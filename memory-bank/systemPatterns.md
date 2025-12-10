@@ -327,6 +327,86 @@ requireAuth() → throws if not authenticated
 - Type-safe parsing
 - Clear error messages
 
+## Existing Components (Kindedo Theme)
+
+### Component Adaptation Strategy
+
+**Starting Point**: Kindedo template provides rich component library that can be adapted for Yuvoo.
+
+**Key Adaptations**:
+
+1. **Class → Club**:
+
+   - Location: `src/components/Class/`
+   - Adapt: Class cards → Club cards
+   - Add: Verification badge, sport filters, location map
+   - Data: `class-data.ts` → `club-data.ts`
+
+2. **Teacher → Doctor**:
+
+   - Location: `src/components/Teacher/`
+   - Adapt: Teacher profiles → Doctor profiles
+   - Add: Medical specialties, availability calendar
+   - Data: `teacher-data.ts` → `doctor-data.ts`
+
+3. **Program → Sport**:
+   - Location: `src/components/Program/`
+   - Adapt: Program listings → Sport recommendations
+   - Add: AI recommendation display, match scores
+   - Data: `program-data.ts` → `sport-data.ts`
+
+**Reusable Components** (no adaptation needed):
+
+- `HeroArea/` - Landing page heroes
+- `Banner/` - Promotional banners
+- `Testimonial/` - Parent feedback
+- `Gallery/` - Photo galleries
+- `FAQ/` - Frequently asked questions
+- `Contact/` - Contact forms
+- `Auth/` - Login, Register, Forgot Password
+- `Common/` - Breadcrumb, Pagination, Preloader, etc.
+
+**Layout Components** (adapt branding only):
+
+- `Header/` - Multiple variants (HeaderOne-Four)
+- `Footer/` - Multiple variants (FooterOne-Three)
+- `Wrapper/` - Page wrapper
+
+**Components to Remove** (Phase 1):
+
+- `Shop/` - Not needed in Phase 1
+- `News/` - Optional, can be repurposed for blog
+
+### Styling Pattern (Current)
+
+**Bootstrap + SCSS**:
+
+- Bootstrap 5.3.3 grid and utilities
+- SCSS for custom styling
+- Component-specific SCSS files
+- Global styles in `globals.scss`
+
+**Animation Pattern**:
+
+```tsx
+className="wow fadeInUp"
+data-wow-duration="1s"
+data-wow-delay=".3s"
+```
+
+**Button Pattern**:
+
+```tsx
+<Link href="/" className="bd-btn">
+  <span className="bd-btn-inner">
+    <span className="bd-btn-normal">Text</span>
+    <span className="bd-btn-hover">Text</span>
+  </span>
+</Link>
+```
+
+**Migration Strategy**: See `designSystem.md` for detailed migration plan from Bootstrap to Tailwind.
+
 ## Component Patterns
 
 ### Client Components
@@ -338,6 +418,18 @@ requireAuth() → throws if not authenticated
 - Browser APIs (localStorage, window)
 
 **Marking**: `'use client'` directive
+
+**Current Pattern** (Kindedo):
+
+- Most components are Client Components
+- Uses Redux for global state
+- Uses custom hooks (`useContext`, `useStickyHeader`, etc.)
+
+**Future Pattern**:
+
+- Server Components by default
+- Client Components only when needed
+- Server Actions instead of Redux for data
 
 ### Server Components
 

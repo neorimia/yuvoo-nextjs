@@ -87,15 +87,132 @@
 
 ### Paleta de Culori
 
-**Culori Principale** (de identificat din tema Kindedo):
+**Culori Extrase din Tema Kindedo** (`public/assets/scss/utils/_colors.scss`):
 
-- **Primary Color**: (de analizat din `theme.scss`)
-- **Secondary Color**: (de analizat)
-- **Accent Colors**: (de analizat)
-- **Background Colors**: (de analizat)
-- **Text Colors**: (de analizat)
+#### Theme Colors (Culori Principale)
 
-**Recomandare**: Analiza fișierelor SCSS pentru a extrage paleta exactă de culori.
+- **Theme 1 (Primary)**: `#00BBAE` - Turcoaz/Cyan
+  - Utilizare: Buttons primary, links hover, accents principale
+  - Variantă deschisă: `#EBFFFE` (theme-7)
+- **Theme 2 (Secondary)**: `#FF9B24` - Portocaliu
+  - Utilizare: Buttons secondary, highlights, CTA-uri
+  - Variantă deschisă: `#FFECD6` (theme-8), `#FFF6EB` (theme-6)
+- **Theme 3 (Accent)**: `#FF577B` - Roz/Roșu
+  - Utilizare: Accents, badges, alerts
+- **Theme 4**: `#FFF8EB` - Bej deschis (background)
+- **Theme 5**: `#FFA455` - Portocaliu deschis
+- **Theme 6**: `#FFF6EB` - Bej foarte deschis (background)
+- **Theme 7**: `#EBFFFE` - Cyan foarte deschis (background)
+- **Theme 8**: `#FFECD6` - Portocaliu foarte deschis (background)
+- **Theme 9**: `#FF7C7C` - Roz deschis
+- **Theme 10**: `#7C81FF` - Violet/Albastru
+- **Theme 11**: `#00B9F1` - Albastru Cyan
+
+#### Common Colors
+
+- **White**: `#FFFFFF` - Fundal alb, text pe fundal închis
+- **Black**: `#1B1B1B` - Text principal, headings
+
+#### Text Colors
+
+- **Body Text**: `#424242` - Text principal
+- **Text 1**: `#000000` - Text foarte închis
+
+#### Grey Colors
+
+- **Grey 1**: `#E6E6E6` - Borders, dividers
+- **Grey 2**: `#E9CFCF` - Borders alternative
+
+#### CSS Variables
+
+Toate culorile sunt disponibile ca CSS variables:
+
+- `--bd-theme-1` până la `--bd-theme-11`
+- `--bd-common-white`, `--bd-common-black`
+- `--bd-text-body`, `--bd-text-1`
+- `--bd-grey-1`, `--bd-grey-2`
+
+### Paleta de Culori Yuvoo (Confirmată)
+
+**Decizie Finală Brand Yuvoo**:
+
+1. **Primary Color**: `#00BBAE` - Turcoaz/Cyan ✅
+
+   - **Utilizare**: Buttons primary, links hover, accents principale, brand identity
+   - **Asociere**: Sport, apă, energie, profesionalism
+   - **Variantă deschisă**: `#EBFFFE` (theme-7) - pentru backgrounds
+   - **CSS Variable**: `--bd-theme-1` sau `--yuvoo-primary`
+
+2. **Secondary Color**: `#FF9B24` - Portocaliu ✅
+
+   - **Utilizare**: Buttons secondary, highlights, CTA-uri, badges importante
+   - **Asociere**: Joc, energie, entuziasm, fun
+   - **Variante deschise**: `#FFECD6` (theme-8), `#FFF6EB` (theme-6) - pentru backgrounds
+   - **CSS Variable**: `--bd-theme-2` sau `--yuvoo-secondary`
+
+3. **Accent Color**: `#7C81FF` - Violet/Albastru ✅
+
+   - **Utilizare**: Accents, badges secundare, highlights subtile, decorative elements
+   - **Asociere**: Creativitate, inovație, modern
+   - **CSS Variable**: `--bd-theme-10` sau `--yuvoo-accent`
+
+4. **Background Colors**:
+   - `#EBFFFE` (theme-7) - Secțiuni sport, hero backgrounds
+   - `#FFF6EB` (theme-6) - Secțiuni generale, cards
+   - `#FFFFFF` - Fundal principal, cards
+   - `#FFECD6` (theme-8) - Secțiuni speciale, highlights
+
+**Notă**: Theme 3 (`#FF577B` - roz) poate fi folosit ocazional pentru alerts sau elemente speciale, dar accentul principal este violet (`#7C81FF`).
+
+**Contrast și Accesibilitate**:
+
+- ✅ Text negru (`#1B1B1B`) pe fundal alb - contrast excelent
+- ✅ Text alb pe fundal turcoaz (`#00BBAE`) - contrast bun
+- ✅ Text alb pe fundal portocaliu (`#FF9B24`) - contrast bun
+- ⚠️ Verifică contrast pentru text pe fundaluri deschise (theme-4, theme-6, theme-7, theme-8)
+
+### Utilizare Culori în Componente
+
+**Exemple de Utilizare pentru Yuvoo**:
+
+```scss
+// Primary button (Turcoaz)
+background: var(--bd-theme-1); // #00BBAE
+color: var(--bd-common-white);
+
+// Secondary button (Portocaliu)
+background: var(--bd-theme-2); // #FF9B24
+color: var(--bd-common-white);
+
+// Accent elements (Violet)
+color: var(--bd-theme-10); // #7C81FF
+background: var(--bd-theme-10); // pentru badges, highlights
+
+// Background sections
+background: var(--bd-theme-7); // #EBFFFE (cyan deschis) - secțiuni sport
+background: var(--bd-theme-6); // #FFF6EB (bej deschis) - secțiuni generale
+background: var(--bd-theme-8); // #FFECD6 (portocaliu deschis) - highlights
+
+// Text
+color: var(--bd-text-body); // #424242 (body text)
+color: var(--bd-heading-primary); // #1B1B1B (headings)
+
+// Borders
+border-color: var(--bd-grey-1); // #E6E6E6
+```
+
+**Ghid de Utilizare Yuvoo**:
+
+- **Primary (`#00BBAE`)**: Buttons principale, logo, links importante, brand elements
+- **Secondary (`#FF9B24`)**: CTA-uri, badges importante, highlights, call-to-action buttons
+- **Accent (`#7C81FF`)**: Badges secundare, decorative elements, subtle highlights, icons
+- **Backgrounds**: Folosește variantele deschise pentru secțiuni și cards
+
+**Gradient Patterns** (folosite în temă):
+
+- `linear-gradient(90.87deg, #00BBAE 0.69%, rgba(0, 187, 174, 0) 96.75%)` - Turcoaz fade
+- `linear-gradient(100.88deg, #EBFFFE 0.6%, #FFF6EB 100%)` - Cyan to Bej
+- `linear-gradient(180deg, #FF577B00, #FF9B24 65%)` - Roz to Portocaliu
 
 ### Tipografie
 
@@ -309,12 +426,12 @@ className="wow fadeInUp" data-wow-duration="1s" data-wow-delay=".3s"
 - Adaptează pentru brand Yuvoo
 - Asigură contrast și accesibilitate
 
-**Culori Recomandate** (orientative):
+**Paleta Finală Yuvoo** (Confirmată):
 
-- **Primary**: Verde/Albastru (sport, energie)
-- **Secondary**: Portocaliu/Galben (joc, fun)
-- **Accent**: Roz/Mov (copii, creativitate)
-- **Neutral**: Gri, Alb (background, text)
+- **Primary**: `#00BBAE` - Turcoaz (sport, energie) ✅
+- **Secondary**: `#FF9B24` - Portocaliu (joc, fun) ✅
+- **Accent**: `#7C81FF` - Violet (creativitate, inovație) ✅
+- **Neutral**: `#1B1B1B` (text), `#424242` (body text), `#FFFFFF` (background), `#E6E6E6` (borders)
 
 ### Imagini
 
@@ -345,33 +462,34 @@ className="wow fadeInUp" data-wow-duration="1s" data-wow-delay=".3s"
 
 ### Actualizări Necesare
 
-1. **techContext.md**:
+1. **techContext.md**: ✅ **COMPLETAT**
 
-   - [ ] Adăugare Bootstrap 5.3.3 în tehnologii actuale
-   - [ ] Adăugare SCSS în tehnologii actuale
-   - [ ] Adăugare WOW.js, Animate.css
-   - [ ] Adăugare Font Awesome Pro, Flaticon
-   - [ ] Notă despre migrarea graduală la Tailwind
+   - [x] Adăugare Bootstrap 5.3.3 în tehnologii actuale
+   - [x] Adăugare SCSS în tehnologii actuale
+   - [x] Adăugare WOW.js, Animate.css
+   - [x] Adăugare Font Awesome Pro, Flaticon
+   - [x] Notă despre migrarea graduală la Tailwind
 
-2. **systemPatterns.md**:
+2. **systemPatterns.md**: ✅ **COMPLETAT**
 
-   - [ ] Adăugare secțiune despre componente existente
-   - [ ] Adăugare pattern-uri de adaptare (Class→Club, Teacher→Doctor)
-   - [ ] Adăugare strategie migrare Bootstrap→Tailwind
-   - [ ] Adăugare structura componentelor reutilizabile
+   - [x] Adăugare secțiune despre componente existente
+   - [x] Adăugare pattern-uri de adaptare (Class→Club, Teacher→Doctor)
+   - [x] Adăugare strategie migrare Bootstrap→Tailwind
+   - [x] Adăugare structura componentelor reutilizabile
 
-3. **activeContext.md**:
+3. **activeContext.md**: ✅ **COMPLETAT**
 
-   - [ ] Actualizare cu tema Kindedo ca starting point
-   - [ ] Adăugare task-uri de adaptare componente
-   - [ ] Adăugare task-uri de rebranding
-   - [ ] Adăugare task-uri de localizare română
+   - [x] Actualizare cu tema Kindedo ca starting point
+   - [x] Adăugare task-uri de adaptare componente
+   - [x] Adăugare task-uri de rebranding
+   - [x] Adăugare task-uri de localizare română
 
-4. **progress.md**:
-   - [ ] Adăugare secțiune "Componente Disponibile"
-   - [ ] Adăugare task-uri de adaptare componente
-   - [ ] Adăugare task-uri de rebranding
-   - [ ] Adăugare task-uri de migrare styling
+4. **progress.md**: ✅ **COMPLETAT**
+
+   - [x] Adăugare secțiune "Componente Disponibile"
+   - [x] Adăugare task-uri de adaptare componente
+   - [x] Adăugare task-uri de rebranding
+   - [x] Adăugare task-uri de migrare styling
 
 ### Fișier Nou: designSystem.md ✅
 
@@ -386,11 +504,14 @@ className="wow fadeInUp" data-wow-duration="1s" data-wow-delay=".3s"
 
 ### Prioritate Înaltă
 
-1. **Analiza Culorilor**:
+1. **Analiza Culorilor**: ✅ **COMPLETAT**
 
-   - [ ] Extrage paleta exactă din SCSS files
-   - [ ] Documentează în designSystem.md
-   - [ ] Decide adaptări pentru brand Yuvoo
+   - [x] Extrage paleta exactă din SCSS files
+   - [x] Documentează în designSystem.md
+   - [x] Decide adaptări pentru brand Yuvoo
+     - Primary: `#00BBAE` (turcoaz) ✅
+     - Secondary: `#FF9B24` (portocaliu) ✅
+     - Accent: `#7C81FF` (violet) ✅
 
 2. **Rebranding Initial**:
 
