@@ -43,6 +43,24 @@
 - **Features**: Type-safe routes, helper functions, legacy route mapping
 - **Status**: ✅ Complete - All routes defined and organized
 
+### Component Adaptation - Class → Club
+
+- **Created**: Club components in `components/features/clubs/`
+  - `ClubsMain.tsx` - Club listing page component
+  - `ClubDetailsMain.tsx` - Club detail page component
+  - `HomeClubArea.tsx` - Homepage club section component
+  - `ClubCard.tsx` - Reusable club card component
+  - `VerificationBadge.tsx` - Club verification badge component
+- **Features**: Verification badges, sport info, location, age groups, pricing, SEO routes
+- **Status**: ✅ Core components created - Ready for integration
+
+### TypeScript Configuration
+
+- **Path Aliases**: Configured `@/*` → `./src/*` (standard Next.js pattern)
+- **Documentation**: Created `TYPESCRIPT_PATHS.md` with usage examples
+- **Decision**: Keep single alias pattern (no additional aliases needed)
+- **Status**: ✅ Configured and documented
+
 ### Current Codebase State
 
 **Starting Theme**: Kindedo - Kindergarten & School Next.js Template
@@ -314,6 +332,8 @@
 - **Language Requirement**: All user-facing content must be in Romanian
 - **SEO Strategy**: Public routes use Romanian paths (`/cluburi`, `/doctori`, `/chestionar`) for SEO optimization
 - **Routes**: Use `@/lib/routes` as single source of truth - never hardcode paths
+- **TypeScript Imports**: Always use `@/` prefix for imports from `src/` directory
+- **Component Organization**: Club components created in `components/features/clubs/` following adaptation strategy
 - **Phase 1 Focus**: Sports only, ages 4-14, Bucharest
 - **No Payments**: Payment-enabled bookings in Phase 2
 - **No Calendar**: Family calendar in Phase 2

@@ -380,6 +380,22 @@ Use Vercel's environment variable management:
 }
 ```
 
+**Configuration Status**: ✅ Configured and documented
+
+- Single `@/*` alias pattern (standard Next.js convention)
+- Maps to `./src/*` directory
+- Works for all imports: `@/lib/*`, `@/components/*`, `@/modules/*`, `@/app/*`
+- No additional aliases needed (keeps configuration simple and consistent)
+- Documentation: `TYPESCRIPT_PATHS.md` created with usage examples and best practices
+
+**Usage Examples**:
+
+```typescript
+import { routes } from "@/lib/routes";
+import ClubCard from "@/components/features/clubs/ClubCard";
+import { getClubBySlug } from "@/modules/clubs/clubs.service";
+```
+
 ## Code Quality Tools
 
 ### ESLint

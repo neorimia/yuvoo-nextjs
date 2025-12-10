@@ -35,9 +35,10 @@ yuvoo-nextjs/
 │   └── actions/                 # Server Actions (main backend)
 │
 ├── components/
-│   ├── ui/                      # shadcn/ui components
+│   ├── ui/                      # shadcn/ui components (planned)
 │   ├── layout/                  # Header, Footer, Sidebar
 │   ├── features/                # Feature-specific components
+│   │   └── clubs/               # Club components (✅ created)
 │   ├── forms/                   # Reusable form components
 │   └── shared/                  # Common components
 │
@@ -161,6 +162,13 @@ import { routes } from "@/lib/routes";
 - Organized by feature (quiz, clubs, doctors, children, bookings)
 - Self-contained with related sub-components
 - Reusable across different pages
+
+**Current Status**:
+
+- ✅ `components/features/clubs/` - Club components created (ClubsMain, ClubDetailsMain, HomeClubArea, ClubCard, VerificationBadge)
+- 📋 `components/features/doctors/` - Doctor components (planned)
+- 📋 `components/features/sports/` - Sport components (planned)
+- 📋 `components/features/quiz/` - Quiz components (planned)
 
 **Layout Components**: `components/layout/`
 
@@ -378,10 +386,22 @@ requireAuth() → throws if not authenticated
 **Key Adaptations**:
 
 1. **Class → Club**:
-   - Location: `src/components/Class/`
-   - Adapt: Class cards → Club cards
-   - Add: Verification badge, sport filters, location map
-   - Data: `class-data.ts` → `club-data.ts`
+   - Location: `src/components/Class/` → `src/components/features/clubs/`
+   - Status: ✅ Core components created
+   - Components created:
+     - `ClubsMain.tsx` - Club listing page (adapted from `Class/ClassesMain.tsx`)
+     - `ClubDetailsMain.tsx` - Club detail page (adapted from `Class/ClassDetailsMain.tsx`)
+     - `HomeClubArea.tsx` - Homepage club section (adapted from `Class/HomeClassArea.tsx`)
+     - `ClubCard.tsx` - Reusable club card component
+     - `VerificationBadge.tsx` - Club verification badge component
+   - Features added:
+     - ✅ Verification badge display
+     - ✅ Sport information display
+     - ✅ Location display (city, district, address)
+     - ✅ Age groups display
+     - ✅ Pricing information (RON, monthly/per_class/per_semester)
+     - ✅ SEO-friendly routes (`/cluburi`, `/cluburi/:slug`)
+   - Data: `class-data.ts` → `club-data.ts` (📋 Planned)
 
 2. **Teacher → Doctor**:
    - Location: `src/components/Teacher/`

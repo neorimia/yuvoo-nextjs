@@ -10,7 +10,8 @@
     "buildCommand": "npm rebuild sharp && npm run build",
     "lint": "next lint",
     "format": "prettier --write .",
-    "format:check": "prettier --check ."
+    "format:check": "prettier --check .",
+    "prepare": "husky"
   },
   "dependencies": {
     "@getbrevo/brevo": "^2.2.0",
@@ -52,6 +53,8 @@
     "drizzle-kit": "^0.28.1",
     "eslint": "^9",
     "eslint-config-next": "15.2.0",
+    "husky": "^9.1.7",
+    "lint-staged": "^16.2.7",
     "prettier": "^3.7.4",
     "typescript": "^5",
     "ws": "^8.18.3"
