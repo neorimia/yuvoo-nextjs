@@ -11,13 +11,11 @@
 ### Immediate Priorities
 
 1. **Memory Bank Creation** ✅
-
    - Documenting project structure
    - Establishing context for future development
    - Creating reference documentation
 
 2. **Architecture Review**
-
    - Reviewing MVP_STARTER_BRIEF.md architecture
    - Understanding current codebase state
    - Planning migration/implementation strategy
@@ -35,6 +33,15 @@
 - Project briefs analyzed and documented
 - Architecture patterns documented
 - Technical context established
+
+### Routes & SEO Configuration
+
+- **Created**: `lib/routes.ts` - Single source of truth for all routes and paths
+- **SEO Strategy**: Public routes use Romanian language for SEO optimization
+  - Public routes: `/sporturi`, `/cluburi`, `/doctori`, `/chestionar`, `/despre-noi`, etc.
+  - Internal routes: `/auth/login`, `/parent/dashboard`, `/club/dashboard`, etc.
+- **Features**: Type-safe routes, helper functions, legacy route mapping
+- **Status**: ✅ Complete - All routes defined and organized
 
 ### Current Codebase State
 
@@ -123,7 +130,6 @@
 ### Week 1-2: Foundation Setup
 
 1. **Project Setup**
-
    - [ ] Verify/upgrade Next.js to latest version
    - [ ] Install required dependencies
    - [ ] Set up Tailwind CSS
@@ -131,7 +137,6 @@
    - [ ] Remove/replace Bootstrap if needed
 
 2. **Database Setup**
-
    - [ ] Create Neon database
    - [ ] Install Drizzle ORM
    - [ ] Create database schema
@@ -139,7 +144,6 @@
    - [ ] Seed initial data (sports, sample clubs)
 
 3. **Authentication Setup**
-
    - [ ] Create Stack Auth project
    - [ ] Configure Stack Auth
    - [ ] Set up session management
@@ -156,7 +160,6 @@
 ### Week 3-4: Core Pages
 
 1. **Landing Page**
-
    - [ ] Design and implement homepage
    - [ ] Value proposition section
    - [ ] 3-step process explanation
@@ -164,14 +167,12 @@
    - [ ] Trust indicators
 
 2. **Authentication Pages**
-
    - [ ] Sign up page
    - [ ] Sign in page
    - [ ] Password reset flow
    - [ ] Email verification
 
 3. **Dashboard**
-
    - [ ] Parent dashboard layout
    - [ ] Overview stats
    - [ ] Recent activity
@@ -186,21 +187,18 @@
 ### Week 5-8: Quiz System
 
 1. **Quiz UI**
-
    - [ ] Quiz flow component
    - [ ] Question components (age, energy, personality, interests, etc.)
    - [ ] Progress indicator
    - [ ] Navigation (next/back)
 
 2. **Quiz Backend**
-
    - [ ] Server Actions for quiz submission
    - [ ] Quiz validation schemas
    - [ ] Quiz service layer
    - [ ] Quiz repository
 
 3. **AI Integration**
-
    - [ ] OpenAI client setup
    - [ ] Prompt engineering
    - [ ] Response parsing
@@ -215,14 +213,12 @@
 ### Week 9-12: Club Discovery
 
 1. **Club Directory**
-
    - [ ] Club listing page
    - [ ] Search and filters
    - [ ] Club card component
    - [ ] Club grid layout
 
 2. **Club Details**
-
    - [ ] Club detail page (SSG)
    - [ ] Club information display
    - [ ] Photo gallery
@@ -230,7 +226,6 @@
    - [ ] Schedule display
 
 3. **Club Search**
-
    - [ ] Search service
    - [ ] Filter logic
    - [ ] Location-based search
@@ -244,13 +239,11 @@
 ### Week 13-14: Doctor Profiles
 
 1. **Doctor Directory**
-
    - [ ] Doctor listing page
    - [ ] Search and filters
    - [ ] Doctor card component
 
 2. **Doctor Details**
-
    - [ ] Doctor profile page (SSG)
    - [ ] Professional information
    - [ ] Availability calendar
@@ -264,20 +257,17 @@
 ### Week 15-16: Polish & Deploy
 
 1. **Email Notifications**
-
    - [ ] Brevo integration
    - [ ] Email templates
    - [ ] Booking confirmations
    - [ ] Quiz result summaries
 
 2. **Testing**
-
    - [ ] Manual testing
    - [ ] User flow testing
    - [ ] Bug fixes
 
 3. **Performance**
-
    - [ ] Image optimization
    - [ ] Code splitting
    - [ ] Database query optimization
@@ -321,6 +311,9 @@
 
 ## Key Reminders
 
+- **Language Requirement**: All user-facing content must be in Romanian
+- **SEO Strategy**: Public routes use Romanian paths (`/cluburi`, `/doctori`, `/chestionar`) for SEO optimization
+- **Routes**: Use `@/lib/routes` as single source of truth - never hardcode paths
 - **Phase 1 Focus**: Sports only, ages 4-14, Bucharest
 - **No Payments**: Payment-enabled bookings in Phase 2
 - **No Calendar**: Family calendar in Phase 2

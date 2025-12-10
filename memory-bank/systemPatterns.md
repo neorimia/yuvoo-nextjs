@@ -46,7 +46,8 @@ yuvoo-nextjs/
 │   ├── db/                      # Drizzle ORM setup & schema
 │   ├── validations/             # Zod schemas
 │   ├── integrations/            # External services (OpenAI, Cloudinary, Brevo)
-│   └── utils/                    # Utility functions
+│   ├── utils/                    # Utility functions
+│   └── routes.ts                # Single source of truth for all routes (SEO-friendly Romanian paths)
 │
 ├── modules/                      # Backend Business Logic (Service Layer)
 │   ├── auth/
@@ -111,6 +112,47 @@ Next.js route groups `(group-name)/` organize routes without affecting URL struc
 - `(auth)/` - Protected parent routes
 - `(club-portal)/` - Club admin routes
 - `(doctor-portal)/` - Doctor admin routes
+
+### 3.1. SEO-Friendly Routing Strategy
+
+**Location**: `lib/routes.ts` - Single source of truth for all routes
+
+**Key Principle**: Public routes use Romanian language for SEO optimization, internal routes use English.
+
+**Public SEO Routes** (Romanian, indexed by search engines):
+
+- Sports: `/sporturi`, `/sporturi/:slug`
+- Clubs: `/cluburi`, `/cluburi/:slug`, `/cluburi/categorie/:category`, `/cluburi/:slug/recenzii`
+- Doctors: `/doctori`, `/doctori/:slug`
+- Quiz: `/chestionar`, `/chestionar/container`, `/chestionar/previzualizare`, `/chestionar/rezultate`
+- Info: `/despre-noi`, `/parteneri`, `/intrebari-frecvente`, `/contact`, `/ajutor`
+- Legal: `/confidentialitate`, `/termeni`, `/cookies`, `/gdpr-parinti`
+- Search: `/cautare`
+
+**Internal Routes** (English, not SEO-sensitive):
+
+- Authentication: `/auth/login`, `/auth/register`, etc.
+- Parent Dashboard: `/parent/dashboard`, `/parent/children`, etc.
+- Club Portal: `/club/dashboard`, `/club/profile`, etc.
+- Doctor Portal: `/doctor/dashboard`, `/doctor/profile`, etc.
+- Admin: `/admin/dashboard`, etc.
+
+**Legacy Routes**: Organized in `routes.legacy.*` for redirect mapping from old Kindedo routes.
+
+**Usage**:
+
+```tsx
+import { routes } from "@/lib/routes";
+<Link href={routes.clubs.list}>Cluburi</Link>
+<Link href={routes.clubs.detail("fotbal-club-bucuresti")}>Detalii Club</Link>
+```
+
+**Helper Functions**:
+
+- `buildUrl(path, params)` - Build URLs with query parameters
+- `isProtectedRoute(path)` - Check if route requires authentication
+- `getRouteGroup(path)` - Get route group (public, auth, club, doctor, admin, api)
+- `isPublicSeoRoute(path)` - Check if route is a public SEO route
 
 ### 4. Component Organization
 
@@ -336,14 +378,12 @@ requireAuth() → throws if not authenticated
 **Key Adaptations**:
 
 1. **Class → Club**:
-
    - Location: `src/components/Class/`
    - Adapt: Class cards → Club cards
    - Add: Verification badge, sport filters, location map
    - Data: `class-data.ts` → `club-data.ts`
 
 2. **Teacher → Doctor**:
-
    - Location: `src/components/Teacher/`
    - Adapt: Teacher profiles → Doctor profiles
    - Add: Medical specialties, availability calendar
@@ -420,33 +460,28 @@ data-wow-delay=".3s"
 Use Client Components when you need:
 
 1. **Interactivity & Event Handlers**
-
    - `onClick`, `onChange`, `onSubmit` handlers
    - User interactions (buttons, forms, modals)
    - Example: `ThemeChanger.tsx` (theme toggle button)
 
 2. **React Hooks**
-
    - `useState`, `useEffect`, `useRef`, `useContext`
    - Custom hooks that use browser APIs
    - Example: `TypedText.tsx` (uses useEffect for Typed.js)
 
 3. **Browser APIs**
-
    - `localStorage`, `sessionStorage`
    - `window`, `document` objects
    - `navigator`, `location`
    - Example: `ThemeChanger.tsx` (localStorage for theme)
 
 4. **Third-Party Client Libraries**
-
    - Swiper (carousels/sliders)
    - Typed.js (typing animations)
    - React Hook Form (form validation)
    - Example: `HomeClassArea.tsx` (Swiper carousel)
 
 5. **State Management**
-
    - Redux (`useSelector`, `useDispatch`)
    - Context API (`useContext`)
    - Example: `CartMain.tsx` (Redux for cart state)
@@ -460,13 +495,11 @@ Use Client Components when you need:
 Use Server Components for:
 
 1. **Data Fetching**
-
    - Direct database queries
    - API calls (no client-side exposure)
    - Example: Club listing page fetching from database
 
 2. **Static Content**
-
    - Content that doesn't change
    - SEO-important text
    - Example: About page content

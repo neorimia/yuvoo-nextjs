@@ -92,6 +92,39 @@
   - `@types/react ^19.0.0`
   - `@types/react-dom ^19.0.0`
 
+## Routing & SEO Strategy
+
+### Routes Configuration
+
+**Location**: `lib/routes.ts` - Single source of truth for all application routes
+
+**SEO Strategy**:
+
+- **Public Routes**: Romanian language paths for SEO optimization (indexed by search engines)
+  - Examples: `/sporturi`, `/cluburi`, `/doctori`, `/chestionar`, `/despre-noi`, `/intrebari-frecvente`
+- **Internal Routes**: English paths (not SEO-sensitive, not indexed)
+  - Examples: `/auth/login`, `/parent/dashboard`, `/club/dashboard`, `/admin/dashboard`
+
+**Key Features**:
+
+- Type-safe route definitions with TypeScript
+- Helper functions for route checking (`isProtectedRoute`, `getRouteGroup`, `isPublicSeoRoute`)
+- Query parameter builder (`buildUrl`)
+- Legacy route mapping for redirects (Kindedo → Yuvoo)
+- External links and asset paths centralized
+- Organized structure: `routes.*`, `externalLinks.*`, `assets.*`
+
+**Usage Pattern**:
+
+```tsx
+import { routes, externalLinks, assets } from "@/lib/routes";
+<Link href={routes.clubs.list}>Cluburi</Link>
+<Link href={routes.clubs.detail("fotbal-club-bucuresti")}>Detalii</Link>
+<Image src={assets.logo} alt="Yuvoo" />
+```
+
+**Important**: Always use `@/lib/routes` for navigation - never hardcode paths. This ensures consistency and makes SEO updates easier.
+
 ## Development Environment
 
 ### Prerequisites

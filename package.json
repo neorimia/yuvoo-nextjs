@@ -8,17 +8,23 @@
     "start": "next start",
     "clean": "rm -rf node_modules package-lock.json yarn.lock",
     "buildCommand": "npm rebuild sharp && npm run build",
-    "lint": "next lint"
+    "lint": "next lint",
+    "format": "prettier --write .",
+    "format:check": "prettier --check ."
   },
   "dependencies": {
-    "@react-native-async-storage/async-storage": "^2.1.2",
+    "@getbrevo/brevo": "^2.2.0",
+    "@neondatabase/serverless": "^0.10.3",
     "@reduxjs/toolkit": "^2.8.2",
+    "@stackframe/stack": "^2.5.40",
     "@types/prismjs": "^1.26.5",
     "@types/react-redux": "^7.1.34",
     "bootstrap": "5.3.3",
-    "cache": "^3.0.0",
-    "clean": "^4.0.2",
+    "cloudinary": "^2.5.1",
+    "drizzle-orm": "^0.36.4",
     "next": "^15.3.1",
+    "openai": "^4.72.0",
+    "postgres": "^3.4.5",
     "prismjs": "^1.30.0",
     "react": "^19.0.0",
     "react-countup": "^6.5.3",
@@ -33,7 +39,8 @@
     "sonner": "^2.0.1",
     "swiper": "^11.2.4",
     "typed.js": "^2.1.0",
-    "wow.js": "^1.2.2"
+    "wow.js": "^1.2.2",
+    "zod": "^3.22.4"
   },
   "devDependencies": {
     "@eslint/eslintrc": "^3",
@@ -41,8 +48,12 @@
     "@types/node": "^20",
     "@types/react": "^19",
     "@types/react-dom": "^19",
+    "@types/ws": "^8.18.1",
+    "drizzle-kit": "^0.28.1",
     "eslint": "^9",
     "eslint-config-next": "15.2.0",
-    "typescript": "^5"
+    "prettier": "^3.7.4",
+    "typescript": "^5",
+    "ws": "^8.18.3"
   }
 }

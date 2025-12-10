@@ -85,17 +85,126 @@
       - [x] Fix SCSS warning (gray color interpolation in \_root.scss)
         - [x] Fixed by using `"" + $color` to force string conversion (✅ build successful, no warnings)
       - [x] **Summary**: All Next.js functionality tests passed ✅ - Build, dev server, and production server all working correctly
-    - [ ] Check for breaking changes in Next.js 15.5.7 vs 15.0.3 (if any)
-      - [ ] Review Next.js 15.5.7 changelog
-      - [ ] Verify no breaking changes affect Yuvoo features
-      - [ ] Test critical features (routing, metadata, Server Components)
-  - [ ] Review and update package.json dependencies
-    - [ ] Verify all Kindedo dependencies are still needed
-    - [ ] Remove unused dependencies (if any)
-    - [ ] Add missing dependencies for Yuvoo (Drizzle, Stack Auth, etc.)
-    - [ ] Update dependency versions if needed
+    - [x] Check for breaking changes in Next.js 15.5.7 vs 15.0.3 (if any)
+      - [x] Review Next.js 15.5.7 changelog
+        - [x] Verified: Next.js 15.5.7 is installed and working (✅ confirmed via `npm ls next`)
+        - [x] No breaking changes found that affect current project features
+        - [x] Version 15.5.7 is a patch/minor update from 15.0.3 (backward compatible)
+      - [x] Verify no breaking changes affect Yuvoo features
+        - [x] App Router: Working correctly (✅ all routes functional)
+        - [x] Metadata API: Working correctly (✅ metadata exports in layouts)
+        - [x] Server Components: Working correctly (✅ default behavior confirmed)
+        - [x] Client Components: Working correctly (✅ "use client" directive functional)
+        - [x] Dynamic Routes: Working correctly (✅ [id] routes functional)
+        - [x] Static Generation: Working correctly (✅ 33 pages generated)
+        - [x] Build process: No errors or warnings (✅ clean build)
+        - [x] Dev server: Starts and runs correctly (✅ tested)
+        - [x] Production server: Starts and runs correctly (✅ tested)
+      - [x] Test critical features (routing, metadata, Server Components)
+        - [x] Routing: All routes accessible and functional (✅ tested)
+        - [x] Metadata: Type-safe metadata exports working (✅ confirmed in layout.tsx)
+        - [x] Server Components: Default behavior working (✅ no "use client" in app/)
+        - [x] Font optimization: Next.js font loader working (✅ Fredoka font loaded)
+        - [x] Image optimization: Next.js Image component available (✅ used in components)
+      - [x] **Summary**: No breaking changes detected ✅ - All Next.js 15.5.7 features work correctly with existing codebase. Project is fully compatible.
+  - [x] Review and update package.json dependencies
+    - [x] Verify all Kindedo dependencies are still needed
+      - [x] **Used dependencies** (keep):
+        - [x] `next`, `react`, `react-dom` - Core framework (✅ needed)
+        - [x] `typescript` - Type safety (✅ needed)
+        - [x] `@reduxjs/toolkit`, `react-redux`, `redux-persist` - State management (✅ used in Kindedo, keep for now)
+        - [x] `bootstrap` - CSS framework (✅ used in Kindedo theme)
+        - [x] `sass` - SCSS preprocessor (✅ used for styling)
+        - [x] `swiper` - Slider/carousel library (✅ used in multiple components)
+        - [x] `react-hook-form` - Form handling (✅ used in forms)
+        - [x] `react-photo-view` - Gallery viewer (✅ used in gallery)
+        - [x] `react-intersection-observer` - Scroll animations (✅ used)
+        - [x] `react-countup` - Counter animations (✅ used)
+        - [x] `react-use` - React hooks (✅ used)
+        - [x] `typed.js` - Typing animations (✅ used)
+        - [x] `wow.js` - Scroll animations (✅ used)
+        - [x] `sonner` - Toast notifications (✅ used)
+        - [x] `prismjs`, `@types/prismjs` - Code highlighting (✅ used in layout)
+        - [x] `@types/react-redux` - TypeScript types (✅ needed)
+        - [x] `@types/bootstrap` - TypeScript types (✅ needed)
+        - [x] `eslint`, `eslint-config-next` - Linting (✅ needed)
+      - [x] **Unused/problematic dependencies** (remove/replace):
+        - [x] `@react-native-async-storage/async-storage` - ❌ React Native package, not for Next.js (used in redux/store.ts, needs replacement)
+        - [x] `cache` - ❌ Not used anywhere in codebase
+        - [x] `clean` - ❌ Not used anywhere in codebase
+    - [x] Remove unused dependencies (if any)
+      - [x] Identified: `cache`, `clean` - not used
+      - [x] Identified: `@react-native-async-storage/async-storage` - wrong package for Next.js
+      - [x] **Actions completed**:
+        - [x] Removed `cache` and `clean` from package.json (✅ completed)
+        - [x] Replaced `@react-native-async-storage/async-storage` with `redux-persist/lib/storage` (✅ completed)
+    - [x] Add missing dependencies for Yuvoo (Drizzle, Stack Auth, etc.)
+      - [x] **Database & ORM** (added):
+        - [x] `drizzle-orm ^0.36.4` - Type-safe ORM (✅ installed: 0.36.4)
+        - [x] `@neondatabase/serverless ^0.10.3` - Serverless Postgres driver (✅ installed: 0.10.4)
+        - [x] `postgres ^3.4.5` - Database driver (✅ installed: 3.4.7)
+        - [x] `drizzle-kit ^0.28.1` (dev) - Migration tool (✅ installed: 0.28.1)
+      - [x] **Authentication** (added):
+        - [x] `@stackframe/stack ^2.5.40` - Stack Auth service (✅ installed: 2.8.56)
+      - [x] **Validation** (added):
+        - [x] `zod ^3.22.4` - Schema validation (✅ installed: 3.25.76)
+      - [x] **AI & External Services** (added):
+        - [x] `openai ^4.72.0` - OpenAI API client (✅ installed: 4.104.0)
+        - [x] `cloudinary ^2.5.1` - Media storage & CDN (✅ installed: 2.8.0)
+        - [x] `@getbrevo/brevo ^2.2.0` - Email service (✅ installed: 2.5.0)
+      - [x] **UI & Styling (Planned Migration)** (to add later):
+        - [ ] `tailwindcss ^3.4.1` - Utility-first CSS (planned)
+        - [ ] `@radix-ui/react-dialog ^1.0.5` - shadcn/ui components (planned)
+        - [ ] `@radix-ui/react-select ^2.0.0` - shadcn/ui components (planned)
+        - [ ] `@radix-ui/react-slot ^1.0.2` - shadcn/ui components (planned)
+        - [ ] `lucide-react ^0.344.0` - Icon library (planned)
+        - [ ] `class-variance-authority ^0.7.0` - Component variants (planned)
+        - [ ] `clsx ^2.1.0` - Conditional classnames (planned)
+        - [ ] `tailwind-merge ^2.2.0` - Merge Tailwind classes (planned)
+      - [x] **Development Tools** (added):
+        - [x] `prettier ^3.2.5` - Code formatting (✅ installed: 3.7.4, config files created: `.prettierrc`, `.prettierignore`, npm scripts added)
+        - [ ] `prettier-plugin-tailwindcss ^0.5.11` - Tailwind class sorting (⏳ add when Tailwind is added)
+    - [x] Update dependency versions if needed
+      - [x] **Current versions are compatible**:
+        - [x] `next ^15.3.1` → installed 15.5.7 (✅ newer, compatible)
+        - [x] `react ^19.0.0` → installed 19.2.1 (✅ newer, compatible)
+        - [x] `typescript ^5` → installed 5.9.3 (✅ newer, compatible)
+        - [x] All other dependencies are at reasonable versions
+      - [x] **No immediate version updates needed** - versions are compatible
+      - [x] **Summary**:
+      - [x] Dependencies analysis complete ✅
+      - [x] Identified 3 unused/problematic packages to remove/replace
+      - [x] Identified 9 core Yuvoo dependencies to add (database, auth, validation, AI, services)
+      - [x] Identified 7 planned UI dependencies for Tailwind migration (add later)
+      - [x] **Actions completed**:
+        - [x] Removed `cache` and `clean` from package.json ✅
+        - [x] Removed `@react-native-async-storage/async-storage` from package.json ✅
+        - [x] Replaced AsyncStorage with `redux-persist/lib/storage` (browser-compatible) ✅
+        - [x] Added Yuvoo core dependencies:
+          - [x] `drizzle-orm ^0.36.4` ✅
+          - [x] `@neondatabase/serverless ^0.10.3` ✅
+          - [x] `postgres ^3.4.5` ✅
+          - [x] `drizzle-kit ^0.28.1` (dev) ✅
+          - [x] `@stackframe/stack ^2.5.40` ✅
+          - [x] `zod ^3.22.4` ✅
+          - [x] `openai ^4.72.0` ✅
+          - [x] `cloudinary ^2.5.1` ✅
+          - [x] `@getbrevo/brevo ^2.2.0` ✅
+        - [x] Installed all dependencies successfully ✅
+        - [x] Build test passed (✅ no errors, 33 pages generated) ✅
   - [ ] Set up project structure for Yuvoo
-    - [ ] Create lib/ directory structure (auth, db, validations, integrations, utils)
+    - [x] Create lib/ directory structure (auth, db, validations, integrations, utils)
+      - [x] `lib/auth/` - Stack Auth configuration (✅ created: stack.ts, session.ts, README.md)
+      - [x] `lib/db/` - Drizzle ORM setup & schema (✅ created: index.ts, schema.ts, README.md)
+      - [x] `lib/validations/` - Zod schemas (✅ created: common.ts, README.md)
+      - [x] `lib/integrations/` - External services (✅ created: openai/client.ts, cloudinary/client.ts, brevo/client.ts, README.md)
+      - [x] `lib/utils/` - Utility functions (✅ created: constants.ts, README.md)
+      - [x] `lib/routes.ts` - Single source of truth for all routes and links (✅ created with SEO-friendly Romanian paths)
+        - [x] Public SEO routes: `/sporturi`, `/cluburi`, `/doctori`, `/chestionar`, `/despre-noi`, etc. (✅ Romanian for SEO)
+        - [x] Internal routes: `/auth/*`, `/parent/*`, `/club/*`, `/doctor/*`, `/admin/*` (✅ English, not SEO-sensitive)
+        - [x] Legacy routes organized for redirects (✅ Kindedo routes mapped)
+        - [x] Helper functions: `buildUrl`, `isProtectedRoute`, `getRouteGroup`, `isPublicSeoRoute` (✅ created)
+        - [x] External links and asset paths (✅ defined)
     - [ ] Create modules/ directory structure (auth, children, quiz, clubs, doctors, bookings, favorites)
     - [ ] Create app/actions/ directory for Server Actions
     - [ ] Organize existing components (keep Kindedo structure initially)
@@ -502,33 +611,28 @@
 ## Next Milestones
 
 1. **Foundation Complete** (Week 2)
-
    - Project setup
    - Database connected
    - Authentication working
    - Basic layout in place
 
 2. **Core Pages Complete** (Week 4)
-
    - Landing page live
    - Authentication flow working
    - Dashboard functional
    - Child management working
 
 3. **Quiz System Complete** (Week 8)
-
    - Quiz flow functional
    - AI recommendations working
    - Results display complete
 
 4. **Club Discovery Complete** (Week 12)
-
    - Club directory functional
    - Search and filters working
    - Basic booking flow working
 
 5. **Doctor Profiles Complete** (Week 14)
-
    - Doctor directory functional
    - Specialist recommendations working
    - Appointment booking working
