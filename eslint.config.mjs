@@ -28,6 +28,19 @@ const eslintConfig = [
       "drizzle/**",
     ],
   },
+  {
+    rules: {
+      // Allow unused variables that start with underscore (common pattern for intentionally unused params)
+      "@typescript-eslint/no-unused-vars": [
+        "error",
+        {
+          argsIgnorePattern: "^_",
+          varsIgnorePattern: "^_",
+          caughtErrorsIgnorePattern: "^_",
+        },
+      ],
+    },
+  },
 ];
 
 export default eslintConfig;

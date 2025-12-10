@@ -5,8 +5,9 @@
  * Handles complex queries with multiple filters.
  */
 
-import { clubsRepository } from "./clubs.repository";
-import type { Club, ClubSearchFilters, ClubSearchResult } from "./clubs.types";
+// TODO: Uncomment when implementing search logic
+// import { clubsRepository } from "./clubs.repository";
+import type { ClubSearchFilters, ClubSearchResult } from "./clubs.types";
 
 /**
  * Search clubs with filters
@@ -19,7 +20,8 @@ export async function search(filters: ClubSearchFilters): Promise<ClubSearchResu
   // 4. Apply pagination
   // 5. Return results with metadata
 
-  const clubs = await clubsRepository.findAll();
+  // TODO: Use clubs result when implementing search logic
+  // const clubs = await clubsRepository.findAll();
 
   return {
     clubs: [],

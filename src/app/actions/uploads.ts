@@ -17,7 +17,7 @@ export async function uploadImageAction(
   formData: FormData
 ): Promise<{ success: boolean; url?: string; error?: string }> {
   try {
-    const user = await requireAuth();
+    await requireAuth(); // Authentication check
 
     const file = formData.get("file") as File;
     if (!file) {
@@ -48,10 +48,10 @@ export async function uploadImageAction(
  * Delete uploaded image
  */
 export async function deleteImageAction(
-  imageUrl: string
+  _imageUrl: string
 ): Promise<{ success: boolean; error?: string }> {
   try {
-    const user = await requireAuth();
+    await requireAuth(); // Authentication check
 
     // TODO: Extract Cloudinary public_id from URL
     // TODO: Delete from Cloudinary

@@ -137,21 +137,18 @@ Toate culorile sunt disponibile ca CSS variables:
 **Decizie Finală Brand Yuvoo**:
 
 1. **Primary Color**: `#00BBAE` - Turcoaz/Cyan ✅
-
    - **Utilizare**: Buttons primary, links hover, accents principale, brand identity
    - **Asociere**: Sport, apă, energie, profesionalism
    - **Variantă deschisă**: `#EBFFFE` (theme-7) - pentru backgrounds
    - **CSS Variable**: `--bd-theme-1` sau `--yuvoo-primary`
 
 2. **Secondary Color**: `#FF9B24` - Portocaliu ✅
-
    - **Utilizare**: Buttons secondary, highlights, CTA-uri, badges importante
    - **Asociere**: Joc, energie, entuziasm, fun
    - **Variante deschise**: `#FFECD6` (theme-8), `#FFF6EB` (theme-6) - pentru backgrounds
    - **CSS Variable**: `--bd-theme-2` sau `--yuvoo-secondary`
 
 3. **Accent Color**: `#7C81FF` - Violet/Albastru ✅
-
    - **Utilizare**: Accents, badges secundare, highlights subtile, decorative elements
    - **Asociere**: Creativitate, inovație, modern
    - **CSS Variable**: `--bd-theme-10` sau `--yuvoo-accent`
@@ -218,19 +215,58 @@ border-color: var(--bd-grey-1); // #E6E6E6
 
 **Font Principal**: Fredoka
 
-- Weights: 400, 500, 600, 700
-- Caracteristici: Friendly, modern, jucăuș
-- Potrivit pentru: Headings, CTA-uri, elemente importante
+- **Family**: `'Fredoka', sans-serif`
+- **Weights Available**:
+  - 200 (Extra Light)
+  - 300 (Light)
+  - 400 (Regular/Normal) ✅ Most common
+  - 500 (Medium)
+  - 600 (Semi Bold) ✅ Common for headings
+  - 700 (Bold) ✅ Common for headings
+  - 800 (Extra Bold)
+  - 900 (Black)
+- **Caracteristici**: Friendly, modern, jucăuș, perfect pentru copii
+- **Potrivit pentru**: Headings, CTA-uri, elemente importante, brand identity
 
-**Font Secundar**: (de identificat - probabil sistem default sau alt Google Font)
+**Font Secundar**: Fredoka (același font pentru consistență)
 
-**Hierarchy**:
+**Font Awesome**: `"Font Awesome 6 Pro"` - pentru iconuri
 
-- H1: Hero titles, main headings
-- H2: Section titles
-- H3: Card titles, subsections
-- Body: Text normal
-- Small: Meta information, captions
+**Typography Scale** (extras din `_typography.scss`):
+
+| Element       | Font Size | Font Weight       | Line Height   | Usage                      |
+| ------------- | --------- | ----------------- | ------------- | -------------------------- |
+| **H1**        | `96px`    | `700` (bold)      | `1.25`        | Hero titles, main headings |
+| **H2**        | `64px`    | `600` (semi-bold) | `1.25`        | Section titles             |
+| **H3**        | `32px`    | `600` (semi-bold) | `1.5`         | Card titles, subsections   |
+| **H4**        | `23px`    | `600` (semi-bold) | `1.7`         | Subsection titles          |
+| **H5**        | `16px`    | `600` (semi-bold) | `1.25`        | Small headings             |
+| **H6**        | `16px`    | `600` (semi-bold) | `2`           | Smallest headings          |
+| **Body**      | `18px`    | `400` (normal)    | `30px` (1.67) | Body text, paragraphs      |
+| **Paragraph** | `18px`    | `400` (normal)    | `30px` (1.67) | Paragraph text             |
+
+**CSS Variables** (din `_root.scss`):
+
+- `--bd-ff-body`: `'Fredoka', sans-serif`
+- `--bd-ff-heading`: `'Fredoka', sans-serif`
+- `--bd-ff-p`: `'Fredoka', sans-serif`
+- `--bd-ff-fontawesome`: `"Font Awesome 6 Pro"`
+- `--bd-fz-body`: `18px`
+- `--bd-fz-p`: `18px`
+- `--bd-fz-h1`: `96px`
+- `--bd-fz-h2`: `64px`
+- `--bd-fz-h3`: `32px`
+- `--bd-fz-h4`: `23px`
+- `--bd-fz-h5`: `16px`
+- `--bd-fz-h6`: `16px`
+- `--bd-fw-normal`: `normal`
+- `--bd-fw-light`: `300`
+- `--bd-fw-regular`: `400`
+- `--bd-fw-medium`: `500`
+- `--bd-fw-sbold`: `600`
+- `--bd-fw-bold`: `700`
+- `--bd-heading-primary`: `#1B1B1B` (black)
+- `--bd-text-body`: `#424242` (dark grey)
 
 ### Componente de Design
 
@@ -282,8 +318,31 @@ border-color: var(--bd-grey-1); // #E6E6E6
 
 - Utiliză sistemul Bootstrap spacing (p-_, m-_, pt-_, pb-_, etc.)
 - Container: `.container` (Bootstrap default)
+- Container max-width: `1320px` (pe ecrane ≥1400px)
 
-**Recomandare**: Documenta spacing-ul exact folosit pentru consistență.
+**Bootstrap Spacing Scale** (standard):
+
+| Class        | Value     | Pixels | Usage           |
+| ------------ | --------- | ------ | --------------- |
+| `p-0`, `m-0` | `0`       | `0px`  | No spacing      |
+| `p-1`, `m-1` | `0.25rem` | `4px`  | Minimal spacing |
+| `p-2`, `m-2` | `0.5rem`  | `8px`  | Small spacing   |
+| `p-3`, `m-3` | `1rem`    | `16px` | Default spacing |
+| `p-4`, `m-4` | `1.5rem`  | `24px` | Medium spacing  |
+| `p-5`, `m-5` | `3rem`    | `48px` | Large spacing   |
+
+**Common Spacing Values Used** (din componente):
+
+- `pt-110`, `pb-70` - Section padding (110px top, 70px bottom)
+- `pt-120`, `pb-80` - Large section padding
+- `mb-20`, `mb-25`, `mb-30`, `mb-40`, `mb-50` - Bottom margins (20px, 25px, 30px, 40px, 50px)
+- `mt-35`, `mt-4` - Top margins
+
+**Container**:
+
+- Default: Bootstrap responsive container
+- Max-width (≥1400px): `1320px`
+- Padding: Bootstrap default (responsive)
 
 ### Animații
 
@@ -293,13 +352,133 @@ border-color: var(--bd-grey-1); // #E6E6E6
 - **Animate.css** - Pre-built animations
 - **AOS** (posibil) - Animate on scroll
 
+**Animation Durations** (din mixins și componente):
+
+- **Standard Transition**: `0.3s` (300ms) - cel mai comun
+- **Long Transition**: `0.5s` (500ms) - pentru animații mai complexe
+- **WOW.js Duration**: `1s` (1000ms) - pentru scroll animations
+- **Easing**: `ease-out` (standard), `cubic-bezier(.785, .135, .15, .86)` (pentru panel animations)
+
 **Pattern-uri**:
 
 ```tsx
+// WOW.js scroll animation
 className="wow fadeInUp" data-wow-duration="1s" data-wow-delay=".3s"
+
+// Standard transition (SCSS mixin)
+@include transition(.3s);
+
+// Custom animation
+@include animate(panel, 1s, infinite, cubic-bezier(.785, .135, .15, .86));
 ```
 
+**Common Animation Classes**:
+
+- `wow fadeInUp` - Fade in from bottom
+- `wow fadeInLeft` - Fade in from left
+- `wow fadeInRight` - Fade in from right
+- `transition-3` - Standard 0.3s transition
+
 **Recomandare**: Menține animațiile subtile pentru UX profesional.
+
+### Border Radius
+
+**Border Radius Values** (extrase din SCSS):
+
+| Value  | Pixels | Usage                             | CSS Class    |
+| ------ | ------ | --------------------------------- | ------------ |
+| `2px`  | `2px`  | Minimal rounding                  | -            |
+| `4px`  | `4px`  | Small elements                    | -            |
+| `5px`  | `5px`  | Small buttons                     | -            |
+| `7px`  | `7px`  | Pagination items                  | -            |
+| `8px`  | `8px`  | Small cards                       | -            |
+| `10px` | `10px` | Medium elements                   | -            |
+| `12px` | `12px` | Medium cards                      | -            |
+| `16px` | `16px` | Cards, buttons                    | -            |
+| `20px` | `20px` | Large cards                       | -            |
+| `24px` | `24px` | **Most common** - Cards, sections | `.radius-24` |
+| `30px` | `30px` | Large sections                    | -            |
+| `32px` | `32px` | Large cards, buttons              | -            |
+| `40px` | `40px` | Decorative elements               | -            |
+| `50px` | `50px` | Buttons, pills                    | -            |
+| `50%`  | -      | **Circles** - Avatars, icons      | -            |
+
+**Organic Shapes** (decorative):
+
+- `border-radius: 44% 56% 44% 56% / 58% 47% 53% 42%` - Organic blob shape
+- `border-radius: 81% 19% 23% 77% / 58% 52% 48% 42%` - Organic blob shape
+- `border-radius: 37% 63% 61% 39% / 52% 49% 51% 48%` - Organic blob shape
+- `border-radius: 42% 58% 37% 63% / 52% 37% 63% 48%` - Organic blob shape
+
+**Most Common**: `24px` (`.radius-24`) pentru cards și secțiuni principale
+
+### Shadows
+
+**Box Shadow Values** (extrase din SCSS):
+
+| Shadow               | Value                                     | Usage              |
+| -------------------- | ----------------------------------------- | ------------------ |
+| **Card Shadow**      | `0px 16px 32px 0px rgba(0, 0, 0, 0.06)`   | Cards, dropcap     |
+| **Menu Shadow**      | `0px 20px 30px rgba(3, 4, 28, 0.1)`       | Dropdown menus     |
+| **Modal Shadow**     | `0px 30px 70px 0px rgba(11, 6, 70, 0.08)` | Modal overlays     |
+| **Header Shadow**    | `0 10px 30px rgba(0, 0, 0, 0.12)`         | Sticky header      |
+| **Header Shadow 2**  | `0px 4px 10px rgba(3, 4, 28, 0.1)`        | Header alternative |
+| **Login Shadow**     | `0px 30px 60px rgba(3, 4, 28, 0.1)`       | Login forms        |
+| **Offcanvas Shadow** | `-5px 0 20px -5px rgba(0, 0, 0, 0.5)`     | Sidebar/offcanvas  |
+
+**Drop Shadow** (pentru imagini și decorative elements):
+
+- `filter: drop-shadow(5px 5px 0 var(--bd-theme-2))` - Portocaliu shadow
+- `filter: drop-shadow(5px 5px 0 var(--bd-theme-1))` - Turcoaz shadow
+- `filter: drop-shadow(4px 4px 0px #FFE1BD)` - Light orange shadow
+- `filter: drop-shadow(6px 6px 0 var(--bd-theme-2))` - Stronger shadow
+- `filter: drop-shadow(0px 10px 0 var(--bd-theme-2))` - Vertical shadow
+
+**Pattern**: Shadows sunt folosite pentru depth și elevation, drop-shadows pentru decorative elements
+
+### Breakpoints (Responsive)
+
+**Breakpoint System** (din `_breakpoints.scss`):
+
+| Breakpoint | Min Width | Max Width | Usage               |
+| ---------- | --------- | --------- | ------------------- |
+| **XXXL**   | `1600px`  | `1700px`  | Extra large screens |
+| **XXL**    | `1400px`  | `1599px`  | Large desktop       |
+| **XL**     | `1200px`  | `1399px`  | Desktop             |
+| **LG**     | `992px`   | `1199px`  | Tablet landscape    |
+| **MD**     | `768px`   | `991px`   | Tablet portrait     |
+| **SM**     | `576px`   | `767px`   | Mobile landscape    |
+| **XS**     | `0px`     | `575px`   | Mobile portrait     |
+
+**Bootstrap Grid**:
+
+- Utiliză sistemul Bootstrap 5.3.3 grid
+- 12 columns
+- Responsive breakpoints: sm, md, lg, xl, xxl
+
+**Container Max Widths**:
+
+- Default: Bootstrap responsive
+- ≥1400px: `1320px` (custom)
+
+### Z-Index Scale
+
+**Z-Index Values** (din componente):
+
+| Value | Usage                   |
+| ----- | ----------------------- |
+| `1`   | Base elements           |
+| `10`  | Panel overlays          |
+| `11`  | Elevated elements       |
+| `99`  | Progress/scroll buttons |
+| `999` | Body overlay, modals    |
+
+**Common Z-Index Pattern**:
+
+- Base content: `z-index: 1`
+- Overlays: `z-index: 10-11`
+- Fixed elements: `z-index: 99`
+- Modals/overlays: `z-index: 999`
 
 ### Icons
 
@@ -310,6 +489,11 @@ className="wow fadeInUp" data-wow-duration="1s" data-wow-delay=".3s"
 - **SVG Components** - Iconuri custom React
 
 **Pattern**: `<i className="flaticon-search"></i>`
+
+**Icon Sizes** (implicit):
+
+- Standard: Font size based
+- Custom SVG: Variable sizes
 
 ## Adaptări Necesare pentru Yuvoo
 
@@ -463,7 +647,6 @@ className="wow fadeInUp" data-wow-duration="1s" data-wow-delay=".3s"
 ### Actualizări Necesare
 
 1. **techContext.md**: ✅ **COMPLETAT**
-
    - [x] Adăugare Bootstrap 5.3.3 în tehnologii actuale
    - [x] Adăugare SCSS în tehnologii actuale
    - [x] Adăugare WOW.js, Animate.css
@@ -471,21 +654,18 @@ className="wow fadeInUp" data-wow-duration="1s" data-wow-delay=".3s"
    - [x] Notă despre migrarea graduală la Tailwind
 
 2. **systemPatterns.md**: ✅ **COMPLETAT**
-
    - [x] Adăugare secțiune despre componente existente
    - [x] Adăugare pattern-uri de adaptare (Class→Club, Teacher→Doctor)
    - [x] Adăugare strategie migrare Bootstrap→Tailwind
    - [x] Adăugare structura componentelor reutilizabile
 
 3. **activeContext.md**: ✅ **COMPLETAT**
-
    - [x] Actualizare cu tema Kindedo ca starting point
    - [x] Adăugare task-uri de adaptare componente
    - [x] Adăugare task-uri de rebranding
    - [x] Adăugare task-uri de localizare română
 
 4. **progress.md**: ✅ **COMPLETAT**
-
    - [x] Adăugare secțiune "Componente Disponibile"
    - [x] Adăugare task-uri de adaptare componente
    - [x] Adăugare task-uri de rebranding
@@ -505,7 +685,6 @@ className="wow fadeInUp" data-wow-duration="1s" data-wow-delay=".3s"
 ### Prioritate Înaltă
 
 1. **Analiza Culorilor**: ✅ **COMPLETAT**
-
    - [x] Extrage paleta exactă din SCSS files
    - [x] Documentează în designSystem.md
    - [x] Decide adaptări pentru brand Yuvoo
@@ -514,13 +693,11 @@ className="wow fadeInUp" data-wow-duration="1s" data-wow-delay=".3s"
      - Accent: `#7C81FF` (violet) ✅
 
 2. **Rebranding Initial**:
-
    - [ ] Schimbă logo-ul
    - [ ] Actualizează metadata
    - [ ] Actualizează favicon
 
 3. **Adaptare Componente Cheie**:
-
    - [ ] Class → Club (primul test)
    - [ ] Teacher → Doctor (al doilea test)
    - [ ] Program → Sport (al treilea test)
@@ -533,7 +710,6 @@ className="wow fadeInUp" data-wow-duration="1s" data-wow-delay=".3s"
 ### Prioritate Medie
 
 5. **Migrare Styling**:
-
    - [ ] Setup Tailwind CSS
    - [ ] Creează componente noi cu Tailwind
    - [ ] Planifică migrare graduală

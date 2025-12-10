@@ -5,15 +5,16 @@
  * Handles database queries for doctor data.
  */
 
-import { db } from "@/lib/db";
-import { doctors } from "@/lib/db/schema";
-import { eq } from "drizzle-orm";
+// TODO: Uncomment when implementing database queries
+// import { db } from "@/lib/db";
+// import { doctors } from "@/lib/db/schema";
+// import { eq } from "drizzle-orm";
 import type { Doctor } from "./doctors.types";
 
 /**
  * Find doctor by slug
  */
-export async function findBySlug(slug: string): Promise<Doctor | null> {
+export async function findBySlug(_slug: string): Promise<Doctor | null> {
   // TODO: Implement database query
   return null; // Placeholder
 }
@@ -21,7 +22,7 @@ export async function findBySlug(slug: string): Promise<Doctor | null> {
 /**
  * Find doctors by specialty
  */
-export async function findBySpecialty(specialty: string): Promise<Doctor[]> {
+export async function findBySpecialty(_specialty: string): Promise<Doctor[]> {
   // TODO: Implement database query
   return []; // Placeholder
 }

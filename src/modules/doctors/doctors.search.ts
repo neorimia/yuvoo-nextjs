@@ -5,8 +5,9 @@
  * Handles complex queries with multiple filters.
  */
 
-import { doctorsRepository } from "./doctors.repository";
-import type { Doctor, DoctorSearchFilters, DoctorSearchResult } from "./doctors.types";
+// TODO: Uncomment when implementing search logic
+// import { doctorsRepository } from "./doctors.repository";
+import type { DoctorSearchFilters, DoctorSearchResult } from "./doctors.types";
 
 /**
  * Search doctors with filters
@@ -19,7 +20,8 @@ export async function search(filters: DoctorSearchFilters): Promise<DoctorSearch
   // 4. Apply pagination
   // 5. Return results with metadata
 
-  const doctors = await doctorsRepository.findAll();
+  // TODO: Use doctors result when implementing search logic
+  // const doctors = await doctorsRepository.findAll();
 
   return {
     doctors: [],

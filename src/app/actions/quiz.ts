@@ -18,7 +18,7 @@ export async function submitQuizAction(
   input: CreateQuizInput
 ): Promise<{ success: boolean; result?: QuizResult; error?: string }> {
   try {
-    const user = await requireAuth();
+    await requireAuth(); // Authentication check
 
     // TODO: Validate input with Zod schema
 
@@ -42,7 +42,7 @@ export async function submitQuizAction(
  */
 export async function getQuizResultAction(quizId: string): Promise<QuizResult | null> {
   try {
-    const user = await requireAuth();
+    await requireAuth(); // Authentication check
 
     const result = await getQuizResult(quizId);
 
@@ -61,7 +61,7 @@ export async function getQuizResultAction(quizId: string): Promise<QuizResult | 
  */
 export async function getQuizHistoryAction(childId: string): Promise<QuizResult[]> {
   try {
-    const user = await requireAuth();
+    await requireAuth(); // Authentication check
 
     // TODO: Verify child belongs to user
 

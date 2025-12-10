@@ -7,7 +7,7 @@
 
 import { quizRepository } from "./quiz.repository";
 import { quizAnalyzer } from "./quiz.analyzer";
-import type { QuizSubmission, QuizResult, CreateQuizInput } from "./quiz.types";
+import type { QuizResult, CreateQuizInput } from "./quiz.types";
 
 /**
  * Submit quiz and get AI recommendations

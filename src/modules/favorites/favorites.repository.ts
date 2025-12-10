@@ -5,15 +5,16 @@
  * Handles database queries for favorite data.
  */
 
-import { db } from "@/lib/db";
-import { favorites } from "@/lib/db/schema";
-import { eq, and } from "drizzle-orm";
+// TODO: Uncomment when implementing database queries
+// import { db } from "@/lib/db";
+// import { favorites } from "@/lib/db/schema";
+// import { eq, and } from "drizzle-orm";
 import type { Favorite, CreateFavoriteInput } from "./favorites.types";
 
 /**
  * Find favorites by user ID
  */
-export async function findByUserId(userId: string): Promise<Favorite[]> {
+export async function findByUserId(_userId: string): Promise<Favorite[]> {
   // TODO: Implement database query
   return []; // Placeholder
 }
@@ -22,9 +23,9 @@ export async function findByUserId(userId: string): Promise<Favorite[]> {
  * Find favorite by user and entity
  */
 export async function findByUserAndEntity(
-  userId: string,
-  entityId: string,
-  entityType: "club" | "doctor"
+  _userId: string,
+  _entityId: string,
+  _entityType: "club" | "doctor"
 ): Promise<Favorite | null> {
   // TODO: Implement database query
   return null; // Placeholder
@@ -33,7 +34,7 @@ export async function findByUserAndEntity(
 /**
  * Find favorite by ID
  */
-export async function findById(favoriteId: string): Promise<Favorite | null> {
+export async function findById(_favoriteId: string): Promise<Favorite | null> {
   // TODO: Implement database query
   return null; // Placeholder
 }
@@ -41,7 +42,7 @@ export async function findById(favoriteId: string): Promise<Favorite | null> {
 /**
  * Create favorite
  */
-export async function create(input: CreateFavoriteInput): Promise<Favorite> {
+export async function create(_input: CreateFavoriteInput): Promise<Favorite> {
   // TODO: Implement database insert
   throw new Error("Not implemented");
 }
@@ -49,7 +50,7 @@ export async function create(input: CreateFavoriteInput): Promise<Favorite> {
 /**
  * Delete favorite
  */
-export async function deleteFavorite(favoriteId: string): Promise<void> {
+export async function deleteFavorite(_favoriteId: string): Promise<void> {
   // TODO: Implement database delete
   throw new Error("Not implemented");
 }

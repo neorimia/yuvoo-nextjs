@@ -7,7 +7,7 @@
 
 import { bookingsRepository } from "./bookings.repository";
 import { bookingsNotifications } from "./bookings.notifications";
-import type { Booking, CreateBookingInput, UpdateBookingInput } from "./bookings.types";
+import type { Booking, CreateBookingInput } from "./bookings.types";
 
 /**
  * Create new booking

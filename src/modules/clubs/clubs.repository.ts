@@ -5,15 +5,16 @@
  * Handles database queries for club data.
  */
 
-import { db } from "@/lib/db";
-import { clubs } from "@/lib/db/schema";
-import { eq, and } from "drizzle-orm";
+// TODO: Uncomment when implementing database queries
+// import { db } from "@/lib/db";
+// import { clubs } from "@/lib/db/schema";
+// import { eq, and } from "drizzle-orm";
 import type { Club } from "./clubs.types";
 
 /**
  * Find club by slug
  */
-export async function findBySlug(slug: string): Promise<Club | null> {
+export async function findBySlug(_slug: string): Promise<Club | null> {
   // TODO: Implement database query
   return null; // Placeholder
 }
@@ -21,7 +22,7 @@ export async function findBySlug(slug: string): Promise<Club | null> {
 /**
  * Find clubs by sport
  */
-export async function findBySport(sportId: string): Promise<Club[]> {
+export async function findBySport(_sportId: string): Promise<Club[]> {
   // TODO: Implement database query
   return []; // Placeholder
 }

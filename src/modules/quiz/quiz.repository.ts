@@ -5,9 +5,10 @@
  * Handles database queries for quiz data.
  */
 
-import { db } from "@/lib/db";
-import { quizzes } from "@/lib/db/schema";
-import { eq } from "drizzle-orm";
+// TODO: Uncomment when implementing database queries
+// import { db } from "@/lib/db";
+// import { quizzes } from "@/lib/db/schema";
+// import { eq } from "drizzle-orm";
 import type {
   QuizSubmission,
   QuizResult,
@@ -18,7 +19,7 @@ import type {
 /**
  * Create quiz submission
  */
-export async function create(input: CreateQuizInput): Promise<QuizSubmission> {
+export async function create(_input: CreateQuizInput): Promise<QuizSubmission> {
   // TODO: Implement database insert
   throw new Error("Not implemented");
 }
@@ -27,8 +28,8 @@ export async function create(input: CreateQuizInput): Promise<QuizSubmission> {
  * Save quiz results
  */
 export async function saveResults(
-  quizId: string,
-  recommendations: SportRecommendation[]
+  _quizId: string,
+  _recommendations: SportRecommendation[]
 ): Promise<QuizResult> {
   // TODO: Implement database update with results
   throw new Error("Not implemented");
@@ -37,7 +38,7 @@ export async function saveResults(
 /**
  * Find result by ID
  */
-export async function findResultById(quizId: string): Promise<QuizResult | null> {
+export async function findResultById(_quizId: string): Promise<QuizResult | null> {
   // TODO: Implement database query
   return null; // Placeholder
 }
@@ -45,7 +46,7 @@ export async function findResultById(quizId: string): Promise<QuizResult | null>
 /**
  * Find quizzes by child ID
  */
-export async function findByChildId(childId: string): Promise<QuizResult[]> {
+export async function findByChildId(_childId: string): Promise<QuizResult[]> {
   // TODO: Implement database query
   return []; // Placeholder
 }
