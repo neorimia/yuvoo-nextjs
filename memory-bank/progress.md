@@ -205,7 +205,15 @@
         - [x] Legacy routes organized for redirects (✅ Kindedo routes mapped)
         - [x] Helper functions: `buildUrl`, `isProtectedRoute`, `getRouteGroup`, `isPublicSeoRoute` (✅ created)
         - [x] External links and asset paths (✅ defined)
-    - [ ] Create modules/ directory structure (auth, children, quiz, clubs, doctors, bookings, favorites)
+    - [x] Create modules/ directory structure (auth, children, quiz, clubs, doctors, bookings, favorites) (✅ created with service, repository, types, and optional files)
+      - [x] `modules/README.md` - Module structure documentation (✅ created)
+      - [x] `modules/auth/` - Authentication service layer (✅ created: service, repository, types, README)
+      - [x] `modules/children/` - Child profile management (✅ created: service, repository, types, README)
+      - [x] `modules/quiz/` - AI Coach Quiz logic (✅ created: service, repository, analyzer, types, README)
+      - [x] `modules/clubs/` - Sports club operations (✅ created: service, repository, search, types, README)
+      - [x] `modules/doctors/` - Pediatric specialist operations (✅ created: service, repository, search, types, README)
+      - [x] `modules/bookings/` - Trial bookings and consultations (✅ created: service, repository, notifications, types, README)
+      - [x] `modules/favorites/` - Saved clubs and doctors (✅ created: service, repository, types, README)
     - [ ] Create app/actions/ directory for Server Actions
     - [ ] Organize existing components (keep Kindedo structure initially)
   - [ ] Configure TypeScript paths and aliases
