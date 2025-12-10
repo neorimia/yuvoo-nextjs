@@ -20,6 +20,16 @@ if (!process.env.DATABASE_URL) {
   process.exit(1);
 }
 
+// Debug: Check DATABASE_URL (masked for security)
+const dbUrl = process.env.DATABASE_URL;
+if (dbUrl) {
+  const maskedUrl = dbUrl.replace(/:[^:@]+@/, ":****@"); // Mask password
+  console.log("📋 DATABASE_URL found:", maskedUrl.substring(0, 50) + "...");
+} else {
+  console.error("❌ DATABASE_URL is empty or undefined");
+  process.exit(1);
+}
+
 import { db } from "./index";
 import { sql } from "drizzle-orm";
 
