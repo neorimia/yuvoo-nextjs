@@ -26,15 +26,30 @@
 
 ### UI & Styling
 
-- **Tailwind CSS**: `^3.4.1` - Utility-first CSS
-- **shadcn/ui**: Component library built on Radix UI
+**Current (Starting Theme - Kindedo)**:
+
+- **Bootstrap**: `5.3.3` - CSS framework (actual)
+- **SCSS**: `^1.75.0` - CSS preprocessor (actual)
+- **Animate.css** - Animation library (actual)
+- **WOW.js**: `^1.2.2` - Scroll animations (actual)
+- **Font Awesome Pro** - Icon library (actual)
+- **Flaticon Kindedo** - Custom icons (actual)
+- **Nice Select** - Styled dropdowns (actual)
+- **Fredoka** (Google Fonts) - Primary font, child-friendly (actual)
+
+**Planned Migration**:
+
+- **Tailwind CSS**: `^3.4.1` - Utility-first CSS (planificat)
+- **shadcn/ui**: Component library built on Radix UI (planificat)
   - `@radix-ui/react-dialog ^1.0.5`
   - `@radix-ui/react-select ^2.0.0`
   - `@radix-ui/react-slot ^1.0.2`
-- **Lucide React**: `^0.344.0` - Icon library
-- **Class Variance Authority**: `^0.7.0` - Component variants
-- **clsx**: `^2.1.0` - Conditional classnames
-- **tailwind-merge**: `^2.2.0` - Merge Tailwind classes
+- **Lucide React**: `^0.344.0` - Icon library (planificat)
+- **Class Variance Authority**: `^0.7.0` - Component variants (planificat)
+- **clsx**: `^2.1.0` - Conditional classnames (planificat)
+- **tailwind-merge**: `^2.2.0` - Merge Tailwind classes (planificat)
+
+**Migration Strategy**: Gradual migration - keep Bootstrap for existing components, use Tailwind for new components. See `designSystem.md` for details.
 
 ### Validation
 

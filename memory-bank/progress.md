@@ -25,6 +25,9 @@
 - [x] Database schema designed
 - [x] Feature list documented
 - [x] User flows mapped
+- [x] Starting theme analyzed (Kindedo)
+- [x] Design system documented
+- [x] Component adaptation strategy defined
 
 ## What's In Progress 🚧
 
@@ -36,25 +39,37 @@
 - [ ] Database connection
 - [ ] Authentication setup
 
+### Theme Adaptation
+
+- [ ] Analyze color palette from SCSS files
+- [ ] Extract design tokens
+- [ ] Create Yuvoo brand guidelines
+- [ ] Update logo and favicon
+- [ ] Update metadata and branding
+
 ## What's Left to Build 📋
 
 ### Week 1-2: Foundation
 
-- [ ] Next.js 15 project setup
-- [ ] Tailwind CSS + shadcn/ui installation
+- [ ] Next.js latest project setup (✅ already done - Kindedo theme)
+- [ ] Analyze and document existing components
+- [ ] Extract color palette and design tokens
+- [ ] Rebranding (logo, metadata, favicon)
+- [ ] Tailwind CSS setup (for new components)
 - [ ] Drizzle ORM setup
 - [ ] Database schema implementation
 - [ ] Stack Auth integration
-- [ ] Basic layout components (Header, Footer, Sidebar)
+- [ ] Adapt Header/Footer components (branding only)
 - [ ] Routing structure
 
 ### Week 3-4: Core Pages
 
-- [ ] Landing page
-- [ ] Sign up / Sign in pages
-- [ ] Dashboard layout
-- [ ] Child profile management (CRUD)
-- [ ] Onboarding flow
+- [ ] Landing page (adapt HeroArea components)
+- [ ] Sign up / Sign in pages (✅ already exist - adapt branding)
+- [ ] Dashboard layout (new component)
+- [ ] Child profile management (CRUD) (new component)
+- [ ] Onboarding flow (new component)
+- [ ] Localize all UI text to Romanian
 
 ### Week 5-8: Quiz System
 
@@ -72,28 +87,31 @@
 
 ### Week 9-12: Club Discovery
 
-- [ ] Club listing page
-- [ ] Club search and filters
-- [ ] Club card component
-- [ ] Club detail page (SSG)
+- [ ] Adapt Class components → Club components
+- [ ] Club listing page (adapt ClassesMain)
+- [ ] Club search and filters (new component)
+- [ ] Club card component (adapt Class cards)
+- [ ] Club detail page (SSG) (adapt ClassDetailsMain)
 - [ ] Club information display
-- [ ] Photo gallery
-- [ ] Map integration (location)
+- [ ] Photo gallery (✅ exists - Gallery component)
+- [ ] Map integration (location) (new component)
 - [ ] Schedule display
 - [ ] Club search service
 - [ ] Location-based search
 - [ ] Basic booking form
 - [ ] Booking creation flow
+- [ ] Add verification badge component
 
 ### Week 13-14: Doctor Profiles
 
-- [ ] Doctor listing page
-- [ ] Doctor search and filters
-- [ ] Doctor card component
-- [ ] Doctor profile page (SSG)
-- [ ] Professional information display
-- [ ] Availability calendar
-- [ ] Appointment booking form
+- [ ] Adapt Teacher components → Doctor components
+- [ ] Doctor listing page (adapt TeachersMain)
+- [ ] Doctor search and filters (new component)
+- [ ] Doctor card component (adapt Teacher cards)
+- [ ] Doctor profile page (SSG) (adapt TeacherDetailsMain)
+- [ ] Professional information display (adapt TeacherInfo)
+- [ ] Availability calendar (new component)
+- [ ] Appointment booking form (new component)
 - [ ] AI Coach → Specialist recommendation logic
 - [ ] Risk signal detection
 
