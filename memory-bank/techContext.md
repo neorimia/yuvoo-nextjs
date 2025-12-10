@@ -4,10 +4,20 @@
 
 ### Core Framework
 
-- **Next.js**: `^15.0.3` - React framework with App Router
-- **React**: `^19.0.0` - UI library
-- **React DOM**: `^19.0.0` - React rendering
-- **TypeScript**: `^5.6.3` - Type safety
+**Current Installed Versions**:
+
+- **Next.js**: `15.5.7` (installed) - React framework with App Router ✅
+- **React**: `19.2.1` (installed) - UI library ✅
+- **React DOM**: `19.2.1` (installed) - React rendering ✅
+- **TypeScript**: `5.9.3` (installed) - Type safety ✅
+
+**Package.json Versions**:
+
+- **Next.js**: `^15.3.1` (package.json) - will install latest 15.x
+- **React**: `^19.0.0` (package.json) - will install latest 19.x
+- **TypeScript**: `^5` (package.json) - will install latest 5.x
+
+**Note**: Installed versions are newer than package.json minimums, which is good for compatibility.
 
 ### Database & ORM
 

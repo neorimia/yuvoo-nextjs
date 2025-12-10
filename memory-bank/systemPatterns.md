@@ -409,37 +409,115 @@ data-wow-delay=".3s"
 
 ## Component Patterns
 
-### Client Components
+### Server Components vs Client Components
 
-**When to Use**:
+**Default Rule**: Server Components by default, Client Components only when needed.
 
-- Interactive elements (forms, buttons)
-- State management (useState, useEffect)
-- Browser APIs (localStorage, window)
+**All App Router pages** (`app/**/page.tsx`) are Server Components by default - no `'use client'` directive needed.
 
-**Marking**: `'use client'` directive
+### When to Use Client Components (`'use client'`)
 
-**Current Pattern** (Kindedo):
+Use Client Components when you need:
 
-- Most components are Client Components
-- Uses Redux for global state
-- Uses custom hooks (`useContext`, `useStickyHeader`, etc.)
+1. **Interactivity & Event Handlers**
 
-**Future Pattern**:
+   - `onClick`, `onChange`, `onSubmit` handlers
+   - User interactions (buttons, forms, modals)
+   - Example: `ThemeChanger.tsx` (theme toggle button)
 
-- Server Components by default
-- Client Components only when needed
-- Server Actions instead of Redux for data
+2. **React Hooks**
 
-### Server Components
+   - `useState`, `useEffect`, `useRef`, `useContext`
+   - Custom hooks that use browser APIs
+   - Example: `TypedText.tsx` (uses useEffect for Typed.js)
 
-**When to Use**:
+3. **Browser APIs**
 
-- Data fetching
-- Static content
-- SEO-important pages
+   - `localStorage`, `sessionStorage`
+   - `window`, `document` objects
+   - `navigator`, `location`
+   - Example: `ThemeChanger.tsx` (localStorage for theme)
 
-**Default**: All components are Server Components unless marked `'use client'`
+4. **Third-Party Client Libraries**
+
+   - Swiper (carousels/sliders)
+   - Typed.js (typing animations)
+   - React Hook Form (form validation)
+   - Example: `HomeClassArea.tsx` (Swiper carousel)
+
+5. **State Management**
+
+   - Redux (`useSelector`, `useDispatch`)
+   - Context API (`useContext`)
+   - Example: `CartMain.tsx` (Redux for cart state)
+
+6. **Context Providers**
+   - Custom context providers
+   - Example: `GlobalVideoModal.tsx` (VideoProvider context)
+
+### When to Use Server Components (Default)
+
+Use Server Components for:
+
+1. **Data Fetching**
+
+   - Direct database queries
+   - API calls (no client-side exposure)
+   - Example: Club listing page fetching from database
+
+2. **Static Content**
+
+   - Content that doesn't change
+   - SEO-important text
+   - Example: About page content
+
+3. **Server-Only Code**
+   - File system access
+   - Environment variables (server-side)
+   - Example: Reading config files
+
+### Current Pattern (Kindedo Theme)
+
+**Analysis of 35 Client Components**:
+
+- ✅ **Forms** (8 components): `ContactForm`, `SignInForm`, `SignUpForm`, `ForgotForm` - Need `react-hook-form` and form state
+- ✅ **Shop/Cart** (5 components): `CartMain`, `ShopMain`, `CheckoutMain`, `WishlistMain`, `ShopDetailsMain` - Need Redux state
+- ✅ **Sliders/Carousels** (10+ components): `HomeClassArea`, `ProgramSlider`, `HomeBlogArea` - Need Swiper library
+- ✅ **Interactive UI** (5 components): `ThemeChanger`, `TypedText`, `GlobalVideoModal`, `CountdownSection` - Need browser APIs/hooks
+- ✅ **Gallery** (2 components): `GalleryMain`, `HomeTwoGalleryArea` - Need photo viewer interactions
+- ✅ **Blog/News** (5 components): `BlogMain`, `BlogDetailsMain` - May use Swiper or interactive features
+
+**Conclusion**: All current Client Components are correctly marked - they all require client-side interactivity.
+
+### Future Pattern (Yuvoo)
+
+**Migration Strategy**:
+
+1. **New Components**: Start as Server Components, add `'use client'` only when needed
+2. **Data Fetching**: Use Server Actions + Server Components (no Redux for data)
+3. **Forms**: Keep as Client Components (React Hook Form) but submit to Server Actions
+4. **State**:
+   - Server state → Server Components + Server Actions
+   - Client state → Client Components with `useState` or Context
+   - Global state → Consider removing Redux, use Server Actions + React Context
+
+**Pattern Decision Tree**:
+
+```
+Does component need interactivity?
+  → Yes → Client Component
+  → No → Does it fetch data?
+    → Yes → Server Component
+    → No → Server Component (default)
+```
+
+### Best Practices
+
+1. **Minimize Client Components**: Only mark as `'use client'` when absolutely necessary
+2. **Composition**: Use Server Components as containers, Client Components for interactive parts
+3. **Bundle Size**: Client Components increase JavaScript bundle - keep them small
+4. **Hydration**: Client Components hydrate on client - minimize to improve performance
+5. **Props**: Server Components can pass data to Client Components (serializable props only)
 
 ### Form Handling
 

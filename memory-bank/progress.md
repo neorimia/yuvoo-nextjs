@@ -34,18 +34,131 @@
 ### Foundation Setup
 
 - [ ] Project initialization
+  - [x] Next.js project exists (Kindedo theme)
+  - [ ] Verify Next.js version compatibility
+    - [x] Next.js 15.5.7 installed (✅ compatible, newer than required 15.0.3)
+    - [x] React 19.2.1 installed (✅ compatible, newer than required 19.0.0)
+    - [x] TypeScript 5.9.3 installed (✅ compatible)
+    - [x] TypeScript paths configured (@/_ → ./src/_) ✅
+    - [x] Verify App Router compatibility (check existing routes)
+      - [x] App Router structure exists (✅ route groups: (news), (pages), (shop))
+      - [x] Layout files present (✅ 28 layout.tsx files in route groups and pages)
+      - [x] Page files present (✅ 34 page.tsx files in routes)
+      - [x] Dynamic routes exist (✅ [id] routes in class-details, teacher-details, program-details, shop-details, news-details)
+      - [x] Metadata exports present (✅ metadata in root layout.tsx, 29 files with metadata)
+      - [x] Special files: not-found.tsx exists (✅ custom 404 page)
+      - [x] Root layout uses Metadata API correctly (✅ type-safe metadata export)
+      - [x] No route handlers (route.ts/js) - not needed for current structure
+      - [x] Verify Server Components vs Client Components usage
+        - [x] App Router pages are Server Components (✅ no "use client" in app/)
+        - [x] Client Components properly marked (✅ 36 components with "use client" in components/)
+        - [x] Layout components use "use client" where needed (✅ Header, Wrapper are Client Components)
+        - [x] Review Client Components - verify all need interactivity
+          - [x] Analyzed 35 Client Components (✅ all correctly marked)
+          - [x] Forms (8): Need react-hook-form and form state ✅
+          - [x] Shop/Cart (5): Need Redux state management ✅
+          - [x] Sliders/Carousels (10+): Need Swiper library ✅
+          - [x] Interactive UI (5): Need browser APIs/hooks ✅
+          - [x] Gallery (2): Need photo viewer interactions ✅
+          - [x] Blog/News (5): Use Swiper or interactive features ✅
+        - [x] Document pattern: Server Components by default, Client Components for interactivity
+          - [x] Pattern documented in `systemPatterns.md` ✅
+          - [x] Decision tree and best practices added ✅
+          - [x] Current Kindedo pattern analyzed ✅
+          - [x] Future Yuvoo migration strategy documented ✅
+      - [x] Check for any Pages Router remnants (should be none)
+        - [x] No getServerSideProps/getStaticProps (✅ none found)
+        - [x] No \_app.tsx or \_document.tsx (✅ none found)
+        - [x] No pages/ directory (✅ only app/ directory exists)
+        - [x] App Router structure confirmed (✅ route groups, layouts, pages)
+      - [x] **Summary**: App Router fully compatible ✅ - All routes use App Router, no Pages Router remnants, proper Server/Client Component separation
+    - [x] Test basic Next.js functionality (dev server, build)
+      - [x] Build test successful (✅ `npm run build` completed successfully)
+      - [x] 33 static pages generated (✅ SSG working)
+      - [x] Test dev server (`npm run dev`)
+        - [x] Dev server starts successfully (✅ Ready in ~1550ms)
+        - [x] Port detection works (✅ auto-switches to available port if 3000 is in use)
+        - [x] Local and network URLs accessible
+      - [x] Test production server (`npm start`)
+        - [x] Production server starts successfully (✅ after build)
+        - [x] Serves built static pages correctly
+      - [x] Fix SCSS warning (gray color interpolation in \_root.scss)
+        - [x] Fixed by using `"" + $color` to force string conversion (✅ build successful, no warnings)
+      - [x] **Summary**: All Next.js functionality tests passed ✅ - Build, dev server, and production server all working correctly
+    - [ ] Check for breaking changes in Next.js 15.5.7 vs 15.0.3 (if any)
+      - [ ] Review Next.js 15.5.7 changelog
+      - [ ] Verify no breaking changes affect Yuvoo features
+      - [ ] Test critical features (routing, metadata, Server Components)
+  - [ ] Review and update package.json dependencies
+    - [ ] Verify all Kindedo dependencies are still needed
+    - [ ] Remove unused dependencies (if any)
+    - [ ] Add missing dependencies for Yuvoo (Drizzle, Stack Auth, etc.)
+    - [ ] Update dependency versions if needed
+  - [ ] Set up project structure for Yuvoo
+    - [ ] Create lib/ directory structure (auth, db, validations, integrations, utils)
+    - [ ] Create modules/ directory structure (auth, children, quiz, clubs, doctors, bookings, favorites)
+    - [ ] Create app/actions/ directory for Server Actions
+    - [ ] Organize existing components (keep Kindedo structure initially)
+  - [ ] Configure TypeScript paths and aliases
+    - [x] Verify @/ alias points to src/ (✅ already configured in tsconfig.json)
+    - [ ] Add additional aliases if needed (@/lib, @/components, etc.) - optional
+  - [ ] Set up environment variables template (.env.local.example)
+    - [ ] Create .env.local.example with all required variables
+    - [ ] Document each variable with comments
+    - [ ] Add to .gitignore (.env.local)
 - [ ] Dependency installation
+  - [ ] Install/verify core dependencies (Next.js, React, TypeScript)
+  - [ ] Install database dependencies (Drizzle ORM, Neon driver)
+  - [ ] Install authentication (Stack Auth)
+  - [ ] Install Tailwind CSS (for new components)
+  - [ ] Install shadcn/ui
+  - [ ] Install validation (Zod)
+  - [ ] Install AI/External services (OpenAI, Cloudinary, Brevo)
 - [ ] Development environment setup
+  - [ ] Configure ESLint for Yuvoo
+  - [ ] Configure Prettier
+  - [ ] Set up Git hooks (optional)
+  - [ ] Configure VS Code settings (optional)
 - [ ] Database connection
+  - [ ] Create Neon database
+  - [ ] Set up DATABASE_URL in .env.local
+  - [ ] Configure Drizzle ORM
+  - [ ] Test database connection
 - [ ] Authentication setup
+  - [ ] Create Stack Auth project
+  - [ ] Configure Stack Auth keys
+  - [ ] Set up authentication middleware
+  - [ ] Test authentication flow
 
 ### Theme Adaptation
 
-- [ ] Analyze color palette from SCSS files
-- [ ] Extract design tokens
-- [ ] Create Yuvoo brand guidelines
+- [x] Analyze color palette from SCSS files ✅
+- [x] Extract design tokens ✅
+- [x] Create Yuvoo brand guidelines ✅
 - [ ] Update logo and favicon
+  - [ ] Create/design Yuvoo logo (SVG format)
+  - [ ] Create Yuvoo logo variants:
+    - [ ] logo.svg (default, dark background)
+    - [ ] logo-white.svg (light background)
+    - [ ] favicon.png (16x16, 32x32, 48x48 sizes)
+    - [ ] favicon.ico (app/favicon.ico)
+  - [ ] Replace logo files in public/assets/img/logo/
+  - [ ] Update favicon.ico in src/app/
+  - [ ] Update logo references in Header components (HeaderOne, HeaderTwo, HeaderThree, HeaderFour)
+  - [ ] Update logo in Footer components (FooterOne, FooterTwo, FooterThree)
+  - [ ] Update logo in MenuSidebar component
+  - [ ] Update logo in Topbar components (if applicable)
 - [ ] Update metadata and branding
+  - [ ] Update app/layout.tsx metadata:
+    - [ ] title: "Yuvoo - Descoperă sportul potrivit copilului tău"
+    - [ ] description: Descriere în română pentru Yuvoo
+    - [ ] lang: "ro" (schimbă din "en" la "ro")
+  - [ ] Update favicon.ico in src/app/favicon.ico
+  - [ ] Update site name "Kindedo" → "Yuvoo" în toate componentele
+  - [ ] Update copyright text în Footer components
+  - [ ] Update email addresses (noreply@yuvoo.com sau similar)
+  - [ ] Update social media links (dacă există)
+  - [ ] Update meta tags pentru SEO (Open Graph, Twitter Cards)
 
 ## What's Left to Build 📋
 
