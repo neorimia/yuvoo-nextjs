@@ -214,7 +214,16 @@
       - [x] `modules/doctors/` - Pediatric specialist operations (✅ created: service, repository, search, types, README)
       - [x] `modules/bookings/` - Trial bookings and consultations (✅ created: service, repository, notifications, types, README)
       - [x] `modules/favorites/` - Saved clubs and doctors (✅ created: service, repository, types, README)
-    - [ ] Create app/actions/ directory for Server Actions
+    - [x] Create app/actions/ directory for Server Actions (✅ created with all action files)
+      - [x] `app/actions/README.md` - Server Actions documentation (✅ created)
+      - [x] `app/actions/auth.ts` - Authentication actions (✅ created)
+      - [x] `app/actions/children.ts` - Child profile actions (✅ created)
+      - [x] `app/actions/quiz.ts` - Quiz submission & analysis (✅ created)
+      - [x] `app/actions/clubs.ts` - Club search & management (✅ created)
+      - [x] `app/actions/doctors.ts` - Doctor search & management (✅ created)
+      - [x] `app/actions/bookings.ts` - Booking creation & management (✅ created)
+      - [x] `app/actions/favorites.ts` - Favorites management (✅ created)
+      - [x] `app/actions/uploads.ts` - File upload actions (✅ created)
     - [ ] Organize existing components (keep Kindedo structure initially)
   - [ ] Configure TypeScript paths and aliases
     - [x] Verify @/ alias points to src/ (✅ already configured in tsconfig.json)
