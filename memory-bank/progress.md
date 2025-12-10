@@ -272,30 +272,37 @@
 - [x] Analyze color palette from SCSS files ✅
 - [x] Extract design tokens ✅
 - [x] Create Yuvoo brand guidelines ✅
-- [ ] Update logo and favicon
-  - [ ] Create/design Yuvoo logo (SVG format)
+- [ ] Update logo and favicon (📋 guide created: LOGO_REBRANDING_GUIDE.md)
+  - [ ] Create/design Yuvoo logo (SVG format) (📋 design task - requires logo design)
   - [ ] Create Yuvoo logo variants:
-    - [ ] logo.svg (default, dark background)
-    - [ ] logo-white.svg (light background)
-    - [ ] favicon.png (16x16, 32x32, 48x48 sizes)
-    - [ ] favicon.ico (app/favicon.ico)
-  - [ ] Replace logo files in public/assets/img/logo/
-  - [ ] Update favicon.ico in src/app/
-  - [ ] Update logo references in Header components (HeaderOne, HeaderTwo, HeaderThree, HeaderFour)
-  - [ ] Update logo in Footer components (FooterOne, FooterTwo, FooterThree)
-  - [ ] Update logo in MenuSidebar component
-  - [ ] Update logo in Topbar components (if applicable)
-- [ ] Update metadata and branding
-  - [ ] Update app/layout.tsx metadata:
-    - [ ] title: "Yuvoo - Descoperă sportul potrivit copilului tău"
-    - [ ] description: Descriere în română pentru Yuvoo
-    - [ ] lang: "ro" (schimbă din "en" la "ro")
-  - [ ] Update favicon.ico in src/app/favicon.ico
-  - [ ] Update site name "Kindedo" → "Yuvoo" în toate componentele
-  - [ ] Update copyright text în Footer components
-  - [ ] Update email addresses (noreply@yuvoo.com sau similar)
-  - [ ] Update social media links (dacă există)
-  - [ ] Update meta tags pentru SEO (Open Graph, Twitter Cards)
+    - [ ] logo.svg (default, dark background) (📋 design task)
+    - [ ] logo-white.svg (light background) (📋 design task)
+    - [ ] favicon.png (16x16, 32x32, 48x48 sizes) (📋 design task)
+    - [ ] favicon.ico (app/favicon.ico) (📋 can be generated from favicon.png)
+  - [ ] Replace logo files in public/assets/img/logo/ (📋 after logo design is complete)
+  - [ ] Update favicon.ico in src/app/ (📋 after favicon design is complete)
+  - [ ] Update logo references in Header components (HeaderOne, HeaderTwo, HeaderThree, HeaderFour) (📋 code update task)
+  - [ ] Update logo in Footer components (FooterOne, FooterTwo, FooterThree) (📋 code update task)
+  - [ ] Update logo in MenuSidebar component (📋 code update task)
+  - [ ] Update logo in footer-data.ts (📋 code update task)
+  - [ ] Test logo display across all components (📋 testing task)
+- [x] Update metadata and branding (✅ partially completed)
+  - [x] Update app/layout.tsx metadata:
+    - [x] title: "Yuvoo - Descoperă sportul potrivit copilului tău" (✅ updated)
+    - [x] description: Descriere în română pentru Yuvoo (✅ updated with Romanian description)
+    - [x] lang: "ro" (schimbă din "en" la "ro") (✅ changed to "ro")
+    - [x] Add Open Graph meta tags (✅ added with Romanian content)
+    - [x] Add Twitter Card meta tags (✅ added)
+    - [x] Add SEO keywords (✅ added Romanian keywords)
+  - [ ] Update favicon.ico in src/app/favicon.ico (📋 requires logo design first)
+  - [x] Update site name "Kindedo" → "Yuvoo" în componente principale (✅ footer-data.ts, copyright components, MenuSidebar, TopbarOne, TopbarFour updated)
+  - [x] Update copyright text în Footer components (✅ updated to "© Yuvoo. Toate drepturile rezervate.")
+  - [x] Update email addresses (✅ contact@yuvoo.ro updated in footer-data.ts, MenuSidebar, TopbarOne, TopbarFour)
+  - [x] Update footer links (✅ updated to Romanian routes: /sporturi, /cluburi, /doctori, /chestionar, /despre-noi, /intrebari-frecvente, /ajutor)
+  - [x] Update contact info (✅ updated address to "București, România", phone to Romanian format, email to contact@yuvoo.ro)
+  - [x] Update social media links (✅ updated to Yuvoo accounts: facebook.com/yuvoo, twitter.com/yuvoo, instagram.com/yuvoo in footer-data.ts and MenuSidebar)
+  - [x] Update MenuSidebar (✅ "Despre Yuvoo" text, contact info, search placeholder in Romanian)
+  - [ ] Update remaining "Kindedo" references in data files (📋 blog-data.ts, testimonial-data.ts may contain Kindedo references - low priority, can be updated when those features are implemented)
 
 ## What's Left to Build 📋
 

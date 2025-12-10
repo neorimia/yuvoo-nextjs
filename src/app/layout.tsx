@@ -7,7 +7,7 @@ import { Toaster } from "sonner";
 import "./globals.scss";
 import "swiper/css/bundle";
 import "react-photo-view/dist/react-photo-view.css";
-import 'prismjs/themes/prism-tomorrow.css';
+import "prismjs/themes/prism-tomorrow.css";
 import ReduxProvider from "@/redux/provider";
 
 const fredoka = Fredoka({
@@ -17,9 +17,64 @@ const fredoka = Fredoka({
 });
 
 export const metadata: Metadata = {
-  title: "Kindedo - Kindergarten & School Next js Template",
+  title: "Yuvoo - Descoperă sportul potrivit copilului tău",
   description:
-    "Kindedo Next js Template is focused on preschool and daycare institutions, children groups, playschools, kindergartens, and kids stores. It has all the needed features for a kindergarten or a daycare website, as well as for a children’s goods store or childcare blog.",
+    "Yuvoo este platforma AI care ajută părinții din România să găsească activitățile sportive potrivite pentru copiii lor (4-14 ani). Descoperă sporturi personalizate, cluburi verificate și specialiști pediatri.",
+  keywords: [
+    "sport copii",
+    "cluburi sportive copii",
+    "activități sportive",
+    "sport pentru copii România",
+    "specialiști pediatri sport",
+    "recomandări sport AI",
+  ],
+  authors: [{ name: "Yuvoo" }],
+  creator: "Yuvoo",
+  publisher: "Yuvoo",
+  formatDetection: {
+    email: false,
+    address: false,
+    telephone: false,
+  },
+  metadataBase: new URL(process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000"),
+  alternates: {
+    canonical: "/",
+  },
+  openGraph: {
+    title: "Yuvoo - Descoperă sportul potrivit copilului tău",
+    description:
+      "Platformă AI pentru descoperirea activităților sportive potrivite pentru copiii tăi. Cluburi verificate și specialiști pediatri.",
+    url: process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000",
+    siteName: "Yuvoo",
+    locale: "ro_RO",
+    type: "website",
+    images: [
+      {
+        url: "/assets/img/og-image.jpg", // TODO: Add OG image
+        width: 1200,
+        height: 630,
+        alt: "Yuvoo - Platformă AI pentru sporturi copii",
+      },
+    ],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Yuvoo - Descoperă sportul potrivit copilului tău",
+    description:
+      "Platformă AI pentru descoperirea activităților sportive potrivite pentru copiii tăi.",
+    images: ["/assets/img/twitter-image.jpg"], // TODO: Add Twitter image
+  },
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: {
+      index: true,
+      follow: true,
+      "max-video-preview": -1,
+      "max-image-preview": "large",
+      "max-snippet": -1,
+    },
+  },
 };
 
 export default function RootLayout({
@@ -28,7 +83,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
+    <html lang="ro">
       <body suppressHydrationWarning className={`${fredoka.variable}`}>
         <VideoProvider>
           <ReduxProvider>

@@ -1,164 +1,165 @@
-import logo from '../../public/assets/img/logo/logo.svg';
-import logoWhite from '../../public/assets/img/logo/logo-white.svg';
-import { IFooterData } from '@/types/footer-interface';
+import logo from "../../public/assets/img/logo/logo.svg";
+import logoWhite from "../../public/assets/img/logo/logo-white.svg";
+import { IFooterData } from "@/types/footer-interface";
 
 const footerData: IFooterData = {
-    "description": {
+  description: {
+    id: 1,
+    logo: logo,
+    logoWhite: logoWhite,
+    teaser:
+      "Yuvoo te ajută să găsești activitățile sportive perfecte pentru copilul tău. Descoperă sporturi personalizate, cluburi verificate și specialiști pediatri.",
+    socialTitle: "Social",
+    newsTitle: "Alătură-te Newsletter-ului",
+    newsBtn: "Abonează-te acum",
+    social_icons: [
+      {
         id: 1,
-        logo: logo,
-        logoWhite: logoWhite,
-        teaser: 'In our Adult Participation programs, for most students, it is their first program in Kindedo.',
-        socialTitle: 'Social',
-        newsTitle: 'Join Our Newsletter',
-        newsBtn: 'Subscribe now',
-        social_icons: [
-            {
-                id: 1,
-                icon: 'fa-brands fa-facebook-f',
-                url: 'https://www.facebook.com/',
-                name: 'Facebook',
-            },
-            {
-                id: 2,
-                icon: 'fa-brands fa-twitter',
-                url: 'https://twitter.com/',
-                name: 'Twitter',
-            },
-            {
-                id: 3,
-                icon: 'fa-brands fa-youtube',
-                url: 'https://www.youtube.com/',
-                name: 'Youtube',
-            }
-        ]
-    },
-    "quick_links": {
+        icon: "fa-brands fa-facebook-f",
+        url: "https://facebook.com/yuvoo",
+        name: "Facebook",
+      },
+      {
         id: 2,
-        title: 'Quick links',
-        menus: [
-            {
-                id: 1,
-                menu: 'About',
-                path: '/about',
-            },
-            {
-                id: 2,
-                menu: 'Programs',
-                path: '/programs',
-            },
-            {
-                id: 3,
-                menu: 'Shop',
-                path: '/shop',
-            },
-            {
-                id: 4,
-                menu: 'Classes',
-                path: '/classes',
-            },
-            {
-                id: 5,
-                menu: 'News',
-                path: '/news',
-            },
-            {
-                id: 6,
-                menu: 'Contact',
-                path: '/contact',
-            }
-        ]
-    },
-    "program_links": {
+        icon: "fa-brands fa-twitter",
+        url: "https://twitter.com/yuvoo",
+        name: "Twitter",
+      },
+      {
         id: 3,
-        title: 'Programs',
-        programs: [
-            {
-                id: 1,
-                menu: 'Play School',
-                path: '/programs',
-            },
-            {
-                id: 2,
-                menu: 'Nursery',
-                path: '/programs',
-            },
-            {
-                id: 3,
-                menu: 'Junior Kg',
-                path: '/programs',
-            },
-            {
-                id: 4,
-                menu: 'Senior Kg',
-                path: '/programs',
-            },
-            {
-                id: 5,
-                menu: 'Holiday Camp',
-                path: '/programs',
-            },
-            {
-                id: 6,
-                menu: 'Day Care',
-                path: '/programs',
-            }
-        ]
-    },
-    "customer_services": {
+        icon: "fa-brands fa-instagram",
+        url: "https://instagram.com/yuvoo",
+        name: "Instagram",
+      },
+    ],
+  },
+  quick_links: {
+    id: 2,
+    title: "Link-uri rapide",
+    menus: [
+      {
+        id: 1,
+        menu: "Despre noi",
+        path: "/despre-noi",
+      },
+      {
+        id: 2,
+        menu: "Sporturi",
+        path: "/sporturi",
+      },
+      {
         id: 3,
-        title: 'Programs',
-        services: [
-            {
-                id: 1,
-                menu: 'Recently Viewed',
-                path: '/programs',
-            },
-            {
-                id: 2,
-                menu: 'New Products',
-                path: '/shop',
-            },
-            {
-                id: 3,
-                menu: 'Shipping & Returns',
-                path: '/contact',
-            },
-            {
-                id: 4,
-                menu: 'Senior Kg',
-                path: '/programs',
-            },
-            {
-                id: 5,
-                menu: 'Become a Seller',
-                path: '/programs',
-            }
-        ]
-    },
-    "contact_info": {
+        menu: "Cluburi",
+        path: "/cluburi",
+      },
+      {
         id: 4,
-        title: 'Contact Us',
-        infos: [
-            {
-                id: 1,
-                icon: 'fa-light fa-location-dot',
-                url: '#',
-                title: '14/A, Kilix Home Tower, NYC',
-            },
-            {
-                id: 2,
-                icon: 'fa-light fa-phone',
-                url: 'tel:9072003462',
-                title: '907-200-3462',
-            },
-            {
-                id: 3,
-                icon: 'fa-light fa-envelope',
-                url: 'mailto:support@kindedo.com',
-                title: 'Support@kindedo.com',
-            }
-        ]
-    },
-}
+        menu: "Doctori",
+        path: "/doctori",
+      },
+      {
+        id: 5,
+        menu: "Chestionar",
+        path: "/chestionar",
+      },
+      {
+        id: 6,
+        menu: "Contact",
+        path: "/contact",
+      },
+    ],
+  },
+  program_links: {
+    id: 3,
+    title: "Sporturi populare",
+    programs: [
+      {
+        id: 1,
+        menu: "Fotbal",
+        path: "/sporturi/fotbal",
+      },
+      {
+        id: 2,
+        menu: "Baschet",
+        path: "/sporturi/baschet",
+      },
+      {
+        id: 3,
+        menu: "Tenis",
+        path: "/sporturi/tenis",
+      },
+      {
+        id: 4,
+        menu: "Înot",
+        path: "/sporturi/inot",
+      },
+      {
+        id: 5,
+        menu: "Dans",
+        path: "/sporturi/dans",
+      },
+      {
+        id: 6,
+        menu: "Gimnastică",
+        path: "/sporturi/gimnastica",
+      },
+    ],
+  },
+  customer_services: {
+    id: 3,
+    title: "Servicii",
+    services: [
+      {
+        id: 1,
+        menu: "Chestionar AI",
+        path: "/chestionar",
+      },
+      {
+        id: 2,
+        menu: "Cluburi verificate",
+        path: "/cluburi",
+      },
+      {
+        id: 3,
+        menu: "Specialiști pediatri",
+        path: "/doctori",
+      },
+      {
+        id: 4,
+        menu: "Întrebări frecvente",
+        path: "/intrebari-frecvente",
+      },
+      {
+        id: 5,
+        menu: "Ajutor",
+        path: "/ajutor",
+      },
+    ],
+  },
+  contact_info: {
+    id: 4,
+    title: "Contactează-ne",
+    infos: [
+      {
+        id: 1,
+        icon: "fa-light fa-location-dot",
+        url: "#",
+        title: "București, România",
+      },
+      {
+        id: 2,
+        icon: "fa-light fa-phone",
+        url: "tel:+40700000000",
+        title: "+40 700 000 000",
+      },
+      {
+        id: 3,
+        icon: "fa-light fa-envelope",
+        url: "mailto:contact@yuvoo.ro",
+        title: "contact@yuvoo.ro",
+      },
+    ],
+  },
+};
 
 export default footerData;
