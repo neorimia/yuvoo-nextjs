@@ -253,11 +253,11 @@
   - [x] Configure Prettier (✅ configured: .prettierrc, .prettierignore created)
   - [x] Set up Git hooks (optional) (✅ configured: Husky + lint-staged for pre-commit formatting and linting)
   - [x] Configure VS Code settings (optional) (✅ configured: .vscode/settings.json, extensions.json, format on save, ESLint auto-fix)
-- [ ] Database connection
-  - [ ] Create Neon database
-  - [ ] Set up DATABASE_URL in .env.local
-  - [ ] Configure Drizzle ORM
-  - [ ] Test database connection
+- [x] Database connection (✅ partially configured)
+  - [ ] Create Neon database (📋 manual step - requires Neon account)
+  - [ ] Set up DATABASE_URL in .env.local (📋 copy from .env.local.example and fill in actual connection string)
+  - [x] Configure Drizzle ORM (✅ drizzle.config.ts created, database scripts added to package.json)
+  - [ ] Test database connection (📋 requires DATABASE_URL to be set in .env.local)
 - [ ] Authentication setup
   - [ ] Create Stack Auth project
   - [ ] Configure Stack Auth keys
