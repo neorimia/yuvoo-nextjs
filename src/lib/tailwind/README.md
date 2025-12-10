@@ -12,24 +12,30 @@ Tailwind CSS is configured to work **alongside Bootstrap 5.3.3** in the Yuvoo pr
 
 ✅ **Installed**:
 
-- `tailwindcss@^3.4.19`
+- `tailwindcss@^4.1.17` (upgraded from v3.4.19 using official upgrade tool)
+- `@tailwindcss/postcss@^4.1.17` (PostCSS plugin for Tailwind v4)
 - `postcss@^8.5.6`
-- `autoprefixer@^10.4.22`
+
+**Note**: Autoprefixer is no longer needed - it's built into Tailwind CSS v4.
 
 ## Configuration Files
 
-### 1. `tailwind.config.ts`
+### 1. `src/app/globals.css` (CSS-based Configuration)
 
-**Location**: Root directory
+**Location**: `src/app/globals.css`
 
-**Key Features**:
+**Key Features** (Tailwind v4 uses CSS-based configuration):
 
-- **Content paths**: Scans all TypeScript/TSX files in `src/`
+- **@import 'tailwindcss'**: Imports Tailwind CSS v4
+- **@theme block**: Defines all design tokens (colors, typography, spacing, etc.)
 - **Yuvoo brand colors**: Primary (#00BBAE), Secondary (#FF9B24), Accent (#7C81FF)
 - **Typography**: Fredoka font family, design system font sizes
 - **Border radius**: Values from design system (4px to 50px)
 - **Shadows**: Card, menu, modal, header shadows
-- **Preflight disabled**: Prevents conflicts with Bootstrap
+- **Custom component classes**: `.btn-yuvoo-primary`, `.btn-yuvoo-secondary`, etc. (using `@utility`)
+- **Custom utilities**: `.text-yuvoo-heading`, `.section-padding`, etc.
+
+**Note**: Tailwind v4 no longer uses `tailwind.config.ts` - configuration is done via CSS using the `@theme` directive.
 
 ### 2. `postcss.config.js`
 
@@ -37,19 +43,9 @@ Tailwind CSS is configured to work **alongside Bootstrap 5.3.3** in the Yuvoo pr
 
 **Configuration**:
 
-- Processes CSS with Tailwind CSS
-- Autoprefixer for browser compatibility
+- Uses `@tailwindcss/postcss` plugin (Tailwind v4 PostCSS plugin)
 - Works alongside SCSS compilation
-
-### 3. `src/app/globals.css`
-
-**Location**: `src/app/globals.css`
-
-**Contents**:
-
-- Tailwind directives (`@tailwind base`, `@tailwind components`, `@tailwind utilities`)
-- Custom Yuvoo component classes (`.btn-yuvoo-primary`, `.btn-yuvoo-secondary`, etc.)
-- Custom utilities (`.text-yuvoo-heading`, `.section-padding`, etc.)
+- Autoprefixer is built-in (no separate plugin needed)
 
 **Import**: Added to `src/app/layout.tsx` alongside `globals.scss`
 
@@ -123,9 +119,10 @@ Pre-defined Yuvoo classes:
 
 ### Important Notes
 
-- **Preflight disabled**: Tailwind's base reset is disabled to avoid conflicts
+- **Tailwind v4**: Automatically handles coexistence with other CSS frameworks
 - **Both CSS files loaded**: `globals.scss` (Bootstrap) and `globals.css` (Tailwind) are both imported
 - **No conflicts expected**: Tailwind utilities won't override Bootstrap unless explicitly used
+- **CSS-based config**: Tailwind v4 uses `@theme` in CSS instead of JavaScript config file
 
 ## Design Tokens Integration
 
@@ -142,7 +139,7 @@ All design tokens from `designSystem.md` are integrated:
 
 ### Phase 1: Current (Hybrid)
 
-- ✅ Tailwind installed and configured
+- ✅ Tailwind v4 installed and configured
 - ✅ Bootstrap remains for existing components
 - ✅ New components use Tailwind
 
@@ -183,14 +180,29 @@ export default function TailwindTest() {
 ## Resources
 
 - **Tailwind CSS Docs**: https://tailwindcss.com/docs
-- **Tailwind v3 Config**: https://tailwindcss.com/docs/configuration
+- **Tailwind v4 Docs**: https://tailwindcss.com/docs/v4-beta
+- **Upgrade Guide**: https://tailwindcss.com/docs/upgrade-guide
 - **Design System**: `memory-bank/designSystem.md`
 - **Component Analysis**: `src/components/COMPONENT_ANALYSIS.md`
 
 ## Notes
 
-- Tailwind CSS v3.4.19 is installed (stable version)
-- PostCSS processes Tailwind alongside SCSS
-- Preflight is disabled to prevent Bootstrap conflicts
-- All Yuvoo brand colors are available as Tailwind utilities
-- Custom component classes are defined in `globals.css`
+- **Tailwind CSS v4.1.17** is installed (upgraded from v3.4.19 using `npx @tailwindcss/upgrade`)
+- **CSS-based configuration**: Tailwind v4 uses `@theme` directive in CSS instead of `tailwind.config.ts`
+- **PostCSS**: Uses `@tailwindcss/postcss` plugin for Tailwind v4
+- **Autoprefixer**: Built into Tailwind v4, no separate package needed
+- **Coexistence**: Tailwind v4 automatically handles coexistence with Bootstrap
+- All Yuvoo brand colors are available as Tailwind utilities via CSS custom properties
+- Custom component classes are defined in `globals.css` using `@utility` directive (Tailwind v4 syntax)
+- Configuration migrated from v3 to v4 using official upgrade tool
+
+## Upgrade History
+
+- **Initial Setup**: Tailwind CSS v3.4.19 with `tailwind.config.ts`
+- **Upgraded**: To v4.1.17 using `npx @tailwindcss/upgrade`
+- **Changes**:
+  - Removed `tailwind.config.ts` (now CSS-based)
+  - Migrated to `@theme` directive in `globals.css`
+  - Updated PostCSS config to use `@tailwindcss/postcss`
+  - Removed `autoprefixer` (built-in)
+  - Updated custom utilities to use `@utility` directive

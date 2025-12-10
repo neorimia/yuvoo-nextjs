@@ -49,9 +49,10 @@
 
 **Current Setup**:
 
-- **Tailwind CSS**: `3.4.19` (installed) ✅ - Utility-first CSS for new components
+- **Tailwind CSS**: `4.1.17` (installed) ✅ - Utility-first CSS for new components (upgraded from v3.4.19)
+- **@tailwindcss/postcss**: `4.1.17` (installed) ✅ - PostCSS plugin for Tailwind v4
 - **PostCSS**: `8.5.6` (installed) ✅ - CSS processing
-- **Autoprefixer**: `10.4.22` (installed) ✅ - Browser compatibility
+- **Note**: Tailwind v4 uses CSS-based configuration (no tailwind.config.ts), Autoprefixer is built-in
 
 **Planned Migration** (for additional UI libraries):
 
