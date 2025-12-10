@@ -272,21 +272,7 @@
 - [x] Analyze color palette from SCSS files ✅
 - [x] Extract design tokens ✅
 - [x] Create Yuvoo brand guidelines ✅
-- [ ] Update logo and favicon (📋 guide created: LOGO_REBRANDING_GUIDE.md)
-  - [ ] Create/design Yuvoo logo (SVG format) (📋 design task - requires logo design)
-  - [ ] Create Yuvoo logo variants:
-    - [ ] logo.svg (default, dark background) (📋 design task)
-    - [ ] logo-white.svg (light background) (📋 design task)
-    - [ ] favicon.png (16x16, 32x32, 48x48 sizes) (📋 design task)
-    - [ ] favicon.ico (app/favicon.ico) (📋 can be generated from favicon.png)
-  - [ ] Replace logo files in public/assets/img/logo/ (📋 after logo design is complete)
-  - [ ] Update favicon.ico in src/app/ (📋 after favicon design is complete)
-  - [ ] Update logo references in Header components (HeaderOne, HeaderTwo, HeaderThree, HeaderFour) (📋 code update task)
-  - [ ] Update logo in Footer components (FooterOne, FooterTwo, FooterThree) (📋 code update task)
-  - [ ] Update logo in MenuSidebar component (📋 code update task)
-  - [ ] Update logo in footer-data.ts (📋 code update task)
-  - [ ] Test logo display across all components (📋 testing task)
-- [x] Update metadata and branding (✅ partially completed)
+- [x] Update metadata and branding text (✅ completed)
   - [x] Update app/layout.tsx metadata:
     - [x] title: "Yuvoo - Descoperă sportul potrivit copilului tău" (✅ updated)
     - [x] description: Descriere în română pentru Yuvoo (✅ updated with Romanian description)
@@ -345,8 +331,47 @@
   - [x] Animation durations documented (✅ 0.3s, 0.5s, 1s + easing functions)
   - [x] Z-index scale documented (✅ 1, 10, 11, 99, 999)
   - [x] All design tokens documented in designSystem.md (✅ comprehensive documentation)
-- [ ] Rebranding (logo, metadata, favicon)
-- [ ] Tailwind CSS setup (for new components)
+- [x] Rebranding (✅ metadata and text completed, ⏳ logo/favicon files pending design)
+  - [x] Metadata and branding text (✅ completed)
+    - [x] Update app/layout.tsx metadata (✅ title, description, lang="ro", Open Graph, Twitter Cards, SEO keywords)
+    - [x] Update site name "Kindedo" → "Yuvoo" (✅ footer-data.ts, copyright components, MenuSidebar, TopbarOne, TopbarFour)
+    - [x] Update copyright text (✅ "© Yuvoo. Toate drepturile rezervate.")
+    - [x] Update email addresses (✅ contact@yuvoo.ro)
+    - [x] Update footer links (✅ Romanian routes: /sporturi, /cluburi, /doctori, /chestionar)
+    - [x] Update contact info (✅ București, România, Romanian phone format)
+    - [x] Update social media links (✅ Yuvoo accounts)
+    - [x] Update MenuSidebar (✅ Romanian text, contact info)
+  - [x] Logo references verified (✅ paths already correct - no code changes needed)
+    - [x] Header components (✅ HeaderOne, HeaderTwo, HeaderThree, HeaderFour - paths correct)
+    - [x] Footer components (✅ FooterOne, FooterTwo, FooterThree - paths correct via footer-data.ts)
+    - [x] MenuSidebar (✅ path correct)
+    - [x] footer-data.ts (✅ paths correct)
+    - [x] routes.ts (✅ asset paths correct)
+  - [ ] Logo and favicon files (⏳ blocked by design task - requires logo design)
+    - [ ] Create/design Yuvoo logo (SVG format) (📋 design task - requires logo design)
+    - [ ] Create logo variants:
+      - [ ] logo.svg (default, dark text on light background) (📋 design task)
+      - [ ] logo-white.svg (light text for dark backgrounds) (📋 design task)
+      - [ ] favicon.png (16x16, 32x32, 48x48 sizes) (📋 design task)
+      - [ ] favicon.ico (generated from favicon.png) (📋 after favicon.png is created)
+    - [ ] Replace logo files in public/assets/img/logo/ (📋 after logo design is complete)
+      - [ ] Replace public/assets/img/logo/logo.svg
+      - [ ] Replace public/assets/img/logo/logo-white.svg
+      - [ ] Replace public/assets/img/logo/favicon.png
+    - [ ] Replace favicon.ico in src/app/favicon.ico (📋 after favicon design is complete)
+    - [ ] Test logo display across all components (📋 testing task - after logo files are replaced)
+  - [x] Rebranding guide created (✅ LOGO_REBRANDING_GUIDE.md with complete implementation checklist)
+- [x] Tailwind CSS setup (for new components) (✅ completed)
+  - [x] Install Tailwind CSS v3.4.19 (✅ installed: tailwindcss@3.4.19, postcss@8.5.6, autoprefixer@10.4.22)
+  - [x] Create tailwind.config.ts (✅ configured with Yuvoo brand colors, typography, spacing, shadows, border radius)
+  - [x] Create postcss.config.js (✅ configured with Tailwind and Autoprefixer)
+  - [x] Create globals.css with Tailwind directives (✅ created with custom Yuvoo component classes)
+  - [x] Import globals.css in layout.tsx (✅ added alongside globals.scss)
+  - [x] Configure Tailwind to coexist with Bootstrap (✅ preflight disabled to prevent conflicts)
+  - [x] Integrate Yuvoo design tokens (✅ colors, typography, spacing, shadows, border radius from designSystem.md)
+  - [x] Create custom Yuvoo component classes (✅ btn-yuvoo-primary, btn-yuvoo-secondary, card-yuvoo, etc.)
+  - [x] Create Tailwind documentation (✅ src/lib/tailwind/README.md with usage examples)
+  - [x] Verify build works with Tailwind (✅ build successful)
 - [ ] Drizzle ORM setup
 - [ ] Database schema implementation
 - [ ] Stack Auth integration

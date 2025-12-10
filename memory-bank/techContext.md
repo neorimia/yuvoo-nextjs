@@ -47,9 +47,14 @@
 - **Nice Select** - Styled dropdowns (actual)
 - **Fredoka** (Google Fonts) - Primary font, child-friendly (actual)
 
-**Planned Migration**:
+**Current Setup**:
 
-- **Tailwind CSS**: `^3.4.1` - Utility-first CSS (planificat)
+- **Tailwind CSS**: `3.4.19` (installed) ✅ - Utility-first CSS for new components
+- **PostCSS**: `8.5.6` (installed) ✅ - CSS processing
+- **Autoprefixer**: `10.4.22` (installed) ✅ - Browser compatibility
+
+**Planned Migration** (for additional UI libraries):
+
 - **shadcn/ui**: Component library built on Radix UI (planificat)
   - `@radix-ui/react-dialog ^1.0.5`
   - `@radix-ui/react-select ^2.0.0`

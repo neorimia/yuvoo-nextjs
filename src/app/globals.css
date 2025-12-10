@@ -1,0 +1,84 @@
+/**
+ * Tailwind CSS Global Styles for Yuvoo
+ *
+ * This file contains Tailwind directives and custom CSS for new components.
+ * Bootstrap styles are loaded separately via globals.scss.
+ *
+ * Usage:
+ * - Use Tailwind classes in new components (Quiz, Dashboard, etc.)
+ * - Keep Bootstrap classes in existing adapted components
+ * - Both can coexist in the same project
+ */
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/**
+ * Custom Tailwind Components
+ * 
+ * Add reusable component classes here using @apply directive
+ */
+
+@layer components {
+  /* Yuvoo Primary Button */
+  .btn-yuvoo-primary {
+    @apply bg-primary text-white font-semibold px-6 py-3 rounded-xl transition-all duration-300;
+    @apply hover:bg-primary-dark active:scale-95;
+  }
+
+  /* Yuvoo Secondary Button */
+  .btn-yuvoo-secondary {
+    @apply bg-secondary text-white font-semibold px-6 py-3 rounded-xl transition-all duration-300;
+    @apply hover:bg-secondary-dark active:scale-95;
+  }
+
+  /* Yuvoo Accent Button */
+  .btn-yuvoo-accent {
+    @apply bg-accent text-white font-semibold px-6 py-3 rounded-xl transition-all duration-300;
+    @apply hover:bg-accent-dark active:scale-95;
+  }
+
+  /* Yuvoo Card */
+  .card-yuvoo {
+    @apply bg-white rounded-xl shadow-card p-6 transition-all duration-300;
+    @apply hover:shadow-lg;
+  }
+
+  /* Yuvoo Section Background */
+  .bg-yuvoo-primary-light {
+    @apply bg-primary-light;
+  }
+
+  .bg-yuvoo-secondary-light {
+    @apply bg-secondary-light;
+  }
+
+  .bg-yuvoo-secondary-lighter {
+    @apply bg-secondary-lighter;
+  }
+}
+
+/**
+ * Custom Utilities
+ */
+
+@layer utilities {
+  /* Text colors matching design system */
+  .text-yuvoo-heading {
+    @apply text-neutral-black;
+  }
+
+  .text-yuvoo-body {
+    @apply text-neutral-body;
+  }
+
+  /* Spacing utilities for sections */
+  .section-padding {
+    @apply pt-[110px] pb-[70px];
+  }
+
+  .section-padding-lg {
+    @apply pt-[120px] pb-[80px];
+  }
+}
