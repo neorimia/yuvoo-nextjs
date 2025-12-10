@@ -84,6 +84,9 @@ npm run db:studio
 
 # Check for schema issues
 npm run db:check
+
+# Seed database with sample data
+npm run db:seed
 ```
 
 ## Schema Overview
@@ -127,3 +130,27 @@ npm run db:check
 
 - Use `npm run db:push` for development (direct sync)
 - Use `npm run db:generate` + `npm run db:migrate` for production (versioned migrations)
+
+## Seed Data
+
+The database can be populated with sample data for development and testing using the seed script:
+
+```bash
+npm run db:seed
+```
+
+This will create:
+
+- **Test users** (3 parent accounts)
+- **Sample clubs** (30+ sports clubs across Romania)
+- **Sample doctors** (8 pediatric specialists)
+
+**Note**: The seed script is idempotent - running it multiple times won't create duplicates. Existing records are skipped.
+
+**Seed Data Includes**:
+
+- Clubs covering 20+ different sports (fotbal, baschet, tenis, înot, gimnastică, dans, etc.)
+- Clubs in multiple Romanian cities (București, Cluj-Napoca, Timișoara, Iași, etc.)
+- Mix of verified and unverified clubs
+- Featured clubs for homepage display
+- Doctors specializing in: Ortopedie pediatrică, Nutriție pediatrică, Psihologie sportivă, Medicină sportivă pediatrică, Cardiologie pediatrică, Fizioterapie pediatrică
