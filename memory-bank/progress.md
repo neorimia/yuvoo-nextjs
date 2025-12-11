@@ -419,9 +419,60 @@
       - [x] Sample clubs created (✅ 34 clubs created across Romania)
       - [x] Sample doctors created (✅ 8 doctors created with various specialties)
       - [x] Sports coverage verified (✅ 20 different sports covered: fotbal, baschet, tenis, înot, gimnastică, dans, karate, judo, volei, handbal, atletism, ciclism, echiță, schi, patinaj, hochei, scrimă, tenis de masă, badminton, rugby)
-- [ ] Stack Auth integration
-- [ ] Adapt Header/Footer components (branding only)
-- [ ] Routing structure
+- [ ] Stack Auth integration (backend ✅ configured, frontend ⏳ pending)
+  - [ ] Add Stack Auth client provider to app layout
+  - [ ] Integrate Stack Auth into SignInForm component
+  - [ ] Integrate Stack Auth into SignUpForm component
+  - [ ] Integrate Stack Auth into ForgotPasswordForm component
+  - [ ] Update auth pages metadata and text to Romanian
+  - [ ] Test login/signup flow end-to-end
+  - [ ] Handle redirects after authentication
+- [x] Adapt Header/Footer components (branding only) (✅ completed)
+  - [x] Footer data updated (✅ footer-data.ts - Romanian text, Yuvoo branding)
+  - [x] Copyright text updated (✅ CopyrightText.tsx, CopyrightTextTwo.tsx)
+  - [x] MenuSidebar updated (✅ Romanian text, Yuvoo contact info)
+  - [x] TopbarOne updated (✅ contact@yuvoo.ro)
+  - [x] TopbarFour updated (✅ contact@yuvoo.ro)
+  - [x] TopbarTwo (✅ updated: contact@yuvoo.ro, București address, Romanian hours)
+  - [x] TopbarThree (✅ updated: contact@yuvoo.ro, Romanian phone, Romanian tagline)
+  - [x] BreadcrumbOne (✅ updated: "Kindedo" → "Yuvoo" in breadcrumb)
+  - [x] ContactInfoArea (✅ updated: contact@yuvoo.ro, Romanian phone, București address)
+  - [x] Header logo paths verified (✅ all Header components use correct logo paths)
+  - [x] Footer logo paths verified (✅ footer-data.ts uses correct logo paths)
+- [x] Routing structure (✅ completed)
+  - [x] Routes definition (✅ src/lib/routes.ts - all routes defined with SEO-friendly Romanian paths)
+  - [x] Create route groups structure (✅ completed)
+    - [x] `(public)/` - Public app pages (✅ created: layout.tsx)
+    - [x] `(auth)/` - Authentication pages (✅ created: layout.tsx)
+    - [x] `(marketing)/` - Public marketing pages (✅ created: layout.tsx)
+    - [ ] `(club-portal)/` - Club admin portal routes (⏳ pending - not in MVP Phase 1)
+    - [ ] `(doctor-portal)/` - Doctor portal routes (⏳ pending - not in MVP Phase 1)
+  - [x] Create public pages (✅ completed)
+    - [x] `/sporturi` - Sports listing page (✅ created)
+    - [x] `/sporturi/[slug]` - Sport detail page (✅ created)
+    - [x] `/cluburi` - Clubs listing page (✅ created with ClubsMain component)
+    - [x] `/cluburi/[slug]` - Club detail page (✅ created with ClubDetailsMain component)
+    - [x] `/doctori` - Doctors listing page (✅ created)
+    - [x] `/doctori/[slug]` - Doctor detail page (✅ created)
+    - [x] `/chestionar` - Quiz intro page (✅ created)
+    - [x] `/cautare` - Search page (✅ created)
+  - [x] Create auth pages (✅ completed)
+    - [x] `/auth/login` - Login page (✅ created - uses LoginMain component)
+    - [x] `/auth/register` - Register page (✅ created - uses RegisterMain component)
+    - [x] `/auth/forgot-password` - Forgot password page (✅ created - uses ForgotPasswordMain component)
+    - [x] `/auth/reset-password` - Reset password page (✅ created)
+  - [x] Create protected parent pages (✅ completed)
+    - [x] `/parent/dashboard` - Parent dashboard (✅ created with auth check)
+    - [x] `/parent/children` - Children list (✅ created with auth check)
+    - [ ] `/parent/children/add` - Add child (⏳ pending - will be created when needed)
+    - [x] `/parent/bookings` - Bookings list (✅ created with auth check)
+    - [x] `/parent/favorites` - Favorites list (✅ created with auth check)
+    - [x] `/parent/settings` - Settings page (✅ created with auth check)
+  - [x] Create legacy route redirects (✅ completed)
+    - [x] `/classes` → `/cluburi` (✅ redirect created)
+    - [x] `/teachers` → `/doctori` (✅ redirect created)
+    - [x] `/programs` → `/sporturi` (✅ redirect created)
+    - [ ] Other legacy routes
 
 ### Week 3-4: Core Pages
 
