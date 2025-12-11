@@ -529,6 +529,7 @@ import { getClubBySlug } from "@/modules/clubs/clubs.service";
 - **Brand Guidelines**: `docs/BRAND_GUIDELINES.md` - Visual identity, tone of voice, UX principles, and brand consistency guidelines
 - **Components Guide**: `docs/COMPONENTS_GUIDE.md` - Component patterns, styling rules, and UI development guidelines
 - **Copy Library**: `docs/COPY_LIBRARY.md` - All user-facing text, CTAs, messages, and Romanian language copy
+- **Copywriting Guide**: `docs/COPYWRITING_GUIDE.md` - Copywriting principles, brand voice guidelines, writing templates, and best practices
 - **System Patterns**: `memory-bank/systemPatterns.md` - Architecture patterns and design decisions
 - **Active Context**: `memory-bank/activeContext.md` - Current work focus and recent changes
 - **Progress Tracking**: `memory-bank/progress.md` - Development progress and completed items

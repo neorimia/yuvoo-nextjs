@@ -83,6 +83,10 @@
   - **Content**: Single source of truth for all user-facing text including CTAs, form microcopy, error messages, success messages, empty states, loading states, modal messages, toast notifications, quiz copy, club/doctor copy, navigation labels, trust messages, onboarding copy, search & filters, booking copy, profile & settings, help & support, legal & compliance, email templates, and usage guidelines
   - **Status**: ✅ Complete - Complete reference for all Romanian language copy across the platform
 
+- **Updated**: `docs/COPYWRITING_GUIDE.md` - Comprehensive copywriting guide
+  - **Content**: Brand essence, brand voice (70% warm & supportive, 30% expert & confident), writing principles (clarity, empathy, microcopy, trust building, positivity), language & style guidelines, writing structure, content types (UI, marketing, email, help, errors), writing templates, common mistakes, content checklist, and quick reference
+  - **Status**: ✅ Complete - Complete reference for copywriting principles and best practices
+
 ### Next.js 16 Upgrade & Cache Components Migration ✅
 
 **Completed**: December 2024
@@ -392,6 +396,7 @@
 - **Brand Guidelines**: See `docs/BRAND_GUIDELINES.md` for visual identity, tone of voice, UX principles, and brand consistency guidelines
 - **Components Guide**: See `docs/COMPONENTS_GUIDE.md` for component patterns, styling rules, and UI development guidelines
 - **Copy Library**: See `docs/COPY_LIBRARY.md` for all user-facing text, CTAs, messages, and Romanian language copy
+- **Copywriting Guide**: See `docs/COPYWRITING_GUIDE.md` for copywriting principles, brand voice guidelines, writing templates, and best practices
 - **Phase 1 Focus**: Sports only, ages 4-14, Bucharest
 - **No Payments**: Payment-enabled bookings in Phase 2
 - **No Calendar**: Family calendar in Phase 2

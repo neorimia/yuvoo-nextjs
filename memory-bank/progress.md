@@ -311,6 +311,9 @@
 - [x] Create copy library documentation ✅
   - [x] Created `docs/COPY_LIBRARY.md` with comprehensive copy library ✅
   - [x] Documented all user-facing text including CTAs, form microcopy, error messages, success messages, empty states, loading states, modal messages, toast notifications, quiz copy, club/doctor copy, navigation labels, trust messages, onboarding copy, search & filters, booking copy, profile & settings, help & support, legal & compliance, email templates, and usage guidelines ✅
+- [x] Update copywriting guide documentation ✅
+  - [x] Enhanced `docs/COPYWRITING_GUIDE.md` with comprehensive copywriting guide ✅
+  - [x] Documented brand essence, brand voice (70/30 split), writing principles (clarity, empathy, microcopy, trust building, positivity), language & style guidelines, writing structure, content types (UI, marketing, email, help, errors), writing templates, common mistakes, content checklist, and quick reference ✅
 
 ### Theme Adaptation
 
