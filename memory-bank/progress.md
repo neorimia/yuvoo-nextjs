@@ -583,13 +583,20 @@
   - [x] Integrated all components into homepage (✅ updated: src/app/(public)/page.tsx)
   - [x] Updated homepage SEO metadata (✅ updated: Open Graph, Twitter Cards, keywords, canonical URL)
   - [x] All content in Romanian language (✅ verified)
-- [ ] Sign up / Sign in pages (✅ components exist - needs Stack Auth integration & Romanian branding)
-  - [ ] Integrate Stack Auth into SignInForm component
-  - [ ] Integrate Stack Auth into SignUpForm component
-  - [ ] Integrate Stack Auth into ForgotPasswordForm component
-  - [ ] Update auth pages metadata and text to Romanian
-  - [ ] Test login/signup flow end-to-end
-  - [ ] Handle redirects after authentication
+- [x] Sign up / Sign in pages ✅ (✅ COMPLETE - Stack Auth integration & Romanian localization)
+  - [x] Development plan created (✅ created: `docs/AUTH_INTEGRATION_PLAN.md`)
+  - [x] Add StackProvider to root layout (✅ created: `src/providers/StackAuthProvider.tsx`, integrated in `src/app/layout.tsx`)
+  - [x] Integrate Stack Auth into SignInForm component (✅ completed: Stack Auth integration, Romanian localization, error handling, loading states, redirect to dashboard)
+  - [x] Create error message mappings (✅ created: `src/lib/auth/errors.ts` with Romanian error messages)
+  - [x] Integrate Stack Auth into SignUpForm component (✅ completed: Stack Auth integration, Romanian localization, password confirmation validation, error handling, loading states, redirect to dashboard)
+  - [x] Integrate Stack Auth into ForgotPasswordForm component (✅ completed: Stack Auth integration, Romanian localization, success/error feedback, loading states)
+  - [x] Update auth pages metadata and text to Romanian (✅ completed: LoginMain, RegisterMain, ForgotPasswordMain localized, all page metadata updated with SEO)
+  - [x] Create reset password page and component (✅ completed: ResetPasswordForm, ResetPasswordMain, page with Stack Auth integration, Romanian localization, auto-redirect to login)
+  - [x] Create email confirmation page and component (✅ completed: EmailConfirmationForm, EmailConfirmationMain, page with Stack Auth integration, Romanian localization, auto-redirect to login)
+  - [x] Update Stack Auth configuration (✅ completed: passwordReset and emailVerification URLs configured)
+  - [x] Update routes configuration (✅ completed: emailConfirmation route added)
+  - [x] Handle redirects after authentication (✅ completed: All forms redirect appropriately - login/signup → dashboard, reset/verification → login)
+  - [ ] Test login/signup flow end-to-end (⏳ Ready for testing - all implementation complete)
 - [ ] Dashboard layout (new component)
 - [ ] Child profile management (CRUD) (new component)
 - [ ] Onboarding flow (new component)
