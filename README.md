@@ -223,6 +223,10 @@ npm run clean        # Șterge node_modules și lock files
 
 ## 📚 Documentație
 
+### Setup Guides
+
+- **MCP Setup**: See `MCP_SETUP.md` for Model Context Protocol server configuration (Next.js DevTools MCP)
+
 ### Memory Bank
 
 Documentația completă a proiectului se află în directorul `memory-bank/`:
