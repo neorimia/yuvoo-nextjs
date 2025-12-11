@@ -1,7 +1,9 @@
 "use cache";
 import React from "react";
+import Link from "next/link";
 import wave from "../../../../public/assets/img/shape/wave-line.png";
 import Image, { StaticImageData } from "next/image";
+import { routes } from "@/lib/routes";
 // import { cacheLife } from "next/cache";
 
 interface CopyrightTextProps {
@@ -25,9 +27,28 @@ const CopyrightText: React.FC<CopyrightTextProps> = async ({
         />
       </div>
       <div className="container">
-        <div className="bd-footer-copyright-wrap d-flex align-items-md-center justify-content-center">
-          <div className="bd-footer-copyright-text pb-20">
-            <p>&copy; {new Date().getFullYear()} Yuvoo. Toate drepturile rezervate.</p>
+        <div className="bd-footer-copyright-wrap d-flex flex-column flex-md-row align-items-md-center justify-content-md-center gap-3 pb-20">
+          <div className="bd-footer-copyright-text">
+            <p className="mb-0">
+              &copy; {new Date().getFullYear()} Yuvoo. Toate drepturile rezervate.
+            </p>
+          </div>
+          <div className="bd-footer-legal-links d-flex flex-wrap align-items-center justify-content-center gap-3">
+            <Link href={routes.privacy} className="bd-footer-legal-link">
+              Politică de confidențialitate
+            </Link>
+            <span className="bd-footer-legal-separator">|</span>
+            <Link href={routes.terms} className="bd-footer-legal-link">
+              Termeni și condiții
+            </Link>
+            <span className="bd-footer-legal-separator">|</span>
+            <Link href={routes.cookies} className="bd-footer-legal-link">
+              Politică cookies
+            </Link>
+            <span className="bd-footer-legal-separator">|</span>
+            <Link href={routes.gdpr} className="bd-footer-legal-link">
+              GDPR pentru părinți
+            </Link>
           </div>
         </div>
       </div>

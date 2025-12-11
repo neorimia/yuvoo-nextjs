@@ -32,6 +32,8 @@ export const stackServerApp = new StackServerApp({
   urls: {
     signIn: routes.login,
     signUp: routes.register,
+    passwordReset: routes.resetPassword, // Password reset page
+    emailVerification: routes.emailConfirmation, // Email verification page
     afterSignIn: routes.parent.dashboard, // Protected route - redirect after login
     afterSignUp: routes.parent.dashboard, // Protected route - redirect after signup
   },

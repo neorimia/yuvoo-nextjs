@@ -3,6 +3,7 @@ import Link from "next/link";
 import Image from "next/image";
 import logo from "../../../../../public/assets/img/logo/logo.svg";
 import MobileMenu from "./MobileMenu";
+import { routes, externalLinks } from "@/lib/routes";
 
 interface MenuSidebarProps {
   sideMenuOpen: boolean;
@@ -22,8 +23,8 @@ const MenuSidebar: React.FC<MenuSidebarProps> = ({ sideMenuOpen, setSideMenuOpen
           <div className="offcanvas__content">
             <div className="offcanvas__top mb-40 d-flex justify-content-between align-items-center">
               <div className="offcanvas__logo logo">
-                <Link href="/">
-                  <Image src={logo} style={{ width: "100%", height: "100%" }} alt="img not found" />
+                <Link href={routes.home}>
+                  <Image src={logo} style={{ width: "100%", height: "100%" }} alt="Yuvoo Logo" />
                 </Link>
               </div>
               <div className="offcanvas__close">
@@ -46,7 +47,7 @@ const MenuSidebar: React.FC<MenuSidebarProps> = ({ sideMenuOpen, setSideMenuOpen
             </div>
             <div className="mobile-menu fix mb-30 menu-counter d-lg-none mean-container">
               <div className="mean-bar">
-                <MobileMenu />
+                <MobileMenu onClose={() => setSideMenuOpen(false)} />
               </div>
             </div>
             <div className="offcanvas__about d-none d-lg-block mb-30">
@@ -104,18 +105,18 @@ const MenuSidebar: React.FC<MenuSidebarProps> = ({ sideMenuOpen, setSideMenuOpen
             <div className="offcanvas__social">
               <ul>
                 <li>
-                  <a target="_blank" rel="noreferrer" href="https://www.facebook.com/">
+                  <a target="_blank" rel="noreferrer" href={externalLinks.facebook}>
                     <i className="fa-brands fa-facebook-f"></i>
                   </a>
                 </li>
                 <li>
-                  <a target="_blank" rel="noreferrer" href="https://twitter.com/">
+                  <a target="_blank" rel="noreferrer" href={externalLinks.twitter}>
                     <i className="fa-brands fa-twitter"></i>
                   </a>
                 </li>
                 <li>
-                  <a target="_blank" rel="noreferrer" href="https://www.youtube.com/">
-                    <i className="fa-brands fa-youtube"></i>
+                  <a target="_blank" rel="noreferrer" href={externalLinks.instagram}>
+                    <i className="fa-brands fa-instagram"></i>
                   </a>
                 </li>
               </ul>

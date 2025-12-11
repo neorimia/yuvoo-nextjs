@@ -556,16 +556,47 @@
     - [x] `/teachers` → `/doctori` (✅ redirect created)
     - [x] `/programs` → `/sporturi` (✅ redirect created)
     - [ ] Other legacy routes
+  - [x] Create legal pages (✅ completed)
+    - [x] `/confidentialitate` - Privacy Policy (✅ created with 9 sections, complete Romanian content)
+    - [x] `/termeni` - Terms of Service (✅ created with 9 sections, complete Romanian content)
+    - [x] `/cookies` - Cookie Policy (✅ created with 7 sections, complete Romanian content)
+    - [x] `/gdpr-parinti` - GDPR for Parents (✅ created with 11 sections, complete Romanian content)
+    - [x] Legal pages SCSS styling (✅ created: `public/assets/scss/layout/_legal.scss`)
+    - [x] Footer legal links integration (✅ added to CopyrightText and CopyrightTextTwo components)
+    - [x] Footer legal links styling (✅ added to `_footer.scss`)
+    - [x] SEO metadata on all pages (✅ Open Graph, Twitter Cards, canonical URLs)
+    - [x] Development plan documentation (✅ created: `docs/LEGAL_PAGES_DEVELOPMENT_PLAN.md`)
 
 ### Week 3-4: Core Pages
 
-- [x] Landing page (adapt HeroArea components) (✅ completed)
+- [x] Landing page (homepage components) (✅ completed)
   - [x] Created HeroYuvoo component with Romanian text (✅ created: src/components/HeroArea/HeroYuvoo.tsx)
-  - [x] Updated homepage to use HeroYuvoo and HomeClubArea (✅ updated: src/app/home/page.tsx)
-  - [x] Updated homepage metadata for Yuvoo (✅ updated: src/app/page.tsx with Romanian title and description)
-  - [x] Added getFeaturedClubs Server Action (✅ added: src/app/actions/clubs.ts)
-  - [x] Made HomeClubArea handle empty data gracefully (✅ updated: src/components/features/clubs/HomeClubArea.tsx)
-- [ ] Sign up / Sign in pages (✅ already exist - adapt branding)
+  - [x] Created HowItWorks component (✅ created: src/components/features/home/HowItWorks.tsx)
+  - [x] Created FeaturedSports component (✅ created: src/components/features/home/FeaturedSports.tsx)
+  - [x] Created FeaturedClubs component (✅ created: src/components/features/home/FeaturedClubs.tsx)
+  - [x] Created FeaturedDoctors component (✅ created: src/components/features/home/FeaturedDoctors.tsx)
+  - [x] Created HomeTestimonial component (✅ created: src/components/features/home/HomeTestimonial.tsx)
+  - [x] Created HomeFaq component (✅ created: src/components/features/home/HomeFaq.tsx)
+  - [x] Updated HomePromotionArea with Yuvoo content (✅ updated: src/components/Promotion/HomePromotionArea.tsx)
+  - [x] Updated HomeThreeFeatureArea with Yuvoo features (✅ updated: src/components/Feature/HomeThreeFeatureArea.tsx)
+  - [x] Updated fact-data.ts with Yuvoo statistics (✅ updated: src/data/fact-data.ts)
+  - [x] Integrated all components into homepage (✅ updated: src/app/(public)/page.tsx)
+  - [x] Updated homepage SEO metadata (✅ updated: Open Graph, Twitter Cards, keywords, canonical URL)
+  - [x] All content in Romanian language (✅ verified)
+- [x] Sign up / Sign in pages ✅ (✅ COMPLETE - Stack Auth integration & Romanian localization)
+  - [x] Development plan created (✅ created: `docs/AUTH_INTEGRATION_PLAN.md`)
+  - [x] Add StackProvider to root layout (✅ created: `src/providers/StackAuthProvider.tsx`, integrated in `src/app/layout.tsx`)
+  - [x] Integrate Stack Auth into SignInForm component (✅ completed: Stack Auth integration, Romanian localization, error handling, loading states, redirect to dashboard)
+  - [x] Create error message mappings (✅ created: `src/lib/auth/errors.ts` with Romanian error messages)
+  - [x] Integrate Stack Auth into SignUpForm component (✅ completed: Stack Auth integration, Romanian localization, password confirmation validation, error handling, loading states, redirect to dashboard)
+  - [x] Integrate Stack Auth into ForgotPasswordForm component (✅ completed: Stack Auth integration, Romanian localization, success/error feedback, loading states)
+  - [x] Update auth pages metadata and text to Romanian (✅ completed: LoginMain, RegisterMain, ForgotPasswordMain localized, all page metadata updated with SEO)
+  - [x] Create reset password page and component (✅ completed: ResetPasswordForm, ResetPasswordMain, page with Stack Auth integration, Romanian localization, auto-redirect to login)
+  - [x] Create email confirmation page and component (✅ completed: EmailConfirmationForm, EmailConfirmationMain, page with Stack Auth integration, Romanian localization, auto-redirect to login)
+  - [x] Update Stack Auth configuration (✅ completed: passwordReset and emailVerification URLs configured)
+  - [x] Update routes configuration (✅ completed: emailConfirmation route added)
+  - [x] Handle redirects after authentication (✅ completed: All forms redirect appropriately - login/signup → dashboard, reset/verification → login)
+  - [ ] Test login/signup flow end-to-end (⏳ Ready for testing - all implementation complete)
 - [ ] Dashboard layout (new component)
 - [ ] Child profile management (CRUD) (new component)
 - [ ] Onboarding flow (new component)
@@ -694,15 +725,52 @@
 
 ### Landing Page & Onboarding
 
-**Status**: Not Started
-**Components Needed**:
+**Status**: Homepage Components Complete ✅
+**Components Created**:
 
-- Homepage design
-- Value proposition section
-- 3-step process explanation
-- Sign-up form
-- Onboarding flow
-- Trust indicators
+- ✅ Homepage design (complete component structure)
+- ✅ Value proposition section (HeroYuvoo component)
+- ✅ 3-step process explanation (HowItWorks component)
+- ✅ Featured sports showcase (FeaturedSports component)
+- ✅ Featured clubs showcase (FeaturedClubs component)
+- ✅ Featured doctors showcase (FeaturedDoctors component)
+- ✅ Parent testimonial (HomeTestimonial component)
+- ✅ FAQ section (HomeFaq component)
+- ✅ Trust indicators (verification badges, specialist credentials)
+- ✅ SEO optimization (metadata, Open Graph, Twitter Cards)
+
+**Components Still Needed**:
+
+- [ ] Sign-up form integration
+- [ ] Onboarding flow
+- [ ] User account creation flow
+
+### Legal Pages
+
+**Status**: Complete ✅
+**Pages Created**:
+
+- ✅ Privacy Policy (`/confidentialitate`) - 9 sections, complete Romanian content, GDPR compliant
+- ✅ Terms of Service (`/termeni`) - 9 sections, complete Romanian content
+- ✅ Cookie Policy (`/cookies`) - 7 sections, complete Romanian content
+- ✅ GDPR for Parents (`/gdpr-parinti`) - 11 sections, complete Romanian content, children's data protection focus
+
+**Features Implemented**:
+
+- ✅ SEO metadata (titles, descriptions, keywords, Open Graph, Twitter Cards, canonical URLs)
+- ✅ Responsive design (mobile, tablet, desktop)
+- ✅ Footer legal links integration (CopyrightText, CopyrightTextTwo)
+- ✅ Footer legal links styling
+- ✅ SCSS styling (`_legal.scss`) with responsive typography
+- ✅ Internal linking between related pages
+- ✅ Contact information on all pages
+- ✅ "Last updated" dates
+- ✅ Proper heading hierarchy for accessibility
+- ✅ Development plan documentation (`docs/LEGAL_PAGES_DEVELOPMENT_PLAN.md`)
+
+**Next Step**:
+
+- [ ] Legal review by counsel (GDPR compliance, Romanian law compliance, content accuracy)
 
 ### Authentication System
 

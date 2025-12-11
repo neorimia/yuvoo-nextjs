@@ -1,37 +1,50 @@
-import React from "react";
+import React, { Suspense } from "react";
 import type { Metadata } from "next";
 import BreadcrumbOne from "@/components/Breadcrumb/BreadcrumbOne";
+import ResetPasswordMain from "@/components/Auth/ResetPasswordMain";
 
 export const metadata: Metadata = {
-  title: "Resetare Parolă - Yuvoo",
-  description: "Resetează parola contului tău Yuvoo.",
+  title: "Resetare Parolă | Yuvoo",
+  description:
+    "Resetează parola contului tău Yuvoo. Introdu parola nouă folosind link-ul primit pe email.",
+  keywords: [
+    "resetare parola yuvoo",
+    "schimbare parola yuvoo",
+    "reset password yuvoo",
+    "parola noua",
+  ],
+  openGraph: {
+    title: "Resetare Parolă | Yuvoo",
+    description:
+      "Resetează parola contului tău Yuvoo. Introdu parola nouă folosind link-ul primit pe email.",
+    url: `${process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000"}/auth/reset-password`,
+    siteName: "Yuvoo",
+    locale: "ro_RO",
+    type: "website",
+  },
+  twitter: {
+    card: "summary",
+    title: "Resetare Parolă | Yuvoo",
+    description: "Resetează parola contului tău Yuvoo.",
+  },
+  alternates: {
+    canonical: "/auth/reset-password",
+  },
 };
 
 /**
  * Reset Password Page
  *
  * Authentication page for password reset.
- * Route: /auth/reset-password
+ * Route: /auth/reset-password?token=<reset-token>
  */
 export default function ResetPasswordPage() {
   return (
     <>
       <BreadcrumbOne title="Resetare Parolă" subTitle="Resetare Parolă" />
-      <section className="bd-reset-password-area pt-120 pb-70">
-        <div className="container">
-          <div className="row justify-content-center">
-            <div className="col-xl-6 col-lg-8">
-              <div className="bd-reset-password-content">
-                <h1 className="bd-section-title mb-30">Resetare Parolă</h1>
-                {/* TODO: Add reset password form component */}
-                <div className="bd-reset-password-placeholder">
-                  <p>Formularul de resetare parolă va fi adăugat aici.</p>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
+      <Suspense fallback={<div className="text-center py-5">Se încarcă...</div>}>
+        <ResetPasswordMain />
+      </Suspense>
     </>
   );
 }

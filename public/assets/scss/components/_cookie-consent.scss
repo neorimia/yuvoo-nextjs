@@ -1,0 +1,163 @@
+@use "../utils" as *;
+
+/*----------------------------------------*/
+/*  COOKIE CONSENT BANNER CSS START
+/*----------------------------------------*/
+
+.bd-cookie-consent-banner {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: 9999;
+  background: var(--bd-common-white);
+  box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.1);
+  padding: 24px;
+  animation: slideUp 0.3s ease-out;
+
+  @media #{$md,$sm,$xs} {
+    padding: 20px 16px;
+  }
+
+  @keyframes slideUp {
+    from {
+      transform: translateY(100%);
+      opacity: 0;
+    }
+    to {
+      transform: translateY(0);
+      opacity: 1;
+    }
+  }
+}
+
+.bd-cookie-consent-content {
+  max-width: 1200px;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+
+  @media #{$md,$sm,$xs} {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 16px;
+  }
+}
+
+.bd-cookie-consent-text {
+  flex: 1;
+
+  @media #{$md,$sm,$xs} {
+    width: 100%;
+  }
+}
+
+.bd-cookie-consent-title {
+  font-size: 18px;
+  font-weight: var(--bd-fw-semi-bold);
+  color: var(--bd-theme-1);
+  margin-bottom: 8px;
+  line-height: 1.4;
+
+  @media #{$sm,$xs} {
+    font-size: 16px;
+  }
+}
+
+.bd-cookie-consent-description {
+  font-size: 14px;
+  line-height: 1.6;
+  color: var(--bd-text-body);
+  margin: 0;
+
+  @media #{$sm,$xs} {
+    font-size: 13px;
+  }
+}
+
+.bd-cookie-consent-link {
+  color: var(--bd-theme-1);
+  text-decoration: underline;
+  font-weight: var(--bd-fw-medium);
+  transition: color 0.3s ease;
+
+  &:hover {
+    color: var(--bd-theme-2);
+  }
+}
+
+.bd-cookie-consent-actions {
+  display: flex;
+  gap: 12px;
+  flex-shrink: 0;
+
+  @media #{$md,$sm,$xs} {
+    width: 100%;
+    flex-direction: column;
+  }
+
+  @media #{$sm,$xs} {
+    gap: 10px;
+  }
+}
+
+.bd-cookie-consent-btn {
+  padding: 12px 24px;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: var(--bd-fw-semi-bold);
+  border: none;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  white-space: nowrap;
+
+  @media #{$md,$sm,$xs} {
+    width: 100%;
+    padding: 14px 24px;
+  }
+
+  @media #{$sm,$xs} {
+    font-size: 13px;
+    padding: 12px 20px;
+  }
+
+  &:focus {
+    outline: 2px solid var(--bd-theme-1);
+    outline-offset: 2px;
+  }
+}
+
+.bd-cookie-consent-btn-primary {
+  background-color: var(--bd-theme-1);
+  color: var(--bd-common-white);
+
+  &:hover {
+    background-color: var(--bd-theme-2);
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(0, 187, 174, 0.3);
+  }
+
+  &:active {
+    transform: translateY(0);
+  }
+}
+
+.bd-cookie-consent-btn-secondary {
+  background-color: transparent;
+  color: var(--bd-theme-1);
+  border: 2px solid var(--bd-theme-1);
+
+  &:hover {
+    background-color: var(--bd-theme-1);
+    color: var(--bd-common-white);
+    transform: translateY(-1px);
+  }
+
+  &:active {
+    transform: translateY(0);
+  }
+}
+
+// COOKIE CONSENT BANNER CSS END

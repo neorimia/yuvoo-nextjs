@@ -57,6 +57,7 @@ export const routes = {
   forgotPassword: "/auth/forgot-password",
   resetPassword: "/auth/reset-password",
   verifyEmail: "/auth/verify-email",
+  emailConfirmation: "/auth/email-confirmation",
   verificationPending: "/auth/verification-pending",
   chooseRole: "/auth/choose-role",
 

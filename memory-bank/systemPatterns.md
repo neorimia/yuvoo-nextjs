@@ -220,17 +220,31 @@ users (1) ──→ (many) favorites (clubs/doctors)
 
 ## Authentication Pattern
 
-### Stack Auth Integration
+### Stack Auth Integration ✅ COMPLETE
 
 **Configuration**: `lib/auth/stack.ts`
 **Session Management**: `lib/auth/session.ts`
+**Client Provider**: `src/providers/StackAuthProvider.tsx` (wraps StackProvider and StackTheme)
+**Error Handling**: `lib/auth/errors.ts` (Romanian error messages)
 
-**Flow**:
+**Client-Side Integration**:
 
-1. User authenticates via Stack Auth
-2. Server Action checks Stack Auth session
-3. Syncs with local `users` table (creates if needed)
-4. Returns local user record
+- **Provider Setup**: `StackAuthProvider` wraps entire app in root layout
+- **Hooks Used**: `useStackApp()` for authentication methods
+- **Forms**: All authentication forms are client components using Stack Auth methods
+  - `signInWithCredential()` - Sign in
+  - `signUpWithCredential()` - Sign up
+  - `sendForgotPasswordEmail()` - Password reset request
+  - `resetPasswordWithToken()` - Password reset with token
+  - `verifyEmail()` - Email verification
+
+**Authentication Flow**:
+
+1. User authenticates via Stack Auth (client-side)
+2. Stack Auth manages session
+3. Server Actions can check Stack Auth session via `lib/auth/session.ts`
+4. Syncs with local `users` table (creates if needed)
+5. Returns local user record
 
 **Session Helper**:
 
@@ -244,6 +258,28 @@ requireAuth() → throws if not authenticated
 - Layout-level: `app/(auth)/layout.tsx` checks session
 - Server Actions: Use `requireAuth()` helper
 - Middleware: Optional for additional protection
+
+**Authentication Pages** (All completed with Romanian localization):
+
+- `/auth/login` - Sign in page
+- `/auth/register` - Sign up page
+- `/auth/forgot-password` - Password reset request
+- `/auth/reset-password` - Password reset with token
+- `/auth/email-confirmation` - Email verification
+
+**Error Handling**:
+
+- Centralized error message mapping in `lib/auth/errors.ts`
+- All error messages in Romanian
+- `getErrorMessage()` utility function extracts user-friendly messages from Stack Auth errors
+- Forms display errors with consistent styling
+
+**Redirects**:
+
+- Successful login → `/parent/dashboard`
+- Successful signup → `/parent/dashboard`
+- Successful password reset → `/auth/login`
+- Successful email verification → `/auth/login`
 
 ## AI Integration Pattern
 
@@ -687,6 +723,8 @@ Does component need interactivity?
 - **SEO Guidelines**: `docs/SEO_GUIDELINES.md` - SEO strategy, slug generation, meta tags templates, Open Graph templates, and SEO best practices
 - **Site Map**: `docs/SITE_MAP.md` - Complete application structure, all routes, user flows, and navigation patterns
 - **Wireframes**: `docs/WIREFRAMES.md` - Detailed page structures, component placement, and layout specifications for all major pages
+- **Legal Pages Plan**: `docs/LEGAL_PAGES_DEVELOPMENT_PLAN.md` - Comprehensive legal pages development plan, content templates, SEO guidelines, and implementation checklist
+- **Authentication Integration Plan**: `docs/AUTH_INTEGRATION_PLAN.md` - Complete authentication system integration details, Stack Auth setup, Romanian localization, and implementation checklist
 - **System Patterns**: `memory-bank/systemPatterns.md` - This file
 - **Technical Context**: `memory-bank/techContext.md` - Technology stack details
 - **Product Context**: `memory-bank/productContext.md` - Product requirements
