@@ -21,7 +21,37 @@ interface HomeClubAreaProps {
 }
 
 const HomeClubArea: React.FC<HomeClubAreaProps> = ({ clubs }) => {
-  const featuredClubs = clubs.slice(0, 6); // Show first 6 clubs
+  const featuredClubs = clubs?.slice(0, 6) || []; // Show first 6 clubs
+
+  // If no clubs, show a message
+  if (featuredClubs.length === 0) {
+    return (
+      <section className="bd-club-area pt-110 pb-120">
+        <div className="container">
+          <div className="row justify-content-center">
+            <div className="col-lg-8">
+              <div className="bd-section-title-wrapper text-center mb-55 wow fadeInUp">
+                <h2 className="bd-section-title mb-0">Cluburi Sportive Verificate</h2>
+                <p>
+                  Descoperă cele mai bune cluburi sportive pentru copiii tăi
+                  <br />
+                  Verificate și recomandate de specialiști
+                </p>
+                <div className="mt-4">
+                  <Link href={routes.clubs.list} className="bd-btn">
+                    <span className="bd-btn-inner">
+                      <span className="bd-btn-normal">Explorează toate cluburile</span>
+                      <span className="bd-btn-hover">Explorează toate cluburile</span>
+                    </span>
+                  </Link>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+    );
+  }
 
   return (
     <section className="bd-club-area pt-110 pb-120">

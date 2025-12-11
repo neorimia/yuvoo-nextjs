@@ -40,21 +40,17 @@ const nextConfig: NextConfig = {
     ignoreBuildErrors: false,
   },
 
-  // ESLint configuration
-  eslint: {
-    // Fail build on ESLint errors in production
-    ignoreDuringBuilds: false,
-  },
-
   // Production optimizations
   poweredByHeader: false, // Remove X-Powered-By header for security
   compress: true, // Enable gzip compression
   reactStrictMode: true, // Enable React strict mode
 
-  // Experimental features (if needed)
-  // experimental: {
-  //   // Add experimental features here if needed
-  // },
+  // Note: The "useContext is not exported from 'react'" warning from Stack Auth
+  // is a known compatibility issue with React 19. It's a bundling warning that
+  // doesn't break functionality. Stack Auth will need to update for full React 19 support.
+
+  // Cache Components (Next.js 16.0.8 - moved to root level)
+  cacheComponents: true,
 };
 
 export default nextConfig;

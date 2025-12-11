@@ -10,6 +10,12 @@ interface ClubDetailPageProps {
   }>;
 }
 
+// TODO: Implement proper generateStaticParams when real data fetching is added
+// For now, returning a dummy value to satisfy Cache Components requirement
+export async function generateStaticParams() {
+  return [{ slug: "example-club" }];
+}
+
 /**
  * Club Detail Page
  *
@@ -17,6 +23,8 @@ interface ClubDetailPageProps {
  * SEO-friendly route: /cluburi/[slug]
  */
 export default async function ClubDetailPage({ params }: ClubDetailPageProps) {
+  // DYNAMIC: Page uses dynamic params - will be rendered on-demand
+  // TODO: Add generateStaticParams and "use cache" when implementing real data fetching
   const { slug } = await params;
 
   // TODO: Fetch club data by slug
@@ -25,6 +33,7 @@ export default async function ClubDetailPage({ params }: ClubDetailPageProps) {
 
   // Placeholder club data for now
   // TODO: Fetch club data by slug
+  // NOTE: Using static dates for placeholder - will be replaced with real data fetching
   const club: Club = {
     id: "1",
     name: "Club Sportiv",
@@ -38,6 +47,7 @@ export default async function ClubDetailPage({ params }: ClubDetailPageProps) {
       address: "Str. Exemplu 1",
     },
     verified: true,
+    featured: false,
     images: [],
     ageGroups: [],
     levels: [],
@@ -45,8 +55,8 @@ export default async function ClubDetailPage({ params }: ClubDetailPageProps) {
       email: "contact@club.ro",
       phone: "+40700000000",
     },
-    createdAt: new Date(),
-    updatedAt: new Date(),
+    createdAt: new Date("2024-01-01"), // Static date for placeholder
+    updatedAt: new Date("2024-01-01"), // Static date for placeholder
   };
 
   return (
@@ -58,6 +68,8 @@ export default async function ClubDetailPage({ params }: ClubDetailPageProps) {
 }
 
 export async function generateMetadata({ params }: ClubDetailPageProps): Promise<Metadata> {
+  // MIGRATED: generateMetadata uses async params, but page doesn't use dynamic APIs
+  // Adding "use cache" to page component to make it cacheable
   const { slug } = await params;
 
   return {

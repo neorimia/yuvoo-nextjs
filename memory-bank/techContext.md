@@ -6,18 +6,20 @@
 
 **Current Installed Versions**:
 
-- **Next.js**: `15.5.7` (installed) - React framework with App Router ✅
+- **Next.js**: `16.0.8` (installed) - React framework with App Router and Cache Components ✅
 - **React**: `19.2.1` (installed) - UI library ✅
 - **React DOM**: `19.2.1` (installed) - React rendering ✅
 - **TypeScript**: `5.9.3` (installed) - Type safety ✅
 
 **Package.json Versions**:
 
-- **Next.js**: `^15.3.1` (package.json) - will install latest 15.x
-- **React**: `^19.0.0` (package.json) - will install latest 19.x
+- **Next.js**: `^16.0.8` (package.json) - upgraded from 15.3.1 ✅
+- **React**: `^19.2.1` (package.json) - upgraded from 19.0.0 ✅
 - **TypeScript**: `^5` (package.json) - will install latest 5.x
 
-**Note**: Installed versions are newer than package.json minimums, which is good for compatibility.
+**Cache Components**: Enabled (`cacheComponents: true` in next.config.ts) ✅
+
+**Note**: Upgraded to Next.js 16.0.8 with Cache Components mode enabled. All routes migrated and verified.
 
 ### Database & ORM
 
@@ -45,7 +47,7 @@
 - **Font Awesome Pro** - Icon library (actual)
 - **Flaticon Kindedo** - Custom icons (actual)
 - **Nice Select** - Styled dropdowns (actual)
-- **Fredoka** (Google Fonts) - Primary font, child-friendly (actual)
+- **Gabarito** (Google Fonts) - Primary font, child-friendly (actual)
 
 **Current Setup**:
 
@@ -434,9 +436,29 @@ import { getClubBySlug } from "@/modules/clubs/clubs.service";
 
 ### Caching Strategy
 
-- **Next.js Cache**: Automatic caching of Server Components
-- **Revalidation**: `revalidatePath()` after mutations
-- **Static Assets**: Cloudinary CDN
+**Cache Components (Next.js 16)**:
+
+- **Dynamic by Default**: All routes are dynamic unless using `"use cache"`
+- **Opt-in Caching**: Use `"use cache"` directive for cacheable content (must be async functions)
+- **Private Cache**: Use `"use cache: private"` for user-specific prefetchable content
+- **Cache Life**: Configure with `cacheLife()` for time-based revalidation
+- **Cache Tags**: Use `cacheTag()` for on-demand revalidation
+- **Static Shells**: Cached components create static shells for instant loading
+- **Suspense Boundaries**: Use `<Suspense>` for dynamic content within cached routes
+
+**Legacy Patterns (Removed)**:
+
+- ❌ `export const dynamic = "force-dynamic"` - Removed, use dynamic APIs instead
+- ❌ `export const revalidate` - Removed, use `cacheLife()` instead
+- ❌ `unstable_noStore()` - Removed, dynamic by default
+
+**Revalidation**:
+
+- **Time-based**: `cacheLife('hours')`, `cacheLife('days')`, etc.
+- **Tag-based**: `cacheTag('resource-name')` with `revalidateTag()` or `updateTag()`
+- **Path-based**: `revalidatePath()` after mutations (still supported)
+
+**Static Assets**: Cloudinary CDN
 
 ## Security Considerations
 
@@ -499,3 +521,20 @@ import { getClubBySlug } from "@/modules/clubs/clubs.service";
 - **Search**: Full-text search (Postgres or Algolia)
 - **Real-time**: WebSockets for notifications
 - **Mobile App**: React Native (future phase)
+
+## Documentation References
+
+- **Architecture Overview**: `docs/ARCHITECTURE_OVERVIEW.md` - Complete architecture documentation with patterns, data flows, and design decisions
+- **Code Generation Rules**: `docs/ PROMPTING_RULES_FOR_CODEGEN.md` - Comprehensive code generation guidelines
+- **Brand Guidelines**: `docs/BRAND_GUIDELINES.md` - Visual identity, tone of voice, UX principles, and brand consistency guidelines
+- **Components Guide**: `docs/COMPONENTS_GUIDE.md` - Component patterns, styling rules, and UI development guidelines
+- **Copy Library**: `docs/COPY_LIBRARY.md` - All user-facing text, CTAs, messages, and Romanian language copy
+- **Copywriting Guide**: `docs/COPYWRITING_GUIDE.md` - Copywriting principles, brand voice guidelines, writing templates, and best practices
+- **Data Models**: `docs/DATA_MODELS.md` - All data structures, TypeScript interfaces, database schemas, and model relationships
+- **Design Tokens**: `docs/DESIGN_TOKENS.md` - Comprehensive design tokens reference (colors, typography, spacing, shadows, border radius, animations, breakpoints)
+- **SEO Guidelines**: `docs/SEO_GUIDELINES.md` - SEO strategy, slug generation, meta tags templates, Open Graph templates, and SEO best practices
+- **Site Map**: `docs/SITE_MAP.md` - Complete application structure, all routes, user flows, and navigation patterns
+- **Wireframes**: `docs/WIREFRAMES.md` - Detailed page structures, component placement, and layout specifications for all major pages
+- **System Patterns**: `memory-bank/systemPatterns.md` - Architecture patterns and design decisions
+- **Active Context**: `memory-bank/activeContext.md` - Current work focus and recent changes
+- **Progress Tracking**: `memory-bank/progress.md` - Development progress and completed items

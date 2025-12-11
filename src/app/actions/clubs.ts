@@ -51,3 +51,33 @@ export async function getClubsBySportAction(sportId: string): Promise<Club[]> {
     return [];
   }
 }
+
+/**
+ * Get featured clubs for homepage (public action)
+ */
+export async function getFeaturedClubs(): Promise<{
+  success: boolean;
+  data?: Club[];
+  error?: string;
+}> {
+  try {
+    // Search for featured and verified clubs, limit to 6
+    const result = await searchClubs({
+      featured: true,
+      verified: true,
+      page: 1,
+      pageSize: 6,
+    });
+    return {
+      success: true,
+      data: result.clubs,
+    };
+  } catch (error) {
+    console.error("Error getting featured clubs:", error);
+    return {
+      success: false,
+      data: [],
+      error: error instanceof Error ? error.message : "Unknown error",
+    };
+  }
+}

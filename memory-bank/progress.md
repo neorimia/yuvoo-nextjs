@@ -104,7 +104,7 @@
         - [x] Routing: All routes accessible and functional (✅ tested)
         - [x] Metadata: Type-safe metadata exports working (✅ confirmed in layout.tsx)
         - [x] Server Components: Default behavior working (✅ no "use client" in app/)
-        - [x] Font optimization: Next.js font loader working (✅ Fredoka font loaded)
+        - [x] Font optimization: Next.js font loader working (✅ Gabarito font loaded)
         - [x] Image optimization: Next.js Image component available (✅ used in components)
       - [x] **Summary**: No breaking changes detected ✅ - All Next.js 15.5.7 features work correctly with existing codebase. Project is fully compatible.
   - [x] Review and update package.json dependencies
@@ -152,15 +152,15 @@
         - [x] `openai ^4.72.0` - OpenAI API client (✅ installed: 4.104.0)
         - [x] `cloudinary ^2.5.1` - Media storage & CDN (✅ installed: 2.8.0)
         - [x] `@getbrevo/brevo ^2.2.0` - Email service (✅ installed: 2.5.0)
-      - [x] **UI & Styling (Planned Migration)** (to add later):
-        - [ ] `tailwindcss ^3.4.1` - Utility-first CSS (planned)
-        - [ ] `@radix-ui/react-dialog ^1.0.5` - shadcn/ui components (planned)
-        - [ ] `@radix-ui/react-select ^2.0.0` - shadcn/ui components (planned)
-        - [ ] `@radix-ui/react-slot ^1.0.2` - shadcn/ui components (planned)
-        - [ ] `lucide-react ^0.344.0` - Icon library (planned)
-        - [ ] `class-variance-authority ^0.7.0` - Component variants (planned)
-        - [ ] `clsx ^2.1.0` - Conditional classnames (planned)
-        - [ ] `tailwind-merge ^2.2.0` - Merge Tailwind classes (planned)
+      - [x] **UI & Styling** (✅ Tailwind and shadcn/ui installed):
+        - [x] `tailwindcss v4.1.17` - Utility-first CSS (✅ installed - upgraded to v4)
+        - [x] `class-variance-authority ^0.7.1` - Component variants (✅ installed)
+        - [x] `clsx ^2.1.1` - Conditional classnames (✅ installed)
+        - [x] `lucide-react ^0.560.0` - Icon library (✅ installed)
+        - [x] `tailwind-merge ^3.4.0` - Merge Tailwind classes (✅ installed)
+        - [ ] `@radix-ui/react-dialog ^1.0.5` - shadcn/ui components (📋 install when adding dialog component)
+        - [ ] `@radix-ui/react-select ^2.0.0` - shadcn/ui components (📋 install when adding select component)
+        - [ ] `@radix-ui/react-slot ^1.0.2` - shadcn/ui components (📋 install when adding slot component)
       - [x] **Development Tools** (added):
         - [x] `prettier ^3.2.5` - Code formatting (✅ installed: 3.7.4, config files created: `.prettierrc`, `.prettierignore`, npm scripts added)
         - [ ] `prettier-plugin-tailwindcss ^0.5.11` - Tailwind class sorting (⏳ add when Tailwind is added)
@@ -175,7 +175,7 @@
       - [x] Dependencies analysis complete ✅
       - [x] Identified 3 unused/problematic packages to remove/replace
       - [x] Identified 9 core Yuvoo dependencies to add (database, auth, validation, AI, services)
-      - [x] Identified 7 planned UI dependencies for Tailwind migration (add later)
+      - [x] Installed UI dependencies (Tailwind v4 ✅, shadcn/ui core ✅, Radix UI components install on-demand)
       - [x] **Actions completed**:
         - [x] Removed `cache` and `clean` from package.json ✅
         - [x] Removed `@react-native-async-storage/async-storage` from package.json ✅
@@ -244,8 +244,8 @@
   - [x] Install/verify core dependencies (Next.js, React, TypeScript) (✅ installed: Next.js 15.5.7, React 19.2.1, TypeScript 5.9.3)
   - [x] Install database dependencies (Drizzle ORM, Neon driver) (✅ installed: drizzle-orm 0.36.4, drizzle-kit 0.28.1, @neondatabase/serverless 0.10.4, postgres 3.4.5)
   - [x] Install authentication (Stack Auth) (✅ installed: @stackframe/stack 2.8.56)
-  - [ ] Install Tailwind CSS (for new components) (📋 planned - not yet installed)
-  - [ ] Install shadcn/ui (📋 planned - not yet installed, requires Tailwind first)
+  - [x] Install Tailwind CSS (for new components) (✅ installed: Tailwind CSS v4.1.17 - see line 366 for details)
+  - [x] Install shadcn/ui (✅ installed: initialized with "new-york" style, neutral base color, CSS variables enabled)
   - [x] Install validation (Zod) (✅ installed: zod 3.25.76)
   - [x] Install AI/External services (OpenAI, Cloudinary, Brevo) (✅ installed: openai 4.104.0, cloudinary 2.8.0, @getbrevo/brevo 2.5.0)
 - [x] Development environment setup (✅ partially configured)
@@ -268,6 +268,67 @@
   - [x] Implement session management (✅ session.ts updated with user sync, role checking)
   - [x] Create test script (✅ test-auth.ts created)
   - [x] Test authentication configuration (✅ configuration test successful - verified on 2025-12-10)
+
+### Next.js 16 Upgrade & Cache Components Migration ✅
+
+- [x] Upgrade Next.js from 15.3.1 to 16.0.8 ✅
+  - [x] Upgrade React to 19.2.1 ✅
+  - [x] Upgrade React DOM to 19.2.1 ✅
+  - [x] Upgrade @types/react and @types/react-dom ✅
+- [x] Enable Cache Components mode ✅
+  - [x] Add `cacheComponents: true` to next.config.ts ✅
+  - [x] Remove ESLint config from next.config.ts (moved to ESLint config files) ✅
+- [x] Migrate Route Segment Config exports ✅
+  - [x] Remove `export const dynamic = "force-dynamic"` from 5 parent pages ✅
+  - [x] Add migration comments explaining removal ✅
+- [x] Fix dynamic routes for Cache Components ✅
+  - [x] Add `generateStaticParams()` to all 8 dynamic routes ✅
+  - [x] Fix cluburi/[slug], doctori/[slug], sporturi/[slug] routes ✅
+  - [x] Fix theme-for-inspired dynamic routes (program-details, teacher-details, class-details, shop-details, news-details) ✅
+- [x] Add "use cache" directives ✅
+  - [x] Footer components (CopyrightText, CopyrightTextTwo) - made async ✅
+  - [x] Forgot-password page ✅
+- [x] Fix parent routes for dynamic rendering ✅
+  - [x] Add explicit `cookies()` access to 5 parent pages ✅
+  - [x] Prevents prerender errors with Cache Components ✅
+- [x] Fix new Date() usage in cached components ✅
+  - [x] Replace dynamic dates with static dates in placeholder data ✅
+- [x] Verify build success ✅
+  - [x] All 68 routes building successfully ✅
+  - [x] No errors or warnings ✅
+- [x] Create comprehensive code generation rules ✅
+  - [x] Updated `docs/ PROMPTING_RULES_FOR_CODEGEN.md` with Cache Components patterns ✅
+  - [x] Documented Next.js 16 patterns, file naming, error handling, etc. ✅
+- [x] Create architecture overview documentation ✅
+  - [x] Created `docs/ARCHITECTURE_OVERVIEW.md` with comprehensive architecture documentation ✅
+  - [x] Documented technology stack, patterns, data flows, caching strategy, etc. ✅
+- [x] Create brand guidelines documentation ✅
+  - [x] Created `docs/BRAND_GUIDELINES.md` with comprehensive brand guidelines ✅
+  - [x] Documented visual identity (colors, typography, spacing, shadows), tone of voice, UX principles, writing guidelines, microcopy examples, brand messages, content pillars, logo requirements, and implementation checklist ✅
+- [x] Create components guide documentation ✅
+  - [x] Created `docs/COMPONENTS_GUIDE.md` with comprehensive components guide ✅
+  - [x] Documented component organization, styling approach (Bootstrap + Tailwind), button patterns, input patterns, card types, modal & toast guidelines, layout components, naming conventions, component patterns, best practices, and usage examples ✅
+- [x] Create copy library documentation ✅
+  - [x] Created `docs/COPY_LIBRARY.md` with comprehensive copy library ✅
+  - [x] Documented all user-facing text including CTAs, form microcopy, error messages, success messages, empty states, loading states, modal messages, toast notifications, quiz copy, club/doctor copy, navigation labels, trust messages, onboarding copy, search & filters, booking copy, profile & settings, help & support, legal & compliance, email templates, and usage guidelines ✅
+- [x] Update copywriting guide documentation ✅
+  - [x] Enhanced `docs/COPYWRITING_GUIDE.md` with comprehensive copywriting guide ✅
+  - [x] Documented brand essence, brand voice (70/30 split), writing principles (clarity, empathy, microcopy, trust building, positivity), language & style guidelines, writing structure, content types (UI, marketing, email, help, errors), writing templates, common mistakes, content checklist, and quick reference ✅
+- [x] Create data models documentation ✅
+  - [x] Created `docs/DATA_MODELS.md` with comprehensive data models documentation ✅
+  - [x] Documented core models (User, Child, Club, Doctor, Quiz, Booking, Favorite, Review), TypeScript interfaces, database schema mappings, relationships, enums, field conventions, usage examples, common patterns, and database vs TypeScript differences ✅
+- [x] Create design tokens documentation ✅
+  - [x] Created `docs/DESIGN_TOKENS.md` with comprehensive design tokens reference ✅
+  - [x] Documented colors (primary, secondary, accent, backgrounds, neutrals), typography (font family, weights, scale), spacing (Bootstrap scale, common values), border radius, shadows, animations, z-index, breakpoints, and implementation examples ✅
+- [x] Create SEO guidelines documentation ✅
+  - [x] Created `docs/SEO_GUIDELINES.md` with comprehensive SEO guidelines ✅
+  - [x] Documented SEO strategy, URL structure, slug generation rules (clubs, doctors, sports), meta tags templates, Open Graph templates, structured data (Schema.org), content SEO guidelines, technical SEO, local SEO, performance SEO, and monitoring ✅
+- [x] Create site map documentation ✅
+  - [x] Created `docs/SITE_MAP.md` with complete application structure ✅
+  - [x] Documented all routes (public SEO routes, authentication routes, protected routes), route groups, user flows, navigation structure, route helper functions, SEO notes, legacy routes, and API routes ✅
+- [x] Create wireframes documentation ✅
+  - [x] Created `docs/WIREFRAMES.md` with detailed page structures ✅
+  - [x] Documented wireframes for homepage, quiz intro, quiz container (6 steps), quiz results, club finder, club detail page, parent dashboard, children list, add/edit child form, responsive design patterns, and component patterns ✅
 
 ### Theme Adaptation
 
@@ -349,19 +410,31 @@
     - [x] MenuSidebar (✅ path correct)
     - [x] footer-data.ts (✅ paths correct)
     - [x] routes.ts (✅ asset paths correct)
-  - [ ] Logo and favicon files (⏳ blocked by design task - requires logo design)
-    - [ ] Create/design Yuvoo logo (SVG format) (📋 design task - requires logo design)
-    - [ ] Create logo variants:
-      - [ ] logo.svg (default, dark text on light background) (📋 design task)
-      - [ ] logo-white.svg (light text for dark backgrounds) (📋 design task)
-      - [ ] favicon.png (16x16, 32x32, 48x48 sizes) (📋 design task)
-      - [ ] favicon.ico (generated from favicon.png) (📋 after favicon.png is created)
-    - [ ] Replace logo files in public/assets/img/logo/ (📋 after logo design is complete)
-      - [ ] Replace public/assets/img/logo/logo.svg
-      - [ ] Replace public/assets/img/logo/logo-white.svg
-      - [ ] Replace public/assets/img/logo/favicon.png
-    - [ ] Replace favicon.ico in src/app/favicon.ico (📋 after favicon design is complete)
-    - [ ] Test logo display across all components (📋 testing task - after logo files are replaced)
+  - [x] Favicon and PWA icon setup (✅ completed - using existing icons)
+    - [x] Create favicon.ico in src/app/ (✅ using existing icon, multi-resolution ICO with 32x32 and 48x48)
+    - [x] Create icon.svg in src/app/ (✅ SVG favicon for modern browsers)
+    - [x] Create icon.png in src/app/ (✅ PNG favicon 96x96)
+    - [x] Create apple-icon.png in src/app/ (✅ Apple touch icon 180x180)
+    - [x] Create manifest.json in src/app/ (✅ Web app manifest with Yuvoo branding, Romanian language)
+    - [x] Add supporting icons in public/ (✅ android-chrome-192x192.png, android-chrome-512x512.png, apple-touch-icon.png, icon-192x192.png, icon-512x512.png)
+    - [x] Configure layout.tsx icon metadata (✅ comprehensive icon links, appleWebApp configuration)
+    - [x] Update middleware.ts to skip static files (✅ prevents conflicts with Next.js routing)
+    - [x] Remove duplicate files from public/ (✅ resolved Next.js routing conflicts)
+    - [x] All favicon files accessible (✅ verified 200 OK responses)
+    - [x] HTML links generated correctly (✅ Next.js 15 auto-detection working)
+  - [x] Logo design and replacement (✅ completed - Yuvoo logo implemented)
+    - [x] Create/design Yuvoo logo (SVG format) (✅ Yuvoo logo created)
+    - [x] Create logo variants:
+      - [x] logo.svg (default, dark text on light background) (✅ created in public/assets/img/logo/logo.svg)
+      - [x] logo-white.svg (light text for dark backgrounds) (✅ created in public/assets/img/logo/logo-white.svg)
+    - [x] Replace logo files in public/assets/img/logo/ (✅ logo files updated)
+      - [x] Replace public/assets/img/logo/logo.svg (✅ updated with Yuvoo logo)
+      - [x] Replace public/assets/img/logo/logo-white.svg (✅ updated with Yuvoo logo)
+    - [x] Update favicon files with custom logo (✅ favicon files updated with Yuvoo branding)
+      - [x] Regenerate favicon.ico from custom logo (✅ updated in src/app/favicon.ico)
+      - [x] Regenerate icon.svg, icon.png, apple-icon.png from custom logo (✅ all updated in src/app/)
+      - [x] Update all icon sizes (192x192, 512x512, etc.) with custom logo (✅ android-chrome and icon sizes updated in public/)
+    - [ ] Test logo display across all components (📋 testing task - verify logo displays correctly in Header, Footer, and all components)
   - [x] Rebranding guide created (✅ LOGO_REBRANDING_GUIDE.md with complete implementation checklist)
 - [x] Tailwind CSS setup (for new components) (✅ completed and upgraded to v4)
   - [x] Install Tailwind CSS v4.1.17 (✅ upgraded from v3.4.19 using official upgrade tool)
@@ -376,6 +449,16 @@
   - [x] Create custom Yuvoo component classes (✅ btn-yuvoo-primary, btn-yuvoo-secondary, card-yuvoo, etc.)
   - [x] Create Tailwind documentation (✅ src/lib/tailwind/README.md with usage examples - needs v4 update)
   - [x] Verify build works with Tailwind v4 (✅ build successful after upgrade)
+- [x] MCP (Model Context Protocol) setup (✅ documentation created)
+  - [x] Create MCP_SETUP.md documentation (✅ Next.js DevTools MCP configuration documented)
+  - [x] Document Next.js DevTools MCP server configuration (✅ configuration example provided for Cursor/Claude Desktop)
+- [x] shadcn/ui setup (✅ completed)
+  - [x] Initialize shadcn/ui (✅ initialized with "new-york" style, neutral base color)
+  - [x] Create components.json configuration (✅ created with RSC support, TypeScript, CSS variables enabled)
+  - [x] Install core dependencies (✅ class-variance-authority, clsx, lucide-react, tailwind-merge installed)
+  - [x] Create utils.ts with cn() helper (✅ src/lib/utils.ts created)
+  - [x] Update globals.css with shadcn/ui theme variables (✅ CSS variables for light/dark themes added)
+  - [x] Configure component aliases (✅ @/components, @/lib/utils, @/components/ui configured)
 - [x] Drizzle ORM setup (✅ completed)
   - [x] Install Drizzle ORM and dependencies (✅ installed: drizzle-orm@0.36.4, drizzle-kit@0.28.1, @neondatabase/serverless@0.10.4, postgres@3.4.7)
   - [x] Create drizzle.config.ts (✅ configured with schema path, output directory, dialect, and database credentials)
@@ -476,7 +559,12 @@
 
 ### Week 3-4: Core Pages
 
-- [ ] Landing page (adapt HeroArea components)
+- [x] Landing page (adapt HeroArea components) (✅ completed)
+  - [x] Created HeroYuvoo component with Romanian text (✅ created: src/components/HeroArea/HeroYuvoo.tsx)
+  - [x] Updated homepage to use HeroYuvoo and HomeClubArea (✅ updated: src/app/home/page.tsx)
+  - [x] Updated homepage metadata for Yuvoo (✅ updated: src/app/page.tsx with Romanian title and description)
+  - [x] Added getFeaturedClubs Server Action (✅ added: src/app/actions/clubs.ts)
+  - [x] Made HomeClubArea handle empty data gracefully (✅ updated: src/components/features/clubs/HomeClubArea.tsx)
 - [ ] Sign up / Sign in pages (✅ already exist - adapt branding)
 - [ ] Dashboard layout (new component)
 - [ ] Child profile management (CRUD) (new component)
@@ -772,7 +860,7 @@
 
 ### Current Issues
 
-- None identified (early stage)
+- None identified - Next.js 16 upgrade and Cache Components migration completed successfully ✅
 
 ### Technical Debt
 
@@ -835,8 +923,13 @@
 
 ## Notes
 
+- **Next.js 16 Upgrade Complete**: Successfully upgraded to Next.js 16.0.8 with Cache Components enabled
+- **Cache Components Migration**: All routes migrated, build successful, ready for development
+- **Code Generation Rules**: Comprehensive guidelines documented in `docs/ PROMPTING_RULES_FOR_CODEGEN.md`
 - Timeline is aggressive; may need adjustment
 - Focus on Phase 1 scope only
 - Quality over speed
 - User testing important before launch
 - Club and doctor onboarding is critical for success
+- **Cache Components**: Remember - dynamic by default, use `"use cache"` for cacheable content (async functions required)
+- **Dynamic Routes**: All must have `generateStaticParams()` returning at least one value

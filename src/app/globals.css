@@ -12,19 +12,32 @@
 
 @import "tailwindcss";
 
+@import "tw-animate-css";
+
+/*---break---
+ */
+
+@custom-variant dark (&:is(.dark *));
+
 @theme {
-  --color-primary: #00bbae;
-  --color-primary-light: #ebfffe;
-  --color-primary-dark: #009b8f;
+  /* Yuvoo Brand Colors - Design System */
+  --color-yuvoo-primary: #00bbae;
+  --color-yuvoo-primary-light: #ebfffe;
+  --color-yuvoo-primary-dark: #009b8f;
 
-  --color-secondary: #ff9b24;
-  --color-secondary-light: #ffecd6;
-  --color-secondary-lighter: #fff6eb;
-  --color-secondary-dark: #e6891f;
+  --color-yuvoo-secondary: #ff9b24;
+  --color-yuvoo-secondary-light: #ffecd6;
+  --color-yuvoo-secondary-lighter: #fff6eb;
+  --color-yuvoo-secondary-dark: #e6891f;
 
-  --color-accent: #7c81ff;
-  --color-accent-light: #b8bbff;
-  --color-accent-dark: #5c61e6;
+  --color-yuvoo-accent: #7c81ff;
+  --color-yuvoo-accent-light: #b8bbff;
+  --color-yuvoo-accent-dark: #5c61e6;
+
+  /* Tailwind utility classes for Yuvoo light colors */
+  --color-primary-light: var(--color-yuvoo-primary-light);
+  --color-secondary-light: var(--color-yuvoo-secondary-light);
+  --color-secondary-lighter: var(--color-yuvoo-secondary-lighter);
 
   --color-neutral-black: #1b1b1b;
   --color-neutral-body: #424242;
@@ -45,9 +58,9 @@
   --color-theme-10: #7c81ff;
   --color-theme-11: #00b9f1;
 
-  --font-sans: var(--font-fredoka), Fredoka, sans-serif;
-  --font-body: var(--font-fredoka), Fredoka, sans-serif;
-  --font-heading: var(--font-fredoka), Fredoka, sans-serif;
+  --font-sans: var(--font-gabarito), Gabarito, sans-serif;
+  --font-body: var(--font-gabarito), Gabarito, sans-serif;
+  --font-heading: var(--font-gabarito), Gabarito, sans-serif;
 
   --text-h1: 96px;
   --text-h2: 64px;
@@ -62,14 +75,15 @@
   --leading-relaxed: 1.7;
   --leading-loose: 2;
 
-  --radius-sm: 4px;
-  --radius: 8px;
-  --radius-md: 12px;
-  --radius-lg: 16px;
-  --radius-xl: 24px;
-  --radius-2xl: 32px;
-  --radius-3xl: 50px;
-  --radius-full: 50%;
+  /* Yuvoo Design System Radius Values */
+  --radius-yuvoo-sm: 4px;
+  --radius-yuvoo: 8px;
+  --radius-yuvoo-md: 12px;
+  --radius-yuvoo-lg: 16px;
+  --radius-yuvoo-xl: 24px;
+  --radius-yuvoo-2xl: 32px;
+  --radius-yuvoo-3xl: 50px;
+  --radius-yuvoo-full: 50%;
 
   --shadow-card: 0px 16px 32px 0px rgba(0, 0, 0, 0.06);
   --shadow-menu: 0px 20px 30px rgba(3, 4, 28, 0.1);
@@ -123,12 +137,21 @@
   color utility to any element that depends on these defaults.
 */
 @layer base {
+  /* Tailwind v4 border color compatibility */
   *,
   ::after,
   ::before,
   ::backdrop,
   ::file-selector-button {
     border-color: var(--color-gray-200, currentcolor);
+  }
+
+  /* shadcn/ui base styles */
+  * {
+    @apply border-border outline-ring/50;
+  }
+  body {
+    @apply bg-background text-foreground;
   }
 }
 
@@ -164,15 +187,15 @@
 
 @utility bg-yuvoo-primary-light {
   /* Yuvoo Section Background */
-  @apply bg-primary-light;
+  background-color: var(--color-yuvoo-primary-light);
 }
 
 @utility bg-yuvoo-secondary-light {
-  @apply bg-secondary-light;
+  background-color: var(--color-yuvoo-secondary-light);
 }
 
 @utility bg-yuvoo-secondary-lighter {
-  @apply bg-secondary-lighter;
+  background-color: var(--color-yuvoo-secondary-lighter);
 }
 
 /**
@@ -195,4 +218,143 @@
 
 @utility section-padding-lg {
   @apply pt-[120px] pb-[80px];
+}
+
+/*---break---
+ */
+
+@theme inline {
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 4px);
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-primary-dark: var(--color-yuvoo-primary-dark); /* #009b8f */
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-secondary-dark: var(--color-yuvoo-secondary-dark); /* #e6891f */
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-accent-dark: var(--color-yuvoo-accent-dark); /* #5c61e6 */
+  --color-destructive: var(--destructive);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+  --color-chart-1: var(--chart-1);
+  --color-chart-2: var(--chart-2);
+  --color-chart-3: var(--chart-3);
+  --color-chart-4: var(--chart-4);
+  --color-chart-5: var(--chart-5);
+  --color-sidebar: var(--sidebar);
+  --color-sidebar-foreground: var(--sidebar-foreground);
+  --color-sidebar-primary: var(--sidebar-primary);
+  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
+  --color-sidebar-accent: var(--sidebar-accent);
+  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
+  --color-sidebar-border: var(--sidebar-border);
+  --color-sidebar-ring: var(--sidebar-ring);
+}
+
+/*---break---
+ */
+
+:root {
+  --radius: 0.625rem;
+  /* Yuvoo Brand Colors - Light Theme */
+  --background: oklch(1 0 0); /* White */
+  --foreground: oklch(0.145 0 0); /* #1B1B1B - Yuvoo neutral black */
+  --card: oklch(1 0 0); /* White */
+  --card-foreground: oklch(0.145 0 0); /* #1B1B1B */
+  --popover: oklch(1 0 0); /* White */
+  --popover-foreground: oklch(0.145 0 0); /* #1B1B1B */
+  /* Primary: Yuvoo Turcoaz #00BBAE */
+  --primary: oklch(0.7 0.14 193.5); /* #00BBAE */
+  --primary-foreground: oklch(0.985 0 0); /* White for contrast */
+  /* Secondary: Yuvoo Portocaliu #FF9B24 */
+  --secondary: oklch(0.8 0.2 70); /* #FF9B24 */
+  --secondary-foreground: oklch(0.985 0 0); /* White for contrast */
+  /* Muted: Light grey for subtle backgrounds */
+  --muted: oklch(0.97 0 0); /* #FFF6EB equivalent - Yuvoo theme-6 */
+  --muted-foreground: oklch(0.424 0 0); /* #424242 - Yuvoo neutral body */
+  /* Accent: Yuvoo Violet #7C81FF */
+  --accent: oklch(0.7 0.2 264); /* #7C81FF */
+  --accent-foreground: oklch(0.985 0 0); /* White for contrast */
+  /* Destructive: Red for errors */
+  --destructive: oklch(0.577 0.245 27.325);
+  --destructive-foreground: oklch(0.985 0 0);
+  /* Borders and inputs */
+  --border: oklch(0.922 0 0); /* #E6E6E6 - Yuvoo grey-1 */
+  --input: oklch(0.922 0 0); /* #E6E6E6 */
+  --ring: oklch(0.7 0.14 193.5); /* Primary color for focus rings */
+  /* Chart colors - using Yuvoo brand colors */
+  --chart-1: oklch(0.7 0.14 193.5); /* Primary - Turcoaz */
+  --chart-2: oklch(0.8 0.2 70); /* Secondary - Portocaliu */
+  --chart-3: oklch(0.7 0.2 264); /* Accent - Violet */
+  --chart-4: oklch(0.7 0.14 193.5); /* Primary variant */
+  --chart-5: oklch(0.8 0.2 70); /* Secondary variant */
+  /* Sidebar - using Yuvoo light backgrounds */
+  --sidebar: oklch(0.985 0 0); /* Light background */
+  --sidebar-foreground: oklch(0.145 0 0); /* #1B1B1B */
+  --sidebar-primary: oklch(0.7 0.14 193.5); /* Primary color */
+  --sidebar-primary-foreground: oklch(0.985 0 0); /* White */
+  --sidebar-accent: oklch(0.97 0 0); /* Muted background */
+  --sidebar-accent-foreground: oklch(0.145 0 0); /* Dark text */
+  --sidebar-border: oklch(0.922 0 0); /* Border color */
+  --sidebar-ring: oklch(0.7 0.14 193.5); /* Primary for focus */
+}
+
+/*---break---
+ */
+
+.dark {
+  /* Yuvoo Brand Colors - Dark Theme */
+  --background: oklch(0.145 0 0); /* #1B1B1B - Dark background */
+  --foreground: oklch(0.985 0 0); /* White text */
+  --card: oklch(0.205 0 0); /* Slightly lighter dark */
+  --card-foreground: oklch(0.985 0 0); /* White */
+  --popover: oklch(0.205 0 0);
+  --popover-foreground: oklch(0.985 0 0);
+  /* Primary: Yuvoo Turcoaz - lighter for dark mode */
+  --primary: oklch(0.75 0.16 193.5); /* Lighter turcoaz for dark mode */
+  --primary-foreground: oklch(0.145 0 0); /* Dark text on light primary */
+  /* Secondary: Yuvoo Portocaliu - lighter for dark mode */
+  --secondary: oklch(0.85 0.22 70); /* Lighter orange for dark mode */
+  --secondary-foreground: oklch(0.145 0 0); /* Dark text */
+  /* Muted: Dark grey for subtle backgrounds */
+  --muted: oklch(0.269 0 0); /* Dark grey */
+  --muted-foreground: oklch(0.708 0 0); /* Light grey text */
+  /* Accent: Yuvoo Violet - lighter for dark mode */
+  --accent: oklch(0.75 0.22 264); /* Lighter violet for dark mode */
+  --accent-foreground: oklch(0.985 0 0); /* White */
+  /* Destructive: Red for errors */
+  --destructive: oklch(0.704 0.191 22.216);
+  --destructive-foreground: oklch(0.985 0 0);
+  /* Borders and inputs - subtle in dark mode */
+  --border: oklch(1 0 0 / 10%); /* Subtle white border */
+  --input: oklch(1 0 0 / 15%); /* Slightly more visible */
+  --ring: oklch(0.75 0.16 193.5); /* Primary color for focus rings */
+  /* Chart colors - adjusted for dark mode */
+  --chart-1: oklch(0.75 0.16 193.5); /* Primary - Turcoaz */
+  --chart-2: oklch(0.85 0.22 70); /* Secondary - Portocaliu */
+  --chart-3: oklch(0.75 0.22 264); /* Accent - Violet */
+  --chart-4: oklch(0.7 0.14 193.5); /* Primary variant */
+  --chart-5: oklch(0.8 0.2 70); /* Secondary variant */
+  /* Sidebar - dark theme */
+  --sidebar: oklch(0.205 0 0); /* Dark background */
+  --sidebar-foreground: oklch(0.985 0 0); /* White text */
+  --sidebar-primary: oklch(0.75 0.16 193.5); /* Primary color */
+  --sidebar-primary-foreground: oklch(0.145 0 0); /* Dark text */
+  --sidebar-accent: oklch(0.269 0 0); /* Muted dark */
+  --sidebar-accent-foreground: oklch(0.985 0 0); /* White */
+  --sidebar-border: oklch(1 0 0 / 10%); /* Subtle border */
+  --sidebar-ring: oklch(0.75 0.16 193.5); /* Primary for focus */
 }

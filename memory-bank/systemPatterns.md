@@ -2,9 +2,10 @@
 
 ## Architecture Overview
 
-**Pattern**: Next.js 15 Monolithic App with Modular Backend Pattern
+**Pattern**: Next.js 16 Monolithic App with Cache Components and Modular Backend Pattern
 **Deployment**: Vercel (Frontend) + Neon (Database) + Cloudinary (Media)
 **Timeline**: 16-week MVP development cycle
+**Next.js Version**: 16.0.8 with Cache Components enabled ✅
 
 ## Core Architecture Principles
 
@@ -335,18 +336,45 @@ requireAuth() → throws if not authenticated
 
 ## Caching Strategy
 
-### Next.js Cache
+### Next.js 16 Cache Components
 
-**Server Actions**: Use `revalidatePath()` after mutations
-**Static Generation**: Club and doctor detail pages (SSG)
-**Dynamic Routes**: Quiz results, user dashboards (SSR)
+**Paradigm Shift**: Dynamic by default, opt-in to caching with `"use cache"`
+
+**Caching Patterns**:
+
+1. **Public Cache** (`"use cache"`):
+   - For content same for all users
+   - Use `cacheLife()` for time-based revalidation
+   - Use `cacheTag()` for on-demand revalidation
+   - Example: Footer components, static pages
+
+2. **Private Cache** (`"use cache: private"`):
+   - For user-specific prefetchable content
+   - Can access cookies/params at runtime
+   - Prefetched with actual runtime values
+
+3. **Dynamic Content** (default):
+   - Use `<Suspense>` boundaries for dynamic content
+   - Access `cookies()`, `headers()`, `params` for dynamic rendering
+   - Example: Protected pages, user dashboards
+
+**Route Segment Config** (Removed):
+
+- ❌ `export const dynamic` - Removed, use dynamic APIs or `"use cache"`
+- ❌ `export const revalidate` - Removed, use `cacheLife()` instead
+- ❌ `export const fetchCache` - Removed, use `"use cache"` instead
+
+**Dynamic Routes**:
+
+- All dynamic routes MUST have `generateStaticParams()` returning at least one value
+- Required for Cache Components compatibility
 
 **Revalidation Triggers**:
 
-- After quiz submission
-- After booking creation/cancellation
-- After profile updates
-- After favorite toggles
+- After quiz submission: `revalidatePath()` or `updateTag()`
+- After booking creation/cancellation: `revalidatePath()` or `updateTag()`
+- After profile updates: `revalidatePath()` or `updateTag()`
+- After favorite toggles: `revalidatePath()` or `updateTag()`
 
 ## Error Handling Pattern
 
@@ -638,9 +666,28 @@ Does component need interactivity?
 
 ## Performance Patterns
 
-1. **Static Generation**: Club/doctor detail pages
-2. **Server Components**: Reduce client bundle
-3. **Image Optimization**: Cloudinary + Next.js Image
-4. **Database Indexing**: Strategic indexes on search fields
-5. **Caching**: Next.js cache + revalidation
-6. **Code Splitting**: Automatic via Next.js
+1. **Cache Components**: Explicit caching with `"use cache"` for cacheable content
+2. **Static Shells**: Cached components create static shells for instant loading
+3. **Server Components**: Default (reduces client bundle)
+4. **Image Optimization**: Cloudinary + Next.js Image
+5. **Database Indexing**: Strategic indexes on search fields
+6. **Caching**: Cache Components with time-based and tag-based revalidation
+7. **Code Splitting**: Automatic via Next.js
+
+## Documentation References
+
+- **Architecture Overview**: `docs/ARCHITECTURE_OVERVIEW.md` - Complete architecture documentation
+- **Code Generation Rules**: `docs/ PROMPTING_RULES_FOR_CODEGEN.md` - Code generation guidelines
+- **Brand Guidelines**: `docs/BRAND_GUIDELINES.md` - Visual identity, tone of voice, UX principles, and brand consistency guidelines
+- **Components Guide**: `docs/COMPONENTS_GUIDE.md` - Component patterns, styling rules, and UI development guidelines
+- **Copy Library**: `docs/COPY_LIBRARY.md` - All user-facing text, CTAs, messages, and Romanian language copy
+- **Copywriting Guide**: `docs/COPYWRITING_GUIDE.md` - Copywriting principles, brand voice guidelines, writing templates, and best practices
+- **Data Models**: `docs/DATA_MODELS.md` - All data structures, TypeScript interfaces, database schemas, and model relationships
+- **Design Tokens**: `docs/DESIGN_TOKENS.md` - Comprehensive design tokens reference (colors, typography, spacing, shadows, border radius, animations, breakpoints)
+- **SEO Guidelines**: `docs/SEO_GUIDELINES.md` - SEO strategy, slug generation, meta tags templates, Open Graph templates, and SEO best practices
+- **Site Map**: `docs/SITE_MAP.md` - Complete application structure, all routes, user flows, and navigation patterns
+- **Wireframes**: `docs/WIREFRAMES.md` - Detailed page structures, component placement, and layout specifications for all major pages
+- **System Patterns**: `memory-bank/systemPatterns.md` - This file
+- **Technical Context**: `memory-bank/techContext.md` - Technology stack details
+- **Product Context**: `memory-bank/productContext.md` - Product requirements
+- **Progress Tracking**: `memory-bank/progress.md` - Development progress

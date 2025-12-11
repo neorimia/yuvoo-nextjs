@@ -29,7 +29,7 @@ Tailwind CSS is configured to work **alongside Bootstrap 5.3.3** in the Yuvoo pr
 - **@import 'tailwindcss'**: Imports Tailwind CSS v4
 - **@theme block**: Defines all design tokens (colors, typography, spacing, etc.)
 - **Yuvoo brand colors**: Primary (#00BBAE), Secondary (#FF9B24), Accent (#7C81FF)
-- **Typography**: Fredoka font family, design system font sizes
+- **Typography**: Gabarito font family, design system font sizes
 - **Border radius**: Values from design system (4px to 50px)
 - **Shadows**: Card, menu, modal, header shadows
 - **Custom component classes**: `.btn-yuvoo-primary`, `.btn-yuvoo-secondary`, etc. (using `@utility`)
@@ -129,7 +129,7 @@ Pre-defined Yuvoo classes:
 All design tokens from `designSystem.md` are integrated:
 
 - ✅ **Colors**: Yuvoo brand colors (Primary, Secondary, Accent) + theme colors
-- ✅ **Typography**: Fredoka font, design system font sizes
+- ✅ **Typography**: Gabarito font, design system font sizes
 - ✅ **Spacing**: Bootstrap spacing + custom section padding
 - ✅ **Border radius**: All values from design system
 - ✅ **Shadows**: All shadow patterns from design system

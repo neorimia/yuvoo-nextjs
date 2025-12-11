@@ -20,7 +20,7 @@ Based on the Yuvoo brand guidelines:
 
 - Format: SVG
 - Colors: Use Yuvoo brand colors (Primary: #00BBAE, Secondary: #FF9B24, Accent: #7C81FF)
-- Text: "Yuvoo" in Romanian-friendly font (Fredoka recommended)
+- Text: "Yuvoo" in Romanian-friendly font (Gabarito recommended)
 - Background: Transparent
 - Usage: Headers on light backgrounds, main logo
 
@@ -131,7 +131,7 @@ src/app/favicon.ico       → Replace with Yuvoo favicon.ico
 
 ### Typography
 
-- **Font**: Fredoka (already used in the project)
+- **Font**: Gabarito (already used in the project)
 - **Style**: Bold, friendly, rounded
 - **Language**: "Yuvoo" (brand name, works in Romanian)
 

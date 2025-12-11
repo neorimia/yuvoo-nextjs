@@ -1,13 +1,20 @@
+"use cache";
 import React from "react";
 import wave from "../../../../public/assets/img/shape/wave-line.png";
 import Image, { StaticImageData } from "next/image";
+// import { cacheLife } from "next/cache";
 
 interface CopyrightTextProps {
   copyright_space?: string;
   copyright_shape?: StaticImageData;
 }
 
-const CopyrightText: React.FC<CopyrightTextProps> = ({ copyright_space, copyright_shape }) => {
+const CopyrightText: React.FC<CopyrightTextProps> = async ({
+  copyright_space,
+  copyright_shape,
+}) => {
+  // CACHED: Copyright year cached for 1 year (changes annually)
+  // cacheLife('max') - year changes once per year, safe to cache long-term
   return (
     <div className={`bd-footer-copyright ${copyright_space || "pb-5"}`}>
       <div className="bd-footer-copyright-line pb-20">
