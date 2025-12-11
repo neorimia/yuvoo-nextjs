@@ -2,6 +2,8 @@ import React from "react";
 import type { Metadata } from "next";
 import { requireAuth } from "@/lib/auth/session";
 
+export const dynamic = "force-dynamic";
+
 export const metadata: Metadata = {
   title: "Favorite - Yuvoo",
   description: "Cluburile și doctorii tăi favoriți pe Yuvoo.",

@@ -38,6 +38,7 @@ export default async function ClubDetailPage({ params }: ClubDetailPageProps) {
       address: "Str. Exemplu 1",
     },
     verified: true,
+    featured: false,
     images: [],
     ageGroups: [],
     levels: [],

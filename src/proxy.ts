@@ -10,7 +10,7 @@ import type { NextRequest } from "next/server";
 import { stackServerApp } from "@/lib/auth/stack";
 import { routes, isProtectedRoute } from "@/lib/routes";
 
-export async function middleware(request: NextRequest) {
+export async function proxy(request: NextRequest) {
   const { pathname } = request.nextUrl;
 
   // Skip middleware for static files, API routes, and public assets

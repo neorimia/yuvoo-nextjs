@@ -40,12 +40,6 @@ const nextConfig: NextConfig = {
     ignoreBuildErrors: false,
   },
 
-  // ESLint configuration
-  eslint: {
-    // Fail build on ESLint errors in production
-    ignoreDuringBuilds: false,
-  },
-
   // Production optimizations
   poweredByHeader: false, // Remove X-Powered-By header for security
   compress: true, // Enable gzip compression
