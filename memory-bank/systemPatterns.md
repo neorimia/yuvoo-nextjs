@@ -679,6 +679,7 @@ Does component need interactivity?
 - **Architecture Overview**: `docs/ARCHITECTURE_OVERVIEW.md` - Complete architecture documentation
 - **Code Generation Rules**: `docs/ PROMPTING_RULES_FOR_CODEGEN.md` - Code generation guidelines
 - **Brand Guidelines**: `docs/BRAND_GUIDELINES.md` - Visual identity, tone of voice, UX principles, and brand consistency guidelines
+- **Components Guide**: `docs/COMPONENTS_GUIDE.md` - Component patterns, styling rules, and UI development guidelines
 - **System Patterns**: `memory-bank/systemPatterns.md` - This file
 - **Technical Context**: `memory-bank/techContext.md` - Technology stack details
 - **Product Context**: `memory-bank/productContext.md` - Product requirements

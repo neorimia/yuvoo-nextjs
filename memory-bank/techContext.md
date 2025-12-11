@@ -527,6 +527,7 @@ import { getClubBySlug } from "@/modules/clubs/clubs.service";
 - **Architecture Overview**: `docs/ARCHITECTURE_OVERVIEW.md` - Complete architecture documentation with patterns, data flows, and design decisions
 - **Code Generation Rules**: `docs/ PROMPTING_RULES_FOR_CODEGEN.md` - Comprehensive code generation guidelines
 - **Brand Guidelines**: `docs/BRAND_GUIDELINES.md` - Visual identity, tone of voice, UX principles, and brand consistency guidelines
+- **Components Guide**: `docs/COMPONENTS_GUIDE.md` - Component patterns, styling rules, and UI development guidelines
 - **System Patterns**: `memory-bank/systemPatterns.md` - Architecture patterns and design decisions
 - **Active Context**: `memory-bank/activeContext.md` - Current work focus and recent changes
 - **Progress Tracking**: `memory-bank/progress.md` - Development progress and completed items

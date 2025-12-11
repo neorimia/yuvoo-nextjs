@@ -75,6 +75,10 @@
   - **Content**: Visual identity (colors, typography, spacing, shadows, icons), tone of voice (warm & supportive 70%, expert & confident 30%), UX principles, writing guidelines, microcopy examples, brand messages, content pillars, logo requirements, and implementation checklist
   - **Status**: ✅ Complete - Complete reference for brand consistency across all touchpoints
 
+- **Created**: `docs/COMPONENTS_GUIDE.md` - Comprehensive components guide
+  - **Content**: Component organization, styling approach (Bootstrap + Tailwind), button patterns, input patterns, card types (club, doctor, sport), modal & toast guidelines, layout components, naming conventions, component patterns (Server/Client Components), best practices, and usage examples
+  - **Status**: ✅ Complete - Complete reference for creating consistent UI components
+
 ### Next.js 16 Upgrade & Cache Components Migration ✅
 
 **Completed**: December 2024
@@ -382,6 +386,7 @@
 - **Code Generation**: See `docs/ PROMPTING_RULES_FOR_CODEGEN.md` for comprehensive code generation guidelines
 - **Architecture Reference**: See `docs/ARCHITECTURE_OVERVIEW.md` for complete architecture documentation
 - **Brand Guidelines**: See `docs/BRAND_GUIDELINES.md` for visual identity, tone of voice, UX principles, and brand consistency guidelines
+- **Components Guide**: See `docs/COMPONENTS_GUIDE.md` for component patterns, styling rules, and UI development guidelines
 - **Phase 1 Focus**: Sports only, ages 4-14, Bucharest
 - **No Payments**: Payment-enabled bookings in Phase 2
 - **No Calendar**: Family calendar in Phase 2
