@@ -51,6 +51,10 @@ const nextConfig: NextConfig = {
   compress: true, // Enable gzip compression
   reactStrictMode: true, // Enable React strict mode
 
+  // Note: The "useContext is not exported from 'react'" warning from Stack Auth
+  // is a known compatibility issue with React 19. It's a bundling warning that
+  // doesn't break functionality. Stack Auth will need to update for full React 19 support.
+
   // Experimental features (if needed)
   // experimental: {
   //   // Add experimental features here if needed

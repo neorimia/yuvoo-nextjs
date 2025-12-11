@@ -104,7 +104,7 @@
         - [x] Routing: All routes accessible and functional (✅ tested)
         - [x] Metadata: Type-safe metadata exports working (✅ confirmed in layout.tsx)
         - [x] Server Components: Default behavior working (✅ no "use client" in app/)
-        - [x] Font optimization: Next.js font loader working (✅ Fredoka font loaded)
+        - [x] Font optimization: Next.js font loader working (✅ Gabarito font loaded)
         - [x] Image optimization: Next.js Image component available (✅ used in components)
       - [x] **Summary**: No breaking changes detected ✅ - All Next.js 15.5.7 features work correctly with existing codebase. Project is fully compatible.
   - [x] Review and update package.json dependencies
@@ -476,7 +476,12 @@
 
 ### Week 3-4: Core Pages
 
-- [ ] Landing page (adapt HeroArea components)
+- [x] Landing page (adapt HeroArea components) (✅ completed)
+  - [x] Created HeroYuvoo component with Romanian text (✅ created: src/components/HeroArea/HeroYuvoo.tsx)
+  - [x] Updated homepage to use HeroYuvoo and HomeClubArea (✅ updated: src/app/home/page.tsx)
+  - [x] Updated homepage metadata for Yuvoo (✅ updated: src/app/page.tsx with Romanian title and description)
+  - [x] Added getFeaturedClubs Server Action (✅ added: src/app/actions/clubs.ts)
+  - [x] Made HomeClubArea handle empty data gracefully (✅ updated: src/components/features/clubs/HomeClubArea.tsx)
 - [ ] Sign up / Sign in pages (✅ already exist - adapt branding)
 - [ ] Dashboard layout (new component)
 - [ ] Child profile management (CRUD) (new component)

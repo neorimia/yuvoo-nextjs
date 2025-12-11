@@ -45,9 +45,9 @@
   --color-theme-10: #7c81ff;
   --color-theme-11: #00b9f1;
 
-  --font-sans: var(--font-fredoka), Fredoka, sans-serif;
-  --font-body: var(--font-fredoka), Fredoka, sans-serif;
-  --font-heading: var(--font-fredoka), Fredoka, sans-serif;
+  --font-sans: var(--font-gabarito), Gabarito, sans-serif;
+  --font-body: var(--font-gabarito), Gabarito, sans-serif;
+  --font-heading: var(--font-gabarito), Gabarito, sans-serif;
 
   --text-h1: 96px;
   --text-h2: 64px;

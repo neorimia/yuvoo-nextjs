@@ -23,6 +23,7 @@ export interface Club {
   ageGroups: number[]; // e.g., [4, 5, 6, 7, 8]
   levels: string[]; // e.g., ["beginner", "intermediate", "advanced"]
   verified: boolean;
+  featured: boolean;
   images: string[];
   contact: {
     phone?: string;
@@ -49,6 +50,7 @@ export interface ClubSearchFilters {
   district?: string;
   level?: string;
   verified?: boolean;
+  featured?: boolean;
   page?: number;
   pageSize?: number;
   sortBy?: "name" | "verified" | "rating";

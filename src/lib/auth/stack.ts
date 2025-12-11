@@ -11,14 +11,11 @@
  */
 
 import { StackServerApp } from "@stackframe/stack";
-import * as dotenv from "dotenv";
 import { routes } from "@/lib/routes";
 
-// Load environment variables (for standalone scripts)
-// In Next.js, env vars are loaded automatically, but this ensures they're loaded in test scripts
-if (typeof window === "undefined") {
-  dotenv.config({ path: ".env.local" });
-}
+// Note: Environment variables are automatically loaded by Next.js
+// No need for dotenv.config() here - it causes issues in Edge Runtime (middleware)
+// For standalone Node.js scripts, load dotenv in those scripts directly
 
 // Validate required environment variables
 if (!process.env.NEXT_PUBLIC_STACK_PROJECT_ID) {

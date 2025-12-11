@@ -1,4 +1,4 @@
-import { Fredoka } from "next/font/google";
+import { Gabarito } from "next/font/google";
 import GlobalVideoModal from "@/components/Popup/GlobalVideoModal";
 import { VideoProvider } from "@/provider/VideoProvider";
 import AppProvider from "@/provider/AppProvider";
@@ -11,8 +11,8 @@ import "react-photo-view/dist/react-photo-view.css";
 import "prismjs/themes/prism-tomorrow.css";
 import ReduxProvider from "@/redux/provider";
 
-const fredoka = Fredoka({
-  variable: "--font-fredoka",
+const gabarito = Gabarito({
+  variable: "--font-gabarito",
   subsets: ["latin"],
   weight: ["400", "500", "600", "700"],
 });
@@ -85,7 +85,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="ro">
-      <body suppressHydrationWarning className={`${fredoka.variable}`}>
+      <body suppressHydrationWarning className={`${gabarito.variable}`}>
         <VideoProvider>
           <ReduxProvider>
             <AppProvider>{children}</AppProvider>

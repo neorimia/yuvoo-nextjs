@@ -5,7 +5,17 @@ import HeaderOne from "@/layouts/Header/HeaderOne";
 import HomePage from "./home/page";
 
 export const metadata: Metadata = {
-  title: "Home - Kindergarten & School Next js Template",
+  title: "Yuvoo - Descoperă sportul potrivit copilului tău",
+  description:
+    "Platformă pentru găsirea sportului potrivit pentru copiii tăi. Cu ajutorul AI Coach, descoperă cluburi sportive verificate și consultează specialiști pediatri.",
+  keywords: [
+    "sport copii",
+    "cluburi sportive",
+    "sporturi pentru copii",
+    "AI Coach",
+    "specialiști pediatri",
+    "România",
+  ],
 };
 
 const Home = () => {

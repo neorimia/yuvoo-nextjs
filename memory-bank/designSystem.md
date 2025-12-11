@@ -55,7 +55,7 @@
 
 **Font Principal**:
 
-- **Fredoka** (Google Fonts) - Font friendly pentru copii, modern și jucăuș
+- **Gabarito** (Google Fonts) - Font friendly pentru copii, modern și jucăuș
 
 **Planificat pentru Yuvoo**:
 
@@ -213,9 +213,9 @@ border-color: var(--bd-grey-1); // #E6E6E6
 
 ### Tipografie
 
-**Font Principal**: Fredoka
+**Font Principal**: Gabarito
 
-- **Family**: `'Fredoka', sans-serif`
+- **Family**: `'Gabarito', sans-serif`
 - **Weights Available**:
   - 200 (Extra Light)
   - 300 (Light)
@@ -228,7 +228,7 @@ border-color: var(--bd-grey-1); // #E6E6E6
 - **Caracteristici**: Friendly, modern, jucăuș, perfect pentru copii
 - **Potrivit pentru**: Headings, CTA-uri, elemente importante, brand identity
 
-**Font Secundar**: Fredoka (același font pentru consistență)
+**Font Secundar**: Gabarito (același font pentru consistență)
 
 **Font Awesome**: `"Font Awesome 6 Pro"` - pentru iconuri
 
@@ -247,9 +247,9 @@ border-color: var(--bd-grey-1); // #E6E6E6
 
 **CSS Variables** (din `_root.scss`):
 
-- `--bd-ff-body`: `'Fredoka', sans-serif`
-- `--bd-ff-heading`: `'Fredoka', sans-serif`
-- `--bd-ff-p`: `'Fredoka', sans-serif`
+- `--bd-ff-body`: `'Gabarito', sans-serif`
+- `--bd-ff-heading`: `'Gabarito', sans-serif`
+- `--bd-ff-p`: `'Gabarito', sans-serif`
 - `--bd-ff-fontawesome`: `"Font Awesome 6 Pro"`
 - `--bd-fz-body`: `18px`
 - `--bd-fz-p`: `18px`

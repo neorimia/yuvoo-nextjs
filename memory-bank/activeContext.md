@@ -73,7 +73,7 @@
 - ✅ **Multiple layout variants** (HeaderOne-Four, FooterOne-Three)
 - ✅ **Animation libraries** (WOW.js, Animate.css)
 - ✅ **Font Awesome Pro** + Flaticon icons
-- ✅ **Fredoka font** (child-friendly)
+- ✅ **Gabarito font** (child-friendly)
 - ✅ **Complete page structure** (home, about, contact, etc.)
 
 **Decision Made**: ✅ **Hybrid Approach** - Reuse and adapt existing components

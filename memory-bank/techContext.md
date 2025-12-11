@@ -45,7 +45,7 @@
 - **Font Awesome Pro** - Icon library (actual)
 - **Flaticon Kindedo** - Custom icons (actual)
 - **Nice Select** - Styled dropdowns (actual)
-- **Fredoka** (Google Fonts) - Primary font, child-friendly (actual)
+- **Gabarito** (Google Fonts) - Primary font, child-friendly (actual)
 
 **Current Setup**:
 
