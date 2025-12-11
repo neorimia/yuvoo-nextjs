@@ -152,15 +152,15 @@
         - [x] `openai ^4.72.0` - OpenAI API client (✅ installed: 4.104.0)
         - [x] `cloudinary ^2.5.1` - Media storage & CDN (✅ installed: 2.8.0)
         - [x] `@getbrevo/brevo ^2.2.0` - Email service (✅ installed: 2.5.0)
-      - [x] **UI & Styling (Planned Migration)** (to add later):
-        - [ ] `tailwindcss ^3.4.1` - Utility-first CSS (planned)
-        - [ ] `@radix-ui/react-dialog ^1.0.5` - shadcn/ui components (planned)
-        - [ ] `@radix-ui/react-select ^2.0.0` - shadcn/ui components (planned)
-        - [ ] `@radix-ui/react-slot ^1.0.2` - shadcn/ui components (planned)
-        - [ ] `lucide-react ^0.344.0` - Icon library (planned)
-        - [ ] `class-variance-authority ^0.7.0` - Component variants (planned)
-        - [ ] `clsx ^2.1.0` - Conditional classnames (planned)
-        - [ ] `tailwind-merge ^2.2.0` - Merge Tailwind classes (planned)
+      - [x] **UI & Styling** (✅ Tailwind and shadcn/ui installed):
+        - [x] `tailwindcss v4.1.17` - Utility-first CSS (✅ installed - upgraded to v4)
+        - [x] `class-variance-authority ^0.7.1` - Component variants (✅ installed)
+        - [x] `clsx ^2.1.1` - Conditional classnames (✅ installed)
+        - [x] `lucide-react ^0.560.0` - Icon library (✅ installed)
+        - [x] `tailwind-merge ^3.4.0` - Merge Tailwind classes (✅ installed)
+        - [ ] `@radix-ui/react-dialog ^1.0.5` - shadcn/ui components (📋 install when adding dialog component)
+        - [ ] `@radix-ui/react-select ^2.0.0` - shadcn/ui components (📋 install when adding select component)
+        - [ ] `@radix-ui/react-slot ^1.0.2` - shadcn/ui components (📋 install when adding slot component)
       - [x] **Development Tools** (added):
         - [x] `prettier ^3.2.5` - Code formatting (✅ installed: 3.7.4, config files created: `.prettierrc`, `.prettierignore`, npm scripts added)
         - [ ] `prettier-plugin-tailwindcss ^0.5.11` - Tailwind class sorting (⏳ add when Tailwind is added)
@@ -175,7 +175,7 @@
       - [x] Dependencies analysis complete ✅
       - [x] Identified 3 unused/problematic packages to remove/replace
       - [x] Identified 9 core Yuvoo dependencies to add (database, auth, validation, AI, services)
-      - [x] Identified 7 planned UI dependencies for Tailwind migration (add later)
+      - [x] Installed UI dependencies (Tailwind v4 ✅, shadcn/ui core ✅, Radix UI components install on-demand)
       - [x] **Actions completed**:
         - [x] Removed `cache` and `clean` from package.json ✅
         - [x] Removed `@react-native-async-storage/async-storage` from package.json ✅
@@ -244,8 +244,8 @@
   - [x] Install/verify core dependencies (Next.js, React, TypeScript) (✅ installed: Next.js 15.5.7, React 19.2.1, TypeScript 5.9.3)
   - [x] Install database dependencies (Drizzle ORM, Neon driver) (✅ installed: drizzle-orm 0.36.4, drizzle-kit 0.28.1, @neondatabase/serverless 0.10.4, postgres 3.4.5)
   - [x] Install authentication (Stack Auth) (✅ installed: @stackframe/stack 2.8.56)
-  - [ ] Install Tailwind CSS (for new components) (📋 planned - not yet installed)
-  - [ ] Install shadcn/ui (📋 planned - not yet installed, requires Tailwind first)
+  - [x] Install Tailwind CSS (for new components) (✅ installed: Tailwind CSS v4.1.17 - see line 366 for details)
+  - [x] Install shadcn/ui (✅ installed: initialized with "new-york" style, neutral base color, CSS variables enabled)
   - [x] Install validation (Zod) (✅ installed: zod 3.25.76)
   - [x] Install AI/External services (OpenAI, Cloudinary, Brevo) (✅ installed: openai 4.104.0, cloudinary 2.8.0, @getbrevo/brevo 2.5.0)
 - [x] Development environment setup (✅ partially configured)
@@ -376,6 +376,13 @@
   - [x] Create custom Yuvoo component classes (✅ btn-yuvoo-primary, btn-yuvoo-secondary, card-yuvoo, etc.)
   - [x] Create Tailwind documentation (✅ src/lib/tailwind/README.md with usage examples - needs v4 update)
   - [x] Verify build works with Tailwind v4 (✅ build successful after upgrade)
+- [x] shadcn/ui setup (✅ completed)
+  - [x] Initialize shadcn/ui (✅ initialized with "new-york" style, neutral base color)
+  - [x] Create components.json configuration (✅ created with RSC support, TypeScript, CSS variables enabled)
+  - [x] Install core dependencies (✅ class-variance-authority, clsx, lucide-react, tailwind-merge installed)
+  - [x] Create utils.ts with cn() helper (✅ src/lib/utils.ts created)
+  - [x] Update globals.css with shadcn/ui theme variables (✅ CSS variables for light/dark themes added)
+  - [x] Configure component aliases (✅ @/components, @/lib/utils, @/components/ui configured)
 - [x] Drizzle ORM setup (✅ completed)
   - [x] Install Drizzle ORM and dependencies (✅ installed: drizzle-orm@0.36.4, drizzle-kit@0.28.1, @neondatabase/serverless@0.10.4, postgres@3.4.7)
   - [x] Create drizzle.config.ts (✅ configured with schema path, output directory, dialect, and database credentials)
