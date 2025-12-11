@@ -4,10 +4,20 @@
 
 ### Core Framework
 
-- **Next.js**: `^15.0.3` - React framework with App Router
-- **React**: `^19.0.0` - UI library
-- **React DOM**: `^19.0.0` - React rendering
-- **TypeScript**: `^5.6.3` - Type safety
+**Current Installed Versions**:
+
+- **Next.js**: `15.5.7` (installed) - React framework with App Router ✅
+- **React**: `19.2.1` (installed) - UI library ✅
+- **React DOM**: `19.2.1` (installed) - React rendering ✅
+- **TypeScript**: `5.9.3` (installed) - Type safety ✅
+
+**Package.json Versions**:
+
+- **Next.js**: `^15.3.1` (package.json) - will install latest 15.x
+- **React**: `^19.0.0` (package.json) - will install latest 19.x
+- **TypeScript**: `^5` (package.json) - will install latest 5.x
+
+**Note**: Installed versions are newer than package.json minimums, which is good for compatibility.
 
 ### Database & ORM
 
@@ -26,15 +36,36 @@
 
 ### UI & Styling
 
-- **Tailwind CSS**: `^3.4.1` - Utility-first CSS
-- **shadcn/ui**: Component library built on Radix UI
+**Current (Starting Theme - Kindedo)**:
+
+- **Bootstrap**: `5.3.3` - CSS framework (actual)
+- **SCSS**: `^1.75.0` - CSS preprocessor (actual)
+- **Animate.css** - Animation library (actual)
+- **WOW.js**: `^1.2.2` - Scroll animations (actual)
+- **Font Awesome Pro** - Icon library (actual)
+- **Flaticon Kindedo** - Custom icons (actual)
+- **Nice Select** - Styled dropdowns (actual)
+- **Fredoka** (Google Fonts) - Primary font, child-friendly (actual)
+
+**Current Setup**:
+
+- **Tailwind CSS**: `4.1.17` (installed) ✅ - Utility-first CSS for new components (upgraded from v3.4.19)
+- **@tailwindcss/postcss**: `4.1.17` (installed) ✅ - PostCSS plugin for Tailwind v4
+- **PostCSS**: `8.5.6` (installed) ✅ - CSS processing
+- **Note**: Tailwind v4 uses CSS-based configuration (no tailwind.config.ts), Autoprefixer is built-in
+
+**Planned Migration** (for additional UI libraries):
+
+- **shadcn/ui**: Component library built on Radix UI (planificat)
   - `@radix-ui/react-dialog ^1.0.5`
   - `@radix-ui/react-select ^2.0.0`
   - `@radix-ui/react-slot ^1.0.2`
-- **Lucide React**: `^0.344.0` - Icon library
-- **Class Variance Authority**: `^0.7.0` - Component variants
-- **clsx**: `^2.1.0` - Conditional classnames
-- **tailwind-merge**: `^2.2.0` - Merge Tailwind classes
+- **Lucide React**: `^0.344.0` - Icon library (planificat)
+- **Class Variance Authority**: `^0.7.0` - Component variants (planificat)
+- **clsx**: `^2.1.0` - Conditional classnames (planificat)
+- **tailwind-merge**: `^2.2.0` - Merge Tailwind classes (planificat)
+
+**Migration Strategy**: Gradual migration - keep Bootstrap for existing components, use Tailwind for new components. See `designSystem.md` for details.
 
 ### Validation
 
@@ -66,6 +97,39 @@
   - `@types/node ^20.11.20`
   - `@types/react ^19.0.0`
   - `@types/react-dom ^19.0.0`
+
+## Routing & SEO Strategy
+
+### Routes Configuration
+
+**Location**: `lib/routes.ts` - Single source of truth for all application routes
+
+**SEO Strategy**:
+
+- **Public Routes**: Romanian language paths for SEO optimization (indexed by search engines)
+  - Examples: `/sporturi`, `/cluburi`, `/doctori`, `/chestionar`, `/despre-noi`, `/intrebari-frecvente`
+- **Internal Routes**: English paths (not SEO-sensitive, not indexed)
+  - Examples: `/auth/login`, `/parent/dashboard`, `/club/dashboard`, `/admin/dashboard`
+
+**Key Features**:
+
+- Type-safe route definitions with TypeScript
+- Helper functions for route checking (`isProtectedRoute`, `getRouteGroup`, `isPublicSeoRoute`)
+- Query parameter builder (`buildUrl`)
+- Legacy route mapping for redirects (Kindedo → Yuvoo)
+- External links and asset paths centralized
+- Organized structure: `routes.*`, `externalLinks.*`, `assets.*`
+
+**Usage Pattern**:
+
+```tsx
+import { routes, externalLinks, assets } from "@/lib/routes";
+<Link href={routes.clubs.list}>Cluburi</Link>
+<Link href={routes.clubs.detail("fotbal-club-bucuresti")}>Detalii</Link>
+<Image src={assets.logo} alt="Yuvoo" />
+```
+
+**Important**: Always use `@/lib/routes` for navigation - never hardcode paths. This ensures consistency and makes SEO updates easier.
 
 ## Development Environment
 
@@ -320,6 +384,22 @@ Use Vercel's environment variable management:
     }
   }
 }
+```
+
+**Configuration Status**: ✅ Configured and documented
+
+- Single `@/*` alias pattern (standard Next.js convention)
+- Maps to `./src/*` directory
+- Works for all imports: `@/lib/*`, `@/components/*`, `@/modules/*`, `@/app/*`
+- No additional aliases needed (keeps configuration simple and consistent)
+- Documentation: `TYPESCRIPT_PATHS.md` created with usage examples and best practices
+
+**Usage Examples**:
+
+```typescript
+import { routes } from "@/lib/routes";
+import ClubCard from "@/components/features/clubs/ClubCard";
+import { getClubBySlug } from "@/modules/clubs/clubs.service";
 ```
 
 ## Code Quality Tools

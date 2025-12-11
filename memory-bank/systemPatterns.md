@@ -35,9 +35,10 @@ yuvoo-nextjs/
 │   └── actions/                 # Server Actions (main backend)
 │
 ├── components/
-│   ├── ui/                      # shadcn/ui components
+│   ├── ui/                      # shadcn/ui components (planned)
 │   ├── layout/                  # Header, Footer, Sidebar
 │   ├── features/                # Feature-specific components
+│   │   └── clubs/               # Club components (✅ created)
 │   ├── forms/                   # Reusable form components
 │   └── shared/                  # Common components
 │
@@ -46,7 +47,8 @@ yuvoo-nextjs/
 │   ├── db/                      # Drizzle ORM setup & schema
 │   ├── validations/             # Zod schemas
 │   ├── integrations/            # External services (OpenAI, Cloudinary, Brevo)
-│   └── utils/                    # Utility functions
+│   ├── utils/                    # Utility functions
+│   └── routes.ts                # Single source of truth for all routes (SEO-friendly Romanian paths)
 │
 ├── modules/                      # Backend Business Logic (Service Layer)
 │   ├── auth/
@@ -112,6 +114,47 @@ Next.js route groups `(group-name)/` organize routes without affecting URL struc
 - `(club-portal)/` - Club admin routes
 - `(doctor-portal)/` - Doctor admin routes
 
+### 3.1. SEO-Friendly Routing Strategy
+
+**Location**: `lib/routes.ts` - Single source of truth for all routes
+
+**Key Principle**: Public routes use Romanian language for SEO optimization, internal routes use English.
+
+**Public SEO Routes** (Romanian, indexed by search engines):
+
+- Sports: `/sporturi`, `/sporturi/:slug`
+- Clubs: `/cluburi`, `/cluburi/:slug`, `/cluburi/categorie/:category`, `/cluburi/:slug/recenzii`
+- Doctors: `/doctori`, `/doctori/:slug`
+- Quiz: `/chestionar`, `/chestionar/container`, `/chestionar/previzualizare`, `/chestionar/rezultate`
+- Info: `/despre-noi`, `/parteneri`, `/intrebari-frecvente`, `/contact`, `/ajutor`
+- Legal: `/confidentialitate`, `/termeni`, `/cookies`, `/gdpr-parinti`
+- Search: `/cautare`
+
+**Internal Routes** (English, not SEO-sensitive):
+
+- Authentication: `/auth/login`, `/auth/register`, etc.
+- Parent Dashboard: `/parent/dashboard`, `/parent/children`, etc.
+- Club Portal: `/club/dashboard`, `/club/profile`, etc.
+- Doctor Portal: `/doctor/dashboard`, `/doctor/profile`, etc.
+- Admin: `/admin/dashboard`, etc.
+
+**Legacy Routes**: Organized in `routes.legacy.*` for redirect mapping from old Kindedo routes.
+
+**Usage**:
+
+```tsx
+import { routes } from "@/lib/routes";
+<Link href={routes.clubs.list}>Cluburi</Link>
+<Link href={routes.clubs.detail("fotbal-club-bucuresti")}>Detalii Club</Link>
+```
+
+**Helper Functions**:
+
+- `buildUrl(path, params)` - Build URLs with query parameters
+- `isProtectedRoute(path)` - Check if route requires authentication
+- `getRouteGroup(path)` - Get route group (public, auth, club, doctor, admin, api)
+- `isPublicSeoRoute(path)` - Check if route is a public SEO route
+
 ### 4. Component Organization
 
 **Feature-Based Components**: `components/features/`
@@ -119,6 +162,13 @@ Next.js route groups `(group-name)/` organize routes without affecting URL struc
 - Organized by feature (quiz, clubs, doctors, children, bookings)
 - Self-contained with related sub-components
 - Reusable across different pages
+
+**Current Status**:
+
+- ✅ `components/features/clubs/` - Club components created (ClubsMain, ClubDetailsMain, HomeClubArea, ClubCard, VerificationBadge)
+- 📋 `components/features/doctors/` - Doctor components (planned)
+- 📋 `components/features/sports/` - Sport components (planned)
+- 📋 `components/features/quiz/` - Quiz components (planned)
 
 **Layout Components**: `components/layout/`
 
@@ -327,27 +377,200 @@ requireAuth() → throws if not authenticated
 - Type-safe parsing
 - Clear error messages
 
+## Existing Components (Kindedo Theme)
+
+### Component Adaptation Strategy
+
+**Starting Point**: Kindedo template provides rich component library that can be adapted for Yuvoo.
+
+**Key Adaptations**:
+
+1. **Class → Club**:
+   - Location: `src/components/Class/` → `src/components/features/clubs/`
+   - Status: ✅ Core components created
+   - Components created:
+     - `ClubsMain.tsx` - Club listing page (adapted from `Class/ClassesMain.tsx`)
+     - `ClubDetailsMain.tsx` - Club detail page (adapted from `Class/ClassDetailsMain.tsx`)
+     - `HomeClubArea.tsx` - Homepage club section (adapted from `Class/HomeClassArea.tsx`)
+     - `ClubCard.tsx` - Reusable club card component
+     - `VerificationBadge.tsx` - Club verification badge component
+   - Features added:
+     - ✅ Verification badge display
+     - ✅ Sport information display
+     - ✅ Location display (city, district, address)
+     - ✅ Age groups display
+     - ✅ Pricing information (RON, monthly/per_class/per_semester)
+     - ✅ SEO-friendly routes (`/cluburi`, `/cluburi/:slug`)
+   - Data: `class-data.ts` → `club-data.ts` (📋 Planned)
+
+2. **Teacher → Doctor**:
+   - Location: `src/components/Teacher/`
+   - Adapt: Teacher profiles → Doctor profiles
+   - Add: Medical specialties, availability calendar
+   - Data: `teacher-data.ts` → `doctor-data.ts`
+
+3. **Program → Sport**:
+   - Location: `src/components/Program/`
+   - Adapt: Program listings → Sport recommendations
+   - Add: AI recommendation display, match scores
+   - Data: `program-data.ts` → `sport-data.ts`
+
+**Reusable Components** (no adaptation needed):
+
+- `HeroArea/` - Landing page heroes
+- `Banner/` - Promotional banners
+- `Testimonial/` - Parent feedback
+- `Gallery/` - Photo galleries
+- `FAQ/` - Frequently asked questions
+- `Contact/` - Contact forms
+- `Auth/` - Login, Register, Forgot Password
+- `Common/` - Breadcrumb, Pagination, Preloader, etc.
+
+**Layout Components** (adapt branding only):
+
+- `Header/` - Multiple variants (HeaderOne-Four)
+- `Footer/` - Multiple variants (FooterOne-Three)
+- `Wrapper/` - Page wrapper
+
+**Components to Remove** (Phase 1):
+
+- `Shop/` - Not needed in Phase 1
+- `News/` - Optional, can be repurposed for blog
+
+### Styling Pattern (Current)
+
+**Bootstrap + SCSS**:
+
+- Bootstrap 5.3.3 grid and utilities
+- SCSS for custom styling
+- Component-specific SCSS files
+- Global styles in `globals.scss`
+
+**Animation Pattern**:
+
+```tsx
+className="wow fadeInUp"
+data-wow-duration="1s"
+data-wow-delay=".3s"
+```
+
+**Button Pattern**:
+
+```tsx
+<Link href="/" className="bd-btn">
+  <span className="bd-btn-inner">
+    <span className="bd-btn-normal">Text</span>
+    <span className="bd-btn-hover">Text</span>
+  </span>
+</Link>
+```
+
+**Migration Strategy**: See `designSystem.md` for detailed migration plan from Bootstrap to Tailwind.
+
 ## Component Patterns
 
-### Client Components
+### Server Components vs Client Components
 
-**When to Use**:
+**Default Rule**: Server Components by default, Client Components only when needed.
 
-- Interactive elements (forms, buttons)
-- State management (useState, useEffect)
-- Browser APIs (localStorage, window)
+**All App Router pages** (`app/**/page.tsx`) are Server Components by default - no `'use client'` directive needed.
 
-**Marking**: `'use client'` directive
+### When to Use Client Components (`'use client'`)
 
-### Server Components
+Use Client Components when you need:
 
-**When to Use**:
+1. **Interactivity & Event Handlers**
+   - `onClick`, `onChange`, `onSubmit` handlers
+   - User interactions (buttons, forms, modals)
+   - Example: `ThemeChanger.tsx` (theme toggle button)
 
-- Data fetching
-- Static content
-- SEO-important pages
+2. **React Hooks**
+   - `useState`, `useEffect`, `useRef`, `useContext`
+   - Custom hooks that use browser APIs
+   - Example: `TypedText.tsx` (uses useEffect for Typed.js)
 
-**Default**: All components are Server Components unless marked `'use client'`
+3. **Browser APIs**
+   - `localStorage`, `sessionStorage`
+   - `window`, `document` objects
+   - `navigator`, `location`
+   - Example: `ThemeChanger.tsx` (localStorage for theme)
+
+4. **Third-Party Client Libraries**
+   - Swiper (carousels/sliders)
+   - Typed.js (typing animations)
+   - React Hook Form (form validation)
+   - Example: `HomeClassArea.tsx` (Swiper carousel)
+
+5. **State Management**
+   - Redux (`useSelector`, `useDispatch`)
+   - Context API (`useContext`)
+   - Example: `CartMain.tsx` (Redux for cart state)
+
+6. **Context Providers**
+   - Custom context providers
+   - Example: `GlobalVideoModal.tsx` (VideoProvider context)
+
+### When to Use Server Components (Default)
+
+Use Server Components for:
+
+1. **Data Fetching**
+   - Direct database queries
+   - API calls (no client-side exposure)
+   - Example: Club listing page fetching from database
+
+2. **Static Content**
+   - Content that doesn't change
+   - SEO-important text
+   - Example: About page content
+
+3. **Server-Only Code**
+   - File system access
+   - Environment variables (server-side)
+   - Example: Reading config files
+
+### Current Pattern (Kindedo Theme)
+
+**Analysis of 35 Client Components**:
+
+- ✅ **Forms** (8 components): `ContactForm`, `SignInForm`, `SignUpForm`, `ForgotForm` - Need `react-hook-form` and form state
+- ✅ **Shop/Cart** (5 components): `CartMain`, `ShopMain`, `CheckoutMain`, `WishlistMain`, `ShopDetailsMain` - Need Redux state
+- ✅ **Sliders/Carousels** (10+ components): `HomeClassArea`, `ProgramSlider`, `HomeBlogArea` - Need Swiper library
+- ✅ **Interactive UI** (5 components): `ThemeChanger`, `TypedText`, `GlobalVideoModal`, `CountdownSection` - Need browser APIs/hooks
+- ✅ **Gallery** (2 components): `GalleryMain`, `HomeTwoGalleryArea` - Need photo viewer interactions
+- ✅ **Blog/News** (5 components): `BlogMain`, `BlogDetailsMain` - May use Swiper or interactive features
+
+**Conclusion**: All current Client Components are correctly marked - they all require client-side interactivity.
+
+### Future Pattern (Yuvoo)
+
+**Migration Strategy**:
+
+1. **New Components**: Start as Server Components, add `'use client'` only when needed
+2. **Data Fetching**: Use Server Actions + Server Components (no Redux for data)
+3. **Forms**: Keep as Client Components (React Hook Form) but submit to Server Actions
+4. **State**:
+   - Server state → Server Components + Server Actions
+   - Client state → Client Components with `useState` or Context
+   - Global state → Consider removing Redux, use Server Actions + React Context
+
+**Pattern Decision Tree**:
+
+```
+Does component need interactivity?
+  → Yes → Client Component
+  → No → Does it fetch data?
+    → Yes → Server Component
+    → No → Server Component (default)
+```
+
+### Best Practices
+
+1. **Minimize Client Components**: Only mark as `'use client'` when absolutely necessary
+2. **Composition**: Use Server Components as containers, Client Components for interactive parts
+3. **Bundle Size**: Client Components increase JavaScript bundle - keep them small
+4. **Hydration**: Client Components hydrate on client - minimize to improve performance
+5. **Props**: Server Components can pass data to Client Components (serializable props only)
 
 ### Form Handling
 

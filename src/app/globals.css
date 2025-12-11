@@ -1,0 +1,198 @@
+/**
+ * Tailwind CSS Global Styles for Yuvoo
+ *
+ * This file contains Tailwind directives and custom CSS for new components.
+ * Bootstrap styles are loaded separately via globals.scss.
+ *
+ * Usage:
+ * - Use Tailwind classes in new components (Quiz, Dashboard, etc.)
+ * - Keep Bootstrap classes in existing adapted components
+ * - Both can coexist in the same project
+ */
+
+@import "tailwindcss";
+
+@theme {
+  --color-primary: #00bbae;
+  --color-primary-light: #ebfffe;
+  --color-primary-dark: #009b8f;
+
+  --color-secondary: #ff9b24;
+  --color-secondary-light: #ffecd6;
+  --color-secondary-lighter: #fff6eb;
+  --color-secondary-dark: #e6891f;
+
+  --color-accent: #7c81ff;
+  --color-accent-light: #b8bbff;
+  --color-accent-dark: #5c61e6;
+
+  --color-neutral-black: #1b1b1b;
+  --color-neutral-body: #424242;
+  --color-neutral-white: #ffffff;
+
+  --color-neutral-grey-1: #e6e6e6;
+  --color-neutral-grey-2: #e9cfcf;
+
+  --color-theme-1: #00bbae;
+  --color-theme-2: #ff9b24;
+  --color-theme-3: #ff577b;
+  --color-theme-4: #fff8eb;
+  --color-theme-5: #ffa455;
+  --color-theme-6: #fff6eb;
+  --color-theme-7: #ebfffe;
+  --color-theme-8: #ffecd6;
+  --color-theme-9: #ff7c7c;
+  --color-theme-10: #7c81ff;
+  --color-theme-11: #00b9f1;
+
+  --font-sans: var(--font-fredoka), Fredoka, sans-serif;
+  --font-body: var(--font-fredoka), Fredoka, sans-serif;
+  --font-heading: var(--font-fredoka), Fredoka, sans-serif;
+
+  --text-h1: 96px;
+  --text-h2: 64px;
+  --text-h3: 32px;
+  --text-h4: 23px;
+  --text-h5: 16px;
+  --text-h6: 16px;
+  --text-body: 18px;
+
+  --leading-heading: 1.25;
+  --leading-body: 30px;
+  --leading-relaxed: 1.7;
+  --leading-loose: 2;
+
+  --radius-sm: 4px;
+  --radius: 8px;
+  --radius-md: 12px;
+  --radius-lg: 16px;
+  --radius-xl: 24px;
+  --radius-2xl: 32px;
+  --radius-3xl: 50px;
+  --radius-full: 50%;
+
+  --shadow-card: 0px 16px 32px 0px rgba(0, 0, 0, 0.06);
+  --shadow-menu: 0px 20px 30px rgba(3, 4, 28, 0.1);
+  --shadow-modal: 0px 30px 70px 0px rgba(11, 6, 70, 0.08);
+  --shadow-header: 0 10px 30px rgba(0, 0, 0, 0.12);
+  --shadow-header-alt: 0px 4px 10px rgba(3, 4, 28, 0.1);
+  --shadow-login: 0px 30px 60px rgba(3, 4, 28, 0.1);
+  --shadow-offcanvas: -5px 0 20px -5px rgba(0, 0, 0, 0.5);
+
+  --spacing-section: 110px;
+  --spacing-section-lg: 120px;
+
+  --animate-fade-in: fadeIn 0.3s ease-out;
+  --animate-fade-in-up: fadeInUp 0.3s ease-out;
+  --animate-slide-in: slideIn 0.5s ease-out;
+
+  @keyframes fadeIn {
+    0% {
+      opacity: 0;
+    }
+    100% {
+      opacity: 1;
+    }
+  }
+  @keyframes fadeInUp {
+    0% {
+      opacity: 0;
+      transform: translateY(10px);
+    }
+    100% {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+  @keyframes slideIn {
+    0% {
+      transform: translateX(-100%);
+    }
+    100% {
+      transform: translateX(0);
+    }
+  }
+}
+
+/*
+  The default border color has changed to `currentcolor` in Tailwind CSS v4,
+  so we've added these compatibility styles to make sure everything still
+  looks the same as it did with Tailwind CSS v3.
+
+  If we ever want to remove these styles, we need to add an explicit border
+  color utility to any element that depends on these defaults.
+*/
+@layer base {
+  *,
+  ::after,
+  ::before,
+  ::backdrop,
+  ::file-selector-button {
+    border-color: var(--color-gray-200, currentcolor);
+  }
+}
+
+/**
+ * Custom Tailwind Components
+ * 
+ * Add reusable component classes here using @apply directive
+ */
+
+@utility btn-yuvoo-primary {
+  /* Yuvoo Primary Button */
+  @apply bg-primary text-white font-semibold px-6 py-3 rounded-xl transition-all duration-300;
+  @apply hover:bg-primary-dark active:scale-95;
+}
+
+@utility btn-yuvoo-secondary {
+  /* Yuvoo Secondary Button */
+  @apply bg-secondary text-white font-semibold px-6 py-3 rounded-xl transition-all duration-300;
+  @apply hover:bg-secondary-dark active:scale-95;
+}
+
+@utility btn-yuvoo-accent {
+  /* Yuvoo Accent Button */
+  @apply bg-accent text-white font-semibold px-6 py-3 rounded-xl transition-all duration-300;
+  @apply hover:bg-accent-dark active:scale-95;
+}
+
+@utility card-yuvoo {
+  /* Yuvoo Card */
+  @apply bg-white rounded-xl shadow-card p-6 transition-all duration-300;
+  @apply hover:shadow-lg;
+}
+
+@utility bg-yuvoo-primary-light {
+  /* Yuvoo Section Background */
+  @apply bg-primary-light;
+}
+
+@utility bg-yuvoo-secondary-light {
+  @apply bg-secondary-light;
+}
+
+@utility bg-yuvoo-secondary-lighter {
+  @apply bg-secondary-lighter;
+}
+
+/**
+ * Custom Utilities
+ */
+
+@utility text-yuvoo-heading {
+  /* Text colors matching design system */
+  @apply text-neutral-black;
+}
+
+@utility text-yuvoo-body {
+  @apply text-neutral-body;
+}
+
+@utility section-padding {
+  /* Spacing utilities for sections */
+  @apply pt-[110px] pb-[70px];
+}
+
+@utility section-padding-lg {
+  @apply pt-[120px] pb-[80px];
+}

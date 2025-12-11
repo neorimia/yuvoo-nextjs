@@ -11,13 +11,11 @@
 ### Immediate Priorities
 
 1. **Memory Bank Creation** ✅
-
    - Documenting project structure
    - Establishing context for future development
    - Creating reference documentation
 
 2. **Architecture Review**
-
    - Reviewing MVP_STARTER_BRIEF.md architecture
    - Understanding current codebase state
    - Planning migration/implementation strategy
@@ -36,21 +34,57 @@
 - Architecture patterns documented
 - Technical context established
 
+### Routes & SEO Configuration
+
+- **Created**: `lib/routes.ts` - Single source of truth for all routes and paths
+- **SEO Strategy**: Public routes use Romanian language for SEO optimization
+  - Public routes: `/sporturi`, `/cluburi`, `/doctori`, `/chestionar`, `/despre-noi`, etc.
+  - Internal routes: `/auth/login`, `/parent/dashboard`, `/club/dashboard`, etc.
+- **Features**: Type-safe routes, helper functions, legacy route mapping
+- **Status**: ✅ Complete - All routes defined and organized
+
+### Component Adaptation - Class → Club
+
+- **Created**: Club components in `components/features/clubs/`
+  - `ClubsMain.tsx` - Club listing page component
+  - `ClubDetailsMain.tsx` - Club detail page component
+  - `HomeClubArea.tsx` - Homepage club section component
+  - `ClubCard.tsx` - Reusable club card component
+  - `VerificationBadge.tsx` - Club verification badge component
+- **Features**: Verification badges, sport info, location, age groups, pricing, SEO routes
+- **Status**: ✅ Core components created - Ready for integration
+
+### TypeScript Configuration
+
+- **Path Aliases**: Configured `@/*` → `./src/*` (standard Next.js pattern)
+- **Documentation**: Created `TYPESCRIPT_PATHS.md` with usage examples
+- **Decision**: Keep single alias pattern (no additional aliases needed)
+- **Status**: ✅ Configured and documented
+
 ### Current Codebase State
 
-**Observation**: The current codebase appears to be a template/starter project (`kindedo-nextjs`) with:
+**Starting Theme**: Kindedo - Kindergarten & School Next.js Template
 
-- Bootstrap-based styling
-- Redux state management
-- Existing component structure
-- Different architecture than planned
+**Observation**: The current codebase is a complete template (`kindedo-nextjs`) with:
 
-**Action Needed**:
+- ✅ **Bootstrap 5.3.3** + SCSS styling
+- ✅ **Redux Toolkit** for state management
+- ✅ **Rich component library** (Class, Teacher, Program, etc.)
+- ✅ **Multiple layout variants** (HeaderOne-Four, FooterOne-Three)
+- ✅ **Animation libraries** (WOW.js, Animate.css)
+- ✅ **Font Awesome Pro** + Flaticon icons
+- ✅ **Fredoka font** (child-friendly)
+- ✅ **Complete page structure** (home, about, contact, etc.)
 
-- Assess whether to:
-  - Migrate existing codebase to new architecture
-  - Start fresh with new architecture
-  - Hybrid approach (reuse some components)
+**Decision Made**: ✅ **Hybrid Approach** - Reuse and adapt existing components
+
+**Action Plan**:
+
+- Adapt existing components (Class→Club, Teacher→Doctor, Program→Sport)
+- Keep Bootstrap for existing components initially
+- Use Tailwind for new components (Quiz, Dashboard)
+- Gradual migration strategy
+- See `designSystem.md` for detailed adaptation plan
 
 ## Active Decisions & Considerations
 
@@ -76,13 +110,27 @@
 
 ### Technology Stack Alignment
 
-**To Verify**:
+**Current Stack** (Kindedo Theme):
 
-- [ ] Current Next.js version matches requirements
+- ✅ Next.js 15.3.1 (matches requirements)
+- ✅ React 19.0.0 (matches requirements)
+- ✅ TypeScript 5.x (matches requirements)
+- ✅ Bootstrap 5.3.3 + SCSS (actual, to be gradually migrated)
+- ✅ Redux Toolkit (actual, to be gradually replaced with Server Actions)
+
+**To Setup**:
+
 - [ ] Database setup (Neon + Drizzle)
 - [ ] Authentication setup (Stack Auth)
-- [ ] UI library migration (Bootstrap → Tailwind + shadcn/ui)
-- [ ] State management (Redux → Server Actions + React state)
+- [x] Tailwind CSS setup (for new components) ✅ - Completed and upgraded to v4.1.17
+- [ ] shadcn/ui installation (for new components)
+
+**Migration Strategy**:
+
+- Keep Bootstrap/SCSS for existing adapted components
+- Use Tailwind for new components (Quiz, Dashboard, etc.)
+- Gradually migrate as components are refactored
+- See `designSystem.md` for component adaptation plan
 
 ### Development Environment
 
@@ -100,7 +148,6 @@
 ### Week 1-2: Foundation Setup
 
 1. **Project Setup**
-
    - [ ] Verify/upgrade Next.js to latest version
    - [ ] Install required dependencies
    - [ ] Set up Tailwind CSS
@@ -108,7 +155,6 @@
    - [ ] Remove/replace Bootstrap if needed
 
 2. **Database Setup**
-
    - [ ] Create Neon database
    - [ ] Install Drizzle ORM
    - [ ] Create database schema
@@ -116,7 +162,6 @@
    - [ ] Seed initial data (sports, sample clubs)
 
 3. **Authentication Setup**
-
    - [ ] Create Stack Auth project
    - [ ] Configure Stack Auth
    - [ ] Set up session management
@@ -133,7 +178,6 @@
 ### Week 3-4: Core Pages
 
 1. **Landing Page**
-
    - [ ] Design and implement homepage
    - [ ] Value proposition section
    - [ ] 3-step process explanation
@@ -141,14 +185,12 @@
    - [ ] Trust indicators
 
 2. **Authentication Pages**
-
    - [ ] Sign up page
    - [ ] Sign in page
    - [ ] Password reset flow
    - [ ] Email verification
 
 3. **Dashboard**
-
    - [ ] Parent dashboard layout
    - [ ] Overview stats
    - [ ] Recent activity
@@ -163,21 +205,18 @@
 ### Week 5-8: Quiz System
 
 1. **Quiz UI**
-
    - [ ] Quiz flow component
    - [ ] Question components (age, energy, personality, interests, etc.)
    - [ ] Progress indicator
    - [ ] Navigation (next/back)
 
 2. **Quiz Backend**
-
    - [ ] Server Actions for quiz submission
    - [ ] Quiz validation schemas
    - [ ] Quiz service layer
    - [ ] Quiz repository
 
 3. **AI Integration**
-
    - [ ] OpenAI client setup
    - [ ] Prompt engineering
    - [ ] Response parsing
@@ -192,14 +231,12 @@
 ### Week 9-12: Club Discovery
 
 1. **Club Directory**
-
    - [ ] Club listing page
    - [ ] Search and filters
    - [ ] Club card component
    - [ ] Club grid layout
 
 2. **Club Details**
-
    - [ ] Club detail page (SSG)
    - [ ] Club information display
    - [ ] Photo gallery
@@ -207,7 +244,6 @@
    - [ ] Schedule display
 
 3. **Club Search**
-
    - [ ] Search service
    - [ ] Filter logic
    - [ ] Location-based search
@@ -221,13 +257,11 @@
 ### Week 13-14: Doctor Profiles
 
 1. **Doctor Directory**
-
    - [ ] Doctor listing page
    - [ ] Search and filters
    - [ ] Doctor card component
 
 2. **Doctor Details**
-
    - [ ] Doctor profile page (SSG)
    - [ ] Professional information
    - [ ] Availability calendar
@@ -241,20 +275,17 @@
 ### Week 15-16: Polish & Deploy
 
 1. **Email Notifications**
-
    - [ ] Brevo integration
    - [ ] Email templates
    - [ ] Booking confirmations
    - [ ] Quiz result summaries
 
 2. **Testing**
-
    - [ ] Manual testing
    - [ ] User flow testing
    - [ ] Bug fixes
 
 3. **Performance**
-
    - [ ] Image optimization
    - [ ] Code splitting
    - [ ] Database query optimization
@@ -298,6 +329,11 @@
 
 ## Key Reminders
 
+- **Language Requirement**: All user-facing content must be in Romanian
+- **SEO Strategy**: Public routes use Romanian paths (`/cluburi`, `/doctori`, `/chestionar`) for SEO optimization
+- **Routes**: Use `@/lib/routes` as single source of truth - never hardcode paths
+- **TypeScript Imports**: Always use `@/` prefix for imports from `src/` directory
+- **Component Organization**: Club components created in `components/features/clubs/` following adaptation strategy
 - **Phase 1 Focus**: Sports only, ages 4-14, Bucharest
 - **No Payments**: Payment-enabled bookings in Phase 2
 - **No Calendar**: Family calendar in Phase 2
