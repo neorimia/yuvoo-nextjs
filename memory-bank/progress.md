@@ -269,6 +269,37 @@
   - [x] Create test script (✅ test-auth.ts created)
   - [x] Test authentication configuration (✅ configuration test successful - verified on 2025-12-10)
 
+### Next.js 16 Upgrade & Cache Components Migration ✅
+
+- [x] Upgrade Next.js from 15.3.1 to 16.0.8 ✅
+  - [x] Upgrade React to 19.2.1 ✅
+  - [x] Upgrade React DOM to 19.2.1 ✅
+  - [x] Upgrade @types/react and @types/react-dom ✅
+- [x] Enable Cache Components mode ✅
+  - [x] Add `cacheComponents: true` to next.config.ts ✅
+  - [x] Remove ESLint config from next.config.ts (moved to ESLint config files) ✅
+- [x] Migrate Route Segment Config exports ✅
+  - [x] Remove `export const dynamic = "force-dynamic"` from 5 parent pages ✅
+  - [x] Add migration comments explaining removal ✅
+- [x] Fix dynamic routes for Cache Components ✅
+  - [x] Add `generateStaticParams()` to all 8 dynamic routes ✅
+  - [x] Fix cluburi/[slug], doctori/[slug], sporturi/[slug] routes ✅
+  - [x] Fix theme-for-inspired dynamic routes (program-details, teacher-details, class-details, shop-details, news-details) ✅
+- [x] Add "use cache" directives ✅
+  - [x] Footer components (CopyrightText, CopyrightTextTwo) - made async ✅
+  - [x] Forgot-password page ✅
+- [x] Fix parent routes for dynamic rendering ✅
+  - [x] Add explicit `cookies()` access to 5 parent pages ✅
+  - [x] Prevents prerender errors with Cache Components ✅
+- [x] Fix new Date() usage in cached components ✅
+  - [x] Replace dynamic dates with static dates in placeholder data ✅
+- [x] Verify build success ✅
+  - [x] All 68 routes building successfully ✅
+  - [x] No errors or warnings ✅
+- [x] Create comprehensive code generation rules ✅
+  - [x] Updated `docs/ PROMPTING_RULES_FOR_CODEGEN.md` with Cache Components patterns ✅
+  - [x] Documented Next.js 16 patterns, file naming, error handling, etc. ✅
+
 ### Theme Adaptation
 
 - [x] Analyze color palette from SCSS files ✅
@@ -799,7 +830,7 @@
 
 ### Current Issues
 
-- None identified (early stage)
+- None identified - Next.js 16 upgrade and Cache Components migration completed successfully ✅
 
 ### Technical Debt
 
@@ -862,8 +893,13 @@
 
 ## Notes
 
+- **Next.js 16 Upgrade Complete**: Successfully upgraded to Next.js 16.0.8 with Cache Components enabled
+- **Cache Components Migration**: All routes migrated, build successful, ready for development
+- **Code Generation Rules**: Comprehensive guidelines documented in `docs/ PROMPTING_RULES_FOR_CODEGEN.md`
 - Timeline is aggressive; may need adjustment
 - Focus on Phase 1 scope only
 - Quality over speed
 - User testing important before launch
 - Club and doctor onboarding is critical for success
+- **Cache Components**: Remember - dynamic by default, use `"use cache"` for cacheable content (async functions required)
+- **Dynamic Routes**: All must have `generateStaticParams()` returning at least one value

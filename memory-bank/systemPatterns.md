@@ -2,9 +2,10 @@
 
 ## Architecture Overview
 
-**Pattern**: Next.js 15 Monolithic App with Modular Backend Pattern
+**Pattern**: Next.js 16 Monolithic App with Cache Components and Modular Backend Pattern
 **Deployment**: Vercel (Frontend) + Neon (Database) + Cloudinary (Media)
 **Timeline**: 16-week MVP development cycle
+**Next.js Version**: 16.0.8 with Cache Components enabled ✅
 
 ## Core Architecture Principles
 
@@ -335,18 +336,45 @@ requireAuth() → throws if not authenticated
 
 ## Caching Strategy
 
-### Next.js Cache
+### Next.js 16 Cache Components
 
-**Server Actions**: Use `revalidatePath()` after mutations
-**Static Generation**: Club and doctor detail pages (SSG)
-**Dynamic Routes**: Quiz results, user dashboards (SSR)
+**Paradigm Shift**: Dynamic by default, opt-in to caching with `"use cache"`
+
+**Caching Patterns**:
+
+1. **Public Cache** (`"use cache"`):
+   - For content same for all users
+   - Use `cacheLife()` for time-based revalidation
+   - Use `cacheTag()` for on-demand revalidation
+   - Example: Footer components, static pages
+
+2. **Private Cache** (`"use cache: private"`):
+   - For user-specific prefetchable content
+   - Can access cookies/params at runtime
+   - Prefetched with actual runtime values
+
+3. **Dynamic Content** (default):
+   - Use `<Suspense>` boundaries for dynamic content
+   - Access `cookies()`, `headers()`, `params` for dynamic rendering
+   - Example: Protected pages, user dashboards
+
+**Route Segment Config** (Removed):
+
+- ❌ `export const dynamic` - Removed, use dynamic APIs or `"use cache"`
+- ❌ `export const revalidate` - Removed, use `cacheLife()` instead
+- ❌ `export const fetchCache` - Removed, use `"use cache"` instead
+
+**Dynamic Routes**:
+
+- All dynamic routes MUST have `generateStaticParams()` returning at least one value
+- Required for Cache Components compatibility
 
 **Revalidation Triggers**:
 
-- After quiz submission
-- After booking creation/cancellation
-- After profile updates
-- After favorite toggles
+- After quiz submission: `revalidatePath()` or `updateTag()`
+- After booking creation/cancellation: `revalidatePath()` or `updateTag()`
+- After profile updates: `revalidatePath()` or `updateTag()`
+- After favorite toggles: `revalidatePath()` or `updateTag()`
 
 ## Error Handling Pattern
 

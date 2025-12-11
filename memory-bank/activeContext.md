@@ -2,9 +2,9 @@
 
 ## Current Status
 
-**Phase**: Planning & Architecture Design
-**Date**: Initial Memory Bank Creation
-**Focus**: Establishing project foundation and documentation
+**Phase**: Foundation Setup & Architecture Migration
+**Date**: December 2024
+**Focus**: Next.js 16 upgrade, Cache Components migration, and code generation standards
 
 ## Current Work Focus
 
@@ -61,12 +61,43 @@
 - **Decision**: Keep single alias pattern (no additional aliases needed)
 - **Status**: ✅ Configured and documented
 
+### Code Generation Documentation
+
+- **Created**: `docs/ PROMPTING_RULES_FOR_CODEGEN.md` - Comprehensive code generation guidelines
+- **Content**: Next.js 16 patterns, Cache Components rules, file naming, error handling, TypeScript patterns, Romanian language requirements
+- **Status**: ✅ Complete - Serves as reference for all code generation
+
+### Next.js 16 Upgrade & Cache Components Migration ✅
+
+**Completed**: December 2024
+
+- **Upgraded**: Next.js 15.3.1 → 16.0.8
+- **Upgraded**: React 19.0.0 → 19.2.1
+- **Enabled**: Cache Components mode (`cacheComponents: true` in next.config.ts)
+- **Migrated**: All Route Segment Config exports removed (incompatible with Cache Components)
+- **Fixed**: All dynamic routes with `generateStaticParams()` (8 routes)
+- **Fixed**: Parent routes to explicitly access `cookies()` for dynamic rendering
+- **Added**: `"use cache"` directives to Footer components and static pages
+- **Fixed**: `new Date()` usage in cached components
+- **Status**: ✅ Build successful - All 68 routes building correctly
+
+**Key Changes**:
+
+- Removed `export const dynamic = "force-dynamic"` from 5 parent pages
+- Added `generateStaticParams()` to all dynamic routes (cluburi, doctori, sporturi, theme routes)
+- Made Footer components async for `"use cache"` compatibility
+- Updated `next.config.ts` to remove ESLint config (moved to ESLint config files)
+- Renamed `middleware.ts` → `proxy.ts` (Next.js 16 middleware-to-proxy migration)
+- All routes verified and working with Cache Components
+
 ### Current Codebase State
 
 **Starting Theme**: Kindedo - Kindergarten & School Next.js Template
 
 **Observation**: The current codebase is a complete template (`kindedo-nextjs`) with:
 
+- ✅ **Next.js 16.0.8** with Cache Components enabled
+- ✅ **React 19.2.1**
 - ✅ **Bootstrap 5.3.3** + SCSS styling
 - ✅ **Redux Toolkit** for state management
 - ✅ **Rich component library** (Class, Teacher, Program, etc.)
@@ -92,7 +123,7 @@
 
 **Planned Architecture** (from MVP_STARTER_BRIEF.md):
 
-- Next.js 15 with App Router
+- Next.js 16 with App Router and Cache Components ✅
 - Server Actions pattern
 - Drizzle ORM
 - Stack Auth
@@ -101,19 +132,19 @@
 
 **Current Codebase**:
 
-- Next.js 15 (matches)
-- Bootstrap styling (different)
-- Redux (different)
-- Existing component structure
+- Next.js 16.0.8 with Cache Components ✅ (upgraded and migrated)
+- Bootstrap styling (different, gradual migration planned)
+- Redux (different, gradual replacement planned)
+- Existing component structure (being adapted)
 
-**Decision Needed**: Migration strategy
+**Status**: ✅ Next.js 16 upgrade complete, Cache Components enabled and working
 
 ### Technology Stack Alignment
 
 **Current Stack** (Kindedo Theme):
 
-- ✅ Next.js 15.3.1 (matches requirements)
-- ✅ React 19.0.0 (matches requirements)
+- ✅ Next.js 16.0.8 with Cache Components (upgraded from 15.3.1) ✅
+- ✅ React 19.2.1 (upgraded from 19.0.0) ✅
 - ✅ TypeScript 5.x (matches requirements)
 - ✅ Bootstrap 5.3.3 + SCSS (actual, to be gradually migrated)
 - ✅ Redux Toolkit (actual, to be gradually replaced with Server Actions)
@@ -148,11 +179,12 @@
 ### Week 1-2: Foundation Setup
 
 1. **Project Setup**
-   - [ ] Verify/upgrade Next.js to latest version
-   - [ ] Install required dependencies
-   - [ ] Set up Tailwind CSS
-   - [ ] Install shadcn/ui components
-   - [ ] Remove/replace Bootstrap if needed
+   - [x] Verify/upgrade Next.js to latest version ✅ (Upgraded to 16.0.8)
+   - [x] Enable Cache Components ✅ (Migrated to Cache Components mode)
+   - [x] Install required dependencies ✅
+   - [x] Set up Tailwind CSS ✅ (v4.1.17 installed)
+   - [x] Install shadcn/ui components ✅ (Initialized)
+   - [ ] Remove/replace Bootstrap if needed (gradual migration planned)
 
 2. **Database Setup**
    - [ ] Create Neon database
@@ -329,11 +361,17 @@
 
 ## Key Reminders
 
+- **Next.js 16 Cache Components**: Dynamic by default, use `"use cache"` for cacheable content (must be async functions)
+- **Dynamic Routes**: All dynamic routes MUST have `generateStaticParams()` returning at least one value
+- **Route Segment Config**: DO NOT use `export const dynamic`, `export const revalidate` - removed in Cache Components
+- **Async Params**: Always await params: `const { slug } = await params;` (Next.js 16)
+- **Dynamic APIs**: Access `cookies()` or `headers()` at top of page components that need dynamic rendering
 - **Language Requirement**: All user-facing content must be in Romanian
 - **SEO Strategy**: Public routes use Romanian paths (`/cluburi`, `/doctori`, `/chestionar`) for SEO optimization
 - **Routes**: Use `@/lib/routes` as single source of truth - never hardcode paths
 - **TypeScript Imports**: Always use `@/` prefix for imports from `src/` directory
 - **Component Organization**: Club components created in `components/features/clubs/` following adaptation strategy
+- **Code Generation**: See `docs/ PROMPTING_RULES_FOR_CODEGEN.md` for comprehensive code generation guidelines
 - **Phase 1 Focus**: Sports only, ages 4-14, Bucharest
 - **No Payments**: Payment-enabled bookings in Phase 2
 - **No Calendar**: Family calendar in Phase 2
