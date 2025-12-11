@@ -79,6 +79,10 @@
   - **Content**: Component organization, styling approach (Bootstrap + Tailwind), button patterns, input patterns, card types (club, doctor, sport), modal & toast guidelines, layout components, naming conventions, component patterns (Server/Client Components), best practices, and usage examples
   - **Status**: ✅ Complete - Complete reference for creating consistent UI components
 
+- **Created**: `docs/COPY_LIBRARY.md` - Comprehensive copy library
+  - **Content**: Single source of truth for all user-facing text including CTAs, form microcopy, error messages, success messages, empty states, loading states, modal messages, toast notifications, quiz copy, club/doctor copy, navigation labels, trust messages, onboarding copy, search & filters, booking copy, profile & settings, help & support, legal & compliance, email templates, and usage guidelines
+  - **Status**: ✅ Complete - Complete reference for all Romanian language copy across the platform
+
 ### Next.js 16 Upgrade & Cache Components Migration ✅
 
 **Completed**: December 2024
@@ -387,6 +391,7 @@
 - **Architecture Reference**: See `docs/ARCHITECTURE_OVERVIEW.md` for complete architecture documentation
 - **Brand Guidelines**: See `docs/BRAND_GUIDELINES.md` for visual identity, tone of voice, UX principles, and brand consistency guidelines
 - **Components Guide**: See `docs/COMPONENTS_GUIDE.md` for component patterns, styling rules, and UI development guidelines
+- **Copy Library**: See `docs/COPY_LIBRARY.md` for all user-facing text, CTAs, messages, and Romanian language copy
 - **Phase 1 Focus**: Sports only, ages 4-14, Bucharest
 - **No Payments**: Payment-enabled bookings in Phase 2
 - **No Calendar**: Family calendar in Phase 2
