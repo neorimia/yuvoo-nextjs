@@ -87,6 +87,10 @@
   - **Content**: Brand essence, brand voice (70% warm & supportive, 30% expert & confident), writing principles (clarity, empathy, microcopy, trust building, positivity), language & style guidelines, writing structure, content types (UI, marketing, email, help, errors), writing templates, common mistakes, content checklist, and quick reference
   - **Status**: ✅ Complete - Complete reference for copywriting principles and best practices
 
+- **Created**: `docs/DATA_MODELS.md` - Comprehensive data models documentation
+  - **Content**: Core models (User, Child, Club, Doctor, Quiz, Booking, Favorite, Review), TypeScript interfaces, database schema mappings, relationships, enums, field conventions, usage examples, common patterns, and database vs TypeScript differences
+  - **Status**: ✅ Complete - Complete reference for all data structures and models used in the platform
+
 ### Next.js 16 Upgrade & Cache Components Migration ✅
 
 **Completed**: December 2024
@@ -397,6 +401,10 @@
 - **Components Guide**: See `docs/COMPONENTS_GUIDE.md` for component patterns, styling rules, and UI development guidelines
 - **Copy Library**: See `docs/COPY_LIBRARY.md` for all user-facing text, CTAs, messages, and Romanian language copy
 - **Copywriting Guide**: See `docs/COPYWRITING_GUIDE.md` for copywriting principles, brand voice guidelines, writing templates, and best practices
+- **Design Tokens**: See `docs/DESIGN_TOKENS.md` for comprehensive design tokens reference (colors, typography, spacing, shadows, border radius, animations, breakpoints)
+- **SEO Guidelines**: See `docs/SEO_GUIDELINES.md` for SEO strategy, slug generation, meta tags templates, Open Graph templates, and SEO best practices
+- **Site Map**: See `docs/SITE_MAP.md` for complete application structure, all routes, user flows, and navigation patterns
+- **Wireframes**: See `docs/WIREFRAMES.md` for detailed page structures, component placement, and layout specifications for all major pages
 - **Phase 1 Focus**: Sports only, ages 4-14, Bucharest
 - **No Payments**: Payment-enabled bookings in Phase 2
 - **No Calendar**: Family calendar in Phase 2
