@@ -1,8 +1,11 @@
 import React from "react";
 import type { Metadata } from "next";
+import { cookies } from "next/headers";
 import { requireAuth } from "@/lib/auth/session";
 
-export const dynamic = "force-dynamic";
+// MIGRATED: Removed export const dynamic = 'force-dynamic' (incompatible with Cache Components)
+// This page uses requireAuth() which accesses cookies, so it remains dynamic by default
+// Explicitly accessing cookies() to ensure route is dynamic during build
 
 export const metadata: Metadata = {
   title: "Favorite - Yuvoo",
@@ -16,6 +19,8 @@ export const metadata: Metadata = {
  * Route: /parent/favorites
  */
 export default async function FavoritesPage() {
+  // Explicitly access cookies to ensure route is dynamic (prevents prerender errors)
+  await cookies();
   await requireAuth();
 
   return (

@@ -381,6 +381,7 @@ yuvoo-monorepo/
 ## 🔧 Technology Stack Details
 
 ### Core Framework
+
 ```json
 {
   "dependencies": {
@@ -393,6 +394,7 @@ yuvoo-monorepo/
 ```
 
 ### Database & ORM
+
 ```json
 {
   "dependencies": {
@@ -407,6 +409,7 @@ yuvoo-monorepo/
 ```
 
 ### Authentication
+
 ```json
 {
   "dependencies": {
@@ -416,6 +419,7 @@ yuvoo-monorepo/
 ```
 
 ### UI & Styling
+
 ```json
 {
   "dependencies": {
@@ -432,6 +436,7 @@ yuvoo-monorepo/
 ```
 
 ### Validation
+
 ```json
 {
   "dependencies": {
@@ -441,6 +446,7 @@ yuvoo-monorepo/
 ```
 
 ### AI & External Services
+
 ```json
 {
   "dependencies": {
@@ -452,6 +458,7 @@ yuvoo-monorepo/
 ```
 
 ### Development Tools
+
 ```json
 {
   "devDependencies": {
@@ -484,33 +491,33 @@ import {
   decimal,
   pgEnum,
   index,
-} from 'drizzle-orm/pg-core';
-import { relations } from 'drizzle-orm';
+} from "drizzle-orm/pg-core";
+import { relations } from "drizzle-orm";
 
 // ============================================
 // ENUMS
 // ============================================
 
-export const userRoleEnum = pgEnum('user_role', ['parent', 'club_admin', 'doctor', 'admin']);
-export const genderEnum = pgEnum('gender', ['male', 'female', 'other', 'prefer_not_to_say']);
-export const energyLevelEnum = pgEnum('energy_level', ['low', 'medium', 'high', 'very_high']);
-export const bookingStatusEnum = pgEnum('booking_status', [
-  'pending',
-  'confirmed',
-  'completed',
-  'cancelled',
-  'no_show',
+export const userRoleEnum = pgEnum("user_role", ["parent", "club_admin", "doctor", "admin"]);
+export const genderEnum = pgEnum("gender", ["male", "female", "other", "prefer_not_to_say"]);
+export const energyLevelEnum = pgEnum("energy_level", ["low", "medium", "high", "very_high"]);
+export const bookingStatusEnum = pgEnum("booking_status", [
+  "pending",
+  "confirmed",
+  "completed",
+  "cancelled",
+  "no_show",
 ]);
-export const bookingTypeEnum = pgEnum('booking_type', ['club_trial', 'doctor_consultation']);
-export const sportCategoryEnum = pgEnum('sport_category', [
-  'team',
-  'individual',
-  'water',
-  'winter',
-  'combat',
-  'racket',
-  'gymnastics',
-  'outdoor',
+export const bookingTypeEnum = pgEnum("booking_type", ["club_trial", "doctor_consultation"]);
+export const sportCategoryEnum = pgEnum("sport_category", [
+  "team",
+  "individual",
+  "water",
+  "winter",
+  "combat",
+  "racket",
+  "gymnastics",
+  "outdoor",
 ]);
 
 // ============================================
@@ -518,23 +525,23 @@ export const sportCategoryEnum = pgEnum('sport_category', [
 // ============================================
 
 export const users = pgTable(
-  'users',
+  "users",
   {
-    id: uuid('id').primaryKey().defaultRandom(),
-    stackUserId: varchar('stack_user_id', { length: 255 }).unique(), // Stack Auth ID
-    email: varchar('email', { length: 255 }).notNull().unique(),
-    name: varchar('name', { length: 255 }).notNull(),
-    phone: varchar('phone', { length: 20 }),
-    role: userRoleEnum('role').default('parent').notNull(),
-    avatarUrl: text('avatar_url'),
-    emailVerified: boolean('email_verified').default(false),
-    onboardingCompleted: boolean('onboarding_completed').default(false),
-    createdAt: timestamp('created_at').defaultNow().notNull(),
-    updatedAt: timestamp('updated_at').defaultNow().notNull(),
+    id: uuid("id").primaryKey().defaultRandom(),
+    stackUserId: varchar("stack_user_id", { length: 255 }).unique(), // Stack Auth ID
+    email: varchar("email", { length: 255 }).notNull().unique(),
+    name: varchar("name", { length: 255 }).notNull(),
+    phone: varchar("phone", { length: 20 }),
+    role: userRoleEnum("role").default("parent").notNull(),
+    avatarUrl: text("avatar_url"),
+    emailVerified: boolean("email_verified").default(false),
+    onboardingCompleted: boolean("onboarding_completed").default(false),
+    createdAt: timestamp("created_at").defaultNow().notNull(),
+    updatedAt: timestamp("updated_at").defaultNow().notNull(),
   },
   (table) => ({
-    emailIdx: index('users_email_idx').on(table.email),
-    stackUserIdx: index('users_stack_user_idx').on(table.stackUserId),
+    emailIdx: index("users_email_idx").on(table.email),
+    stackUserIdx: index("users_stack_user_idx").on(table.stackUserId),
   })
 );
 
@@ -543,25 +550,25 @@ export const users = pgTable(
 // ============================================
 
 export const children = pgTable(
-  'children',
+  "children",
   {
-    id: uuid('id').primaryKey().defaultRandom(),
-    parentId: uuid('parent_id')
-      .references(() => users.id, { onDelete: 'cascade' })
+    id: uuid("id").primaryKey().defaultRandom(),
+    parentId: uuid("parent_id")
+      .references(() => users.id, { onDelete: "cascade" })
       .notNull(),
-    name: varchar('name', { length: 255 }).notNull(),
-    dateOfBirth: timestamp('date_of_birth').notNull(),
-    gender: genderEnum('gender'),
-    weight: decimal('weight', { precision: 5, scale: 2 }), // kg
-    height: decimal('height', { precision: 5, scale: 2 }), // cm
-    medicalNotes: text('medical_notes'),
-    allergies: text('allergies'),
-    avatarUrl: text('avatar_url'),
-    createdAt: timestamp('created_at').defaultNow().notNull(),
-    updatedAt: timestamp('updated_at').defaultNow().notNull(),
+    name: varchar("name", { length: 255 }).notNull(),
+    dateOfBirth: timestamp("date_of_birth").notNull(),
+    gender: genderEnum("gender"),
+    weight: decimal("weight", { precision: 5, scale: 2 }), // kg
+    height: decimal("height", { precision: 5, scale: 2 }), // cm
+    medicalNotes: text("medical_notes"),
+    allergies: text("allergies"),
+    avatarUrl: text("avatar_url"),
+    createdAt: timestamp("created_at").defaultNow().notNull(),
+    updatedAt: timestamp("updated_at").defaultNow().notNull(),
   },
   (table) => ({
-    parentIdx: index('children_parent_idx').on(table.parentId),
+    parentIdx: index("children_parent_idx").on(table.parentId),
   })
 );
 
@@ -570,34 +577,34 @@ export const children = pgTable(
 // ============================================
 
 export const quizzes = pgTable(
-  'quizzes',
+  "quizzes",
   {
-    id: uuid('id').primaryKey().defaultRandom(),
-    childId: uuid('child_id')
-      .references(() => children.id, { onDelete: 'cascade' })
+    id: uuid("id").primaryKey().defaultRandom(),
+    childId: uuid("child_id")
+      .references(() => children.id, { onDelete: "cascade" })
       .notNull(),
-    
+
     // Quiz Answers
-    age: integer('age').notNull(),
-    energyLevel: energyLevelEnum('energy_level').notNull(),
-    personality: jsonb('personality').notNull(), // Array of traits
-    physicalBuild: varchar('physical_build', { length: 50 }),
-    interests: jsonb('interests').notNull(), // Array of interests
-    previousSports: jsonb('previous_sports'), // Array of sports tried
-    timeAvailability: varchar('time_availability', { length: 50 }),
-    budget: varchar('budget', { length: 50 }),
-    goals: jsonb('goals'), // Array of parent goals
-    
+    age: integer("age").notNull(),
+    energyLevel: energyLevelEnum("energy_level").notNull(),
+    personality: jsonb("personality").notNull(), // Array of traits
+    physicalBuild: varchar("physical_build", { length: 50 }),
+    interests: jsonb("interests").notNull(), // Array of interests
+    previousSports: jsonb("previous_sports"), // Array of sports tried
+    timeAvailability: varchar("time_availability", { length: 50 }),
+    budget: varchar("budget", { length: 50 }),
+    goals: jsonb("goals"), // Array of parent goals
+
     // AI Analysis Results
-    recommendations: jsonb('recommendations').notNull(), // Array of recommended sports with scores
-    reasoning: text('reasoning'),
-    aiModel: varchar('ai_model', { length: 100 }).default('gpt-4-turbo'),
-    
-    createdAt: timestamp('created_at').defaultNow().notNull(),
+    recommendations: jsonb("recommendations").notNull(), // Array of recommended sports with scores
+    reasoning: text("reasoning"),
+    aiModel: varchar("ai_model", { length: 100 }).default("gpt-4-turbo"),
+
+    createdAt: timestamp("created_at").defaultNow().notNull(),
   },
   (table) => ({
-    childIdx: index('quizzes_child_idx').on(table.childId),
-    createdAtIdx: index('quizzes_created_at_idx').on(table.createdAt),
+    childIdx: index("quizzes_child_idx").on(table.childId),
+    createdAtIdx: index("quizzes_created_at_idx").on(table.createdAt),
   })
 );
 
@@ -606,76 +613,76 @@ export const quizzes = pgTable(
 // ============================================
 
 export const clubs = pgTable(
-  'clubs',
+  "clubs",
   {
-    id: uuid('id').primaryKey().defaultRandom(),
-    adminId: uuid('admin_id').references(() => users.id),
-    
+    id: uuid("id").primaryKey().defaultRandom(),
+    adminId: uuid("admin_id").references(() => users.id),
+
     // Basic Info
-    name: varchar('name', { length: 255 }).notNull(),
-    slug: varchar('slug', { length: 255 }).notNull().unique(),
-    description: text('description'),
-    sportType: varchar('sport_type', { length: 100 }).notNull(),
-    sportCategory: sportCategoryEnum('sport_category'),
-    
+    name: varchar("name", { length: 255 }).notNull(),
+    slug: varchar("slug", { length: 255 }).notNull().unique(),
+    description: text("description"),
+    sportType: varchar("sport_type", { length: 100 }).notNull(),
+    sportCategory: sportCategoryEnum("sport_category"),
+
     // Location
-    address: text('address').notNull(),
-    city: varchar('city', { length: 100 }).notNull(),
-    county: varchar('county', { length: 100 }),
-    postalCode: varchar('postal_code', { length: 20 }),
-    latitude: decimal('latitude', { precision: 10, scale: 8 }),
-    longitude: decimal('longitude', { precision: 11, scale: 8 }),
-    
+    address: text("address").notNull(),
+    city: varchar("city", { length: 100 }).notNull(),
+    county: varchar("county", { length: 100 }),
+    postalCode: varchar("postal_code", { length: 20 }),
+    latitude: decimal("latitude", { precision: 10, scale: 8 }),
+    longitude: decimal("longitude", { precision: 11, scale: 8 }),
+
     // Contact
-    phone: varchar('phone', { length: 20 }),
-    email: varchar('email', { length: 255 }),
-    website: text('website'),
-    
+    phone: varchar("phone", { length: 20 }),
+    email: varchar("email", { length: 255 }),
+    website: text("website"),
+
     // Age Groups
-    minAge: integer('min_age').notNull(),
-    maxAge: integer('max_age').notNull(),
-    
+    minAge: integer("min_age").notNull(),
+    maxAge: integer("max_age").notNull(),
+
     // Verification & Quality
-    verified: boolean('verified').default(false).notNull(),
-    verifiedAt: timestamp('verified_at'),
-    featured: boolean('featured').default(false),
-    rating: decimal('rating', { precision: 2, scale: 1 }),
-    reviewCount: integer('review_count').default(0),
-    
+    verified: boolean("verified").default(false).notNull(),
+    verifiedAt: timestamp("verified_at"),
+    featured: boolean("featured").default(false),
+    rating: decimal("rating", { precision: 2, scale: 1 }),
+    reviewCount: integer("review_count").default(0),
+
     // Media
-    logoUrl: text('logo_url'),
-    coverImageUrl: text('cover_image_url'),
-    photos: jsonb('photos'), // Array of photo URLs
-    videoUrl: text('video_url'),
-    
+    logoUrl: text("logo_url"),
+    coverImageUrl: text("cover_image_url"),
+    photos: jsonb("photos"), // Array of photo URLs
+    videoUrl: text("video_url"),
+
     // Schedule & Availability
-    schedule: jsonb('schedule'), // Weekly schedule object
-    capacity: integer('capacity'),
-    
+    schedule: jsonb("schedule"), // Weekly schedule object
+    capacity: integer("capacity"),
+
     // Pricing
-    priceRange: varchar('price_range', { length: 50 }), // e.g., "100-200 RON/month"
-    trialAvailable: boolean('trial_available').default(true),
-    trialPrice: decimal('trial_price', { precision: 10, scale: 2 }),
-    
+    priceRange: varchar("price_range", { length: 50 }), // e.g., "100-200 RON/month"
+    trialAvailable: boolean("trial_available").default(true),
+    trialPrice: decimal("trial_price", { precision: 10, scale: 2 }),
+
     // Features
-    facilities: jsonb('facilities'), // Array of facility names
-    certifications: jsonb('certifications'), // Array of certifications
-    
+    facilities: jsonb("facilities"), // Array of facility names
+    certifications: jsonb("certifications"), // Array of certifications
+
     // SEO
-    metaTitle: varchar('meta_title', { length: 255 }),
-    metaDescription: text('meta_description'),
-    
+    metaTitle: varchar("meta_title", { length: 255 }),
+    metaDescription: text("meta_description"),
+
     // Status
-    active: boolean('active').default(true),
-    
-    createdAt: timestamp('created_at').defaultNow().notNull(),
-    updatedAt: timestamp('updated_at').defaultNow().notNull(),
+    active: boolean("active").default(true),
+
+    createdAt: timestamp("created_at").defaultNow().notNull(),
+    updatedAt: timestamp("updated_at").defaultNow().notNull(),
   },
   (table) => ({
-    sportCityIdx: index('clubs_sport_city_idx').on(table.sportType, table.city),
-    verifiedIdx: index('clubs_verified_idx').on(table.verified),
-    slugIdx: index('clubs_slug_idx').on(table.slug),
-    locationIdx: index('clubs_location_idx').on(table.latitude, table.longitude),
+    sportCityIdx: index("clubs_sport_city_idx").on(table.sportType, table.city),
+    verifiedIdx: index("clubs_verified_idx").on(table.verified),
+    slugIdx: index("clubs_slug_idx").on(table.slug),
+    locationIdx: index("clubs_location_idx").on(table.latitude, table.longitude),
   })
 );
 
@@ -684,72 +691,72 @@ export const clubs = pgTable(
 // ============================================
 
 export const doctors = pgTable(
-  'doctors',
+  "doctors",
   {
-    id: uuid('id').primaryKey().defaultRandom(),
-    userId: uuid('user_id').references(() => users.id),
-    
+    id: uuid("id").primaryKey().defaultRandom(),
+    userId: uuid("user_id").references(() => users.id),
+
     // Basic Info
-    name: varchar('name', { length: 255 }).notNull(),
-    slug: varchar('slug', { length: 255 }).notNull().unique(),
-    title: varchar('title', { length: 100 }), // Dr., Prof., etc.
-    specialty: varchar('specialty', { length: 100 }).notNull(), // Pediatric Orthopedist, etc.
-    subSpecialties: jsonb('sub_specialties'), // Array of sub-specialties
-    
+    name: varchar("name", { length: 255 }).notNull(),
+    slug: varchar("slug", { length: 255 }).notNull().unique(),
+    title: varchar("title", { length: 100 }), // Dr., Prof., etc.
+    specialty: varchar("specialty", { length: 100 }).notNull(), // Pediatric Orthopedist, etc.
+    subSpecialties: jsonb("sub_specialties"), // Array of sub-specialties
+
     // Professional Info
-    qualifications: text('qualifications'),
-    experience: integer('experience'), // Years of experience
-    bio: text('bio'),
-    languagesSpoken: jsonb('languages_spoken'), // Array of languages
-    
+    qualifications: text("qualifications"),
+    experience: integer("experience"), // Years of experience
+    bio: text("bio"),
+    languagesSpoken: jsonb("languages_spoken"), // Array of languages
+
     // Clinic/Practice Info
-    clinicName: varchar('clinic_name', { length: 255 }),
-    address: text('address'),
-    city: varchar('city', { length: 100 }),
-    county: varchar('county', { length: 100 }),
-    postalCode: varchar('postal_code', { length: 20 }),
-    
+    clinicName: varchar("clinic_name", { length: 255 }),
+    address: text("address"),
+    city: varchar("city", { length: 100 }),
+    county: varchar("county", { length: 100 }),
+    postalCode: varchar("postal_code", { length: 20 }),
+
     // Contact
-    phone: varchar('phone', { length: 20 }),
-    email: varchar('email', { length: 255 }),
-    website: text('website'),
-    
+    phone: varchar("phone", { length: 20 }),
+    email: varchar("email", { length: 255 }),
+    website: text("website"),
+
     // Verification & Quality
-    verified: boolean('verified').default(false).notNull(),
-    verifiedAt: timestamp('verified_at'),
-    licenseNumber: varchar('license_number', { length: 100 }),
-    rating: decimal('rating', { precision: 2, scale: 1 }),
-    reviewCount: integer('review_count').default(0),
-    
+    verified: boolean("verified").default(false).notNull(),
+    verifiedAt: timestamp("verified_at"),
+    licenseNumber: varchar("license_number", { length: 100 }),
+    rating: decimal("rating", { precision: 2, scale: 1 }),
+    reviewCount: integer("review_count").default(0),
+
     // Media
-    photoUrl: text('photo_url'),
-    clinicPhotos: jsonb('clinic_photos'), // Array of photo URLs
-    
+    photoUrl: text("photo_url"),
+    clinicPhotos: jsonb("clinic_photos"), // Array of photo URLs
+
     // Availability & Pricing
-    availability: jsonb('availability'), // Weekly availability object
-    consultationFee: decimal('consultation_fee', { precision: 10, scale: 2 }),
-    consultationDuration: integer('consultation_duration'), // minutes
-    onlineConsultation: boolean('online_consultation').default(false),
-    
+    availability: jsonb("availability"), // Weekly availability object
+    consultationFee: decimal("consultation_fee", { precision: 10, scale: 2 }),
+    consultationDuration: integer("consultation_duration"), // minutes
+    onlineConsultation: boolean("online_consultation").default(false),
+
     // Insurance
-    acceptsInsurance: boolean('accepts_insurance').default(false),
-    insuranceProviders: jsonb('insurance_providers'), // Array of accepted insurers
-    
+    acceptsInsurance: boolean("accepts_insurance").default(false),
+    insuranceProviders: jsonb("insurance_providers"), // Array of accepted insurers
+
     // SEO
-    metaTitle: varchar('meta_title', { length: 255 }),
-    metaDescription: text('meta_description'),
-    
+    metaTitle: varchar("meta_title", { length: 255 }),
+    metaDescription: text("meta_description"),
+
     // Status
-    active: boolean('active').default(true),
-    acceptingNewPatients: boolean('accepting_new_patients').default(true),
-    
-    createdAt: timestamp('created_at').defaultNow().notNull(),
-    updatedAt: timestamp('updated_at').defaultNow().notNull(),
+    active: boolean("active").default(true),
+    acceptingNewPatients: boolean("accepting_new_patients").default(true),
+
+    createdAt: timestamp("created_at").defaultNow().notNull(),
+    updatedAt: timestamp("updated_at").defaultNow().notNull(),
   },
   (table) => ({
-    specialtyCityIdx: index('doctors_specialty_city_idx').on(table.specialty, table.city),
-    verifiedIdx: index('doctors_verified_idx').on(table.verified),
-    slugIdx: index('doctors_slug_idx').on(table.slug),
+    specialtyCityIdx: index("doctors_specialty_city_idx").on(table.specialty, table.city),
+    verifiedIdx: index("doctors_verified_idx").on(table.verified),
+    slugIdx: index("doctors_slug_idx").on(table.slug),
   })
 );
 
@@ -758,50 +765,50 @@ export const doctors = pgTable(
 // ============================================
 
 export const bookings = pgTable(
-  'bookings',
+  "bookings",
   {
-    id: uuid('id').primaryKey().defaultRandom(),
-    parentId: uuid('parent_id')
-      .references(() => users.id, { onDelete: 'cascade' })
+    id: uuid("id").primaryKey().defaultRandom(),
+    parentId: uuid("parent_id")
+      .references(() => users.id, { onDelete: "cascade" })
       .notNull(),
-    childId: uuid('child_id')
-      .references(() => children.id, { onDelete: 'cascade' })
+    childId: uuid("child_id")
+      .references(() => children.id, { onDelete: "cascade" })
       .notNull(),
-    
+
     // Booking Type
-    bookingType: bookingTypeEnum('booking_type').notNull(),
-    clubId: uuid('club_id').references(() => clubs.id, { onDelete: 'set null' }),
-    doctorId: uuid('doctor_id').references(() => doctors.id, { onDelete: 'set null' }),
-    
+    bookingType: bookingTypeEnum("booking_type").notNull(),
+    clubId: uuid("club_id").references(() => clubs.id, { onDelete: "set null" }),
+    doctorId: uuid("doctor_id").references(() => doctors.id, { onDelete: "set null" }),
+
     // Schedule
-    scheduledAt: timestamp('scheduled_at').notNull(),
-    duration: integer('duration'), // minutes
-    endTime: timestamp('end_time'),
-    
+    scheduledAt: timestamp("scheduled_at").notNull(),
+    duration: integer("duration"), // minutes
+    endTime: timestamp("end_time"),
+
     // Status
-    status: bookingStatusEnum('status').default('pending').notNull(),
-    
+    status: bookingStatusEnum("status").default("pending").notNull(),
+
     // Notes & Communication
-    parentNotes: text('parent_notes'),
-    providerNotes: text('provider_notes'),
-    cancellationReason: text('cancellation_reason'),
-    
+    parentNotes: text("parent_notes"),
+    providerNotes: text("provider_notes"),
+    cancellationReason: text("cancellation_reason"),
+
     // Reminders
-    reminderSent: boolean('reminder_sent').default(false),
-    reminderSentAt: timestamp('reminder_sent_at'),
-    
+    reminderSent: boolean("reminder_sent").default(false),
+    reminderSentAt: timestamp("reminder_sent_at"),
+
     // Timestamps
-    confirmedAt: timestamp('confirmed_at'),
-    completedAt: timestamp('completed_at'),
-    cancelledAt: timestamp('cancelled_at'),
-    createdAt: timestamp('created_at').defaultNow().notNull(),
-    updatedAt: timestamp('updated_at').defaultNow().notNull(),
+    confirmedAt: timestamp("confirmed_at"),
+    completedAt: timestamp("completed_at"),
+    cancelledAt: timestamp("cancelled_at"),
+    createdAt: timestamp("created_at").defaultNow().notNull(),
+    updatedAt: timestamp("updated_at").defaultNow().notNull(),
   },
   (table) => ({
-    parentIdx: index('bookings_parent_idx').on(table.parentId),
-    childIdx: index('bookings_child_idx').on(table.childId),
-    scheduledIdx: index('bookings_scheduled_idx').on(table.scheduledAt),
-    statusIdx: index('bookings_status_idx').on(table.status),
+    parentIdx: index("bookings_parent_idx").on(table.parentId),
+    childIdx: index("bookings_child_idx").on(table.childId),
+    scheduledIdx: index("bookings_scheduled_idx").on(table.scheduledAt),
+    statusIdx: index("bookings_status_idx").on(table.status),
   })
 );
 
@@ -810,19 +817,19 @@ export const bookings = pgTable(
 // ============================================
 
 export const favorites = pgTable(
-  'favorites',
+  "favorites",
   {
-    id: uuid('id').primaryKey().defaultRandom(),
-    userId: uuid('user_id')
-      .references(() => users.id, { onDelete: 'cascade' })
+    id: uuid("id").primaryKey().defaultRandom(),
+    userId: uuid("user_id")
+      .references(() => users.id, { onDelete: "cascade" })
       .notNull(),
-    clubId: uuid('club_id').references(() => clubs.id, { onDelete: 'cascade' }),
-    doctorId: uuid('doctor_id').references(() => doctors.id, { onDelete: 'cascade' }),
-    createdAt: timestamp('created_at').defaultNow().notNull(),
+    clubId: uuid("club_id").references(() => clubs.id, { onDelete: "cascade" }),
+    doctorId: uuid("doctor_id").references(() => doctors.id, { onDelete: "cascade" }),
+    createdAt: timestamp("created_at").defaultNow().notNull(),
   },
   (table) => ({
-    userClubIdx: index('favorites_user_club_idx').on(table.userId, table.clubId),
-    userDoctorIdx: index('favorites_user_doctor_idx').on(table.userId, table.doctorId),
+    userClubIdx: index("favorites_user_club_idx").on(table.userId, table.clubId),
+    userDoctorIdx: index("favorites_user_doctor_idx").on(table.userId, table.doctorId),
   })
 );
 
@@ -831,31 +838,31 @@ export const favorites = pgTable(
 // ============================================
 
 export const reviews = pgTable(
-  'reviews',
+  "reviews",
   {
-    id: uuid('id').primaryKey().defaultRandom(),
-    userId: uuid('user_id')
-      .references(() => users.id, { onDelete: 'cascade' })
+    id: uuid("id").primaryKey().defaultRandom(),
+    userId: uuid("user_id")
+      .references(() => users.id, { onDelete: "cascade" })
       .notNull(),
-    clubId: uuid('club_id').references(() => clubs.id, { onDelete: 'cascade' }),
-    doctorId: uuid('doctor_id').references(() => doctors.id, { onDelete: 'cascade' }),
-    bookingId: uuid('booking_id').references(() => bookings.id, { onDelete: 'set null' }),
-    
-    rating: integer('rating').notNull(), // 1-5
-    title: varchar('title', { length: 255 }),
-    comment: text('comment'),
-    
+    clubId: uuid("club_id").references(() => clubs.id, { onDelete: "cascade" }),
+    doctorId: uuid("doctor_id").references(() => doctors.id, { onDelete: "cascade" }),
+    bookingId: uuid("booking_id").references(() => bookings.id, { onDelete: "set null" }),
+
+    rating: integer("rating").notNull(), // 1-5
+    title: varchar("title", { length: 255 }),
+    comment: text("comment"),
+
     // Moderation
-    approved: boolean('approved').default(false),
-    approvedAt: timestamp('approved_at'),
-    
-    createdAt: timestamp('created_at').defaultNow().notNull(),
-    updatedAt: timestamp('updated_at').defaultNow().notNull(),
+    approved: boolean("approved").default(false),
+    approvedAt: timestamp("approved_at"),
+
+    createdAt: timestamp("created_at").defaultNow().notNull(),
+    updatedAt: timestamp("updated_at").defaultNow().notNull(),
   },
   (table) => ({
-    clubIdx: index('reviews_club_idx').on(table.clubId),
-    doctorIdx: index('reviews_doctor_idx').on(table.doctorId),
-    approvedIdx: index('reviews_approved_idx').on(table.approved),
+    clubIdx: index("reviews_club_idx").on(table.clubId),
+    doctorIdx: index("reviews_doctor_idx").on(table.doctorId),
+    approvedIdx: index("reviews_approved_idx").on(table.approved),
   })
 );
 
@@ -924,15 +931,15 @@ export const bookingsRelations = relations(bookings, ({ one }) => ({
 
 ```typescript
 // lib/auth/stack.ts
-import { StackServerApp } from '@stackframe/stack';
+import { StackServerApp } from "@stackframe/stack";
 
 export const stackServerApp = new StackServerApp({
-  tokenStore: 'nextjs-cookie',
+  tokenStore: "nextjs-cookie",
   urls: {
-    home: '/',
-    afterSignIn: '/dashboard',
-    afterSignUp: '/onboarding',
-    afterSignOut: '/',
+    home: "/",
+    afterSignIn: "/dashboard",
+    afterSignUp: "/onboarding",
+    afterSignOut: "/",
   },
 });
 
@@ -945,7 +952,7 @@ export async function getCurrentUser() {
 export async function requireAuth() {
   const user = await getCurrentUser();
   if (!user) {
-    throw new Error('Unauthorized');
+    throw new Error("Unauthorized");
   }
   return user;
 }
@@ -953,24 +960,20 @@ export async function requireAuth() {
 
 ```typescript
 // lib/auth/session.ts
-import { db } from '@/lib/db/drizzle';
-import { users } from '@/lib/db/schema';
-import { eq } from 'drizzle-orm';
-import { getCurrentUser } from './stack';
+import { db } from "@/lib/db/drizzle";
+import { users } from "@/lib/db/schema";
+import { eq } from "drizzle-orm";
+import { getCurrentUser } from "./stack";
 
 export async function getSession() {
   const stackUser = await getCurrentUser();
-  
+
   if (!stackUser) {
     return null;
   }
 
   // Get or create user in our database
-  let [dbUser] = await db
-    .select()
-    .from(users)
-    .where(eq(users.stackUserId, stackUser.id))
-    .limit(1);
+  let [dbUser] = await db.select().from(users).where(eq(users.stackUserId, stackUser.id)).limit(1);
 
   if (!dbUser) {
     // Create user on first login
@@ -978,8 +981,8 @@ export async function getSession() {
       .insert(users)
       .values({
         stackUserId: stackUser.id,
-        email: stackUser.primaryEmail || '',
-        name: stackUser.displayName || 'User',
+        email: stackUser.primaryEmail || "",
+        name: stackUser.displayName || "User",
         emailVerified: stackUser.primaryEmailVerified,
       })
       .returning();
@@ -1026,15 +1029,15 @@ export default async function AuthLayout({
 
 ```typescript
 // app/actions/quiz.ts
-'use server';
+"use server";
 
-import { revalidatePath } from 'next/cache';
-import { db } from '@/lib/db/drizzle';
-import { quizzes, children } from '@/lib/db/schema';
-import { QuizService } from '@/modules/quiz/quiz.service';
-import { quizSubmissionSchema } from '@/lib/validations/quiz';
-import { requireAuth } from '@/lib/auth/stack';
-import { eq } from 'drizzle-orm';
+import { revalidatePath } from "next/cache";
+import { db } from "@/lib/db/drizzle";
+import { quizzes, children } from "@/lib/db/schema";
+import { QuizService } from "@/modules/quiz/quiz.service";
+import { quizSubmissionSchema } from "@/lib/validations/quiz";
+import { requireAuth } from "@/lib/auth/stack";
+import { eq } from "drizzle-orm";
 
 const quizService = new QuizService();
 
@@ -1044,14 +1047,10 @@ export async function submitQuiz(childId: string, formData: FormData) {
     const user = await requireAuth();
 
     // 2. Verify child belongs to user
-    const [child] = await db
-      .select()
-      .from(children)
-      .where(eq(children.id, childId))
-      .limit(1);
+    const [child] = await db.select().from(children).where(eq(children.id, childId)).limit(1);
 
     if (!child || child.parentId !== user.id) {
-      throw new Error('Child not found');
+      throw new Error("Child not found");
     }
 
     // 3. Validate input
@@ -1085,7 +1084,7 @@ export async function submitQuiz(childId: string, formData: FormData) {
 
     // 6. Revalidate cache
     revalidatePath(`/children/${childId}`);
-    revalidatePath('/dashboard');
+    revalidatePath("/dashboard");
 
     return {
       success: true,
@@ -1093,10 +1092,10 @@ export async function submitQuiz(childId: string, formData: FormData) {
       recommendations: analysis.recommendations,
     };
   } catch (error) {
-    console.error('Quiz submission error:', error);
+    console.error("Quiz submission error:", error);
     return {
       success: false,
-      error: error instanceof Error ? error.message : 'Failed to submit quiz',
+      error: error instanceof Error ? error.message : "Failed to submit quiz",
     };
   }
 }
@@ -1104,8 +1103,8 @@ export async function submitQuiz(childId: string, formData: FormData) {
 
 ```typescript
 // modules/quiz/quiz.service.ts
-import OpenAI from 'openai';
-import type { QuizAnswers, QuizAnalysis } from './quiz.types';
+import OpenAI from "openai";
+import type { QuizAnswers, QuizAnalysis } from "./quiz.types";
 
 export class QuizService {
   private openai: OpenAI;
@@ -1120,10 +1119,10 @@ export class QuizService {
     const prompt = this.buildAnalysisPrompt(answers);
 
     const completion = await this.openai.chat.completions.create({
-      model: 'gpt-4-turbo-preview',
+      model: "gpt-4-turbo-preview",
       messages: [
         {
-          role: 'system',
+          role: "system",
           content: `You are a pediatric sports development specialist with expertise in matching children to appropriate sports based on their physical, psychological, and developmental characteristics. 
           
           Analyze the child's profile and recommend 3 sports that would be most beneficial. For each sport, provide:
@@ -1146,13 +1145,13 @@ export class QuizService {
             "reasoning": "string (overall analysis)"
           }`,
         },
-        { role: 'user', content: prompt },
+        { role: "user", content: prompt },
       ],
-      response_format: { type: 'json_object' },
+      response_format: { type: "json_object" },
       temperature: 0.7,
     });
 
-    const result = JSON.parse(completion.choices[0].message.content || '{}');
+    const result = JSON.parse(completion.choices[0].message.content || "{}");
     return result as QuizAnalysis;
   }
 
@@ -1165,22 +1164,22 @@ Age: ${answers.age} years old
 Energy Level: ${answers.energyLevel}
 This indicates the child's activity preference and stamina levels.
 
-Personality Traits: ${answers.personality.join(', ')}
+Personality Traits: ${answers.personality.join(", ")}
 These traits influence how the child interacts with teammates and handles competition.
 
-Physical Build: ${answers.physicalBuild || 'Not specified'}
+Physical Build: ${answers.physicalBuild || "Not specified"}
 
-Interests: ${answers.interests.join(', ')}
+Interests: ${answers.interests.join(", ")}
 Current hobbies and activities that interest the child.
 
-Previous Sports Experience: ${answers.previousSports?.join(', ') || 'None'}
+Previous Sports Experience: ${answers.previousSports?.join(", ") || "None"}
 
-Time Availability: ${answers.timeAvailability || 'Not specified'}
+Time Availability: ${answers.timeAvailability || "Not specified"}
 How much time the child can commit to sports activities.
 
-Budget Considerations: ${answers.budget || 'Not specified'}
+Budget Considerations: ${answers.budget || "Not specified"}
 
-Parent Goals: ${answers.goals?.join(', ') || 'General fitness and enjoyment'}
+Parent Goals: ${answers.goals?.join(", ") || "General fitness and enjoyment"}
 
 Based on this comprehensive profile, recommend the 3 most suitable sports for this child, considering:
 1. Developmental appropriateness for their age
@@ -1197,11 +1196,11 @@ Based on this comprehensive profile, recommend the 3 most suitable sports for th
 
 ```typescript
 // app/actions/clubs.ts
-'use server';
+"use server";
 
-import { db } from '@/lib/db/drizzle';
-import { ClubsService } from '@/modules/clubs/clubs.service';
-import { clubSearchSchema } from '@/lib/validations/club';
+import { db } from "@/lib/db/drizzle";
+import { ClubsService } from "@/modules/clubs/clubs.service";
+import { clubSearchSchema } from "@/lib/validations/club";
 
 const clubsService = new ClubsService();
 
@@ -1215,11 +1214,11 @@ export async function searchClubs(filters: unknown) {
       clubs,
     };
   } catch (error) {
-    console.error('Club search error:', error);
+    console.error("Club search error:", error);
     return {
       success: false,
       clubs: [],
-      error: error instanceof Error ? error.message : 'Search failed',
+      error: error instanceof Error ? error.message : "Search failed",
     };
   }
 }
@@ -1231,7 +1230,7 @@ export async function getClubById(id: string) {
     if (!club) {
       return {
         success: false,
-        error: 'Club not found',
+        error: "Club not found",
       };
     }
 
@@ -1242,7 +1241,7 @@ export async function getClubById(id: string) {
   } catch (error) {
     return {
       success: false,
-      error: error instanceof Error ? error.message : 'Failed to fetch club',
+      error: error instanceof Error ? error.message : "Failed to fetch club",
     };
   }
 }
@@ -1250,10 +1249,10 @@ export async function getClubById(id: string) {
 
 ```typescript
 // modules/clubs/clubs.service.ts
-import { db } from '@/lib/db/drizzle';
-import { clubs } from '@/lib/db/schema';
-import { eq, and, sql, or, gte, lte } from 'drizzle-orm';
-import type { ClubSearchFilters } from './clubs.types';
+import { db } from "@/lib/db/drizzle";
+import { clubs } from "@/lib/db/schema";
+import { eq, and, sql, or, gte, lte } from "drizzle-orm";
+import type { ClubSearchFilters } from "./clubs.types";
 
 export class ClubsService {
   async search(filters: ClubSearchFilters) {
@@ -1271,12 +1270,7 @@ export class ClubsService {
 
     // Age filter
     if (filters.age) {
-      conditions.push(
-        and(
-          lte(clubs.minAge, filters.age),
-          gte(clubs.maxAge, filters.age)
-        )!
-      );
+      conditions.push(and(lte(clubs.minAge, filters.age), gte(clubs.maxAge, filters.age))!);
     }
 
     // Verified only
@@ -1322,11 +1316,7 @@ export class ClubsService {
   }
 
   async getById(id: string) {
-    const [club] = await db
-      .select()
-      .from(clubs)
-      .where(eq(clubs.id, id))
-      .limit(1);
+    const [club] = await db.select().from(clubs).where(eq(clubs.id, id)).limit(1);
 
     return club;
   }
@@ -1346,13 +1336,13 @@ export class ClubsService {
 
 ```typescript
 // app/actions/bookings.ts
-'use server';
+"use server";
 
-import { revalidatePath } from 'next/cache';
-import { db } from '@/lib/db/drizzle';
-import { BookingsService } from '@/modules/bookings/bookings.service';
-import { bookingCreateSchema } from '@/lib/validations/booking';
-import { requireAuth } from '@/lib/auth/stack';
+import { revalidatePath } from "next/cache";
+import { db } from "@/lib/db/drizzle";
+import { BookingsService } from "@/modules/bookings/bookings.service";
+import { bookingCreateSchema } from "@/lib/validations/booking";
+import { requireAuth } from "@/lib/auth/stack";
 
 const bookingsService = new BookingsService();
 
@@ -1369,18 +1359,18 @@ export async function createBooking(data: unknown) {
     // Send confirmation email
     await bookingsService.sendConfirmationEmail(booking.id);
 
-    revalidatePath('/bookings');
-    revalidatePath('/dashboard');
+    revalidatePath("/bookings");
+    revalidatePath("/dashboard");
 
     return {
       success: true,
       booking,
     };
   } catch (error) {
-    console.error('Booking creation error:', error);
+    console.error("Booking creation error:", error);
     return {
       success: false,
-      error: error instanceof Error ? error.message : 'Failed to create booking',
+      error: error instanceof Error ? error.message : "Failed to create booking",
     };
   }
 }
@@ -1391,8 +1381,8 @@ export async function cancelBooking(bookingId: string, reason?: string) {
 
     const cancelled = await bookingsService.cancel(bookingId, user.id, reason);
 
-    revalidatePath('/bookings');
-    revalidatePath('/dashboard');
+    revalidatePath("/bookings");
+    revalidatePath("/dashboard");
 
     return {
       success: true,
@@ -1401,7 +1391,7 @@ export async function cancelBooking(bookingId: string, reason?: string) {
   } catch (error) {
     return {
       success: false,
-      error: error instanceof Error ? error.message : 'Failed to cancel booking',
+      error: error instanceof Error ? error.message : "Failed to cancel booking",
     };
   }
 }
@@ -1419,7 +1409,7 @@ export async function getUserBookings() {
     return {
       success: false,
       bookings: [],
-      error: error instanceof Error ? error.message : 'Failed to fetch bookings',
+      error: error instanceof Error ? error.message : "Failed to fetch bookings",
     };
   }
 }
@@ -1654,29 +1644,29 @@ NEXT_PUBLIC_APP_URL="http://localhost:3000"
 
 ```typescript
 // tests/unit/modules/quiz.service.test.ts
-import { describe, it, expect, beforeEach } from 'vitest';
-import { QuizService } from '@/modules/quiz/quiz.service';
+import { describe, it, expect, beforeEach } from "vitest";
+import { QuizService } from "@/modules/quiz/quiz.service";
 
-describe('QuizService', () => {
+describe("QuizService", () => {
   let quizService: QuizService;
 
   beforeEach(() => {
     quizService = new QuizService();
   });
 
-  it('should analyze quiz answers and return recommendations', async () => {
+  it("should analyze quiz answers and return recommendations", async () => {
     const answers = {
-      childId: 'test-child-id',
+      childId: "test-child-id",
       age: 8,
-      energyLevel: 'high',
-      personality: ['outgoing', 'competitive'],
-      interests: ['running', 'teamwork'],
-      physicalBuild: 'average',
+      energyLevel: "high",
+      personality: ["outgoing", "competitive"],
+      interests: ["running", "teamwork"],
+      physicalBuild: "average",
     };
 
     const result = await quizService.analyzeQuizAnswers(answers);
 
-    expect(result).toHaveProperty('recommendations');
+    expect(result).toHaveProperty("recommendations");
     expect(result.recommendations).toBeInstanceOf(Array);
     expect(result.recommendations.length).toBeGreaterThan(0);
   });
@@ -1688,6 +1678,7 @@ describe('QuizService', () => {
 ## 📝 Next Steps: Implementation Order
 
 ### Week 1-2: Foundation
+
 1. Initialize Next.js project with TypeScript
 2. Set up Tailwind CSS and shadcn/ui
 3. Configure Drizzle ORM and create schema
@@ -1695,30 +1686,35 @@ describe('QuizService', () => {
 5. Create basic layout components (Header, Footer, Sidebar)
 
 ### Week 3-4: Core Pages
+
 1. Landing page
 2. Sign up/Sign in flows
 3. Dashboard layout
 4. Child profile management (CRUD)
 
 ### Week 5-8: Quiz System
+
 1. Quiz flow UI components
 2. Server Actions for quiz submission
 3. OpenAI integration
 4. Results display
 
 ### Week 9-12: Club Discovery
+
 1. Club search and filters
 2. Club detail pages (SSG)
 3. Map integration
 4. Booking flow
 
 ### Week 13-14: Doctor Profiles
+
 1. Doctor listing and search
 2. Doctor detail pages
 3. Appointment booking
 4. Calendar integration
 
 ### Week 15-16: Polish & Deploy
+
 1. Email notifications
 2. Testing
 3. Performance optimization

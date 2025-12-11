@@ -49,10 +49,8 @@ const nextConfig: NextConfig = {
   // is a known compatibility issue with React 19. It's a bundling warning that
   // doesn't break functionality. Stack Auth will need to update for full React 19 support.
 
-  // Experimental features (if needed)
-  // experimental: {
-  //   // Add experimental features here if needed
-  // },
+  // Cache Components (Next.js 16.0.8 - moved to root level)
+  cacheComponents: true,
 };
 
 export default nextConfig;

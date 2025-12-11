@@ -5,6 +5,11 @@ import HomeNewsletter from "@/components/Newsletter/HomeNewsletter";
 import MoreProgrammers from "@/components/Program/ProgramSlider";
 import { PageParamsProps } from "@/types/custom-interface";
 
+// TODO: Implement proper generateStaticParams when real data fetching is added
+export async function generateStaticParams() {
+  return [{ id: "1" }];
+}
+
 export default async function ClassDetails(props: PageParamsProps) {
   const resolvedParams = await props.params;
   const { id } = resolvedParams;

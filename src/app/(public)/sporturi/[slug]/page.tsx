@@ -8,6 +8,12 @@ interface SportDetailPageProps {
   }>;
 }
 
+// TODO: Implement proper generateStaticParams when real data fetching is added
+// For now, returning a dummy value to satisfy Cache Components requirement
+export async function generateStaticParams() {
+  return [{ slug: "example-sport" }];
+}
+
 /**
  * Sport Detail Page
  *
