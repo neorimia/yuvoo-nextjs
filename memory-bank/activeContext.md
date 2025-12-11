@@ -61,11 +61,15 @@
 - **Decision**: Keep single alias pattern (no additional aliases needed)
 - **Status**: ✅ Configured and documented
 
-### Code Generation Documentation
+### Documentation Updates
 
 - **Created**: `docs/ PROMPTING_RULES_FOR_CODEGEN.md` - Comprehensive code generation guidelines
-- **Content**: Next.js 16 patterns, Cache Components rules, file naming, error handling, TypeScript patterns, Romanian language requirements
-- **Status**: ✅ Complete - Serves as reference for all code generation
+  - **Content**: Next.js 16 patterns, Cache Components rules, file naming, error handling, TypeScript patterns, Romanian language requirements
+  - **Status**: ✅ Complete - Serves as reference for all code generation
+
+- **Created**: `docs/ARCHITECTURE_OVERVIEW.md` - Complete architecture documentation
+  - **Content**: Executive summary, technology stack, Next.js 16 Cache Components, directory structure, data flow patterns, design patterns, routing strategy, caching strategy, authentication, error handling, performance, security, deployment, and architectural decisions
+  - **Status**: ✅ Complete - Comprehensive reference for project architecture
 
 ### Next.js 16 Upgrade & Cache Components Migration ✅
 
@@ -372,6 +376,7 @@
 - **TypeScript Imports**: Always use `@/` prefix for imports from `src/` directory
 - **Component Organization**: Club components created in `components/features/clubs/` following adaptation strategy
 - **Code Generation**: See `docs/ PROMPTING_RULES_FOR_CODEGEN.md` for comprehensive code generation guidelines
+- **Architecture Reference**: See `docs/ARCHITECTURE_OVERVIEW.md` for complete architecture documentation
 - **Phase 1 Focus**: Sports only, ages 4-14, Bucharest
 - **No Payments**: Payment-enabled bookings in Phase 2
 - **No Calendar**: Family calendar in Phase 2

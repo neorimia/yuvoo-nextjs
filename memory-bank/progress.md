@@ -299,6 +299,9 @@
 - [x] Create comprehensive code generation rules ✅
   - [x] Updated `docs/ PROMPTING_RULES_FOR_CODEGEN.md` with Cache Components patterns ✅
   - [x] Documented Next.js 16 patterns, file naming, error handling, etc. ✅
+- [x] Create architecture overview documentation ✅
+  - [x] Created `docs/ARCHITECTURE_OVERVIEW.md` with comprehensive architecture documentation ✅
+  - [x] Documented technology stack, patterns, data flows, caching strategy, etc. ✅
 
 ### Theme Adaptation
 

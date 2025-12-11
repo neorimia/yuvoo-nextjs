@@ -666,9 +666,19 @@ Does component need interactivity?
 
 ## Performance Patterns
 
-1. **Static Generation**: Club/doctor detail pages
-2. **Server Components**: Reduce client bundle
-3. **Image Optimization**: Cloudinary + Next.js Image
-4. **Database Indexing**: Strategic indexes on search fields
-5. **Caching**: Next.js cache + revalidation
-6. **Code Splitting**: Automatic via Next.js
+1. **Cache Components**: Explicit caching with `"use cache"` for cacheable content
+2. **Static Shells**: Cached components create static shells for instant loading
+3. **Server Components**: Default (reduces client bundle)
+4. **Image Optimization**: Cloudinary + Next.js Image
+5. **Database Indexing**: Strategic indexes on search fields
+6. **Caching**: Cache Components with time-based and tag-based revalidation
+7. **Code Splitting**: Automatic via Next.js
+
+## Documentation References
+
+- **Architecture Overview**: `docs/ARCHITECTURE_OVERVIEW.md` - Complete architecture documentation
+- **Code Generation Rules**: `docs/ PROMPTING_RULES_FOR_CODEGEN.md` - Code generation guidelines
+- **System Patterns**: `memory-bank/systemPatterns.md` - This file
+- **Technical Context**: `memory-bank/techContext.md` - Technology stack details
+- **Product Context**: `memory-bank/productContext.md` - Product requirements
+- **Progress Tracking**: `memory-bank/progress.md` - Development progress
