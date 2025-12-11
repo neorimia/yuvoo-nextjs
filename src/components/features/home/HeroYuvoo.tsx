@@ -3,12 +3,12 @@ import Link from "next/link";
 import React from "react";
 import { routes } from "@/lib/routes";
 import { externalLinks } from "@/lib/routes";
-import shape1 from "../../../public/assets/img/shape/curved-line-2.png";
-import heroImg from "../../../public/assets/img/hero/hero-3.jpg";
-import shape2 from "../../../public/assets/img/shape/home-3-shape-1.png";
-import shape3 from "../../../public/assets/img/shape/home-3-shape-2.png";
-import shape4 from "../../../public/assets/img/shape/home-3-shape-3.png";
-import shape5 from "../../../public/assets/img/shape/hero-3-shape-4.png";
+import shape1 from "../../../../public/assets/img/shape/curved-line-2.png";
+import heroImg from "../../../../public/assets/img/hero/hero-3.jpg";
+import shape2 from "../../../../public/assets/img/shape/home-3-shape-1.png";
+import shape3 from "../../../../public/assets/img/shape/home-3-shape-2.png";
+import shape4 from "../../../../public/assets/img/shape/home-3-shape-3.png";
+import shape5 from "../../../../public/assets/img/shape/hero-3-shape-4.png";
 
 const HeroYuvoo = () => {
   return (
@@ -41,15 +41,12 @@ const HeroYuvoo = () => {
           <div className="row align-items-center">
             <div className="col-lg-7 col-md-6">
               <div className="bd-hero-content">
-                <span className="wow fadeInUp" data-wow-duration="1s" data-wow-delay=".3s">
-                  Platformă pentru Sporturi pentru Copii
-                </span>
                 <h1
                   className="bd-hero-title wow fadeInUp"
                   data-wow-duration="1s"
                   data-wow-delay=".5s"
                 >
-                  Descoperă sportul potrivit copilului tău
+                  Găsește sportul potrivit pentru copilul tău
                 </h1>
                 <p
                   className="wow fadeInUp"
@@ -57,8 +54,8 @@ const HeroYuvoo = () => {
                   data-wow-delay=".6s"
                   style={{ fontSize: "18px", marginBottom: "30px", color: "#424242" }}
                 >
-                  Cu ajutorul AI Coach, găsește cel mai potrivit sport pentru copilul tău, descoperă
-                  cluburi sportive verificate și consultează specialiști pediatri.
+                  Recomandări personalizate bazate pe personalitatea, interesul și ritmul de
+                  dezvoltare al copilului susținute de AI și validate de specialiști pediatrici.
                 </p>
                 <div
                   className="bd-hero-btn wow fadeInUp"
@@ -67,16 +64,26 @@ const HeroYuvoo = () => {
                 >
                   <Link href={routes.quiz.intro} className="bd-btn">
                     <span className="bd-btn-inner">
-                      <span className="bd-btn-normal">Începe Chestionarul AI</span>
-                      <span className="bd-btn-hover">Începe Chestionarul AI</span>
+                      <span className="bd-btn-normal">Începe Quiz-ul</span>
+                      <span className="bd-btn-hover">Începe Quiz-ul</span>
                     </span>
                   </Link>
-                  <Link href={routes.clubs.list} className="bd-btn bd-btn-grey ms-3">
-                    <span className="bd-btn-inner">
-                      <span className="bd-btn-normal">Explorează Cluburile</span>
-                      <span className="bd-btn-hover">Explorează Cluburile</span>
-                    </span>
+                  <Link href={routes.clubs.list} className="bd-hero-secondary-link">
+                    Vreau doar să explorez cluburile
                   </Link>
+                </div>
+                <div
+                  className="bd-hero-trust-tag wow fadeInUp"
+                  data-wow-duration="1s"
+                  data-wow-delay=".8s"
+                  style={{
+                    marginTop: "30px",
+                    fontSize: "14px",
+                    color: "#6B6B6B",
+                    fontWeight: 400,
+                  }}
+                >
+                  Peste 5.000 de familii au folosit deja Yuvoo
                 </div>
               </div>
             </div>
@@ -88,7 +95,7 @@ const HeroYuvoo = () => {
                       <Image
                         src={heroImg}
                         style={{ width: "auto", height: "100%" }}
-                        alt="Copii practicând sport"
+                        alt="Copil zâmbind la un sport"
                       />
                     </div>
                   </div>

@@ -9,6 +9,7 @@ import HeaderMenus from "./components/Menu/HeaderMenus";
 import logo from "../../../public/assets/img/logo/logo.svg";
 import SearchPopup from "./components/Popup/SearchPopup";
 import MenuSidebar from "./components/Sidebar/MenuSidebar";
+import { routes } from "@/lib/routes";
 
 const YuvooHeader = () => {
   const { scrollDirection, sideMenuOpen, setSideMenuOpen, isSearchOpen, setIsSearchOpen } =
@@ -26,11 +27,11 @@ const YuvooHeader = () => {
               <div className="mega-menu-wrapper p-relative">
                 <div className="d-flex align-items-center justify-content-between">
                   <div className="bd-header-logo">
-                    <Link href="/">
+                    <Link href={routes.home}>
                       <Image
                         src={logo}
                         style={{ width: "100%", height: "100%" }}
-                        alt="img not found"
+                        alt="Yuvoo Logo"
                       />
                     </Link>
                   </div>
@@ -45,21 +46,11 @@ const YuvooHeader = () => {
                     </div>
                   </div>
                   <div className="bd-header-bottom-right d-flex justify-content-end align-items-center">
-                    <div className="bd-header-meta-item d-none bd-header-menu-meta d-xxl-flex align-items-center">
-                      <div className="bd-header-meta-icon">
-                        <i className="flaticon-phone-call"></i>
-                      </div>
-                      <div className="bd-header-meta-text">
-                        <p>
-                          <a href="tel:9072003462">907-200-3462</a>
-                        </p>
-                      </div>
-                    </div>
                     <div className="bd-header-btn d-none d-xl-block">
-                      <Link href="/contact" className="bd-btn">
+                      <Link href={routes.quiz.intro} className="bd-btn">
                         <span className="bd-btn-inner">
-                          <span className="bd-btn-normal">Apply now</span>
-                          <span className="bd-btn-hover">Apply now</span>
+                          <span className="bd-btn-normal">Începe Chestionarul</span>
+                          <span className="bd-btn-hover">Începe Chestionarul</span>
                         </span>
                       </Link>
                     </div>

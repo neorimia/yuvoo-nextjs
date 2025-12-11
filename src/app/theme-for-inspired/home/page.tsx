@@ -1,7 +1,7 @@
 import HomeAboutArea from "@/components/About/HomeAboutArea";
 import HomeBannerArea from "@/components/Banner/HomeBannerArea";
 import HomeBlogArea from "@/components/Blog/HomeBlogArea";
-import HeroYuvoo from "@/components/HeroArea/HeroYuvoo";
+import HeroYuvoo from "@/components/features/home/HeroYuvoo";
 import HomeNewsletter from "@/components/Newsletter/HomeNewsletter";
 import HomeProgramArea from "@/components/Program/HomeProgramArea";
 import HomePromotionArea from "@/components/Promotion/HomePromotionArea";
@@ -19,8 +19,8 @@ export default async function HomePage() {
   return (
     <>
       <HeroYuvoo />
+      <HomePromotionArea promo_space="pt-120" />
       <HomeClubArea clubs={clubs} />
-      <HomePromotionArea />
       <HomeProgramArea />
       <HomeAboutArea />
       <HomeBannerArea />

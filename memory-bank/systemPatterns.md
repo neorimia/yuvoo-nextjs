@@ -687,6 +687,7 @@ Does component need interactivity?
 - **SEO Guidelines**: `docs/SEO_GUIDELINES.md` - SEO strategy, slug generation, meta tags templates, Open Graph templates, and SEO best practices
 - **Site Map**: `docs/SITE_MAP.md` - Complete application structure, all routes, user flows, and navigation patterns
 - **Wireframes**: `docs/WIREFRAMES.md` - Detailed page structures, component placement, and layout specifications for all major pages
+- **Legal Pages Plan**: `docs/LEGAL_PAGES_DEVELOPMENT_PLAN.md` - Comprehensive legal pages development plan, content templates, SEO guidelines, and implementation checklist
 - **System Patterns**: `memory-bank/systemPatterns.md` - This file
 - **Technical Context**: `memory-bank/techContext.md` - Technology stack details
 - **Product Context**: `memory-bank/productContext.md` - Product requirements
