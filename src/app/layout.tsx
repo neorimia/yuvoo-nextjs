@@ -51,7 +51,7 @@ export const metadata: Metadata = {
     type: "website",
     images: [
       {
-        url: "/assets/img/og-image.jpg", // TODO: Add OG image
+        url: "/assets/img/logo/og-image.jpg",
         width: 1200,
         height: 630,
         alt: "Yuvoo - Platformă AI pentru sporturi copii",
@@ -63,7 +63,7 @@ export const metadata: Metadata = {
     title: "Yuvoo - Descoperă sportul potrivit copilului tău",
     description:
       "Platformă AI pentru descoperirea activităților sportive potrivite pentru copiii tăi.",
-    images: ["/assets/img/twitter-image.jpg"], // TODO: Add Twitter image
+    images: ["/assets/img/logo/twitter-image.jpg"],
   },
   robots: {
     index: true,
@@ -76,6 +76,28 @@ export const metadata: Metadata = {
       "max-snippet": -1,
     },
   },
+  icons: {
+    icon: [
+      { url: "/icon.svg", type: "image/svg+xml" },
+      { url: "/icon.png", type: "image/png" },
+      { url: "/icon-192x192.png", sizes: "192x192", type: "image/png" },
+      { url: "/icon-512x512.png", sizes: "512x512", type: "image/png" },
+      { url: "/favicon.ico", sizes: "any" },
+    ],
+    apple: [
+      { url: "/apple-icon.png", sizes: "180x180", type: "image/png" },
+      { url: "/apple-touch-icon.png", sizes: "180x180", type: "image/png" },
+    ],
+    shortcut: "/favicon.ico",
+  },
+  manifest: "/manifest.json",
+  appleWebApp: {
+    capable: true,
+    statusBarStyle: "default",
+    title: "Yuvoo",
+  },
+  // Note: Next.js 15 automatically detects icon.svg, icon.png, favicon.ico, and apple-icon.png
+  // from src/app/ directory. The icons metadata above provides additional explicit links.
 };
 
 export default function RootLayout({

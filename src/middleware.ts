@@ -14,11 +14,21 @@ export async function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl;
 
   // Skip middleware for static files, API routes, and public assets
+  // This must be checked FIRST before any Stack Auth calls
   if (
     pathname.startsWith("/_next") ||
     pathname.startsWith("/api") ||
     pathname.startsWith("/assets") ||
-    pathname.startsWith("/favicon.ico")
+    pathname === "/favicon.ico" ||
+    pathname.startsWith("/icon") ||
+    pathname.startsWith("/apple") ||
+    pathname === "/manifest.json" ||
+    pathname.endsWith(".ico") ||
+    pathname.endsWith(".svg") ||
+    pathname.endsWith(".png") ||
+    pathname.endsWith(".jpg") ||
+    pathname.endsWith(".jpeg") ||
+    pathname.endsWith(".webp")
   ) {
     return NextResponse.next();
   }
@@ -59,8 +69,11 @@ export const config = {
      * - _next/static (static files)
      * - _next/image (image optimization files)
      * - favicon.ico (favicon file)
+     * - icon.* (all icon files)
+     * - apple.* (apple touch icons)
+     * - manifest.json (web app manifest)
      * - assets (public assets)
      */
-    "/((?!api|_next/static|_next/image|favicon.ico|assets).*)",
+    "/((?!api|_next/static|_next/image|favicon\\.ico|icon|apple|manifest\\.json|assets).*)",
   ],
 };

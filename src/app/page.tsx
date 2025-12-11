@@ -1,8 +1,8 @@
 import Wrapper from "@/layouts/Wrapper";
 import { Metadata } from "next";
 import FooterOne from "@/layouts/Footer/FooterOne";
-import HeaderOne from "@/layouts/Header/HeaderOne";
-import HomePage from "./home/page";
+import HomePage from "@/app/theme-for-inspired/home/page";
+import YuvooHeader from "@/layouts/Header/YuvooHeader";
 
 export const metadata: Metadata = {
   title: "Yuvoo - Descoperă sportul potrivit copilului tău",
@@ -22,7 +22,7 @@ const Home = () => {
   return (
     <>
       <Wrapper>
-        <HeaderOne />
+        <YuvooHeader />
         <main>
           <HomePage />
         </main>

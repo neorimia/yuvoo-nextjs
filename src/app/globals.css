@@ -34,6 +34,11 @@
   --color-yuvoo-accent-light: #b8bbff;
   --color-yuvoo-accent-dark: #5c61e6;
 
+  /* Tailwind utility classes for Yuvoo light colors */
+  --color-primary-light: var(--color-yuvoo-primary-light);
+  --color-secondary-light: var(--color-yuvoo-secondary-light);
+  --color-secondary-lighter: var(--color-yuvoo-secondary-lighter);
+
   --color-neutral-black: #1b1b1b;
   --color-neutral-body: #424242;
   --color-neutral-white: #ffffff;
@@ -182,15 +187,15 @@
 
 @utility bg-yuvoo-primary-light {
   /* Yuvoo Section Background */
-  @apply bg-primary-light;
+  background-color: var(--color-yuvoo-primary-light);
 }
 
 @utility bg-yuvoo-secondary-light {
-  @apply bg-secondary-light;
+  background-color: var(--color-yuvoo-secondary-light);
 }
 
 @utility bg-yuvoo-secondary-lighter {
-  @apply bg-secondary-lighter;
+  background-color: var(--color-yuvoo-secondary-lighter);
 }
 
 /**
