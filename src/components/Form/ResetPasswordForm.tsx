@@ -1,13 +1,11 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useTransition } from "react";
 import { useForm } from "react-hook-form";
-import { useRouter, useSearchParams } from "next/navigation";
-import { useStackApp } from "@stackframe/stack";
+import { useSearchParams } from "next/navigation";
+import { resetPasswordAction } from "@/app/actions/auth";
 import ErrorMsg from "./ErrorMassage";
 import { EyeCutSvgIcon, LockSvgIcon } from "../SVG";
-import { routes } from "@/lib/routes";
-import { getErrorMessage } from "@/lib/auth/errors";
 
 type ResetPasswordFormData = {
   password: string;
@@ -17,7 +15,7 @@ type ResetPasswordFormData = {
 const ResetPasswordForm = () => {
   const [showPass, setShowPass] = useState(false);
   const [showConPass, setShowConPass] = useState(false);
-  const [isLoading, setIsLoading] = useState(false);
+  const [isPending, startTransition] = useTransition();
   const [authError, setAuthError] = useState<string | null>(null);
   const [successMessage, setSuccessMessage] = useState<string | null>(null);
   const {
@@ -26,8 +24,6 @@ const ResetPasswordForm = () => {
     formState: { errors },
     watch,
   } = useForm<ResetPasswordFormData>();
-  const stackApp = useStackApp();
-  const router = useRouter();
   const searchParams = useSearchParams();
   const token = searchParams.get("token");
 
@@ -47,31 +43,31 @@ const ResetPasswordForm = () => {
       return;
     }
 
-    setIsLoading(true);
     setAuthError(null);
     setSuccessMessage(null);
 
-    try {
-      await stackApp.resetPasswordWithToken({
-        token,
-        newPassword: data.password,
-      });
+    startTransition(async () => {
+      const formData = new FormData();
+      formData.append("token", token);
+      formData.append("password", data.password);
+      formData.append("passwordConfirmation", data.passwordConfirmation);
 
-      // Show success message
-      setSuccessMessage(
-        "Parola a fost resetată cu succes! Vei fi redirecționat la pagina de autentificare."
-      );
+      const result = await resetPasswordAction(formData);
 
-      // Redirect to login after 2 seconds
-      setTimeout(() => {
-        router.push(routes.login);
-      }, 2000);
-    } catch (error) {
-      // Handle error
-      const errorMessage = getErrorMessage(error);
-      setAuthError(errorMessage);
-      setIsLoading(false);
-    }
+      if (result.success) {
+        setSuccessMessage(
+          "Parola a fost resetată cu succes! Vei fi redirecționat la pagina de autentificare."
+        );
+        // Redirect after 2 seconds
+        setTimeout(() => {
+          if (result.redirect) {
+            router.push(result.redirect);
+          }
+        }, 2000);
+      } else {
+        setAuthError(result.error || "Eroare la resetarea parolei");
+      }
+    });
   };
 
   // If no token, show error
@@ -117,7 +113,7 @@ const ResetPasswordForm = () => {
                 type={showPass ? "text" : "password"}
                 placeholder="Parola nouă"
                 autoComplete="new-password"
-                disabled={isLoading || !!successMessage}
+                disabled={isPending || !!successMessage}
               />
               <span>
                 <LockSvgIcon />
@@ -126,7 +122,7 @@ const ResetPasswordForm = () => {
             <span
               className="login-input-eye"
               onClick={() => setShowPass(!showPass)}
-              style={{ cursor: isLoading || successMessage ? "not-allowed" : "pointer" }}
+              style={{ cursor: isPending || successMessage ? "not-allowed" : "pointer" }}
             >
               {showPass ? <i className="fa-regular fa-eye"></i> : <EyeCutSvgIcon />}
             </span>
@@ -149,7 +145,7 @@ const ResetPasswordForm = () => {
                 type={showConPass ? "text" : "password"}
                 placeholder="Confirmă parola nouă"
                 autoComplete="new-password"
-                disabled={isLoading || !!successMessage}
+                disabled={isPending || !!successMessage}
               />
               <span>
                 <LockSvgIcon />
@@ -158,7 +154,7 @@ const ResetPasswordForm = () => {
             <span
               className="login-input-eye"
               onClick={() => setShowConPass(!showConPass)}
-              style={{ cursor: isLoading || successMessage ? "not-allowed" : "pointer" }}
+              style={{ cursor: isPending || successMessage ? "not-allowed" : "pointer" }}
             >
               {showConPass ? <i className="fa-regular fa-eye"></i> : <EyeCutSvgIcon />}
             </span>
@@ -167,13 +163,13 @@ const ResetPasswordForm = () => {
         </div>
       </div>
       <div className="login__btn text-center">
-        <button type="submit" className="bd-btn" disabled={isLoading || !!successMessage}>
+        <button type="submit" className="bd-btn" disabled={isPending || !!successMessage}>
           <span className="bd-btn-inner">
             <span className="bd-btn-normal">
-              {isLoading ? "Se resetează..." : successMessage ? "Resetat" : "Resetează parola"}
+              {isPending ? "Se resetează..." : successMessage ? "Resetat" : "Resetează parola"}
             </span>
             <span className="bd-btn-hover">
-              {isLoading ? "Se resetează..." : successMessage ? "Resetat" : "Resetează parola"}
+              {isPending ? "Se resetează..." : successMessage ? "Resetat" : "Resetează parola"}
             </span>
           </span>
         </button>

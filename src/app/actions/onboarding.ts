@@ -14,10 +14,12 @@ import { eq, and, sql } from "drizzle-orm";
 import { redirect } from "next/navigation";
 import { routes } from "@/lib/routes";
 import { generateSlug } from "@/lib/utils";
+import { z } from "zod";
 import { startOnboardingSchema, updateOnboardingStepSchema } from "@/lib/validations/onboarding";
 import { createChildSchema } from "@/lib/validations/child";
+import { clubContactScheduleSchema } from "@/lib/validations/club";
 import type { CreateChildInput } from "@/lib/validations/child";
-import type { ClubBasicInfoInput } from "@/lib/validations/club";
+import type { ClubBasicInfoInput, ClubContactScheduleInput } from "@/lib/validations/club";
 import type { DoctorBasicInfoInput } from "@/lib/validations/doctor";
 
 // Types
@@ -363,6 +365,67 @@ export async function createClubOnboarding(
     return {
       success: false,
       error: "A apărut o eroare la crearea profilului clubului.",
+    };
+  }
+}
+
+/**
+ * Update Club Contact & Schedule During Onboarding (Club Admin - Step 3)
+ */
+export async function updateClubContactSchedule(
+  data: ClubContactScheduleInput
+): Promise<OnboardingResponse<{ clubId: string }>> {
+  try {
+    const session = await requireAuth();
+
+    // Get club ID from onboarding progress
+    const progressData = await getOnboardingProgress();
+    if (!progressData.success || !progressData.data) {
+      return {
+        success: false,
+        error: "Nu s-a găsit progresul onboarding-ului. Te rugăm să începi din nou.",
+      };
+    }
+
+    const clubId = progressData.data.stepData?.club_id as string | undefined;
+    if (!clubId) {
+      return {
+        success: false,
+        error: "Nu s-a găsit profilul clubului. Te rugăm să revii la pasul anterior.",
+      };
+    }
+
+    // Validate the input
+    const validated = clubContactScheduleSchema.parse(data);
+
+    // Update club with contact and schedule information
+    await db
+      .update(clubs)
+      .set({
+        phone: validated.phone,
+        email: validated.email,
+        website: validated.website || null,
+        schedule: validated.schedule,
+        updatedAt: new Date(),
+      })
+      .where(and(eq(clubs.id, clubId), eq(clubs.adminUserId, session.dbUser.id)));
+
+    await saveStepData("contact_schedule", validated);
+    await markStepComplete(3);
+    await updateOnboardingStep(4);
+
+    return { success: true, data: { clubId } };
+  } catch (error) {
+    console.error("Error updating club contact and schedule:", error);
+    if (error instanceof z.ZodError) {
+      return {
+        success: false,
+        error: error.errors[0]?.message || "Datele introduse nu sunt valide.",
+      };
+    }
+    return {
+      success: false,
+      error: "A apărut o eroare la actualizarea informațiilor de contact și program.",
     };
   }
 }

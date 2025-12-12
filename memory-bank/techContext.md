@@ -30,11 +30,14 @@
 
 ### Authentication
 
-- **Stack Auth**: `@stackframe/stack ^2.5.40` - Authentication service
-  - Handles user authentication
-  - Email/password, OAuth support
-  - Session management
+- **Stack Auth**: `@stackframe/stack ^2.5.40` - Authentication service (Server-Side Only)
+  - Handles user authentication (server-side only)
+  - Email/password authentication
+  - Session management (server-side)
   - User management
+  - **Architecture**: All authentication operations use Server Actions
+  - **No Client Provider**: Removed StackProvider - authentication is fully server-side
+  - **Server Actions**: `signInAction`, `signUpAction`, `forgotPasswordAction`, `resetPasswordAction`, `verifyEmailAction`
 
 ### UI & Styling
 

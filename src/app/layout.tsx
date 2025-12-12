@@ -3,7 +3,6 @@ import GlobalVideoModal from "@/components/Popup/GlobalVideoModal";
 import CookieConsentBanner from "@/components/CookieConsent/CookieConsentBanner";
 import { VideoProvider } from "@/provider/VideoProvider";
 import AppProvider from "@/provider/AppProvider";
-import StackAuthProvider from "@/providers/StackAuthProvider";
 import type { Metadata } from "next";
 import { Toaster } from "sonner";
 import "./globals.scss"; // Bootstrap + SCSS (existing components)
@@ -110,16 +109,14 @@ export default function RootLayout({
   return (
     <html lang="ro">
       <body suppressHydrationWarning className={`${gabarito.variable}`}>
-        <StackAuthProvider>
-          <VideoProvider>
-            <ReduxProvider>
-              <AppProvider>{children}</AppProvider>
-              <Toaster position="top-center" richColors />
-              <GlobalVideoModal />
-              <CookieConsentBanner />
-            </ReduxProvider>
-          </VideoProvider>
-        </StackAuthProvider>
+        <VideoProvider>
+          <ReduxProvider>
+            <AppProvider>{children}</AppProvider>
+            <Toaster position="top-center" richColors />
+            <GlobalVideoModal />
+            <CookieConsentBanner />
+          </ReduxProvider>
+        </VideoProvider>
       </body>
     </html>
   );

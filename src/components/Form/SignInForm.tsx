@@ -1,14 +1,13 @@
 "use client";
 
 import Link from "next/link";
-import React, { useState } from "react";
+import React, { useState, useTransition } from "react";
 import { useForm } from "react-hook-form";
 import { useRouter } from "next/navigation";
-import { useStackApp } from "@stackframe/stack";
+import { signInAction } from "@/app/actions/auth";
 import ErrorMsg from "./ErrorMassage";
 import { EmailSvgIcon, EyeCutSvgIcon, LockSvgIcon } from "../SVG";
 import { routes } from "@/lib/routes";
-import { getErrorMessage } from "@/lib/auth/errors";
 
 type SignInFormData = {
   email: string;
@@ -17,35 +16,32 @@ type SignInFormData = {
 
 const SignInForm = () => {
   const [showPass, setShowPass] = useState(false);
-  const [isLoading, setIsLoading] = useState(false);
+  const [isPending, startTransition] = useTransition();
   const [authError, setAuthError] = useState<string | null>(null);
+  const router = useRouter();
   const {
     register,
     handleSubmit,
     formState: { errors },
   } = useForm<SignInFormData>();
-  const stackApp = useStackApp();
-  const router = useRouter();
 
   const onSubmit = async (data: SignInFormData) => {
-    setIsLoading(true);
     setAuthError(null);
 
-    try {
-      await stackApp.signInWithCredential({
-        email: data.email,
-        password: data.password,
-      });
+    startTransition(async () => {
+      const formData = new FormData();
+      formData.append("email", data.email);
+      formData.append("password", data.password);
 
-      // Redirect to dashboard after successful login
-      router.push(routes.parent.dashboard);
-      router.refresh(); // Refresh to update server-side session
-    } catch (error) {
-      // Handle authentication error
-      const errorMessage = getErrorMessage(error);
-      setAuthError(errorMessage);
-      setIsLoading(false);
-    }
+      const result = await signInAction(formData);
+
+      if (result.success && result.redirect) {
+        router.push(result.redirect);
+        router.refresh();
+      } else {
+        setAuthError(result.error || "Eroare la autentificare");
+      }
+    });
   };
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
@@ -69,7 +65,7 @@ const SignInForm = () => {
               id="emailAddress"
               type="email"
               placeholder="Adresă de email"
-              disabled={isLoading}
+              disabled={isPending}
             />
             <span>
               <EmailSvgIcon />
@@ -92,7 +88,7 @@ const SignInForm = () => {
                 type={showPass ? "text" : "password"}
                 placeholder="Parola ta"
                 autoComplete="current-password"
-                disabled={isLoading}
+                disabled={isPending}
               />
               <span>
                 <LockSvgIcon />
@@ -101,7 +97,7 @@ const SignInForm = () => {
             <span
               className="login-input-eye"
               onClick={() => setShowPass(!showPass)}
-              style={{ cursor: isLoading ? "not-allowed" : "pointer" }}
+              style={{ cursor: isPending ? "not-allowed" : "pointer" }}
             >
               {showPass ? <i className="fa-regular fa-eye"></i> : <EyeCutSvgIcon />}
             </span>
@@ -112,23 +108,23 @@ const SignInForm = () => {
 
       <div className="login__option mb-25 d-sm-flex justify-content-between">
         <div className="login__remember">
-          <input type="checkbox" id="tp-remember" disabled={isLoading} />
+          <input type="checkbox" id="tp-remember" disabled={isPending} />
           <label htmlFor="tp-remember">Ține-mă minte</label>
         </div>
         <div className="login__forgot">
-          <Link href={routes.forgotPassword} onClick={(e) => isLoading && e.preventDefault()}>
+          <Link href={routes.forgotPassword} onClick={(e) => isPending && e.preventDefault()}>
             ai uitat parola?
           </Link>
         </div>
       </div>
       <div className="login__btn text-center">
-        <button type="submit" className="bd-btn" disabled={isLoading}>
+        <button type="submit" className="bd-btn" disabled={isPending}>
           <span className="bd-btn-inner">
             <span className="bd-btn-normal">
-              {isLoading ? "Se autentifică..." : "Autentificare"}
+              {isPending ? "Se autentifică..." : "Autentificare"}
             </span>
             <span className="bd-btn-hover">
-              {isLoading ? "Se autentifică..." : "Autentificare"}
+              {isPending ? "Se autentifică..." : "Autentificare"}
             </span>
           </span>
         </button>

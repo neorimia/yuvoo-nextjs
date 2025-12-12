@@ -220,31 +220,33 @@ users (1) ──→ (many) favorites (clubs/doctors)
 
 ## Authentication Pattern
 
-### Stack Auth Integration ✅ COMPLETE
+### Stack Auth Integration ✅ COMPLETE - Server-Side Only
 
-**Configuration**: `lib/auth/stack.ts`
+**Configuration**: `lib/auth/stack.ts` (server-side only)
 **Session Management**: `lib/auth/session.ts`
-**Client Provider**: `src/providers/StackAuthProvider.tsx` (wraps StackProvider and StackTheme)
+**Server Actions**: `app/actions/auth.ts` (all authentication operations)
 **Error Handling**: `lib/auth/errors.ts` (Romanian error messages)
 
-**Client-Side Integration**:
+**Server-Side Architecture**:
 
-- **Provider Setup**: `StackAuthProvider` wraps entire app in root layout
-- **Hooks Used**: `useStackApp()` for authentication methods
-- **Forms**: All authentication forms are client components using Stack Auth methods
-  - `signInWithCredential()` - Sign in
-  - `signUpWithCredential()` - Sign up
-  - `sendForgotPasswordEmail()` - Password reset request
-  - `resetPasswordWithToken()` - Password reset with token
-  - `verifyEmail()` - Email verification
+- **No Client Provider**: Removed StackProvider - authentication is fully server-side
+- **Server Actions**: All authentication operations use Server Actions
+  - `signInAction()` - Sign in with email/password
+  - `signUpAction()` - Sign up with email/password
+  - `forgotPasswordAction()` - Send password reset email
+  - `resetPasswordAction()` - Reset password with token
+  - `verifyEmailAction()` - Verify email with token
+- **Forms**: Client components call Server Actions via `useTransition`
+- **Email Confirmation**: Server component that calls Server Action directly
 
 **Authentication Flow**:
 
-1. User authenticates via Stack Auth (client-side)
-2. Stack Auth manages session
-3. Server Actions can check Stack Auth session via `lib/auth/session.ts`
-4. Syncs with local `users` table (creates if needed)
-5. Returns local user record
+1. User submits form → Client component calls Server Action
+2. Server Action authenticates via Stack Auth (server-side)
+3. Stack Auth manages session (server-side)
+4. Server Actions check Stack Auth session via `lib/auth/session.ts`
+5. Syncs with local `users` table (creates if needed)
+6. Returns local user record
 
 **Session Helper**:
 
@@ -259,7 +261,7 @@ requireAuth() → throws if not authenticated
 - Server Actions: Use `requireAuth()` helper
 - Middleware: Optional for additional protection
 
-**Authentication Pages** (All completed with Romanian localization):
+**Authentication Pages** (All completed with Romanian localization, using Server Actions):
 
 - `/auth/login` - Sign in page
 - `/auth/register` - Sign up page
@@ -273,13 +275,22 @@ requireAuth() → throws if not authenticated
 - All error messages in Romanian
 - `getErrorMessage()` utility function extracts user-friendly messages from Stack Auth errors
 - Forms display errors with consistent styling
+- Server Actions return `{ success: boolean, error?: string, redirect?: string }` format
 
-**Redirects**:
+**Redirects** (handled by Server Actions and form components):
 
 - Successful login → `/parent/dashboard`
 - Successful signup → `/parent/dashboard`
 - Successful password reset → `/auth/login`
 - Successful email verification → `/auth/login`
+
+**Benefits of Server-Side Architecture**:
+
+- ✅ Better security (no client-side auth logic)
+- ✅ Smaller client bundle (no Stack Auth client code)
+- ✅ Better SEO (server-side rendering)
+- ✅ Simpler architecture (Server Actions pattern)
+- ✅ Better error handling (server-side validation)
 
 ## Onboarding Pattern
 
@@ -752,13 +763,14 @@ Does component need interactivity?
 
 ## Security Patterns
 
-1. **Authentication**: Stack Auth handles all auth
+1. **Authentication**: Stack Auth handles all auth (server-side only, no client-side provider)
 2. **Authorization**: Role-based (parent, club_admin, doctor, admin)
-3. **Input Validation**: Zod schemas for all inputs
+3. **Input Validation**: Zod schemas for all inputs (server-side validation in Server Actions)
 4. **SQL Injection**: Drizzle ORM parameterized queries
 5. **XSS**: React automatic escaping
-6. **CSRF**: Next.js built-in protection
+6. **CSRF**: Next.js built-in protection (Server Actions are CSRF-protected)
 7. **File Uploads**: Cloudinary handles storage and CDN
+8. **Server Actions**: All authentication operations are server-side only
 
 ## Performance Patterns
 
@@ -786,6 +798,7 @@ Does component need interactivity?
 - **Wireframes**: `docs/WIREFRAMES.md` - Detailed page structures, component placement, and layout specifications for all major pages
 - **Legal Pages Plan**: `docs/LEGAL_PAGES_DEVELOPMENT_PLAN.md` - Comprehensive legal pages development plan, content templates, SEO guidelines, and implementation checklist
 - **Authentication Integration Plan**: `docs/AUTH_INTEGRATION_PLAN.md` - Complete authentication system integration details, Stack Auth setup, Romanian localization, and implementation checklist
+- **Stack Auth Server Migration**: `docs/STACK_AUTH_SERVER_MIGRATION_PLAN.md` - Migration plan and implementation details for server-side authentication
 - **System Patterns**: `memory-bank/systemPatterns.md` - This file
 - **Technical Context**: `memory-bank/techContext.md` - Technology stack details
 - **Product Context**: `memory-bank/productContext.md` - Product requirements

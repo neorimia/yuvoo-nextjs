@@ -10,3 +10,4 @@ export type { OnboardingStep } from "./OnboardingProgress";
 export { OnboardingNavigation } from "./OnboardingNavigation";
 export { AddChildForm } from "./AddChildForm";
 export { ClubBasicInfoForm } from "./ClubBasicInfoForm";
+export { ClubContactScheduleForm } from "./ClubContactScheduleForm";

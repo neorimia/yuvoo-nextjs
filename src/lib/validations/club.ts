@@ -46,7 +46,7 @@ export const clubContactScheduleSchema = z.object({
 
   email: z.string(zodRomanianErrors).email("Adresa de email este invalidă").toLowerCase(),
 
-  website: z.string().url("URL-ul website-ului este invalid").optional().or(z.literal("")),
+  website: z.union([z.string().url("URL-ul website-ului este invalid"), z.literal("")]).optional(),
 
   schedule: z
     .array(
