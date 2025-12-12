@@ -600,7 +600,7 @@
   - [ ] Test login/signup flow end-to-end (⏳ Ready for testing - all implementation complete)
 - [ ] Dashboard layout (new component)
 - [ ] Child profile management (CRUD) (new component)
-- [x] Onboarding system foundation ✅ (✅ Phase 2 Complete, Phase 3 In Progress)
+- [x] Onboarding system foundation ✅ (✅ Phase 2 Complete, ✅ Phase 3 Complete, 🚧 Phase 4 In Progress)
   - [x] Database schema (`onboarding_progress` table, updated `users`/`clubs`/`doctors` tables) ✅
   - [x] Drizzle migration created ✅
   - [x] Server Actions implemented (state management, progress tracking, resume functionality) ✅
@@ -671,6 +671,74 @@
       - [x] Manual navigation buttons (Dashboard, View Clubs) ✅
       - [x] Auto-redirect to dashboard after 5 seconds ✅
       - [x] Completion server action (`completeClubOnboarding`) ✅
+  - [x] **Doctor Onboarding (Phase 4)**: ✅ **COMPLETE**
+    - [x] Welcome page (`/onboarding/doctor/welcome`) ✅
+      - [x] Personalized greeting with doctor name ✅
+      - [x] 8-step progress indicator ✅
+      - [x] Romanian copy with benefits list ✅
+    - [x] Basic info form (`/onboarding/doctor/basic-info`) ✅
+      - [x] `DoctorBasicInfoForm` component ✅
+      - [x] Specialty selection dropdown (4 specialties: orthopedist, nutritionist, psychologist, sports_medicine) ✅
+      - [x] Credentials multi-select with quick-add buttons (MD, Dr., Conf. Dr., Prof. Dr., Specialist, Primar, Board Certified, CMR) ✅
+      - [x] Custom credential input with add/remove functionality ✅
+      - [x] First name, last name, title (optional) fields ✅
+      - [x] Server action creates doctor profile and tracks progress ✅
+    - [x] Bio & Experience step (`/onboarding/doctor/bio-experience`) ✅
+      - [x] `DoctorBioExperienceForm` component ✅
+      - [x] Bio textarea with character counter (100-2000 characters) ✅
+      - [x] Years of experience input (1-50) ✅
+      - [x] Secondary specialties multi-select (optional) ✅
+      - [x] Languages multi-select (required, minimum 1) with common languages and custom input ✅
+      - [x] Server action updates doctor profile and tracks progress ✅
+    - [x] Location & Contact step (`/onboarding/doctor/location-contact`) ✅
+      - [x] `DoctorLocationContactForm` component ✅
+      - [x] City dropdown (30 major Romanian cities) ✅
+      - [x] District/Sector input (optional) ✅
+      - [x] Address input (required, 10-300 characters) ✅
+      - [x] Phone input with Romanian format normalization (+40XXXXXXXXX) ✅
+      - [x] Email input (required) ✅
+      - [x] Website input (optional, URL validation) ✅
+      - [x] Server action updates doctor profile and tracks progress ✅
+    - [x] Photo Upload step (`/onboarding/doctor/photo`) ✅
+      - [x] `DoctorPhotoForm` component ✅
+      - [x] Single professional photo upload (optional) ✅
+      - [x] Cloudinary integration for image uploads ✅
+      - [x] Image preview with remove functionality ✅
+      - [x] Professional photo recommendations ✅
+      - [x] Skip functionality ✅
+      - [x] File validation (JPG, PNG, WebP, max 5MB) ✅
+      - [x] Server action updates doctor profile and tracks progress ✅
+    - [x] Verification Documents step (`/onboarding/doctor/verification`) ✅
+      - [x] `DoctorVerificationForm` component ✅
+      - [x] Multi-document upload (4-10 documents required) ✅
+      - [x] Required documents listed (Diplomă, Certificat specialist, Licență, Certificat CMR) ✅
+      - [x] Optional document (Asigurare malpraxis) ✅
+      - [x] Cloudinary integration for document uploads ✅
+      - [x] Document preview with file type icons and filenames ✅
+      - [x] File validation (PDF, JPG, PNG, max 10MB per file) ✅
+      - [x] Verification timeline explanation (2-3 business days) ✅
+      - [x] Skip functionality ✅
+      - [x] Server action updates doctor profile, sets verification status to "in_review", and tracks progress ✅
+    - [x] Availability Settings step (`/onboarding/doctor/availability`) ✅
+      - [x] `DoctorAvailabilityForm` component ✅
+      - [x] Accepting new patients checkbox ✅
+      - [x] Online consultations checkbox ✅
+      - [x] Optional schedule builder (day, start time, end time) ✅
+      - [x] Dynamic schedule entries (add/remove) ✅
+      - [x] Time pickers for start and end times ✅
+      - [x] Empty state message ✅
+      - [x] Info box explaining availability information ✅
+      - [x] Server action updates doctor profile and tracks progress ✅
+    - [x] Completion step (`/onboarding/doctor/complete`) ✅
+      - [x] `DoctorCompletionContent` component ✅
+      - [x] Personalized success message with doctor name and title ✅
+      - [x] Success icon with animation ✅
+      - [x] Success details section (profile created, documents uploaded, verification timeline) ✅
+      - [x] Next steps section (verification process, email notification, profile visibility) ✅
+      - [x] What you can do section (manage consultations, edit profile, view requests, configure schedule) ✅
+      - [x] Action buttons (Dashboard, View Doctors) ✅
+      - [x] Auto-redirect after 5 seconds ✅
+      - [x] Server action marks onboarding as complete and updates all statuses ✅
 - [ ] Localize all UI text to Romanian
 
 ### Week 5-8: Quiz System

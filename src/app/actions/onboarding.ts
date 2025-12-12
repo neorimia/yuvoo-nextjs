@@ -13,7 +13,7 @@ import { users, onboardingProgress, children, clubs, doctors } from "@/lib/db/sc
 import { eq, and, sql } from "drizzle-orm";
 import { redirect } from "next/navigation";
 import { routes } from "@/lib/routes";
-import { generateSlug } from "@/lib/utils";
+import { generateSlug, normalizePhoneNumber } from "@/lib/utils";
 import { z } from "zod";
 import { startOnboardingSchema, updateOnboardingStepSchema } from "@/lib/validations/onboarding";
 import { createChildSchema } from "@/lib/validations/child";
@@ -23,6 +23,14 @@ import {
   clubPhotoSchema,
   clubVerificationSchema,
 } from "@/lib/validations/club";
+import {
+  doctorBasicInfoSchema,
+  doctorBioExperienceSchema,
+  doctorLocationContactSchema,
+  doctorPhotoSchema,
+  doctorVerificationSchema,
+  doctorAvailabilitySchema,
+} from "@/lib/validations/doctor";
 import type { CreateChildInput } from "@/lib/validations/child";
 import type {
   ClubBasicInfoInput,
@@ -31,7 +39,14 @@ import type {
   ClubPhotoInput,
   ClubVerificationInput,
 } from "@/lib/validations/club";
-import type { DoctorBasicInfoInput } from "@/lib/validations/doctor";
+import type {
+  DoctorBasicInfoInput,
+  DoctorBioExperienceInput,
+  DoctorLocationContactInput,
+  DoctorPhotoInput,
+  DoctorVerificationInput,
+  DoctorAvailabilityInput,
+} from "@/lib/validations/doctor";
 
 // Types
 type OnboardingRole = "parent" | "club_admin" | "doctor";
@@ -700,7 +715,7 @@ export async function completeClubOnboarding(): Promise<{ success: boolean; erro
 // ============================================================================
 
 /**
- * Create Doctor Profile During Onboarding
+ * Create Doctor Profile During Onboarding (Doctor - Step 2)
  */
 export async function createDoctorOnboarding(
   data: DoctorBasicInfoInput
@@ -708,30 +723,346 @@ export async function createDoctorOnboarding(
   try {
     const session = await requireAuth();
 
+    // Validate the input
+    const validated = doctorBasicInfoSchema.parse(data);
+
     const [doctor] = await db
       .insert(doctors)
       .values({
         id: crypto.randomUUID(),
         userId: session.dbUser.id,
-        firstName: data.firstName,
-        lastName: data.lastName,
-        title: data.title,
-        specialty: data.specialty,
-        credentials: data.credentials,
-        city: "",
+        firstName: validated.firstName,
+        lastName: validated.lastName,
+        title: validated.title || null,
+        specialty: validated.specialty,
+        credentials: validated.credentials,
+        city: "", // Will be filled in step 4
         profileComplete: false,
         verificationStatus: "pending",
       })
       .returning();
 
     await saveStepData("doctor_id", doctor.id);
+    await saveStepData("basic_info", validated);
+    await markStepComplete(2);
+    await updateOnboardingStep(3);
 
     return { success: true, data: { doctorId: doctor.id } };
   } catch (error) {
     console.error("Error creating doctor during onboarding:", error);
+    if (error instanceof z.ZodError) {
+      return {
+        success: false,
+        error: error.errors[0]?.message || "Datele introduse nu sunt valide.",
+      };
+    }
     return {
       success: false,
       error: "A apărut o eroare la crearea profilului profesional.",
+    };
+  }
+}
+
+/**
+ * Update Doctor Bio & Experience During Onboarding (Doctor - Step 3)
+ */
+export async function updateDoctorBioExperience(
+  data: DoctorBioExperienceInput
+): Promise<OnboardingResponse<{ doctorId: string }>> {
+  try {
+    const session = await requireAuth();
+
+    // Get doctor ID from onboarding progress
+    const progressData = await getOnboardingProgress();
+    if (!progressData.success || !progressData.data) {
+      return {
+        success: false,
+        error: "Nu s-a găsit progresul onboarding-ului. Te rugăm să începi din nou.",
+      };
+    }
+
+    const doctorId = progressData.data.stepData?.doctor_id as string | undefined;
+    if (!doctorId) {
+      return {
+        success: false,
+        error: "Nu s-a găsit profilul profesional. Te rugăm să revii la pasul anterior.",
+      };
+    }
+
+    // Validate the input
+    const validated = doctorBioExperienceSchema.parse(data);
+
+    // Update doctor with bio and experience information
+    await db
+      .update(doctors)
+      .set({
+        bio: validated.bio,
+        yearsOfExperience: validated.yearsOfExperience,
+        secondarySpecialties: validated.secondarySpecialties || [],
+        languages: validated.languages,
+        updatedAt: new Date(),
+      })
+      .where(and(eq(doctors.id, doctorId), eq(doctors.userId, session.dbUser.id)));
+
+    await saveStepData("bio_experience", validated);
+    await markStepComplete(3);
+    await updateOnboardingStep(4);
+
+    return { success: true, data: { doctorId } };
+  } catch (error) {
+    console.error("Error updating doctor bio and experience:", error);
+    if (error instanceof z.ZodError) {
+      return {
+        success: false,
+        error: error.errors[0]?.message || "Datele introduse nu sunt valide.",
+      };
+    }
+    return {
+      success: false,
+      error: "A apărut o eroare la actualizarea biografiei și experienței.",
+    };
+  }
+}
+
+/**
+ * Update Doctor Location & Contact During Onboarding (Doctor - Step 4)
+ */
+export async function updateDoctorLocationContact(
+  data: DoctorLocationContactInput
+): Promise<OnboardingResponse<{ doctorId: string }>> {
+  try {
+    const session = await requireAuth();
+
+    // Get doctor ID from onboarding progress
+    const progressData = await getOnboardingProgress();
+    if (!progressData.success || !progressData.data) {
+      return {
+        success: false,
+        error: "Nu s-a găsit progresul onboarding-ului. Te rugăm să începi din nou.",
+      };
+    }
+
+    const doctorId = progressData.data.stepData?.doctor_id as string | undefined;
+    if (!doctorId) {
+      return {
+        success: false,
+        error: "Nu s-a găsit profilul profesional. Te rugăm să revii la pasul anterior.",
+      };
+    }
+
+    // Validate the input
+    const validated = doctorLocationContactSchema.parse(data);
+
+    // Normalize phone number
+    const normalizedPhone = normalizePhoneNumber(validated.phone);
+
+    // Update doctor with location and contact information
+    await db
+      .update(doctors)
+      .set({
+        city: validated.city,
+        district: validated.district || null,
+        address: validated.address,
+        phone: normalizedPhone,
+        email: validated.email,
+        website: validated.website || null,
+        updatedAt: new Date(),
+      })
+      .where(and(eq(doctors.id, doctorId), eq(doctors.userId, session.dbUser.id)));
+
+    await saveStepData("location_contact", validated);
+    await markStepComplete(4);
+    await updateOnboardingStep(5);
+
+    return { success: true, data: { doctorId } };
+  } catch (error) {
+    console.error("Error updating doctor location and contact:", error);
+    if (error instanceof z.ZodError) {
+      return {
+        success: false,
+        error: error.errors[0]?.message || "Datele introduse nu sunt valide.",
+      };
+    }
+    return {
+      success: false,
+      error: "A apărut o eroare la actualizarea locației și contactului.",
+    };
+  }
+}
+
+/**
+ * Update Doctor Photo During Onboarding (Doctor - Step 5)
+ */
+export async function updateDoctorPhoto(
+  data: DoctorPhotoInput
+): Promise<OnboardingResponse<{ doctorId: string }>> {
+  try {
+    const session = await requireAuth();
+
+    // Get doctor ID from onboarding progress
+    const progressData = await getOnboardingProgress();
+    if (!progressData.success || !progressData.data) {
+      return {
+        success: false,
+        error: "Nu s-a găsit progresul onboarding-ului. Te rugăm să începi din nou.",
+      };
+    }
+
+    const doctorId = progressData.data.stepData?.doctor_id as string | undefined;
+    if (!doctorId) {
+      return {
+        success: false,
+        error: "Nu s-a găsit profilul profesional. Te rugăm să revii la pasul anterior.",
+      };
+    }
+
+    // Validate the input (photo is optional)
+    const validated = doctorPhotoSchema.parse(data);
+
+    // Update doctor with photo URL (if provided)
+    await db
+      .update(doctors)
+      .set({
+        photoUrl: validated.photoUrl || null,
+        updatedAt: new Date(),
+      })
+      .where(and(eq(doctors.id, doctorId), eq(doctors.userId, session.dbUser.id)));
+
+    await saveStepData("photo", validated);
+    await markStepComplete(5);
+    await updateOnboardingStep(6);
+
+    return { success: true, data: { doctorId } };
+  } catch (error) {
+    console.error("Error updating doctor photo:", error);
+    if (error instanceof z.ZodError) {
+      return {
+        success: false,
+        error: error.errors[0]?.message || "Datele introduse nu sunt valide.",
+      };
+    }
+    return {
+      success: false,
+      error: "A apărut o eroare la actualizarea fotografiei.",
+    };
+  }
+}
+
+/**
+ * Update Doctor Verification Documents During Onboarding (Doctor - Step 6)
+ */
+export async function updateDoctorVerification(
+  data: DoctorVerificationInput
+): Promise<OnboardingResponse<{ doctorId: string }>> {
+  try {
+    const session = await requireAuth();
+
+    // Get doctor ID from onboarding progress
+    const progressData = await getOnboardingProgress();
+    if (!progressData.success || !progressData.data) {
+      return {
+        success: false,
+        error: "Nu s-a găsit progresul onboarding-ului. Te rugăm să începi din nou.",
+      };
+    }
+
+    const doctorId = progressData.data.stepData?.doctor_id as string | undefined;
+    if (!doctorId) {
+      return {
+        success: false,
+        error: "Nu s-a găsit profilul profesional. Te rugăm să revii la pasul anterior.",
+      };
+    }
+
+    // Validate the input
+    const validated = doctorVerificationSchema.parse(data);
+
+    // Update doctor with verification documents
+    await db
+      .update(doctors)
+      .set({
+        verificationDocuments: validated.verificationDocuments,
+        verificationStatus: "in_review",
+        updatedAt: new Date(),
+      })
+      .where(and(eq(doctors.id, doctorId), eq(doctors.userId, session.dbUser.id)));
+
+    await saveStepData("verification", validated);
+    await markStepComplete(6);
+    await updateOnboardingStep(7);
+
+    return { success: true, data: { doctorId } };
+  } catch (error) {
+    console.error("Error updating doctor verification documents:", error);
+    if (error instanceof z.ZodError) {
+      return {
+        success: false,
+        error: error.errors[0]?.message || "Datele introduse nu sunt valide.",
+      };
+    }
+    return {
+      success: false,
+      error: "A apărut o eroare la actualizarea documentelor de verificare.",
+    };
+  }
+}
+
+/**
+ * Update Doctor Availability During Onboarding (Doctor - Step 7)
+ */
+export async function updateDoctorAvailability(
+  data: DoctorAvailabilityInput
+): Promise<OnboardingResponse<{ doctorId: string }>> {
+  try {
+    const session = await requireAuth();
+
+    // Get doctor ID from onboarding progress
+    const progressData = await getOnboardingProgress();
+    if (!progressData.success || !progressData.data) {
+      return {
+        success: false,
+        error: "Nu s-a găsit progresul onboarding-ului. Te rugăm să începi din nou.",
+      };
+    }
+
+    const doctorId = progressData.data.stepData?.doctor_id as string | undefined;
+    if (!doctorId) {
+      return {
+        success: false,
+        error: "Nu s-a găsit profilul profesional. Te rugăm să revii la pasul anterior.",
+      };
+    }
+
+    // Validate the input
+    const validated = doctorAvailabilitySchema.parse(data);
+
+    // Update doctor with availability settings
+    await db
+      .update(doctors)
+      .set({
+        acceptingNewPatients: validated.acceptingNewPatients,
+        onlineConsultations: validated.onlineConsultations,
+        schedule: validated.schedule && validated.schedule.length > 0 ? validated.schedule : [],
+        updatedAt: new Date(),
+      })
+      .where(and(eq(doctors.id, doctorId), eq(doctors.userId, session.dbUser.id)));
+
+    await saveStepData("availability", validated);
+    await markStepComplete(7);
+    await updateOnboardingStep(8);
+
+    return { success: true, data: { doctorId } };
+  } catch (error) {
+    console.error("Error updating doctor availability:", error);
+    if (error instanceof z.ZodError) {
+      return {
+        success: false,
+        error: error.errors[0]?.message || "Datele introduse nu sunt valide.",
+      };
+    }
+    return {
+      success: false,
+      error: "A apărut o eroare la actualizarea disponibilității.",
     };
   }
 }
@@ -768,10 +1099,11 @@ export async function submitDoctorForVerification(
 /**
  * Complete Doctor Onboarding
  */
-export async function completeDoctorOnboarding(): Promise<never> {
+export async function completeDoctorOnboarding(): Promise<{ success: boolean; error?: string }> {
   try {
     const session = await requireAuth();
 
+    // Update user onboarding status
     await db
       .update(users)
       .set({
@@ -781,6 +1113,7 @@ export async function completeDoctorOnboarding(): Promise<never> {
       })
       .where(eq(users.id, session.dbUser.id));
 
+    // Update onboarding progress
     await db
       .update(onboardingProgress)
       .set({
@@ -790,6 +1123,7 @@ export async function completeDoctorOnboarding(): Promise<never> {
       })
       .where(eq(onboardingProgress.userId, session.dbUser.id));
 
+    // Mark doctor profile as complete
     const progressData = await getOnboardingProgress();
     if (progressData.success && progressData.data?.stepData?.doctor_id) {
       await db
@@ -798,9 +1132,12 @@ export async function completeDoctorOnboarding(): Promise<never> {
         .where(eq(doctors.id, progressData.data?.stepData?.doctor_id as string));
     }
 
-    redirect(routes.doctor?.dashboard || "/doctor/dashboard");
+    return { success: true };
   } catch (error) {
     console.error("Error completing doctor onboarding:", error);
-    throw new Error("A apărut o eroare la finalizarea onboarding-ului.");
+    return {
+      success: false,
+      error: "A apărut o eroare la finalizarea onboarding-ului.",
+    };
   }
 }
