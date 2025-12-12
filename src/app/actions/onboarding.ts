@@ -24,6 +24,19 @@ type OnboardingRole = "parent" | "club_admin" | "doctor";
 
 type OnboardingResponse<T = void> = { success: true; data?: T } | { success: false; error: string };
 
+type OnboardingProgressData = {
+  id: string;
+  userId: string;
+  role: string;
+  currentStep: number;
+  totalSteps: number;
+  completedSteps: number[];
+  stepData: Record<string, unknown>;
+  isCompleted: boolean;
+  createdAt: Date;
+  updatedAt: Date;
+};
+
 // ============================================================================
 // ONBOARDING STATE MANAGEMENT
 // ============================================================================
@@ -31,7 +44,9 @@ type OnboardingResponse<T = void> = { success: true; data?: T } | { success: fal
 /**
  * Start Onboarding Flow
  */
-export async function startOnboarding(role: OnboardingRole): Promise<OnboardingResponse> {
+export async function startOnboarding(
+  role: OnboardingRole
+): Promise<OnboardingResponse<OnboardingProgressData>> {
   try {
     const session = await requireAuth();
     const validated = startOnboardingSchema.parse({ role });
@@ -50,7 +65,21 @@ export async function startOnboarding(role: OnboardingRole): Promise<OnboardingR
       .limit(1);
 
     if (existing.length > 0) {
-      return { success: true, data: existing[0] };
+      return {
+        success: true,
+        data: {
+          id: existing[0].id,
+          userId: existing[0].userId,
+          role: existing[0].role,
+          currentStep: existing[0].currentStep,
+          totalSteps: existing[0].totalSteps,
+          completedSteps: existing[0].completedSteps.map(Number),
+          stepData: existing[0].stepData as Record<string, unknown>,
+          isCompleted: existing[0].isCompleted,
+          createdAt: existing[0].createdAt,
+          updatedAt: existing[0].updatedAt,
+        },
+      };
     }
 
     const [progress] = await db
@@ -67,7 +96,21 @@ export async function startOnboarding(role: OnboardingRole): Promise<OnboardingR
       })
       .returning();
 
-    return { success: true, data: progress };
+    return {
+      success: true,
+      data: {
+        id: progress.id,
+        userId: progress.userId,
+        role: progress.role,
+        currentStep: progress.currentStep,
+        totalSteps: progress.totalSteps,
+        completedSteps: progress.completedSteps.map(Number),
+        stepData: progress.stepData as Record<string, unknown>,
+        isCompleted: progress.isCompleted,
+        createdAt: progress.createdAt,
+        updatedAt: progress.updatedAt,
+      },
+    };
   } catch (error) {
     console.error("Error starting onboarding:", error);
     return {
@@ -80,20 +123,7 @@ export async function startOnboarding(role: OnboardingRole): Promise<OnboardingR
 /**
  * Get Onboarding Progress
  */
-export async function getOnboardingProgress(): Promise<
-  OnboardingResponse<{
-    id: string;
-    userId: string;
-    role: string;
-    currentStep: number;
-    totalSteps: number;
-    completedSteps: number[];
-    stepData: Record<string, unknown>;
-    isCompleted: boolean;
-    createdAt: Date;
-    updatedAt: Date;
-  }>
-> {
+export async function getOnboardingProgress(): Promise<OnboardingResponse<OnboardingProgressData>> {
   try {
     const session = await requireAuth();
 
@@ -107,7 +137,21 @@ export async function getOnboardingProgress(): Promise<
       return { success: false, error: "Nu există progres de onboarding." };
     }
 
-    return { success: true, data: progress[0] };
+    return {
+      success: true,
+      data: {
+        id: progress[0].id,
+        userId: progress[0].userId,
+        role: progress[0].role,
+        currentStep: progress[0].currentStep,
+        totalSteps: progress[0].totalSteps,
+        completedSteps: progress[0].completedSteps.map(Number),
+        stepData: progress[0].stepData as Record<string, unknown>,
+        isCompleted: progress[0].isCompleted,
+        createdAt: progress[0].createdAt,
+        updatedAt: progress[0].updatedAt,
+      },
+    };
   } catch (error) {
     console.error("Error getting onboarding progress:", error);
     return {
@@ -265,7 +309,7 @@ export async function completeParentOnboarding(action: "quiz" | "dashboard"): Pr
     await markStepComplete(5);
 
     if (action === "quiz") {
-      redirect(routes.quiz?.start || "/chestionar");
+      redirect(routes.quiz?.intro || "/chestionar");
     } else {
       redirect(routes.parent?.dashboard || "/parent/dashboard");
     }
@@ -371,11 +415,11 @@ export async function completeClubOnboarding(): Promise<never> {
       .where(eq(onboardingProgress.userId, session.dbUser.id));
 
     const progressData = await getOnboardingProgress();
-    if (progressData.success && progressData.data.stepData?.club_id) {
+    if (progressData.success && progressData.data && progressData.data?.stepData?.club_id) {
       await db
         .update(clubs)
         .set({ profileComplete: true, updatedAt: new Date() })
-        .where(eq(clubs.id, progressData.data.stepData.club_id));
+        .where(eq(clubs.id, progressData.data?.stepData?.club_id as string));
     }
 
     redirect(routes.club?.dashboard || "/club/dashboard");
@@ -481,11 +525,11 @@ export async function completeDoctorOnboarding(): Promise<never> {
       .where(eq(onboardingProgress.userId, session.dbUser.id));
 
     const progressData = await getOnboardingProgress();
-    if (progressData.success && progressData.data.stepData?.doctor_id) {
+    if (progressData.success && progressData.data?.stepData?.doctor_id) {
       await db
         .update(doctors)
         .set({ profileComplete: true, updatedAt: new Date() })
-        .where(eq(doctors.id, progressData.data.stepData.doctor_id));
+        .where(eq(doctors.id, progressData.data?.stepData?.doctor_id as string));
     }
 
     redirect(routes.doctor?.dashboard || "/doctor/dashboard");

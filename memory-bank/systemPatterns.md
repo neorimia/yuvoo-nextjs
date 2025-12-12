@@ -281,6 +281,66 @@ requireAuth() → throws if not authenticated
 - Successful password reset → `/auth/login`
 - Successful email verification → `/auth/login`
 
+## Onboarding Pattern
+
+### Onboarding System Architecture
+
+**Status**: 🚧 Foundation Complete (Database schema, Server Actions, validation schemas)
+
+**Location**:
+
+- Server Actions: `app/actions/onboarding.ts`
+- Validation: `lib/validations/onboarding.ts`, `lib/validations/child.ts`, `lib/validations/club.ts`, `lib/validations/doctor.ts`
+- Database: `lib/db/schema.ts` (onboarding_progress table)
+
+**Pattern**:
+
+1. **Cross-Session State Management**: `onboarding_progress` table tracks user onboarding state across sessions
+2. **Role-Based Flows**: Separate onboarding flows for parent (5 steps), club_admin (7 steps), doctor (8 steps)
+3. **Progress Tracking**: Step-by-step progress with `completedSteps` array and `stepData` JSONB field
+4. **Resume Functionality**: Automatic progress retrieval on page load
+5. **Server Actions**: All onboarding operations via Server Actions with proper TypeScript types
+
+**Key Server Actions**:
+
+- `startOnboarding(role)` - Initialize onboarding flow
+- `getOnboardingProgress()` - Retrieve current progress
+- `updateOnboardingStep(stepNumber, stepData)` - Update current step
+- `markStepComplete(stepNumber)` - Mark step as completed
+- `saveStepData(key, value)` - Save step-specific data (JSONB)
+- Role-specific actions: `addChildOnboarding()`, `createClubOnboarding()`, `createDoctorOnboarding()`
+
+**Validation Strategy**:
+
+- Zod schemas for each onboarding step
+- Romanian error messages via `zodRomanianErrors`
+- Type-safe input validation
+- Separate schemas for child, club, and doctor profiles
+
+**Database Schema**:
+
+```typescript
+onboarding_progress {
+  id: string (UUID)
+  userId: string (FK to users)
+  role: "parent" | "club_admin" | "doctor"
+  currentStep: number
+  totalSteps: number
+  completedSteps: number[] (array of completed step numbers)
+  stepData: JSONB (flexible step-specific data)
+  isCompleted: boolean
+  createdAt: Date
+  updatedAt: Date
+}
+```
+
+**Pending Implementation**:
+
+- Middleware for onboarding protection
+- Route structure (`/onboarding/parent/*`, `/onboarding/club/*`, `/onboarding/doctor/*`)
+- Base UI components (OnboardingLayout, OnboardingProgress, OnboardingNavigation)
+- Parent onboarding UI (welcome, add child, platform tour, quiz CTA)
+
 ## AI Integration Pattern
 
 ### OpenAI Integration
