@@ -157,72 +157,6 @@
   }
 }
 
-/**
- * Custom Tailwind Components
- * 
- * Add reusable component classes here using @apply directive
- * Note: @utility is a valid Tailwind v4 directive (CSS language server may show warnings)
- */
-
-@utility btn-yuvoo-primary {
-  /* Yuvoo Primary Button */
-  @apply bg-primary text-white font-semibold px-6 py-3 rounded-xl transition-all duration-300;
-  @apply hover:bg-[var(--color-primary-dark)] active:scale-95;
-}
-
-@utility btn-yuvoo-secondary {
-  /* Yuvoo Secondary Button */
-  @apply bg-secondary text-white font-semibold px-6 py-3 rounded-xl transition-all duration-300;
-  @apply hover:bg-[var(--color-secondary-dark)] active:scale-95;
-}
-
-@utility btn-yuvoo-accent {
-  /* Yuvoo Accent Button */
-  @apply bg-accent text-white font-semibold px-6 py-3 rounded-xl transition-all duration-300;
-  @apply hover:bg-[var(--color-accent-dark)] active:scale-95;
-}
-
-@utility card-yuvoo {
-  /* Yuvoo Card */
-  @apply bg-white rounded-xl shadow-card p-6 transition-all duration-300;
-  @apply hover:shadow-lg;
-}
-
-@utility bg-yuvoo-primary-light {
-  /* Yuvoo Section Background */
-  background-color: var(--color-yuvoo-primary-light);
-}
-
-@utility bg-yuvoo-secondary-light {
-  background-color: var(--color-yuvoo-secondary-light);
-}
-
-@utility bg-yuvoo-secondary-lighter {
-  background-color: var(--color-yuvoo-secondary-lighter);
-}
-
-/**
- * Custom Utilities
- */
-
-@utility text-yuvoo-heading {
-  /* Text colors matching design system */
-  @apply text-neutral-black;
-}
-
-@utility text-yuvoo-body {
-  @apply text-neutral-body;
-}
-
-@utility section-padding {
-  /* Spacing utilities for sections */
-  @apply pt-[110px] pb-[70px];
-}
-
-@utility section-padding-lg {
-  @apply pt-[120px] pb-[80px];
-}
-
 /*---break---
  */
 
@@ -284,7 +218,7 @@
 
 /*---break---
  */
-
+/*  */
 :root {
   --background: hsl(0 0% 100%);
   --foreground: hsl(0 0% 14.902%);
@@ -292,8 +226,8 @@
   --card-foreground: hsl(0 0% 14.902%);
   --popover: hsl(0 0% 100%);
   --popover-foreground: hsl(0 0% 14.902%);
-  --primary: #00bbae; /* Yuvoo Primary Turcoaz */
-  --primary-foreground: hsl(0 0% 100%); /* White for contrast */
+  --primary: hsl(175.8289 100% 36.6667%);
+  --primary-foreground: hsl(0 0% 10.5882%);
   --secondary: hsl(32.6027 100% 57.0588%);
   --secondary-foreground: hsl(0 0% 10.5882%);
   --muted: hsl(210 20% 98.0392%);
@@ -304,20 +238,20 @@
   --destructive-foreground: hsl(0 0% 100%);
   --border: hsl(220 13.0435% 90.9804%);
   --input: hsl(220 13.0435% 90.9804%);
-  --ring: #00bbae; /* Yuvoo Primary Turcoaz for focus rings */
-  --chart-1: #00bbae; /* Yuvoo Primary Turcoaz */
+  --ring: hsl(37.6923 92.126% 50.1961%);
+  --chart-1: hsl(37.6923 92.126% 50.1961%);
   --chart-2: hsl(32.1327 94.6188% 43.7255%);
   --chart-3: hsl(25.9649 90.4762% 37.0588%);
   --chart-4: hsl(22.7273 82.5% 31.3725%);
   --chart-5: hsl(21.7143 77.7778% 26.4706%);
   --sidebar: hsl(210 20% 98.0392%);
   --sidebar-foreground: hsl(0 0% 14.902%);
-  --sidebar-primary: #00bbae; /* Yuvoo Primary Turcoaz */
+  --sidebar-primary: hsl(37.6923 92.126% 50.1961%);
   --sidebar-primary-foreground: hsl(0 0% 100%);
   --sidebar-accent: hsl(48 100% 96.0784%);
   --sidebar-accent-foreground: hsl(22.7273 82.5% 31.3725%);
   --sidebar-border: hsl(220 13.0435% 90.9804%);
-  --sidebar-ring: #00bbae; /* Yuvoo Primary Turcoaz */
+  --sidebar-ring: hsl(37.6923 92.126% 50.1961%);
   --font-sans: Inter, sans-serif;
   --font-serif: Source Serif 4, serif;
   --font-mono: JetBrains Mono, monospace;
@@ -339,9 +273,6 @@
   --tracking-normal: 0em;
   --spacing: 0.25rem;
 }
-
-/*---break---
- */
 
 .dark {
   --background: hsl(0 0% 9.0196%);
@@ -395,3 +326,63 @@
   --shadow-xl: 0px 4px 8px -1px hsl(0 0% 0% / 0.1), 0px 8px 10px -2px hsl(0 0% 0% / 0.1);
   --shadow-2xl: 0px 4px 8px -1px hsl(0 0% 0% / 0.25);
 }
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-destructive-foreground: var(--destructive-foreground);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+  --color-chart-1: var(--chart-1);
+  --color-chart-2: var(--chart-2);
+  --color-chart-3: var(--chart-3);
+  --color-chart-4: var(--chart-4);
+  --color-chart-5: var(--chart-5);
+  --color-sidebar: var(--sidebar);
+  --color-sidebar-foreground: var(--sidebar-foreground);
+  --color-sidebar-primary: var(--sidebar-primary);
+  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
+  --color-sidebar-accent: var(--sidebar-accent);
+  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
+  --color-sidebar-border: var(--sidebar-border);
+  --color-sidebar-ring: var(--sidebar-ring);
+
+  --font-sans: var(--font-sans);
+  --font-mono: var(--font-mono);
+  --font-serif: var(--font-serif);
+
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 4px);
+
+  --shadow-2xs: var(--shadow-2xs);
+  --shadow-xs: var(--shadow-xs);
+  --shadow-sm: var(--shadow-sm);
+  --shadow: var(--shadow);
+  --shadow-md: var(--shadow-md);
+  --shadow-lg: var(--shadow-lg);
+  --shadow-xl: var(--shadow-xl);
+  --shadow-2xl: var(--shadow-2xl);
+}
+
+/**
+ * Custom Tailwind Components
+ * 
+ * Add reusable component classes here using @apply directive
+ * Note: @utility is a valid Tailwind v4 directive (CSS language server may show warnings)
+ */

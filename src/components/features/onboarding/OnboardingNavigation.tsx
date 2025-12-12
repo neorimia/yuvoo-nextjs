@@ -179,7 +179,7 @@ export function OnboardingNavigation({
               size="default"
               asChild
               onClick={handleBackClick}
-              className="min-w-[44px] md:min-w-auto bg-white border-border text-muted-foreground hover:bg-muted hover:border-primary focus-visible:ring-primary"
+              className="min-w-[44px] md:min-w-auto bg-white border-border text-muted-foreground hover:bg-muted hover:border-(--color-yuvoo-primary) focus-visible:ring-(--color-yuvoo-primary)"
             >
               <Link href={backHref} aria-label={backText} title={backText}>
                 <ArrowLeft />
@@ -199,7 +199,7 @@ export function OnboardingNavigation({
               size="default"
               asChild
               onClick={handleSkipClick}
-              className="text-muted-foreground hover:text-primary focus-visible:ring-primary"
+              className="text-muted-foreground hover:text-(--color-yuvoo-primary) focus-visible:ring-(--color-yuvoo-primary)"
               aria-label={skipText}
             >
               <Link href={skipHref}>{skipText}</Link>
@@ -208,7 +208,7 @@ export function OnboardingNavigation({
         </div>
 
         {/* Next/Finish button */}
-        <div className="shrink-0">
+        <div className="shrink-0 text-white min-w-[120px] md:min-w-auto">
           {isSubmitButton ? (
             // Submit button (for forms) - Using Yuvoo brand design
             <Button
@@ -217,7 +217,8 @@ export function OnboardingNavigation({
               onClick={handleNextClick}
               disabled={isNextDisabled || isLoading}
               size="lg"
-              className="btn-yuvoo-primary min-w-[120px] md:min-w-auto shadow-md hover:shadow-[0px_4px_12px_rgba(0,187,174,0.2)] disabled:hover:bg-primary disabled:hover:shadow-md disabled:active:scale-100"
+              variant="default"
+              className="w-full bg-(--color-yuvoo-primary) text-white min-w-[120px] md:min-w-auto shadow-md hover:bg-(--color-yuvoo-primary-dark) hover:shadow-[0px_4px_12px_rgba(0,187,174,0.2)] disabled:hover:bg-(--color-yuvoo-primary) disabled:hover:shadow-md disabled:active:scale-100"
               aria-label={buttonText}
               aria-busy={isLoading}
             >
@@ -241,7 +242,7 @@ export function OnboardingNavigation({
               disabled
               size="lg"
               variant="default"
-              className="btn-yuvoo-primary min-w-[120px] md:min-w-auto shadow-md hover:shadow-[0px_4px_12px_rgba(0,187,174,0.2)] disabled:hover:bg-primary disabled:hover:shadow-md disabled:active:scale-100"
+              className="w-full bg-(--color-yuvoo-primary) text-white min-w-[120px] md:min-w-auto shadow-md hover:shadow-[0px_4px_12px_rgba(0,187,174,0.2)] disabled:hover:bg-(--color-yuvoo-primary) disabled:hover:shadow-md disabled:active:scale-100"
               aria-label={buttonText}
               aria-disabled={true}
             >
@@ -252,9 +253,10 @@ export function OnboardingNavigation({
             // Link button (for navigation when enabled) - Using Yuvoo brand design
             <Button
               size="lg"
+              variant="default"
               asChild
               onClick={handleNextClick}
-              className="btn-yuvoo-primary min-w-[120px] md:min-w-auto shadow-md hover:shadow-[0px_4px_12px_rgba(0,187,174,0.2)]"
+              className="bg-(--color-yuvoo-primary) text-white min-w-[120px] md:min-w-auto shadow-md hover:bg-(--color-yuvoo-primary-dark) hover:shadow-[0px_4px_12px_rgba(0,187,174,0.2)]"
               aria-label={buttonText}
             >
               <Link href={nextHref || "#"}>

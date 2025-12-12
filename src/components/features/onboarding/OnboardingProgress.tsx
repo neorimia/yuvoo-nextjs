@@ -57,7 +57,7 @@ export function OnboardingProgress({
 
             {/* Progress line - extends from step 1 to current step */}
             <div
-              className="absolute top-5 left-0 h-0.5 bg-primary transition-all duration-500 ease-in-out"
+              className="absolute top-5 left-0 h-0.5 bg-yuvoo-primary transition-all duration-500 ease-in-out"
               style={{
                 width:
                   currentStep === 1 ? "0%" : `${((currentStep - 1) / (steps.length - 1)) * 100}%`,
@@ -83,9 +83,9 @@ export function OnboardingProgress({
                         "w-10 h-10 rounded-full flex items-center justify-center relative z-10",
                         "transition-all duration-300 ease-in-out",
                         isCompleted &&
-                          "bg-primary text-white shadow-md shadow-primary/20 border-2 border-primary",
+                          "bg-yuvoo-primary text-white shadow-md shadow-yuvoo-primary/20 border-2 border-yuvoo-primary",
                         isCurrent &&
-                          "bg-white border-4 border-primary text-primary shadow-lg shadow-primary/10",
+                          "bg-white border-4 border-yuvoo-primary text-yuvoo-primary shadow-lg shadow-primary/10",
                         isPending && "bg-white border-2 border-muted text-muted-foreground"
                       )}
                       aria-current={isCurrent ? "step" : undefined}
@@ -103,7 +103,7 @@ export function OnboardingProgress({
                       <p
                         className={cn(
                           "text-sm font-semibold leading-tight",
-                          isCurrent && "text-primary",
+                          isCurrent && "text-yuvoo-primary",
                           isCompleted && "text-foreground",
                           isPending && "text-muted-foreground"
                         )}
@@ -114,7 +114,7 @@ export function OnboardingProgress({
                         <p
                           className={cn(
                             "text-xs mt-1 leading-relaxed",
-                            isCurrent ? "text-primary/80" : "text-muted-foreground"
+                            isCurrent ? "text-yuvoo-primary" : "text-muted-foreground"
                           )}
                         >
                           {step.description}
@@ -148,7 +148,9 @@ export function OnboardingProgress({
 
           {/* Current step label */}
           <div className="mt-4">
-            <p className="text-base font-semibold text-primary">{steps[currentStep - 1]?.label}</p>
+            <p className="text-base font-semibold text-yuvoo-primary">
+              {steps[currentStep - 1]?.label}
+            </p>
             {steps[currentStep - 1]?.description && (
               <p className="text-sm text-muted-foreground mt-1.5 leading-relaxed">
                 {steps[currentStep - 1].description}

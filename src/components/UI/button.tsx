@@ -10,16 +10,16 @@ const buttonVariants = cva(
     variants: {
       variant: {
         default:
-          "bg-primary text-white hover:bg-[var(--color-primary-dark)] active:scale-95 shadow-md hover:shadow-[0px_4px_12px_rgba(0,187,174,0.2)]",
+          "bg-yuvoo-primary text-white hover:bg-yuvoo-primary-dark active:scale-95 shadow-md hover:shadow-[0px_4px_12px_rgba(0,187,174,0.2)]",
         destructive:
           "bg-destructive text-white hover:bg-destructive/90 active:scale-95 shadow-md focus-visible:ring-destructive/20 dark:focus-visible:ring-destructive/40 dark:bg-destructive/60",
         outline:
-          "border border-border bg-background shadow-xs hover:bg-accent hover:text-accent-foreground hover:border-primary active:scale-95 dark:bg-input/30 dark:border-input dark:hover:bg-input/50",
+          "border border-border bg-background shadow-xs hover:bg-accent hover:text-accent-foreground hover:border-yuvoo-primary active:scale-95 dark:bg-input/30 dark:border-input dark:hover:bg-input/50",
         secondary:
           "bg-secondary text-white hover:bg-[var(--color-secondary-dark)] active:scale-95 shadow-md hover:shadow-[0px_4px_12px_rgba(255,155,36,0.2)]",
         ghost:
           "hover:bg-accent hover:text-accent-foreground active:scale-95 dark:hover:bg-accent/50",
-        link: "text-primary underline-offset-4 hover:underline hover:text-[var(--color-primary-dark)]",
+        link: "text-yuvoo-primary underline-offset-4 hover:underline hover:text-yuvoo-primary-dark",
       },
       size: {
         default: "h-9 px-4 py-2 has-[>svg]:px-3",

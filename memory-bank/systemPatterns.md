@@ -647,6 +647,29 @@ data-wow-delay=".3s"
 
 **Migration Strategy**: See `designSystem.md` for detailed migration plan from Bootstrap to Tailwind.
 
+### Tailwind Color Usage Preference
+
+**IMPORTANT**: When using Tailwind color utilities, prefer Yuvoo-specific color classes over generic primary/secondary classes:
+
+✅ **Preferred**:
+
+- `bg-yuvoo-primary` instead of `bg-primary`
+- `text-yuvoo-primary` instead of `text-primary`
+- `bg-yuvoo-secondary` instead of `bg-secondary`
+- `text-yuvoo-secondary` instead of `text-secondary`
+- `bg-yuvoo-accent` instead of `bg-accent`
+- `text-yuvoo-accent` instead of `text-accent`
+- `border-yuvoo-primary` instead of `border-primary`
+
+**Rationale**:
+
+- More explicit about using Yuvoo brand colors
+- Directly maps to `--color-yuvoo-primary` CSS variable (#00BBAE)
+- Better semantic meaning in code
+- Easier to identify brand-specific styling
+
+**Note**: Generic `bg-primary` maps to shadcn/ui's `--primary` variable (which we set to Yuvoo primary, but using explicit Yuvoo utilities is clearer).
+
 ## Component Patterns
 
 ### Server Components vs Client Components

@@ -5,12 +5,12 @@ import { VideoProvider } from "@/provider/VideoProvider";
 import AppProvider from "@/provider/AppProvider";
 import type { Metadata } from "next";
 import { Toaster } from "sonner";
-import "./globals.scss"; // Bootstrap + SCSS (existing components)
-import "./globals.css"; // Tailwind CSS (new components)
 import "swiper/css/bundle";
 import "react-photo-view/dist/react-photo-view.css";
 import "prismjs/themes/prism-tomorrow.css";
 import ReduxProvider from "@/redux/provider";
+import "./globals.scss"; // Bootstrap + SCSS (existing components)
+import "./globals.css"; // Tailwind CSS (new components)
 
 const gabarito = Gabarito({
   variable: "--font-gabarito",
