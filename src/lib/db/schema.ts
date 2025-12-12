@@ -1,20 +1,22 @@
 /**
- * Database Schema
+ * Database Schema - UPDATED FOR ONBOARDING
  *
  * Drizzle ORM schema definitions for Yuvoo.
  *
  * Tables:
- * - users: Parent, club admin, doctor, admin roles
+ * - users: Parent, club admin, doctor, admin roles (UPDATED)
  * - children: Child profiles linked to parents
  * - quizzes: Quiz answers and AI recommendations
- * - clubs: Sports club information
- * - doctors: Pediatric specialist profiles
+ * - clubs: Sports club information (UPDATED)
+ * - doctors: Pediatric specialist profiles (UPDATED)
  * - bookings: Club trials and doctor consultations
  * - favorites: Saved clubs and doctors
  * - reviews: Club and doctor reviews (moderated)
+ * - onboarding_progress: Cross-session onboarding state tracking (NEW)
  */
 
 import { pgTable, text, timestamp, boolean, integer, jsonb, pgEnum } from "drizzle-orm/pg-core";
+import { sql } from "drizzle-orm";
 
 // Enums
 export const userRoleEnum = pgEnum("user_role", ["parent", "club_admin", "doctor", "admin"]);
@@ -23,6 +25,14 @@ export const bookingStatusEnum = pgEnum("booking_status", [
   "confirmed",
   "cancelled",
   "completed",
+]);
+
+// NEW: Verification status enum for clubs and doctors
+export const verificationStatusEnum = pgEnum("verification_status", [
+  "pending", // Initial state, no documents submitted
+  "in_review", // Documents submitted, admin reviewing
+  "approved", // Verified and approved
+  "rejected", // Rejected, needs resubmission
 ]);
 
 // Users table
@@ -34,6 +44,11 @@ export const users = pgTable("users", {
   firstName: text("first_name"),
   lastName: text("last_name"),
   phone: text("phone"),
+
+  // NEW: Onboarding tracking fields
+  onboardingCompleted: boolean("onboarding_completed").notNull().default(false),
+  profileCompletionPercentage: integer("profile_completion_percentage").default(0),
+
   createdAt: timestamp("created_at").defaultNow().notNull(),
   updatedAt: timestamp("updated_at").defaultNow().notNull(),
 });
@@ -66,20 +81,58 @@ export const quizzes = pgTable("quizzes", {
 // Clubs table
 export const clubs = pgTable("clubs", {
   id: text("id").primaryKey(),
+  adminUserId: text("admin_user_id").references(() => users.id), // Link to club admin user
+
+  // Basic info
   name: text("name").notNull(),
+  slug: text("slug").unique(), // SEO-friendly URL slug
   description: text("description"),
   sportType: text("sport_type").notNull(),
+
+  // Location
   city: text("city").notNull(),
+  district: text("district"), // Sector/District (e.g., "Sector 1" in București)
   address: text("address"),
   latitude: text("latitude"),
   longitude: text("longitude"),
+
+  // Contact
   phone: text("phone"),
   email: text("email"),
   website: text("website"),
+
+  // Schedule (JSONB array of schedule entries)
+  schedule: jsonb("schedule").default(sql`'[]'::jsonb`),
+
+  // Pricing (JSONB array of pricing options)
+  pricing: jsonb("pricing").default(sql`'[]'::jsonb`),
+
+  // Age groups and levels
+  ageGroups: integer("age_groups")
+    .array()
+    .default(sql`'{}'::integer[]`),
+  experienceLevels: text("experience_levels")
+    .array()
+    .default(sql`'{}'::text[]`),
+
+  // Media
   logoUrl: text("logo_url"),
+  galleryUrls: text("gallery_urls")
+    .array()
+    .default(sql`'{}'::text[]`),
+
+  // NEW: Verification fields
+  profileComplete: boolean("profile_complete").notNull().default(false),
+  verificationStatus: verificationStatusEnum("verification_status").notNull().default("pending"),
+  verificationDocuments: text("verification_documents")
+    .array()
+    .default(sql`'{}'::text[]`),
+
+  // Legacy fields (keep for compatibility)
   verified: boolean("verified").default(false).notNull(),
   featured: boolean("featured").default(false).notNull(),
   rating: integer("rating").default(0),
+
   createdAt: timestamp("created_at").defaultNow().notNull(),
   updatedAt: timestamp("updated_at").defaultNow().notNull(),
 });
@@ -88,17 +141,57 @@ export const clubs = pgTable("clubs", {
 export const doctors = pgTable("doctors", {
   id: text("id").primaryKey(),
   userId: text("user_id").references(() => users.id),
+
+  // Basic info
   firstName: text("first_name").notNull(),
   lastName: text("last_name").notNull(),
-  specialty: text("specialty").notNull(),
+  title: text("title"), // "Dr.", "Conf. Dr.", etc.
+
+  // Professional info
+  specialty: text("specialty").notNull(), // Primary specialty
+  secondarySpecialties: text("secondary_specialties")
+    .array()
+    .default(sql`'{}'::text[]`),
+  credentials: text("credentials")
+    .array()
+    .default(sql`'{}'::text[]`), // ["MD", "Board Certified", ...]
   bio: text("bio"),
+  yearsOfExperience: integer("years_of_experience"),
+  languages: text("languages")
+    .array()
+    .default(sql`'{}'::text[]`), // ["Română", "Engleză", ...]
+
+  // Location
   city: text("city").notNull(),
+  district: text("district"),
+  address: text("address"),
+
+  // Contact
   phone: text("phone"),
   email: text("email"),
-  photoUrl: text("photo_url"),
-  verified: boolean("verified").default(false).notNull(),
+  website: text("website"),
+
+  // Availability
   acceptingNewPatients: boolean("accepting_new_patients").default(true).notNull(),
+  onlineConsultations: boolean("online_consultations").default(false).notNull(),
+
+  // Schedule (JSONB array)
+  schedule: jsonb("schedule").default(sql`'[]'::jsonb`),
+
+  // Media
+  photoUrl: text("photo_url"),
+
+  // NEW: Verification fields
+  profileComplete: boolean("profile_complete").notNull().default(false),
+  verificationStatus: verificationStatusEnum("verification_status").notNull().default("pending"),
+  verificationDocuments: text("verification_documents")
+    .array()
+    .default(sql`'{}'::text[]`),
+
+  // Legacy fields
+  verified: boolean("verified").default(false).notNull(),
   rating: integer("rating").default(0),
+
   createdAt: timestamp("created_at").defaultNow().notNull(),
   updatedAt: timestamp("updated_at").defaultNow().notNull(),
 });
@@ -144,4 +237,37 @@ export const reviews = pgTable("reviews", {
   moderated: boolean("moderated").default(false).notNull(),
   createdAt: timestamp("created_at").defaultNow().notNull(),
   updatedAt: timestamp("updated_at").defaultNow().notNull(),
+});
+
+// NEW: Onboarding Progress table
+export const onboardingProgress = pgTable("onboarding_progress", {
+  id: text("id")
+    .primaryKey()
+    .default(sql`gen_random_uuid()`),
+  userId: text("user_id")
+    .notNull()
+    .references(() => users.id, { onDelete: "cascade" })
+    .unique(), // One progress record per user
+
+  // Role determines which onboarding flow to use
+  role: userRoleEnum("role").notNull(),
+
+  // Progress tracking
+  currentStep: integer("current_step").notNull().default(1),
+  totalSteps: integer("total_steps").notNull(),
+  completedSteps: text("completed_steps")
+    .array()
+    .notNull()
+    .default(sql`'{}'::text[]`),
+
+  // JSONB storage for partial form data (enables resume functionality)
+  // Example structure: { "child_id": "uuid", "club_basic_info": { "name": "..." } }
+  stepData: jsonb("step_data").default(sql`'{}'::jsonb`),
+
+  // Completion status
+  isCompleted: boolean("is_completed").notNull().default(false),
+
+  // Timestamps
+  createdAt: timestamp("created_at").notNull().defaultNow(),
+  updatedAt: timestamp("updated_at").notNull().defaultNow(),
 });

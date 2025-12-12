@@ -563,6 +563,7 @@ import { getClubBySlug } from "@/modules/clubs/clubs.service";
 
 ## Documentation References
 
+- **Claude Guide**: `CLAUDE.md` - Comprehensive project guide for Claude Code with quick start, development commands, architecture patterns, troubleshooting, and quick reference
 - **Architecture Overview**: `docs/ARCHITECTURE_OVERVIEW.md` - Complete architecture documentation with patterns, data flows, and design decisions
 - **Code Generation Rules**: `docs/ PROMPTING_RULES_FOR_CODEGEN.md` - Comprehensive code generation guidelines
 - **Brand Guidelines**: `docs/BRAND_GUIDELINES.md` - Visual identity, tone of voice, UX principles, and brand consistency guidelines

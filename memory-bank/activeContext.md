@@ -4,7 +4,7 @@
 
 **Phase**: Foundation Setup & Architecture Migration
 **Date**: December 2024
-**Focus**: Next.js 16 upgrade, Cache Components migration, and code generation standards
+**Focus**: Documentation improvements, Next.js 16 upgrade, Cache Components migration, and code generation standards
 
 ## Current Work Focus
 
@@ -248,6 +248,11 @@ Current homepage structure (`src/app/(public)/page.tsx`):
 - **Status**: ✅ Configured and documented
 
 ### Documentation Updates
+
+- **Created**: `CLAUDE.md` - Comprehensive project guide for Claude Code ✅
+  - **Content**: Project overview, quick start, development commands, architecture patterns, critical development rules, documentation structure, external services, component adaptation, development workflow, testing guidelines, troubleshooting, quick reference
+  - **Features**: Table of contents, expanded examples, code snippets, testing checklists, troubleshooting section, quick reference patterns
+  - **Status**: ✅ Complete - Comprehensive guide for working with the codebase
 
 - **Created**: `docs/ PROMPTING_RULES_FOR_CODEGEN.md` - Comprehensive code generation guidelines
   - **Content**: Next.js 16 patterns, Cache Components rules, file naming, error handling, TypeScript patterns, Romanian language requirements
@@ -593,6 +598,7 @@ Current homepage structure (`src/app/(public)/page.tsx`):
 - **Wireframes**: See `docs/WIREFRAMES.md` for detailed page structures, component placement, and layout specifications for all major pages
 - **Legal Pages Plan**: See `docs/LEGAL_PAGES_DEVELOPMENT_PLAN.md` for comprehensive legal pages development plan, content templates, and implementation guidelines
 - **Authentication Integration Plan**: See `docs/AUTH_INTEGRATION_PLAN.md` for complete authentication system integration details, Stack Auth setup, and Romanian localization guidelines
+- **Claude Guide**: See `CLAUDE.md` for comprehensive project guide, quick start, development commands, architecture patterns, troubleshooting, and quick reference
 - **Phase 1 Focus**: Sports only, ages 4-14, Bucharest
 - **No Payments**: Payment-enabled bookings in Phase 2
 - **No Calendar**: Family calendar in Phase 2
