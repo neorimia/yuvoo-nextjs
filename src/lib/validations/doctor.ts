@@ -40,15 +40,18 @@ export const doctorBasicInfoSchema = z.object({
 export const doctorBioExperienceSchema = z.object({
   bio: z
     .string(zodRomanianErrors)
-    .min(100, "Bio-ul trebuie să conțină cel puțin 100 caractere")
-    .max(2000, "Bio-ul este prea lung (maxim 2000 caractere)")
+    .min(
+      100,
+      "Bio-ul trebuie să conțină cel puțin 100 caractere. Descrie experiența ta profesională, abordarea ta și de ce ești pasionat de medicina sportivă pediatrică."
+    )
+    .max(2000, "Bio-ul este prea lung (maxim 2000 caractere). Te rugăm să scurti textul.")
     .trim(),
 
   yearsOfExperience: z
     .number({ required_error: "Anii de experiență sunt obligatorii" })
-    .int("Trebuie să fie un număr întreg")
-    .min(1, "Minim 1 an de experiență")
-    .max(50, "Valoare invalidă"),
+    .int("Trebuie să fie un număr întreg (ex: 5, 10, 15)")
+    .min(1, "Minim 1 an de experiență este necesar")
+    .max(50, "Valoarea introdusă este prea mare. Te rugăm să verifici numărul introdus."),
 
   secondarySpecialties: z.array(z.string()).optional(),
 
@@ -65,13 +68,19 @@ export const doctorLocationContactSchema = z.object({
 
   address: z
     .string(zodRomanianErrors)
-    .min(10, "Adresa completă este obligatorie (minim 10 caractere)")
-    .max(300, "Adresa este prea lungă")
+    .min(
+      10,
+      "Adresa completă este obligatorie (minim 10 caractere). Include strada, număr, bloc, scara, etaj, apartament."
+    )
+    .max(300, "Adresa este prea lungă (maxim 300 caractere). Te rugăm să scurti textul.")
     .trim(),
 
   phone: z
     .string(zodRomanianErrors)
-    .regex(/^\+40[0-9]{9}$/, "Format telefon invalid (ex: +40721234567)"),
+    .regex(
+      /^\+40[0-9]{9}$/,
+      "Format telefon invalid. Te rugăm să introduci numărul în format internațional: +40XXXXXXXXX (ex: +40721234567)"
+    ),
 
   email: z.string(zodRomanianErrors).email("Adresa de email este invalidă").toLowerCase(),
 

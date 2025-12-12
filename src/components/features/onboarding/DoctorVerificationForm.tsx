@@ -25,6 +25,8 @@ import { uploadDocumentAction, deleteDocumentAction } from "@/app/actions/upload
 import { doctorVerificationSchema, type DoctorVerificationInput } from "@/lib/validations/doctor";
 import { routes } from "@/lib/routes";
 import { OnboardingNavigation } from "./OnboardingNavigation";
+import { InfoTooltip } from "@/components/shared/InfoTooltip";
+import { InfoBox } from "./components";
 import { X, Upload, FileText, File } from "lucide-react";
 
 export function DoctorVerificationForm() {
@@ -160,12 +162,18 @@ export function DoctorVerificationForm() {
   };
 
   return (
-    <form id="doctor-verification-form" onSubmit={handleSubmit(onSubmit)} className="space-y-6">
+    <form
+      id="doctor-verification-form"
+      onSubmit={handleSubmit(onSubmit)}
+      className="space-y-6 px-4 sm:px-0"
+    >
       {/* Server error message */}
       {serverError && (
-        <div className="bg-red-50 border border-red-200 rounded-lg p-4">
+        <div className="bg-red-50 border border-red-200 rounded-lg p-4" role="alert">
           <div className="flex items-start gap-3">
-            <span className="text-red-500 text-xl">⚠️</span>
+            <span className="text-red-500 text-xl" aria-hidden="true">
+              ⚠️
+            </span>
             <div>
               <h4 className="font-semibold text-red-900 mb-1">Eroare</h4>
               <p className="text-sm text-red-700">{serverError}</p>
@@ -177,8 +185,12 @@ export function DoctorVerificationForm() {
       {/* Document Upload */}
       <div>
         <div className="flex items-center justify-between mb-3">
-          <label className="block text-sm font-medium text-gray-700">
+          <label className="flex items-center gap-2 text-sm font-medium text-gray-700">
             Documente de verificare <span className="text-red-500">*</span>
+            <InfoTooltip
+              content="Încarcă documentele tale profesionale pentru verificare. Documentele verificate îți vor oferi badge-ul de 'Verificat' și vor crește încrederea părinților. Verificarea durează 2-3 zile lucrătoare."
+              size="sm"
+            />
           </label>
           <span className="text-xs text-gray-500">
             {documentUrls.length}/10 documente (minim 4 obligatorii)
@@ -194,13 +206,13 @@ export function DoctorVerificationForm() {
             {documentUrls.map((url, index) => (
               <div
                 key={index}
-                className="flex items-center justify-between p-3 border border-gray-200 rounded-lg bg-gray-50 group"
+                className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2 sm:gap-0 p-3 border border-gray-200 rounded-lg bg-gray-50 group"
               >
-                <div className="flex items-center gap-3 flex-1 min-w-0">
+                <div className="flex items-center gap-3 flex-1 min-w-0 w-full sm:w-auto">
                   {getFileIcon(url)}
                   <div className="flex-1 min-w-0">
                     <p className="text-sm font-medium text-gray-900 truncate">{getFileName(url)}</p>
-                    <p className="text-xs text-gray-500 truncate">{url}</p>
+                    <p className="text-xs text-gray-500 truncate hidden sm:block">{url}</p>
                   </div>
                   {uploadingDocument === index && (
                     <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-[#00BBAE]"></div>
@@ -270,59 +282,50 @@ export function DoctorVerificationForm() {
       </div>
 
       {/* Info box */}
-      <div className="bg-[#EBFFFE] border border-[#00BBAE]/20 rounded-xl p-6">
-        <div className="flex items-start gap-3">
-          <span className="text-2xl">ℹ️</span>
-          <div>
-            <h3 className="font-semibold text-gray-900 mb-2">
-              Ce documente ai nevoie pentru verificare?
-            </h3>
-            <p className="text-sm text-gray-700 mb-3">
-              Pentru a obține badge-ul de &apos;Verificat&apos;, încarcă cel puțin 4 documente
-              obligatorii:
-            </p>
-            <ul className="text-sm text-gray-700 space-y-2 list-none">
-              <li className="flex items-start gap-2">
-                <span className="text-red-500 font-semibold">*</span>
-                <span>
-                  <strong>Diplomă de medic</strong> - Document oficial care confirmă calificarea de
-                  medic
-                </span>
-              </li>
-              <li className="flex items-start gap-2">
-                <span className="text-red-500 font-semibold">*</span>
-                <span>
-                  <strong>Certificat de specialist</strong> - Certificat care confirmă specializarea
-                  ta
-                </span>
-              </li>
-              <li className="flex items-start gap-2">
-                <span className="text-red-500 font-semibold">*</span>
-                <span>
-                  <strong>Licență de liberă practică</strong> - Autorizație pentru practica medicală
-                </span>
-              </li>
-              <li className="flex items-start gap-2">
-                <span className="text-red-500 font-semibold">*</span>
-                <span>
-                  <strong>Certificat Colegiul Medicilor din România</strong> - Membru activ al CMR
-                </span>
-              </li>
-              <li className="flex items-start gap-2">
-                <span className="text-gray-400 font-semibold">○</span>
-                <span>
-                  <strong>Asigurare malpraxis</strong> (opțional) - Poliță de asigurare pentru
-                  răspundere profesională
-                </span>
-              </li>
-            </ul>
-            <p className="text-sm text-gray-700 mt-4">
-              ⏱️ <strong>Verificare:</strong> 2-3 zile lucrătoare. Documentele vor fi revizuite de
-              echipa Yuvoo pentru a verifica autenticitatea și conformitatea.
-            </p>
-          </div>
-        </div>
-      </div>
+      <InfoBox title="Ce documente ai nevoie pentru verificare?" icon="ℹ️">
+        <p className="text-sm text-gray-700 mb-3">
+          Pentru a obține badge-ul de &apos;Verificat&apos;, încarcă cel puțin 4 documente
+          obligatorii:
+        </p>
+        <ul className="text-sm text-gray-700 space-y-2 list-none">
+          <li className="flex items-start gap-2">
+            <span className="text-red-500 font-semibold">*</span>
+            <span>
+              <strong>Diplomă de medic</strong> - Document oficial care confirmă calificarea de
+              medic
+            </span>
+          </li>
+          <li className="flex items-start gap-2">
+            <span className="text-red-500 font-semibold">*</span>
+            <span>
+              <strong>Certificat de specialist</strong> - Certificat care confirmă specializarea ta
+            </span>
+          </li>
+          <li className="flex items-start gap-2">
+            <span className="text-red-500 font-semibold">*</span>
+            <span>
+              <strong>Licență de liberă practică</strong> - Autorizație pentru practica medicală
+            </span>
+          </li>
+          <li className="flex items-start gap-2">
+            <span className="text-red-500 font-semibold">*</span>
+            <span>
+              <strong>Certificat Colegiul Medicilor din România</strong> - Membru activ al CMR
+            </span>
+          </li>
+          <li className="flex items-start gap-2">
+            <span className="text-gray-400 font-semibold">○</span>
+            <span>
+              <strong>Asigurare malpraxis</strong> (opțional) - Poliță de asigurare pentru
+              răspundere profesională
+            </span>
+          </li>
+        </ul>
+        <p className="text-sm text-gray-700 mt-4">
+          ⏱️ <strong>Verificare:</strong> 2-3 zile lucrătoare. Documentele vor fi revizuite de
+          echipa Yuvoo pentru a verifica autenticitatea și conformitatea.
+        </p>
+      </InfoBox>
 
       {/* Navigation */}
       <div className="pt-6 border-t border-gray-200 space-y-4">

@@ -31,6 +31,8 @@ import {
 import { routes } from "@/lib/routes";
 import { normalizePhoneNumber } from "@/lib/utils";
 import { OnboardingNavigation } from "./OnboardingNavigation";
+import { InfoTooltip } from "@/components/shared/InfoTooltip";
+import { ServerErrorAlert } from "./components/ServerErrorAlert";
 
 // Romanian cities (major cities)
 const ROMANIAN_CITIES = [
@@ -115,13 +117,9 @@ export function DoctorLocationContactForm() {
   };
 
   return (
-    <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
+    <form onSubmit={handleSubmit(onSubmit)} className="space-y-6 px-4 sm:px-0">
       {/* Server error */}
-      {serverError && (
-        <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-lg">
-          {serverError}
-        </div>
-      )}
+      <ServerErrorAlert error={serverError} />
 
       {/* City */}
       <div>
@@ -182,8 +180,15 @@ export function DoctorLocationContactForm() {
 
       {/* Phone */}
       <div>
-        <label htmlFor="phone" className="block text-sm font-medium text-gray-700 mb-2">
+        <label
+          htmlFor="phone"
+          className="flex items-center gap-2 text-sm font-medium text-gray-700 mb-2"
+        >
           Telefon cabinet <span className="text-red-500">*</span>
+          <InfoTooltip
+            content="Numărul de telefon al cabinetului tău în format internațional (+40XXXXXXXXX). Acesta va fi afișat în profilul tău pentru ca părinții să te poată contacta."
+            size="sm"
+          />
         </label>
         <input
           id="phone"
@@ -200,8 +205,15 @@ export function DoctorLocationContactForm() {
 
       {/* Email */}
       <div>
-        <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-2">
+        <label
+          htmlFor="email"
+          className="flex items-center gap-2 text-sm font-medium text-gray-700 mb-2"
+        >
           Email profesional <span className="text-red-500">*</span>
+          <InfoTooltip
+            content="Adresa de email profesională a cabinetului. Părinții vor putea să te contacteze prin email pentru programări sau întrebări."
+            size="sm"
+          />
         </label>
         <input
           id="email"

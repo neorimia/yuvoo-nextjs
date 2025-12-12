@@ -115,7 +115,13 @@
     - Action buttons (Dashboard, View Doctors)
     - Auto-redirect after 5 seconds to dashboard
     - Server action marks onboarding as complete and updates all statuses
-  - Status: ✅ **COMPLETE** - All 8 steps implemented and functional
+  - Romanian Language Review ✅
+    - Reviewed all doctor onboarding form components for Romanian text consistency
+    - Checked all error messages and validation text
+    - Reviewed all page headers and descriptions
+    - Updated COPY_LIBRARY.md with comprehensive doctor onboarding copy
+    - Fixed any translation issues and ensured consistency
+  - Status: ✅ **COMPLETE** - All 8 steps implemented and functional, Romanian language review complete
 
 5. **Component Development**
    - Creating feature-specific components as needed
@@ -483,7 +489,8 @@ Current homepage structure (`src/app/(public)/page.tsx`):
 
 - **Created**: `docs/COPY_LIBRARY.md` - Comprehensive copy library
   - **Content**: Single source of truth for all user-facing text including CTAs, form microcopy, error messages, success messages, empty states, loading states, modal messages, toast notifications, quiz copy, club/doctor copy, navigation labels, trust messages, onboarding copy, search & filters, booking copy, profile & settings, help & support, legal & compliance, email templates, and usage guidelines
-  - **Status**: ✅ Complete - Complete reference for all Romanian language copy across the platform
+  - **Updated**: Added comprehensive Doctor Onboarding Copy section with all text from all 8 steps (Welcome, Basic Info, Bio & Experience, Location & Contact, Photo, Verification, Availability, Completion)
+  - **Status**: ✅ Complete - Complete reference for all Romanian language copy across the platform, including full doctor onboarding flow
 
 - **Updated**: `docs/COPYWRITING_GUIDE.md` - Comprehensive copywriting guide
   - **Content**: Brand essence, brand voice (70% warm & supportive, 30% expert & confident), writing principles (clarity, empathy, microcopy, trust building, positivity), language & style guidelines, writing structure, content types (UI, marketing, email, help, errors), writing templates, common mistakes, content checklist, and quick reference

@@ -17,13 +17,25 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import { useForm } from "react-hook-form";
+import { useForm, Controller } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { AlertCircle } from "lucide-react";
 import { createClubOnboarding } from "@/app/actions/onboarding";
 import { clubBasicInfoSchema, type ClubBasicInfoInput } from "@/lib/validations/club";
 import { routes } from "@/lib/routes";
 import { SPORT_TYPES } from "@/lib/utils/constants";
 import { OnboardingNavigation } from "./OnboardingNavigation";
+import { Alert, AlertDescription } from "@/components/UI/alert";
+import { Input } from "@/components/UI/input";
+import { Textarea } from "@/components/UI/textarea";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/UI/select";
+import { cn } from "@/lib/utils";
 
 // Romanian cities (major cities)
 const ROMANIAN_CITIES = [
@@ -67,6 +79,7 @@ export function ClubBasicInfoForm() {
   const {
     register,
     handleSubmit,
+    control,
     formState: { errors },
     watch,
   } = useForm<ClubBasicInfoInput>({
@@ -101,15 +114,10 @@ export function ClubBasicInfoForm() {
     <form id="club-basic-info-form" onSubmit={handleSubmit(onSubmit)} className="space-y-6">
       {/* Server error message */}
       {serverError && (
-        <div className="bg-red-50 border border-red-200 rounded-lg p-4">
-          <div className="flex items-start gap-3">
-            <span className="text-red-500 text-xl">⚠️</span>
-            <div>
-              <h4 className="font-semibold text-red-900 mb-1">Eroare</h4>
-              <p className="text-sm text-red-700">{serverError}</p>
-            </div>
-          </div>
-        </div>
+        <Alert variant="destructive">
+          <AlertCircle className="h-4 w-4" />
+          <AlertDescription>{serverError}</AlertDescription>
+        </Alert>
       )}
 
       {/* Club Name */}
@@ -117,24 +125,18 @@ export function ClubBasicInfoForm() {
         <label htmlFor="name" className="block text-sm font-medium text-gray-700 mb-2">
           Nume club <span className="text-red-500">*</span>
         </label>
-        <input
+        <Input
           id="name"
           type="text"
           {...register("name")}
           disabled={isLoading}
-          className={`
-            w-full px-4 py-3 border rounded-lg
-            focus:outline-none focus:ring-2 focus:ring-[#00BBAE] focus:border-transparent
-            transition-all duration-200
-            ${errors.name ? "border-red-500" : "border-gray-300"}
-            ${isLoading ? "bg-gray-100 cursor-not-allowed" : "bg-white"}
-          `}
+          className={cn("w-full h-11", errors.name && "border-destructive")}
           placeholder="ex. Fotbal Club Junior București"
           aria-invalid={errors.name ? "true" : "false"}
           aria-describedby={errors.name ? "name-error" : undefined}
         />
         {errors.name && (
-          <p id="name-error" className="mt-2 text-sm text-red-600">
+          <p id="name-error" className="mt-2 text-sm text-destructive">
             {errors.name.message}
           </p>
         )}
@@ -145,29 +147,31 @@ export function ClubBasicInfoForm() {
         <label htmlFor="sportType" className="block text-sm font-medium text-gray-700 mb-2">
           Sport principal <span className="text-red-500">*</span>
         </label>
-        <select
-          id="sportType"
-          {...register("sportType")}
-          disabled={isLoading}
-          className={`
-            w-full px-4 py-3 border rounded-lg
-            focus:outline-none focus:ring-2 focus:ring-[#00BBAE] focus:border-transparent
-            transition-all duration-200
-            ${errors.sportType ? "border-red-500" : "border-gray-300"}
-            ${isLoading ? "bg-gray-100 cursor-not-allowed" : "bg-white"}
-          `}
-          aria-invalid={errors.sportType ? "true" : "false"}
-          aria-describedby={errors.sportType ? "sportType-error" : undefined}
-        >
-          <option value="">Selectează sportul principal</option>
-          {SPORT_TYPES.map((sport) => (
-            <option key={sport} value={sport}>
-              {sport.charAt(0).toUpperCase() + sport.slice(1)}
-            </option>
-          ))}
-        </select>
+        <Controller
+          name="sportType"
+          control={control}
+          render={({ field }) => (
+            <Select value={field.value || ""} onValueChange={field.onChange} disabled={isLoading}>
+              <SelectTrigger
+                id="sportType"
+                className={cn("w-full h-11", errors.sportType && "border-destructive")}
+                aria-invalid={errors.sportType ? "true" : "false"}
+                aria-describedby={errors.sportType ? "sportType-error" : undefined}
+              >
+                <SelectValue placeholder="Selectează sportul principal" />
+              </SelectTrigger>
+              <SelectContent>
+                {SPORT_TYPES.map((sport) => (
+                  <SelectItem key={sport} value={sport}>
+                    {sport.charAt(0).toUpperCase() + sport.slice(1)}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+          )}
+        />
         {errors.sportType && (
-          <p id="sportType-error" className="mt-2 text-sm text-red-600">
+          <p id="sportType-error" className="mt-2 text-sm text-destructive">
             {errors.sportType.message}
           </p>
         )}
@@ -178,20 +182,16 @@ export function ClubBasicInfoForm() {
         <label htmlFor="description" className="block text-sm font-medium text-gray-700 mb-2">
           Descriere club <span className="text-red-500">*</span>
         </label>
-        <textarea
+        <Textarea
           id="description"
           {...register("description")}
           disabled={isLoading}
           rows={6}
           maxLength={1000}
-          className={`
-            w-full px-4 py-3 border rounded-lg
-            focus:outline-none focus:ring-2 focus:ring-[#00BBAE] focus:border-transparent
-            transition-all duration-200
-            resize-y
-            ${errors.description ? "border-red-500" : "border-gray-300"}
-            ${isLoading ? "bg-gray-100 cursor-not-allowed" : "bg-white"}
-          `}
+          className={cn(
+            "w-full min-h-[120px] resize-y",
+            errors.description && "border-destructive"
+          )}
           placeholder="Descrie clubul tău, programele oferite, facilitățile și experiența antrenorilor. Minim 50 caractere."
           aria-invalid={errors.description ? "true" : "false"}
           aria-describedby={errors.description ? "description-error" : "description-help"}
@@ -199,7 +199,7 @@ export function ClubBasicInfoForm() {
         <div className="mt-2 flex items-center justify-between">
           <div>
             {errors.description ? (
-              <p id="description-error" className="text-sm text-red-600">
+              <p id="description-error" className="text-sm text-destructive">
                 {errors.description.message}
               </p>
             ) : (
@@ -217,29 +217,34 @@ export function ClubBasicInfoForm() {
         <label htmlFor="city" className="block text-sm font-medium text-gray-700 mb-2">
           Oraș <span className="text-red-500">*</span>
         </label>
-        <select
-          id="city"
-          {...register("city")}
-          disabled={isLoading}
-          className={`
-            w-full px-4 py-3 border rounded-lg
-            focus:outline-none focus:ring-2 focus:ring-[#00BBAE] focus:border-transparent
-            transition-all duration-200
-            ${errors.city ? "border-red-500" : "border-gray-300"}
-            ${isLoading ? "bg-gray-100 cursor-not-allowed" : "bg-white"}
-          `}
-          aria-invalid={errors.city ? "true" : "false"}
-          aria-describedby={errors.city ? "city-error" : undefined}
-        >
-          <option value="">Selectează orașul</option>
-          {ROMANIAN_CITIES.map((city) => (
-            <option key={city} value={city}>
-              {city}
-            </option>
-          ))}
-        </select>
+        <Controller
+          name="city"
+          control={control}
+          render={({ field }) => (
+            <Select value={field.value || ""} onValueChange={field.onChange} disabled={isLoading}>
+              <SelectTrigger
+                id="city"
+                className={cn(
+                  "w-full h-11 border-border rounded-md focus:ring-0 focus:ring-offset-0",
+                  errors.city && "border-destructive"
+                )}
+                aria-invalid={errors.city ? "true" : "false"}
+                aria-describedby={errors.city ? "city-error" : undefined}
+              >
+                <SelectValue placeholder="Selectează orașul" />
+              </SelectTrigger>
+              <SelectContent>
+                {ROMANIAN_CITIES.map((city) => (
+                  <SelectItem key={city} value={city}>
+                    {city}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+          )}
+        />
         {errors.city && (
-          <p id="city-error" className="mt-2 text-sm text-red-600">
+          <p id="city-error" className="mt-2 text-sm text-destructive">
             {errors.city.message}
           </p>
         )}
@@ -250,24 +255,18 @@ export function ClubBasicInfoForm() {
         <label htmlFor="district" className="block text-sm font-medium text-gray-700 mb-2">
           District/Sector <span className="text-gray-500 text-xs">(opțional)</span>
         </label>
-        <input
+        <Input
           id="district"
           type="text"
           {...register("district")}
           disabled={isLoading}
-          className={`
-            w-full px-4 py-3 border rounded-lg
-            focus:outline-none focus:ring-2 focus:ring-[#00BBAE] focus:border-transparent
-            transition-all duration-200
-            ${errors.district ? "border-red-500" : "border-gray-300"}
-            ${isLoading ? "bg-gray-100 cursor-not-allowed" : "bg-white"}
-          `}
+          className={cn("w-full h-11", errors.district && "border-destructive")}
           placeholder="ex. Sector 1, Sector 2, etc."
           aria-invalid={errors.district ? "true" : "false"}
           aria-describedby={errors.district ? "district-error" : undefined}
         />
         {errors.district && (
-          <p id="district-error" className="mt-2 text-sm text-red-600">
+          <p id="district-error" className="mt-2 text-sm text-destructive">
             {errors.district.message}
           </p>
         )}
@@ -278,24 +277,18 @@ export function ClubBasicInfoForm() {
         <label htmlFor="address" className="block text-sm font-medium text-gray-700 mb-2">
           Adresă completă <span className="text-red-500">*</span>
         </label>
-        <input
+        <Input
           id="address"
           type="text"
           {...register("address")}
           disabled={isLoading}
-          className={`
-            w-full px-4 py-3 border rounded-lg
-            focus:outline-none focus:ring-2 focus:ring-[#00BBAE] focus:border-transparent
-            transition-all duration-200
-            ${errors.address ? "border-red-500" : "border-gray-300"}
-            ${isLoading ? "bg-gray-100 cursor-not-allowed" : "bg-white"}
-          `}
+          className={cn("w-full h-11", errors.address && "border-destructive")}
           placeholder="ex. Strada Sportului 10, Sector 1"
           aria-invalid={errors.address ? "true" : "false"}
           aria-describedby={errors.address ? "address-error" : undefined}
         />
         {errors.address && (
-          <p id="address-error" className="mt-2 text-sm text-red-600">
+          <p id="address-error" className="mt-2 text-sm text-destructive">
             {errors.address.message}
           </p>
         )}
@@ -322,7 +315,7 @@ export function ClubBasicInfoForm() {
       </div>
 
       {/* Navigation */}
-      <div className="pt-6 border-t border-gray-200">
+      <div className="mt-6 border-t border-gray-200">
         <OnboardingNavigation
           backHref={routes.onboarding.club.welcome}
           nextHref={null} // null means submit button

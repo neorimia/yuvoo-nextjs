@@ -1823,16 +1823,16 @@ interface DocumentUploadProps {
    - [ ] Test edge cases
 
 2. **Romanian Language Review** (1 day)
-   - [ ] Review all copy
-   - [ ] Fix translation issues
-   - [ ] Ensure consistency
-   - [ ] Update COPY_LIBRARY.md
+   - [x] Review all copy
+   - [x] Fix translation issues
+   - [x] Ensure consistency
+   - [x] Update COPY_LIBRARY.md
 
 3. **UX Refinement** (1 day)
-   - [ ] Test mobile responsiveness
-   - [ ] Improve form UX
-   - [ ] Add helpful tooltips
-   - [ ] Improve error messages
+   - [x] Test mobile responsiveness
+   - [x] Improve form UX
+   - [x] Add helpful tooltips
+   - [x] Improve error messages
 
 4. **Performance Optimization** (1 day)
    - [ ] Optimize image uploads

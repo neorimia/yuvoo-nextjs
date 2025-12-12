@@ -23,6 +23,8 @@ import { createDoctorOnboarding } from "@/app/actions/onboarding";
 import { doctorBasicInfoSchema, type DoctorBasicInfoInput } from "@/lib/validations/doctor";
 import { routes } from "@/lib/routes";
 import { OnboardingNavigation } from "./OnboardingNavigation";
+import { InfoTooltip } from "@/components/shared/InfoTooltip";
+import { ServerErrorAlert } from "./components/ServerErrorAlert";
 
 // Doctor specialties (matching validation enum)
 const DOCTOR_SPECIALTIES = [
@@ -122,17 +124,16 @@ export function DoctorBasicInfoForm() {
   };
 
   return (
-    <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
+    <form onSubmit={handleSubmit(onSubmit)} className="space-y-6 px-4 sm:px-0">
       {/* Server error */}
-      {serverError && (
-        <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-lg">
-          {serverError}
-        </div>
-      )}
+      <ServerErrorAlert error={serverError} />
 
       {/* First Name */}
       <div>
-        <label htmlFor="firstName" className="block text-sm font-medium text-gray-700 mb-2">
+        <label
+          htmlFor="firstName"
+          className="flex items-center gap-2 text-sm font-medium text-gray-700 mb-2"
+        >
           Prenume <span className="text-red-500">*</span>
         </label>
         <input
@@ -151,7 +152,10 @@ export function DoctorBasicInfoForm() {
 
       {/* Last Name */}
       <div>
-        <label htmlFor="lastName" className="block text-sm font-medium text-gray-700 mb-2">
+        <label
+          htmlFor="lastName"
+          className="flex items-center gap-2 text-sm font-medium text-gray-700 mb-2"
+        >
           Nume <span className="text-red-500">*</span>
         </label>
         <input
@@ -168,8 +172,15 @@ export function DoctorBasicInfoForm() {
 
       {/* Title (Optional) */}
       <div>
-        <label htmlFor="title" className="block text-sm font-medium text-gray-700 mb-2">
+        <label
+          htmlFor="title"
+          className="flex items-center gap-2 text-sm font-medium text-gray-700 mb-2"
+        >
           Titlu profesional (opțional)
+          <InfoTooltip
+            content="Exemplu: Dr., Conf. Dr., Prof. Dr. Acest titlu va apărea în profilul tău profesional."
+            size="sm"
+          />
         </label>
         <input
           id="title"
@@ -185,8 +196,15 @@ export function DoctorBasicInfoForm() {
 
       {/* Specialty */}
       <div>
-        <label htmlFor="specialty" className="block text-sm font-medium text-gray-700 mb-2">
+        <label
+          htmlFor="specialty"
+          className="flex items-center gap-2 text-sm font-medium text-gray-700 mb-2"
+        >
           Specializare <span className="text-red-500">*</span>
+          <InfoTooltip
+            content="Selectează specialitatea ta principală. Aceasta va fi afișată în profilul tău și va ajuta părinții să te găsească."
+            size="sm"
+          />
         </label>
         <select
           id="specialty"
@@ -209,8 +227,12 @@ export function DoctorBasicInfoForm() {
 
       {/* Credentials */}
       <div>
-        <label className="block text-sm font-medium text-gray-700 mb-2">
+        <label className="flex items-center gap-2 text-sm font-medium text-gray-700 mb-2">
           Credențiale <span className="text-red-500">*</span>
+          <InfoTooltip
+            content="Adaugă credențialele tale profesionale (ex: MD, Specialist, Primar, Board Certified, CMR). Acestea vor crește încrederea părinților în competența ta."
+            size="sm"
+          />
         </label>
         <p className="text-sm text-gray-500 mb-3">
           Adaugă cel puțin o credențială (ex: MD, Specialist, etc.)
@@ -219,7 +241,7 @@ export function DoctorBasicInfoForm() {
         {/* Common credentials quick add */}
         <div className="mb-3">
           <p className="text-xs text-gray-500 mb-2">Adaugă rapid:</p>
-          <div className="flex flex-wrap gap-2">
+          <div className="flex flex-wrap gap-2 sm:gap-2">
             {COMMON_CREDENTIALS.map((cred) => (
               <button
                 key={cred}
@@ -239,7 +261,7 @@ export function DoctorBasicInfoForm() {
         </div>
 
         {/* Custom credential input */}
-        <div className="flex gap-2 mb-3">
+        <div className="flex flex-col sm:flex-row gap-2 mb-3">
           <input
             type="text"
             value={newCredential}
@@ -256,7 +278,7 @@ export function DoctorBasicInfoForm() {
           <button
             type="button"
             onClick={addCredential}
-            className="px-4 py-2 bg-[#00BBAE] text-white rounded-lg hover:bg-[#00998d] transition-colors"
+            className="px-4 py-2 bg-[#00BBAE] text-white rounded-lg hover:bg-[#00998d] transition-colors whitespace-nowrap"
           >
             Adaugă
           </button>

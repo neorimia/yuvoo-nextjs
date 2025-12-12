@@ -25,6 +25,7 @@ import { uploadImageAction, deleteImageAction } from "@/app/actions/uploads";
 import { doctorPhotoSchema, type DoctorPhotoInput } from "@/lib/validations/doctor";
 import { routes } from "@/lib/routes";
 import { OnboardingNavigation } from "./OnboardingNavigation";
+import { ServerErrorAlert, InfoBox } from "./components";
 import { X, Upload } from "lucide-react";
 import Image from "next/image";
 
@@ -129,13 +130,9 @@ export function DoctorPhotoForm() {
   };
 
   return (
-    <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
+    <form onSubmit={handleSubmit(onSubmit)} className="space-y-6 px-4 sm:px-0">
       {/* Server error */}
-      {serverError && (
-        <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-lg">
-          {serverError}
-        </div>
-      )}
+      <ServerErrorAlert error={serverError} />
 
       {/* Photo Upload Section */}
       <div>
@@ -147,14 +144,14 @@ export function DoctorPhotoForm() {
         </p>
 
         {/* Recommendations */}
-        <div className="bg-[#EBFFFE] rounded-lg p-4 mb-4">
+        <InfoBox icon="💡" className="mb-4">
           <p className="text-sm font-medium text-gray-900 mb-2">Recomandări:</p>
           <ul className="text-sm text-gray-700 space-y-1">
             <li>• Fundal profesional</li>
             <li>• Îmbrăcăminte profesională</li>
             <li>• Imagine clară, frontală</li>
           </ul>
-        </div>
+        </InfoBox>
 
         {/* Photo Preview or Upload Area */}
         {photoUrl ? (

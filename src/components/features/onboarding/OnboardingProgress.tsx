@@ -15,6 +15,8 @@
 "use client";
 
 import { CheckCircle2 } from "lucide-react";
+import { Progress } from "@/components/UI/progress";
+import { cn } from "@/lib/utils";
 
 export interface OnboardingStep {
   /** Step number (1-based) */
@@ -39,21 +41,24 @@ export function OnboardingProgress({
   steps,
   className = "",
 }: OnboardingProgressProps) {
+  const progressPercentage = (currentStep / steps.length) * 100;
+
   return (
-    <div className={`w-full ${className}`} role="navigation" aria-label="Progres onboarding">
+    <div className={cn("w-full", className)} role="navigation" aria-label="Progres onboarding">
       {/* Progress bar - visual indicator */}
-      <div className="mb-8">
+      <div className="my-8">
         {/* Desktop/Tablet: Horizontal stepper */}
         <div className="hidden md:block">
           <div className="relative">
             {/* Background line */}
-            <div className="absolute top-5 left-0 right-0 h-0.5 bg-gray-200" aria-hidden="true" />
+            <div className="absolute top-5 left-0 right-0 h-0.5 bg-muted" aria-hidden="true" />
 
-            {/* Progress line */}
+            {/* Progress line - extends from step 1 to current step */}
             <div
-              className="absolute top-5 left-0 h-0.5 bg-[#00BBAE] transition-all duration-500 ease-in-out"
+              className="absolute top-5 left-0 h-0.5 bg-primary transition-all duration-500 ease-in-out"
               style={{
-                width: `${((currentStep - 1) / (steps.length - 1)) * 100}%`,
+                width:
+                  currentStep === 1 ? "0%" : `${((currentStep - 1) / (steps.length - 1)) * 100}%`,
               }}
               aria-hidden="true"
             />
@@ -63,45 +68,55 @@ export function OnboardingProgress({
               {steps.map((step) => {
                 const isCompleted = step.number < currentStep;
                 const isCurrent = step.number === currentStep;
-                const _isPending = step.number > currentStep;
+                const isPending = step.number > currentStep;
 
                 return (
-                  <div key={step.number} className="flex flex-col items-center">
+                  <div
+                    key={step.number}
+                    className="flex flex-col items-center flex-1 max-w-[150px]"
+                  >
                     {/* Step circle */}
                     <div
-                      className={`
-                        w-10 h-10 rounded-full flex items-center justify-center
-                        transition-all duration-300 ease-in-out
-                        ${
-                          isCompleted
-                            ? "bg-[#00BBAE] text-white shadow-md"
-                            : isCurrent
-                              ? "bg-white border-4 border-[#00BBAE] text-[#00BBAE] shadow-lg"
-                              : "bg-white border-2 border-gray-300 text-gray-400"
-                        }
-                      `}
+                      className={cn(
+                        "w-10 h-10 rounded-full flex items-center justify-center relative z-10",
+                        "transition-all duration-300 ease-in-out",
+                        isCompleted &&
+                          "bg-primary text-white shadow-md shadow-primary/20 border-2 border-primary",
+                        isCurrent &&
+                          "bg-white border-4 border-primary text-primary shadow-lg shadow-primary/10",
+                        isPending && "bg-white border-2 border-muted text-muted-foreground"
+                      )}
                       aria-current={isCurrent ? "step" : undefined}
                       aria-label={`Pas ${step.number}: ${step.label}`}
                     >
                       {isCompleted ? (
-                        <CheckCircle2 className="w-5 h-5" />
+                        <CheckCircle2 className="w-5 h-5 stroke-[2.5]" aria-hidden="true" />
                       ) : (
-                        <span className="font-semibold">{step.number}</span>
+                        <span className="font-semibold text-sm leading-none">{step.number}</span>
                       )}
                     </div>
 
                     {/* Step label */}
-                    <div className="mt-3 text-center max-w-[120px]">
+                    <div className="mt-3 text-center w-full px-2">
                       <p
-                        className={`
-                          text-sm font-medium
-                          ${isCurrent ? "text-[#00BBAE]" : isCompleted ? "text-gray-700" : "text-gray-400"}
-                        `}
+                        className={cn(
+                          "text-sm font-semibold leading-tight",
+                          isCurrent && "text-primary",
+                          isCompleted && "text-foreground",
+                          isPending && "text-muted-foreground"
+                        )}
                       >
                         {step.label}
                       </p>
                       {step.description && (
-                        <p className="text-xs text-gray-500 mt-1">{step.description}</p>
+                        <p
+                          className={cn(
+                            "text-xs mt-1 leading-relaxed",
+                            isCurrent ? "text-primary/80" : "text-muted-foreground"
+                          )}
+                        >
+                          {step.description}
+                        </p>
                       )}
                     </div>
                   </div>
@@ -114,36 +129,28 @@ export function OnboardingProgress({
         {/* Mobile: Compact vertical indicator */}
         <div className="block md:hidden">
           <div className="flex items-center justify-between mb-4">
-            <p className="text-sm font-medium text-gray-700">
+            <p className="text-sm font-semibold text-foreground">
               Pas {currentStep} din {steps.length}
             </p>
-            <p className="text-sm text-gray-500">
-              {Math.round((currentStep / steps.length) * 100)}% complet
+            <p className="text-sm text-muted-foreground">
+              {Math.round(progressPercentage)}% complet
             </p>
           </div>
 
-          {/* Progress bar */}
-          <div className="w-full h-2 bg-gray-200 rounded-full overflow-hidden">
-            <div
-              className="h-full bg-[#00BBAE] transition-all duration-500 ease-in-out"
-              style={{
-                width: `${(currentStep / steps.length) * 100}%`,
-              }}
-              role="progressbar"
-              aria-valuenow={currentStep}
-              aria-valuemin={1}
-              aria-valuemax={steps.length}
-              aria-label={`Progres: ${currentStep} din ${steps.length} pași completați`}
-            />
-          </div>
+          {/* Progress bar using shadcn Progress component */}
+          <Progress
+            value={progressPercentage}
+            className="h-2 mb-4"
+            aria-label={`Progres: ${currentStep} din ${steps.length} pași completați`}
+          />
 
           {/* Current step label */}
           <div className="mt-4">
-            <p className="text-base font-semibold text-[#00BBAE]">
-              {steps[currentStep - 1]?.label}
-            </p>
+            <p className="text-base font-semibold text-primary">{steps[currentStep - 1]?.label}</p>
             {steps[currentStep - 1]?.description && (
-              <p className="text-sm text-gray-600 mt-1">{steps[currentStep - 1].description}</p>
+              <p className="text-sm text-muted-foreground mt-1.5 leading-relaxed">
+                {steps[currentStep - 1].description}
+              </p>
             )}
           </div>
         </div>

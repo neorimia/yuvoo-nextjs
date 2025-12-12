@@ -681,6 +681,175 @@ This document serves as the **single source of truth** for all user-facing text 
 - "Explorează cluburile"
 - "Găsește clubul potrivit"
 
+### Doctor Onboarding Copy
+
+**Welcome Page**:
+
+- "Bună, [Nume]! 👋"
+- "Bun venit pe platforma Yuvoo pentru specialiști pediatri! În următorii pași vei crea profilul tău profesional."
+- "Ce vei face în următorii pași:"
+- "Informații profesionale"
+- "Specializare și experiență"
+- "Cabinet și program"
+- "Documente de verificare"
+- "⏱️ Durată estimată: 10-15 minute"
+- "Începe"
+
+**Step 1 - Basic Info**:
+
+- "Informații profesionale 👨‍⚕️"
+- "Spune-ne despre tine și specialitatea ta pentru a crea un profil complet și profesional."
+- "Prenume \*"
+- "Nume \*"
+- "Titlu profesional (opțional)"
+- "Specializare \*"
+- "Selectează specializarea"
+- "Credențiale \*"
+- "Adaugă cel puțin o credențială (ex: MD, Specialist, etc.)"
+- "Adaugă rapid:"
+- "Adaugă credențială personalizată"
+- "Adaugă"
+- "Șterge"
+- "Continuă"
+
+**Step 2 - Bio & Experience**:
+
+- "Bio profesional și experiență 📝"
+- "Descrie experiența și abordarea ta profesională pentru a crea un profil complet și atractiv."
+- "Bio profesional \*"
+- "Descrie experiența ta în lucrul cu copiii și sportul pediatric"
+- "Minim 100 caractere, maxim 2000 caractere"
+- "Ani de experiență \*"
+- "Specializări secundare (opțional)"
+- "Selectează specializări suplimentare dacă ai experiență în alte domenii"
+- "Limbi vorbite \*"
+- "Selectează cel puțin o limbă în care poți comunica cu părinții"
+- "Adaugă altă limbă"
+- "Continuă"
+
+**Step 3 - Location & Contact**:
+
+- "Cabinet și contact 📍"
+- "Adaugă adresa cabinetului și informațiile de contact pentru ca părinții să te poată găsi."
+- "Oraș \*"
+- "Selectează orașul"
+- "District/Sector (opțional)"
+- "Adresă cabinet \*"
+- "Minim 10 caractere"
+- "Telefon cabinet \*"
+- "Format: +40XXXXXXXXX (ex: +40721234567)"
+- "Email profesional \*"
+- "Website (opțional)"
+- "Continuă"
+
+**Step 4 - Photo**:
+
+- "Fotografie profesională 📸"
+- "Încarcă o fotografie profesională pentru profilul tău (opțional - poți adăuga mai târziu)"
+- "Fotografie profesională (opțional)"
+- "Încarcă o fotografie profesională pentru profilul tău"
+- "Recomandări:"
+- "Fundal profesional"
+- "Îmbrăcăminte profesională"
+- "Imagine clară, frontală"
+- "Click pentru a încărca fotografie"
+- "Format acceptat: JPG, PNG, WebP / Mărime max: 5MB"
+- "Se încarcă..."
+- "Șterge fotografia"
+- "Continuă"
+- "Sari acest pas - adaug mai târziu"
+
+**Step 5 - Verification**:
+
+- "Documente de verificare 📄"
+- "Încarcă documentele profesionale pentru a obține badge-ul de 'Verificat' și a crește încrederea părinților."
+- "Documente de verificare \*"
+- "X/10 documente (minim 4 obligatorii)"
+- "Încarcă cel puțin 4 documente obligatorii. Acceptă PDF, JPG, PNG (maxim 10MB fiecare)."
+- "Se încarcă..."
+- "Adaugă documente de verificare"
+- "PDF, JPG, PNG (maxim X restante)"
+- "Ce documente ai nevoie pentru verificare?"
+- "Pentru a obține badge-ul de 'Verificat', încarcă cel puțin 4 documente obligatorii:"
+- "Diplomă de medic - Document oficial care confirmă calificarea de medic"
+- "Certificat de specialist - Certificat care confirmă specializarea ta"
+- "Licență de liberă practică - Autorizație pentru practica medicală"
+- "Certificat Colegiul Medicilor din România - Membru activ al CMR"
+- "Asigurare malpraxis (opțional) - Poliță de asigurare pentru răspundere profesională"
+- "⏱️ Verificare: 2-3 zile lucrătoare. Documentele vor fi revizuite de echipa Yuvoo pentru a verifica autenticitatea și conformitatea."
+- "Trimite spre verificare"
+- "Sari acest pas - verific mai târziu"
+
+**Step 6 - Availability**:
+
+- "Disponibilitate consultații 📅"
+- "Configurează disponibilitatea ta pentru consultații și programul de lucru (opțional)"
+- "Accept pacienți noi"
+- "Activează această opțiune dacă accepți în prezent pacienți noi în cabinetul tău."
+- "Consultații online disponibile"
+- "Activează această opțiune dacă oferi consultații online (video sau telefon)."
+- "Program consultații (opțional)"
+- "Adaugă interval"
+- "Nu ai adăugat niciun interval de consultații."
+- "Apasă pe \"Adaugă interval\" pentru a adăuga programul tău de consultații. Acest câmp este opțional."
+- "Ziua"
+- "Selectează ziua"
+- "Ora început"
+- "Ora sfârșit"
+- "Șterge interval"
+- "De ce avem nevoie de aceste informații?"
+- "Informațiile despre disponibilitatea ta vor fi afișate în profilul tău profesional, astfel încât părinții să știe dacă accepți pacienți noi și când ești disponibil pentru consultații. Poți actualiza aceste detalii oricând din dashboard-ul tău."
+- "Continuă"
+
+**Step 7 - Completion**:
+
+- "✅ Profil complet!"
+- "Felicitări, [Dr. Nume]!"
+- "Profilul tău profesional a fost creat cu succes și trimis spre verificare."
+- "Profilul profesional a fost creat"
+- "Toate informațiile introduse au fost salvate și sunt disponibile în profilul tău profesional."
+- "Documentele au fost încărcate"
+- "Documentele de verificare au fost primite și vor fi revizuite de echipa Yuvoo."
+- "Procesul de verificare"
+- "Verificarea documentelor poate dura 2-3 zile lucrătoare. Vei primi o notificare prin email când procesul este finalizat. După verificare, profilul tău va primi badge-ul de verificare și va fi vizibil în directorul de doctori."
+- "Ce urmează?"
+- "Verificare documente (2-3 zile) - Echipa Yuvoo va revizui documentele încărcate"
+- "Notificare email la aprobare - Vei primi un email când profilul este verificat și aprobat"
+- "Profil vizibil pe platformă - După aprobare, profilul tău va apărea în directorul de doctori"
+- "Ce poți face acum?"
+- "Gestionează consultații - Vezi și gestionează solicitările de consultații de la părinți"
+- "Editează profilul profesional - Actualizează informațiile despre specialitate, experiență și disponibilitate"
+- "Vezi solicitări părinți - Părinții pot solicita consultații prin platformă"
+- "Configurează programul - Actualizează disponibilitatea și programul de consultații"
+- "Mergi la Dashboard"
+- "Vezi Doctori"
+- "Vei fi redirecționat automat la dashboard în câteva secunde..."
+
+**Error Messages**:
+
+- "A apărut o eroare neașteptată. Te rugăm să încerci din nou."
+- "Eroare la încărcarea fotografiei"
+- "Eroare la ștergerea fotografiei"
+- "Eroare la încărcarea documentului X"
+- "Datele introduse nu sunt valide."
+
+**Specialty Labels**:
+
+- "Ortopedie pediatrică"
+- "Nutriție pediatrică"
+- "Psihologie sportivă"
+- "Medicină sportivă pediatrică"
+
+**Days of Week**:
+
+- "Luni"
+- "Marți"
+- "Miercuri"
+- "Joi"
+- "Vineri"
+- "Sâmbătă"
+- "Duminică"
+
 ---
 
 ## Search & Filters

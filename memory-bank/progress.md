@@ -312,6 +312,11 @@
 - [x] Create copy library documentation ✅
   - [x] Created `docs/COPY_LIBRARY.md` with comprehensive copy library ✅
   - [x] Documented all user-facing text including CTAs, form microcopy, error messages, success messages, empty states, loading states, modal messages, toast notifications, quiz copy, club/doctor copy, navigation labels, trust messages, onboarding copy, search & filters, booking copy, profile & settings, help & support, legal & compliance, email templates, and usage guidelines ✅
+  - [x] Added comprehensive Doctor Onboarding Copy section to COPY_LIBRARY.md ✅
+  - [x] Documented all Romanian text from all 8 doctor onboarding steps ✅
+  - [x] Reviewed all doctor onboarding components for Romanian language consistency ✅
+  - [x] Verified all error messages and validation text are in Romanian ✅
+  - [x] Ensured consistent terminology across all doctor onboarding steps ✅
 - [x] Update copywriting guide documentation ✅
   - [x] Enhanced `docs/COPYWRITING_GUIDE.md` with comprehensive copywriting guide ✅
   - [x] Documented brand essence, brand voice (70/30 split), writing principles (clarity, empathy, microcopy, trust building, positivity), language & style guidelines, writing structure, content types (UI, marketing, email, help, errors), writing templates, common mistakes, content checklist, and quick reference ✅
@@ -739,6 +744,12 @@
       - [x] Action buttons (Dashboard, View Doctors) ✅
       - [x] Auto-redirect after 5 seconds ✅
       - [x] Server action marks onboarding as complete and updates all statuses ✅
+    - [x] Romanian Language Review ✅
+      - [x] Reviewed all doctor onboarding form components for Romanian text consistency ✅
+      - [x] Checked all error messages and validation text ✅
+      - [x] Reviewed all page headers and descriptions ✅
+      - [x] Updated COPY_LIBRARY.md with comprehensive doctor onboarding copy ✅
+      - [x] Fixed any translation issues and ensured consistency ✅
 - [ ] Localize all UI text to Romanian
 
 ### Week 5-8: Quiz System

@@ -22,3 +22,7 @@ export { DoctorPhotoForm } from "./DoctorPhotoForm";
 export { DoctorVerificationForm } from "./DoctorVerificationForm";
 export { DoctorAvailabilityForm } from "./DoctorAvailabilityForm";
 export { DoctorCompletionContent } from "./DoctorCompletionContent";
+
+// Shared components and hooks
+export * from "./components";
+export * from "./hooks/useOnboardingForm";

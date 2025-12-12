@@ -148,10 +148,12 @@
 
   /* shadcn/ui base styles */
   * {
-    @apply border-border outline-ring/50;
+    border-color: var(--color-border);
+    outline-color: var(--color-ring);
   }
   body {
-    @apply bg-background text-foreground;
+    background-color: var(--color-background);
+    color: var(--color-foreground);
   }
 }
 
@@ -159,24 +161,25 @@
  * Custom Tailwind Components
  * 
  * Add reusable component classes here using @apply directive
+ * Note: @utility is a valid Tailwind v4 directive (CSS language server may show warnings)
  */
 
 @utility btn-yuvoo-primary {
   /* Yuvoo Primary Button */
   @apply bg-primary text-white font-semibold px-6 py-3 rounded-xl transition-all duration-300;
-  @apply hover:bg-primary-dark active:scale-95;
+  @apply hover:bg-[var(--color-primary-dark)] active:scale-95;
 }
 
 @utility btn-yuvoo-secondary {
   /* Yuvoo Secondary Button */
   @apply bg-secondary text-white font-semibold px-6 py-3 rounded-xl transition-all duration-300;
-  @apply hover:bg-secondary-dark active:scale-95;
+  @apply hover:bg-[var(--color-secondary-dark)] active:scale-95;
 }
 
 @utility btn-yuvoo-accent {
   /* Yuvoo Accent Button */
   @apply bg-accent text-white font-semibold px-6 py-3 rounded-xl transition-all duration-300;
-  @apply hover:bg-accent-dark active:scale-95;
+  @apply hover:bg-[var(--color-accent-dark)] active:scale-95;
 }
 
 @utility card-yuvoo {
@@ -224,10 +227,6 @@
  */
 
 @theme inline {
-  --radius-sm: calc(var(--radius) - 4px);
-  --radius-md: calc(var(--radius) - 2px);
-  --radius-lg: var(--radius);
-  --radius-xl: calc(var(--radius) + 4px);
   --color-background: var(--background);
   --color-foreground: var(--foreground);
   --color-card: var(--card);
@@ -236,16 +235,17 @@
   --color-popover-foreground: var(--popover-foreground);
   --color-primary: var(--primary);
   --color-primary-foreground: var(--primary-foreground);
-  --color-primary-dark: var(--color-yuvoo-primary-dark); /* #009b8f */
+  --color-primary-dark: var(--color-yuvoo-primary-dark); /* #009b8f - Yuvoo specific */
   --color-secondary: var(--secondary);
   --color-secondary-foreground: var(--secondary-foreground);
-  --color-secondary-dark: var(--color-yuvoo-secondary-dark); /* #e6891f */
+  --color-secondary-dark: var(--color-yuvoo-secondary-dark); /* #e6891f - Yuvoo specific */
   --color-muted: var(--muted);
   --color-muted-foreground: var(--muted-foreground);
   --color-accent: var(--accent);
   --color-accent-foreground: var(--accent-foreground);
-  --color-accent-dark: var(--color-yuvoo-accent-dark); /* #5c61e6 */
+  --color-accent-dark: var(--color-yuvoo-accent-dark); /* #5c61e6 - Yuvoo specific */
   --color-destructive: var(--destructive);
+  --color-destructive-foreground: var(--destructive-foreground);
   --color-border: var(--border);
   --color-input: var(--input);
   --color-ring: var(--ring);
@@ -262,99 +262,136 @@
   --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
   --color-sidebar-border: var(--sidebar-border);
   --color-sidebar-ring: var(--sidebar-ring);
+
+  --font-sans: var(--font-sans);
+  --font-mono: var(--font-mono);
+  --font-serif: var(--font-serif);
+
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 4px);
+
+  --shadow-2xs: var(--shadow-2xs);
+  --shadow-xs: var(--shadow-xs);
+  --shadow-sm: var(--shadow-sm);
+  --shadow: var(--shadow);
+  --shadow-md: var(--shadow-md);
+  --shadow-lg: var(--shadow-lg);
+  --shadow-xl: var(--shadow-xl);
+  --shadow-2xl: var(--shadow-2xl);
 }
 
 /*---break---
  */
 
 :root {
-  --radius: 0.625rem;
-  /* Yuvoo Brand Colors - Light Theme */
-  --background: oklch(1 0 0); /* White */
-  --foreground: oklch(0.145 0 0); /* #1B1B1B - Yuvoo neutral black */
-  --card: oklch(1 0 0); /* White */
-  --card-foreground: oklch(0.145 0 0); /* #1B1B1B */
-  --popover: oklch(1 0 0); /* White */
-  --popover-foreground: oklch(0.145 0 0); /* #1B1B1B */
-  /* Primary: Yuvoo Turcoaz #00BBAE */
-  --primary: oklch(0.7 0.14 193.5); /* #00BBAE */
-  --primary-foreground: oklch(0.985 0 0); /* White for contrast */
-  /* Secondary: Yuvoo Portocaliu #FF9B24 */
-  --secondary: oklch(0.8 0.2 70); /* #FF9B24 */
-  --secondary-foreground: oklch(0.985 0 0); /* White for contrast */
-  /* Muted: Light grey for subtle backgrounds */
-  --muted: oklch(0.97 0 0); /* #FFF6EB equivalent - Yuvoo theme-6 */
-  --muted-foreground: oklch(0.424 0 0); /* #424242 - Yuvoo neutral body */
-  /* Accent: Yuvoo Violet #7C81FF */
-  --accent: oklch(0.7 0.2 264); /* #7C81FF */
-  --accent-foreground: oklch(0.985 0 0); /* White for contrast */
-  /* Destructive: Red for errors */
-  --destructive: oklch(0.577 0.245 27.325);
-  --destructive-foreground: oklch(0.985 0 0);
-  /* Borders and inputs */
-  --border: oklch(0.922 0 0); /* #E6E6E6 - Yuvoo grey-1 */
-  --input: oklch(0.922 0 0); /* #E6E6E6 */
-  --ring: oklch(0.7 0.14 193.5); /* Primary color for focus rings */
-  /* Chart colors - using Yuvoo brand colors */
-  --chart-1: oklch(0.7 0.14 193.5); /* Primary - Turcoaz */
-  --chart-2: oklch(0.8 0.2 70); /* Secondary - Portocaliu */
-  --chart-3: oklch(0.7 0.2 264); /* Accent - Violet */
-  --chart-4: oklch(0.7 0.14 193.5); /* Primary variant */
-  --chart-5: oklch(0.8 0.2 70); /* Secondary variant */
-  /* Sidebar - using Yuvoo light backgrounds */
-  --sidebar: oklch(0.985 0 0); /* Light background */
-  --sidebar-foreground: oklch(0.145 0 0); /* #1B1B1B */
-  --sidebar-primary: oklch(0.7 0.14 193.5); /* Primary color */
-  --sidebar-primary-foreground: oklch(0.985 0 0); /* White */
-  --sidebar-accent: oklch(0.97 0 0); /* Muted background */
-  --sidebar-accent-foreground: oklch(0.145 0 0); /* Dark text */
-  --sidebar-border: oklch(0.922 0 0); /* Border color */
-  --sidebar-ring: oklch(0.7 0.14 193.5); /* Primary for focus */
+  --background: hsl(0 0% 100%);
+  --foreground: hsl(0 0% 14.902%);
+  --card: hsl(0 0% 100%);
+  --card-foreground: hsl(0 0% 14.902%);
+  --popover: hsl(0 0% 100%);
+  --popover-foreground: hsl(0 0% 14.902%);
+  --primary: #00bbae; /* Yuvoo Primary Turcoaz */
+  --primary-foreground: hsl(0 0% 100%); /* White for contrast */
+  --secondary: hsl(32.6027 100% 57.0588%);
+  --secondary-foreground: hsl(0 0% 10.5882%);
+  --muted: hsl(210 20% 98.0392%);
+  --muted-foreground: hsl(220 8.9362% 46.0784%);
+  --accent: hsl(237.7099 100% 74.3137%);
+  --accent-foreground: hsl(0 0% 10.5882%);
+  --destructive: hsl(0 84.2365% 60.1961%);
+  --destructive-foreground: hsl(0 0% 100%);
+  --border: hsl(220 13.0435% 90.9804%);
+  --input: hsl(220 13.0435% 90.9804%);
+  --ring: #00bbae; /* Yuvoo Primary Turcoaz for focus rings */
+  --chart-1: #00bbae; /* Yuvoo Primary Turcoaz */
+  --chart-2: hsl(32.1327 94.6188% 43.7255%);
+  --chart-3: hsl(25.9649 90.4762% 37.0588%);
+  --chart-4: hsl(22.7273 82.5% 31.3725%);
+  --chart-5: hsl(21.7143 77.7778% 26.4706%);
+  --sidebar: hsl(210 20% 98.0392%);
+  --sidebar-foreground: hsl(0 0% 14.902%);
+  --sidebar-primary: #00bbae; /* Yuvoo Primary Turcoaz */
+  --sidebar-primary-foreground: hsl(0 0% 100%);
+  --sidebar-accent: hsl(48 100% 96.0784%);
+  --sidebar-accent-foreground: hsl(22.7273 82.5% 31.3725%);
+  --sidebar-border: hsl(220 13.0435% 90.9804%);
+  --sidebar-ring: #00bbae; /* Yuvoo Primary Turcoaz */
+  --font-sans: Inter, sans-serif;
+  --font-serif: Source Serif 4, serif;
+  --font-mono: JetBrains Mono, monospace;
+  --radius: 0.375rem;
+  --shadow-x: 0px;
+  --shadow-y: 4px;
+  --shadow-blur: 8px;
+  --shadow-spread: -1px;
+  --shadow-opacity: 0.1;
+  --shadow-color: hsl(0 0% 0%);
+  --shadow-2xs: 0px 4px 8px -1px hsl(0 0% 0% / 0.05);
+  --shadow-xs: 0px 4px 8px -1px hsl(0 0% 0% / 0.05);
+  --shadow-sm: 0px 4px 8px -1px hsl(0 0% 0% / 0.1), 0px 1px 2px -2px hsl(0 0% 0% / 0.1);
+  --shadow: 0px 4px 8px -1px hsl(0 0% 0% / 0.1), 0px 1px 2px -2px hsl(0 0% 0% / 0.1);
+  --shadow-md: 0px 4px 8px -1px hsl(0 0% 0% / 0.1), 0px 2px 4px -2px hsl(0 0% 0% / 0.1);
+  --shadow-lg: 0px 4px 8px -1px hsl(0 0% 0% / 0.1), 0px 4px 6px -2px hsl(0 0% 0% / 0.1);
+  --shadow-xl: 0px 4px 8px -1px hsl(0 0% 0% / 0.1), 0px 8px 10px -2px hsl(0 0% 0% / 0.1);
+  --shadow-2xl: 0px 4px 8px -1px hsl(0 0% 0% / 0.25);
+  --tracking-normal: 0em;
+  --spacing: 0.25rem;
 }
 
 /*---break---
  */
 
 .dark {
-  /* Yuvoo Brand Colors - Dark Theme */
-  --background: oklch(0.145 0 0); /* #1B1B1B - Dark background */
-  --foreground: oklch(0.985 0 0); /* White text */
-  --card: oklch(0.205 0 0); /* Slightly lighter dark */
-  --card-foreground: oklch(0.985 0 0); /* White */
-  --popover: oklch(0.205 0 0);
-  --popover-foreground: oklch(0.985 0 0);
-  /* Primary: Yuvoo Turcoaz - lighter for dark mode */
-  --primary: oklch(0.75 0.16 193.5); /* Lighter turcoaz for dark mode */
-  --primary-foreground: oklch(0.145 0 0); /* Dark text on light primary */
-  /* Secondary: Yuvoo Portocaliu - lighter for dark mode */
-  --secondary: oklch(0.85 0.22 70); /* Lighter orange for dark mode */
-  --secondary-foreground: oklch(0.145 0 0); /* Dark text */
-  /* Muted: Dark grey for subtle backgrounds */
-  --muted: oklch(0.269 0 0); /* Dark grey */
-  --muted-foreground: oklch(0.708 0 0); /* Light grey text */
-  /* Accent: Yuvoo Violet - lighter for dark mode */
-  --accent: oklch(0.75 0.22 264); /* Lighter violet for dark mode */
-  --accent-foreground: oklch(0.985 0 0); /* White */
-  /* Destructive: Red for errors */
-  --destructive: oklch(0.704 0.191 22.216);
-  --destructive-foreground: oklch(0.985 0 0);
-  /* Borders and inputs - subtle in dark mode */
-  --border: oklch(1 0 0 / 10%); /* Subtle white border */
-  --input: oklch(1 0 0 / 15%); /* Slightly more visible */
-  --ring: oklch(0.75 0.16 193.5); /* Primary color for focus rings */
-  /* Chart colors - adjusted for dark mode */
-  --chart-1: oklch(0.75 0.16 193.5); /* Primary - Turcoaz */
-  --chart-2: oklch(0.85 0.22 70); /* Secondary - Portocaliu */
-  --chart-3: oklch(0.75 0.22 264); /* Accent - Violet */
-  --chart-4: oklch(0.7 0.14 193.5); /* Primary variant */
-  --chart-5: oklch(0.8 0.2 70); /* Secondary variant */
-  /* Sidebar - dark theme */
-  --sidebar: oklch(0.205 0 0); /* Dark background */
-  --sidebar-foreground: oklch(0.985 0 0); /* White text */
-  --sidebar-primary: oklch(0.75 0.16 193.5); /* Primary color */
-  --sidebar-primary-foreground: oklch(0.145 0 0); /* Dark text */
-  --sidebar-accent: oklch(0.269 0 0); /* Muted dark */
-  --sidebar-accent-foreground: oklch(0.985 0 0); /* White */
-  --sidebar-border: oklch(1 0 0 / 10%); /* Subtle border */
-  --sidebar-ring: oklch(0.75 0.16 193.5); /* Primary for focus */
+  --background: hsl(0 0% 9.0196%);
+  --foreground: hsl(0 0% 89.8039%);
+  --card: hsl(0 0% 14.902%);
+  --card-foreground: hsl(0 0% 89.8039%);
+  --popover: hsl(0 0% 14.902%);
+  --popover-foreground: hsl(0 0% 89.8039%);
+  --primary: hsl(37.6923 92.126% 50.1961%);
+  --primary-foreground: hsl(0 0% 0%);
+  --secondary: hsl(0 0% 14.902%);
+  --secondary-foreground: hsl(0 0% 89.8039%);
+  --muted: hsl(0 0% 12.1569%);
+  --muted-foreground: hsl(0 0% 63.9216%);
+  --accent: hsl(22.7273 82.5% 31.3725%);
+  --accent-foreground: hsl(48 96.6387% 76.6667%);
+  --destructive: hsl(0 84.2365% 60.1961%);
+  --destructive-foreground: hsl(0 0% 100%);
+  --border: hsl(0 0% 25.098%);
+  --input: hsl(0 0% 25.098%);
+  --ring: hsl(37.6923 92.126% 50.1961%);
+  --chart-1: hsl(43.2558 96.4126% 56.2745%);
+  --chart-2: hsl(32.1327 94.6188% 43.7255%);
+  --chart-3: hsl(22.7273 82.5% 31.3725%);
+  --chart-4: hsl(25.9649 90.4762% 37.0588%);
+  --chart-5: hsl(22.7273 82.5% 31.3725%);
+  --sidebar: hsl(0 0% 5.8824%);
+  --sidebar-foreground: hsl(0 0% 89.8039%);
+  --sidebar-primary: hsl(37.6923 92.126% 50.1961%);
+  --sidebar-primary-foreground: hsl(0 0% 100%);
+  --sidebar-accent: hsl(22.7273 82.5% 31.3725%);
+  --sidebar-accent-foreground: hsl(48 96.6387% 76.6667%);
+  --sidebar-border: hsl(0 0% 25.098%);
+  --sidebar-ring: hsl(37.6923 92.126% 50.1961%);
+  --font-sans: Inter, sans-serif;
+  --font-serif: Source Serif 4, serif;
+  --font-mono: JetBrains Mono, monospace;
+  --radius: 0.375rem;
+  --shadow-x: 0px;
+  --shadow-y: 4px;
+  --shadow-blur: 8px;
+  --shadow-spread: -1px;
+  --shadow-opacity: 0.1;
+  --shadow-color: hsl(0 0% 0%);
+  --shadow-2xs: 0px 4px 8px -1px hsl(0 0% 0% / 0.05);
+  --shadow-xs: 0px 4px 8px -1px hsl(0 0% 0% / 0.05);
+  --shadow-sm: 0px 4px 8px -1px hsl(0 0% 0% / 0.1), 0px 1px 2px -2px hsl(0 0% 0% / 0.1);
+  --shadow: 0px 4px 8px -1px hsl(0 0% 0% / 0.1), 0px 1px 2px -2px hsl(0 0% 0% / 0.1);
+  --shadow-md: 0px 4px 8px -1px hsl(0 0% 0% / 0.1), 0px 2px 4px -2px hsl(0 0% 0% / 0.1);
+  --shadow-lg: 0px 4px 8px -1px hsl(0 0% 0% / 0.1), 0px 4px 6px -2px hsl(0 0% 0% / 0.1);
+  --shadow-xl: 0px 4px 8px -1px hsl(0 0% 0% / 0.1), 0px 8px 10px -2px hsl(0 0% 0% / 0.1);
+  --shadow-2xl: 0px 4px 8px -1px hsl(0 0% 0% / 0.25);
 }

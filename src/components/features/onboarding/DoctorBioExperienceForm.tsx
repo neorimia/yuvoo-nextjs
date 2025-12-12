@@ -25,6 +25,8 @@ import { updateDoctorBioExperience } from "@/app/actions/onboarding";
 import { doctorBioExperienceSchema, type DoctorBioExperienceInput } from "@/lib/validations/doctor";
 import { routes } from "@/lib/routes";
 import { OnboardingNavigation } from "./OnboardingNavigation";
+import { InfoTooltip } from "@/components/shared/InfoTooltip";
+import { ServerErrorAlert } from "./components/ServerErrorAlert";
 
 // Common languages in Romania
 const COMMON_LANGUAGES = [
@@ -137,18 +139,21 @@ export function DoctorBioExperienceForm() {
   };
 
   return (
-    <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
+    <form onSubmit={handleSubmit(onSubmit)} className="space-y-6 px-4 sm:px-0">
       {/* Server error */}
-      {serverError && (
-        <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-lg">
-          {serverError}
-        </div>
-      )}
+      <ServerErrorAlert error={serverError} />
 
       {/* Bio */}
       <div>
-        <label htmlFor="bio" className="block text-sm font-medium text-gray-700 mb-2">
+        <label
+          htmlFor="bio"
+          className="flex items-center gap-2 text-sm font-medium text-gray-700 mb-2"
+        >
           Bio profesional <span className="text-red-500">*</span>
+          <InfoTooltip
+            content="Descrie experiența ta profesională, abordarea ta în lucrul cu copiii și de ce ești pasionat de medicina sportivă pediatrică. Un bio complet ajută părinții să te cunoască mai bine."
+            size="sm"
+          />
         </label>
         <p className="text-sm text-gray-500 mb-2">
           Descrie experiența ta în lucrul cu copiii și sportul pediatric
@@ -177,8 +182,15 @@ export function DoctorBioExperienceForm() {
 
       {/* Years of Experience */}
       <div>
-        <label htmlFor="yearsOfExperience" className="block text-sm font-medium text-gray-700 mb-2">
+        <label
+          htmlFor="yearsOfExperience"
+          className="flex items-center gap-2 text-sm font-medium text-gray-700 mb-2"
+        >
           Ani de experiență <span className="text-red-500">*</span>
+          <InfoTooltip
+            content="Numărul de ani de experiență în practica medicală. Această informație ajută părinții să înțeleagă nivelul tău de experiență."
+            size="sm"
+          />
         </label>
         <input
           id="yearsOfExperience"
@@ -224,8 +236,12 @@ export function DoctorBioExperienceForm() {
 
       {/* Languages */}
       <div>
-        <label className="block text-sm font-medium text-gray-700 mb-2">
+        <label className="flex items-center gap-2 text-sm font-medium text-gray-700 mb-2">
           Limbi vorbite <span className="text-red-500">*</span>
+          <InfoTooltip
+            content="Selectează toate limbile în care poți comunica confortabil cu părinții. Aceasta ajută părinții să te găsească și să știe că pot comunica cu tine în limba lor preferată."
+            size="sm"
+          />
         </label>
         <p className="text-sm text-gray-500 mb-3">
           Selectează cel puțin o limbă în care poți comunica cu părinții
@@ -250,7 +266,7 @@ export function DoctorBioExperienceForm() {
         </div>
 
         {/* Custom language input */}
-        <div className="flex gap-2">
+        <div className="flex flex-col sm:flex-row gap-2">
           <input
             type="text"
             value={customLanguage}
@@ -267,7 +283,7 @@ export function DoctorBioExperienceForm() {
           <button
             type="button"
             onClick={addCustomLanguage}
-            className="px-4 py-2 bg-[#00BBAE] text-white rounded-lg hover:bg-[#00998d] transition-colors"
+            className="px-4 py-2 bg-[#00BBAE] text-white rounded-lg hover:bg-[#00998d] transition-colors whitespace-nowrap"
           >
             Adaugă
           </button>

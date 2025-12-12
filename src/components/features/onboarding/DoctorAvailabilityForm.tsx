@@ -24,7 +24,9 @@ import { updateDoctorAvailability } from "@/app/actions/onboarding";
 import { doctorAvailabilitySchema, type DoctorAvailabilityInput } from "@/lib/validations/doctor";
 import { routes } from "@/lib/routes";
 import { OnboardingNavigation } from "./OnboardingNavigation";
+import { InfoTooltip } from "@/components/shared/InfoTooltip";
 import { X, Plus } from "lucide-react";
+import { InfoBox } from "./components/InfoBox";
 
 // Days of the week in Romanian
 const DAYS_OF_WEEK = [
@@ -91,7 +93,11 @@ export function DoctorAvailabilityForm() {
   };
 
   return (
-    <form id="doctor-availability-form" onSubmit={handleSubmit(onSubmit)} className="space-y-6">
+    <form
+      id="doctor-availability-form"
+      onSubmit={handleSubmit(onSubmit)}
+      className="space-y-6 px-4 sm:px-0"
+    >
       {/* Server Error */}
       {serverError && (
         <div className="bg-red-50 border border-red-200 rounded-lg p-4">
@@ -117,9 +123,13 @@ export function DoctorAvailabilityForm() {
           <div className="flex-1">
             <label
               htmlFor="acceptingNewPatients"
-              className="block text-sm font-medium text-gray-900 cursor-pointer"
+              className="flex items-center gap-2 text-sm font-medium text-gray-900 cursor-pointer"
             >
               Accept pacienți noi
+              <InfoTooltip
+                content="Dacă activezi această opțiune, părinții vor ști că poți accepta pacienți noi și vor putea rezerva consultații pentru copiii lor."
+                size="sm"
+              />
             </label>
             <p className="mt-1 text-sm text-gray-600">
               Activează această opțiune dacă accepți în prezent pacienți noi în cabinetul tău.
@@ -146,9 +156,13 @@ export function DoctorAvailabilityForm() {
           <div className="flex-1">
             <label
               htmlFor="onlineConsultations"
-              className="block text-sm font-medium text-gray-900 cursor-pointer"
+              className="flex items-center gap-2 text-sm font-medium text-gray-900 cursor-pointer"
             >
               Consultații online disponibile
+              <InfoTooltip
+                content="Dacă oferi consultații online (video sau telefon), activează această opțiune. Părinții vor putea vedea că oferi această opțiune și vor putea rezerva consultații online."
+                size="sm"
+              />
             </label>
             <p className="mt-1 text-sm text-gray-600">
               Activează această opțiune dacă oferi consultații online (video sau telefon).
@@ -201,11 +215,11 @@ export function DoctorAvailabilityForm() {
                 key={field.id}
                 className="
                   bg-white border border-gray-200 rounded-lg p-4
-                  flex items-start gap-4
+                  flex flex-col sm:flex-row items-start gap-4
                 "
               >
                 {/* Day Select */}
-                <div className="flex-1">
+                <div className="flex-1 w-full sm:w-auto">
                   <label
                     htmlFor={`schedule.${index}.day`}
                     className="block text-xs font-medium text-gray-600 mb-1.5"
@@ -237,7 +251,7 @@ export function DoctorAvailabilityForm() {
                 </div>
 
                 {/* Start Time */}
-                <div className="flex-1">
+                <div className="flex-1 w-full sm:w-auto">
                   <label
                     htmlFor={`schedule.${index}.startTime`}
                     className="block text-xs font-medium text-gray-600 mb-1.5"
@@ -264,7 +278,7 @@ export function DoctorAvailabilityForm() {
                 </div>
 
                 {/* End Time */}
-                <div className="flex-1">
+                <div className="flex-1 w-full sm:w-auto">
                   <label
                     htmlFor={`schedule.${index}.endTime`}
                     className="block text-xs font-medium text-gray-600 mb-1.5"
@@ -291,7 +305,7 @@ export function DoctorAvailabilityForm() {
                 </div>
 
                 {/* Remove Button */}
-                <div className="shrink-0 pt-6">
+                <div className="shrink-0 pt-0 sm:pt-6 w-full sm:w-auto flex justify-end sm:justify-start">
                   <button
                     type="button"
                     onClick={() => removeScheduleEntry(index)}
@@ -302,6 +316,7 @@ export function DoctorAvailabilityForm() {
                       focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2
                       transition-all duration-200
                       disabled:opacity-50 disabled:cursor-not-allowed
+                      self-end sm:self-auto
                     "
                     aria-label="Șterge interval"
                   >
@@ -319,21 +334,13 @@ export function DoctorAvailabilityForm() {
       </div>
 
       {/* Info box */}
-      <div className="bg-[#EBFFFE] border border-[#00BBAE]/20 rounded-xl p-6">
-        <div className="flex items-start gap-3">
-          <span className="text-2xl">ℹ️</span>
-          <div>
-            <h3 className="font-semibold text-gray-900 mb-2">
-              De ce avem nevoie de aceste informații?
-            </h3>
-            <p className="text-sm text-gray-700">
-              Informațiile despre disponibilitatea ta vor fi afișate în profilul tău profesional,
-              astfel încât părinții să știe dacă accepți pacienți noi și când ești disponibil pentru
-              consultații. Poți actualiza aceste detalii oricând din dashboard-ul tău.
-            </p>
-          </div>
-        </div>
-      </div>
+      <InfoBox title="De ce avem nevoie de aceste informații?" icon="ℹ️">
+        <p className="text-sm text-gray-700">
+          Informațiile despre disponibilitatea ta vor fi afișate în profilul tău profesional, astfel
+          încât părinții să știe dacă accepți pacienți noi și când ești disponibil pentru
+          consultații. Poți actualiza aceste detalii oricând din dashboard-ul tău.
+        </p>
+      </InfoBox>
 
       {/* Navigation */}
       <div className="pt-6 border-t border-gray-200">
