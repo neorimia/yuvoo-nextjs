@@ -8,3 +8,4 @@ export { OnboardingLayout } from "./OnboardingLayout";
 export { OnboardingProgress } from "./OnboardingProgress";
 export type { OnboardingStep } from "./OnboardingProgress";
 export { OnboardingNavigation } from "./OnboardingNavigation";
+export { AddChildForm } from "./AddChildForm";
