@@ -41,7 +41,9 @@ export function OnboardingProgress({
   steps,
   className = "",
 }: OnboardingProgressProps) {
-  const progressPercentage = (currentStep / steps.length) * 100;
+  // Use same calculation as desktop for consistency
+  // Progress represents completion: step 1 = 0%, step 2 = 25%, etc.
+  const progressPercentage = currentStep === 1 ? 0 : ((currentStep - 1) / (steps.length - 1)) * 100;
 
   return (
     <div className={cn("w-full", className)} role="navigation" aria-label="Progres onboarding">

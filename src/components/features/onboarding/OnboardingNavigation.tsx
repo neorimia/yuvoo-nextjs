@@ -163,7 +163,7 @@ export function OnboardingNavigation({
     <div className={cn("space-y-4", className)}>
       {/* Error message */}
       {error && (
-        <Alert variant="destructive" aria-live="polite">
+        <Alert variant="destructive">
           <AlertCircle />
           <AlertDescription>{error}</AlertDescription>
         </Alert>
@@ -179,7 +179,7 @@ export function OnboardingNavigation({
               size="default"
               asChild
               onClick={handleBackClick}
-              className="min-w-[44px] md:min-w-auto bg-white border-border text-neutral-body hover:bg-muted hover:border-primary focus-visible:ring-primary"
+              className="min-w-[44px] md:min-w-auto bg-white border-border text-muted-foreground hover:bg-muted hover:border-primary focus-visible:ring-primary"
             >
               <Link href={backHref} aria-label={backText} title={backText}>
                 <ArrowLeft />
@@ -199,7 +199,7 @@ export function OnboardingNavigation({
               size="default"
               asChild
               onClick={handleSkipClick}
-              className="text-neutral-body hover:text-primary focus-visible:ring-primary"
+              className="text-muted-foreground hover:text-primary focus-visible:ring-primary"
               aria-label={skipText}
             >
               <Link href={skipHref}>{skipText}</Link>
@@ -217,7 +217,7 @@ export function OnboardingNavigation({
               onClick={handleNextClick}
               disabled={isNextDisabled || isLoading}
               size="lg"
-              className="btn-yuvoo-primary min-w-section-lg md:min-w-auto shadow-md hover:shadow-[0px_4px_12px_rgba(0,187,174,0.2)] disabled:hover:bg-primary disabled:hover:shadow-md disabled:active:scale-100"
+              className="btn-yuvoo-primary min-w-[120px] md:min-w-auto shadow-md hover:shadow-[0px_4px_12px_rgba(0,187,174,0.2)] disabled:hover:bg-primary disabled:hover:shadow-md disabled:active:scale-100"
               aria-label={buttonText}
               aria-busy={isLoading}
             >
@@ -241,7 +241,7 @@ export function OnboardingNavigation({
               disabled
               size="lg"
               variant="default"
-              className="btn-yuvoo-primary min-w-section-lg md:min-w-auto shadow-md hover:shadow-[0px_4px_12px_rgba(0,187,174,0.2)] disabled:hover:bg-primary disabled:hover:shadow-md disabled:active:scale-100"
+              className="btn-yuvoo-primary min-w-[120px] md:min-w-auto shadow-md hover:shadow-[0px_4px_12px_rgba(0,187,174,0.2)] disabled:hover:bg-primary disabled:hover:shadow-md disabled:active:scale-100"
               aria-label={buttonText}
               aria-disabled={true}
             >
@@ -254,7 +254,7 @@ export function OnboardingNavigation({
               size="lg"
               asChild
               onClick={handleNextClick}
-              className="btn-yuvoo-primary min-w-section-lg md:min-w-auto shadow-md hover:shadow-[0px_4px_12px_rgba(0,187,174,0.2)]"
+              className="btn-yuvoo-primary min-w-[120px] md:min-w-auto shadow-md hover:shadow-[0px_4px_12px_rgba(0,187,174,0.2)]"
               aria-label={buttonText}
             >
               <Link href={nextHref || "#"}>
