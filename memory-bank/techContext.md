@@ -70,7 +70,13 @@
 - **clsx**: `^2.1.0` - Conditional classnames (planificat)
 - **tailwind-merge**: `^2.2.0` - Merge Tailwind classes (planificat)
 
-**Migration Strategy**: Gradual migration - keep Bootstrap for existing components, use Tailwind for new components. See `designSystem.md` for details.
+**Migration Strategy**:
+
+- **Current**: Bootstrap for existing components, Tailwind for new components (gradual migration)
+- **Planned**: Remove Tailwind CSS and shadcn/ui, keep only Bootstrap 5.3.3 + SCSS
+- **Documentation**: See `docs/TAILWIND_REMOVAL_PLAN.md` for complete migration plan
+- **Components**: See `docs/REUSABLE_COMPONENTS_LIST.md` for inventory of reusable Bootstrap components
+- **Bootstrap Utility API**: Use Bootstrap's Sass-based Utility API to create custom Yuvoo-branded utilities instead of Tailwind utilities
 
 ### Validation
 

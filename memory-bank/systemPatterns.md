@@ -64,6 +64,33 @@ yuvoo-nextjs/
 └── styles/                       # Global styles + Tailwind
 ```
 
+## Reusable Component Patterns
+
+### Onboarding Form Components
+
+**Location**: `src/components/features/onboarding/components/`
+
+**Shared Components**:
+
+- `FormField.tsx` - Reusable form field with label, input, error display
+- `ServerErrorAlert.tsx` - Server-side error message display
+- `InfoBox.tsx` - Information box with icon and variant support
+- `FormSection.tsx` - Section wrapper for form groups
+
+**File Upload Components** (Created from pattern recognition):
+
+- `FileUploadArea.tsx` - Reusable file upload area with drag-and-drop styling
+  - Used for: logo uploads, photo uploads, document uploads
+  - Features: loading states, file type hints, max files tracking, Bootstrap styling
+- `ImagePreview.tsx` - Reusable image preview with remove button
+  - Used for: logo previews, photo previews, gallery image previews
+  - Features: Next.js Image optimization, responsive sizing, remove functionality
+- `DocumentPreview.tsx` - Reusable document preview with file icons
+  - Used for: verification document previews
+  - Features: file type icons (PDF, DOC, images), filename display, remove functionality
+
+**Pattern Recognition Principle**: When the same UI pattern appears in multiple components, extract it into a reusable component to avoid duplication and ensure consistency.
+
 ## Key Design Patterns
 
 ### 1. Server Actions Pattern
@@ -867,6 +894,8 @@ Does component need interactivity?
 - **Legal Pages Plan**: `docs/LEGAL_PAGES_DEVELOPMENT_PLAN.md` - Comprehensive legal pages development plan, content templates, SEO guidelines, and implementation checklist
 - **Authentication Integration Plan**: `docs/AUTH_INTEGRATION_PLAN.md` - Complete authentication system integration details, Stack Auth setup, Romanian localization, and implementation checklist
 - **Stack Auth Server Migration**: `docs/STACK_AUTH_SERVER_MIGRATION_PLAN.md` - Migration plan and implementation details for server-side authentication
+- **Tailwind Removal Plan**: `docs/TAILWIND_REMOVAL_PLAN.md` - Comprehensive migration strategy to remove Tailwind CSS and shadcn/ui, keep only Bootstrap 5.3.3 and SCSS
+- **Reusable Components List**: `docs/REUSABLE_COMPONENTS_LIST.md` - Complete inventory of ~80+ reusable Bootstrap components with Bootstrap 5.3 documentation references
 - **System Patterns**: `memory-bank/systemPatterns.md` - This file
 - **Technical Context**: `memory-bank/techContext.md` - Technology stack details
 - **Product Context**: `memory-bank/productContext.md` - Product requirements

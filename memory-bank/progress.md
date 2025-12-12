@@ -32,6 +32,19 @@
 
 ## What's In Progress 🚧
 
+### Bootstrap Migration (Phase 2.2 Complete ✅)
+
+- [x] Phase 1.1: Bootstrap Component Library ✅
+- [x] Phase 1.2: Bootstrap Utility API Extensions ✅
+- [x] Phase 2.2: Replace shadcn Components in Onboarding Forms ✅
+  - [x] All shared onboarding components migrated ✅
+  - [x] All parent onboarding forms migrated ✅
+  - [x] All club onboarding forms migrated (6 forms) ✅
+  - [x] All doctor onboarding forms migrated (7 forms) ✅
+  - [x] Reusable components created (FileUploadArea, ImagePreview, DocumentPreview) ✅
+- [ ] Phase 3: Remove Tailwind Dependencies (Next)
+- [ ] Phase 4: Cleanup & Testing
+
 ### Foundation Setup
 
 - [ ] Project initialization
@@ -335,6 +348,39 @@
 - [x] Create wireframes documentation ✅
   - [x] Created `docs/WIREFRAMES.md` with detailed page structures ✅
   - [x] Documented wireframes for homepage, quiz intro, quiz container (6 steps), quiz results, club finder, club detail page, parent dashboard, children list, add/edit child form, responsive design patterns, and component patterns ✅
+- [x] Create Bootstrap migration documentation ✅
+  - [x] Created `docs/TAILWIND_REMOVAL_PLAN.md` with comprehensive migration strategy ✅
+  - [x] Documented phase-by-phase migration plan (4 weeks), Bootstrap Utility API usage, component replacement mappings, Bootstrap 5.3 documentation links, file removal list, risk assessment, success criteria ✅
+  - [x] Created `docs/REUSABLE_COMPONENTS_LIST.md` with complete component inventory ✅
+  - [x] Documented ~80+ reusable Bootstrap components, component categories, Bootstrap 5.3 component reference, shadcn → Bootstrap mapping table, form/layout/utilities/customization references ✅
+- [x] Create Bootstrap Component Library (Phase 1.1) ✅
+  - [x] Created `src/components/UI/BootstrapButton.tsx` - Bootstrap button wrapper (using `bd-btn` pattern) ✅
+  - [x] Created `src/components/UI/BootstrapInput.tsx` - Bootstrap input wrapper (using `login__input` pattern) ✅
+  - [x] Created `src/components/UI/BootstrapTextarea.tsx` - Bootstrap textarea wrapper ✅
+  - [x] Created `src/components/UI/BootstrapSelect.tsx` - Bootstrap select wrapper ✅
+  - [x] Created `src/components/UI/BootstrapAlert.tsx` - Bootstrap alert wrapper ✅
+  - [x] Created `src/components/UI/BootstrapProgress.tsx` - Bootstrap progress wrapper ✅
+  - [x] Created `src/components/UI/bootstrap-index.ts` - Export index for easy imports ✅
+  - [x] Created `src/components/UI/BOOTSTRAP_COMPONENTS.md` - Component documentation and migration guide ✅
+  - [x] All components follow existing Bootstrap patterns (`bd-btn`, `login__input`, `form-control`, `form-select`, `alert`, `progress`) ✅
+  - [x] All components TypeScript-typed with proper props and error handling ✅
+  - [x] Migration plan updated to mark Phase 1.1 as complete ✅
+- [x] Create Bootstrap Utility API Extensions (Phase 1.2) ✅
+  - [x] Created `public/assets/scss/utils/_yuvoo-utilities.scss` - Custom Yuvoo brand utilities using Bootstrap naming conventions ✅
+  - [x] Added Yuvoo brand color utilities (`bg-yuvoo-primary`, `text-yuvoo-primary`, `bg-yuvoo-secondary`, `text-yuvoo-secondary`, `bg-yuvoo-accent`, `text-yuvoo-accent`) ✅
+  - [x] Added light variant utilities (`bg-yuvoo-primary-light`, `bg-yuvoo-secondary-light`, `bg-yuvoo-secondary-very-light`) ✅
+  - [x] Added hover state utilities for Yuvoo colors (`bg-yuvoo-primary-hover`, `text-yuvoo-primary-hover`, etc.) ✅
+  - [x] Added focus state utilities (`focus-yuvoo-primary`, `focus-yuvoo-secondary`) ✅
+  - [x] Added shadow utilities (`shadow-yuvoo-primary`, `shadow-yuvoo-secondary`, `shadow-yuvoo-accent`) ✅
+  - [x] Added responsive utilities (`d-md-none-yuvoo`, `d-md-block-yuvoo`, `d-md-flex-yuvoo`) ✅
+  - [x] Added spacing utilities (`section-padding-yuvoo`, `container-yuvoo`) ✅
+  - [x] Added button variant utilities (`btn-yuvoo-primary`, `btn-yuvoo-secondary`, `btn-yuvoo-outline-primary`, `btn-yuvoo-outline-secondary`) ✅
+  - [x] All utilities reference existing CSS variables from `_root.scss` (`--bd-theme-1`, `--bd-theme-2`, `--bd-theme-10`, etc.) ✅
+  - [x] Imported in `public/assets/scss/main.scss` ✅
+  - [x] Added to `public/assets/scss/utils/_index.scss` for proper module forwarding ✅
+  - [x] Created `public/assets/scss/utils/YUVOO_UTILITIES.md` - Comprehensive documentation with usage examples and migration guide ✅
+  - [x] All utilities follow Bootstrap naming conventions and are compatible with existing Bootstrap classes ✅
+  - [x] Migration plan updated to mark Phase 1.2 as complete ✅
 
 ### Theme Adaptation
 

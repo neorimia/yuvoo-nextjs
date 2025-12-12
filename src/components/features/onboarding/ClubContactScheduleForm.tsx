@@ -26,6 +26,9 @@ import { clubContactScheduleSchema, type ClubContactScheduleInput } from "@/lib/
 import { routes } from "@/lib/routes";
 import { normalizePhoneNumber } from "@/lib/utils";
 import { OnboardingNavigation } from "./OnboardingNavigation";
+import { ServerErrorAlert } from "./components/ServerErrorAlert";
+import { InfoBox } from "./components/InfoBox";
+import { BootstrapInput, BootstrapSelect, BootstrapButton } from "@/components/UI/bootstrap-index";
 import { X, Plus } from "lucide-react";
 
 // Days of the week in Romanian
@@ -100,230 +103,197 @@ export function ClubContactScheduleForm() {
   };
 
   return (
-    <form id="club-contact-schedule-form" onSubmit={handleSubmit(onSubmit)} className="space-y-6">
+    <form id="club-contact-schedule-form" onSubmit={handleSubmit(onSubmit)}>
       {/* Server error message */}
-      {serverError && (
-        <div className="bg-red-50 border border-red-200 rounded-lg p-4">
-          <div className="flex items-start gap-3">
-            <span className="text-red-500 text-xl">⚠️</span>
-            <div>
-              <h4 className="font-semibold text-red-900 mb-1">Eroare</h4>
-              <p className="text-sm text-red-700">{serverError}</p>
-            </div>
-          </div>
-        </div>
-      )}
+      <ServerErrorAlert error={serverError} className="mb-4" />
 
       {/* Phone */}
-      <div>
-        <label htmlFor="phone" className="block text-sm font-medium text-gray-700 mb-2">
-          Telefon <span className="text-red-500">*</span>
+      <div className="mb-4">
+        <label htmlFor="phone" className="d-block small fw-medium text-body mb-2">
+          Telefon <span className="text-danger">*</span>
         </label>
-        <input
+        <BootstrapInput
           id="phone"
           type="tel"
           {...register("phone")}
           disabled={isLoading}
-          className={`
-            w-full px-4 py-3 border rounded-lg
-            focus:outline-none focus:ring-2 focus:ring-[#00BBAE] focus:border-transparent
-            transition-all duration-200
-            ${errors.phone ? "border-red-500" : "border-gray-300"}
-            ${isLoading ? "bg-gray-100 cursor-not-allowed" : "bg-white"}
-          `}
+          error={!!errors.phone}
+          className="w-100"
           placeholder="+40721234567"
           aria-invalid={errors.phone ? "true" : "false"}
           aria-describedby={errors.phone ? "phone-error" : "phone-help"}
         />
         {errors.phone ? (
-          <p id="phone-error" className="mt-2 text-sm text-red-600">
+          <p id="phone-error" className="mt-2 small text-danger">
             {errors.phone.message}
           </p>
         ) : (
-          <p id="phone-help" className="mt-2 text-xs text-gray-500">
+          <p id="phone-help" className="mt-2 text-xs text-secondary">
             Format: +40XXXXXXXXX (ex: +40721234567)
           </p>
         )}
       </div>
 
       {/* Email */}
-      <div>
-        <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-2">
-          Email <span className="text-red-500">*</span>
+      <div className="mb-4">
+        <label htmlFor="email" className="d-block small fw-medium text-body mb-2">
+          Email <span className="text-danger">*</span>
         </label>
-        <input
+        <BootstrapInput
           id="email"
           type="email"
           {...register("email")}
           disabled={isLoading}
-          className={`
-            w-full px-4 py-3 border rounded-lg
-            focus:outline-none focus:ring-2 focus:ring-[#00BBAE] focus:border-transparent
-            transition-all duration-200
-            ${errors.email ? "border-red-500" : "border-gray-300"}
-            ${isLoading ? "bg-gray-100 cursor-not-allowed" : "bg-white"}
-          `}
+          error={!!errors.email}
+          className="w-100"
           placeholder="contact@clubulmeu.ro"
           aria-invalid={errors.email ? "true" : "false"}
           aria-describedby={errors.email ? "email-error" : undefined}
         />
         {errors.email && (
-          <p id="email-error" className="mt-2 text-sm text-red-600">
+          <p id="email-error" className="mt-2 small text-danger">
             {errors.email.message}
           </p>
         )}
       </div>
 
       {/* Website (Optional) */}
-      <div>
-        <label htmlFor="website" className="block text-sm font-medium text-gray-700 mb-2">
-          Website <span className="text-gray-500 text-xs">(opțional)</span>
+      <div className="mb-4">
+        <label htmlFor="website" className="d-block small fw-medium text-body mb-2">
+          Website <span className="text-secondary text-xs">(opțional)</span>
         </label>
-        <input
+        <BootstrapInput
           id="website"
           type="url"
           {...register("website")}
           disabled={isLoading}
-          className={`
-            w-full px-4 py-3 border rounded-lg
-            focus:outline-none focus:ring-2 focus:ring-[#00BBAE] focus:border-transparent
-            transition-all duration-200
-            ${errors.website ? "border-red-500" : "border-gray-300"}
-            ${isLoading ? "bg-gray-100 cursor-not-allowed" : "bg-white"}
-          `}
+          error={!!errors.website}
+          className="w-100"
           placeholder="https://www.clubulmeu.ro"
           aria-invalid={errors.website ? "true" : "false"}
           aria-describedby={errors.website ? "website-error" : undefined}
         />
         {errors.website && (
-          <p id="website-error" className="mt-2 text-sm text-red-600">
+          <p id="website-error" className="mt-2 small text-danger">
             {errors.website.message}
           </p>
         )}
       </div>
 
       {/* Schedule Builder */}
-      <div>
-        <div className="flex items-center justify-between mb-3">
-          <label className="block text-sm font-medium text-gray-700">
-            Program antrenamente <span className="text-red-500">*</span>
+      <div className="mb-4">
+        <div className="d-flex align-items-center justify-content-between mb-3">
+          <label className="d-block small fw-medium text-body">
+            Program antrenamente <span className="text-danger">*</span>
           </label>
-          <button
+          <BootstrapButton
             type="button"
             onClick={addScheduleEntry}
             disabled={isLoading}
-            className="
-              inline-flex items-center gap-2 px-3 py-1.5
-              text-sm font-medium text-[#00BBAE]
-              bg-[#EBFFFE] border border-[#00BBAE]/20 rounded-lg
-              hover:bg-[#00BBAE] hover:text-white
-              focus:outline-none focus:ring-2 focus:ring-[#00BBAE] focus:ring-offset-2
-              transition-all duration-200
-              disabled:opacity-50 disabled:cursor-not-allowed
-            "
+            variant="outline"
+            size="sm"
+            className="d-inline-flex align-items-center gap-2 "
+            style={{
+              borderColor: "rgba(0, 187, 174, 0.2)",
+            }}
+            onMouseEnter={(e) => {
+              if (!isLoading) {
+                e.currentTarget.style.backgroundColor = "var(--bd-theme-1)";
+                e.currentTarget.style.color = "white";
+              }
+            }}
+            onMouseLeave={(e) => {
+              if (!isLoading) {
+                e.currentTarget.style.backgroundColor = "var(--bd-theme-1-light)";
+                e.currentTarget.style.color = "var(--bd-theme-1)";
+              }
+            }}
           >
-            <Plus className="w-4 h-4" />
-            <span>Adaugă interval</span>
-          </button>
+            <span className="d-inline-flex align-items-center justify-content-center gap-2">
+              <Plus className="w-4 h-4" />
+              <span>Adaugă interval</span>
+            </span>
+          </BootstrapButton>
         </div>
 
         {fields.length === 0 && (
-          <div className="bg-gray-50 border border-gray-200 rounded-lg p-4 text-center">
-            <p className="text-sm text-gray-600 mb-2">
-              Nu ai adăugat niciun interval de antrenament.
-            </p>
-            <p className="text-xs text-gray-500">
+          <div className="bg-light border border-secondary rounded p-4 text-center">
+            <p className="small text-body mb-2">Nu ai adăugat niciun interval de antrenament.</p>
+            <p className="text-xs text-secondary">
               Apasă pe &ldquo;Adaugă interval&rdquo; pentru a adăuga programul clubului.
             </p>
           </div>
         )}
 
         {fields.length > 0 && (
-          <div className="space-y-3">
+          <div className="mb-3">
             {fields.map((field, index) => (
               <div
                 key={field.id}
-                className="
-                  bg-white border border-gray-200 rounded-lg p-4
-                  flex items-start gap-4
-                "
+                className="bg-white border border-secondary rounded p-4 d-flex align-items-start gap-3 mb-3"
               >
                 {/* Day Select */}
-                <div className="flex-1">
+                <div className="flex-fill">
                   <label
                     htmlFor={`schedule.${index}.day`}
-                    className="block text-xs font-medium text-gray-600 mb-1.5"
+                    className="d-block text-xs fw-medium text-body mb-2"
                   >
                     Ziua
                   </label>
-                  <select
+                  <BootstrapSelect
                     {...register(`schedule.${index}.day` as const)}
                     disabled={isLoading}
-                    className={`
-                      w-full px-3 py-2 border rounded-lg text-sm
-                      focus:outline-none focus:ring-2 focus:ring-[#00BBAE] focus:border-transparent
-                      ${errors.schedule?.[index]?.day ? "border-red-500" : "border-gray-300"}
-                      ${isLoading ? "bg-gray-100 cursor-not-allowed" : "bg-white"}
-                    `}
-                  >
-                    <option value="">Selectează ziua</option>
-                    {DAYS_OF_WEEK.map((day) => (
-                      <option key={day.value} value={day.value}>
-                        {day.label}
-                      </option>
-                    ))}
-                  </select>
+                    error={!!errors.schedule?.[index]?.day}
+                    className="w-100 small"
+                    options={[
+                      { value: "", label: "Selectează ziua" },
+                      ...DAYS_OF_WEEK.map((day) => ({ value: day.value, label: day.label })),
+                    ]}
+                  />
                   {errors.schedule?.[index]?.day && (
-                    <p className="mt-1 text-xs text-red-600">
+                    <p className="mt-1 text-xs text-danger">
                       {errors.schedule[index]?.day?.message}
                     </p>
                   )}
                 </div>
 
                 {/* Time Input */}
-                <div className="flex-1">
+                <div className="flex-fill">
                   <label
                     htmlFor={`schedule.${index}.time`}
-                    className="block text-xs font-medium text-gray-600 mb-1.5"
+                    className="d-block text-xs fw-medium text-body mb-2"
                   >
                     Interval orar
                   </label>
-                  <input
+                  <BootstrapInput
                     type="text"
                     {...register(`schedule.${index}.time` as const)}
                     disabled={isLoading}
-                    className={`
-                      w-full px-3 py-2 border rounded-lg text-sm
-                      focus:outline-none focus:ring-2 focus:ring-[#00BBAE] focus:border-transparent
-                      ${errors.schedule?.[index]?.time ? "border-red-500" : "border-gray-300"}
-                      ${isLoading ? "bg-gray-100 cursor-not-allowed" : "bg-white"}
-                    `}
+                    error={!!errors.schedule?.[index]?.time}
+                    className="w-100 small"
                     placeholder="ex: 17:00-18:30"
                     aria-invalid={errors.schedule?.[index]?.time ? "true" : "false"}
                   />
                   {errors.schedule?.[index]?.time && (
-                    <p className="mt-1 text-xs text-red-600">
+                    <p className="mt-1 text-xs text-danger">
                       {errors.schedule[index]?.time?.message}
                     </p>
                   )}
-                  <p className="mt-1 text-xs text-gray-500">
+                  <p className="mt-1 text-xs text-secondary">
                     Format: HH:MM-HH:MM (ex: 17:00-18:30)
                   </p>
                 </div>
 
                 {/* Remove Button */}
-                <div className="shrink-0 pt-6">
+                <div style={{ flexShrink: 0, paddingTop: "1.5rem" }}>
                   <button
                     type="button"
                     onClick={() => removeScheduleEntry(index)}
                     disabled={isLoading}
-                    className="
-                      p-2 text-gray-400 hover:text-red-600
-                      hover:bg-red-50 rounded-lg
-                      focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2
-                      transition-all duration-200
-                      disabled:opacity-50 disabled:cursor-not-allowed
-                    "
+                    className="p-2 text-secondary text-danger-hover bg-danger bg-opacity-10 rounded focus-danger"
+                    style={{
+                      transition: "all 0.2s ease-in-out",
+                    }}
                     aria-label="Șterge interval"
                   >
                     <X className="w-4 h-4" />
@@ -335,29 +305,19 @@ export function ClubContactScheduleForm() {
         )}
 
         {errors.schedule && typeof errors.schedule.message === "string" && (
-          <p className="mt-2 text-sm text-red-600">{errors.schedule.message}</p>
+          <p className="mt-2 small text-danger">{errors.schedule.message}</p>
         )}
       </div>
 
       {/* Info box */}
-      <div className="bg-[#EBFFFE] border border-[#00BBAE]/20 rounded-xl p-6">
-        <div className="flex items-start gap-3">
-          <span className="text-2xl">ℹ️</span>
-          <div>
-            <h3 className="font-semibold text-gray-900 mb-2">
-              De ce avem nevoie de aceste informații?
-            </h3>
-            <p className="text-sm text-gray-700">
-              Informațiile de contact și programul de antrenamente vor fi afișate în profilul
-              clubului tău, astfel încât părinții să te poată contacta și să știe când se desfășoară
-              antrenamentele. Poți actualiza aceste detalii oricând din dashboard-ul tău.
-            </p>
-          </div>
-        </div>
-      </div>
+      <InfoBox title="De ce avem nevoie de aceste informații?" className="mb-4">
+        Informațiile de contact și programul de antrenamente vor fi afișate în profilul clubului
+        tău, astfel încât părinții să te poată contacta și să știe când se desfășoară
+        antrenamentele. Poți actualiza aceste detalii oricând din dashboard-ul tău.
+      </InfoBox>
 
       {/* Navigation */}
-      <div className="pt-6 border-t border-gray-200">
+      <div className="pt-4 border-top border-secondary">
         <OnboardingNavigation
           backHref={routes.onboarding.club.basicInfo}
           nextHref={null} // null means submit button

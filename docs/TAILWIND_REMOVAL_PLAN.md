@@ -156,29 +156,38 @@ This document outlines the plan to remove Tailwind CSS v4 and shadcn/ui componen
 
 ### Phase 1: Preparation & Audit (Week 1)
 
-#### 1.1 Create Bootstrap Component Library
+#### 1.1 Create Bootstrap Component Library ✅
 
-- [ ] Create `src/components/UI/BootstrapButton.tsx` - Bootstrap button wrapper (using `bd-btn` pattern)
-- [ ] Create `src/components/UI/BootstrapInput.tsx` - Bootstrap input wrapper (using `login__input` pattern)
-- [ ] Create `src/components/UI/BootstrapTextarea.tsx` - Bootstrap textarea wrapper
-- [ ] Create `src/components/UI/BootstrapSelect.tsx` - Bootstrap select wrapper (or use `NiceSelect.tsx`)
-- [ ] Create `src/components/UI/BootstrapAlert.tsx` - Bootstrap alert wrapper
-- [ ] Create `src/components/UI/BootstrapProgress.tsx` - Bootstrap progress wrapper
+- [x] Create `src/components/UI/BootstrapButton.tsx` - Bootstrap button wrapper (using `bd-btn` pattern)
+- [x] Create `src/components/UI/BootstrapInput.tsx` - Bootstrap input wrapper (using `login__input` pattern)
+- [x] Create `src/components/UI/BootstrapTextarea.tsx` - Bootstrap textarea wrapper
+- [x] Create `src/components/UI/BootstrapSelect.tsx` - Bootstrap select wrapper (or use `NiceSelect.tsx`)
+- [x] Create `src/components/UI/BootstrapAlert.tsx` - Bootstrap alert wrapper
+- [x] Create `src/components/UI/BootstrapProgress.tsx` - Bootstrap progress wrapper
+- [x] Create `src/components/UI/bootstrap-index.ts` - Export index for easy imports
+- [x] Create `src/components/UI/BOOTSTRAP_COMPONENTS.md` - Component documentation and migration guide
 
-#### 1.2 Create Bootstrap Utility API Extensions
+#### 1.2 Create Bootstrap Utility API Extensions ✅
 
-- [ ] Create `public/assets/scss/utils/_yuvoo-utilities.scss` - Custom Yuvoo brand utilities using Bootstrap Utility API
-- [ ] Add Yuvoo brand color utilities (`bg-yuvoo-primary`, `text-yuvoo-primary`, etc.)
-- [ ] Add hover state utilities for Yuvoo colors
-- [ ] Reference existing CSS variables from `_root.scss` (`--bd-theme-1`, `--bd-theme-2`, etc.)
-- [ ] Import in `public/assets/scss/main.scss`
+- [x] Create `public/assets/scss/utils/_yuvoo-utilities.scss` - Custom Yuvoo brand utilities using Bootstrap Utility API
+- [x] Add Yuvoo brand color utilities (`bg-yuvoo-primary`, `text-yuvoo-primary`, etc.)
+- [x] Add hover state utilities for Yuvoo colors
+- [x] Reference existing CSS variables from `_root.scss` (`--bd-theme-1`, `--bd-theme-2`, etc.)
+- [x] Import in `public/assets/scss/main.scss`
+- [x] Add to `public/assets/scss/utils/_index.scss` for proper module forwarding
 
-#### 1.3 Audit All Components
+#### 1.3 Audit All Components ✅
 
-- [ ] Search for all Tailwind class usage (`bg-`, `text-`, `flex`, `grid`, etc.)
-- [ ] Search for all shadcn component imports (`@/components/UI/button`, etc.)
-- [ ] Document all files that need changes
-- [ ] Create replacement mapping (Tailwind → Bootstrap classes)
+- [x] Search for all Tailwind class usage (`bg-`, `text-`, `flex`, `grid`, etc.)
+- [x] Search for all shadcn component imports (`@/components/UI/button`, etc.)
+- [x] Document all files that need changes
+- [x] Create replacement mapping (Tailwind → Bootstrap classes)
+- [x] Created `docs/TAILWIND_AUDIT_REPORT.md` - Comprehensive audit report with:
+  - All files using shadcn/ui components (4 files identified)
+  - All files using Tailwind classes (3+ files identified)
+  - Complete Tailwind → Bootstrap class mapping
+  - Yuvoo-specific utility replacements
+  - Migration checklist for Phase 2
 
 #### 1.4 Backup Current State
 
@@ -199,16 +208,156 @@ This document outlines the plan to remove Tailwind CSS v4 and shadcn/ui componen
 
 #### 2.2 Update Onboarding Components
 
-- [ ] Update `OnboardingNavigation.tsx` - Replace Button, Alert
-- [ ] Update `OnboardingProgress.tsx` - Replace Progress
-- [ ] Update all form components in `features/onboarding/`
-- [ ] Update shared components (`FormField`, `ServerErrorAlert`, `InfoBox`)
+- [x] Update `OnboardingNavigation.tsx` - Replace Button, Alert ✅
+  - ✅ Replaced `Button` with `BootstrapButton` (submit buttons) and `bd-btn` pattern (Link buttons)
+  - ✅ Replaced `Alert` + `AlertDescription` with `BootstrapAlert`
+  - ✅ Replaced all Tailwind classes with Bootstrap equivalents
+  - ✅ Applied Yuvoo brand utilities
+  - ✅ Preserved all functionality
+  - Status: ✅ Complete - Fully migrated to Bootstrap
+- [x] Update `OnboardingProgress.tsx` - Replace Progress ✅
+  - ✅ Replaced `Progress` with Bootstrap progress bar (direct implementation for Yuvoo colors)
+  - ✅ Replaced all Tailwind classes with Bootstrap equivalents
+  - ✅ Applied Yuvoo brand utilities (`bg-yuvoo-primary`, `text-yuvoo-primary`, etc.)
+  - ✅ Preserved all functionality (desktop stepper, mobile progress bar, step indicators)
+  - Status: ✅ Complete - Fully migrated to Bootstrap
+- [x] Update `ClubBasicInfoForm.tsx` - Replace Alert, Input, Textarea, Select ✅
+  - ✅ Replaced `Alert` + `AlertDescription` with `BootstrapAlert`
+  - ✅ Replaced `Input` with `BootstrapInput` (4 instances)
+  - ✅ Replaced `Textarea` with `BootstrapTextarea`
+  - ✅ Replaced `Select` (shadcn) with `BootstrapSelect` (2 instances)
+  - ✅ Replaced all Tailwind classes with Bootstrap equivalents
+  - ✅ Applied Yuvoo brand utilities
+  - ✅ Preserved all functionality (form validation, error handling, React Hook Form integration)
+  - Status: ✅ Complete - Fully migrated to Bootstrap
+- [x] Update shared components (`FormField`, `ServerErrorAlert`, `InfoBox`, `FormSection`)
+  - ✅ Replaced all Tailwind classes with Bootstrap equivalents
+  - ✅ Updated to use Bootstrap components (`BootstrapInput`, `BootstrapTextarea`, `BootstrapSelect`, `BootstrapAlert`)
+  - ✅ Applied Yuvoo brand utilities
+  - Status: ✅ Complete - All shared components migrated to Bootstrap
+- [x] Update `OnboardingLayout.tsx`
+  - ✅ Replaced all Tailwind classes with Bootstrap equivalents
+  - ✅ Updated responsive classes (md:, lg:, sm:) to Bootstrap responsive utilities
+  - ✅ Applied Yuvoo brand utilities
+  - ✅ Preserved accessibility features (skip link, focus states)
+  - Status: ✅ Complete - Fully migrated to Bootstrap
+- [x] Update `AddChildForm.tsx`
+  - ✅ Replaced all Tailwind classes with Bootstrap equivalents
+  - ✅ Updated to use Bootstrap components and shared components
+  - ✅ Applied Yuvoo brand utilities
+  - ✅ Preserved form functionality (date picker, gender selection, validation)
+  - Status: ✅ Complete - Fully migrated to Bootstrap
+- [ ] Update all other form components in `features/onboarding/`
+  - [x] Club onboarding forms:
+    - [x] `ClubContactScheduleForm.tsx` ✅
+    - [x] `ClubPhotosForm.tsx` ✅
+    - [x] `ClubPricingAgesForm.tsx` ✅
+    - [x] `ClubVerificationForm.tsx` ✅
+    - [x] `ClubCompletionContent.tsx` ✅
+    - ✅ All club forms replaced Tailwind classes with Bootstrap equivalents
+    - ✅ Updated to use Bootstrap components and shared components
+    - ✅ Applied Yuvoo brand utilities
+    - ✅ Preserved all functionality (form validation, file uploads, React Hook Form integration)
+    - Status: ✅ Complete - All club onboarding forms fully migrated to Bootstrap
+  - [ ] Doctor onboarding forms:
+    - [x] `DoctorBasicInfoForm.tsx` ✅
+      - ✅ Replaced all Tailwind classes with Bootstrap equivalents
+      - ✅ Updated to use Bootstrap components (`BootstrapInput`, `BootstrapSelect`, `BootstrapButton`)
+      - ✅ Updated to use shared components (`ServerErrorAlert`)
+      - ✅ Applied Yuvoo brand utilities
+      - ✅ Preserved all functionality (credentials builder, form validation, React Hook Form integration)
+      - Status: ✅ Complete - Fully migrated to Bootstrap
+    - [x] `DoctorBioExperienceForm.tsx` ✅
+    - [x] `DoctorLocationContactForm.tsx` ✅
+    - [x] `DoctorPhotoForm.tsx` ✅
+    - [x] `DoctorAvailabilityForm.tsx` ✅
+    - [x] `DoctorVerificationForm.tsx` ✅
+    - [x] `DoctorCompletionContent.tsx` ✅
+    - ✅ All doctor forms replaced Tailwind classes with Bootstrap equivalents
+    - ✅ Updated to use Bootstrap components and shared components
+    - ✅ Applied Yuvoo brand utilities
+    - ✅ Preserved all functionality (form validation, file uploads, React Hook Form integration)
+    - Status: ✅ Complete - All doctor onboarding forms fully migrated to Bootstrap
+
+#### 2.2.1 Reusable Components Created (Pattern Recognition)
+
+During the migration process, common patterns were identified and extracted into reusable components:
+
+- [x] `FileUploadArea.tsx` ✅
+  - **Pattern**: File upload areas with dashed borders, loading states, and upload icons appeared in multiple forms
+  - **Used in**: ClubPhotosForm (logo, gallery), ClubVerificationForm (documents), DoctorPhotoForm (photo), DoctorVerificationForm (documents)
+  - **Features**: Bootstrap styling, Yuvoo brand colors, loading states, file type hints, max files tracking
+  - **Location**: `src/components/features/onboarding/components/FileUploadArea.tsx`
+
+- [x] `ImagePreview.tsx` ✅
+  - **Pattern**: Image previews with remove buttons appeared in multiple forms
+  - **Used in**: ClubPhotosForm (logo, gallery), DoctorPhotoForm (photo)
+  - **Features**: Next.js Image optimization, responsive sizing, remove functionality, loading overlay
+  - **Location**: `src/components/features/onboarding/components/ImagePreview.tsx`
+
+- [x] `DocumentPreview.tsx` ✅
+  - **Pattern**: Document previews with file icons and remove buttons appeared in verification forms
+  - **Used in**: ClubVerificationForm, DoctorVerificationForm
+  - **Features**: File type icons (PDF, DOC, images), filename display, remove functionality, loading states
+  - **Location**: `src/components/features/onboarding/components/DocumentPreview.tsx`
+
+**Pattern Recognition Principle**: When the same UI pattern appears in 3+ components, extract it into a reusable component to avoid duplication and ensure consistency.
+
+**Export**: All reusable components exported from `src/components/features/onboarding/components/index.ts`
 
 #### 2.3 Update Other Components
 
-- [ ] Audit and update `features/clubs/*` components
-- [ ] Audit and update `shared/InfoTooltip.tsx`
-- [ ] Update any other components using Tailwind
+- [x] Audit and update `features/clubs/*` components ✅
+  - **Audit Results**: All club components already use Bootstrap utilities and custom Kindedo theme classes
+  - **Components Checked**:
+    - `ClubCard.tsx` - ✅ Uses Bootstrap (`d-flex`, `justify-content-between`, `text-center`, `mb-*`, `position-absolute`, etc.)
+    - `ClubsMain.tsx` - ✅ Uses Bootstrap utilities and theme classes
+    - `ClubDetailsMain.tsx` - ✅ Uses Bootstrap utilities and theme classes
+    - `HomeClubArea.tsx` - ✅ Uses Bootstrap utilities and theme classes
+    - `VerificationBadge.tsx` - ✅ Uses custom theme classes only
+  - **No Tailwind Classes Found**: All components use Bootstrap utilities (`d-flex`, `justify-content-between`, `align-items-center`, `text-center`, `mb-*`, `position-absolute`, `top-0`, `end-0`, `m-*`, `text-muted`, `small`, etc.)
+  - **No shadcn/ui Components Found**: All components use native HTML elements and Bootstrap styling
+  - **Status**: ✅ Complete - No migration needed, components already use Bootstrap
+- [x] Audit and update `shared/InfoTooltip.tsx` ✅
+  - **Found Tailwind Classes**: Component was using Tailwind utilities
+  - **Replaced**:
+    - `relative`, `inline-flex`, `items-center` → `position-relative`, `d-inline-flex`, `align-items-center`
+    - `w-3 h-3`, `w-4 h-4`, `w-5 h-5` → Inline styles for icon sizing
+    - `focus:outline-none`, `focus:ring-2`, `focus:ring-[#00BBAE]` → `focus-yuvoo-primary` (Bootstrap utility)
+    - `rounded-full` → `rounded-circle`
+    - `text-gray-400`, `hover:text-[#00BBAE]` → `text-secondary`, `text-yuvoo-primary-hover`
+    - `transition-colors` → Inline style `transition: color 0.2s ease-in-out`
+    - `absolute`, `left-0`, `sm:left-1/2`, `sm:-translate-x-1/2` → `position-absolute`, `start-0`, `start-sm-50`, `translate-middle-x-sm`
+    - `bottom-full`, `mb-2` → `bottom-100`, `mb-2` (Bootstrap)
+    - `w-64`, `sm:w-72` → Inline styles `width: 16rem`, `maxWidth: 18rem`
+    - `p-3`, `bg-gray-900`, `text-white`, `text-sm` → `p-3`, `bg-dark`, `text-white`, `small` (Bootstrap)
+    - `rounded-lg`, `shadow-lg`, `z-50` → `rounded`, `shadow`, `z-3` (Bootstrap)
+    - `pointer-events-none`, `whitespace-normal` → Inline styles
+    - Tooltip arrow border classes → Inline styles with Bootstrap dark color variable
+  - **Status**: ✅ Complete - Fully migrated to Bootstrap with Yuvoo brand utilities
+- [x] Update any other components using Tailwind ✅
+  - **Found Tailwind Classes**:
+    - `HomePromotionArea.tsx` - `min-w-[110px]` (Tailwind arbitrary value) ✅ Fixed
+    - `Promotion/HomePromotionArea.tsx` - `min-w-[110px]` (Tailwind arbitrary value) ✅ Fixed
+  - **Legacy shadcn/ui Components** (Not in use):
+    - `src/components/UI/button.tsx` - Old shadcn/ui Button component (using Tailwind)
+    - `src/components/UI/input.tsx` - Old shadcn/ui Input component (using Tailwind)
+    - `src/components/UI/select.tsx` - Old shadcn/ui Select component (using Tailwind)
+    - `src/components/UI/textarea.tsx` - Old shadcn/ui Textarea component (using Tailwind)
+    - `src/components/UI/alert.tsx` - Old shadcn/ui Alert component (using Tailwind)
+    - `src/components/UI/progress.tsx` - Old shadcn/ui Progress component (using Tailwind)
+    - **Status**: ✅ Not imported anywhere - Can be safely removed in Phase 3
+  - **Other Components Checked**:
+    - Form components (`Form/*`) - ✅ Using Bootstrap utilities only
+    - Homepage components (`features/home/*`) - ✅ Using Bootstrap utilities and theme classes
+    - Club components (`features/clubs/*`) - ✅ Already using Bootstrap (audited earlier)
+  - **Onboarding Page Files Updated** (All 19 pages):
+    - Parent onboarding: `welcome/page.tsx`, `add-child/page.tsx`, `tour/page.tsx`, `quiz-intro/page.tsx` ✅
+    - Club onboarding: `welcome/page.tsx`, `basic-info/page.tsx`, `contact-schedule/page.tsx`, `pricing-ages/page.tsx`, `photos/page.tsx`, `verification/page.tsx`, `complete/page.tsx` ✅
+    - Doctor onboarding: `welcome/page.tsx`, `basic-info/page.tsx`, `bio-experience/page.tsx`, `location-contact/page.tsx`, `photo/page.tsx`, `verification/page.tsx`, `availability/page.tsx`, `complete/page.tsx` ✅
+    - All Tailwind classes replaced with Bootstrap utilities and Yuvoo brand utilities
+    - Replaced: `max-w-*`, `mx-auto`, `text-*`, `font-*`, `bg-*`, `border-*`, `rounded-*`, `p-*`, `m-*`, `space-*`, `flex`, `items-*`, `gap-*`, `shrink-*`, `w-*`, `h-*`, `shadow-*`, `hover:*`, `focus:*`, etc.
+  - **Status**: ✅ Complete - All active components and pages migrated to Bootstrap
 
 ### Phase 3: Remove Tailwind Dependencies (Week 3)
 

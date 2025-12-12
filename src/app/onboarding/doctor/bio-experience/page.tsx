@@ -30,13 +30,11 @@ export default async function DoctorBioExperiencePage() {
     <OnboardingLayout>
       <OnboardingProgress currentStep={3} steps={DOCTOR_STEPS} className="mb-8" />
 
-      <div className="max-w-2xl mx-auto">
+      <div className="mx-auto" style={{ maxWidth: "42rem" }}>
         {/* Header */}
-        <div className="text-center mb-8">
-          <h1 className="text-4xl font-bold text-gray-900 mb-4">
-            Bio profesional și experiență 📝
-          </h1>
-          <p className="text-lg text-gray-600">
+        <div className="text-center mb-5">
+          <h1 className="display-4 fw-bold text-body mb-4">Bio profesional și experiență 📝</h1>
+          <p className="h5 text-body">
             Descrie experiența și abordarea ta profesională pentru a crea un profil complet și
             atractiv.
           </p>

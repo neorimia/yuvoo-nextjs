@@ -29,11 +29,11 @@ export default async function ClubVerificationPage() {
     <OnboardingLayout>
       <OnboardingProgress currentStep={6} steps={CLUB_STEPS} className="mb-8" />
 
-      <div className="max-w-3xl mx-auto">
+      <div className="mx-auto" style={{ maxWidth: "48rem" }}>
         {/* Header */}
-        <div className="text-center mb-8">
-          <h1 className="text-4xl font-bold text-gray-900 mb-4">Documente de Verificare 📄</h1>
-          <p className="text-lg text-gray-600">
+        <div className="text-center mb-5">
+          <h1 className="display-4 fw-bold text-body mb-4">Documente de Verificare 📄</h1>
+          <p className="h5 text-body">
             Încarcă documentele necesare pentru verificarea clubului tău. Procesul de verificare
             ajută părinții să își facă o idee mai bună despre seriozitatea și siguranța
             activităților tale.

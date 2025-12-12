@@ -22,6 +22,7 @@ import Link from "next/link";
 import { routes } from "@/lib/routes";
 import { HelpCircle, X } from "lucide-react";
 import Image from "next/image";
+import { cn } from "@/lib/utils";
 
 interface OnboardingLayoutProps {
   children: ReactNode;
@@ -69,23 +70,31 @@ export function OnboardingLayout({
   };
 
   return (
-    <div className={`min-h-screen flex flex-col ${backgroundClass}`}>
+    <div className={cn("min-vh-100 d-flex flex-column", backgroundClass)}>
       {/* Skip to content link (accessibility) */}
       <a
         href="#main-content"
-        className="sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 focus:z-50 focus:px-4 focus:py-2 focus:bg-[#00BBAE] focus:text-white focus:rounded-lg focus:shadow-lg focus:outline-none focus:ring-2 focus:ring-[#00BBAE] focus:ring-offset-2"
+        className="visually-hidden-focusable position-absolute top-4 start-4 z-50 px-3 py-2 bg-yuvoo-primary text-white rounded shadow-lg focus-yuvoo-primary"
+        style={{ zIndex: 1050 }}
       >
         Sari la conținut
       </a>
 
       {/* Header - Minimal branding only */}
-      <header className="sticky top-0 z-50 bg-white/95 backdrop-blur-sm border-b border-gray-200 shadow-sm">
-        <div className="container mx-auto px-4 py-3 md:py-4 md:px-6 lg:px-8">
-          <div className="flex items-center justify-between gap-4">
+      <header
+        className="position-sticky top-0 z-50 bg-white border-bottom border-secondary shadow-sm"
+        style={{
+          backgroundColor: "rgba(255, 255, 255, 0.95)",
+          backdropFilter: "blur(4px)",
+        }}
+      >
+        <div className="container mx-auto px-3 py-3 px-md-4 py-md-4 px-lg-5">
+          <div className="d-flex align-items-center justify-content-between gap-3">
             {/* Logo */}
             <Link
               href={routes.home}
-              className="flex items-center space-x-2 group shrink-0"
+              className="d-flex align-items-center gap-2"
+              style={{ flexShrink: 0 }}
               aria-label="Înapoi la pagina principală Yuvoo"
             >
               <Image src="/assets/img/logo/logo.svg" alt="Yuvoo" width={100} height={100} />
@@ -93,16 +102,19 @@ export function OnboardingLayout({
 
             {/* Optional header content (e.g., progress) */}
             {headerContent && (
-              <div className="flex-1 max-w-md mx-4 hidden md:block">{headerContent}</div>
+              <div className="flex-fill mx-4 d-none d-md-block" style={{ maxWidth: "28rem" }}>
+                {headerContent}
+              </div>
             )}
 
             {/* Right side actions */}
-            <div className="flex items-center gap-3 shrink-0">
+            <div className="d-flex align-items-center gap-3" style={{ flexShrink: 0 }}>
               {/* Help link */}
               {showHelpLink && (
                 <Link
                   href={routes.contact}
-                  className="hidden sm:flex items-center gap-1.5 text-sm text-gray-600 hover:text-[#00BBAE] transition-colors focus:outline-none focus:ring-2 focus:ring-[#00BBAE] focus:ring-offset-2 rounded-lg px-2 py-1"
+                  className="d-none d-sm-flex align-items-center gap-2 small text-secondary text-yuvoo-primary-hover rounded px-2 py-1 focus-yuvoo-primary"
+                  style={{ transition: "color 0.2s ease-in-out" }}
                   aria-label="Ajutor și suport"
                 >
                   <HelpCircle className="w-4 h-4" />
@@ -114,7 +126,8 @@ export function OnboardingLayout({
               {showHelpLink && (
                 <Link
                   href={routes.contact}
-                  className="sm:hidden text-gray-600 hover:text-[#00BBAE] transition-colors focus:outline-none focus:ring-2 focus:ring-[#00BBAE] focus:ring-offset-2 rounded-lg p-2"
+                  className="d-sm-none text-secondary text-yuvoo-primary-hover rounded p-2 focus-yuvoo-primary"
+                  style={{ transition: "color 0.2s ease-in-out" }}
                   aria-label="Ajutor și suport"
                 >
                   <HelpCircle className="w-5 h-5" />
@@ -125,7 +138,8 @@ export function OnboardingLayout({
               {showExitButton && (
                 <button
                   onClick={handleExit}
-                  className="text-gray-600 hover:text-red-600 transition-colors focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2 rounded-lg p-2"
+                  className="text-secondary text-danger-hover rounded p-2 focus-danger"
+                  style={{ transition: "color 0.2s ease-in-out" }}
                   aria-label="Părăsește onboarding-ul"
                   title="Părăsește onboarding-ul"
                 >
@@ -136,36 +150,39 @@ export function OnboardingLayout({
           </div>
 
           {/* Mobile header content */}
-          {headerContent && <div className="mt-3 md:hidden">{headerContent}</div>}
+          {headerContent && <div className="mt-3 d-md-none">{headerContent}</div>}
         </div>
       </header>
 
       {/* Main content area */}
       <main
         id="main-content"
-        className="flex-1 container mx-auto px-4 py-6 md:py-8 md:px-6 lg:px-8 max-w-4xl w-full"
+        className="flex-fill container mx-auto px-3 py-4 px-md-4 py-md-5 px-lg-5"
+        style={{ maxWidth: "64rem", width: "100%" }}
       >
         <div className="animate-fadeIn">{children}</div>
       </main>
 
       {/* Footer - Minimal info only */}
-      <footer className="mt-auto py-4 md:py-6 border-t border-gray-200 bg-gray-50">
-        <div className="container mx-auto px-4 md:px-6 lg:px-8">
+      <footer className="mt-auto py-3 py-md-4 border-top border-secondary bg-light">
+        <div className="container mx-auto px-3 px-md-4 px-lg-5">
           {footerContent || (
-            <div className="flex flex-col md:flex-row items-center justify-between gap-3 md:gap-4 text-sm text-gray-600">
-              <p className="text-center md:text-left">
+            <div className="d-flex flex-column flex-md-row align-items-center justify-content-between gap-3 gap-md-4 small text-secondary">
+              <p className="text-center text-md-start mb-0">
                 © {new Date().getFullYear()} Yuvoo. Toate drepturile rezervate.
               </p>
-              <div className="flex gap-4">
+              <div className="d-flex gap-4">
                 <Link
                   href={routes.privacy}
-                  className="hover:text-[#00BBAE] transition-colors focus:outline-none focus:ring-2 focus:ring-[#00BBAE] focus:ring-offset-2 rounded px-1"
+                  className="text-yuvoo-primary-hover focus-yuvoo-primary rounded px-1"
+                  style={{ transition: "color 0.2s ease-in-out" }}
                 >
                   Confidențialitate
                 </Link>
                 <Link
                   href={routes.terms}
-                  className="hover:text-[#00BBAE] transition-colors focus:outline-none focus:ring-2 focus:ring-[#00BBAE] focus:ring-offset-2 rounded px-1"
+                  className="text-yuvoo-primary-hover focus-yuvoo-primary rounded px-1"
+                  style={{ transition: "color 0.2s ease-in-out" }}
                 >
                   Termeni
                 </Link>

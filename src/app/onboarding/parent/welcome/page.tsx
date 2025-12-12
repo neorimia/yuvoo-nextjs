@@ -31,30 +31,34 @@ export default async function ParentWelcomePage() {
       <OnboardingProgress currentStep={1} steps={PARENT_STEPS} className="mb-8" />
 
       {/* Main content */}
-      <div className="max-w-2xl mx-auto text-center">
-        <h1 className="text-4xl font-bold text-gray-900 mb-4">Bun venit la Yuvoo! 👋</h1>
-        <p className="text-lg text-gray-600 mb-8">
+      <div className="mx-auto text-center" style={{ maxWidth: "42rem" }}>
+        <h1 className="display-4 fw-bold text-body mb-4">Bun venit la Yuvoo! 👋</h1>
+        <p className="h5 text-body mb-5">
           Hai să începem configurarea contului tău de părinte. Te vom ghida pas cu pas pentru a găsi
           sportul perfect pentru copilul tău.
         </p>
 
         {/* Benefits list */}
-        <div className="bg-[#EBFFFE] rounded-xl p-6 mb-8 text-left">
-          <h2 className="text-xl font-semibold text-gray-900 mb-4">
-            Ce vei face în următorii pași:
-          </h2>
-          <ul className="space-y-3">
-            <li className="flex items-start gap-3">
-              <span className="text-[#00BBAE] text-2xl">✓</span>
-              <span className="text-gray-700">Adaugă profilul copilului tău</span>
+        <div className="bg-yuvoo-primary-light rounded-3 p-4 mb-5 text-start">
+          <h2 className="h4 fw-semibold text-body mb-4">Ce vei face în următorii pași:</h2>
+          <ul className="mb-0" style={{ listStyle: "none", paddingLeft: 0 }}>
+            <li className="d-flex align-items-start gap-3 mb-3">
+              <span className="text-yuvoo-primary" style={{ fontSize: "1.5rem" }}>
+                ✓
+              </span>
+              <span className="text-body">Adaugă profilul copilului tău</span>
             </li>
-            <li className="flex items-start gap-3">
-              <span className="text-[#00BBAE] text-2xl">✓</span>
-              <span className="text-gray-700">Descoperă funcționalitățile platformei</span>
+            <li className="d-flex align-items-start gap-3 mb-3">
+              <span className="text-yuvoo-primary" style={{ fontSize: "1.5rem" }}>
+                ✓
+              </span>
+              <span className="text-body">Descoperă funcționalitățile platformei</span>
             </li>
-            <li className="flex items-start gap-3">
-              <span className="text-[#00BBAE] text-2xl">✓</span>
-              <span className="text-gray-700">
+            <li className="d-flex align-items-start gap-3">
+              <span className="text-yuvoo-primary" style={{ fontSize: "1.5rem" }}>
+                ✓
+              </span>
+              <span className="text-body">
                 Începe chestionarul AI pentru recomandări personalizate
               </span>
             </li>
@@ -62,7 +66,7 @@ export default async function ParentWelcomePage() {
         </div>
 
         {/* Estimated time */}
-        <p className="text-sm text-gray-500 mb-8">⏱️ Durată estimată: 5-10 minute</p>
+        <p className="small text-secondary mb-5">⏱️ Durată estimată: 5-10 minute</p>
       </div>
 
       {/* Navigation */}
@@ -70,7 +74,7 @@ export default async function ParentWelcomePage() {
         backHref={null}
         nextHref={routes.onboarding.parent.addChild}
         nextText="Începe"
-        className="mt-8"
+        className="mt-5"
       />
     </OnboardingLayout>
   );

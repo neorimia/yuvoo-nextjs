@@ -33,42 +33,48 @@ export default async function ClubWelcomePage() {
       <OnboardingProgress currentStep={1} steps={CLUB_STEPS} className="mb-8" />
 
       {/* Main content */}
-      <div className="max-w-2xl mx-auto text-center">
-        <h1 className="text-4xl font-bold text-gray-900 mb-4">
+      <div className="mx-auto text-center" style={{ maxWidth: "42rem" }}>
+        <h1 className="display-4 fw-bold text-body mb-4">
           Bună, {session.user.displayName || "Administrator"}! 👋
         </h1>
-        <p className="text-lg text-gray-600 mb-8">
+        <p className="h5 text-body mb-5">
           Bun venit pe platforma Yuvoo pentru administratori de cluburi! În următorii pași vei crea
           profilul clubului tău.
         </p>
 
         {/* Benefits list */}
-        <div className="bg-[#EBFFFE] rounded-xl p-6 mb-8 text-left">
-          <h2 className="text-xl font-semibold text-gray-900 mb-4">
-            Ce vei face în următorii pași:
-          </h2>
-          <ul className="space-y-3">
-            <li className="flex items-start gap-3">
-              <span className="text-[#00BBAE] text-2xl">✓</span>
-              <span className="text-gray-700">Informații despre club</span>
+        <div className="bg-yuvoo-primary-light rounded-3 p-4 mb-5 text-start">
+          <h2 className="h4 fw-semibold text-body mb-4">Ce vei face în următorii pași:</h2>
+          <ul className="mb-0" style={{ listStyle: "none", paddingLeft: 0 }}>
+            <li className="d-flex align-items-start gap-3 mb-3">
+              <span className="text-yuvoo-primary" style={{ fontSize: "1.5rem" }}>
+                ✓
+              </span>
+              <span className="text-body">Informații despre club</span>
             </li>
-            <li className="flex items-start gap-3">
-              <span className="text-[#00BBAE] text-2xl">✓</span>
-              <span className="text-gray-700">Program și tarife</span>
+            <li className="d-flex align-items-start gap-3 mb-3">
+              <span className="text-yuvoo-primary" style={{ fontSize: "1.5rem" }}>
+                ✓
+              </span>
+              <span className="text-body">Program și tarife</span>
             </li>
-            <li className="flex items-start gap-3">
-              <span className="text-[#00BBAE] text-2xl">✓</span>
-              <span className="text-gray-700">Fotografii și documente</span>
+            <li className="d-flex align-items-start gap-3 mb-3">
+              <span className="text-yuvoo-primary" style={{ fontSize: "1.5rem" }}>
+                ✓
+              </span>
+              <span className="text-body">Fotografii și documente</span>
             </li>
-            <li className="flex items-start gap-3">
-              <span className="text-[#00BBAE] text-2xl">✓</span>
-              <span className="text-gray-700">Verificare și aprobare</span>
+            <li className="d-flex align-items-start gap-3">
+              <span className="text-yuvoo-primary" style={{ fontSize: "1.5rem" }}>
+                ✓
+              </span>
+              <span className="text-body">Verificare și aprobare</span>
             </li>
           </ul>
         </div>
 
         {/* Estimated time */}
-        <p className="text-sm text-gray-500 mb-8">⏱️ Durată estimată: 10-15 minute</p>
+        <p className="small text-secondary mb-5">⏱️ Durată estimată: 10-15 minute</p>
       </div>
 
       {/* Navigation */}
@@ -76,7 +82,7 @@ export default async function ClubWelcomePage() {
         backHref={null}
         nextHref={routes.onboarding.club.basicInfo}
         nextText="Începe"
-        className="mt-8"
+        className="mt-5"
       />
     </OnboardingLayout>
   );

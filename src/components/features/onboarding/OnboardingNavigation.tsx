@@ -22,8 +22,7 @@
 import { ArrowLeft, ArrowRight, Loader2, AlertCircle } from "lucide-react";
 import Link from "next/link";
 import { useEffect, useCallback } from "react";
-import { Button } from "@/components/UI/button";
-import { Alert, AlertDescription } from "@/components/UI/alert";
+import { BootstrapButton, BootstrapAlert } from "@/components/UI/bootstrap-index";
 import { cn } from "@/lib/utils";
 
 interface OnboardingNavigationProps {
@@ -82,7 +81,7 @@ export function OnboardingNavigation({
   loadingText = "Se procesează...",
   formId,
   enableKeyboardShortcuts = true,
-  showBackTextOnMobile = false,
+  showBackTextOnMobile: _showBackTextOnMobile = false,
   className = "",
   onBackClick,
   onNextClick,
@@ -160,130 +159,162 @@ export function OnboardingNavigation({
   }, [onSkipClick]);
 
   return (
-    <div className={cn("space-y-4", className)}>
+    <div className={cn("mb-4", className)}>
       {/* Error message */}
       {error && (
-        <Alert variant="destructive">
-          <AlertCircle />
-          <AlertDescription>{error}</AlertDescription>
-        </Alert>
+        <BootstrapAlert variant="danger" className="mb-4">
+          <AlertCircle className="me-2" />
+          {error}
+        </BootstrapAlert>
       )}
 
       {/* Navigation buttons */}
-      <div className="flex items-center justify-between gap-3 md:gap-4 my-4">
+      <div
+        className={cn(
+          "d-flex align-items-center  gap-3 my-4",
+          "mx-auto",
+          !backHref ? "justify-content-center" : "justify-content-between"
+        )}
+      >
         {/* Back button */}
-        <div className="shrink-0">
-          {backHref ? (
-            <Button
-              variant="outline"
-              size="default"
-              asChild
-              onClick={handleBackClick}
-              className="min-w-[44px] md:min-w-auto bg-white border-border text-muted-foreground hover:bg-muted hover:border-(--color-yuvoo-primary) focus-visible:ring-(--color-yuvoo-primary)"
-            >
-              <Link href={backHref} aria-label={backText} title={backText}>
-                <ArrowLeft />
-                <span className={showBackTextOnMobile ? "" : "hidden sm:inline"}>{backText}</span>
+        {backHref && (
+          <div style={{ flexShrink: 0 }}>
+            {backHref ? (
+              <Link
+                href={backHref || "#"}
+                onClick={handleBackClick}
+                className={cn(
+                  "bd-btn bd-btn-lg btn-outline",
+                  "bg-transparent text-white",
+                  "shadow shadow-yuvoo-primary",
+                  "text-yuvoo-primary hover:text-yuvoo-primary-hover",
+                  "border-yuvoo-primary hover:border-yuvoo-primary-hover"
+                )}
+                style={{ minWidth: "120px" }}
+                aria-label={backText}
+              >
+                <span className="bd-btn-inner">
+                  <span className="bd-btn-normal d-flex align-items-center justify-content-center">
+                    <ArrowLeft className="me-1" aria-hidden="true" />
+                    <span className="d-none d-sm-inline">{backText}</span>
+                  </span>
+                  <span className="bd-btn-hover text-white d-flex align-items-center justify-content-center">
+                    <ArrowLeft className="me-1" aria-hidden="true" />
+                    <span className="d-none d-sm-inline">{backText}</span>
+                  </span>
+                </span>
               </Link>
-            </Button>
-          ) : (
-            <div className="w-16 md:w-24" aria-hidden="true" />
-          )}
-        </div>
+            ) : (
+              <div className="w-16" style={{ width: "96px" }} aria-hidden="true" />
+            )}
+          </div>
+        )}
 
         {/* Center: Skip button (optional) */}
-        <div className="flex-1 flex justify-center">
-          {skipHref && !isFinalStep && (
-            <Button
-              variant="link"
-              size="default"
-              asChild
+        {skipHref && !isFinalStep && (
+          <div className="flex-fill d-flex justify-content-center">
+            <Link
+              href={skipHref}
               onClick={handleSkipClick}
-              className="text-muted-foreground hover:text-(--color-yuvoo-primary) focus-visible:ring-(--color-yuvoo-primary)"
+              className={cn("text-muted text-yuvoo-primary-hover", "focus-yuvoo-primary")}
               aria-label={skipText}
             >
-              <Link href={skipHref}>{skipText}</Link>
-            </Button>
-          )}
-        </div>
+              {skipText}
+            </Link>
+          </div>
+        )}
 
         {/* Next/Finish button */}
-        <div className="shrink-0 text-white min-w-[120px] md:min-w-auto">
+        <div style={{ flexShrink: 0 }} className="text-white">
           {isSubmitButton ? (
             // Submit button (for forms) - Using Yuvoo brand design
-            <Button
+            <BootstrapButton
               type="submit"
               form={formId}
               onClick={handleNextClick}
               disabled={isNextDisabled || isLoading}
               size="lg"
-              variant="default"
-              className="w-full bg-(--color-yuvoo-primary) text-white min-w-[120px] md:min-w-auto shadow-md hover:bg-(--color-yuvoo-primary-dark) hover:shadow-[0px_4px_12px_rgba(0,187,174,0.2)] disabled:hover:bg-(--color-yuvoo-primary) disabled:hover:shadow-md disabled:active:scale-100"
+              variant="primary"
+              isLoading={isLoading}
+              className={cn("w-100", "bg-yuvoo-primary text-white", "shadow shadow-yuvoo-primary")}
+              style={{ minWidth: "120px" }}
               aria-label={buttonText}
               aria-busy={isLoading}
             >
               {isLoading ? (
                 <>
-                  <Loader2 className="animate-spin" aria-hidden="true" />
-                  <span className="hidden sm:inline">{loadingText}</span>
-                  <span className="sm:hidden">...</span>
+                  <Loader2 className="animate-spin me-2" aria-hidden="true" />
+                  <span className="d-none d-sm-inline">{loadingText}</span>
+                  <span className="d-sm-none">...</span>
                 </>
               ) : (
                 <>
                   <span>{buttonText}</span>
-                  <ArrowRight aria-hidden="true" />
+                  <ArrowRight className="ms-2" aria-hidden="true" />
                 </>
               )}
-            </Button>
+            </BootstrapButton>
           ) : isNextDisabled ? (
             // Disabled button (when navigation is disabled)
-            <Button
+            <BootstrapButton
               type="button"
               disabled
               size="lg"
-              variant="default"
-              className="w-full bg-(--color-yuvoo-primary) text-white min-w-[120px] md:min-w-auto shadow-md hover:shadow-[0px_4px_12px_rgba(0,187,174,0.2)] disabled:hover:bg-(--color-yuvoo-primary) disabled:hover:shadow-md disabled:active:scale-100"
+              variant="primary"
+              className={cn("w-100", "bg-yuvoo-primary text-white", "shadow")}
+              style={{ minWidth: "120px" }}
               aria-label={buttonText}
               aria-disabled={true}
             >
               <span>{buttonText}</span>
-              <ArrowRight aria-hidden="true" />
-            </Button>
+              <ArrowRight className="ms-2" aria-hidden="true" />
+            </BootstrapButton>
           ) : (
             // Link button (for navigation when enabled) - Using Yuvoo brand design
-            <Button
-              size="lg"
-              variant="default"
-              asChild
+            <Link
+              href={nextHref || "#"}
               onClick={handleNextClick}
-              className="bg-(--color-yuvoo-primary) text-white min-w-[120px] md:min-w-auto shadow-md hover:bg-(--color-yuvoo-primary-dark) hover:shadow-[0px_4px_12px_rgba(0,187,174,0.2)]"
+              className={cn(
+                "bd-btn bd-btn-lg",
+                "bg-yuvoo-primary text-white",
+                "shadow shadow-yuvoo-primary"
+              )}
+              style={{ minWidth: "120px" }}
               aria-label={buttonText}
             >
-              <Link href={nextHref || "#"}>
-                <span>{buttonText}</span>
-                <ArrowRight aria-hidden="true" />
-              </Link>
-            </Button>
+              <span className="bd-btn-inner">
+                <span className="bd-btn-normal">
+                  <span>{buttonText}</span>
+                  <ArrowRight className="ms-2" aria-hidden="true" />
+                </span>
+                <span className="bd-btn-hover">
+                  <span>{buttonText}</span>
+                  <ArrowRight className="ms-2" aria-hidden="true" />
+                </span>
+              </span>
+            </Link>
           )}
         </div>
       </div>
 
       {/* Keyboard shortcuts hint (desktop only) */}
-      {enableKeyboardShortcuts && !isLoading && (
-        <div className="hidden md:flex items-center justify-center gap-4 text-xs text-gray-500 mb-4">
-          <kbd className="px-2 py-1 bg-gray-100 border border-gray-300 rounded text-xs">Enter</kbd>
+      {/* {enableKeyboardShortcuts && !isLoading && (
+        <div className="d-none d-md-flex align-items-center justify-content-center gap-4 small text-secondary mb-4">
+          <kbd className="px-2 py-1 bg-light text-black border border-secondary rounded small">
+            Enter
+          </kbd>
           <span>pentru a continua</span>
           {backHref && (
             <>
-              <span className="text-gray-300">•</span>
-              <kbd className="px-2 py-1 bg-gray-100 border border-gray-300 rounded text-xs">
+              <span className="text-secondary">•</span>
+              <kbd className="px-2 py-1 bg-light text-black border border-secondary rounded small">
                 Esc
               </kbd>
               <span>pentru a reveni</span>
             </>
           )}
         </div>
-      )}
+      )} */}
     </div>
   );
 }

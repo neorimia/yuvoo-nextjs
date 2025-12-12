@@ -33,6 +33,7 @@ import { normalizePhoneNumber } from "@/lib/utils";
 import { OnboardingNavigation } from "./OnboardingNavigation";
 import { InfoTooltip } from "@/components/shared/InfoTooltip";
 import { ServerErrorAlert } from "./components/ServerErrorAlert";
+import { BootstrapInput, BootstrapSelect } from "@/components/UI/bootstrap-index";
 
 // Romanian cities (major cities)
 const ROMANIAN_CITIES = [
@@ -117,131 +118,122 @@ export function DoctorLocationContactForm() {
   };
 
   return (
-    <form onSubmit={handleSubmit(onSubmit)} className="space-y-6 px-4 sm:px-0">
+    <form onSubmit={handleSubmit(onSubmit)} className="px-3 px-sm-0">
       {/* Server error */}
-      <ServerErrorAlert error={serverError} />
+      <ServerErrorAlert error={serverError} className="mb-4" />
 
       {/* City */}
-      <div>
-        <label htmlFor="city" className="block text-sm font-medium text-gray-700 mb-2">
-          Oraș <span className="text-red-500">*</span>
+      <div className="mb-4">
+        <label htmlFor="city" className="d-block small fw-medium text-body mb-2">
+          Oraș <span className="text-danger">*</span>
         </label>
-        <select
+        <BootstrapSelect
           id="city"
           {...register("city")}
-          className={`w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-[#00BBAE] focus:border-transparent ${
-            errors.city ? "border-red-500" : "border-gray-300"
-          }`}
-        >
-          <option value="">Selectează orașul</option>
-          {ROMANIAN_CITIES.map((city) => (
-            <option key={city} value={city}>
-              {city}
-            </option>
-          ))}
-        </select>
-        {errors.city && <p className="mt-1 text-sm text-red-600">{errors.city.message}</p>}
+          error={!!errors.city}
+          className="w-100"
+          options={[
+            { value: "", label: "Selectează orașul" },
+            ...ROMANIAN_CITIES.map((city) => ({ value: city, label: city })),
+          ]}
+        />
+        {errors.city && <p className="mt-1 small text-danger">{errors.city.message}</p>}
       </div>
 
       {/* District/Sector (Optional) */}
-      <div>
-        <label htmlFor="district" className="block text-sm font-medium text-gray-700 mb-2">
-          District/Sector <span className="text-gray-500 text-xs">(opțional)</span>
+      <div className="mb-4">
+        <label htmlFor="district" className="d-block small fw-medium text-body mb-2">
+          District/Sector <span className="text-secondary text-xs">(opțional)</span>
         </label>
-        <input
+        <BootstrapInput
           id="district"
           type="text"
           {...register("district")}
-          className={`w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-[#00BBAE] focus:border-transparent ${
-            errors.district ? "border-red-500" : "border-gray-300"
-          }`}
+          error={!!errors.district}
+          className="w-100"
           placeholder="Ex: Sector 1, Sector 2, etc."
         />
-        {errors.district && <p className="mt-1 text-sm text-red-600">{errors.district.message}</p>}
+        {errors.district && <p className="mt-1 small text-danger">{errors.district.message}</p>}
       </div>
 
       {/* Address */}
-      <div>
-        <label htmlFor="address" className="block text-sm font-medium text-gray-700 mb-2">
-          Adresă cabinet <span className="text-red-500">*</span>
+      <div className="mb-4">
+        <label htmlFor="address" className="d-block small fw-medium text-body mb-2">
+          Adresă cabinet <span className="text-danger">*</span>
         </label>
-        <input
+        <BootstrapInput
           id="address"
           type="text"
           {...register("address")}
-          className={`w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-[#00BBAE] focus:border-transparent ${
-            errors.address ? "border-red-500" : "border-gray-300"
-          }`}
+          error={!!errors.address}
+          className="w-100"
           placeholder="Ex: Strada Exemplu, Nr. 10, Bloc A, Scara 1, Etaj 2, Ap. 5"
         />
-        <p className="mt-1 text-xs text-gray-500">Minim 10 caractere</p>
-        {errors.address && <p className="mt-1 text-sm text-red-600">{errors.address.message}</p>}
+        <p className="mt-1 text-xs text-secondary">Minim 10 caractere</p>
+        {errors.address && <p className="mt-1 small text-danger">{errors.address.message}</p>}
       </div>
 
       {/* Phone */}
-      <div>
+      <div className="mb-4">
         <label
           htmlFor="phone"
-          className="flex items-center gap-2 text-sm font-medium text-gray-700 mb-2"
+          className="d-flex align-items-center gap-2 small fw-medium text-body mb-2"
         >
-          Telefon cabinet <span className="text-red-500">*</span>
+          Telefon cabinet <span className="text-danger">*</span>
           <InfoTooltip
             content="Numărul de telefon al cabinetului tău în format internațional (+40XXXXXXXXX). Acesta va fi afișat în profilul tău pentru ca părinții să te poată contacta."
             size="sm"
           />
         </label>
-        <input
+        <BootstrapInput
           id="phone"
           type="tel"
           {...register("phone")}
-          className={`w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-[#00BBAE] focus:border-transparent ${
-            errors.phone ? "border-red-500" : "border-gray-300"
-          }`}
+          error={!!errors.phone}
+          className="w-100"
           placeholder="+40721234567"
         />
-        <p className="mt-1 text-xs text-gray-500">Format: +40XXXXXXXXX (ex: +40721234567)</p>
-        {errors.phone && <p className="mt-1 text-sm text-red-600">{errors.phone.message}</p>}
+        <p className="mt-1 text-xs text-secondary">Format: +40XXXXXXXXX (ex: +40721234567)</p>
+        {errors.phone && <p className="mt-1 small text-danger">{errors.phone.message}</p>}
       </div>
 
       {/* Email */}
-      <div>
+      <div className="mb-4">
         <label
           htmlFor="email"
-          className="flex items-center gap-2 text-sm font-medium text-gray-700 mb-2"
+          className="d-flex align-items-center gap-2 small fw-medium text-body mb-2"
         >
-          Email profesional <span className="text-red-500">*</span>
+          Email profesional <span className="text-danger">*</span>
           <InfoTooltip
             content="Adresa de email profesională a cabinetului. Părinții vor putea să te contacteze prin email pentru programări sau întrebări."
             size="sm"
           />
         </label>
-        <input
+        <BootstrapInput
           id="email"
           type="email"
           {...register("email")}
-          className={`w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-[#00BBAE] focus:border-transparent ${
-            errors.email ? "border-red-500" : "border-gray-300"
-          }`}
+          error={!!errors.email}
+          className="w-100"
           placeholder="contact@cabinet.ro"
         />
-        {errors.email && <p className="mt-1 text-sm text-red-600">{errors.email.message}</p>}
+        {errors.email && <p className="mt-1 small text-danger">{errors.email.message}</p>}
       </div>
 
       {/* Website (Optional) */}
-      <div>
-        <label htmlFor="website" className="block text-sm font-medium text-gray-700 mb-2">
-          Website <span className="text-gray-500 text-xs">(opțional)</span>
+      <div className="mb-4">
+        <label htmlFor="website" className="d-block small fw-medium text-body mb-2">
+          Website <span className="text-secondary text-xs">(opțional)</span>
         </label>
-        <input
+        <BootstrapInput
           id="website"
           type="url"
           {...register("website")}
-          className={`w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-[#00BBAE] focus:border-transparent ${
-            errors.website ? "border-red-500" : "border-gray-300"
-          }`}
+          error={!!errors.website}
+          className="w-100"
           placeholder="https://www.cabinet.ro"
         />
-        {errors.website && <p className="mt-1 text-sm text-red-600">{errors.website.message}</p>}
+        {errors.website && <p className="mt-1 small text-danger">{errors.website.message}</p>}
       </div>
 
       {/* Navigation */}
@@ -250,7 +242,7 @@ export function DoctorLocationContactForm() {
         nextHref={null}
         nextText="Continuă"
         isLoading={isLoading}
-        className="mt-8"
+        className="mt-5"
       />
     </form>
   );

@@ -25,6 +25,8 @@ import { routes } from "@/lib/routes";
 import { OnboardingNavigation } from "./OnboardingNavigation";
 import { InfoTooltip } from "@/components/shared/InfoTooltip";
 import { ServerErrorAlert } from "./components/ServerErrorAlert";
+import { BootstrapInput, BootstrapSelect, BootstrapButton } from "@/components/UI/bootstrap-index";
+import { cn } from "@/lib/utils";
 
 // Doctor specialties (matching validation enum)
 const DOCTOR_SPECIALTIES = [
@@ -124,57 +126,53 @@ export function DoctorBasicInfoForm() {
   };
 
   return (
-    <form onSubmit={handleSubmit(onSubmit)} className="space-y-6 px-4 sm:px-0">
+    <form onSubmit={handleSubmit(onSubmit)} className="px-3 px-sm-0">
       {/* Server error */}
-      <ServerErrorAlert error={serverError} />
+      <ServerErrorAlert error={serverError} className="mb-4" />
 
       {/* First Name */}
-      <div>
+      <div className="mb-4">
         <label
           htmlFor="firstName"
-          className="flex items-center gap-2 text-sm font-medium text-gray-700 mb-2"
+          className="d-flex align-items-center gap-2 small fw-medium text-body mb-2"
         >
-          Prenume <span className="text-red-500">*</span>
+          Prenume <span className="text-danger">*</span>
         </label>
-        <input
+        <BootstrapInput
           id="firstName"
           type="text"
           {...register("firstName")}
-          className={`w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-[#00BBAE] focus:border-transparent ${
-            errors.firstName ? "border-red-500" : "border-gray-300"
-          }`}
+          error={!!errors.firstName}
+          className="w-100"
           placeholder="Ion"
         />
-        {errors.firstName && (
-          <p className="mt-1 text-sm text-red-600">{errors.firstName.message}</p>
-        )}
+        {errors.firstName && <p className="mt-1 small text-danger">{errors.firstName.message}</p>}
       </div>
 
       {/* Last Name */}
-      <div>
+      <div className="mb-4">
         <label
           htmlFor="lastName"
-          className="flex items-center gap-2 text-sm font-medium text-gray-700 mb-2"
+          className="d-flex align-items-center gap-2 small fw-medium text-body mb-2"
         >
-          Nume <span className="text-red-500">*</span>
+          Nume <span className="text-danger">*</span>
         </label>
-        <input
+        <BootstrapInput
           id="lastName"
           type="text"
           {...register("lastName")}
-          className={`w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-[#00BBAE] focus:border-transparent ${
-            errors.lastName ? "border-red-500" : "border-gray-300"
-          }`}
+          error={!!errors.lastName}
+          className="w-100"
           placeholder="Popescu"
         />
-        {errors.lastName && <p className="mt-1 text-sm text-red-600">{errors.lastName.message}</p>}
+        {errors.lastName && <p className="mt-1 small text-danger">{errors.lastName.message}</p>}
       </div>
 
       {/* Title (Optional) */}
-      <div>
+      <div className="mb-4">
         <label
           htmlFor="title"
-          className="flex items-center gap-2 text-sm font-medium text-gray-700 mb-2"
+          className="d-flex align-items-center gap-2 small fw-medium text-body mb-2"
         >
           Titlu profesional (opțional)
           <InfoTooltip
@@ -182,77 +180,75 @@ export function DoctorBasicInfoForm() {
             size="sm"
           />
         </label>
-        <input
+        <BootstrapInput
           id="title"
           type="text"
           {...register("title")}
-          className={`w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-[#00BBAE] focus:border-transparent ${
-            errors.title ? "border-red-500" : "border-gray-300"
-          }`}
+          error={!!errors.title}
+          className="w-100"
           placeholder="Dr., Conf. Dr., Prof. Dr."
         />
-        {errors.title && <p className="mt-1 text-sm text-red-600">{errors.title.message}</p>}
+        {errors.title && <p className="mt-1 small text-danger">{errors.title.message}</p>}
       </div>
 
       {/* Specialty */}
-      <div>
+      <div className="mb-4">
         <label
           htmlFor="specialty"
-          className="flex items-center gap-2 text-sm font-medium text-gray-700 mb-2"
+          className="d-flex align-items-center gap-2 small fw-medium text-body mb-2"
         >
-          Specializare <span className="text-red-500">*</span>
+          Specializare <span className="text-danger">*</span>
           <InfoTooltip
             content="Selectează specialitatea ta principală. Aceasta va fi afișată în profilul tău și va ajuta părinții să te găsească."
             size="sm"
           />
         </label>
-        <select
+        <BootstrapSelect
           id="specialty"
           {...register("specialty")}
-          className={`w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-[#00BBAE] focus:border-transparent ${
-            errors.specialty ? "border-red-500" : "border-gray-300"
-          }`}
-        >
-          <option value="">Selectează specializarea</option>
-          {DOCTOR_SPECIALTIES.map((spec) => (
-            <option key={spec.value} value={spec.value}>
-              {spec.label}
-            </option>
-          ))}
-        </select>
-        {errors.specialty && (
-          <p className="mt-1 text-sm text-red-600">{errors.specialty.message}</p>
-        )}
+          error={!!errors.specialty}
+          className="w-100"
+          options={[
+            { value: "", label: "Selectează specializarea" },
+            ...DOCTOR_SPECIALTIES.map((spec) => ({ value: spec.value, label: spec.label })),
+          ]}
+        />
+        {errors.specialty && <p className="mt-1 small text-danger">{errors.specialty.message}</p>}
       </div>
 
       {/* Credentials */}
-      <div>
-        <label className="flex items-center gap-2 text-sm font-medium text-gray-700 mb-2">
-          Credențiale <span className="text-red-500">*</span>
+      <div className="mb-4">
+        <label className="d-flex align-items-center gap-2 small fw-medium text-body mb-2">
+          Credențiale <span className="text-danger">*</span>
           <InfoTooltip
             content="Adaugă credențialele tale profesionale (ex: MD, Specialist, Primar, Board Certified, CMR). Acestea vor crește încrederea părinților în competența ta."
             size="sm"
           />
         </label>
-        <p className="text-sm text-gray-500 mb-3">
+        <p className="small text-secondary mb-3">
           Adaugă cel puțin o credențială (ex: MD, Specialist, etc.)
         </p>
 
         {/* Common credentials quick add */}
         <div className="mb-3">
-          <p className="text-xs text-gray-500 mb-2">Adaugă rapid:</p>
-          <div className="flex flex-wrap gap-2 sm:gap-2">
+          <p className="text-xs text-secondary mb-2">Adaugă rapid:</p>
+          <div className="d-flex flex-wrap gap-2">
             {COMMON_CREDENTIALS.map((cred) => (
               <button
                 key={cred}
                 type="button"
                 onClick={() => addCommonCredential(cred)}
                 disabled={credentials.includes(cred)}
-                className={`px-3 py-1 text-sm rounded-md border transition-colors ${
+                className={cn(
+                  "px-3 py-1 small rounded border",
                   credentials.includes(cred)
-                    ? "bg-gray-100 text-gray-400 border-gray-200 cursor-not-allowed"
-                    : "bg-white text-gray-700 border-gray-300 hover:bg-gray-50"
-                }`}
+                    ? "bg-light text-secondary border-secondary"
+                    : "bg-white text-body border-secondary text-secondary-hover"
+                )}
+                style={{
+                  cursor: credentials.includes(cred) ? "not-allowed" : "pointer",
+                  transition: "all 0.2s ease-in-out",
+                }}
               >
                 {cred}
               </button>
@@ -261,8 +257,8 @@ export function DoctorBasicInfoForm() {
         </div>
 
         {/* Custom credential input */}
-        <div className="flex flex-col sm:flex-row gap-2 mb-3">
-          <input
+        <div className="d-flex flex-column flex-sm-row gap-2 mb-3">
+          <BootstrapInput
             type="text"
             value={newCredential}
             onChange={(e) => setNewCredential(e.target.value)}
@@ -273,30 +269,39 @@ export function DoctorBasicInfoForm() {
               }
             }}
             placeholder="Adaugă credențială personalizată"
-            className="flex-1 px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#00BBAE] focus:border-transparent"
+            className="flex-fill"
           />
-          <button
+          <BootstrapButton
             type="button"
             onClick={addCredential}
-            className="px-4 py-2 bg-[#00BBAE] text-white rounded-lg hover:bg-[#00998d] transition-colors whitespace-nowrap"
+            variant="primary"
+            className="bg-yuvoo-primary text-white text-yuvoo-primary-hover"
+            style={{ whiteSpace: "nowrap" }}
+            onMouseEnter={(e) => {
+              e.currentTarget.style.backgroundColor = "var(--bd-theme-1-hover)";
+            }}
+            onMouseLeave={(e) => {
+              e.currentTarget.style.backgroundColor = "var(--bd-theme-1)";
+            }}
           >
             Adaugă
-          </button>
+          </BootstrapButton>
         </div>
 
         {/* Credentials list */}
         {credentials.length > 0 && (
-          <div className="space-y-2">
+          <div className="mb-3">
             {credentials.map((cred) => (
               <div
                 key={cred}
-                className="flex items-center justify-between px-3 py-2 bg-gray-50 rounded-lg"
+                className="d-flex align-items-center justify-content-between px-3 py-2 bg-light rounded mb-2"
               >
-                <span className="text-sm text-gray-700">{cred}</span>
+                <span className="small text-body">{cred}</span>
                 <button
                   type="button"
                   onClick={() => removeCredential(cred)}
-                  className="text-red-500 hover:text-red-700 text-sm"
+                  className="text-danger text-danger-hover small"
+                  style={{ transition: "color 0.2s ease-in-out" }}
                 >
                   Șterge
                 </button>
@@ -306,7 +311,7 @@ export function DoctorBasicInfoForm() {
         )}
 
         {errors.credentials && (
-          <p className="mt-1 text-sm text-red-600">{errors.credentials.message}</p>
+          <p className="mt-1 small text-danger">{errors.credentials.message}</p>
         )}
       </div>
 
@@ -316,7 +321,7 @@ export function DoctorBasicInfoForm() {
         nextHref={null}
         nextText="Continuă"
         isLoading={isLoading}
-        className="mt-8"
+        className="mt-5"
       />
     </form>
   );

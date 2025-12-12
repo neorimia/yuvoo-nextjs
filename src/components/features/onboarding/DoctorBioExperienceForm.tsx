@@ -27,6 +27,13 @@ import { routes } from "@/lib/routes";
 import { OnboardingNavigation } from "./OnboardingNavigation";
 import { InfoTooltip } from "@/components/shared/InfoTooltip";
 import { ServerErrorAlert } from "./components/ServerErrorAlert";
+import {
+  BootstrapInput,
+  BootstrapTextarea,
+  BootstrapButton,
+} from "@/components/UI/bootstrap-index";
+import { cn } from "@/lib/utils";
+import { X } from "lucide-react";
 
 // Common languages in Romania
 const COMMON_LANGUAGES = [
@@ -139,135 +146,163 @@ export function DoctorBioExperienceForm() {
   };
 
   return (
-    <form onSubmit={handleSubmit(onSubmit)} className="space-y-6 px-4 sm:px-0">
+    <form onSubmit={handleSubmit(onSubmit)} className="px-3 px-sm-0">
       {/* Server error */}
-      <ServerErrorAlert error={serverError} />
+      <ServerErrorAlert error={serverError} className="mb-4" />
 
       {/* Bio */}
-      <div>
+      <div className="mb-4">
         <label
           htmlFor="bio"
-          className="flex items-center gap-2 text-sm font-medium text-gray-700 mb-2"
+          className="d-flex align-items-center gap-2 small fw-medium text-body mb-2"
         >
-          Bio profesional <span className="text-red-500">*</span>
+          Bio profesional <span className="text-danger">*</span>
           <InfoTooltip
             content="Descrie experiența ta profesională, abordarea ta în lucrul cu copiii și de ce ești pasionat de medicina sportivă pediatrică. Un bio complet ajută părinții să te cunoască mai bine."
             size="sm"
           />
         </label>
-        <p className="text-sm text-gray-500 mb-2">
+        <p className="small text-secondary mb-2">
           Descrie experiența ta în lucrul cu copiii și sportul pediatric
         </p>
-        <textarea
+        <BootstrapTextarea
           id="bio"
           rows={8}
           {...register("bio")}
-          className={`w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-[#00BBAE] focus:border-transparent resize-y ${
-            errors.bio ? "border-red-500" : "border-gray-300"
-          }`}
+          error={!!errors.bio}
+          className="w-100"
+          style={{ resize: "vertical" }}
           placeholder="Descrie experiența ta profesională, abordarea ta în lucrul cu copiii, specializările tale și de ce ești pasionat de medicina sportivă pediatrică..."
         />
-        <div className="flex justify-between items-center mt-1">
-          <p className="text-xs text-gray-500">Minim 100 caractere, maxim 2000 caractere</p>
+        <div className="d-flex justify-content-between align-items-center mt-1">
+          <p className="text-xs text-secondary">Minim 100 caractere, maxim 2000 caractere</p>
           <p
-            className={`text-xs ${
-              bioLength < 100 ? "text-red-500" : bioLength > 2000 ? "text-red-500" : "text-gray-500"
-            }`}
+            className={cn(
+              "text-xs",
+              bioLength < 100 || bioLength > 2000 ? "text-danger" : "text-secondary"
+            )}
           >
             {bioLength} / 2000
           </p>
         </div>
-        {errors.bio && <p className="mt-1 text-sm text-red-600">{errors.bio.message}</p>}
+        {errors.bio && <p className="mt-1 small text-danger">{errors.bio.message}</p>}
       </div>
 
       {/* Years of Experience */}
-      <div>
+      <div className="mb-4">
         <label
           htmlFor="yearsOfExperience"
-          className="flex items-center gap-2 text-sm font-medium text-gray-700 mb-2"
+          className="d-flex align-items-center gap-2 small fw-medium text-body mb-2"
         >
-          Ani de experiență <span className="text-red-500">*</span>
+          Ani de experiență <span className="text-danger">*</span>
           <InfoTooltip
             content="Numărul de ani de experiență în practica medicală. Această informație ajută părinții să înțeleagă nivelul tău de experiență."
             size="sm"
           />
         </label>
-        <input
+        <BootstrapInput
           id="yearsOfExperience"
           type="number"
           min="1"
           max="50"
           {...register("yearsOfExperience", { valueAsNumber: true })}
-          className={`w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-[#00BBAE] focus:border-transparent ${
-            errors.yearsOfExperience ? "border-red-500" : "border-gray-300"
-          }`}
+          error={!!errors.yearsOfExperience}
+          className="w-100"
           placeholder="Ex: 5"
         />
         {errors.yearsOfExperience && (
-          <p className="mt-1 text-sm text-red-600">{errors.yearsOfExperience.message}</p>
+          <p className="mt-1 small text-danger">{errors.yearsOfExperience.message}</p>
         )}
       </div>
 
       {/* Secondary Specialties (Optional) */}
-      <div>
-        <label className="block text-sm font-medium text-gray-700 mb-2">
+      <div className="mb-4">
+        <label className="d-block small fw-medium text-body mb-2">
           Specializări secundare (opțional)
         </label>
-        <p className="text-sm text-gray-500 mb-3">
+        <p className="small text-secondary mb-3">
           Selectează specializări suplimentare dacă ai experiență în alte domenii
         </p>
-        <div className="space-y-2">
+        <div className="mb-3">
           {SECONDARY_SPECIALTIES.map((specialty) => (
             <label
               key={specialty.value}
-              className="flex items-center gap-3 p-3 border border-gray-300 rounded-lg cursor-pointer hover:bg-gray-50 transition-colors"
+              className={cn(
+                "d-flex align-items-center gap-3 p-3 border border-secondary rounded cursor-pointer",
+                "text-secondary-hover"
+              )}
+              style={{
+                transition: "all 0.2s ease-in-out",
+                cursor: "pointer",
+              }}
+              onMouseEnter={(e) => {
+                e.currentTarget.style.backgroundColor = "var(--bs-light)";
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.backgroundColor = "";
+              }}
             >
               <input
                 type="checkbox"
                 checked={selectedSecondarySpecialties.includes(specialty.value)}
                 onChange={() => toggleSecondarySpecialty(specialty.value)}
-                className="w-4 h-4 text-[#00BBAE] border-gray-300 rounded focus:ring-[#00BBAE]"
+                className="form-check-input"
+                style={{ width: "1rem", height: "1rem" }}
               />
-              <span className="text-sm text-gray-700">{specialty.label}</span>
+              <span className="small text-body">{specialty.label}</span>
             </label>
           ))}
         </div>
       </div>
 
       {/* Languages */}
-      <div>
-        <label className="flex items-center gap-2 text-sm font-medium text-gray-700 mb-2">
-          Limbi vorbite <span className="text-red-500">*</span>
+      <div className="mb-4">
+        <label className="d-flex align-items-center gap-2 small fw-medium text-body mb-2">
+          Limbi vorbite <span className="text-danger">*</span>
           <InfoTooltip
             content="Selectează toate limbile în care poți comunica confortabil cu părinții. Aceasta ajută părinții să te găsească și să știe că pot comunica cu tine în limba lor preferată."
             size="sm"
           />
         </label>
-        <p className="text-sm text-gray-500 mb-3">
+        <p className="small text-secondary mb-3">
           Selectează cel puțin o limbă în care poți comunica cu părinții
         </p>
 
         {/* Common languages */}
-        <div className="space-y-2 mb-3">
+        <div className="mb-3">
           {COMMON_LANGUAGES.map((language) => (
             <label
               key={language}
-              className="flex items-center gap-3 p-3 border border-gray-300 rounded-lg cursor-pointer hover:bg-gray-50 transition-colors"
+              className={cn(
+                "d-flex align-items-center gap-3 p-3 border border-secondary rounded cursor-pointer",
+                "text-secondary-hover"
+              )}
+              style={{
+                transition: "all 0.2s ease-in-out",
+                cursor: "pointer",
+              }}
+              onMouseEnter={(e) => {
+                e.currentTarget.style.backgroundColor = "var(--bs-light)";
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.backgroundColor = "";
+              }}
             >
               <input
                 type="checkbox"
                 checked={selectedLanguages.includes(language)}
                 onChange={() => toggleLanguage(language)}
-                className="w-4 h-4 text-[#00BBAE] border-gray-300 rounded focus:ring-[#00BBAE]"
+                className="form-check-input"
+                style={{ width: "1rem", height: "1rem" }}
               />
-              <span className="text-sm text-gray-700">{language}</span>
+              <span className="small text-body">{language}</span>
             </label>
           ))}
         </div>
 
         {/* Custom language input */}
-        <div className="flex flex-col sm:flex-row gap-2">
-          <input
+        <div className="d-flex flex-column flex-sm-row gap-2">
+          <BootstrapInput
             type="text"
             value={customLanguage}
             onChange={(e) => setCustomLanguage(e.target.value)}
@@ -278,41 +313,48 @@ export function DoctorBioExperienceForm() {
               }
             }}
             placeholder="Adaugă altă limbă"
-            className="flex-1 px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#00BBAE] focus:border-transparent"
+            className="flex-fill"
           />
-          <button
+          <BootstrapButton
             type="button"
             onClick={addCustomLanguage}
-            className="px-4 py-2 bg-[#00BBAE] text-white rounded-lg hover:bg-[#00998d] transition-colors whitespace-nowrap"
+            variant="primary"
+            className="bg-yuvoo-primary text-white text-yuvoo-primary-hover"
+            style={{ whiteSpace: "nowrap" }}
+            onMouseEnter={(e) => {
+              e.currentTarget.style.backgroundColor = "var(--bd-theme-1-hover)";
+            }}
+            onMouseLeave={(e) => {
+              e.currentTarget.style.backgroundColor = "var(--bd-theme-1)";
+            }}
           >
             Adaugă
-          </button>
+          </BootstrapButton>
         </div>
 
         {/* Selected languages display */}
         {selectedLanguages.length > 0 && (
-          <div className="mt-3 flex flex-wrap gap-2">
+          <div className="mt-3 d-flex flex-wrap gap-2">
             {selectedLanguages.map((language) => (
               <span
                 key={language}
-                className="inline-flex items-center gap-2 px-3 py-1 bg-[#EBFFFE] text-gray-700 rounded-md text-sm"
+                className="d-inline-flex align-items-center gap-2 px-3 py-1 bg-yuvoo-primary-light text-body rounded small"
               >
                 {language}
                 <button
                   type="button"
                   onClick={() => toggleLanguage(language)}
-                  className="text-gray-500 hover:text-red-500"
+                  className="text-secondary text-danger-hover border-0 bg-transparent p-0"
+                  style={{ transition: "color 0.2s ease-in-out" }}
                 >
-                  ×
+                  <X className="w-4 h-4" />
                 </button>
               </span>
             ))}
           </div>
         )}
 
-        {errors.languages && (
-          <p className="mt-1 text-sm text-red-600">{errors.languages.message}</p>
-        )}
+        {errors.languages && <p className="mt-1 small text-danger">{errors.languages.message}</p>}
       </div>
 
       {/* Navigation */}
@@ -321,7 +363,7 @@ export function DoctorBioExperienceForm() {
         nextHref={null}
         nextText="Continuă"
         isLoading={isLoading}
-        className="mt-8"
+        className="mt-5"
       />
     </form>
   );

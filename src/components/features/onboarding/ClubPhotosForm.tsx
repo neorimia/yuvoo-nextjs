@@ -25,6 +25,9 @@ import { uploadImageAction, deleteImageAction } from "@/app/actions/uploads";
 import { clubPhotoSchema, type ClubPhotoInput } from "@/lib/validations/club";
 import { routes } from "@/lib/routes";
 import { OnboardingNavigation } from "./OnboardingNavigation";
+import { ServerErrorAlert } from "./components/ServerErrorAlert";
+import { InfoBox } from "./components/InfoBox";
+import { cn } from "@/lib/utils";
 import { X, Upload, Image as ImageIcon } from "lucide-react";
 import Image from "next/image";
 
@@ -181,33 +184,26 @@ export function ClubPhotosForm() {
   };
 
   return (
-    <form id="club-photos-form" onSubmit={handleSubmit(onSubmit)} className="space-y-6">
+    <form id="club-photos-form" onSubmit={handleSubmit(onSubmit)}>
       {/* Server error message */}
-      {serverError && (
-        <div className="bg-red-50 border border-red-200 rounded-lg p-4">
-          <div className="flex items-start gap-3">
-            <span className="text-red-500 text-xl">⚠️</span>
-            <div>
-              <h4 className="font-semibold text-red-900 mb-1">Eroare</h4>
-              <p className="text-sm text-red-700">{serverError}</p>
-            </div>
-          </div>
-        </div>
-      )}
+      <ServerErrorAlert error={serverError} className="mb-4" />
 
       {/* Logo Upload */}
-      <div>
-        <label className="block text-sm font-medium text-gray-700 mb-3">
-          Logo club <span className="text-red-500">*</span>
+      <div className="mb-4">
+        <label className="d-block small fw-medium text-body mb-3">
+          Logo club <span className="text-danger">*</span>
         </label>
-        <p className="text-xs text-gray-500 mb-3">
+        <p className="text-xs text-secondary mb-3">
           Încarcă logo-ul clubului (JPG, PNG sau WebP, maxim 5MB)
         </p>
 
-        <div className="space-y-3">
+        <div className="mb-3">
           {logoUrl ? (
-            <div className="relative inline-block">
-              <div className="relative w-32 h-32 border-2 border-gray-200 rounded-lg overflow-hidden bg-gray-50">
+            <div className="position-relative d-inline-block">
+              <div
+                className="position-relative border-2 border-secondary rounded overflow-hidden bg-light"
+                style={{ width: "8rem", height: "8rem" }}
+              >
                 <Image
                   src={logoUrl}
                   alt="Club logo"
@@ -220,7 +216,11 @@ export function ClubPhotosForm() {
                 type="button"
                 onClick={handleRemoveLogo}
                 disabled={isLoading || uploadingLogo}
-                className="absolute -top-2 -right-2 p-1 bg-red-500 text-white rounded-full hover:bg-red-600 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2 transition-all"
+                className="position-absolute top-0 end-0 p-1 bg-danger text-white rounded-circle text-danger-hover focus-danger"
+                style={{
+                  transform: "translate(25%, -25%)",
+                  transition: "all 0.2s ease-in-out",
+                }}
                 aria-label="Șterge logo"
               >
                 <X className="w-4 h-4" />
@@ -228,29 +228,35 @@ export function ClubPhotosForm() {
             </div>
           ) : (
             <div
-              onClick={() => logoInputRef.current?.click()}
-              className={`
-                w-full h-32 border-2 border-dashed rounded-lg
-                flex items-center justify-center cursor-pointer
-                transition-all duration-200
-                ${
-                  uploadingLogo
-                    ? "border-[#00BBAE] bg-[#EBFFFE]"
-                    : "border-gray-300 bg-gray-50 hover:border-[#00BBAE] hover:bg-[#EBFFFE]/50"
-                }
-                ${isLoading ? "opacity-50 cursor-not-allowed" : ""}
-              `}
+              onClick={() => !isLoading && !uploadingLogo && logoInputRef.current?.click()}
+              className={cn(
+                "w-100 border-2 border-dashed rounded",
+                "d-flex align-items-center justify-content-center",
+                uploadingLogo
+                  ? "border-yuvoo-primary bg-yuvoo-primary-light"
+                  : "border-secondary bg-light border-yuvoo-primary-hover bg-yuvoo-primary-light",
+                isLoading && "opacity-50"
+              )}
+              style={{
+                height: "8rem",
+                cursor: isLoading || uploadingLogo ? "not-allowed" : "pointer",
+                transition: "all 0.2s ease-in-out",
+              }}
             >
               {uploadingLogo ? (
                 <div className="text-center">
-                  <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-[#00BBAE] mx-auto mb-2"></div>
-                  <p className="text-sm text-gray-600">Se încarcă...</p>
+                  <div
+                    className="spinner-border spinner-border-sm text-yuvoo-primary mb-2"
+                    role="status"
+                    aria-hidden="true"
+                  />
+                  <p className="small text-body">Se încarcă...</p>
                 </div>
               ) : (
                 <div className="text-center">
-                  <Upload className="w-8 h-8 text-gray-400 mx-auto mb-2" />
-                  <p className="text-sm font-medium text-gray-700">Apasă pentru a încărca logo</p>
-                  <p className="text-xs text-gray-500">JPG, PNG sau WebP</p>
+                  <Upload className="w-8 h-8 text-secondary mx-auto mb-2" />
+                  <p className="small fw-medium text-body">Apasă pentru a încărca logo</p>
+                  <p className="text-xs text-secondary">JPG, PNG sau WebP</p>
                 </div>
               )}
             </div>
@@ -262,32 +268,35 @@ export function ClubPhotosForm() {
             accept="image/jpeg,image/jpg,image/png,image/webp"
             onChange={handleLogoUpload}
             disabled={isLoading || uploadingLogo}
-            className="hidden"
+            className="visually-hidden"
             aria-label="Încarcă logo"
           />
         </div>
 
-        {errors.logoUrl && <p className="mt-2 text-sm text-red-600">{errors.logoUrl.message}</p>}
+        {errors.logoUrl && <p className="mt-2 small text-danger">{errors.logoUrl.message}</p>}
       </div>
 
       {/* Gallery Upload */}
-      <div>
-        <div className="flex items-center justify-between mb-3">
-          <label className="block text-sm font-medium text-gray-700">
-            Galerie fotografii <span className="text-red-500">*</span>
+      <div className="mb-4">
+        <div className="d-flex align-items-center justify-content-between mb-3">
+          <label className="d-block small fw-medium text-body">
+            Galerie fotografii <span className="text-danger">*</span>
           </label>
-          <span className="text-xs text-gray-500">{galleryUrls.length}/10 fotografii</span>
+          <span className="text-xs text-secondary">{galleryUrls.length}/10 fotografii</span>
         </div>
-        <p className="text-xs text-gray-500 mb-3">
+        <p className="text-xs text-secondary mb-3">
           Încarcă cel puțin 3 fotografii ale clubului (JPG, PNG sau WebP, maxim 5MB fiecare)
         </p>
 
         {/* Gallery Grid */}
         {galleryUrls.length > 0 && (
-          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4 mb-4">
+          <div className="row g-3 mb-4">
             {galleryUrls.map((url, index) => (
-              <div key={index} className="relative group">
-                <div className="relative aspect-square border-2 border-gray-200 rounded-lg overflow-hidden bg-gray-50">
+              <div key={index} className="col-6 col-sm-4 col-md-3 position-relative">
+                <div
+                  className="position-relative border-2 border-secondary rounded overflow-hidden bg-light"
+                  style={{ aspectRatio: "1 / 1" }}
+                >
                   <Image
                     src={url}
                     alt={`Galerie ${index + 1}`}
@@ -296,8 +305,12 @@ export function ClubPhotosForm() {
                     sizes="(max-width: 640px) 50vw, (max-width: 768px) 33vw, 25vw"
                   />
                   {uploadingGallery === index && (
-                    <div className="absolute inset-0 bg-black/50 flex items-center justify-center">
-                      <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-white"></div>
+                    <div className="position-absolute top-0 start-0 w-100 h-100 bg-dark bg-opacity-50 d-flex align-items-center justify-content-center">
+                      <div
+                        className="spinner-border spinner-border-sm text-white"
+                        role="status"
+                        aria-hidden="true"
+                      />
                     </div>
                   )}
                 </div>
@@ -305,7 +318,18 @@ export function ClubPhotosForm() {
                   type="button"
                   onClick={() => handleRemoveGalleryImage(index)}
                   disabled={isLoading || uploadingGallery === index}
-                  className="absolute -top-2 -right-2 p-1 bg-red-500 text-white rounded-full hover:bg-red-600 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2 transition-all opacity-0 group-hover:opacity-100"
+                  className="position-absolute top-0 end-0 p-1 bg-danger text-white rounded-circle text-danger-hover focus-danger"
+                  style={{
+                    transform: "translate(25%, -25%)",
+                    transition: "all 0.2s ease-in-out",
+                    opacity: 0,
+                  }}
+                  onMouseEnter={(e) => {
+                    e.currentTarget.style.opacity = "1";
+                  }}
+                  onMouseLeave={(e) => {
+                    e.currentTarget.style.opacity = "0";
+                  }}
                   aria-label={`Șterge imagine ${index + 1}`}
                 >
                   <X className="w-4 h-4" />
@@ -318,29 +342,40 @@ export function ClubPhotosForm() {
         {/* Upload Button */}
         {galleryUrls.length < 10 && (
           <div
-            onClick={() => galleryInputRef.current?.click()}
-            className={`
-              w-full h-32 border-2 border-dashed rounded-lg
-              flex items-center justify-center cursor-pointer
-              transition-all duration-200
-              ${
-                uploadingGallery !== null
-                  ? "border-[#00BBAE] bg-[#EBFFFE]"
-                  : "border-gray-300 bg-gray-50 hover:border-[#00BBAE] hover:bg-[#EBFFFE]/50"
-              }
-              ${isLoading ? "opacity-50 cursor-not-allowed" : ""}
-            `}
+            onClick={() =>
+              !isLoading &&
+              uploadingGallery === null &&
+              galleryUrls.length < 10 &&
+              galleryInputRef.current?.click()
+            }
+            className={cn(
+              "w-100 border-2 border-dashed rounded",
+              "d-flex align-items-center justify-content-center",
+              uploadingGallery !== null
+                ? "border-yuvoo-primary bg-yuvoo-primary-light"
+                : "border-secondary bg-light border-yuvoo-primary-hover bg-yuvoo-primary-light",
+              isLoading && "opacity-50"
+            )}
+            style={{
+              height: "8rem",
+              cursor: isLoading || uploadingGallery !== null ? "not-allowed" : "pointer",
+              transition: "all 0.2s ease-in-out",
+            }}
           >
             {uploadingGallery !== null ? (
               <div className="text-center">
-                <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-[#00BBAE] mx-auto mb-2"></div>
-                <p className="text-sm text-gray-600">Se încarcă...</p>
+                <div
+                  className="spinner-border spinner-border-sm text-yuvoo-primary mb-2"
+                  role="status"
+                  aria-hidden="true"
+                />
+                <p className="small text-body">Se încarcă...</p>
               </div>
             ) : (
               <div className="text-center">
-                <ImageIcon className="w-8 h-8 text-gray-400 mx-auto mb-2" />
-                <p className="text-sm font-medium text-gray-700">Adaugă fotografii în galerie</p>
-                <p className="text-xs text-gray-500">
+                <ImageIcon className="w-8 h-8 text-secondary mx-auto mb-2" />
+                <p className="small fw-medium text-body">Adaugă fotografii în galerie</p>
+                <p className="text-xs text-secondary">
                   JPG, PNG sau WebP (maxim {10 - galleryUrls.length} restante)
                 </p>
               </div>
@@ -355,34 +390,24 @@ export function ClubPhotosForm() {
           multiple
           onChange={handleGalleryUpload}
           disabled={isLoading || uploadingGallery !== null || galleryUrls.length >= 10}
-          className="hidden"
+          className="visually-hidden"
           aria-label="Încarcă fotografii galerie"
         />
 
         {errors.galleryUrls && (
-          <p className="mt-2 text-sm text-red-600">{errors.galleryUrls.message}</p>
+          <p className="mt-2 small text-danger">{errors.galleryUrls.message}</p>
         )}
       </div>
 
       {/* Info box */}
-      <div className="bg-[#EBFFFE] border border-[#00BBAE]/20 rounded-xl p-6">
-        <div className="flex items-start gap-3">
-          <span className="text-2xl">ℹ️</span>
-          <div>
-            <h3 className="font-semibold text-gray-900 mb-2">
-              De ce avem nevoie de aceste fotografii?
-            </h3>
-            <p className="text-sm text-gray-700">
-              Fotografiile ajută părinții să înțeleagă mai bine clubul tău. Logo-ul va fi afișat în
-              profilul clubului, iar galeria oferă o privire asupra facilităților și activităților.
-              Poți actualiza aceste fotografii oricând din dashboard-ul tău.
-            </p>
-          </div>
-        </div>
-      </div>
+      <InfoBox title="De ce avem nevoie de aceste fotografii?" className="mb-4">
+        Fotografiile ajută părinții să înțeleagă mai bine clubul tău. Logo-ul va fi afișat în
+        profilul clubului, iar galeria oferă o privire asupra facilităților și activităților. Poți
+        actualiza aceste fotografii oricând din dashboard-ul tău.
+      </InfoBox>
 
       {/* Navigation */}
-      <div className="pt-6 border-t border-gray-200">
+      <div className="pt-4 border-top border-secondary">
         <OnboardingNavigation
           backHref={routes.onboarding.club.pricingAges}
           nextHref={null} // null means submit button

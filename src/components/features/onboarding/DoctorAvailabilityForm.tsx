@@ -25,8 +25,10 @@ import { doctorAvailabilitySchema, type DoctorAvailabilityInput } from "@/lib/va
 import { routes } from "@/lib/routes";
 import { OnboardingNavigation } from "./OnboardingNavigation";
 import { InfoTooltip } from "@/components/shared/InfoTooltip";
-import { X, Plus } from "lucide-react";
+import { ServerErrorAlert } from "./components/ServerErrorAlert";
+import { BootstrapInput, BootstrapSelect, BootstrapButton } from "@/components/UI/bootstrap-index";
 import { InfoBox } from "./components/InfoBox";
+import { X, Plus } from "lucide-react";
 
 // Days of the week in Romanian
 const DAYS_OF_WEEK = [
@@ -93,37 +95,26 @@ export function DoctorAvailabilityForm() {
   };
 
   return (
-    <form
-      id="doctor-availability-form"
-      onSubmit={handleSubmit(onSubmit)}
-      className="space-y-6 px-4 sm:px-0"
-    >
+    <form id="doctor-availability-form" onSubmit={handleSubmit(onSubmit)} className="px-3 px-sm-0">
       {/* Server Error */}
-      {serverError && (
-        <div className="bg-red-50 border border-red-200 rounded-lg p-4">
-          <p className="text-sm text-red-800">{serverError}</p>
-        </div>
-      )}
+      <ServerErrorAlert error={serverError} className="mb-4" />
 
       {/* Accepting New Patients */}
-      <div>
-        <div className="flex items-start gap-3">
+      <div className="mb-4">
+        <div className="d-flex align-items-start gap-3">
           <input
             type="checkbox"
             id="acceptingNewPatients"
             {...register("acceptingNewPatients")}
             disabled={isLoading}
-            className="
-              mt-1 w-5 h-5
-              text-[#00BBAE] border-gray-300 rounded
-              focus:ring-2 focus:ring-[#00BBAE] focus:ring-offset-2
-              disabled:opacity-50 disabled:cursor-not-allowed
-            "
+            className="form-check-input mt-1"
+            style={{ width: "1.25rem", height: "1.25rem" }}
           />
-          <div className="flex-1">
+          <div className="flex-fill">
             <label
               htmlFor="acceptingNewPatients"
-              className="flex items-center gap-2 text-sm font-medium text-gray-900 cursor-pointer"
+              className="d-flex align-items-center gap-2 small fw-medium text-body cursor-pointer"
+              style={{ cursor: "pointer" }}
             >
               Accept pacienți noi
               <InfoTooltip
@@ -131,7 +122,7 @@ export function DoctorAvailabilityForm() {
                 size="sm"
               />
             </label>
-            <p className="mt-1 text-sm text-gray-600">
+            <p className="mt-1 small text-body">
               Activează această opțiune dacă accepți în prezent pacienți noi în cabinetul tău.
             </p>
           </div>
@@ -139,24 +130,21 @@ export function DoctorAvailabilityForm() {
       </div>
 
       {/* Online Consultations */}
-      <div>
-        <div className="flex items-start gap-3">
+      <div className="mb-4">
+        <div className="d-flex align-items-start gap-3">
           <input
             type="checkbox"
             id="onlineConsultations"
             {...register("onlineConsultations")}
             disabled={isLoading}
-            className="
-              mt-1 w-5 h-5
-              text-[#00BBAE] border-gray-300 rounded
-              focus:ring-2 focus:ring-[#00BBAE] focus:ring-offset-2
-              disabled:opacity-50 disabled:cursor-not-allowed
-            "
+            className="form-check-input mt-1"
+            style={{ width: "1.25rem", height: "1.25rem" }}
           />
-          <div className="flex-1">
+          <div className="flex-fill">
             <label
               htmlFor="onlineConsultations"
-              className="flex items-center gap-2 text-sm font-medium text-gray-900 cursor-pointer"
+              className="d-flex align-items-center gap-2 small fw-medium text-body cursor-pointer"
+              style={{ cursor: "pointer" }}
             >
               Consultații online disponibile
               <InfoTooltip
@@ -164,7 +152,7 @@ export function DoctorAvailabilityForm() {
                 size="sm"
               />
             </label>
-            <p className="mt-1 text-sm text-gray-600">
+            <p className="mt-1 small text-body">
               Activează această opțiune dacă oferi consultații online (video sau telefon).
             </p>
           </div>
@@ -172,36 +160,43 @@ export function DoctorAvailabilityForm() {
       </div>
 
       {/* Schedule Builder */}
-      <div>
-        <div className="flex items-center justify-between mb-3">
-          <label className="block text-sm font-medium text-gray-700">
-            Program consultații <span className="text-gray-500 text-xs">(opțional)</span>
+      <div className="mb-4">
+        <div className="d-flex align-items-center justify-content-between mb-3">
+          <label className="d-block small fw-medium text-body">
+            Program consultații <span className="text-secondary text-xs">(opțional)</span>
           </label>
-          <button
+          <BootstrapButton
             type="button"
             onClick={addScheduleEntry}
             disabled={isLoading}
-            className="
-              inline-flex items-center gap-2 px-3 py-1.5
-              text-sm font-medium text-[#00BBAE]
-              bg-[#EBFFFE] border border-[#00BBAE]/20 rounded-lg
-              hover:bg-[#00BBAE] hover:text-white
-              focus:outline-none focus:ring-2 focus:ring-[#00BBAE] focus:ring-offset-2
-              transition-all duration-200
-              disabled:opacity-50 disabled:cursor-not-allowed
-            "
+            variant="outline"
+            size="sm"
+            className="d-inline-flex align-items-center gap-2 text-yuvoo-primary bg-yuvoo-primary-light border-yuvoo-primary text-yuvoo-primary-hover"
+            style={{
+              borderColor: "rgba(0, 187, 174, 0.2)",
+            }}
+            onMouseEnter={(e) => {
+              if (!isLoading) {
+                e.currentTarget.style.backgroundColor = "var(--bd-theme-1)";
+                e.currentTarget.style.color = "white";
+              }
+            }}
+            onMouseLeave={(e) => {
+              if (!isLoading) {
+                e.currentTarget.style.backgroundColor = "var(--bd-theme-1-light)";
+                e.currentTarget.style.color = "var(--bd-theme-1)";
+              }
+            }}
           >
             <Plus className="w-4 h-4" />
             <span>Adaugă interval</span>
-          </button>
+          </BootstrapButton>
         </div>
 
         {fields.length === 0 && (
-          <div className="bg-gray-50 border border-gray-200 rounded-lg p-4 text-center">
-            <p className="text-sm text-gray-600 mb-2">
-              Nu ai adăugat niciun interval de consultații.
-            </p>
-            <p className="text-xs text-gray-500">
+          <div className="bg-light border border-secondary rounded p-4 text-center">
+            <p className="small text-body mb-2">Nu ai adăugat niciun interval de consultații.</p>
+            <p className="text-xs text-secondary">
               Apasă pe &ldquo;Adaugă interval&rdquo; pentru a adăuga programul tău de consultații.
               Acest câmp este opțional.
             </p>
@@ -209,115 +204,96 @@ export function DoctorAvailabilityForm() {
         )}
 
         {fields.length > 0 && (
-          <div className="space-y-3">
+          <div className="mb-3">
             {fields.map((field, index) => (
               <div
                 key={field.id}
-                className="
-                  bg-white border border-gray-200 rounded-lg p-4
-                  flex flex-col sm:flex-row items-start gap-4
-                "
+                className="bg-white border border-secondary rounded p-4 d-flex flex-column flex-sm-row align-items-start gap-3 mb-3"
               >
                 {/* Day Select */}
-                <div className="flex-1 w-full sm:w-auto">
+                <div className="flex-fill w-100 w-sm-auto">
                   <label
                     htmlFor={`schedule.${index}.day`}
-                    className="block text-xs font-medium text-gray-600 mb-1.5"
+                    className="d-block text-xs fw-medium text-body mb-2"
                   >
                     Ziua
                   </label>
-                  <select
+                  <BootstrapSelect
                     {...register(`schedule.${index}.day` as const)}
                     disabled={isLoading}
-                    className={`
-                      w-full px-3 py-2 border rounded-lg text-sm
-                      focus:outline-none focus:ring-2 focus:ring-[#00BBAE] focus:border-transparent
-                      ${errors.schedule?.[index]?.day ? "border-red-500" : "border-gray-300"}
-                      ${isLoading ? "bg-gray-100 cursor-not-allowed" : "bg-white"}
-                    `}
-                  >
-                    <option value="">Selectează ziua</option>
-                    {DAYS_OF_WEEK.map((day) => (
-                      <option key={day.value} value={day.value}>
-                        {day.label}
-                      </option>
-                    ))}
-                  </select>
+                    error={!!errors.schedule?.[index]?.day}
+                    className="w-100 small"
+                    options={[
+                      { value: "", label: "Selectează ziua" },
+                      ...DAYS_OF_WEEK.map((day) => ({ value: day.value, label: day.label })),
+                    ]}
+                  />
                   {errors.schedule?.[index]?.day && (
-                    <p className="mt-1 text-xs text-red-600">
+                    <p className="mt-1 text-xs text-danger">
                       {errors.schedule[index]?.day?.message}
                     </p>
                   )}
                 </div>
 
                 {/* Start Time */}
-                <div className="flex-1 w-full sm:w-auto">
+                <div className="flex-fill w-100 w-sm-auto">
                   <label
                     htmlFor={`schedule.${index}.startTime`}
-                    className="block text-xs font-medium text-gray-600 mb-1.5"
+                    className="d-block text-xs fw-medium text-body mb-2"
                   >
                     Ora început
                   </label>
-                  <input
+                  <BootstrapInput
                     type="time"
                     {...register(`schedule.${index}.startTime` as const)}
                     disabled={isLoading}
-                    className={`
-                      w-full px-3 py-2 border rounded-lg text-sm
-                      focus:outline-none focus:ring-2 focus:ring-[#00BBAE] focus:border-transparent
-                      ${errors.schedule?.[index]?.startTime ? "border-red-500" : "border-gray-300"}
-                      ${isLoading ? "bg-gray-100 cursor-not-allowed" : "bg-white"}
-                    `}
+                    error={!!errors.schedule?.[index]?.startTime}
+                    className="w-100 small"
                     aria-invalid={errors.schedule?.[index]?.startTime ? "true" : "false"}
                   />
                   {errors.schedule?.[index]?.startTime && (
-                    <p className="mt-1 text-xs text-red-600">
+                    <p className="mt-1 text-xs text-danger">
                       {errors.schedule[index]?.startTime?.message}
                     </p>
                   )}
                 </div>
 
                 {/* End Time */}
-                <div className="flex-1 w-full sm:w-auto">
+                <div className="flex-fill w-100 w-sm-auto">
                   <label
                     htmlFor={`schedule.${index}.endTime`}
-                    className="block text-xs font-medium text-gray-600 mb-1.5"
+                    className="d-block text-xs fw-medium text-body mb-2"
                   >
                     Ora sfârșit
                   </label>
-                  <input
+                  <BootstrapInput
                     type="time"
                     {...register(`schedule.${index}.endTime` as const)}
                     disabled={isLoading}
-                    className={`
-                      w-full px-3 py-2 border rounded-lg text-sm
-                      focus:outline-none focus:ring-2 focus:ring-[#00BBAE] focus:border-transparent
-                      ${errors.schedule?.[index]?.endTime ? "border-red-500" : "border-gray-300"}
-                      ${isLoading ? "bg-gray-100 cursor-not-allowed" : "bg-white"}
-                    `}
+                    error={!!errors.schedule?.[index]?.endTime}
+                    className="w-100 small"
                     aria-invalid={errors.schedule?.[index]?.endTime ? "true" : "false"}
                   />
                   {errors.schedule?.[index]?.endTime && (
-                    <p className="mt-1 text-xs text-red-600">
+                    <p className="mt-1 text-xs text-danger">
                       {errors.schedule[index]?.endTime?.message}
                     </p>
                   )}
                 </div>
 
                 {/* Remove Button */}
-                <div className="shrink-0 pt-0 sm:pt-6 w-full sm:w-auto flex justify-end sm:justify-start">
+                <div
+                  style={{ flexShrink: 0 }}
+                  className="pt-0 pt-sm-4 w-100 w-sm-auto d-flex justify-content-end justify-content-sm-start"
+                >
                   <button
                     type="button"
                     onClick={() => removeScheduleEntry(index)}
                     disabled={isLoading}
-                    className="
-                      p-2 text-gray-400 hover:text-red-600
-                      hover:bg-red-50 rounded-lg
-                      focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2
-                      transition-all duration-200
-                      disabled:opacity-50 disabled:cursor-not-allowed
-                      self-end sm:self-auto
-                    "
+                    className="p-2 text-secondary text-danger-hover bg-danger bg-opacity-10 rounded focus-danger"
+                    style={{
+                      transition: "all 0.2s ease-in-out",
+                    }}
                     aria-label="Șterge interval"
                   >
                     <X className="w-4 h-4" />
@@ -329,13 +305,13 @@ export function DoctorAvailabilityForm() {
         )}
 
         {errors.schedule && typeof errors.schedule.message === "string" && (
-          <p className="mt-2 text-sm text-red-600">{errors.schedule.message}</p>
+          <p className="mt-2 small text-danger">{errors.schedule.message}</p>
         )}
       </div>
 
       {/* Info box */}
-      <InfoBox title="De ce avem nevoie de aceste informații?" icon="ℹ️">
-        <p className="text-sm text-gray-700">
+      <InfoBox title="De ce avem nevoie de aceste informații?" icon="ℹ️" className="mb-4">
+        <p className="small text-body mb-0">
           Informațiile despre disponibilitatea ta vor fi afișate în profilul tău profesional, astfel
           încât părinții să știe dacă accepți pacienți noi și când ești disponibil pentru
           consultații. Poți actualiza aceste detalii oricând din dashboard-ul tău.
@@ -343,7 +319,7 @@ export function DoctorAvailabilityForm() {
       </InfoBox>
 
       {/* Navigation */}
-      <div className="pt-6 border-t border-gray-200">
+      <div className="pt-4 border-top border-secondary">
         <OnboardingNavigation
           backHref={routes.onboarding.doctor.verification}
           nextHref={null} // null means submit button

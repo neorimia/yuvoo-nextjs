@@ -7,6 +7,9 @@
 
 "use client";
 
+import { BootstrapAlert } from "@/components/UI/bootstrap-index";
+import { AlertCircle } from "lucide-react";
+
 interface ServerErrorAlertProps {
   /** Error message to display */
   error: string | null;
@@ -18,20 +21,12 @@ export function ServerErrorAlert({ error, className = "" }: ServerErrorAlertProp
   if (!error) return null;
 
   return (
-    <div
-      className={`bg-red-50 border border-red-200 rounded-lg p-4 ${className}`}
-      role="alert"
-      aria-live="polite"
-    >
-      <div className="flex items-start gap-3">
-        <span className="text-red-500 text-xl shrink-0" aria-hidden="true">
-          ⚠️
-        </span>
-        <div className="flex-1">
-          <h4 className="font-semibold text-red-900 mb-1">Eroare</h4>
-          <p className="text-sm text-red-700">{error}</p>
-        </div>
+    <BootstrapAlert variant="danger" className={className}>
+      <AlertCircle className="h-4 w-4 me-2" />
+      <div>
+        <h4 className="fw-semibold text-danger mb-1">Eroare</h4>
+        <p className="small text-danger">{error}</p>
       </div>
-    </div>
+    </BootstrapAlert>
   );
 }

@@ -24,6 +24,9 @@ import { uploadDocumentAction, deleteDocumentAction } from "@/app/actions/upload
 import { clubVerificationSchema, type ClubVerificationInput } from "@/lib/validations/club";
 import { routes } from "@/lib/routes";
 import { OnboardingNavigation } from "./OnboardingNavigation";
+import { ServerErrorAlert } from "./components/ServerErrorAlert";
+import { InfoBox } from "./components/InfoBox";
+import { cn } from "@/lib/utils";
 import { X, Upload, FileText, File } from "lucide-react";
 
 export function ClubVerificationForm() {
@@ -50,13 +53,13 @@ export function ClubVerificationForm() {
 
   const getFileIcon = (url: string) => {
     if (url.toLowerCase().endsWith(".pdf")) {
-      return <FileText className="w-8 h-8 text-red-500" />;
+      return <FileText className="w-8 h-8 text-danger" />;
     }
     if (url.toLowerCase().match(/\.(doc|docx)$/)) {
-      return <File className="w-8 h-8 text-blue-500" />;
+      return <File className="w-8 h-8 text-primary" />;
     }
     // Image or other
-    return <File className="w-8 h-8 text-gray-500" />;
+    return <File className="w-8 h-8 text-secondary" />;
   };
 
   const getFileName = (url: string) => {
@@ -147,56 +150,63 @@ export function ClubVerificationForm() {
   };
 
   return (
-    <form id="club-verification-form" onSubmit={handleSubmit(onSubmit)} className="space-y-6">
+    <form id="club-verification-form" onSubmit={handleSubmit(onSubmit)}>
       {/* Server error message */}
-      {serverError && (
-        <div className="bg-red-50 border border-red-200 rounded-lg p-4">
-          <div className="flex items-start gap-3">
-            <span className="text-red-500 text-xl">⚠️</span>
-            <div>
-              <h4 className="font-semibold text-red-900 mb-1">Eroare</h4>
-              <p className="text-sm text-red-700">{serverError}</p>
-            </div>
-          </div>
-        </div>
-      )}
+      <ServerErrorAlert error={serverError} className="mb-4" />
 
       {/* Document Upload */}
-      <div>
-        <div className="flex items-center justify-between mb-3">
-          <label className="block text-sm font-medium text-gray-700">
-            Documente de verificare <span className="text-red-500">*</span>
+      <div className="mb-4">
+        <div className="d-flex align-items-center justify-content-between mb-3">
+          <label className="d-block small fw-medium text-body">
+            Documente de verificare <span className="text-danger">*</span>
           </label>
-          <span className="text-xs text-gray-500">{documentUrls.length}/5 documente</span>
+          <span className="text-xs text-secondary">{documentUrls.length}/5 documente</span>
         </div>
-        <p className="text-xs text-gray-500 mb-3">
+        <p className="text-xs text-secondary mb-3">
           Încarcă cel puțin 2 documente (ex: certificat de înregistrare, asigurare). Acceptă PDF,
           DOC, DOCX, JPG, PNG (maxim 10MB fiecare).
         </p>
 
         {/* Documents List */}
         {documentUrls.length > 0 && (
-          <div className="space-y-3 mb-4">
+          <div className="mb-4">
             {documentUrls.map((url, index) => (
               <div
                 key={index}
-                className="flex items-center justify-between p-3 border border-gray-200 rounded-lg bg-gray-50 group"
+                className="d-flex align-items-center justify-content-between p-3 border border-secondary rounded bg-light mb-3"
               >
-                <div className="flex items-center gap-3 flex-1 min-w-0">
+                <div className="d-flex align-items-center gap-3 flex-fill" style={{ minWidth: 0 }}>
                   {getFileIcon(url)}
-                  <div className="flex-1 min-w-0">
-                    <p className="text-sm font-medium text-gray-900 truncate">{getFileName(url)}</p>
-                    <p className="text-xs text-gray-500 truncate">{url}</p>
+                  <div className="flex-fill" style={{ minWidth: 0 }}>
+                    <p className="small fw-medium text-body text-truncate">{getFileName(url)}</p>
+                    <p className="text-xs text-secondary text-truncate">{url}</p>
                   </div>
                   {uploadingDocument === index && (
-                    <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-[#00BBAE]"></div>
+                    <div
+                      className="spinner-border spinner-border-sm text-yuvoo-primary"
+                      role="status"
+                      aria-hidden="true"
+                    />
                   )}
                 </div>
                 <button
                   type="button"
                   onClick={() => handleRemoveDocument(index)}
                   disabled={isLoading || uploadingDocument === index}
-                  className="ml-3 p-2 text-red-500 hover:bg-red-50 rounded-lg transition-all opacity-0 group-hover:opacity-100 focus:opacity-100 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2"
+                  className="ms-3 p-2 text-danger text-danger-hover bg-danger bg-opacity-10 rounded focus-danger"
+                  style={{
+                    transition: "all 0.2s ease-in-out",
+                    opacity: 0,
+                  }}
+                  onMouseEnter={(e) => {
+                    e.currentTarget.style.opacity = "1";
+                  }}
+                  onMouseLeave={(e) => {
+                    e.currentTarget.style.opacity = "0";
+                  }}
+                  onFocus={(e) => {
+                    e.currentTarget.style.opacity = "1";
+                  }}
                   aria-label={`Șterge document ${index + 1}`}
                 >
                   <X className="w-5 h-5" />
@@ -209,29 +219,40 @@ export function ClubVerificationForm() {
         {/* Upload Button */}
         {documentUrls.length < 5 && (
           <div
-            onClick={() => documentInputRef.current?.click()}
-            className={`
-              w-full h-32 border-2 border-dashed rounded-lg
-              flex items-center justify-center cursor-pointer
-              transition-all duration-200
-              ${
-                uploadingDocument !== null
-                  ? "border-[#00BBAE] bg-[#EBFFFE]"
-                  : "border-gray-300 bg-gray-50 hover:border-[#00BBAE] hover:bg-[#EBFFFE]/50"
-              }
-              ${isLoading ? "opacity-50 cursor-not-allowed" : ""}
-            `}
+            onClick={() =>
+              !isLoading &&
+              uploadingDocument === null &&
+              documentUrls.length < 5 &&
+              documentInputRef.current?.click()
+            }
+            className={cn(
+              "w-100 border-2 border-dashed rounded",
+              "d-flex align-items-center justify-content-center",
+              uploadingDocument !== null
+                ? "border-yuvoo-primary bg-yuvoo-primary-light"
+                : "border-secondary bg-light border-yuvoo-primary-hover bg-yuvoo-primary-light",
+              isLoading && "opacity-50"
+            )}
+            style={{
+              height: "8rem",
+              cursor: isLoading || uploadingDocument !== null ? "not-allowed" : "pointer",
+              transition: "all 0.2s ease-in-out",
+            }}
           >
             {uploadingDocument !== null ? (
               <div className="text-center">
-                <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-[#00BBAE] mx-auto mb-2"></div>
-                <p className="text-sm text-gray-600">Se încarcă...</p>
+                <div
+                  className="spinner-border spinner-border-sm text-yuvoo-primary mb-2"
+                  role="status"
+                  aria-hidden="true"
+                />
+                <p className="small text-body">Se încarcă...</p>
               </div>
             ) : (
               <div className="text-center">
-                <Upload className="w-8 h-8 text-gray-400 mx-auto mb-2" />
-                <p className="text-sm font-medium text-gray-700">Adaugă documente de verificare</p>
-                <p className="text-xs text-gray-500">
+                <Upload className="w-8 h-8 text-secondary mx-auto mb-2" />
+                <p className="small fw-medium text-body">Adaugă documente de verificare</p>
+                <p className="text-xs text-secondary">
                   PDF, DOC, DOCX, JPG, PNG (maxim {5 - documentUrls.length} restante)
                 </p>
               </div>
@@ -246,48 +267,40 @@ export function ClubVerificationForm() {
           multiple
           onChange={handleDocumentUpload}
           disabled={isLoading || uploadingDocument !== null || documentUrls.length >= 5}
-          className="hidden"
+          className="visually-hidden"
           aria-label="Încarcă documente de verificare"
         />
 
         {errors.verificationDocuments && (
-          <p className="mt-2 text-sm text-red-600">{errors.verificationDocuments.message}</p>
+          <p className="mt-2 small text-danger">{errors.verificationDocuments.message}</p>
         )}
       </div>
 
       {/* Info box */}
-      <div className="bg-[#EBFFFE] border border-[#00BBAE]/20 rounded-xl p-6">
-        <div className="flex items-start gap-3">
-          <span className="text-2xl">ℹ️</span>
-          <div>
-            <h3 className="font-semibold text-gray-900 mb-2">
-              Ce documente ai nevoie pentru verificare?
-            </h3>
-            <ul className="text-sm text-gray-700 space-y-1 list-disc list-inside">
-              <li>
-                <strong>Certificat de înregistrare</strong> - Document oficial care confirmă că
-                clubul este înregistrat legal (ex: certificat ONRC pentru asociații, act constitutiv
-                pentru ONG-uri)
-              </li>
-              <li>
-                <strong>Asigurare</strong> - Poliță de asigurare pentru activitățile desfășurate
-                (obligatorie pentru activități cu copii)
-              </li>
-              <li>
-                <strong>Alte documente relevante</strong> (opțional) - Certificări, licențe,
-                autorizații specifice sportului practicat
-              </li>
-            </ul>
-            <p className="text-sm text-gray-700 mt-3">
-              Documentele vor fi revizuite de echipa Yuvoo pentru a verifica autenticitatea și
-              conformitatea. Procesul de verificare poate dura 1-3 zile lucrătoare.
-            </p>
-          </div>
-        </div>
-      </div>
+      <InfoBox title="Ce documente ai nevoie pentru verificare?" className="mb-4">
+        <ul className="small text-body mb-0" style={{ listStyle: "disc", paddingLeft: "1.5rem" }}>
+          <li className="mb-2">
+            <strong>Certificat de înregistrare</strong> - Document oficial care confirmă că clubul
+            este înregistrat legal (ex: certificat ONRC pentru asociații, act constitutiv pentru
+            ONG-uri)
+          </li>
+          <li className="mb-2">
+            <strong>Asigurare</strong> - Poliță de asigurare pentru activitățile desfășurate
+            (obligatorie pentru activități cu copii)
+          </li>
+          <li className="mb-2">
+            <strong>Alte documente relevante</strong> (opțional) - Certificări, licențe, autorizații
+            specifice sportului practicat
+          </li>
+        </ul>
+        <p className="small text-body mt-3 mb-0">
+          Documentele vor fi revizuite de echipa Yuvoo pentru a verifica autenticitatea și
+          conformitatea. Procesul de verificare poate dura 1-3 zile lucrătoare.
+        </p>
+      </InfoBox>
 
       {/* Navigation */}
-      <div className="pt-6 border-t border-gray-200">
+      <div className="pt-4 border-top border-secondary">
         <OnboardingNavigation
           backHref={routes.onboarding.club.photos}
           nextHref={null} // null means submit button

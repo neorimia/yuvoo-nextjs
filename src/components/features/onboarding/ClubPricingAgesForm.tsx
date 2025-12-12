@@ -24,6 +24,10 @@ import { updateClubPricingAges } from "@/app/actions/onboarding";
 import { clubPricingAgesSchema, type ClubPricingAgesInput } from "@/lib/validations/club";
 import { routes } from "@/lib/routes";
 import { OnboardingNavigation } from "./OnboardingNavigation";
+import { ServerErrorAlert } from "./components/ServerErrorAlert";
+import { InfoBox } from "./components/InfoBox";
+import { BootstrapInput, BootstrapSelect, BootstrapButton } from "@/components/UI/bootstrap-index";
+import { cn } from "@/lib/utils";
 import { X, Plus } from "lucide-react";
 
 // Age groups (4-14 years)
@@ -108,104 +112,94 @@ export function ClubPricingAgesForm() {
   };
 
   return (
-    <form id="club-pricing-ages-form" onSubmit={handleSubmit(onSubmit)} className="space-y-6">
+    <form id="club-pricing-ages-form" onSubmit={handleSubmit(onSubmit)}>
       {/* Server error message */}
-      {serverError && (
-        <div className="bg-red-50 border border-red-200 rounded-lg p-4">
-          <div className="flex items-start gap-3">
-            <span className="text-red-500 text-xl">⚠️</span>
-            <div>
-              <h4 className="font-semibold text-red-900 mb-1">Eroare</h4>
-              <p className="text-sm text-red-700">{serverError}</p>
-            </div>
-          </div>
-        </div>
-      )}
+      <ServerErrorAlert error={serverError} className="mb-4" />
 
       {/* Pricing Builder */}
-      <div>
-        <div className="flex items-center justify-between mb-3">
-          <label className="block text-sm font-medium text-gray-700">
-            Prețuri <span className="text-red-500">*</span>
+      <div className="mb-4">
+        <div className="d-flex align-items-center justify-content-between mb-3">
+          <label className="d-block small fw-medium text-body">
+            Prețuri <span className="text-danger">*</span>
           </label>
-          <button
+          <BootstrapButton
             type="button"
             onClick={addPricingOption}
             disabled={isLoading}
-            className="
-              inline-flex items-center gap-2 px-3 py-1.5
-              text-sm font-medium text-[#00BBAE]
-              bg-[#EBFFFE] border border-[#00BBAE]/20 rounded-lg
-              hover:bg-[#00BBAE] hover:text-white
-              focus:outline-none focus:ring-2 focus:ring-[#00BBAE] focus:ring-offset-2
-              transition-all duration-200
-              disabled:opacity-50 disabled:cursor-not-allowed
-            "
+            variant="outline"
+            size="sm"
+            className="d-inline-flex align-items-center gap-2 text-yuvoo-primary bg-yuvoo-primary-light border-yuvoo-primary text-yuvoo-primary-hover"
+            style={{
+              borderColor: "rgba(0, 187, 174, 0.2)",
+            }}
+            onMouseEnter={(e) => {
+              if (!isLoading) {
+                e.currentTarget.style.backgroundColor = "var(--bd-theme-1)";
+                e.currentTarget.style.color = "white";
+              }
+            }}
+            onMouseLeave={(e) => {
+              if (!isLoading) {
+                e.currentTarget.style.backgroundColor = "var(--bd-theme-1-light)";
+                e.currentTarget.style.color = "var(--bd-theme-1)";
+              }
+            }}
           >
             <Plus className="w-4 h-4" />
             <span>Adaugă preț</span>
-          </button>
+          </BootstrapButton>
         </div>
 
         {pricingFields.length === 0 && (
-          <div className="bg-gray-50 border border-gray-200 rounded-lg p-4 text-center">
-            <p className="text-sm text-gray-600 mb-2">Nu ai adăugat niciun preț.</p>
-            <p className="text-xs text-gray-500">
+          <div className="bg-light border border-secondary rounded p-4 text-center">
+            <p className="small text-body mb-2">Nu ai adăugat niciun preț.</p>
+            <p className="text-xs text-secondary">
               Apasă pe &ldquo;Adaugă preț&rdquo; pentru a adăuga opțiunile de preț.
             </p>
           </div>
         )}
 
         {pricingFields.length > 0 && (
-          <div className="space-y-3">
+          <div className="mb-3">
             {pricingFields.map((field, index) => (
               <div
                 key={field.id}
-                className="
-                  bg-white border border-gray-200 rounded-lg p-4
-                  flex items-start gap-4
-                "
+                className="bg-white border border-secondary rounded p-4 d-flex align-items-start gap-3 mb-3"
               >
                 {/* Pricing Type */}
-                <div className="flex-1">
+                <div className="flex-fill">
                   <label
                     htmlFor={`pricing.${index}.type`}
-                    className="block text-xs font-medium text-gray-600 mb-1.5"
+                    className="d-block text-xs fw-medium text-body mb-2"
                   >
                     Tip abonament
                   </label>
-                  <select
+                  <BootstrapSelect
                     {...register(`pricing.${index}.type` as const)}
                     disabled={isLoading}
-                    className={`
-                      w-full px-3 py-2 border rounded-lg text-sm
-                      focus:outline-none focus:ring-2 focus:ring-[#00BBAE] focus:border-transparent
-                      ${errors.pricing?.[index]?.type ? "border-red-500" : "border-gray-300"}
-                      ${isLoading ? "bg-gray-100 cursor-not-allowed" : "bg-white"}
-                    `}
-                  >
-                    {PRICING_TYPES.map((type) => (
-                      <option key={type.value} value={type.value}>
-                        {type.label}
-                      </option>
-                    ))}
-                  </select>
+                    error={!!errors.pricing?.[index]?.type}
+                    className="w-100 small"
+                    options={PRICING_TYPES.map((type) => ({
+                      value: type.value,
+                      label: type.label,
+                    }))}
+                  />
                   {errors.pricing?.[index]?.type && (
-                    <p className="mt-1 text-xs text-red-600">
+                    <p className="mt-1 text-xs text-danger">
                       {errors.pricing[index]?.type?.message}
                     </p>
                   )}
                 </div>
 
                 {/* Amount */}
-                <div className="flex-1">
+                <div className="flex-fill">
                   <label
                     htmlFor={`pricing.${index}.amount`}
-                    className="block text-xs font-medium text-gray-600 mb-1.5"
+                    className="d-block text-xs fw-medium text-body mb-2"
                   >
                     Preț (RON)
                   </label>
-                  <input
+                  <BootstrapInput
                     type="number"
                     step="0.01"
                     min="0"
@@ -214,35 +208,28 @@ export function ClubPricingAgesForm() {
                       valueAsNumber: true,
                     })}
                     disabled={isLoading}
-                    className={`
-                      w-full px-3 py-2 border rounded-lg text-sm
-                      focus:outline-none focus:ring-2 focus:ring-[#00BBAE] focus:border-transparent
-                      ${errors.pricing?.[index]?.amount ? "border-red-500" : "border-gray-300"}
-                      ${isLoading ? "bg-gray-100 cursor-not-allowed" : "bg-white"}
-                    `}
+                    error={!!errors.pricing?.[index]?.amount}
+                    className="w-100 small"
                     placeholder="ex: 200"
                     aria-invalid={errors.pricing?.[index]?.amount ? "true" : "false"}
                   />
                   {errors.pricing?.[index]?.amount && (
-                    <p className="mt-1 text-xs text-red-600">
+                    <p className="mt-1 text-xs text-danger">
                       {errors.pricing[index]?.amount?.message}
                     </p>
                   )}
                 </div>
 
                 {/* Remove Button */}
-                <div className="shrink-0 pt-6">
+                <div style={{ flexShrink: 0, paddingTop: "1.5rem" }}>
                   <button
                     type="button"
                     onClick={() => removePricingOption(index)}
                     disabled={isLoading}
-                    className="
-                      p-2 text-gray-400 hover:text-red-600
-                      hover:bg-red-50 rounded-lg
-                      focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2
-                      transition-all duration-200
-                      disabled:opacity-50 disabled:cursor-not-allowed
-                    "
+                    className="p-2 text-secondary text-danger-hover bg-danger bg-opacity-10 rounded focus-danger"
+                    style={{
+                      transition: "all 0.2s ease-in-out",
+                    }}
                     aria-label="Șterge preț"
                   >
                     <X className="w-4 h-4" />
@@ -254,16 +241,16 @@ export function ClubPricingAgesForm() {
         )}
 
         {errors.pricing && typeof errors.pricing.message === "string" && (
-          <p className="mt-2 text-sm text-red-600">{errors.pricing.message}</p>
+          <p className="mt-2 small text-danger">{errors.pricing.message}</p>
         )}
       </div>
 
       {/* Age Groups */}
-      <div>
-        <label className="block text-sm font-medium text-gray-700 mb-3">
-          Grupe de vârstă <span className="text-red-500">*</span>
+      <div className="mb-4">
+        <label className="d-block small fw-medium text-body mb-3">
+          Grupe de vârstă <span className="text-danger">*</span>
         </label>
-        <p className="text-xs text-gray-500 mb-3">
+        <p className="text-xs text-secondary mb-3">
           Selectează grupele de vârstă acceptate de club (4-14 ani)
         </p>
 
@@ -271,56 +258,66 @@ export function ClubPricingAgesForm() {
           name="ageGroups"
           control={control}
           render={({ field }) => (
-            <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-6 gap-3">
+            <div className="row g-3">
               {AGE_GROUPS.map((age) => {
                 const isSelected = field.value?.includes(age) || false;
                 return (
-                  <label
-                    key={age}
-                    className={`
-                      flex items-center justify-center p-3 border-2 rounded-lg cursor-pointer
-                      transition-all duration-200
-                      ${
+                  <div key={age} className="col-4 col-sm-3 col-md-2">
+                    <label
+                      className={cn(
+                        "d-flex align-items-center justify-content-center p-3 border-2 rounded cursor-pointer",
                         isSelected
-                          ? "border-[#00BBAE] bg-[#EBFFFE] text-[#00BBAE]"
-                          : "border-gray-200 bg-white text-gray-700 hover:border-gray-300"
-                      }
-                      ${isLoading ? "opacity-50 cursor-not-allowed" : ""}
-                    `}
-                  >
-                    <input
-                      type="checkbox"
-                      value={age}
-                      checked={isSelected}
-                      onChange={() => {
-                        const current = field.value || [];
-                        const newValue = isSelected
-                          ? current.filter((a: number) => a !== age)
-                          : [...current, age].sort((a: number, b: number) => a - b);
-                        field.onChange(newValue);
+                          ? "border-yuvoo-primary bg-yuvoo-primary-light text-yuvoo-primary"
+                          : "border-secondary bg-white text-body border-secondary-hover",
+                        isLoading && "opacity-50"
+                      )}
+                      style={{
+                        cursor: isLoading ? "not-allowed" : "pointer",
+                        transition: "all 0.2s ease-in-out",
                       }}
-                      disabled={isLoading}
-                      className="sr-only"
-                    />
-                    <span className="font-medium">{age} ani</span>
-                  </label>
+                      onMouseEnter={(e) => {
+                        if (!isLoading && !isSelected) {
+                          e.currentTarget.style.borderColor = "var(--bs-border-color)";
+                        }
+                      }}
+                      onMouseLeave={(e) => {
+                        if (!isLoading && !isSelected) {
+                          e.currentTarget.style.borderColor = "";
+                        }
+                      }}
+                    >
+                      <input
+                        type="checkbox"
+                        value={age}
+                        checked={isSelected}
+                        onChange={() => {
+                          const current = field.value || [];
+                          const newValue = isSelected
+                            ? current.filter((a: number) => a !== age)
+                            : [...current, age].sort((a: number, b: number) => a - b);
+                          field.onChange(newValue);
+                        }}
+                        disabled={isLoading}
+                        className="visually-hidden"
+                      />
+                      <span className="fw-medium">{age} ani</span>
+                    </label>
+                  </div>
                 );
               })}
             </div>
           )}
         />
 
-        {errors.ageGroups && (
-          <p className="mt-2 text-sm text-red-600">{errors.ageGroups.message}</p>
-        )}
+        {errors.ageGroups && <p className="mt-2 small text-danger">{errors.ageGroups.message}</p>}
       </div>
 
       {/* Experience Levels */}
-      <div>
-        <label className="block text-sm font-medium text-gray-700 mb-3">
-          Niveluri de experiență <span className="text-red-500">*</span>
+      <div className="mb-4">
+        <label className="d-block small fw-medium text-body mb-3">
+          Niveluri de experiență <span className="text-danger">*</span>
         </label>
-        <p className="text-xs text-gray-500 mb-3">
+        <p className="text-xs text-secondary mb-3">
           Selectează nivelurile de experiență oferite de club
         </p>
 
@@ -328,42 +325,57 @@ export function ClubPricingAgesForm() {
           name="experienceLevels"
           control={control}
           render={({ field }) => (
-            <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+            <div className="row g-3">
               {EXPERIENCE_LEVELS.map((level) => {
                 const isSelected =
                   field.value?.includes(level.value as "beginner" | "intermediate" | "advanced") ||
                   false;
                 return (
-                  <label
-                    key={level.value}
-                    className={`
-                      flex items-center justify-center p-4 border-2 rounded-lg cursor-pointer
-                      transition-all duration-200
-                      ${
+                  <div key={level.value} className="col-12 col-sm-4">
+                    <label
+                      className={cn(
+                        "d-flex align-items-center justify-content-center p-4 border-2 rounded cursor-pointer",
                         isSelected
-                          ? "border-[#00BBAE] bg-[#EBFFFE] text-[#00BBAE]"
-                          : "border-gray-200 bg-white text-gray-700 hover:border-gray-300"
-                      }
-                      ${isLoading ? "opacity-50 cursor-not-allowed" : ""}
-                    `}
-                  >
-                    <input
-                      type="checkbox"
-                      value={level.value}
-                      checked={isSelected}
-                      onChange={() => {
-                        const current = field.value || [];
-                        const levelValue = level.value as "beginner" | "intermediate" | "advanced";
-                        const newValue = isSelected
-                          ? current.filter((l: string) => l !== levelValue)
-                          : [...current, levelValue];
-                        field.onChange(newValue);
+                          ? "border-yuvoo-primary bg-yuvoo-primary-light text-yuvoo-primary"
+                          : "border-secondary bg-white text-body border-secondary-hover",
+                        isLoading && "opacity-50"
+                      )}
+                      style={{
+                        cursor: isLoading ? "not-allowed" : "pointer",
+                        transition: "all 0.2s ease-in-out",
                       }}
-                      disabled={isLoading}
-                      className="sr-only"
-                    />
-                    <span className="font-medium">{level.label}</span>
-                  </label>
+                      onMouseEnter={(e) => {
+                        if (!isLoading && !isSelected) {
+                          e.currentTarget.style.borderColor = "var(--bs-border-color)";
+                        }
+                      }}
+                      onMouseLeave={(e) => {
+                        if (!isLoading && !isSelected) {
+                          e.currentTarget.style.borderColor = "";
+                        }
+                      }}
+                    >
+                      <input
+                        type="checkbox"
+                        value={level.value}
+                        checked={isSelected}
+                        onChange={() => {
+                          const current = field.value || [];
+                          const levelValue = level.value as
+                            | "beginner"
+                            | "intermediate"
+                            | "advanced";
+                          const newValue = isSelected
+                            ? current.filter((l: string) => l !== levelValue)
+                            : [...current, levelValue];
+                          field.onChange(newValue);
+                        }}
+                        disabled={isLoading}
+                        className="visually-hidden"
+                      />
+                      <span className="fw-medium">{level.label}</span>
+                    </label>
+                  </div>
                 );
               })}
             </div>
@@ -371,29 +383,19 @@ export function ClubPricingAgesForm() {
         />
 
         {errors.experienceLevels && (
-          <p className="mt-2 text-sm text-red-600">{errors.experienceLevels.message}</p>
+          <p className="mt-2 small text-danger">{errors.experienceLevels.message}</p>
         )}
       </div>
 
       {/* Info box */}
-      <div className="bg-[#EBFFFE] border border-[#00BBAE]/20 rounded-xl p-6">
-        <div className="flex items-start gap-3">
-          <span className="text-2xl">ℹ️</span>
-          <div>
-            <h3 className="font-semibold text-gray-900 mb-2">
-              De ce avem nevoie de aceste informații?
-            </h3>
-            <p className="text-sm text-gray-700">
-              Aceste informații vor ajuta părinții să găsească clubul potrivit pentru copilul lor.
-              Prețurile, grupele de vârstă și nivelurile de experiență vor fi afișate în profilul
-              clubului tău. Poți actualiza aceste detalii oricând din dashboard-ul tău.
-            </p>
-          </div>
-        </div>
-      </div>
+      <InfoBox title="De ce avem nevoie de aceste informații?" className="mb-4">
+        Aceste informații vor ajuta părinții să găsească clubul potrivit pentru copilul lor.
+        Prețurile, grupele de vârstă și nivelurile de experiență vor fi afișate în profilul clubului
+        tău. Poți actualiza aceste detalii oricând din dashboard-ul tău.
+      </InfoBox>
 
       {/* Navigation */}
-      <div className="pt-6 border-t border-gray-200">
+      <div className="pt-4 border-top border-secondary">
         <OnboardingNavigation
           backHref={routes.onboarding.club.contactSchedule}
           nextHref={null} // null means submit button

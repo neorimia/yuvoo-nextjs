@@ -11,6 +11,7 @@ import { useRouter } from "next/navigation";
 import { routes } from "@/lib/routes";
 import { CheckCircle2, ArrowRight, FileText, Clock } from "lucide-react";
 import Link from "next/link";
+import { InfoBox } from "./components/InfoBox";
 
 interface ClubCompletionContentProps {
   userName?: string | null;
@@ -31,53 +32,57 @@ export function ClubCompletionContent({ userName }: ClubCompletionContentProps) 
   return (
     <div className="text-center">
       {/* Success Icon */}
-      <div className="mb-6 flex justify-center">
-        <div className="relative">
-          <div className="absolute inset-0 bg-[#00BBAE]/20 rounded-full animate-ping"></div>
-          <div className="relative bg-[#00BBAE] rounded-full p-6">
+      <div className="mb-5 d-flex justify-content-center">
+        <div className="position-relative">
+          <div
+            className="position-absolute top-0 start-0 w-100 h-100 bg-yuvoo-primary rounded-circle"
+            style={{
+              opacity: 0.2,
+              animation: "ping 1s cubic-bezier(0, 0, 0.2, 1) infinite",
+            }}
+          />
+          <div className="position-relative bg-yuvoo-primary rounded-circle p-4">
             <CheckCircle2 className="w-16 h-16 text-white" />
           </div>
         </div>
       </div>
 
       {/* Success Message */}
-      <h1 className="text-4xl font-bold text-gray-900 mb-4">Felicitări! 🎉</h1>
-      <p className="text-xl text-gray-600 mb-2">
+      <h1 className="display-4 fw-bold text-body mb-4">Felicitări! 🎉</h1>
+      <p className="h4 text-body mb-2">
         {userName ? `Bună, ${userName}!` : "Clubul tău a fost creat cu succes!"}
       </p>
-      <p className="text-lg text-gray-600 mb-8">
-        Ai finalizat procesul de onboarding pentru clubul tău.
-      </p>
+      <p className="h5 text-body mb-5">Ai finalizat procesul de onboarding pentru clubul tău.</p>
 
       {/* Success Details */}
-      <div className="bg-green-50 border border-green-200 rounded-xl p-6 mb-8 text-left">
-        <div className="space-y-4">
-          <div className="flex items-start gap-3">
-            <CheckCircle2 className="w-6 h-6 text-green-600 mt-0.5 shrink-0" />
+      <div className="bg-success bg-opacity-10 border border-success rounded p-4 mb-5 text-start">
+        <div className="mb-4">
+          <div className="d-flex align-items-start gap-3 mb-4">
+            <CheckCircle2 className="w-6 h-6 text-success mt-1" style={{ flexShrink: 0 }} />
             <div>
-              <h3 className="font-semibold text-gray-900 mb-1">Profilul clubului a fost creat</h3>
-              <p className="text-sm text-gray-700">
+              <h3 className="fw-semibold text-body mb-1">Profilul clubului a fost creat</h3>
+              <p className="small text-body">
                 Toate informațiile introduse au fost salvate și sunt disponibile în profilul
                 clubului.
               </p>
             </div>
           </div>
 
-          <div className="flex items-start gap-3">
-            <FileText className="w-6 h-6 text-green-600 mt-0.5 shrink-0" />
+          <div className="d-flex align-items-start gap-3 mb-4">
+            <FileText className="w-6 h-6 text-success mt-1" style={{ flexShrink: 0 }} />
             <div>
-              <h3 className="font-semibold text-gray-900 mb-1">Documentele au fost încărcate</h3>
-              <p className="text-sm text-gray-700">
+              <h3 className="fw-semibold text-body mb-1">Documentele au fost încărcate</h3>
+              <p className="small text-body">
                 Documentele de verificare au fost primite și vor fi revizuite de echipa Yuvoo.
               </p>
             </div>
           </div>
 
-          <div className="flex items-start gap-3">
-            <Clock className="w-6 h-6 text-amber-600 mt-0.5 shrink-0" />
+          <div className="d-flex align-items-start gap-3">
+            <Clock className="w-6 h-6 text-warning mt-1" style={{ flexShrink: 0 }} />
             <div>
-              <h3 className="font-semibold text-gray-900 mb-1">Procesul de verificare</h3>
-              <p className="text-sm text-gray-700">
+              <h3 className="fw-semibold text-body mb-1">Procesul de verificare</h3>
+              <p className="small text-body">
                 Verificarea documentelor poate dura 1-3 zile lucrătoare. Vei primi o notificare prin
                 email când procesul este finalizat. După verificare, clubul tău va primi badge-ul de
                 verificare și va fi vizibil în directorul de cluburi.
@@ -88,21 +93,21 @@ export function ClubCompletionContent({ userName }: ClubCompletionContentProps) 
       </div>
 
       {/* Next Steps */}
-      <div className="bg-[#EBFFFE] border border-[#00BBAE]/20 rounded-xl p-6 mb-8 text-left">
-        <h3 className="font-semibold text-gray-900 mb-4 flex items-center gap-2">
-          <ArrowRight className="w-5 h-5 text-[#00BBAE]" />
-          Ce urmează?
-        </h3>
-        <ul className="space-y-2 text-sm text-gray-700 list-disc list-inside">
-          <li>
+      <InfoBox
+        title="Ce urmează?"
+        icon={<ArrowRight className="w-5 h-5 text-yuvoo-primary" />}
+        className="mb-5 text-start"
+      >
+        <ul className="small text-body mb-0" style={{ listStyle: "disc", paddingLeft: "1.5rem" }}>
+          <li className="mb-2">
             <strong>Explorează dashboard-ul</strong> - Accesează panoul de control al clubului
             pentru a gestiona profilul și setările
           </li>
-          <li>
+          <li className="mb-2">
             <strong>Completează profilul</strong> - Adaugă informații suplimentare despre
             facilitățile și activitățile clubului
           </li>
-          <li>
+          <li className="mb-2">
             <strong>Așteaptă verificarea</strong> - Echipa Yuvoo va revizui documentele în cel mai
             scurt timp posibil
           </li>
@@ -111,27 +116,39 @@ export function ClubCompletionContent({ userName }: ClubCompletionContentProps) 
             și părinții vor putea rezerva probe
           </li>
         </ul>
-      </div>
+      </InfoBox>
 
       {/* Actions */}
-      <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
+      <div className="d-flex flex-column flex-sm-row gap-3 justify-content-center align-items-center">
         <Link
           href={routes.club.dashboard}
-          className="inline-flex items-center justify-center gap-2 px-6 py-3 bg-[#00BBAE] text-white font-semibold rounded-lg hover:bg-[#00A89B] transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-[#00BBAE] focus:ring-offset-2"
+          className="d-inline-flex align-items-center justify-content-center gap-2 px-4 py-3 bg-yuvoo-primary text-white fw-semibold rounded text-yuvoo-primary-hover focus-yuvoo-primary"
+          style={{
+            transition: "all 0.2s ease-in-out",
+          }}
+          onMouseEnter={(e) => {
+            e.currentTarget.style.backgroundColor = "var(--bd-theme-1-hover)";
+          }}
+          onMouseLeave={(e) => {
+            e.currentTarget.style.backgroundColor = "var(--bd-theme-1)";
+          }}
         >
           Mergi la Dashboard
           <ArrowRight className="w-5 h-5" />
         </Link>
         <Link
           href={routes.clubs.list}
-          className="inline-flex items-center justify-center gap-2 px-6 py-3 bg-white text-gray-700 font-semibold rounded-lg border-2 border-gray-300 hover:border-[#00BBAE] hover:text-[#00BBAE] transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-[#00BBAE] focus:ring-offset-2"
+          className="d-inline-flex align-items-center justify-content-center gap-2 px-4 py-3 bg-white text-body fw-semibold rounded border-2 border-secondary text-yuvoo-primary-hover border-yuvoo-primary-hover focus-yuvoo-primary"
+          style={{
+            transition: "all 0.2s ease-in-out",
+          }}
         >
           Vezi Cluburi
         </Link>
       </div>
 
       {/* Auto-redirect notice */}
-      <p className="mt-6 text-sm text-gray-500">
+      <p className="mt-4 small text-secondary">
         Vei fi redirecționat automat la dashboard în câteva secunde...
       </p>
     </div>

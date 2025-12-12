@@ -9,6 +9,12 @@
 
 import { InputHTMLAttributes, TextareaHTMLAttributes, SelectHTMLAttributes } from "react";
 import { InfoTooltip } from "@/components/shared/InfoTooltip";
+import {
+  BootstrapInput,
+  BootstrapTextarea,
+  BootstrapSelect,
+} from "@/components/UI/bootstrap-index";
+import { cn } from "@/lib/utils";
 
 interface BaseFormFieldProps {
   /** Field label */
@@ -62,65 +68,51 @@ export function FormField(props: FormFieldProps) {
   }
 
   return (
-    <div className={`space-y-2 ${className}`}>
+    <div className={cn("mb-4", className)}>
       {/* Label */}
       <label
         htmlFor={fieldId}
-        className="flex items-center gap-2 text-sm font-medium text-gray-700"
+        className="d-flex align-items-center gap-2 small fw-medium text-body mb-2"
       >
         {label}
-        {required && <span className="text-red-500">*</span>}
+        {required && <span className="text-danger">*</span>}
         {helpText && <InfoTooltip content={helpText} size="sm" />}
       </label>
 
       {/* Description */}
-      {description && <p className="text-sm text-gray-500">{description}</p>}
+      {description && <p className="small text-secondary mb-2">{description}</p>}
 
       {/* Input Field */}
       {props.type === "textarea" ? (
-        <textarea
+        <BootstrapTextarea
           id={fieldId}
           {...props.textareaProps}
-          className={`
-            w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-[#00BBAE] focus:border-transparent resize-y
-            ${error ? "border-red-500" : "border-gray-300"}
-            ${props.textareaProps?.disabled ? "bg-gray-100 cursor-not-allowed" : "bg-white"}
-            ${props.textareaProps?.className || ""}
-          `}
+          error={!!error}
+          className={cn("w-100", props.textareaProps?.className)}
+          style={{ resize: "vertical" }}
           aria-invalid={error ? "true" : "false"}
           aria-describedby={error ? `${fieldId}-error` : undefined}
         />
       ) : props.type === "select" ? (
-        <select
+        <BootstrapSelect
           id={fieldId}
           {...props.selectProps}
-          className={`
-            w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-[#00BBAE] focus:border-transparent
-            ${error ? "border-red-500" : "border-gray-300"}
-            ${props.selectProps?.disabled ? "bg-gray-100 cursor-not-allowed" : "bg-white"}
-            ${props.selectProps?.className || ""}
-          `}
+          error={!!error}
+          className={cn("w-100", props.selectProps?.className)}
+          options={[
+            ...(props.placeholder ? [{ value: "", label: props.placeholder }] : []),
+            ...props.options,
+          ]}
           aria-invalid={error ? "true" : "false"}
           aria-describedby={error ? `${fieldId}-error` : undefined}
-        >
-          {props.placeholder && <option value="">{props.placeholder}</option>}
-          {props.options.map((option) => (
-            <option key={option.value} value={option.value}>
-              {option.label}
-            </option>
-          ))}
-        </select>
+        />
       ) : (
-        <input
+        <BootstrapInput
           id={fieldId}
           type={props.type}
           {...props.inputProps}
-          className={`
-            w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-[#00BBAE] focus:border-transparent
-            ${error ? "border-red-500" : "border-gray-300"}
-            ${props.inputProps?.disabled ? "bg-gray-100 cursor-not-allowed" : "bg-white"}
-            ${props.inputProps?.className || ""}
-          `}
+          error={!!error}
+          className={cn("w-100", props.inputProps?.className)}
           aria-invalid={error ? "true" : "false"}
           aria-describedby={error ? `${fieldId}-error` : undefined}
         />
@@ -128,14 +120,14 @@ export function FormField(props: FormFieldProps) {
 
       {/* Character Counter (for textarea) */}
       {props.type === "textarea" && props.characterCount && (
-        <div className="flex justify-between items-center text-xs text-gray-500">
+        <div className="d-flex justify-content-between align-items-center text-xs text-secondary mt-2">
           <span>Minim 100 caractere, maxim {props.characterCount.max} caractere</span>
           <span
             className={
               props.characterCount.current < 100 ||
               props.characterCount.current > props.characterCount.max
-                ? "text-red-500"
-                : "text-gray-500"
+                ? "text-danger"
+                : "text-secondary"
             }
           >
             {props.characterCount.current} / {props.characterCount.max}
@@ -145,7 +137,7 @@ export function FormField(props: FormFieldProps) {
 
       {/* Error Message */}
       {error && (
-        <p id={`${fieldId}-error`} className="text-sm text-red-600" role="alert">
+        <p id={`${fieldId}-error`} className="small text-danger mt-2" role="alert">
           {error}
         </p>
       )}

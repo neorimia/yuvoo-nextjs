@@ -52,51 +52,66 @@ export default async function ParentQuizIntroPage() {
     <OnboardingLayout>
       <OnboardingProgress currentStep={4} steps={PARENT_STEPS} className="mb-8" />
 
-      <div className="max-w-2xl mx-auto">
+      <div className="mx-auto" style={{ maxWidth: "42rem" }}>
         {/* Header */}
-        <div className="text-center mb-10">
-          <div className="inline-flex items-center justify-center w-16 h-16 bg-gradient-to-br from-[#00BBAE] to-[#00998D] rounded-full mb-4 shadow-lg">
+        <div className="text-center mb-5">
+          <div
+            className="d-inline-flex align-items-center justify-content-center rounded-circle mb-4 shadow"
+            style={{
+              width: "4rem",
+              height: "4rem",
+              background:
+                "linear-gradient(to bottom right, var(--bd-theme-1), var(--bd-theme-1-hover))",
+            }}
+          >
             <Target className="w-8 h-8 text-white" />
           </div>
-          <h1 className="text-4xl font-bold text-gray-900 mb-3">🎯 AI Coach Quiz</h1>
-          <p className="text-xl text-gray-700">
+          <h1 className="display-4 fw-bold text-body mb-3">🎯 AI Coach Quiz</h1>
+          <p className="h4 text-body">
             Descoperă sportul potrivit pentru <strong>{childName}</strong>!
           </p>
         </div>
 
         {/* Benefits Section */}
-        <div className="bg-white border border-gray-200 rounded-2xl p-8 mb-8 shadow-sm">
-          <h2 className="text-lg font-semibold text-gray-900 mb-6">
-            Chestionarul personalizat te ajută:
-          </h2>
+        <div className="bg-white border border-secondary rounded-3 p-5 mb-5 shadow-sm">
+          <h2 className="h5 fw-semibold text-body mb-4">Chestionarul personalizat te ajută:</h2>
 
-          <div className="space-y-4">
+          <div className="mb-0">
             {/* Benefit 1 */}
-            <div className="flex items-start gap-3">
-              <div className="shrink-0 w-6 h-6 rounded-full bg-[#EBFFFE] flex items-center justify-center mt-0.5">
-                <CheckCircle2 className="w-4 h-4 text-[#00BBAE]" />
+            <div className="d-flex align-items-start gap-3 mb-4">
+              <div
+                className="rounded-circle bg-yuvoo-primary-light d-flex align-items-center justify-content-center mt-1"
+                style={{ width: "1.5rem", height: "1.5rem", flexShrink: 0 }}
+              >
+                <CheckCircle2 className="w-4 h-4 text-yuvoo-primary" />
               </div>
-              <p className="text-gray-700 leading-relaxed">
+              <p className="text-body mb-0" style={{ lineHeight: "1.75" }}>
                 Să înțelegi <strong>personalitatea și interesele</strong> copilului
               </p>
             </div>
 
             {/* Benefit 2 */}
-            <div className="flex items-start gap-3">
-              <div className="shrink-0 w-6 h-6 rounded-full bg-[#EBFFFE] flex items-center justify-center mt-0.5">
-                <CheckCircle2 className="w-4 h-4 text-[#00BBAE]" />
+            <div className="d-flex align-items-start gap-3 mb-4">
+              <div
+                className="rounded-circle bg-yuvoo-primary-light d-flex align-items-center justify-content-center mt-1"
+                style={{ width: "1.5rem", height: "1.5rem", flexShrink: 0 }}
+              >
+                <CheckCircle2 className="w-4 h-4 text-yuvoo-primary" />
               </div>
-              <p className="text-gray-700 leading-relaxed">
+              <p className="text-body mb-0" style={{ lineHeight: "1.75" }}>
                 Să primești <strong>recomandări de sporturi potrivite</strong>
               </p>
             </div>
 
             {/* Benefit 3 */}
-            <div className="flex items-start gap-3">
-              <div className="shrink-0 w-6 h-6 rounded-full bg-[#EBFFFE] flex items-center justify-center mt-0.5">
-                <CheckCircle2 className="w-4 h-4 text-[#00BBAE]" />
+            <div className="d-flex align-items-start gap-3">
+              <div
+                className="rounded-circle bg-yuvoo-primary-light d-flex align-items-center justify-content-center mt-1"
+                style={{ width: "1.5rem", height: "1.5rem", flexShrink: 0 }}
+              >
+                <CheckCircle2 className="w-4 h-4 text-yuvoo-primary" />
               </div>
-              <p className="text-gray-700 leading-relaxed">
+              <p className="text-body mb-0" style={{ lineHeight: "1.75" }}>
                 Să găsești <strong>cluburile potrivite</strong>
               </p>
             </div>
@@ -104,28 +119,31 @@ export default async function ParentQuizIntroPage() {
         </div>
 
         {/* Time Estimate */}
-        <div className="flex items-center justify-center gap-2 mb-10">
-          <Clock className="w-5 h-5 text-[#00BBAE]" />
-          <p className="text-base text-gray-600">
+        <div className="d-flex align-items-center justify-content-center gap-2 mb-5">
+          <Clock className="w-5 h-5 text-yuvoo-primary" />
+          <p className="h6 text-body mb-0">
             ⏱️ <strong>Timp necesar:</strong> 5-7 minute
           </p>
         </div>
 
         {/* CTA Buttons */}
-        <div className="space-y-4">
+        <div className="mb-4">
           {/* Primary CTA - Start Quiz */}
-          <form action={completeParentOnboarding.bind(null, "quiz")}>
+          <form action={completeParentOnboarding.bind(null, "quiz")} className="mb-3">
             <button
               type="submit"
-              className="
-                w-full inline-flex items-center justify-center gap-3 px-8 py-4
-                text-base font-semibold text-white
-                bg-[#00BBAE] rounded-xl
-                hover:bg-[#00998D]
-                focus:outline-none focus:ring-2 focus:ring-[#00BBAE] focus:ring-offset-2
-                transition-all duration-200
-                shadow-md hover:shadow-lg
-              "
+              className="w-100 d-inline-flex align-items-center justify-content-center gap-3 px-5 py-4 h6 fw-semibold text-white bg-yuvoo-primary rounded-3 text-yuvoo-primary-hover focus-yuvoo-primary shadow text-yuvoo-primary-hover"
+              style={{
+                transition: "all 0.2s ease-in-out",
+              }}
+              onMouseEnter={(e) => {
+                e.currentTarget.style.backgroundColor = "var(--bd-theme-1-hover)";
+                e.currentTarget.style.boxShadow = "0 10px 15px -3px rgba(0, 187, 174, 0.2)";
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.backgroundColor = "var(--bd-theme-1)";
+                e.currentTarget.style.boxShadow = "";
+              }}
             >
               <Target className="w-5 h-5" />
               <span>Începe Chestionarul Acum</span>
@@ -136,14 +154,18 @@ export default async function ParentQuizIntroPage() {
           <form action={completeParentOnboarding.bind(null, "dashboard")}>
             <button
               type="submit"
-              className="
-                w-full inline-flex items-center justify-center gap-2 px-6 py-3
-                text-sm font-medium text-gray-700
-                bg-white border border-gray-300 rounded-xl
-                hover:bg-gray-50 hover:border-gray-400
-                focus:outline-none focus:ring-2 focus:ring-[#00BBAE] focus:ring-offset-2
-                transition-all duration-200
-              "
+              className="w-100 d-inline-flex align-items-center justify-content-center gap-2 px-4 py-3 small fw-medium text-body bg-white border border-secondary rounded-3 text-yuvoo-primary-hover border-yuvoo-primary-hover focus-yuvoo-primary"
+              style={{
+                transition: "all 0.2s ease-in-out",
+              }}
+              onMouseEnter={(e) => {
+                e.currentTarget.style.backgroundColor = "var(--bs-gray-50)";
+                e.currentTarget.style.borderColor = "var(--bs-gray-400)";
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.backgroundColor = "white";
+                e.currentTarget.style.borderColor = "var(--bs-gray-300)";
+              }}
             >
               <span>Mai târziu, mergi la dashboard</span>
             </button>
@@ -151,8 +173,8 @@ export default async function ParentQuizIntroPage() {
         </div>
 
         {/* Info Note */}
-        <div className="mt-8 text-center">
-          <p className="text-sm text-gray-500">
+        <div className="mt-5 text-center">
+          <p className="small text-secondary mb-0">
             Poți completa chestionarul oricând din dashboard-ul tău
           </p>
         </div>

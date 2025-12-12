@@ -27,24 +27,24 @@ export default async function ParentAddChildPage() {
     <OnboardingLayout>
       <OnboardingProgress currentStep={2} steps={PARENT_STEPS} className="mb-8" />
 
-      <div className="max-w-2xl mx-auto">
+      <div className="mx-auto" style={{ maxWidth: "42rem" }}>
         {/* Header */}
-        <div className="text-center mb-8">
-          <h1 className="text-4xl font-bold text-gray-900 mb-4">Adaugă profilul copilului 👶</h1>
-          <p className="text-lg text-gray-600">
+        <div className="text-center mb-5">
+          <h1 className="display-4 fw-bold text-body mb-4">Adaugă profilul copilului 👶</h1>
+          <p className="h5 text-body">
             Spune-ne câteva detalii despre copilul tău pentru a primi recomandări personalizate.
           </p>
         </div>
 
         {/* Info box */}
-        <div className="bg-[#EBFFFE] border border-[#00BBAE]/20 rounded-xl p-6 mb-8">
-          <div className="flex items-start gap-3">
-            <span className="text-2xl">ℹ️</span>
+        <div className="bg-yuvoo-primary-light border border-yuvoo-primary rounded-3 p-4 mb-5">
+          <div className="d-flex align-items-start gap-3">
+            <span style={{ fontSize: "1.5rem" }}>ℹ️</span>
             <div>
-              <h3 className="font-semibold text-gray-900 mb-2">
+              <h3 className="fw-semibold text-body mb-2">
                 De ce avem nevoie de aceste informații?
               </h3>
-              <p className="text-sm text-gray-700">
+              <p className="small text-body">
                 Vârsta și genul copilului ne ajută să îți oferim recomandări de sporturi adecvate
                 dezvoltării sale. Aceste date sunt utilizate doar pentru personalizarea experienței
                 tale pe platformă.

@@ -26,7 +26,9 @@ import { doctorVerificationSchema, type DoctorVerificationInput } from "@/lib/va
 import { routes } from "@/lib/routes";
 import { OnboardingNavigation } from "./OnboardingNavigation";
 import { InfoTooltip } from "@/components/shared/InfoTooltip";
+import { ServerErrorAlert } from "./components/ServerErrorAlert";
 import { InfoBox } from "./components";
+import { cn } from "@/lib/utils";
 import { X, Upload, FileText, File } from "lucide-react";
 
 export function DoctorVerificationForm() {
@@ -53,13 +55,13 @@ export function DoctorVerificationForm() {
 
   const getFileIcon = (url: string) => {
     if (url.toLowerCase().endsWith(".pdf")) {
-      return <FileText className="w-8 h-8 text-red-500" />;
+      return <FileText className="w-8 h-8 text-danger" />;
     }
     if (url.toLowerCase().match(/\.(doc|docx)$/)) {
-      return <File className="w-8 h-8 text-blue-500" />;
+      return <File className="w-8 h-8 text-primary" />;
     }
     // Image or other
-    return <File className="w-8 h-8 text-gray-500" />;
+    return <File className="w-8 h-8 text-secondary" />;
   };
 
   const getFileName = (url: string) => {
@@ -162,67 +164,68 @@ export function DoctorVerificationForm() {
   };
 
   return (
-    <form
-      id="doctor-verification-form"
-      onSubmit={handleSubmit(onSubmit)}
-      className="space-y-6 px-4 sm:px-0"
-    >
+    <form id="doctor-verification-form" onSubmit={handleSubmit(onSubmit)} className="px-3 px-sm-0">
       {/* Server error message */}
-      {serverError && (
-        <div className="bg-red-50 border border-red-200 rounded-lg p-4" role="alert">
-          <div className="flex items-start gap-3">
-            <span className="text-red-500 text-xl" aria-hidden="true">
-              ⚠️
-            </span>
-            <div>
-              <h4 className="font-semibold text-red-900 mb-1">Eroare</h4>
-              <p className="text-sm text-red-700">{serverError}</p>
-            </div>
-          </div>
-        </div>
-      )}
+      <ServerErrorAlert error={serverError} className="mb-4" />
 
       {/* Document Upload */}
-      <div>
-        <div className="flex items-center justify-between mb-3">
-          <label className="flex items-center gap-2 text-sm font-medium text-gray-700">
-            Documente de verificare <span className="text-red-500">*</span>
+      <div className="mb-4">
+        <div className="d-flex align-items-center justify-content-between mb-3">
+          <label className="d-flex align-items-center gap-2 small fw-medium text-body">
+            Documente de verificare <span className="text-danger">*</span>
             <InfoTooltip
               content="Încarcă documentele tale profesionale pentru verificare. Documentele verificate îți vor oferi badge-ul de 'Verificat' și vor crește încrederea părinților. Verificarea durează 2-3 zile lucrătoare."
               size="sm"
             />
           </label>
-          <span className="text-xs text-gray-500">
+          <span className="text-xs text-secondary">
             {documentUrls.length}/10 documente (minim 4 obligatorii)
           </span>
         </div>
-        <p className="text-xs text-gray-500 mb-3">
+        <p className="text-xs text-secondary mb-3">
           Încarcă cel puțin 4 documente obligatorii. Acceptă PDF, JPG, PNG (maxim 10MB fiecare).
         </p>
 
         {/* Documents List */}
         {documentUrls.length > 0 && (
-          <div className="space-y-3 mb-4">
+          <div className="mb-4">
             {documentUrls.map((url, index) => (
               <div
                 key={index}
-                className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2 sm:gap-0 p-3 border border-gray-200 rounded-lg bg-gray-50 group"
+                className="d-flex flex-column flex-sm-row align-items-start align-items-sm-center justify-content-between gap-2 p-3 border border-secondary rounded bg-light mb-3"
               >
-                <div className="flex items-center gap-3 flex-1 min-w-0 w-full sm:w-auto">
+                <div className="d-flex align-items-center gap-3 flex-fill" style={{ minWidth: 0 }}>
                   {getFileIcon(url)}
-                  <div className="flex-1 min-w-0">
-                    <p className="text-sm font-medium text-gray-900 truncate">{getFileName(url)}</p>
-                    <p className="text-xs text-gray-500 truncate hidden sm:block">{url}</p>
+                  <div className="flex-fill" style={{ minWidth: 0 }}>
+                    <p className="small fw-medium text-body text-truncate">{getFileName(url)}</p>
+                    <p className="text-xs text-secondary text-truncate d-none d-sm-block">{url}</p>
                   </div>
                   {uploadingDocument === index && (
-                    <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-[#00BBAE]"></div>
+                    <div
+                      className="spinner-border spinner-border-sm text-yuvoo-primary"
+                      role="status"
+                      aria-hidden="true"
+                    />
                   )}
                 </div>
                 <button
                   type="button"
                   onClick={() => handleRemoveDocument(index)}
                   disabled={isLoading || uploadingDocument === index}
-                  className="ml-3 p-2 text-red-500 hover:bg-red-50 rounded-lg transition-all opacity-0 group-hover:opacity-100 focus:opacity-100 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2"
+                  className="ms-3 p-2 text-danger text-danger-hover bg-danger bg-opacity-10 rounded focus-danger"
+                  style={{
+                    transition: "all 0.2s ease-in-out",
+                    opacity: 0,
+                  }}
+                  onMouseEnter={(e) => {
+                    e.currentTarget.style.opacity = "1";
+                  }}
+                  onMouseLeave={(e) => {
+                    e.currentTarget.style.opacity = "0";
+                  }}
+                  onFocus={(e) => {
+                    e.currentTarget.style.opacity = "1";
+                  }}
                   aria-label={`Șterge document ${index + 1}`}
                 >
                   <X className="w-5 h-5" />
@@ -235,29 +238,40 @@ export function DoctorVerificationForm() {
         {/* Upload Button */}
         {documentUrls.length < 10 && (
           <div
-            onClick={() => documentInputRef.current?.click()}
-            className={`
-              w-full h-32 border-2 border-dashed rounded-lg
-              flex items-center justify-center cursor-pointer
-              transition-all duration-200
-              ${
-                uploadingDocument !== null
-                  ? "border-[#00BBAE] bg-[#EBFFFE]"
-                  : "border-gray-300 bg-gray-50 hover:border-[#00BBAE] hover:bg-[#EBFFFE]/50"
-              }
-              ${isLoading ? "opacity-50 cursor-not-allowed" : ""}
-            `}
+            onClick={() =>
+              !isLoading &&
+              uploadingDocument === null &&
+              documentUrls.length < 10 &&
+              documentInputRef.current?.click()
+            }
+            className={cn(
+              "w-100 border-2 border-dashed rounded",
+              "d-flex align-items-center justify-content-center",
+              uploadingDocument !== null
+                ? "border-yuvoo-primary bg-yuvoo-primary-light"
+                : "border-secondary bg-light border-yuvoo-primary-hover bg-yuvoo-primary-light",
+              isLoading && "opacity-50"
+            )}
+            style={{
+              height: "8rem",
+              cursor: isLoading || uploadingDocument !== null ? "not-allowed" : "pointer",
+              transition: "all 0.2s ease-in-out",
+            }}
           >
             {uploadingDocument !== null ? (
               <div className="text-center">
-                <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-[#00BBAE] mx-auto mb-2"></div>
-                <p className="text-sm text-gray-600">Se încarcă...</p>
+                <div
+                  className="spinner-border spinner-border-sm text-yuvoo-primary mb-2"
+                  role="status"
+                  aria-hidden="true"
+                />
+                <p className="small text-body">Se încarcă...</p>
               </div>
             ) : (
               <div className="text-center">
-                <Upload className="w-8 h-8 text-gray-400 mx-auto mb-2" />
-                <p className="text-sm font-medium text-gray-700">Adaugă documente de verificare</p>
-                <p className="text-xs text-gray-500">
+                <Upload className="w-8 h-8 text-secondary mx-auto mb-2" />
+                <p className="small fw-medium text-body">Adaugă documente de verificare</p>
+                <p className="text-xs text-secondary">
                   PDF, JPG, PNG (maxim {10 - documentUrls.length} restante)
                 </p>
               </div>
@@ -272,63 +286,63 @@ export function DoctorVerificationForm() {
           multiple
           onChange={handleDocumentUpload}
           disabled={isLoading || uploadingDocument !== null || documentUrls.length >= 10}
-          className="hidden"
+          className="visually-hidden"
           aria-label="Încarcă documente de verificare"
         />
 
         {errors.verificationDocuments && (
-          <p className="mt-2 text-sm text-red-600">{errors.verificationDocuments.message}</p>
+          <p className="mt-2 small text-danger">{errors.verificationDocuments.message}</p>
         )}
       </div>
 
       {/* Info box */}
-      <InfoBox title="Ce documente ai nevoie pentru verificare?" icon="ℹ️">
-        <p className="text-sm text-gray-700 mb-3">
+      <InfoBox title="Ce documente ai nevoie pentru verificare?" icon="ℹ️" className="mb-4">
+        <p className="small text-body mb-3">
           Pentru a obține badge-ul de &apos;Verificat&apos;, încarcă cel puțin 4 documente
           obligatorii:
         </p>
-        <ul className="text-sm text-gray-700 space-y-2 list-none">
-          <li className="flex items-start gap-2">
-            <span className="text-red-500 font-semibold">*</span>
+        <ul className="small text-body mb-0" style={{ listStyle: "none", paddingLeft: 0 }}>
+          <li className="d-flex align-items-start gap-2 mb-2">
+            <span className="text-danger fw-semibold">*</span>
             <span>
               <strong>Diplomă de medic</strong> - Document oficial care confirmă calificarea de
               medic
             </span>
           </li>
-          <li className="flex items-start gap-2">
-            <span className="text-red-500 font-semibold">*</span>
+          <li className="d-flex align-items-start gap-2 mb-2">
+            <span className="text-danger fw-semibold">*</span>
             <span>
               <strong>Certificat de specialist</strong> - Certificat care confirmă specializarea ta
             </span>
           </li>
-          <li className="flex items-start gap-2">
-            <span className="text-red-500 font-semibold">*</span>
+          <li className="d-flex align-items-start gap-2 mb-2">
+            <span className="text-danger fw-semibold">*</span>
             <span>
               <strong>Licență de liberă practică</strong> - Autorizație pentru practica medicală
             </span>
           </li>
-          <li className="flex items-start gap-2">
-            <span className="text-red-500 font-semibold">*</span>
+          <li className="d-flex align-items-start gap-2 mb-2">
+            <span className="text-danger fw-semibold">*</span>
             <span>
               <strong>Certificat Colegiul Medicilor din România</strong> - Membru activ al CMR
             </span>
           </li>
-          <li className="flex items-start gap-2">
-            <span className="text-gray-400 font-semibold">○</span>
+          <li className="d-flex align-items-start gap-2 mb-2">
+            <span className="text-secondary fw-semibold">○</span>
             <span>
               <strong>Asigurare malpraxis</strong> (opțional) - Poliță de asigurare pentru
               răspundere profesională
             </span>
           </li>
         </ul>
-        <p className="text-sm text-gray-700 mt-4">
+        <p className="small text-body mt-4 mb-0">
           ⏱️ <strong>Verificare:</strong> 2-3 zile lucrătoare. Documentele vor fi revizuite de
           echipa Yuvoo pentru a verifica autenticitatea și conformitatea.
         </p>
       </InfoBox>
 
       {/* Navigation */}
-      <div className="pt-6 border-t border-gray-200 space-y-4">
+      <div className="pt-4 border-top border-secondary mb-4">
         <OnboardingNavigation
           backHref={routes.onboarding.doctor.photo}
           nextHref={null} // null means submit button
@@ -338,12 +352,22 @@ export function DoctorVerificationForm() {
           nextText="Trimite spre verificare"
         />
         {/* Skip button */}
-        <div className="text-center">
+        <div className="text-center mt-3">
           <button
             type="button"
             onClick={handleSkip}
             disabled={isLoading}
-            className="text-sm text-gray-600 hover:text-[#00BBAE] hover:underline transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+            className="small text-secondary text-yuvoo-primary-hover border-0 bg-transparent p-0"
+            style={{
+              textDecoration: "none",
+              transition: "color 0.2s ease-in-out",
+            }}
+            onMouseEnter={(e) => {
+              e.currentTarget.style.textDecoration = "underline";
+            }}
+            onMouseLeave={(e) => {
+              e.currentTarget.style.textDecoration = "none";
+            }}
           >
             Sari acest pas - verific mai târziu
           </button>

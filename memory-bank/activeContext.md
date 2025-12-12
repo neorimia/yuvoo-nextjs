@@ -2,15 +2,85 @@
 
 ## Current Status
 
-**Phase**: Foundation Setup & Onboarding Development
+**Phase**: Foundation Setup & Onboarding Development + Bootstrap Migration
 **Date**: December 2024
-**Focus**: Club Admin Onboarding complete (all 7 steps), Doctor Onboarding complete (all 8 steps) ✅
+**Focus**: All onboarding forms migrated to Bootstrap ✅ | Reusable components created ✅
 
 ## Current Work Focus
 
 ### Immediate Priorities
 
-1. **Authentication System Integration** ✅ (Completed - Migrated to Server-Side)
+1. **Bootstrap Migration** 🚧 (Phase 2.2 Complete - All Onboarding Forms Migrated)
+   - Comprehensive migration plan created (`docs/TAILWIND_REMOVAL_PLAN.md`) ✅
+   - Reusable components inventory created (`docs/REUSABLE_COMPONENTS_LIST.md`) ✅
+   - Bootstrap 5.3 documentation references added ✅
+   - Component replacement mappings documented ✅
+   - Migration strategy: 4-week phased approach ✅
+   - **Phase 1.1: Bootstrap Component Library** ✅ **COMPLETE**
+     - Created `BootstrapButton.tsx` - Bootstrap button wrapper (using `bd-btn` pattern) ✅
+     - Created `BootstrapInput.tsx` - Bootstrap input wrapper (using `login__input` pattern) ✅
+     - Created `BootstrapTextarea.tsx` - Bootstrap textarea wrapper ✅
+     - Created `BootstrapSelect.tsx` - Bootstrap select wrapper ✅
+     - Created `BootstrapAlert.tsx` - Bootstrap alert wrapper ✅
+     - Created `BootstrapProgress.tsx` - Bootstrap progress wrapper ✅
+     - Created `bootstrap-index.ts` - Export index for easy imports ✅
+     - Created `BOOTSTRAP_COMPONENTS.md` - Component documentation and migration guide ✅
+   - **Phase 1.2: Bootstrap Utility API Extensions** ✅ **COMPLETE**
+     - Created `_yuvoo-utilities.scss` - Custom Yuvoo brand utilities using Bootstrap naming conventions ✅
+     - Added Yuvoo brand color utilities (`bg-yuvoo-primary`, `text-yuvoo-primary`, etc.) ✅
+     - Added hover state utilities for Yuvoo colors ✅
+     - Added focus, shadow, responsive, spacing, and button variant utilities ✅
+     - References existing CSS variables from `_root.scss` (`--bd-theme-1`, `--bd-theme-2`, etc.) ✅
+     - Imported in `public/assets/scss/main.scss` ✅
+     - Added to `public/assets/scss/utils/_index.scss` for proper module forwarding ✅
+     - Created `YUVOO_UTILITIES.md` - Comprehensive documentation with usage examples ✅
+   - **Phase 2.2: Replace shadcn Components in Onboarding Forms** ✅ **COMPLETE**
+     - All onboarding forms migrated from Tailwind CSS and shadcn/ui to Bootstrap 5.3.3 ✅
+     - **Shared Components Updated**:
+       - `FormField.tsx` - Replaced Tailwind with Bootstrap utilities ✅
+       - `ServerErrorAlert.tsx` - Replaced Alert component with BootstrapAlert ✅
+       - `InfoBox.tsx` - Replaced Tailwind with Bootstrap utilities ✅
+       - `FormSection.tsx` - Replaced Tailwind with Bootstrap utilities ✅
+     - **Core Onboarding Components Updated**:
+       - `OnboardingLayout.tsx` - All Tailwind classes replaced with Bootstrap ✅
+       - `OnboardingNavigation.tsx` - Button and Alert replaced with Bootstrap components ✅
+       - `OnboardingProgress.tsx` - Progress component replaced with Bootstrap progress bar ✅
+     - **Parent Onboarding Forms**:
+       - `AddChildForm.tsx` - Fully migrated to Bootstrap ✅
+     - **Club Onboarding Forms (6 forms)**:
+       - `ClubBasicInfoForm.tsx` - Fully migrated to Bootstrap ✅
+       - `ClubContactScheduleForm.tsx` - Fully migrated to Bootstrap ✅
+       - `ClubPhotosForm.tsx` - Fully migrated to Bootstrap ✅
+       - `ClubPricingAgesForm.tsx` - Fully migrated to Bootstrap ✅
+       - `ClubVerificationForm.tsx` - Fully migrated to Bootstrap ✅
+       - `ClubCompletionContent.tsx` - Fully migrated to Bootstrap ✅
+     - **Doctor Onboarding Forms (7 forms)**:
+       - `DoctorBasicInfoForm.tsx` - Fully migrated to Bootstrap ✅
+       - `DoctorBioExperienceForm.tsx` - Fully migrated to Bootstrap ✅
+       - `DoctorLocationContactForm.tsx` - Fully migrated to Bootstrap ✅
+       - `DoctorPhotoForm.tsx` - Fully migrated to Bootstrap ✅
+       - `DoctorAvailabilityForm.tsx` - Fully migrated to Bootstrap ✅
+       - `DoctorVerificationForm.tsx` - Fully migrated to Bootstrap ✅
+       - `DoctorCompletionContent.tsx` - Fully migrated to Bootstrap ✅
+     - **Reusable Components Created** (Pattern Recognition):
+       - `FileUploadArea.tsx` - Reusable file upload area with drag-and-drop styling ✅
+         - Used for: logo uploads, photo uploads, document uploads
+         - Features: loading states, file type hints, max files tracking
+       - `ImagePreview.tsx` - Reusable image preview with remove button ✅
+         - Used for: logo previews, photo previews, gallery image previews
+         - Features: Next.js Image optimization, responsive sizing, remove functionality
+       - `DocumentPreview.tsx` - Reusable document preview with file icons ✅
+         - Used for: verification document previews
+         - Features: file type icons (PDF, DOC, images), filename display, remove functionality
+     - **Migration Details**:
+       - All Tailwind utility classes replaced with Bootstrap equivalents
+       - All shadcn/ui components replaced with Bootstrap components
+       - Yuvoo brand utilities applied throughout (`bg-yuvoo-primary`, `text-yuvoo-primary`, etc.)
+       - All functionality preserved (form validation, file uploads, React Hook Form integration)
+       - No linter errors
+     - Status: ✅ Phase 2.2 complete - All onboarding forms fully migrated to Bootstrap
+
+2. **Authentication System Integration** ✅ (Completed - Migrated to Server-Side)
    - Stack Auth fully integrated using Server Actions pattern (no client-side provider)
    - All authentication operations handled server-side for better security
    - All components localized to Romanian
@@ -18,17 +88,17 @@
    - Forms use Server Actions instead of client-side hooks
    - Ready for end-to-end testing
 
-2. **Legal Pages Development** ✅ (Completed)
+3. **Legal Pages Development** ✅ (Completed)
    - Created all 4 legal pages with comprehensive Romanian content
    - Added footer legal links integration
    - Completed styling and SEO optimization
 
-3. **Homepage Development** ✅ (Completed)
+4. **Homepage Development** ✅ (Completed)
    - All homepage components created and integrated
    - Romanian language content throughout
    - Complete homepage experience with 9 sections
 
-4. **Onboarding System Development** 🚧 (In Progress)
+5. **Onboarding System Development** 🚧 (In Progress)
    - Database schema complete (onboarding_progress table, updated users/clubs/doctors tables) ✅
    - Server Actions implemented (state management, progress tracking, resume functionality) ✅
    - Validation schemas created (onboarding, child, club, doctor) ✅
@@ -464,12 +534,54 @@ Current homepage structure (`src/app/(public)/page.tsx`):
     - Handles various input formats (with spaces, leading zeros, missing +)
     - Used for club contact phone validation
 
+### Bootstrap Component Library Development ✅ (Phase 1.1 & 1.2 Complete)
+
+- **Created**: Bootstrap Component Library (`src/components/UI/`) ✅
+  - `BootstrapButton.tsx` - Replaces shadcn/ui Button with `bd-btn` pattern ✅
+  - `BootstrapInput.tsx` - Replaces shadcn/ui Input with `login__input` pattern ✅
+  - `BootstrapTextarea.tsx` - Replaces shadcn/ui Textarea with `form-control` pattern ✅
+  - `BootstrapSelect.tsx` - Replaces shadcn/ui Select with `form-select` pattern ✅
+  - `BootstrapAlert.tsx` - Replaces shadcn/ui Alert with Bootstrap alert classes ✅
+  - `BootstrapProgress.tsx` - Replaces shadcn/ui Progress with Bootstrap progress bar ✅
+  - `bootstrap-index.ts` - Central export file for easy imports ✅
+  - `BOOTSTRAP_COMPONENTS.md` - Comprehensive documentation with usage examples and migration guide ✅
+  - All components follow existing Bootstrap patterns from codebase ✅
+  - All components TypeScript-typed with proper props ✅
+  - Status: ✅ Phase 1.1 complete - Ready for Phase 2 (Replace shadcn Components)
+
+- **Created**: Bootstrap Utility API Extensions (`public/assets/scss/utils/`) ✅
+  - `_yuvoo-utilities.scss` - Custom Yuvoo brand utilities using Bootstrap naming conventions ✅
+  - Background color utilities: `bg-yuvoo-primary`, `bg-yuvoo-secondary`, `bg-yuvoo-accent`, plus light variants ✅
+  - Text color utilities: `text-yuvoo-primary`, `text-yuvoo-secondary`, `text-yuvoo-accent`, `text-yuvoo-heading`, `text-yuvoo-body` ✅
+  - Border color utilities: `border-yuvoo-primary`, `border-yuvoo-secondary`, `border-yuvoo-accent` ✅
+  - Hover state utilities: `bg-yuvoo-primary-hover`, `text-yuvoo-primary-hover`, etc. ✅
+  - Focus state utilities: `focus-yuvoo-primary`, `focus-yuvoo-secondary` ✅
+  - Shadow utilities: `shadow-yuvoo-primary`, `shadow-yuvoo-secondary`, `shadow-yuvoo-accent` ✅
+  - Responsive utilities: `d-md-none-yuvoo`, `d-md-block-yuvoo`, `d-md-flex-yuvoo` ✅
+  - Spacing utilities: `section-padding-yuvoo`, `container-yuvoo` ✅
+  - Button variant utilities: `btn-yuvoo-primary`, `btn-yuvoo-secondary`, `btn-yuvoo-outline-primary`, `btn-yuvoo-outline-secondary` ✅
+  - All utilities use CSS variables from `_root.scss` (no hardcoded colors) ✅
+  - Imported in `public/assets/scss/main.scss` ✅
+  - Added to `public/assets/scss/utils/_index.scss` for proper module forwarding ✅
+  - `YUVOO_UTILITIES.md` - Comprehensive documentation with usage examples and migration guide ✅
+  - Status: ✅ Phase 1.2 complete - Bootstrap utilities ready for use throughout application
+
 ### Documentation Updates
 
 - **Created**: `CLAUDE.md` - Comprehensive project guide for Claude Code ✅
   - **Content**: Project overview, quick start, development commands, architecture patterns, critical development rules, documentation structure, external services, component adaptation, development workflow, testing guidelines, troubleshooting, quick reference
   - **Features**: Table of contents, expanded examples, code snippets, testing checklists, troubleshooting section, quick reference patterns
   - **Status**: ✅ Complete - Comprehensive guide for working with the codebase
+
+- **Created**: `docs/TAILWIND_REMOVAL_PLAN.md` - Comprehensive Bootstrap migration plan ✅
+  - **Content**: Complete migration strategy to remove Tailwind CSS and shadcn/ui, keep only Bootstrap 5.3.3 and SCSS
+  - **Features**: Phase-by-phase migration plan (4 weeks), Bootstrap Utility API usage guide, component replacement mappings (shadcn → Bootstrap), comprehensive Bootstrap 5.3 documentation links, file removal list, risk assessment, success criteria
+  - **Status**: ✅ Complete - Serves as reference for migrating from Tailwind to Bootstrap-only architecture
+
+- **Created**: `docs/REUSABLE_COMPONENTS_LIST.md` - Comprehensive Bootstrap component inventory ✅
+  - **Content**: Complete list of ~80+ reusable Bootstrap components, component categories (Layout, Features, Common, etc.), Bootstrap 5.3 component reference with documentation links, shadcn → Bootstrap component mapping table
+  - **Features**: Form components reference, Layout & Grid reference, Utilities reference, Customization reference, Bootstrap Utility API examples
+  - **Status**: ✅ Complete - Complete reference for all reusable Bootstrap components in the project
 
 - **Created**: `docs/ PROMPTING_RULES_FOR_CODEGEN.md` - Comprehensive code generation guidelines
   - **Content**: Next.js 16 patterns, Cache Components rules, file naming, error handling, TypeScript patterns, Romanian language requirements
