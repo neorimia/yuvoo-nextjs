@@ -73,7 +73,7 @@ export default async function ParentQuizIntroPage() {
           <div className="space-y-4">
             {/* Benefit 1 */}
             <div className="flex items-start gap-3">
-              <div className="flex-shrink-0 w-6 h-6 rounded-full bg-[#EBFFFE] flex items-center justify-center mt-0.5">
+              <div className="shrink-0 w-6 h-6 rounded-full bg-[#EBFFFE] flex items-center justify-center mt-0.5">
                 <CheckCircle2 className="w-4 h-4 text-[#00BBAE]" />
               </div>
               <p className="text-gray-700 leading-relaxed">
@@ -83,7 +83,7 @@ export default async function ParentQuizIntroPage() {
 
             {/* Benefit 2 */}
             <div className="flex items-start gap-3">
-              <div className="flex-shrink-0 w-6 h-6 rounded-full bg-[#EBFFFE] flex items-center justify-center mt-0.5">
+              <div className="shrink-0 w-6 h-6 rounded-full bg-[#EBFFFE] flex items-center justify-center mt-0.5">
                 <CheckCircle2 className="w-4 h-4 text-[#00BBAE]" />
               </div>
               <p className="text-gray-700 leading-relaxed">
@@ -93,7 +93,7 @@ export default async function ParentQuizIntroPage() {
 
             {/* Benefit 3 */}
             <div className="flex items-start gap-3">
-              <div className="flex-shrink-0 w-6 h-6 rounded-full bg-[#EBFFFE] flex items-center justify-center mt-0.5">
+              <div className="shrink-0 w-6 h-6 rounded-full bg-[#EBFFFE] flex items-center justify-center mt-0.5">
                 <CheckCircle2 className="w-4 h-4 text-[#00BBAE]" />
               </div>
               <p className="text-gray-700 leading-relaxed">

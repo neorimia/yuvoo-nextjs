@@ -600,16 +600,46 @@
   - [ ] Test login/signup flow end-to-end (⏳ Ready for testing - all implementation complete)
 - [ ] Dashboard layout (new component)
 - [ ] Child profile management (CRUD) (new component)
-- [x] Onboarding system foundation ✅ (🚧 Partially Complete - Database schema, Server Actions, validation schemas complete; UI components pending)
+- [x] Onboarding system foundation ✅ (✅ Phase 2 Complete, Phase 3 In Progress)
   - [x] Database schema (`onboarding_progress` table, updated `users`/`clubs`/`doctors` tables) ✅
   - [x] Drizzle migration created ✅
   - [x] Server Actions implemented (state management, progress tracking, resume functionality) ✅
   - [x] Validation schemas created (onboarding, child, club, doctor) ✅
   - [x] Onboarding workflow documentation (`docs/ONBOARDING_WORKFLOW.md`) ✅
   - [x] Parent onboarding phase 1 documentation (`docs/ONBOARDING_PHASE_1.md`) ✅
-  - [ ] Middleware and routing (onboarding protection, route structure)
-  - [ ] Base UI components (OnboardingLayout, OnboardingProgress, OnboardingNavigation)
-  - [ ] Parent onboarding UI (welcome, add child, platform tour, quiz CTA)
+  - [x] Middleware and routing (onboarding protection, route structure) ✅
+  - [x] Base UI components (OnboardingLayout, OnboardingProgress, OnboardingNavigation) ✅
+  - [x] **Parent Onboarding (Phase 2)**: ✅ **COMPLETE**
+    - [x] Welcome page (`/onboarding/parent/welcome`) ✅
+    - [x] Add child profile form (`/onboarding/parent/add-child`) ✅
+      - [x] `AddChildForm` component with React Hook Form + Zod validation ✅
+      - [x] Date picker with age calculation (4-14 years) ✅
+      - [x] Gender selection (optional) ✅
+    - [x] Platform tour (`/onboarding/parent/tour`) ✅
+      - [x] 3-step process visualization ✅
+    - [x] Quiz introduction (`/onboarding/parent/quiz-intro`) ✅
+      - [x] Personalized child name display ✅
+      - [x] Primary and secondary CTAs ✅
+    - [x] Complete step (automatic redirect) ✅
+    - [x] Testing & Polish ✅
+      - [x] End-to-end testing completed ✅
+      - [x] Romanian language review completed ✅
+      - [x] Form validation tested ✅
+      - [x] Navigation flow verified ✅
+      - [x] UX refinement completed ✅
+      - [x] Testing report created (`docs/ONBOARDING_TESTING_REPORT.md`) ✅
+  - [x] **Club Admin Onboarding (Phase 3)**: 🚧 **IN PROGRESS**
+    - [x] Welcome page (`/onboarding/club/welcome`) ✅
+    - [x] Basic info form (`/onboarding/club/basic-info`) ✅
+      - [x] `ClubBasicInfoForm` component ✅
+      - [x] Sport type dropdown ✅
+      - [x] City dropdown (30 Romanian cities) ✅
+      - [x] Slug generation utility (`generateSlug` in `src/lib/utils.ts`) ✅
+    - [ ] Contact & Schedule step ⏳
+    - [ ] Pricing & Ages step ⏳
+    - [ ] Photo Upload step ⏳
+    - [ ] Verification step ⏳
+    - [ ] Completion step ⏳
 - [ ] Localize all UI text to Romanian
 
 ### Week 5-8: Quiz System

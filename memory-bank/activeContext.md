@@ -27,11 +27,20 @@
    - Complete homepage experience with 9 sections
 
 4. **Onboarding System Development** 🚧 (In Progress)
-   - Database schema complete (onboarding_progress table, updated users/clubs/doctors tables)
-   - Server Actions implemented (state management, progress tracking, resume functionality)
-   - Validation schemas created (onboarding, child, club, doctor)
-   - Drizzle migrations created
-   - Pending: Middleware, routing, and UI components
+   - Database schema complete (onboarding_progress table, updated users/clubs/doctors tables) ✅
+   - Server Actions implemented (state management, progress tracking, resume functionality) ✅
+   - Validation schemas created (onboarding, child, club, doctor) ✅
+   - Drizzle migrations created ✅
+   - **Parent Onboarding (Phase 2)**: ✅ **COMPLETE**
+     - Welcome page ✅
+     - Add child profile form ✅
+     - Platform tour ✅
+     - Quiz introduction CTA ✅
+     - Testing & Polish ✅
+   - **Club Admin Onboarding (Phase 3)**: 🚧 **IN PROGRESS**
+     - Welcome page ✅
+     - Basic info form ✅
+     - Pending: Contact & Schedule, Pricing & Ages, Photo Upload, Verification, Completion
 
 5. **Component Development**
    - Creating feature-specific components as needed
@@ -254,7 +263,7 @@ Current homepage structure (`src/app/(public)/page.tsx`):
 - **Decision**: Keep single alias pattern (no additional aliases needed)
 - **Status**: ✅ Configured and documented
 
-### Onboarding System Development 🚧
+### Onboarding System Development ✅ (Phase 2 Complete, Phase 3 In Progress)
 
 - **Created**: Onboarding database schema (`src/lib/db/schema.ts`) ✅
   - `onboarding_progress` table for cross-session state tracking
@@ -266,8 +275,8 @@ Current homepage structure (`src/app/(public)/page.tsx`):
   - State management: `startOnboarding()`, `getOnboardingProgress()`, `updateOnboardingStep()`
   - Progress tracking: `markStepComplete()`, `saveStepData()`
   - Resume functionality: Automatic progress retrieval
-  - Parent onboarding: `addChildOnboarding()`, `completeParentOnboarding()`
-  - Club admin onboarding: `createClubOnboarding()`, `submitClubForVerification()`, `completeClubOnboarding()`
+  - Parent onboarding: `addChildOnboarding()`, `completeParentOnboarding()` ✅
+  - Club admin onboarding: `createClubOnboarding()` ✅, `submitClubForVerification()`, `completeClubOnboarding()`
   - Doctor onboarding: `createDoctorOnboarding()`, `submitDoctorForVerification()`, `completeDoctorOnboarding()`
   - Status: ✅ Complete - All Server Actions implemented with proper TypeScript types
 
@@ -282,11 +291,58 @@ Current homepage structure (`src/app/(public)/page.tsx`):
   - Migration for onboarding_progress table
   - Status: ✅ Complete - Ready for database push
 
-- **Pending**: Middleware, routing, and UI components
-  - Onboarding protection middleware
-  - Route structure (`/onboarding/parent/*`, `/onboarding/club/*`, `/onboarding/doctor/*`)
-  - Base components (OnboardingLayout, OnboardingProgress, OnboardingNavigation)
-  - Status: ⏳ Pending - Foundation complete, UI components next
+- **Created**: Onboarding base components ✅
+  - `OnboardingLayout` - Shared UI wrapper with Yuvoo branding
+  - `OnboardingProgress` - Visual progress indicator (mobile/desktop responsive)
+  - `OnboardingNavigation` - Navigation buttons (back/next/skip/finish)
+  - Status: ✅ Complete - All base components created and tested
+
+- **Created**: Onboarding routing structure ✅
+  - Parent onboarding routes: `/onboarding/parent/*` (5 steps) ✅
+  - Club admin onboarding routes: `/onboarding/club/*` (7 steps) 🚧
+  - Doctor onboarding routes: `/onboarding/doctor/*` (8 steps) ⏳
+  - Status: ✅ Parent routes complete, Club routes in progress
+
+- **Parent Onboarding (Phase 2)**: ✅ **COMPLETE**
+  - Step 1: Welcome page (`/onboarding/parent/welcome`) ✅
+  - Step 2: Add child profile (`/onboarding/parent/add-child`) ✅
+    - `AddChildForm` component with React Hook Form + Zod validation
+    - Date picker with age calculation (4-14 years)
+    - Gender selection (optional)
+  - Step 3: Platform tour (`/onboarding/parent/tour`) ✅
+    - 3-step process visualization (AI Coach Quiz, Găsești Cluburi, Rezervi & Probă)
+  - Step 4: Quiz introduction (`/onboarding/parent/quiz-intro`) ✅
+    - Personalized child name display
+    - Primary CTA: "Începe Chestionarul Acum"
+    - Secondary CTA: "Mai târziu, mergi la dashboard"
+  - Step 5: Complete (redirects automatically) ✅
+  - Testing & Polish: ✅ **COMPLETE**
+    - End-to-end testing completed
+    - Romanian language review completed
+    - Form validation tested
+    - Navigation flow verified
+    - UX refinement completed
+    - Testing report created (`docs/ONBOARDING_TESTING_REPORT.md`)
+
+- **Club Admin Onboarding (Phase 3)**: 🚧 **IN PROGRESS**
+  - Step 1: Welcome page (`/onboarding/club/welcome`) ✅
+    - Personalized greeting with admin name
+    - 7-step progress indicator
+    - Romanian copy with benefits list
+  - Step 2: Basic info (`/onboarding/club/basic-info`) ✅
+    - `ClubBasicInfoForm` component with all required fields
+    - Sport type dropdown (from SPORT_TYPES constant)
+    - City dropdown (30 major Romanian cities)
+    - Description textarea with character counter
+    - Slug generation utility (`generateSlug` in `src/lib/utils.ts`)
+    - Server action creates club and tracks progress
+  - Pending: Contact & Schedule, Pricing & Ages, Photo Upload, Verification, Completion
+
+- **Utility Functions Created**:
+  - `generateSlug()` in `src/lib/utils.ts` ✅
+    - Handles Romanian diacritics
+    - Converts to SEO-friendly URL slugs
+    - Used for club slug generation
 
 ### Documentation Updates
 

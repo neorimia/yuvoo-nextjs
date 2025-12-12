@@ -13,6 +13,7 @@ import { users, onboardingProgress, children, clubs, doctors } from "@/lib/db/sc
 import { eq, and, sql } from "drizzle-orm";
 import { redirect } from "next/navigation";
 import { routes } from "@/lib/routes";
+import { generateSlug } from "@/lib/utils";
 import { startOnboardingSchema, updateOnboardingStepSchema } from "@/lib/validations/onboarding";
 import { createChildSchema } from "@/lib/validations/child";
 import type { CreateChildInput } from "@/lib/validations/child";
@@ -332,12 +333,16 @@ export async function createClubOnboarding(
   try {
     const session = await requireAuth();
 
+    // Generate SEO-friendly slug from club name
+    const slug = generateSlug(data.name);
+
     const [club] = await db
       .insert(clubs)
       .values({
         id: crypto.randomUUID(),
         adminUserId: session.dbUser.id,
         name: data.name,
+        slug,
         sportType: data.sportType,
         description: data.description,
         city: data.city,
@@ -349,6 +354,8 @@ export async function createClubOnboarding(
       .returning();
 
     await saveStepData("club_id", club.id);
+    await markStepComplete(2);
+    await updateOnboardingStep(3);
 
     return { success: true, data: { clubId: club.id } };
   } catch (error) {

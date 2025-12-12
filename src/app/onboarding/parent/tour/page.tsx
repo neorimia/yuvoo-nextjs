@@ -45,7 +45,7 @@ export default async function ParentTourPage() {
             <div className="bg-gradient-to-br from-[#EBFFFE] to-white border-2 border-[#00BBAE] rounded-2xl p-6 shadow-sm hover:shadow-md transition-shadow duration-300">
               <div className="flex items-start gap-4">
                 {/* Step Number Circle */}
-                <div className="flex-shrink-0 w-12 h-12 bg-[#00BBAE] rounded-full flex items-center justify-center shadow-md">
+                <div className="shrink-0 w-12 h-12 bg-[#00BBAE] rounded-full flex items-center justify-center shadow-md">
                   <Sparkles className="w-6 h-6 text-white" />
                 </div>
 
@@ -74,7 +74,7 @@ export default async function ParentTourPage() {
             <div className="bg-gradient-to-br from-[#EBFFFE] to-white border-2 border-[#00BBAE] rounded-2xl p-6 shadow-sm hover:shadow-md transition-shadow duration-300">
               <div className="flex items-start gap-4">
                 {/* Step Number Circle */}
-                <div className="flex-shrink-0 w-12 h-12 bg-[#00BBAE] rounded-full flex items-center justify-center shadow-md">
+                <div className="shrink-0 w-12 h-12 bg-[#00BBAE] rounded-full flex items-center justify-center shadow-md">
                   <Search className="w-6 h-6 text-white" />
                 </div>
 

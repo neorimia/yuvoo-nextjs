@@ -89,6 +89,15 @@
   - Transactional emails
   - Email templates
 
+### Utility Functions
+
+- **Slug Generation**: `generateSlug()` in `src/lib/utils.ts` ✅
+  - Handles Romanian diacritics (normalize NFD, remove diacritics)
+  - Converts text to SEO-friendly URL slugs
+  - Replaces special characters with hyphens
+  - Limits length to 100 characters
+  - Used for club and doctor slug generation
+
 ### Development Tools
 
 - **ESLint**: `^8.57.0` - Code linting
