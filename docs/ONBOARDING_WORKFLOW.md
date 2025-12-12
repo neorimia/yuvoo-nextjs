@@ -1609,10 +1609,13 @@ interface DocumentUploadProps {
    - [x] Create resume onboarding functionality
    - [x] Test server actions (code complete, needs integration testing)
 
-3. **Middleware & Routing** (1 day) ⏳ **PENDING**
-   - [ ] Create onboarding protection middleware
-   - [ ] Set up routing structure (`/onboarding/parent/*`, `/onboarding/club/*`, `/onboarding/doctor/*`)
-   - [ ] Implement redirect logic
+3. **Middleware & Routing** (1 day) ✅ **COMPLETE**
+   - [x] Create onboarding protection proxy (`src/proxy.ts`)
+   - [x] Set up routing structure (`/onboarding/parent/*`, `/onboarding/club/*`, `/onboarding/doctor/*`)
+   - [x] Implement redirect logic based on user state and role
+   - [x] Create role-specific layouts (parent, club, doctor)
+   - [x] Create all onboarding page routes (20 total pages)
+   - [x] Integrate server actions for completion flows
 
 4. **Base Components** (2 days) ⏳ **PENDING**
    - [ ] OnboardingLayout component
@@ -1629,7 +1632,7 @@ interface DocumentUploadProps {
 
 - ✅ Database schema ready
 - ✅ Server Actions implemented
-- ⏳ Routing structure (pending)
+- ✅ Routing structure complete (20 pages created)
 - ⏳ Base components (pending)
 
 ---
