@@ -17,8 +17,6 @@
 
 "use client";
 
-import { useState } from "react";
-import { useRouter } from "next/navigation";
 import { useForm, useFieldArray } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { updateClubContactSchedule } from "@/app/actions/onboarding";
@@ -30,6 +28,7 @@ import { ServerErrorAlert } from "./components/ServerErrorAlert";
 import { InfoBox } from "./components/InfoBox";
 import { BootstrapInput, BootstrapSelect, BootstrapButton } from "@/components/UI/bootstrap-index";
 import { X, Plus } from "lucide-react";
+import { useOnboardingForm } from "./hooks/useOnboardingForm";
 
 // Days of the week in Romanian
 const DAYS_OF_WEEK = [
@@ -43,13 +42,9 @@ const DAYS_OF_WEEK = [
 ] as const;
 
 export function ClubContactScheduleForm() {
-  const router = useRouter();
-  const [isLoading, setIsLoading] = useState(false);
-  const [serverError, setServerError] = useState<string | null>(null);
-
   const {
     register,
-    handleSubmit,
+    handleSubmit: rhfHandleSubmit,
     control,
     formState: { errors },
   } = useForm<ClubContactScheduleInput>({
@@ -62,37 +57,19 @@ export function ClubContactScheduleForm() {
     },
   });
 
+  const { handleSubmit, isLoading, serverError } = useOnboardingForm<ClubContactScheduleInput>({
+    onSubmitAction: updateClubContactSchedule,
+    onSuccessRoute: routes.onboarding.club.pricingAges,
+    transformData: (data) => ({
+      ...data,
+      phone: normalizePhoneNumber(data.phone),
+    }),
+  });
+
   const { fields, append, remove } = useFieldArray({
     control,
     name: "schedule",
   });
-
-  const onSubmit = async (data: ClubContactScheduleInput) => {
-    setIsLoading(true);
-    setServerError(null);
-
-    try {
-      // Normalize phone number (remove spaces, ensure +40 format)
-      const normalizedData = {
-        ...data,
-        phone: normalizePhoneNumber(data.phone),
-      };
-
-      const result = await updateClubContactSchedule(normalizedData);
-
-      if (result.success) {
-        // Navigate to next step
-        router.push(routes.onboarding.club.pricingAges);
-      } else {
-        setServerError(result.error);
-      }
-    } catch (error) {
-      console.error("Error submitting form:", error);
-      setServerError("A apărut o eroare neașteptată. Te rugăm să încerci din nou.");
-    } finally {
-      setIsLoading(false);
-    }
-  };
 
   const addScheduleEntry = () => {
     append({ day: "", time: "" });
@@ -103,7 +80,7 @@ export function ClubContactScheduleForm() {
   };
 
   return (
-    <form id="club-contact-schedule-form" onSubmit={handleSubmit(onSubmit)}>
+    <form id="club-contact-schedule-form" onSubmit={rhfHandleSubmit(handleSubmit)}>
       {/* Server error message */}
       <ServerErrorAlert error={serverError} className="mb-4" />
 

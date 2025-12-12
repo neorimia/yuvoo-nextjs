@@ -16,9 +16,7 @@
 
 "use client";
 
-import { useState } from "react";
-import { useRouter } from "next/navigation";
-import { useForm, useFieldArray, Controller } from "react-hook-form";
+import { useForm, useFieldArray, FieldError } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { updateClubPricingAges } from "@/app/actions/onboarding";
 import { clubPricingAgesSchema, type ClubPricingAgesInput } from "@/lib/validations/club";
@@ -26,9 +24,10 @@ import { routes } from "@/lib/routes";
 import { OnboardingNavigation } from "./OnboardingNavigation";
 import { ServerErrorAlert } from "./components/ServerErrorAlert";
 import { InfoBox } from "./components/InfoBox";
+import { MultiSelectCheckboxField } from "./components";
 import { BootstrapInput, BootstrapSelect, BootstrapButton } from "@/components/UI/bootstrap-index";
-import { cn } from "@/lib/utils";
 import { X, Plus } from "lucide-react";
+import { useOnboardingForm } from "./hooks/useOnboardingForm";
 
 // Age groups (4-14 years)
 const AGE_GROUPS = Array.from({ length: 11 }, (_, i) => i + 4); // [4, 5, 6, ..., 14]
@@ -48,13 +47,9 @@ const PRICING_TYPES = [
 ] as const;
 
 export function ClubPricingAgesForm() {
-  const router = useRouter();
-  const [isLoading, setIsLoading] = useState(false);
-  const [serverError, setServerError] = useState<string | null>(null);
-
   const {
     register,
-    handleSubmit,
+    handleSubmit: rhfHandleSubmit,
     control,
     formState: { errors },
   } = useForm<ClubPricingAgesInput>({
@@ -66,6 +61,16 @@ export function ClubPricingAgesForm() {
     },
   });
 
+  const { handleSubmit, isLoading, serverError } = useOnboardingForm<ClubPricingAgesInput>({
+    onSubmitAction: updateClubPricingAges,
+    onSuccessRoute: routes.onboarding.club.photos,
+    transformData: (data) => ({
+      ...data,
+      ageGroups: Array.isArray(data.ageGroups) ? data.ageGroups : [],
+      experienceLevels: Array.isArray(data.experienceLevels) ? data.experienceLevels : [],
+    }),
+  });
+
   const {
     fields: pricingFields,
     append: appendPricing,
@@ -74,34 +79,6 @@ export function ClubPricingAgesForm() {
     control,
     name: "pricing",
   });
-
-  const onSubmit = async (data: ClubPricingAgesInput) => {
-    setIsLoading(true);
-    setServerError(null);
-
-    try {
-      // Ensure arrays are properly set
-      const submitData = {
-        ...data,
-        ageGroups: Array.isArray(data.ageGroups) ? data.ageGroups : [],
-        experienceLevels: Array.isArray(data.experienceLevels) ? data.experienceLevels : [],
-      };
-
-      const result = await updateClubPricingAges(submitData);
-
-      if (result.success) {
-        // Navigate to next step
-        router.push(routes.onboarding.club.photos);
-      } else {
-        setServerError(result.error);
-      }
-    } catch (error) {
-      console.error("Error submitting form:", error);
-      setServerError("A apărut o eroare neașteptată. Te rugăm să încerci din nou.");
-    } finally {
-      setIsLoading(false);
-    }
-  };
 
   const addPricingOption = () => {
     appendPricing({ type: "monthly", amount: 0 });
@@ -112,7 +89,7 @@ export function ClubPricingAgesForm() {
   };
 
   return (
-    <form id="club-pricing-ages-form" onSubmit={handleSubmit(onSubmit)}>
+    <form id="club-pricing-ages-form" onSubmit={rhfHandleSubmit(handleSubmit)}>
       {/* Server error message */}
       <ServerErrorAlert error={serverError} className="mb-4" />
 
@@ -246,146 +223,36 @@ export function ClubPricingAgesForm() {
       </div>
 
       {/* Age Groups */}
-      <div className="mb-4">
-        <label className="d-block small fw-medium text-body mb-3">
-          Grupe de vârstă <span className="text-danger">*</span>
-        </label>
-        <p className="text-xs text-secondary mb-3">
-          Selectează grupele de vârstă acceptate de club (4-14 ani)
-        </p>
-
-        <Controller
-          name="ageGroups"
-          control={control}
-          render={({ field }) => (
-            <div className="row g-3">
-              {AGE_GROUPS.map((age) => {
-                const isSelected = field.value?.includes(age) || false;
-                return (
-                  <div key={age} className="col-4 col-sm-3 col-md-2">
-                    <label
-                      className={cn(
-                        "d-flex align-items-center justify-content-center p-3 border-2 rounded cursor-pointer",
-                        isSelected
-                          ? "border-yuvoo-primary bg-yuvoo-primary-light text-yuvoo-primary"
-                          : "border-secondary bg-white text-body border-secondary-hover",
-                        isLoading && "opacity-50"
-                      )}
-                      style={{
-                        cursor: isLoading ? "not-allowed" : "pointer",
-                        transition: "all 0.2s ease-in-out",
-                      }}
-                      onMouseEnter={(e) => {
-                        if (!isLoading && !isSelected) {
-                          e.currentTarget.style.borderColor = "var(--bs-border-color)";
-                        }
-                      }}
-                      onMouseLeave={(e) => {
-                        if (!isLoading && !isSelected) {
-                          e.currentTarget.style.borderColor = "";
-                        }
-                      }}
-                    >
-                      <input
-                        type="checkbox"
-                        value={age}
-                        checked={isSelected}
-                        onChange={() => {
-                          const current = field.value || [];
-                          const newValue = isSelected
-                            ? current.filter((a: number) => a !== age)
-                            : [...current, age].sort((a: number, b: number) => a - b);
-                          field.onChange(newValue);
-                        }}
-                        disabled={isLoading}
-                        className="visually-hidden"
-                      />
-                      <span className="fw-medium">{age} ani</span>
-                    </label>
-                  </div>
-                );
-              })}
-            </div>
-          )}
-        />
-
-        {errors.ageGroups && <p className="mt-2 small text-danger">{errors.ageGroups.message}</p>}
-      </div>
+      <MultiSelectCheckboxField
+        label="Grupe de vârstă"
+        name="ageGroups"
+        control={control}
+        error={errors.ageGroups as FieldError | undefined}
+        options={AGE_GROUPS.map((age) => ({
+          value: age,
+          label: `${age} ani`,
+        }))}
+        gridCols={{ xs: 4, sm: 3, md: 2 }}
+        required
+        description="Selectează grupele de vârstă acceptate de club (4-14 ani)"
+        isLoading={isLoading}
+      />
 
       {/* Experience Levels */}
-      <div className="mb-4">
-        <label className="d-block small fw-medium text-body mb-3">
-          Niveluri de experiență <span className="text-danger">*</span>
-        </label>
-        <p className="text-xs text-secondary mb-3">
-          Selectează nivelurile de experiență oferite de club
-        </p>
-
-        <Controller
-          name="experienceLevels"
-          control={control}
-          render={({ field }) => (
-            <div className="row g-3">
-              {EXPERIENCE_LEVELS.map((level) => {
-                const isSelected =
-                  field.value?.includes(level.value as "beginner" | "intermediate" | "advanced") ||
-                  false;
-                return (
-                  <div key={level.value} className="col-12 col-sm-4">
-                    <label
-                      className={cn(
-                        "d-flex align-items-center justify-content-center p-4 border-2 rounded cursor-pointer",
-                        isSelected
-                          ? "border-yuvoo-primary bg-yuvoo-primary-light text-yuvoo-primary"
-                          : "border-secondary bg-white text-body border-secondary-hover",
-                        isLoading && "opacity-50"
-                      )}
-                      style={{
-                        cursor: isLoading ? "not-allowed" : "pointer",
-                        transition: "all 0.2s ease-in-out",
-                      }}
-                      onMouseEnter={(e) => {
-                        if (!isLoading && !isSelected) {
-                          e.currentTarget.style.borderColor = "var(--bs-border-color)";
-                        }
-                      }}
-                      onMouseLeave={(e) => {
-                        if (!isLoading && !isSelected) {
-                          e.currentTarget.style.borderColor = "";
-                        }
-                      }}
-                    >
-                      <input
-                        type="checkbox"
-                        value={level.value}
-                        checked={isSelected}
-                        onChange={() => {
-                          const current = field.value || [];
-                          const levelValue = level.value as
-                            | "beginner"
-                            | "intermediate"
-                            | "advanced";
-                          const newValue = isSelected
-                            ? current.filter((l: string) => l !== levelValue)
-                            : [...current, levelValue];
-                          field.onChange(newValue);
-                        }}
-                        disabled={isLoading}
-                        className="visually-hidden"
-                      />
-                      <span className="fw-medium">{level.label}</span>
-                    </label>
-                  </div>
-                );
-              })}
-            </div>
-          )}
-        />
-
-        {errors.experienceLevels && (
-          <p className="mt-2 small text-danger">{errors.experienceLevels.message}</p>
-        )}
-      </div>
+      <MultiSelectCheckboxField
+        label="Niveluri de experiență"
+        name="experienceLevels"
+        control={control}
+        error={errors.experienceLevels as FieldError | undefined}
+        options={EXPERIENCE_LEVELS.map((level) => ({
+          value: level.value,
+          label: level.label,
+        }))}
+        gridCols={{ xs: 12, sm: 4, md: 4 }}
+        required
+        description="Selectează nivelurile de experiență oferite de club"
+        isLoading={isLoading}
+      />
 
       {/* Info box */}
       <InfoBox title="De ce avem nevoie de aceste informații?" className="mb-4">

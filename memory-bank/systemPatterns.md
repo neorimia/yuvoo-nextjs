@@ -89,7 +89,41 @@ yuvoo-nextjs/
   - Used for: verification document previews
   - Features: file type icons (PDF, DOC, images), filename display, remove functionality
 
-**Pattern Recognition Principle**: When the same UI pattern appears in multiple components, extract it into a reusable component to avoid duplication and ensure consistency.
+**Form Field Components** (Created from component extraction - December 2024):
+
+- `CharacterCounterTextarea.tsx` - Textarea with character counter and min/max validation
+  - Used for: bio fields, description fields with character limits
+  - Features: real-time character count, validation feedback, Bootstrap styling
+- `MultiSelectCheckboxField.tsx` - Multi-select with checkbox grid layout
+  - Used for: age groups, experience levels, specialties, languages
+  - Features: responsive grid layout, React Hook Form integration, error handling
+- `TagInputField.tsx` - Tag input with quick-add buttons and custom input
+  - Used for: credentials, languages, custom tags
+  - Features: quick-add options, custom tag input, remove functionality, validation
+- `SingleImageUploadField.tsx` - Single image upload with preview and delete
+  - Used for: logo uploads, profile photo uploads
+  - Features: Cloudinary integration, image preview, delete functionality, loading states
+- `GalleryUploadField.tsx` - Multiple image uploads with grid preview
+  - Used for: club gallery uploads, multiple photo uploads
+  - Features: grid preview, sequential upload, min/max image limits, remove functionality
+- `DocumentUploadField.tsx` - Document upload with file icons and preview
+  - Used for: verification documents, file uploads
+  - Features: file type icons, filename display, min/max document limits, remove functionality
+- `RadioButtonGroupField.tsx` - Visual radio button group with icons/emojis
+  - Used for: gender selection, single-choice options with visual feedback
+  - Features: icon/emoji support, Bootstrap styling, React Hook Form integration
+- `DatePickerWithAgeField.tsx` - Date picker with automatic age calculation
+  - Used for: date of birth inputs with age display
+  - Features: age calculation, age validation (4-14 years), Bootstrap date input styling
+
+**Pattern Recognition Principle**: When the same UI pattern appears in multiple components, extract it into a reusable component to avoid duplication and ensure consistency. All extracted components follow consistent patterns:
+
+- React Hook Form integration (register, control, setValue)
+- Bootstrap 5.3.3 styling
+- Romanian language labels and error messages
+- Loading states and error handling
+- TypeScript type safety with generics
+- Accessibility (ARIA attributes, semantic HTML)
 
 ## Key Design Patterns
 

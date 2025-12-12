@@ -14,27 +14,21 @@
 
 "use client";
 
-import { useState } from "react";
-import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Calendar } from "lucide-react";
 import { addChildOnboarding } from "@/app/actions/onboarding";
 import { createChildSchema, type CreateChildInput } from "@/lib/validations/child";
 import { routes } from "@/lib/routes";
 import { OnboardingNavigation } from "./OnboardingNavigation";
 import { ServerErrorAlert } from "./components/ServerErrorAlert";
+import { DatePickerWithAgeField, RadioButtonGroupField } from "./components";
 import { BootstrapInput } from "@/components/UI/bootstrap-index";
-import { cn } from "@/lib/utils";
+import { useOnboardingForm } from "./hooks/useOnboardingForm";
 
 export function AddChildForm() {
-  const router = useRouter();
-  const [isLoading, setIsLoading] = useState(false);
-  const [serverError, setServerError] = useState<string | null>(null);
-
   const {
     register,
-    handleSubmit,
+    handleSubmit: rhfHandleSubmit,
     formState: { errors },
     setValue,
     watch,
@@ -42,64 +36,14 @@ export function AddChildForm() {
     resolver: zodResolver(createChildSchema),
   });
 
-  const dateOfBirth = watch("dateOfBirth");
-
-  // Handle date input change
-  const handleDateChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const dateString = e.target.value;
-    if (dateString) {
-      setValue("dateOfBirth", new Date(dateString), { shouldValidate: true });
-    }
-  };
-
-  // Format date for input value (YYYY-MM-DD)
-  const formatDateForInput = (date?: Date): string => {
-    if (!date) return "";
-    const d = new Date(date);
-    const year = d.getFullYear();
-    const month = String(d.getMonth() + 1).padStart(2, "0");
-    const day = String(d.getDate()).padStart(2, "0");
-    return `${year}-${month}-${day}`;
-  };
-
-  // Calculate age from date of birth
-  const calculateAge = (date?: Date): number | null => {
-    if (!date) return null;
-    const today = new Date();
-    const birthDate = new Date(date);
-    let age = today.getFullYear() - birthDate.getFullYear();
-    const monthDiff = today.getMonth() - birthDate.getMonth();
-    if (monthDiff < 0 || (monthDiff === 0 && today.getDate() < birthDate.getDate())) {
-      age--;
-    }
-    return age;
-  };
-
-  const age = calculateAge(dateOfBirth);
-
-  const onSubmit = async (data: CreateChildInput) => {
-    setIsLoading(true);
-    setServerError(null);
-
-    try {
-      const result = await addChildOnboarding(data);
-
-      if (result.success) {
-        // Navigate to next step
-        router.push(routes.onboarding.parent.tour);
-      } else {
-        setServerError(result.error);
-      }
-    } catch (error) {
-      console.error("Error submitting form:", error);
-      setServerError("A apărut o eroare neașteptată. Te rugăm să încerci din nou.");
-    } finally {
-      setIsLoading(false);
-    }
-  };
+  // Use onboarding form hook for submission logic
+  const { handleSubmit, isLoading, serverError } = useOnboardingForm<CreateChildInput>({
+    onSubmitAction: addChildOnboarding,
+    onSuccessRoute: routes.onboarding.parent.tour,
+  });
 
   return (
-    <form id="add-child-form" onSubmit={handleSubmit(onSubmit)}>
+    <form id="add-child-form" onSubmit={rhfHandleSubmit(handleSubmit)}>
       {/* Server error message */}
       <ServerErrorAlert error={serverError} className="mb-4" />
 
@@ -150,167 +94,34 @@ export function AddChildForm() {
       </div>
 
       {/* Date of Birth */}
-      <div className="mb-4">
-        <label htmlFor="dateOfBirth" className="d-block small fw-medium text-body mb-2">
-          Data nașterii <span className="text-danger">*</span>
-        </label>
-        <div className="position-relative">
-          <BootstrapInput
-            id="dateOfBirth"
-            type="date"
-            onChange={handleDateChange}
-            value={formatDateForInput(dateOfBirth)}
-            disabled={isLoading}
-            max={new Date().toISOString().split("T")[0]}
-            min={new Date(new Date().getFullYear() - 14, 0, 1).toISOString().split("T")[0]}
-            error={!!errors.dateOfBirth}
-            className="w-100"
-            style={{ paddingRight: "2.5rem" }}
-            aria-invalid={errors.dateOfBirth ? "true" : "false"}
-            aria-describedby={errors.dateOfBirth ? "dateOfBirth-error" : "dateOfBirth-help"}
-          />
-          <Calendar
-            className="position-absolute"
-            style={{
-              right: "0.75rem",
-              top: "50%",
-              transform: "translateY(-50%)",
-              width: "1.25rem",
-              height: "1.25rem",
-              color: "var(--bs-secondary)",
-              pointerEvents: "none",
-            }}
-            aria-hidden="true"
-          />
-        </div>
-        {age !== null && !errors.dateOfBirth && (
-          <p id="dateOfBirth-help" className="mt-2 small text-body">
-            Vârsta: {age} {age === 1 ? "an" : "ani"}
-          </p>
-        )}
-        {errors.dateOfBirth && (
-          <p id="dateOfBirth-error" className="mt-2 small text-danger">
-            {errors.dateOfBirth.message}
-          </p>
-        )}
-        <p className="mt-2 text-xs text-secondary">
-          Platforma Yuvoo este destinată copiilor cu vârste între 4 și 14 ani.
-        </p>
-      </div>
+      <DatePickerWithAgeField
+        label="Data nașterii"
+        name="dateOfBirth"
+        setValue={setValue}
+        currentValue={watch("dateOfBirth")}
+        error={errors.dateOfBirth}
+        required
+        description="Platforma Yuvoo este destinată copiilor cu vârste între 4 și 14 ani."
+        minAge={4}
+        maxAge={14}
+        isLoading={isLoading}
+      />
 
       {/* Gender (Optional) */}
-      <div className="mb-4">
-        <label className="d-block small fw-medium text-body mb-3">
-          Gen <span className="text-secondary text-xs">(opțional)</span>
-        </label>
-        <div className="row g-3">
-          <div className="col-4">
-            <label
-              className={cn(
-                "d-flex flex-column align-items-center justify-content-center p-4 border-2 rounded",
-                isLoading && "opacity-50"
-              )}
-              style={{
-                cursor: isLoading ? "not-allowed" : "pointer",
-                transition: "all 0.2s ease-in-out",
-              }}
-              onMouseEnter={(e) => {
-                if (!isLoading) {
-                  e.currentTarget.style.borderColor = "var(--bd-theme-1)";
-                  e.currentTarget.style.backgroundColor = "var(--bd-theme-1-light)";
-                }
-              }}
-              onMouseLeave={(e) => {
-                if (!isLoading) {
-                  e.currentTarget.style.borderColor = "";
-                  e.currentTarget.style.backgroundColor = "";
-                }
-              }}
-            >
-              <input
-                type="radio"
-                value="male"
-                {...register("gender")}
-                disabled={isLoading}
-                className="visually-hidden"
-              />
-              <span className="fs-3 mb-2">👦</span>
-              <span className="small fw-medium text-body">Băiat</span>
-            </label>
-          </div>
-
-          <div className="col-4">
-            <label
-              className={cn(
-                "d-flex flex-column align-items-center justify-content-center p-4 border-2 rounded",
-                isLoading && "opacity-50"
-              )}
-              style={{
-                cursor: isLoading ? "not-allowed" : "pointer",
-                transition: "all 0.2s ease-in-out",
-              }}
-              onMouseEnter={(e) => {
-                if (!isLoading) {
-                  e.currentTarget.style.borderColor = "var(--bd-theme-1)";
-                  e.currentTarget.style.backgroundColor = "var(--bd-theme-1-light)";
-                }
-              }}
-              onMouseLeave={(e) => {
-                if (!isLoading) {
-                  e.currentTarget.style.borderColor = "";
-                  e.currentTarget.style.backgroundColor = "";
-                }
-              }}
-            >
-              <input
-                type="radio"
-                value="female"
-                {...register("gender")}
-                disabled={isLoading}
-                className="visually-hidden"
-              />
-              <span className="fs-3 mb-2">👧</span>
-              <span className="small fw-medium text-body">Fată</span>
-            </label>
-          </div>
-
-          <div className="col-4">
-            <label
-              className={cn(
-                "d-flex flex-column align-items-center justify-content-center p-4 border-2 rounded",
-                isLoading && "opacity-50"
-              )}
-              style={{
-                cursor: isLoading ? "not-allowed" : "pointer",
-                transition: "all 0.2s ease-in-out",
-              }}
-              onMouseEnter={(e) => {
-                if (!isLoading) {
-                  e.currentTarget.style.borderColor = "var(--bd-theme-1)";
-                  e.currentTarget.style.backgroundColor = "var(--bd-theme-1-light)";
-                }
-              }}
-              onMouseLeave={(e) => {
-                if (!isLoading) {
-                  e.currentTarget.style.borderColor = "";
-                  e.currentTarget.style.backgroundColor = "";
-                }
-              }}
-            >
-              <input
-                type="radio"
-                value="other"
-                {...register("gender")}
-                disabled={isLoading}
-                className="visually-hidden"
-              />
-              <span className="fs-3 mb-2">👶</span>
-              <span className="small fw-medium text-body">Altul</span>
-            </label>
-          </div>
-        </div>
-        {errors.gender && <p className="mt-2 small text-danger">{errors.gender.message}</p>}
-      </div>
+      <RadioButtonGroupField
+        label="Gen"
+        name="gender"
+        register={register}
+        error={errors.gender}
+        options={[
+          { value: "male", label: "Băiat", emoji: "👦" },
+          { value: "female", label: "Fată", emoji: "👧" },
+          { value: "other", label: "Altul", emoji: "👶" },
+        ]}
+        gridCols={{ xs: 4, sm: 4, md: 4 }}
+        description="(opțional)"
+        isLoading={isLoading}
+      />
 
       {/* Navigation */}
       <div className="pt-4 border-top border-secondary">

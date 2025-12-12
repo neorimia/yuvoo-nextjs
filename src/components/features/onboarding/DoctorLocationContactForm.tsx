@@ -19,8 +19,6 @@
 
 "use client";
 
-import { useState } from "react";
-import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { updateDoctorLocationContact } from "@/app/actions/onboarding";
@@ -34,6 +32,7 @@ import { OnboardingNavigation } from "./OnboardingNavigation";
 import { InfoTooltip } from "@/components/shared/InfoTooltip";
 import { ServerErrorAlert } from "./components/ServerErrorAlert";
 import { BootstrapInput, BootstrapSelect } from "@/components/UI/bootstrap-index";
+import { useOnboardingForm } from "./hooks/useOnboardingForm";
 
 // Romanian cities (major cities)
 const ROMANIAN_CITIES = [
@@ -70,13 +69,9 @@ const ROMANIAN_CITIES = [
 ] as const;
 
 export function DoctorLocationContactForm() {
-  const router = useRouter();
-  const [isLoading, setIsLoading] = useState(false);
-  const [serverError, setServerError] = useState<string | null>(null);
-
   const {
     register,
-    handleSubmit,
+    handleSubmit: rhfHandleSubmit,
     formState: { errors },
   } = useForm<DoctorLocationContactInput>({
     resolver: zodResolver(doctorLocationContactSchema),
@@ -90,35 +85,17 @@ export function DoctorLocationContactForm() {
     },
   });
 
-  const onSubmit = async (data: DoctorLocationContactInput) => {
-    setIsLoading(true);
-    setServerError(null);
-
-    try {
-      // Normalize phone number (remove spaces, ensure +40 format)
-      const normalizedData = {
-        ...data,
-        phone: normalizePhoneNumber(data.phone),
-      };
-
-      const result = await updateDoctorLocationContact(normalizedData);
-
-      if (result.success) {
-        // Navigate to next step
-        router.push(routes.onboarding.doctor.photo);
-      } else {
-        setServerError(result.error);
-      }
-    } catch (error) {
-      console.error("Error submitting form:", error);
-      setServerError("A apărut o eroare neașteptată. Te rugăm să încerci din nou.");
-    } finally {
-      setIsLoading(false);
-    }
-  };
+  const { handleSubmit, isLoading, serverError } = useOnboardingForm<DoctorLocationContactInput>({
+    onSubmitAction: updateDoctorLocationContact,
+    onSuccessRoute: routes.onboarding.doctor.photo,
+    transformData: (data) => ({
+      ...data,
+      phone: normalizePhoneNumber(data.phone),
+    }),
+  });
 
   return (
-    <form onSubmit={handleSubmit(onSubmit)} className="px-3 px-sm-0">
+    <form onSubmit={rhfHandleSubmit(handleSubmit)} className="px-3 px-sm-0">
       {/* Server error */}
       <ServerErrorAlert error={serverError} className="mb-4" />
 

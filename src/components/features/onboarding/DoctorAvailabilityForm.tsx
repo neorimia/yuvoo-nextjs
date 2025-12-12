@@ -16,8 +16,6 @@
 
 "use client";
 
-import { useState } from "react";
-import { useRouter } from "next/navigation";
 import { useForm, useFieldArray } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { updateDoctorAvailability } from "@/app/actions/onboarding";
@@ -29,6 +27,7 @@ import { ServerErrorAlert } from "./components/ServerErrorAlert";
 import { BootstrapInput, BootstrapSelect, BootstrapButton } from "@/components/UI/bootstrap-index";
 import { InfoBox } from "./components/InfoBox";
 import { X, Plus } from "lucide-react";
+import { useOnboardingForm } from "./hooks/useOnboardingForm";
 
 // Days of the week in Romanian
 const DAYS_OF_WEEK = [
@@ -42,13 +41,9 @@ const DAYS_OF_WEEK = [
 ] as const;
 
 export function DoctorAvailabilityForm() {
-  const router = useRouter();
-  const [isLoading, setIsLoading] = useState(false);
-  const [serverError, setServerError] = useState<string | null>(null);
-
   const {
     register,
-    handleSubmit,
+    handleSubmit: rhfHandleSubmit,
     control,
     formState: { errors },
   } = useForm<DoctorAvailabilityInput>({
@@ -60,31 +55,15 @@ export function DoctorAvailabilityForm() {
     },
   });
 
+  const { handleSubmit, isLoading, serverError } = useOnboardingForm<DoctorAvailabilityInput>({
+    onSubmitAction: updateDoctorAvailability,
+    onSuccessRoute: routes.onboarding.doctor.complete,
+  });
+
   const { fields, append, remove } = useFieldArray({
     control,
     name: "schedule",
   });
-
-  const onSubmit = async (data: DoctorAvailabilityInput) => {
-    setIsLoading(true);
-    setServerError(null);
-
-    try {
-      const result = await updateDoctorAvailability(data);
-
-      if (result.success) {
-        // Navigate to next step (completion)
-        router.push(routes.onboarding.doctor.complete);
-      } else {
-        setServerError(result.error);
-      }
-    } catch (error) {
-      console.error("Error submitting form:", error);
-      setServerError("A apărut o eroare neașteptată. Te rugăm să încerci din nou.");
-    } finally {
-      setIsLoading(false);
-    }
-  };
 
   const addScheduleEntry = () => {
     append({ day: "", startTime: "", endTime: "" });
@@ -95,7 +74,11 @@ export function DoctorAvailabilityForm() {
   };
 
   return (
-    <form id="doctor-availability-form" onSubmit={handleSubmit(onSubmit)} className="px-3 px-sm-0">
+    <form
+      id="doctor-availability-form"
+      onSubmit={rhfHandleSubmit(handleSubmit)}
+      className="px-3 px-sm-0"
+    >
       {/* Server Error */}
       <ServerErrorAlert error={serverError} className="mb-4" />
 

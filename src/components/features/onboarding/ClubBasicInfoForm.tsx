@@ -15,8 +15,6 @@
 
 "use client";
 
-import { useState } from "react";
-import { useRouter } from "next/navigation";
 import { useForm, Controller } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { AlertCircle } from "lucide-react";
@@ -25,13 +23,10 @@ import { clubBasicInfoSchema, type ClubBasicInfoInput } from "@/lib/validations/
 import { routes } from "@/lib/routes";
 import { SPORT_TYPES } from "@/lib/utils/constants";
 import { OnboardingNavigation } from "./OnboardingNavigation";
-import {
-  BootstrapAlert,
-  BootstrapInput,
-  BootstrapTextarea,
-  BootstrapSelect,
-} from "@/components/UI/bootstrap-index";
+import { BootstrapAlert, BootstrapInput, BootstrapSelect } from "@/components/UI/bootstrap-index";
+import { CharacterCounterTextarea } from "./components";
 import { cn } from "@/lib/utils";
+import { useOnboardingForm } from "./hooks/useOnboardingForm";
 
 // Romanian cities (major cities)
 const ROMANIAN_CITIES = [
@@ -68,13 +63,9 @@ const ROMANIAN_CITIES = [
 ] as const;
 
 export function ClubBasicInfoForm() {
-  const router = useRouter();
-  const [isLoading, setIsLoading] = useState(false);
-  const [serverError, setServerError] = useState<string | null>(null);
-
   const {
     register,
-    handleSubmit,
+    handleSubmit: rhfHandleSubmit,
     control,
     formState: { errors },
     watch,
@@ -82,32 +73,13 @@ export function ClubBasicInfoForm() {
     resolver: zodResolver(clubBasicInfoSchema),
   });
 
-  const description = watch("description");
-  const descriptionLength = description?.length || 0;
-
-  const onSubmit = async (data: ClubBasicInfoInput) => {
-    setIsLoading(true);
-    setServerError(null);
-
-    try {
-      const result = await createClubOnboarding(data);
-
-      if (result.success) {
-        // Navigate to next step
-        router.push(routes.onboarding.club.contactSchedule);
-      } else {
-        setServerError(result.error);
-      }
-    } catch (error) {
-      console.error("Error submitting form:", error);
-      setServerError("A apărut o eroare neașteptată. Te rugăm să încerci din nou.");
-    } finally {
-      setIsLoading(false);
-    }
-  };
+  const { handleSubmit, isLoading, serverError } = useOnboardingForm<ClubBasicInfoInput>({
+    onSubmitAction: createClubOnboarding,
+    onSuccessRoute: routes.onboarding.club.contactSchedule,
+  });
 
   return (
-    <form id="club-basic-info-form" onSubmit={handleSubmit(onSubmit)} className="mb-4">
+    <form id="club-basic-info-form" onSubmit={rhfHandleSubmit(handleSubmit)} className="mb-4">
       {/* Server error message */}
       {serverError && (
         <BootstrapAlert variant="danger" className="mb-4">
@@ -177,38 +149,19 @@ export function ClubBasicInfoForm() {
       </div>
 
       {/* Description */}
-      <div className="mb-4">
-        <label htmlFor="description" className="d-block small fw-medium text-body mb-2">
-          Descriere club <span className="text-danger">*</span>
-        </label>
-        <BootstrapTextarea
-          id="description"
-          {...register("description")}
-          disabled={isLoading}
-          rows={6}
-          maxLength={1000}
-          error={!!errors.description}
-          className="w-100"
-          style={{ minHeight: "120px", resize: "vertical" }}
-          placeholder="Descrie clubul tău, programele oferite, facilitățile și experiența antrenorilor. Minim 50 caractere."
-          aria-invalid={errors.description ? "true" : "false"}
-          aria-describedby={errors.description ? "description-error" : "description-help"}
-        />
-        <div className="mt-2 d-flex align-items-center justify-content-between">
-          <div>
-            {errors.description ? (
-              <p id="description-error" className="small text-danger">
-                {errors.description.message}
-              </p>
-            ) : (
-              <p id="description-help" className="text-xs text-secondary">
-                Minim 50 caractere, maxim 1000 caractere
-              </p>
-            )}
-          </div>
-          <p className="text-xs text-secondary">{descriptionLength}/1000 caractere</p>
-        </div>
-      </div>
+      <CharacterCounterTextarea
+        label="Descriere club"
+        name="description"
+        register={register}
+        error={errors.description}
+        minChars={50}
+        maxChars={1000}
+        rows={6}
+        placeholder="Descrie clubul tău, programele oferite, facilitățile și experiența antrenorilor. Minim 50 caractere."
+        required
+        isLoading={isLoading}
+        currentValue={watch("description")}
+      />
 
       {/* City */}
       <div className="mb-4">
