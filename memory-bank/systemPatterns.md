@@ -36,7 +36,7 @@ yuvoo-nextjs/
 │   └── actions/                 # Server Actions (main backend)
 │
 ├── components/
-│   ├── ui/                      # shadcn/ui components (planned)
+│   ├── ui/                      # Bootstrap wrapper components
 │   ├── layout/                  # Header, Footer, Sidebar
 │   ├── features/                # Feature-specific components
 │   │   └── clubs/               # Club components (✅ created)
@@ -61,7 +61,7 @@ yuvoo-nextjs/
 │   └── favorites/
 │
 ├── types/                        # Global TypeScript types
-└── styles/                       # Global styles + Tailwind
+└── styles/                       # Global styles (Bootstrap + SCSS)
 ```
 
 ## Reusable Component Patterns
@@ -672,30 +672,29 @@ data-wow-delay=".3s"
 </Link>
 ```
 
-**Migration Strategy**: See `designSystem.md` for detailed migration plan from Bootstrap to Tailwind.
+**Styling Strategy**: All components use Bootstrap 5.3.3 with custom Yuvoo-branded utilities.
 
-### Tailwind Color Usage Preference
+### Yuvoo Brand Color Utilities
 
-**IMPORTANT**: When using Tailwind color utilities, prefer Yuvoo-specific color classes over generic primary/secondary classes:
+**Bootstrap Utility Classes**: Use Yuvoo-specific color utilities via Bootstrap Utility API:
 
-✅ **Preferred**:
+✅ **Available Utilities**:
 
-- `bg-yuvoo-primary` instead of `bg-primary`
-- `text-yuvoo-primary` instead of `text-primary`
-- `bg-yuvoo-secondary` instead of `bg-secondary`
-- `text-yuvoo-secondary` instead of `text-secondary`
-- `bg-yuvoo-accent` instead of `bg-accent`
-- `text-yuvoo-accent` instead of `text-accent`
-- `border-yuvoo-primary` instead of `border-primary`
+- `bg-yuvoo-primary`, `text-yuvoo-primary`, `border-yuvoo-primary`
+- `bg-yuvoo-secondary`, `text-yuvoo-secondary`, `border-yuvoo-secondary`
+- `bg-yuvoo-accent`, `text-yuvoo-accent`, `border-yuvoo-accent`
+- `bg-yuvoo-primary-light`, `bg-yuvoo-secondary-light`
+- Hover states: `bg-yuvoo-primary-hover`, `text-yuvoo-primary-hover`
+- Focus states: `focus-yuvoo-primary`, `focus-yuvoo-secondary`
+
+**Location**: `public/assets/scss/utils/_yuvoo-utilities.scss`
 
 **Rationale**:
 
-- More explicit about using Yuvoo brand colors
-- Directly maps to `--color-yuvoo-primary` CSS variable (#00BBAE)
+- Directly maps to existing CSS variables (`--bd-theme-1`, `--bd-theme-2`, etc.)
+- Consistent with Bootstrap utility naming conventions
 - Better semantic meaning in code
 - Easier to identify brand-specific styling
-
-**Note**: Generic `bg-primary` maps to shadcn/ui's `--primary` variable (which we set to Yuvoo primary, but using explicit Yuvoo utilities is clearer).
 
 ## Component Patterns
 

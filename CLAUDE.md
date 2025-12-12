@@ -132,7 +132,7 @@ npm run buildCommand     # Rebuild sharp + production build (Vercel)
 - **React 19.2.1** with TypeScript 5.x
 - **Drizzle ORM** with Neon serverless Postgres
 - **Stack Auth** for authentication (fully integrated)
-- **Tailwind CSS v4** (new components) + Bootstrap 5.3.3 (existing Kindedo theme)
+- **Bootstrap 5.3.3** + SCSS (all components)
 
 ### Next.js 16 Cache Components Pattern
 
@@ -223,7 +223,7 @@ yuvoo-nextjs/
 │   │   │   ├── quiz/         # Quiz components
 │   │   │   └── doctors/      # Doctor components
 │   │   ├── layout/           # Header, Footer, Sidebar
-│   │   ├── ui/               # shadcn/ui components
+│   │   ├── ui/               # Bootstrap wrapper components
 │   │   ├── shared/           # Common reusable components
 │   │   ├── Form/             # Form components
 │   │   └── Auth/             # Auth-specific components
@@ -601,16 +601,17 @@ You are a sports recommendation assistant.
 
 #### Styling
 
-**Gradual migration** from Bootstrap (existing Kindedo theme) to Tailwind CSS (new components):
+**Styling Architecture**: Bootstrap 5.3.3 + SCSS for all components
 
-- ✅ Keep Bootstrap for existing components
-- ✅ Use Tailwind for all new components
-- ✅ Import order: `globals.scss` (Bootstrap) then `globals.css` (Tailwind)
+- ✅ All components use Bootstrap 5.3.3 utility classes
+- ✅ Custom Yuvoo-branded utilities via Bootstrap Utility API
+- ✅ SCSS for custom styles and component-specific styling
+- ✅ Import: `globals.scss` (Bootstrap + custom SCSS)
 
 ```typescript
 // ✅ Correct import order
 import "@/styles/globals.scss"; // Bootstrap
-import "@/styles/globals.css"; // Tailwind
+// Only globals.scss is imported (Bootstrap + SCSS)
 ```
 
 #### State Management

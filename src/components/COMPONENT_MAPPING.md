@@ -150,8 +150,8 @@ This document maps existing Kindedo components to their Yuvoo equivalents.
 2. Create new Children components
 3. Create new Booking components
 4. Migrate to feature-based organization
-5. Introduce shadcn/ui components
-6. Migrate from Bootstrap to Tailwind
+5. Complete Bootstrap component migration ✅
+6. All components use Bootstrap 5.3.3 + SCSS ✅
 
 ## Notes
 
@@ -161,6 +161,6 @@ This document maps existing Kindedo components to their Yuvoo equivalents.
   - 🔄 In Progress - Component is being worked on
   - ❌ Removed - Component has been removed
 
-- All components currently use **Bootstrap 5.3.3** + **SCSS**
-- Future migration to **Tailwind CSS** + **shadcn/ui** is planned
-- Keep existing components functional during migration
+- All components use **Bootstrap 5.3.3** + **SCSS** ✅
+- Bootstrap wrapper components available in `src/components/UI/` (BootstrapButton, BootstrapInput, etc.)
+- Custom Yuvoo-branded utilities via Bootstrap Utility API

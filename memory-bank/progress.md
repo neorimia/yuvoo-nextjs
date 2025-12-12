@@ -42,7 +42,16 @@
   - [x] All club onboarding forms migrated (6 forms) ✅
   - [x] All doctor onboarding forms migrated (7 forms) ✅
   - [x] Reusable components created (FileUploadArea, ImagePreview, DocumentPreview) ✅
-- [ ] Phase 3: Remove Tailwind Dependencies (Next)
+- [x] Phase 3: Remove Tailwind Dependencies ✅ **COMPLETE**
+  - [x] All Tailwind packages removed from package.json ✅
+  - [x] All Tailwind files deleted (globals.css, old shadcn components) ✅
+  - [x] Configuration updated (layout.tsx, postcss.config.js, .vscode/settings.json) ✅
+- [x] Phase 4.1: Code Cleanup ✅ **COMPLETE**
+  - [x] All Tailwind classes removed ✅
+  - [x] All shadcn component files deleted ✅
+  - [x] Documentation updated (CLAUDE.md, memory-bank files, component docs) ✅
+- [ ] Phase 4.2: Testing (Ready for testing)
+- [ ] Phase 4.3: Final Documentation Updates
 - [ ] Phase 4: Cleanup & Testing
 
 ### Foundation Setup
@@ -166,18 +175,15 @@
         - [x] `openai ^4.72.0` - OpenAI API client (✅ installed: 4.104.0)
         - [x] `cloudinary ^2.5.1` - Media storage & CDN (✅ installed: 2.8.0)
         - [x] `@getbrevo/brevo ^2.2.0` - Email service (✅ installed: 2.5.0)
-      - [x] **UI & Styling** (✅ Tailwind and shadcn/ui installed):
-        - [x] `tailwindcss v4.1.17` - Utility-first CSS (✅ installed - upgraded to v4)
-        - [x] `class-variance-authority ^0.7.1` - Component variants (✅ installed)
-        - [x] `clsx ^2.1.1` - Conditional classnames (✅ installed)
+      - [x] **UI & Styling** (✅ Bootstrap 5.3.3 + SCSS):
+        - [x] `bootstrap 5.3.3` - CSS framework (✅ installed)
+        - [x] `sass ^1.75.0` - CSS preprocessor (✅ installed)
+        - [x] `clsx ^2.1.1` - Conditional classnames (✅ installed - still useful)
         - [x] `lucide-react ^0.560.0` - Icon library (✅ installed)
-        - [x] `tailwind-merge ^3.4.0` - Merge Tailwind classes (✅ installed)
-        - [ ] `@radix-ui/react-dialog ^1.0.5` - shadcn/ui components (📋 install when adding dialog component)
-        - [ ] `@radix-ui/react-select ^2.0.0` - shadcn/ui components (📋 install when adding select component)
-        - [ ] `@radix-ui/react-slot ^1.0.2` - shadcn/ui components (📋 install when adding slot component)
+        - [x] Bootstrap wrapper components created (BootstrapButton, BootstrapInput, etc.) ✅
+        - [x] Custom Yuvoo utilities via Bootstrap Utility API ✅
       - [x] **Development Tools** (added):
-        - [x] `prettier ^3.2.5` - Code formatting (✅ installed: 3.7.4, config files created: `.prettierrc`, `.prettierignore`, npm scripts added)
-        - [ ] `prettier-plugin-tailwindcss ^0.5.11` - Tailwind class sorting (⏳ add when Tailwind is added)
+        - [x] `prettier ^3.7.4` - Code formatting (✅ installed, config files created: `.prettierrc`, `.prettierignore`, npm scripts added)
     - [x] Update dependency versions if needed
       - [x] **Current versions are compatible**:
         - [x] `next ^15.3.1` → installed 15.5.7 (✅ newer, compatible)
@@ -189,7 +195,7 @@
       - [x] Dependencies analysis complete ✅
       - [x] Identified 3 unused/problematic packages to remove/replace
       - [x] Identified 9 core Yuvoo dependencies to add (database, auth, validation, AI, services)
-      - [x] Installed UI dependencies (Tailwind v4 ✅, shadcn/ui core ✅, Radix UI components install on-demand)
+      - [x] Installed UI dependencies (Bootstrap 5.3.3 ✅, SCSS ✅, Bootstrap wrapper components created ✅)
       - [x] **Actions completed**:
         - [x] Removed `cache` and `clean` from package.json ✅
         - [x] Removed `@react-native-async-storage/async-storage` from package.json ✅
@@ -258,8 +264,9 @@
   - [x] Install/verify core dependencies (Next.js, React, TypeScript) (✅ installed: Next.js 15.5.7, React 19.2.1, TypeScript 5.9.3)
   - [x] Install database dependencies (Drizzle ORM, Neon driver) (✅ installed: drizzle-orm 0.36.4, drizzle-kit 0.28.1, @neondatabase/serverless 0.10.4, postgres 3.4.5)
   - [x] Install authentication (Stack Auth) (✅ installed: @stackframe/stack 2.8.56)
-  - [x] Install Tailwind CSS (for new components) (✅ installed: Tailwind CSS v4.1.17 - see line 366 for details)
-  - [x] Install shadcn/ui (✅ installed: initialized with "new-york" style, neutral base color, CSS variables enabled)
+  - [x] Bootstrap 5.3.3 setup (✅ completed - all components use Bootstrap)
+  - [x] Bootstrap wrapper components created (✅ completed - BootstrapButton, BootstrapInput, etc.)
+  - [x] Custom Yuvoo utilities created (✅ completed - via Bootstrap Utility API)
   - [x] Install validation (Zod) (✅ installed: zod 3.25.76)
   - [x] Install AI/External services (OpenAI, Cloudinary, Brevo) (✅ installed: openai 4.104.0, cloudinary 2.8.0, @getbrevo/brevo 2.5.0)
 - [x] Development environment setup (✅ partially configured)
@@ -321,7 +328,7 @@
   - [x] Documented visual identity (colors, typography, spacing, shadows), tone of voice, UX principles, writing guidelines, microcopy examples, brand messages, content pillars, logo requirements, and implementation checklist ✅
 - [x] Create components guide documentation ✅
   - [x] Created `docs/COMPONENTS_GUIDE.md` with comprehensive components guide ✅
-  - [x] Documented component organization, styling approach (Bootstrap + Tailwind), button patterns, input patterns, card types, modal & toast guidelines, layout components, naming conventions, component patterns, best practices, and usage examples ✅
+  - [x] Documented component organization, styling approach (Bootstrap 5.3.3 + SCSS), button patterns, input patterns, card types, modal & toast guidelines, layout components, naming conventions, component patterns, best practices, and usage examples ✅
 - [x] Create copy library documentation ✅
   - [x] Created `docs/COPY_LIBRARY.md` with comprehensive copy library ✅
   - [x] Documented all user-facing text including CTAs, form microcopy, error messages, success messages, empty states, loading states, modal messages, toast notifications, quiz copy, club/doctor copy, navigation labels, trust messages, onboarding copy, search & filters, booking copy, profile & settings, help & support, legal & compliance, email templates, and usage guidelines ✅
@@ -352,7 +359,7 @@
   - [x] Created `docs/TAILWIND_REMOVAL_PLAN.md` with comprehensive migration strategy ✅
   - [x] Documented phase-by-phase migration plan (4 weeks), Bootstrap Utility API usage, component replacement mappings, Bootstrap 5.3 documentation links, file removal list, risk assessment, success criteria ✅
   - [x] Created `docs/REUSABLE_COMPONENTS_LIST.md` with complete component inventory ✅
-  - [x] Documented ~80+ reusable Bootstrap components, component categories, Bootstrap 5.3 component reference, shadcn → Bootstrap mapping table, form/layout/utilities/customization references ✅
+  - [x] Documented ~80+ reusable Bootstrap components, component categories, Bootstrap 5.3 component reference, Bootstrap component mapping table, form/layout/utilities/customization references ✅
 - [x] Create Bootstrap Component Library (Phase 1.1) ✅
   - [x] Created `src/components/UI/BootstrapButton.tsx` - Bootstrap button wrapper (using `bd-btn` pattern) ✅
   - [x] Created `src/components/UI/BootstrapInput.tsx` - Bootstrap input wrapper (using `login__input` pattern) ✅
@@ -488,29 +495,24 @@
       - [x] Update all icon sizes (192x192, 512x512, etc.) with custom logo (✅ android-chrome and icon sizes updated in public/)
     - [ ] Test logo display across all components (📋 testing task - verify logo displays correctly in Header, Footer, and all components)
   - [x] Rebranding guide created (✅ LOGO_REBRANDING_GUIDE.md with complete implementation checklist)
-- [x] Tailwind CSS setup (for new components) (✅ completed and upgraded to v4)
-  - [x] Install Tailwind CSS v4.1.17 (✅ upgraded from v3.4.19 using official upgrade tool)
-  - [x] Install @tailwindcss/postcss v4.1.17 (✅ PostCSS plugin for Tailwind v4)
-  - [x] Remove autoprefixer (✅ built into Tailwind v4, no longer needed)
-  - [x] Migrate to CSS-based configuration (✅ Tailwind v4 uses @theme in globals.css, tailwind.config.ts removed)
-  - [x] Update postcss.config.js (✅ now uses @tailwindcss/postcss instead of tailwindcss plugin)
-  - [x] Update globals.css with @theme directive (✅ migrated to Tailwind v4 CSS-based config with Yuvoo brand colors)
-  - [x] Import globals.css in layout.tsx (✅ added alongside globals.scss)
-  - [x] Configure Tailwind to coexist with Bootstrap (✅ Tailwind v4 handles this automatically)
-  - [x] Integrate Yuvoo design tokens (✅ colors, typography, spacing, shadows, border radius in @theme block)
-  - [x] Create custom Yuvoo component classes (✅ btn-yuvoo-primary, btn-yuvoo-secondary, card-yuvoo, etc.)
-  - [x] Create Tailwind documentation (✅ src/lib/tailwind/README.md with usage examples - needs v4 update)
-  - [x] Verify build works with Tailwind v4 (✅ build successful after upgrade)
+- [x] Bootstrap 5.3.3 setup (✅ completed - all components use Bootstrap)
+  - [x] Bootstrap 5.3.3 installed and configured ✅
+  - [x] SCSS setup for custom styles ✅
+  - [x] Bootstrap wrapper components created (BootstrapButton, BootstrapInput, BootstrapTextarea, BootstrapSelect, BootstrapAlert, BootstrapProgress) ✅
+  - [x] Custom Yuvoo utilities created via Bootstrap Utility API ✅
+  - [x] Yuvoo brand utilities integrated (bg-yuvoo-primary, text-yuvoo-primary, etc.) ✅
+  - [x] All components migrated from Tailwind to Bootstrap ✅
+  - [x] Tailwind CSS and shadcn/ui removed ✅
+  - [x] Verify build works with Bootstrap only (✅ build successful)
 - [x] MCP (Model Context Protocol) setup (✅ documentation created)
   - [x] Create MCP_SETUP.md documentation (✅ Next.js DevTools MCP configuration documented)
   - [x] Document Next.js DevTools MCP server configuration (✅ configuration example provided for Cursor/Claude Desktop)
-- [x] shadcn/ui setup (✅ completed)
-  - [x] Initialize shadcn/ui (✅ initialized with "new-york" style, neutral base color)
-  - [x] Create components.json configuration (✅ created with RSC support, TypeScript, CSS variables enabled)
-  - [x] Install core dependencies (✅ class-variance-authority, clsx, lucide-react, tailwind-merge installed)
-  - [x] Create utils.ts with cn() helper (✅ src/lib/utils.ts created)
-  - [x] Update globals.css with shadcn/ui theme variables (✅ CSS variables for light/dark themes added)
-  - [x] Configure component aliases (✅ @/components, @/lib/utils, @/components/ui configured)
+- [x] Bootstrap component library setup (✅ completed)
+  - [x] Bootstrap wrapper components created (✅ BootstrapButton, BootstrapInput, BootstrapTextarea, BootstrapSelect, BootstrapAlert, BootstrapProgress)
+  - [x] Component documentation created (✅ BOOTSTRAP_COMPONENTS.md with migration guide)
+  - [x] Update utils.ts with cn() helper (✅ src/lib/utils.ts updated to use only clsx, removed tailwind-merge)
+  - [x] All shadcn/ui components replaced with Bootstrap equivalents ✅
+  - [x] shadcn/ui and Tailwind dependencies removed ✅
 - [x] Drizzle ORM setup (✅ completed)
   - [x] Install Drizzle ORM and dependencies (✅ installed: drizzle-orm@0.36.4, drizzle-kit@0.28.1, @neondatabase/serverless@0.10.4, postgres@3.4.7)
   - [x] Create drizzle.config.ts (✅ configured with schema path, output directory, dialect, and database credentials)

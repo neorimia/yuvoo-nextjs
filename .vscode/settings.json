@@ -11,12 +11,9 @@
 
   // File associations
   "files.associations": {
-    "*.css": "tailwindcss",
+    "*.css": "css",
     "*.scss": "scss"
   },
-
-  // CSS linting - ignore unknown at-rules for Tailwind v4
-  "css.lint.unknownAtRules": "ignore",
 
   // TypeScript settings
   "typescript.tsdk": "node_modules/typescript/lib",

@@ -54,29 +54,20 @@
 
 **Current Setup**:
 
-- **Tailwind CSS**: `4.1.17` (installed) ✅ - Utility-first CSS for new components (upgraded from v3.4.19)
-- **@tailwindcss/postcss**: `4.1.17` (installed) ✅ - PostCSS plugin for Tailwind v4
-- **PostCSS**: `8.5.6` (installed) ✅ - CSS processing
-- **Note**: Tailwind v4 uses CSS-based configuration (no tailwind.config.ts), Autoprefixer is built-in
+- **Bootstrap**: `5.3.3` ✅ - CSS framework for all components
+- **SCSS/Sass**: `^1.75.0` ✅ - CSS preprocessor for custom styles
+- **PostCSS**: `8.5.6` (installed) ✅ - CSS processing (minimal config, no Tailwind plugin)
+- **Lucide React**: `^0.560.0` ✅ - Icon library
+- **clsx**: `^2.1.1` ✅ - Conditional classnames utility
 
-**Planned Migration** (for additional UI libraries):
+**Styling Architecture**:
 
-- **shadcn/ui**: Component library built on Radix UI (planificat)
-  - `@radix-ui/react-dialog ^1.0.5`
-  - `@radix-ui/react-select ^2.0.0`
-  - `@radix-ui/react-slot ^1.0.2`
-- **Lucide React**: `^0.344.0` - Icon library (planificat)
-- **Class Variance Authority**: `^0.7.0` - Component variants (planificat)
-- **clsx**: `^2.1.0` - Conditional classnames (planificat)
-- **tailwind-merge**: `^2.2.0` - Merge Tailwind classes (planificat)
-
-**Migration Strategy**:
-
-- **Current**: Bootstrap for existing components, Tailwind for new components (gradual migration)
-- **Planned**: Remove Tailwind CSS and shadcn/ui, keep only Bootstrap 5.3.3 + SCSS
-- **Documentation**: See `docs/TAILWIND_REMOVAL_PLAN.md` for complete migration plan
+- **All components use Bootstrap 5.3.3** utility classes
+- **Custom Yuvoo-branded utilities** via Bootstrap Utility API (see `public/assets/scss/utils/_yuvoo-utilities.scss`)
+- **SCSS** for custom styles and component-specific styling
+- **Bootstrap wrapper components** in `src/components/UI/` (BootstrapButton, BootstrapInput, etc.)
+- **Documentation**: See `docs/TAILWIND_REMOVAL_PLAN.md` for migration history
 - **Components**: See `docs/REUSABLE_COMPONENTS_LIST.md` for inventory of reusable Bootstrap components
-- **Bootstrap Utility API**: Use Bootstrap's Sass-based Utility API to create custom Yuvoo-branded utilities instead of Tailwind utilities
 
 ### Validation
 
@@ -111,8 +102,7 @@
 
 - **ESLint**: `^8.57.0` - Code linting
 - **ESLint Config Next**: `^15.0.3` - Next.js ESLint config
-- **Prettier**: `^3.2.5` - Code formatting
-- **Prettier Plugin Tailwind**: `^0.5.11` - Tailwind class sorting
+- **Prettier**: `^3.7.4` - Code formatting
 - **TypeScript Types**:
   - `@types/node ^20.11.20`
   - `@types/react ^19.0.0`
@@ -576,7 +566,7 @@ import { getClubBySlug } from "@/modules/clubs/clubs.service";
 
 ## Accessibility
 
-- **ARIA Labels**: shadcn/ui components include ARIA
+- **ARIA Labels**: Bootstrap components include ARIA attributes
 - **Keyboard Navigation**: Full keyboard support
 - **Screen Readers**: Semantic HTML
 - **Color Contrast**: WCAG AA compliance
