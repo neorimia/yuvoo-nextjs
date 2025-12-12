@@ -6,6 +6,8 @@ import { useSearchParams } from "next/navigation";
 import { resetPasswordAction } from "@/app/actions/auth";
 import ErrorMsg from "./ErrorMassage";
 import { EyeCutSvgIcon, LockSvgIcon } from "../SVG";
+import { useRouter } from "next/navigation";
+import { routes } from "@/lib/routes";
 
 type ResetPasswordFormData = {
   password: string;
@@ -26,7 +28,7 @@ const ResetPasswordForm = () => {
   } = useForm<ResetPasswordFormData>();
   const searchParams = useSearchParams();
   const token = searchParams.get("token");
-
+  const router = useRouter();
   const password = watch("password");
 
   const onSubmit = async (data: ResetPasswordFormData) => {
@@ -62,6 +64,8 @@ const ResetPasswordForm = () => {
         setTimeout(() => {
           if (result.redirect) {
             router.push(result.redirect);
+          } else {
+            router.push(routes.login);
           }
         }, 2000);
       } else {

@@ -345,12 +345,14 @@ onboarding_progress {
 }
 ```
 
-**Pending Implementation**:
+**Implementation Status**:
 
-- Middleware for onboarding protection
-- Route structure (`/onboarding/parent/*`, `/onboarding/club/*`, `/onboarding/doctor/*`)
-- Base UI components (OnboardingLayout, OnboardingProgress, OnboardingNavigation)
-- Parent onboarding UI (welcome, add child, platform tour, quiz CTA)
+- ✅ Middleware and routing (onboarding protection, route structure) - Complete
+- ✅ Base UI components (OnboardingLayout, OnboardingProgress, OnboardingNavigation) - Complete
+- ✅ Parent onboarding UI (welcome, add child, platform tour, quiz CTA) - Complete
+- ✅ Club admin onboarding UI - Complete
+  - ✅ Welcome, Basic Info, Contact & Schedule, Pricing & Ages, Photo Upload, Verification, Completion
+- ⏳ Doctor onboarding UI - Pending
 
 ## AI Integration Pattern
 
@@ -410,14 +412,56 @@ onboarding_progress {
 
 ### Cloudinary Integration
 
+**Status**: ✅ Implemented
+
 **Location**: `lib/integrations/cloudinary/`
+
+**Implementation**:
+
+- Client configuration (`client.ts`) - Cloudinary SDK setup
+- Upload utilities (`upload.ts`) - File validation, base64 conversion, upload, deletion
+- Server Actions (`app/actions/uploads.ts`) - `uploadImageAction`, `deleteImageAction`
 
 **Use Cases**:
 
-- Club logos and photos
+- Club logos and photos (✅ implemented in Club Admin Onboarding)
+- Club verification documents (✅ implemented - PDF, DOC, DOCX, JPG, PNG)
 - Doctor profile photos
 - Child avatars
-- User avatars
+
+**Features**:
+
+- Image uploads: File validation (JPG, PNG, WebP, max 5MB)
+- Document uploads: File validation (PDF, DOC, DOCX, JPG, PNG, max 10MB)
+- Base64 conversion for server-side upload
+- Folder organization (`yuvoo/clubs/logos`, `yuvoo/clubs/gallery`, `yuvoo/clubs/verification`, `yuvoo/clubs/documents`)
+- Resource type handling (images vs raw files)
+- Image/document deletion with public ID extraction (handles both resource types)
+- Romanian error messages
+- Authentication checks in server actions
+
+**Flow**:
+
+1. Client component handles file selection and preview
+2. File uploaded via `uploadImageAction` or `uploadDocumentAction` Server Action
+3. Server Action validates file (type, size)
+4. Server Action converts to base64 and uploads to Cloudinary
+5. Cloudinary returns secure URL
+6. URL saved to database (club.logoUrl, club.galleryUrls, club.verificationDocuments)
+7. Files can be deleted via `deleteImageAction` or `deleteDocumentAction` Server Action
+
+**Pattern**:
+
+```typescript
+// Upload
+const formData = new FormData();
+formData.append("file", file);
+formData.append("folder", "yuvoo/clubs/logos");
+const result = await uploadImageAction(formData);
+
+// Delete
+await deleteImageAction(imageUrl);
+```
 
 **Flow**:
 

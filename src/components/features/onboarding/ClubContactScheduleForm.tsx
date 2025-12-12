@@ -24,6 +24,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { updateClubContactSchedule } from "@/app/actions/onboarding";
 import { clubContactScheduleSchema, type ClubContactScheduleInput } from "@/lib/validations/club";
 import { routes } from "@/lib/routes";
+import { normalizePhoneNumber } from "@/lib/utils";
 import { OnboardingNavigation } from "./OnboardingNavigation";
 import { X, Plus } from "lucide-react";
 
@@ -68,7 +69,13 @@ export function ClubContactScheduleForm() {
     setServerError(null);
 
     try {
-      const result = await updateClubContactSchedule(data);
+      // Normalize phone number (remove spaces, ensure +40 format)
+      const normalizedData = {
+        ...data,
+        phone: normalizePhoneNumber(data.phone),
+      };
+
+      const result = await updateClubContactSchedule(normalizedData);
 
       if (result.success) {
         // Navigate to next step

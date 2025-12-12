@@ -628,18 +628,49 @@
       - [x] Navigation flow verified ✅
       - [x] UX refinement completed ✅
       - [x] Testing report created (`docs/ONBOARDING_TESTING_REPORT.md`) ✅
-  - [x] **Club Admin Onboarding (Phase 3)**: 🚧 **IN PROGRESS**
+  - [x] **Club Admin Onboarding (Phase 3)**: ✅ **COMPLETE**
     - [x] Welcome page (`/onboarding/club/welcome`) ✅
     - [x] Basic info form (`/onboarding/club/basic-info`) ✅
       - [x] `ClubBasicInfoForm` component ✅
       - [x] Sport type dropdown ✅
       - [x] City dropdown (30 Romanian cities) ✅
       - [x] Slug generation utility (`generateSlug` in `src/lib/utils.ts`) ✅
-    - [ ] Contact & Schedule step ⏳
-    - [ ] Pricing & Ages step ⏳
-    - [ ] Photo Upload step ⏳
-    - [ ] Verification step ⏳
-    - [ ] Completion step ⏳
+    - [x] Contact & Schedule step (`/onboarding/club/contact-schedule`) ✅
+      - [x] `ClubContactScheduleForm` component ✅
+      - [x] Phone input with normalization (Romanian format: +40XXXXXXXXX) ✅
+      - [x] Email input ✅
+      - [x] Website input (optional) ✅
+      - [x] Dynamic schedule builder (multiple day/time entries) ✅
+      - [x] Phone number normalization utility (`normalizePhoneNumber` in `src/lib/utils.ts`) ✅
+    - [x] Pricing & Ages step (`/onboarding/club/pricing-ages`) ✅
+      - [x] `ClubPricingAgesForm` component ✅
+      - [x] Dynamic pricing builder (monthly, per_class, per_semester) ✅
+      - [x] Age group selector (ages 4-14, multi-select) ✅
+      - [x] Experience level selector (beginner, intermediate, advanced, multi-select) ✅
+    - [x] Photo Upload step (`/onboarding/club/photos`) ✅
+      - [x] `ClubPhotosForm` component ✅
+      - [x] Logo upload with preview and removal ✅
+      - [x] Gallery upload (multiple images, 3-10 required) ✅
+      - [x] Cloudinary integration (`src/lib/integrations/cloudinary/upload.ts`) ✅
+      - [x] Image upload server actions (`uploadImageAction`, `deleteImageAction`) ✅
+      - [x] File validation (type and size checks) ✅
+      - [x] Image preview grid with remove functionality ✅
+    - [x] Verification step (`/onboarding/club/verification`) ✅
+      - [x] `ClubVerificationForm` component ✅
+      - [x] Document upload (multiple documents, 2-5 required) ✅
+      - [x] Document types supported (PDF, DOC, DOCX, JPG, PNG) ✅
+      - [x] Document upload server actions (`uploadDocumentAction`, `deleteDocumentAction`) ✅
+      - [x] Document validation (type and size checks, max 10MB) ✅
+      - [x] Document preview with file type icons and removal functionality ✅
+    - [x] Completion step (`/onboarding/club/complete`) ✅
+      - [x] `ClubCompletionContent` component ✅
+      - [x] Success message with animated icon ✅
+      - [x] Personalized greeting with user name ✅
+      - [x] Success checklist (profile created, documents uploaded, verification timeline) ✅
+      - [x] Next steps guidance ✅
+      - [x] Manual navigation buttons (Dashboard, View Clubs) ✅
+      - [x] Auto-redirect to dashboard after 5 seconds ✅
+      - [x] Completion server action (`completeClubOnboarding`) ✅
 - [ ] Localize all UI text to Romanian
 
 ### Week 5-8: Quiz System
@@ -903,12 +934,20 @@
 
 ### Cloudinary
 
-**Status**: Not Started
+**Status**: ✅ Implemented and Integrated
 
-- [ ] Account setup
-- [ ] Client configuration
-- [ ] Upload functionality
-- [ ] Image optimization
+- [x] Account setup (✅ configured)
+- [x] Client configuration (✅ `src/lib/integrations/cloudinary/client.ts`)
+- [x] Upload functionality (✅ `src/lib/integrations/cloudinary/upload.ts`)
+  - [x] File validation (type and size)
+  - [x] Base64 conversion and upload
+  - [x] Image deletion
+  - [x] Public ID extraction
+- [x] Upload server actions (✅ `src/app/actions/uploads.ts`)
+  - [x] `uploadImageAction` - Upload with validation
+  - [x] `deleteImageAction` - Delete from Cloudinary
+- [x] Image optimization (✅ via Cloudinary CDN)
+- [x] Integration with Club Admin Onboarding (✅ Photo Upload step)
 
 ### Brevo
 

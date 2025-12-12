@@ -385,18 +385,57 @@ Use Vercel's environment variable management:
 
 **Purpose**: Image storage and CDN
 
+**Status**: ✅ Implemented and Integrated
+
 **Setup**:
 
 1. Create Cloudinary account
 2. Get cloud name, API key, API secret
 3. Configure in `lib/integrations/cloudinary/client.ts`
+4. Environment variables: `CLOUDINARY_CLOUD_NAME` (or `NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME`), `CLOUDINARY_API_KEY`, `CLOUDINARY_API_SECRET`
+
+**Implementation**:
+
+- ✅ Client configuration (`src/lib/integrations/cloudinary/client.ts`)
+- ✅ Upload utilities (`src/lib/integrations/cloudinary/upload.ts`)
+  - Image file validation (type and size checks)
+  - Document file validation (PDF, DOC, DOCX, JPG, PNG, max 10MB)
+  - Base64 conversion and upload
+  - Image/document deletion (handles both resource types)
+  - Public ID extraction from URLs
+  - Resource type handling (images vs raw files)
+- ✅ Upload server actions (`src/app/actions/uploads.ts`)
+  - `uploadImageAction` - Upload images with validation
+  - `uploadDocumentAction` - Upload documents with validation
+  - `deleteImageAction` - Delete images from Cloudinary
+  - `deleteDocumentAction` - Delete documents from Cloudinary
+- ✅ Used in Club Admin Onboarding (Photo Upload step, Verification Documents step)
 
 **Features Used**:
 
-- Image uploads
-- Automatic optimization
+- Image uploads (logo and gallery photos)
+  - File validation (JPG, PNG, WebP, max 5MB)
+  - Folder: `yuvoo/clubs/logos`, `yuvoo/clubs/gallery`
+- Document uploads (verification documents)
+  - File validation (PDF, DOC, DOCX, JPG, PNG, max 10MB)
+  - Folder: `yuvoo/clubs/verification`, `yuvoo/clubs/documents`
+  - Resource type: `raw` for PDF/DOC files, `image` for image files
+- Automatic optimization via Cloudinary CDN (for images)
 - CDN delivery
-- Transformations (resize, crop, etc.)
+- Image transformations (resize, crop, etc. - via Cloudinary, for images only)
+
+**Usage Pattern**:
+
+```typescript
+// Upload image
+const formData = new FormData();
+formData.append("file", file);
+formData.append("folder", "yuvoo/clubs/logos");
+const result = await uploadImageAction(formData);
+
+// Delete image
+await deleteImageAction(imageUrl);
+```
 
 ### Brevo Integration
 

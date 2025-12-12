@@ -7,9 +7,14 @@
 
 import { requireAuth } from "@/lib/auth/session";
 import { redirect } from "next/navigation";
+import { cookies } from "next/headers";
 import type { ReactNode } from "react";
 
 export default async function OnboardingLayout({ children }: { children: ReactNode }) {
+  // Access cookies to make this route dynamic (required for authentication)
+  // In Next.js 16 Cache Components mode, using cookies() automatically makes the route dynamic
+  await cookies();
+
   // Require authentication for all onboarding routes
   const session = await requireAuth();
 

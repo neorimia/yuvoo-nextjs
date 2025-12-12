@@ -18,3 +18,35 @@ export function generateSlug(text: string): string {
     .replace(/^-+|-+$/g, "") // Remove leading/trailing hyphens
     .substring(0, 100); // Limit length
 }
+
+/**
+ * Normalize Romanian phone number to format: +40XXXXXXXXX
+ * Removes spaces, hyphens, and other formatting characters
+ */
+export function normalizePhoneNumber(phone: string): string {
+  if (!phone) return phone;
+
+  // Remove all non-digit characters except the leading +
+  const cleaned = phone.replace(/[^\d+]/g, "");
+
+  // Handle different input formats
+  if (cleaned.startsWith("0040")) {
+    return "+40" + cleaned.slice(4);
+  }
+  if (cleaned.startsWith("40") && !cleaned.startsWith("+40")) {
+    return "+" + cleaned;
+  }
+  if (cleaned.startsWith("+40")) {
+    return cleaned; // Already in correct format
+  }
+  if (cleaned.startsWith("+")) {
+    return cleaned; // Keep as is if it starts with +
+  }
+  if (cleaned.length === 9 && /^\d{9}$/.test(cleaned)) {
+    // 9 digits without country code - assume Romanian mobile
+    return "+40" + cleaned;
+  }
+
+  // Default: prepend + if not present
+  return cleaned.startsWith("+") ? cleaned : "+" + cleaned;
+}

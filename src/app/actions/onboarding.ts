@@ -17,9 +17,20 @@ import { generateSlug } from "@/lib/utils";
 import { z } from "zod";
 import { startOnboardingSchema, updateOnboardingStepSchema } from "@/lib/validations/onboarding";
 import { createChildSchema } from "@/lib/validations/child";
-import { clubContactScheduleSchema } from "@/lib/validations/club";
+import {
+  clubContactScheduleSchema,
+  clubPricingAgesSchema,
+  clubPhotoSchema,
+  clubVerificationSchema,
+} from "@/lib/validations/club";
 import type { CreateChildInput } from "@/lib/validations/child";
-import type { ClubBasicInfoInput, ClubContactScheduleInput } from "@/lib/validations/club";
+import type {
+  ClubBasicInfoInput,
+  ClubContactScheduleInput,
+  ClubPricingAgesInput,
+  ClubPhotoInput,
+  ClubVerificationInput,
+} from "@/lib/validations/club";
 import type { DoctorBasicInfoInput } from "@/lib/validations/doctor";
 
 // Types
@@ -431,6 +442,183 @@ export async function updateClubContactSchedule(
 }
 
 /**
+ * Update Club Pricing & Age Groups During Onboarding (Club Admin - Step 4)
+ */
+export async function updateClubPricingAges(
+  data: ClubPricingAgesInput
+): Promise<OnboardingResponse<{ clubId: string }>> {
+  try {
+    const session = await requireAuth();
+
+    // Get club ID from onboarding progress
+    const progressData = await getOnboardingProgress();
+    if (!progressData.success || !progressData.data) {
+      return {
+        success: false,
+        error: "Nu s-a găsit progresul onboarding-ului. Te rugăm să începi din nou.",
+      };
+    }
+
+    const clubId = progressData.data.stepData?.club_id as string | undefined;
+    if (!clubId) {
+      return {
+        success: false,
+        error: "Nu s-a găsit profilul clubului. Te rugăm să revii la pasul anterior.",
+      };
+    }
+
+    // Validate the input
+    const validated = clubPricingAgesSchema.parse(data);
+
+    // Update club with pricing, age groups, and experience levels
+    await db
+      .update(clubs)
+      .set({
+        pricing: validated.pricing,
+        ageGroups: validated.ageGroups,
+        experienceLevels: validated.experienceLevels,
+        updatedAt: new Date(),
+      })
+      .where(and(eq(clubs.id, clubId), eq(clubs.adminUserId, session.dbUser.id)));
+
+    await saveStepData("pricing_ages", validated);
+    await markStepComplete(4);
+    await updateOnboardingStep(5);
+
+    return { success: true, data: { clubId } };
+  } catch (error) {
+    console.error("Error updating club pricing and age groups:", error);
+    if (error instanceof z.ZodError) {
+      return {
+        success: false,
+        error: error.errors[0]?.message || "Datele introduse nu sunt valide.",
+      };
+    }
+    return {
+      success: false,
+      error: "A apărut o eroare la actualizarea prețurilor și grupelor de vârstă.",
+    };
+  }
+}
+
+/**
+ * Update Club Photos During Onboarding (Club Admin - Step 5)
+ */
+export async function updateClubPhotos(
+  data: ClubPhotoInput
+): Promise<OnboardingResponse<{ clubId: string }>> {
+  try {
+    const session = await requireAuth();
+
+    // Get club ID from onboarding progress
+    const progressData = await getOnboardingProgress();
+    if (!progressData.success || !progressData.data) {
+      return {
+        success: false,
+        error: "Nu s-a găsit progresul onboarding-ului. Te rugăm să începi din nou.",
+      };
+    }
+
+    const clubId = progressData.data.stepData?.club_id as string | undefined;
+    if (!clubId) {
+      return {
+        success: false,
+        error: "Nu s-a găsit profilul clubului. Te rugăm să revii la pasul anterior.",
+      };
+    }
+
+    // Validate the input
+    const validated = clubPhotoSchema.parse(data);
+
+    // Update club with logo and gallery URLs
+    await db
+      .update(clubs)
+      .set({
+        logoUrl: validated.logoUrl,
+        galleryUrls: validated.galleryUrls,
+        updatedAt: new Date(),
+      })
+      .where(and(eq(clubs.id, clubId), eq(clubs.adminUserId, session.dbUser.id)));
+
+    await saveStepData("photos", validated);
+    await markStepComplete(5);
+    await updateOnboardingStep(6);
+
+    return { success: true, data: { clubId } };
+  } catch (error) {
+    console.error("Error updating club photos:", error);
+    if (error instanceof z.ZodError) {
+      return {
+        success: false,
+        error: error.errors[0]?.message || "Datele introduse nu sunt valide.",
+      };
+    }
+    return {
+      success: false,
+      error: "A apărut o eroare la actualizarea fotografiilor.",
+    };
+  }
+}
+
+/**
+ * Update Club Verification Documents During Onboarding (Club Admin - Step 6)
+ */
+export async function updateClubVerification(
+  data: ClubVerificationInput
+): Promise<OnboardingResponse<{ clubId: string }>> {
+  try {
+    const session = await requireAuth();
+
+    // Get club ID from onboarding progress
+    const progressData = await getOnboardingProgress();
+    if (!progressData.success || !progressData.data) {
+      return {
+        success: false,
+        error: "Nu s-a găsit progresul onboarding-ului. Te rugăm să începi din nou.",
+      };
+    }
+
+    const clubId = progressData.data.stepData?.club_id as string | undefined;
+    if (!clubId) {
+      return {
+        success: false,
+        error: "Nu s-a găsit profilul clubului. Te rugăm să revii la pasul anterior.",
+      };
+    }
+
+    // Validate the input
+    const validated = clubVerificationSchema.parse(data);
+
+    // Update club with verification documents
+    await db
+      .update(clubs)
+      .set({
+        verificationDocuments: validated.verificationDocuments,
+        updatedAt: new Date(),
+      })
+      .where(and(eq(clubs.id, clubId), eq(clubs.adminUserId, session.dbUser.id)));
+
+    await saveStepData("verification", validated);
+    await markStepComplete(6);
+    await updateOnboardingStep(7);
+
+    return { success: true, data: { clubId } };
+  } catch (error) {
+    console.error("Error updating club verification documents:", error);
+    if (error instanceof z.ZodError) {
+      return {
+        success: false,
+        error: error.errors[0]?.message || "Datele introduse nu sunt valide.",
+      };
+    }
+    return {
+      success: false,
+      error: "A apărut o eroare la actualizarea documentelor de verificare.",
+    };
+  }
+}
+
+/**
  * Submit Club for Verification
  */
 export async function submitClubForVerification(
@@ -461,11 +649,14 @@ export async function submitClubForVerification(
 
 /**
  * Complete Club Admin Onboarding
+ *
+ * Marks onboarding as complete in the database. Does NOT redirect (let the page handle it).
  */
-export async function completeClubOnboarding(): Promise<never> {
+export async function completeClubOnboarding(): Promise<{ success: boolean; error?: string }> {
   try {
     const session = await requireAuth();
 
+    // Update user onboarding status
     await db
       .update(users)
       .set({
@@ -475,6 +666,7 @@ export async function completeClubOnboarding(): Promise<never> {
       })
       .where(eq(users.id, session.dbUser.id));
 
+    // Update onboarding progress
     await db
       .update(onboardingProgress)
       .set({
@@ -484,6 +676,7 @@ export async function completeClubOnboarding(): Promise<never> {
       })
       .where(eq(onboardingProgress.userId, session.dbUser.id));
 
+    // Mark club profile as complete
     const progressData = await getOnboardingProgress();
     if (progressData.success && progressData.data && progressData.data?.stepData?.club_id) {
       await db
@@ -492,10 +685,13 @@ export async function completeClubOnboarding(): Promise<never> {
         .where(eq(clubs.id, progressData.data?.stepData?.club_id as string));
     }
 
-    redirect(routes.club?.dashboard || "/club/dashboard");
+    return { success: true };
   } catch (error) {
     console.error("Error completing club onboarding:", error);
-    throw new Error("A apărut o eroare la finalizarea onboarding-ului.");
+    return {
+      success: false,
+      error: "A apărut o eroare la finalizarea onboarding-ului.",
+    };
   }
 }
 

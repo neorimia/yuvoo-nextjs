@@ -11,3 +11,7 @@ export { OnboardingNavigation } from "./OnboardingNavigation";
 export { AddChildForm } from "./AddChildForm";
 export { ClubBasicInfoForm } from "./ClubBasicInfoForm";
 export { ClubContactScheduleForm } from "./ClubContactScheduleForm";
+export { ClubPricingAgesForm } from "./ClubPricingAgesForm";
+export { ClubPhotosForm } from "./ClubPhotosForm";
+export { ClubVerificationForm } from "./ClubVerificationForm";
+export { ClubCompletionContent } from "./ClubCompletionContent";
