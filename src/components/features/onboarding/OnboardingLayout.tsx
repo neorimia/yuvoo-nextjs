@@ -70,7 +70,7 @@ export function OnboardingLayout({
   };
 
   return (
-    <div className={cn("min-vh-100 d-flex flex-column", backgroundClass)}>
+    <div className={cn("min-vh-100 d-flex flex-column position-relative", backgroundClass)}>
       {/* Skip to content link (accessibility) */}
       <a
         href="#main-content"
@@ -82,7 +82,7 @@ export function OnboardingLayout({
 
       {/* Header - Minimal branding only */}
       <header
-        className="position-sticky top-0 z-50 bg-white border-bottom border-secondary shadow-sm"
+        className="position-fixed w-100 top-0 z-99 bg-white border-bottom border-secondary shadow-sm"
         style={{
           backgroundColor: "rgba(255, 255, 255, 0.95)",
           backdropFilter: "blur(4px)",
