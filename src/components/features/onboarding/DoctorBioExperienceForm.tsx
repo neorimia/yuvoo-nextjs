@@ -1,0 +1,162 @@
+/**
+ * DoctorBioExperienceForm Component
+ *
+ * Client component for adding doctor bio and experience during doctor onboarding.
+ * Uses React Hook Form with Zod validation.
+ *
+ * Features:
+ * - Romanian labels and error messages
+ * - Bio textarea with character counter (100-2000 characters)
+ * - Years of experience input (1-50)
+ * - Secondary specialties multi-select (optional)
+ * - Languages multi-select (required, minimum 1)
+ * - Server action integration
+ * - Loading states and error handling
+ * - Responsive design
+ */
+
+"use client";
+
+import { useForm, FieldError } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { updateDoctorBioExperience } from "@/app/actions/onboarding";
+import { doctorBioExperienceSchema, type DoctorBioExperienceInput } from "@/lib/validations/doctor";
+import { routes } from "@/lib/routes";
+import { OnboardingNavigation } from "./OnboardingNavigation";
+import { InfoTooltip } from "@/components/shared/InfoTooltip";
+import { ServerErrorAlert } from "./components/ServerErrorAlert";
+import { CharacterCounterTextarea, MultiSelectCheckboxField, TagInputField } from "./components";
+import { BootstrapInput } from "@/components/UI/bootstrap-index";
+import { useOnboardingForm } from "./hooks/useOnboardingForm";
+
+// Common languages in Romania
+const COMMON_LANGUAGES = [
+  "Română",
+  "Engleză",
+  "Maghiară",
+  "Germană",
+  "Franceză",
+  "Italiană",
+  "Spaniolă",
+] as const;
+
+// Secondary specialties (same as primary specialties for now, can be expanded)
+const SECONDARY_SPECIALTIES = [
+  { value: "orthopedist", label: "Ortopedie pediatrică" },
+  { value: "nutritionist", label: "Nutriție pediatrică" },
+  { value: "psychologist", label: "Psihologie sportivă" },
+  { value: "sports_medicine", label: "Medicină sportivă pediatrică" },
+  { value: "cardiology", label: "Cardiologie pediatrică" },
+  { value: "physiotherapy", label: "Fizioterapie pediatrică" },
+] as const;
+
+export function DoctorBioExperienceForm() {
+  const {
+    register,
+    handleSubmit: rhfHandleSubmit,
+    control,
+    formState: { errors },
+    setValue,
+    watch,
+  } = useForm<DoctorBioExperienceInput>({
+    resolver: zodResolver(doctorBioExperienceSchema),
+    defaultValues: {
+      languages: [],
+      secondarySpecialties: [],
+    },
+  });
+
+  const { handleSubmit, isLoading, serverError } = useOnboardingForm<DoctorBioExperienceInput>({
+    onSubmitAction: updateDoctorBioExperience,
+    onSuccessRoute: routes.onboarding.doctor.locationContact,
+  });
+
+  return (
+    <form onSubmit={rhfHandleSubmit(handleSubmit)} className="px-3 px-sm-0">
+      {/* Server error */}
+      <ServerErrorAlert error={serverError} className="mb-4" />
+
+      {/* Bio */}
+      <CharacterCounterTextarea
+        label="Bio profesional"
+        name="bio"
+        register={register}
+        error={errors.bio}
+        minChars={100}
+        maxChars={2000}
+        rows={8}
+        placeholder="Descrie experiența ta profesională, abordarea ta în lucrul cu copiii, specializările tale și de ce ești pasionat de medicina sportivă pediatrică..."
+        required
+        helpText="Descrie experiența ta profesională, abordarea ta în lucrul cu copiii și de ce ești pasionat de medicina sportivă pediatrică. Un bio complet ajută părinții să te cunoască mai bine."
+        description="Descrie experiența ta în lucrul cu copiii și sportul pediatric"
+        isLoading={isLoading}
+        currentValue={watch("bio")}
+      />
+
+      {/* Years of Experience */}
+      <div className="mb-4">
+        <label
+          htmlFor="yearsOfExperience"
+          className="d-flex align-items-center gap-2 small fw-medium text-body mb-2"
+        >
+          Ani de experiență <span className="text-danger">*</span>
+          <InfoTooltip
+            content="Numărul de ani de experiență în practica medicală. Această informație ajută părinții să înțeleagă nivelul tău de experiență."
+            size="sm"
+          />
+        </label>
+        <BootstrapInput
+          id="yearsOfExperience"
+          type="number"
+          min="1"
+          max="50"
+          {...register("yearsOfExperience", { valueAsNumber: true })}
+          error={!!errors.yearsOfExperience}
+          className="w-100"
+          placeholder="Ex: 5"
+        />
+        {errors.yearsOfExperience && (
+          <p className="mt-1 small text-danger">{errors.yearsOfExperience.message}</p>
+        )}
+      </div>
+
+      {/* Secondary Specialties (Optional) */}
+      <MultiSelectCheckboxField
+        label="Specializări secundare"
+        name="secondarySpecialties"
+        control={control}
+        error={errors.secondarySpecialties as FieldError | undefined}
+        options={SECONDARY_SPECIALTIES.map((specialty) => ({
+          value: specialty.value,
+          label: specialty.label,
+        }))}
+        gridCols={{ xs: 12, sm: 6, md: 4 }}
+        description="Selectează specializări suplimentare dacă ai experiență în alte domenii (opțional)"
+        isLoading={isLoading}
+      />
+
+      {/* Languages */}
+      <TagInputField
+        label="Limbi vorbite"
+        name="languages"
+        setValue={setValue}
+        error={errors.languages as FieldError | undefined}
+        quickAddOptions={COMMON_LANGUAGES}
+        placeholder="Adaugă altă limbă"
+        required
+        helpText="Selectează toate limbile în care poți comunica confortabil cu părinții. Aceasta ajută părinții să te găsească și să știe că pot comunica cu tine în limba lor preferată."
+        description="Selectează cel puțin o limbă în care poți comunica cu părinții"
+        isLoading={isLoading}
+      />
+
+      {/* Navigation */}
+      <OnboardingNavigation
+        backHref={routes.onboarding.doctor.basicInfo}
+        nextHref={null}
+        nextText="Continuă"
+        isLoading={isLoading}
+        className="mt-5"
+      />
+    </form>
+  );
+}

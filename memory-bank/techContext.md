@@ -30,11 +30,14 @@
 
 ### Authentication
 
-- **Stack Auth**: `@stackframe/stack ^2.5.40` - Authentication service
-  - Handles user authentication
-  - Email/password, OAuth support
-  - Session management
+- **Stack Auth**: `@stackframe/stack ^2.5.40` - Authentication service (Server-Side Only)
+  - Handles user authentication (server-side only)
+  - Email/password authentication
+  - Session management (server-side)
   - User management
+  - **Architecture**: All authentication operations use Server Actions
+  - **No Client Provider**: Removed StackProvider - authentication is fully server-side
+  - **Server Actions**: `signInAction`, `signUpAction`, `forgotPasswordAction`, `resetPasswordAction`, `verifyEmailAction`
 
 ### UI & Styling
 
@@ -51,23 +54,20 @@
 
 **Current Setup**:
 
-- **Tailwind CSS**: `4.1.17` (installed) ✅ - Utility-first CSS for new components (upgraded from v3.4.19)
-- **@tailwindcss/postcss**: `4.1.17` (installed) ✅ - PostCSS plugin for Tailwind v4
-- **PostCSS**: `8.5.6` (installed) ✅ - CSS processing
-- **Note**: Tailwind v4 uses CSS-based configuration (no tailwind.config.ts), Autoprefixer is built-in
+- **Bootstrap**: `5.3.3` ✅ - CSS framework for all components
+- **SCSS/Sass**: `^1.75.0` ✅ - CSS preprocessor for custom styles
+- **PostCSS**: `8.5.6` (installed) ✅ - CSS processing (minimal config, no Tailwind plugin)
+- **Lucide React**: `^0.560.0` ✅ - Icon library
+- **clsx**: `^2.1.1` ✅ - Conditional classnames utility
 
-**Planned Migration** (for additional UI libraries):
+**Styling Architecture**:
 
-- **shadcn/ui**: Component library built on Radix UI (planificat)
-  - `@radix-ui/react-dialog ^1.0.5`
-  - `@radix-ui/react-select ^2.0.0`
-  - `@radix-ui/react-slot ^1.0.2`
-- **Lucide React**: `^0.344.0` - Icon library (planificat)
-- **Class Variance Authority**: `^0.7.0` - Component variants (planificat)
-- **clsx**: `^2.1.0` - Conditional classnames (planificat)
-- **tailwind-merge**: `^2.2.0` - Merge Tailwind classes (planificat)
-
-**Migration Strategy**: Gradual migration - keep Bootstrap for existing components, use Tailwind for new components. See `designSystem.md` for details.
+- **All components use Bootstrap 5.3.3** utility classes
+- **Custom Yuvoo-branded utilities** via Bootstrap Utility API (see `public/assets/scss/utils/_yuvoo-utilities.scss`)
+- **SCSS** for custom styles and component-specific styling
+- **Bootstrap wrapper components** in `src/components/UI/` (BootstrapButton, BootstrapInput, etc.)
+- **Documentation**: See `docs/TAILWIND_REMOVAL_PLAN.md` for migration history
+- **Components**: See `docs/REUSABLE_COMPONENTS_LIST.md` for inventory of reusable Bootstrap components
 
 ### Validation
 
@@ -89,12 +89,20 @@
   - Transactional emails
   - Email templates
 
+### Utility Functions
+
+- **Slug Generation**: `generateSlug()` in `src/lib/utils.ts` ✅
+  - Handles Romanian diacritics (normalize NFD, remove diacritics)
+  - Converts text to SEO-friendly URL slugs
+  - Replaces special characters with hyphens
+  - Limits length to 100 characters
+  - Used for club and doctor slug generation
+
 ### Development Tools
 
 - **ESLint**: `^8.57.0` - Code linting
 - **ESLint Config Next**: `^15.0.3` - Next.js ESLint config
-- **Prettier**: `^3.2.5` - Code formatting
-- **Prettier Plugin Tailwind**: `^0.5.11` - Tailwind class sorting
+- **Prettier**: `^3.7.4` - Code formatting
 - **TypeScript Types**:
   - `@types/node ^20.11.20`
   - `@types/react ^19.0.0`
@@ -373,18 +381,57 @@ Use Vercel's environment variable management:
 
 **Purpose**: Image storage and CDN
 
+**Status**: ✅ Implemented and Integrated
+
 **Setup**:
 
 1. Create Cloudinary account
 2. Get cloud name, API key, API secret
 3. Configure in `lib/integrations/cloudinary/client.ts`
+4. Environment variables: `CLOUDINARY_CLOUD_NAME` (or `NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME`), `CLOUDINARY_API_KEY`, `CLOUDINARY_API_SECRET`
+
+**Implementation**:
+
+- ✅ Client configuration (`src/lib/integrations/cloudinary/client.ts`)
+- ✅ Upload utilities (`src/lib/integrations/cloudinary/upload.ts`)
+  - Image file validation (type and size checks)
+  - Document file validation (PDF, DOC, DOCX, JPG, PNG, max 10MB)
+  - Base64 conversion and upload
+  - Image/document deletion (handles both resource types)
+  - Public ID extraction from URLs
+  - Resource type handling (images vs raw files)
+- ✅ Upload server actions (`src/app/actions/uploads.ts`)
+  - `uploadImageAction` - Upload images with validation
+  - `uploadDocumentAction` - Upload documents with validation
+  - `deleteImageAction` - Delete images from Cloudinary
+  - `deleteDocumentAction` - Delete documents from Cloudinary
+- ✅ Used in Club Admin Onboarding (Photo Upload step, Verification Documents step)
 
 **Features Used**:
 
-- Image uploads
-- Automatic optimization
+- Image uploads (logo and gallery photos)
+  - File validation (JPG, PNG, WebP, max 5MB)
+  - Folder: `yuvoo/clubs/logos`, `yuvoo/clubs/gallery`
+- Document uploads (verification documents)
+  - File validation (PDF, DOC, DOCX, JPG, PNG, max 10MB)
+  - Folder: `yuvoo/clubs/verification`, `yuvoo/clubs/documents`
+  - Resource type: `raw` for PDF/DOC files, `image` for image files
+- Automatic optimization via Cloudinary CDN (for images)
 - CDN delivery
-- Transformations (resize, crop, etc.)
+- Image transformations (resize, crop, etc. - via Cloudinary, for images only)
+
+**Usage Pattern**:
+
+```typescript
+// Upload image
+const formData = new FormData();
+formData.append("file", file);
+formData.append("folder", "yuvoo/clubs/logos");
+const result = await uploadImageAction(formData);
+
+// Delete image
+await deleteImageAction(imageUrl);
+```
 
 ### Brevo Integration
 
@@ -519,7 +566,7 @@ import { getClubBySlug } from "@/modules/clubs/clubs.service";
 
 ## Accessibility
 
-- **ARIA Labels**: shadcn/ui components include ARIA
+- **ARIA Labels**: Bootstrap components include ARIA attributes
 - **Keyboard Navigation**: Full keyboard support
 - **Screen Readers**: Semantic HTML
 - **Color Contrast**: WCAG AA compliance
@@ -563,6 +610,7 @@ import { getClubBySlug } from "@/modules/clubs/clubs.service";
 
 ## Documentation References
 
+- **Claude Guide**: `CLAUDE.md` - Comprehensive project guide for Claude Code with quick start, development commands, architecture patterns, troubleshooting, and quick reference
 - **Architecture Overview**: `docs/ARCHITECTURE_OVERVIEW.md` - Complete architecture documentation with patterns, data flows, and design decisions
 - **Code Generation Rules**: `docs/ PROMPTING_RULES_FOR_CODEGEN.md` - Comprehensive code generation guidelines
 - **Brand Guidelines**: `docs/BRAND_GUIDELINES.md` - Visual identity, tone of voice, UX principles, and brand consistency guidelines

@@ -136,7 +136,7 @@ Once we migrate to the new structure, components will be organized as:
 
 ```
 components/
-├── ui/              # shadcn/ui base components (new)
+├── ui/              # Bootstrap wrapper components
 ├── layout/          # Header, Footer, Sidebar (migrate from layouts/)
 ├── features/       # Feature-specific components
 │   ├── quiz/       # Quiz components
@@ -160,7 +160,7 @@ components/
 ### Phase 2: Gradual Migration (Future)
 
 - Migrate to feature-based organization
-- Introduce shadcn/ui components
+- Use Bootstrap wrapper components (BootstrapButton, BootstrapInput, etc.)
 - Migrate from Bootstrap to Tailwind
 - Refactor components as needed
 
@@ -225,7 +225,7 @@ import Header from "@/components/layout/Header";
 
 ## Notes
 
-- All components currently use **Bootstrap 5.3.3** + **SCSS**
-- Future migration to **Tailwind CSS** + **shadcn/ui** is planned
-- Keep existing components functional during migration
+- All components use **Bootstrap 5.3.3** + **SCSS** ✅
+- Bootstrap wrapper components available in `src/components/UI/` (BootstrapButton, BootstrapInput, etc.)
+- Custom Yuvoo-branded utilities via Bootstrap Utility API
 - Test thoroughly after any component adaptations

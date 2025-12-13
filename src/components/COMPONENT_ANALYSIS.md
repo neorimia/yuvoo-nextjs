@@ -408,11 +408,11 @@ This document provides a detailed analysis of all components in the `src/compone
 - SCSS for custom styles
 - Component-specific SCSS files
 
-**Future (Planned)**:
+**Current**:
 
-- Tailwind CSS for new components
-- shadcn/ui component library
-- Gradual migration from Bootstrap
+- Bootstrap 5.3.3 for all components ✅
+- Bootstrap wrapper components (BootstrapButton, BootstrapInput, etc.)
+- Custom Yuvoo-branded utilities via Bootstrap Utility API
 
 ### 3. Type Safety
 
@@ -482,8 +482,8 @@ This document provides a detailed analysis of all components in the `src/compone
 3. Create Booking components
 4. Create Favorites components
 5. Migrate to feature-based organization
-6. Introduce shadcn/ui components
-7. Migrate from Bootstrap to Tailwind
+6. Complete Bootstrap component migration ✅
+7. All components use Bootstrap 5.3.3 + SCSS ✅
 
 ---
 
@@ -507,8 +507,8 @@ This document provides a detailed analysis of all components in the `src/compone
 
 ### Long-term (Future)
 
-1. Migrate to Tailwind CSS
-2. Introduce shadcn/ui
+1. Complete Bootstrap component library ✅
+2. All components use Bootstrap 5.3.3 + SCSS ✅
 3. Refactor to Server Components
 4. Optimize bundle size
 5. Improve accessibility
@@ -517,9 +517,9 @@ This document provides a detailed analysis of all components in the `src/compone
 
 ## Notes
 
-- All components currently use **Bootstrap 5.3.3** + **SCSS**
-- Future migration to **Tailwind CSS** + **shadcn/ui** is planned
-- Keep existing components functional during migration
+- All components use **Bootstrap 5.3.3** + **SCSS** ✅
+- Bootstrap wrapper components available in `src/components/UI/` (BootstrapButton, BootstrapInput, etc.)
+- Custom Yuvoo-branded utilities via Bootstrap Utility API
 - Test thoroughly after any component adaptations
 - All user-facing text must be in **Romanian**
 - Use centralized routes from `@/lib/routes`

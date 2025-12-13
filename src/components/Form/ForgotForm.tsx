@@ -1,18 +1,17 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useTransition } from "react";
 import { useForm } from "react-hook-form";
-import { useStackApp } from "@stackframe/stack";
+import { forgotPasswordAction } from "@/app/actions/auth";
 import ErrorMsg from "./ErrorMassage";
 import { EmailSvgIcon } from "../SVG";
-import { getErrorMessage } from "@/lib/auth/errors";
 
 type ForgotFormData = {
   email: string;
 };
 
 const ForgotForm = () => {
-  const [isLoading, setIsLoading] = useState(false);
+  const [isPending, startTransition] = useTransition();
   const [authError, setAuthError] = useState<string | null>(null);
   const [successMessage, setSuccessMessage] = useState<string | null>(null);
   const {
@@ -21,28 +20,24 @@ const ForgotForm = () => {
     formState: { errors },
     reset,
   } = useForm<ForgotFormData>();
-  const stackApp = useStackApp();
 
   const onSubmit = async (data: ForgotFormData) => {
-    setIsLoading(true);
     setAuthError(null);
     setSuccessMessage(null);
 
-    try {
-      await stackApp.sendForgotPasswordEmail(data.email);
+    startTransition(async () => {
+      const formData = new FormData();
+      formData.append("email", data.email);
 
-      // Show success message
-      setSuccessMessage(
-        "Link-ul de resetare a parolei a fost trimis la adresa ta de email. Verifică căsuța poștală."
-      );
-      reset(); // Clear form
-    } catch (error) {
-      // Handle error
-      const errorMessage = getErrorMessage(error);
-      setAuthError(errorMessage);
-    } finally {
-      setIsLoading(false);
-    }
+      const result = await forgotPasswordAction(formData);
+
+      if (result.success) {
+        setSuccessMessage(result.message || "Link-ul de resetare a fost trimis cu succes!");
+        reset(); // Clear form
+      } else {
+        setAuthError(result.error || "Eroare la trimiterea email-ului");
+      }
+    });
   };
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
@@ -75,7 +70,7 @@ const ForgotForm = () => {
               id="emailAddress"
               type="email"
               placeholder="Adresă de email"
-              disabled={isLoading || !!successMessage}
+              disabled={isPending || !!successMessage}
             />
             <span>
               <EmailSvgIcon />
@@ -85,13 +80,13 @@ const ForgotForm = () => {
         </div>
       </div>
       <div className="login__btn text-center">
-        <button type="submit" className="bd-btn" disabled={isLoading || !!successMessage}>
+        <button type="submit" className="bd-btn" disabled={isPending || !!successMessage}>
           <span className="bd-btn-inner">
             <span className="bd-btn-normal">
-              {isLoading ? "Se trimite..." : successMessage ? "Trimis" : "Trimite link de resetare"}
+              {isPending ? "Se trimite..." : successMessage ? "Trimis" : "Trimite link de resetare"}
             </span>
             <span className="bd-btn-hover">
-              {isLoading ? "Se trimite..." : successMessage ? "Trimis" : "Trimite link de resetare"}
+              {isPending ? "Se trimite..." : successMessage ? "Trimis" : "Trimite link de resetare"}
             </span>
           </span>
         </button>

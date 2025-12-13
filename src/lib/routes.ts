@@ -170,11 +170,38 @@ export const routes = {
     verifications: "/admin/verifications",
   },
 
-  // Onboarding Routes
+  // Onboarding Routes - Complete flows for all roles
   onboarding: {
-    parent: "/onboarding/parent",
-    club: "/onboarding/club",
-    doctor: "/onboarding/doctor",
+    // Parent onboarding (5 steps)
+    parent: {
+      welcome: "/onboarding/parent/welcome",
+      addChild: "/onboarding/parent/add-child",
+      tour: "/onboarding/parent/tour",
+      quizIntro: "/onboarding/parent/quiz-intro",
+      complete: "/onboarding/parent/complete",
+    },
+    // Club admin onboarding (7 steps)
+    club: {
+      welcome: "/onboarding/club/welcome",
+      basicInfo: "/onboarding/club/basic-info",
+      contactSchedule: "/onboarding/club/contact-schedule",
+      pricingAges: "/onboarding/club/pricing-ages",
+      photos: "/onboarding/club/photos",
+      verification: "/onboarding/club/verification",
+      complete: "/onboarding/club/complete",
+    },
+    // Doctor onboarding (8 steps)
+    doctor: {
+      welcome: "/onboarding/doctor/welcome",
+      basicInfo: "/onboarding/doctor/basic-info",
+      bioExperience: "/onboarding/doctor/bio-experience",
+      locationContact: "/onboarding/doctor/location-contact",
+      photo: "/onboarding/doctor/photo",
+      verification: "/onboarding/doctor/verification",
+      availability: "/onboarding/doctor/availability",
+      complete: "/onboarding/doctor/complete",
+    },
+    // General
     gettingStarted: "/onboarding/getting-started",
   },
 
@@ -324,9 +351,9 @@ export function isProtectedRoute(path: string): boolean {
     routes.club.dashboard,
     routes.doctor.dashboard,
     routes.admin.dashboard,
-    routes.onboarding.parent,
-    routes.onboarding.club,
-    routes.onboarding.doctor,
+    "/onboarding/parent",
+    "/onboarding/club",
+    "/onboarding/doctor",
   ];
 
   return protectedPaths.some((protectedPath) => path.startsWith(protectedPath));

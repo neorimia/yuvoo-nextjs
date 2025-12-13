@@ -76,7 +76,7 @@ const HomePromotionArea: React.FC<HomePromAreaProps> = ({ promoImg, promo_space 
                       className="bd-promotion-counter d-flex align-items-center gap-3 flex-md-column"
                       key={index}
                     >
-                      <div className="bd-promotion-counter-content min-w-[110px]">
+                      <div className="bd-promotion-counter-content" style={{ minWidth: "110px" }}>
                         <CountUpContent number={item?.count} add_style={false} text={item.text} />
                       </div>
                       <div className="bd-promotion-counter-text d-flex flex-column flex-md-row gap-1">

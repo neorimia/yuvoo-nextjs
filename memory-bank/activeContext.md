@@ -2,36 +2,250 @@
 
 ## Current Status
 
-**Phase**: Foundation Setup & Architecture Migration
+**Phase**: Foundation Setup & Onboarding Development + Bootstrap Migration + Component Extraction
 **Date**: December 2024
-**Focus**: Next.js 16 upgrade, Cache Components migration, and code generation standards
+**Focus**: All onboarding forms migrated to Bootstrap ✅ | Reusable components created ✅ | Component extraction complete ✅
 
 ## Current Work Focus
 
 ### Immediate Priorities
 
-1. **Authentication System Integration** ✅ (Completed)
-   - Stack Auth fully integrated into all authentication forms and pages
+1. **Bootstrap Migration** 🚧 (Phase 2.2 Complete - All Onboarding Forms Migrated)
+   - Comprehensive migration plan created (`docs/TAILWIND_REMOVAL_PLAN.md`) ✅
+   - Reusable components inventory created (`docs/REUSABLE_COMPONENTS_LIST.md`) ✅
+   - Bootstrap 5.3 documentation references added ✅
+   - Component replacement mappings documented ✅
+   - Migration strategy: 4-week phased approach ✅
+   - **Phase 1.1: Bootstrap Component Library** ✅ **COMPLETE**
+     - Created `BootstrapButton.tsx` - Bootstrap button wrapper (using `bd-btn` pattern) ✅
+     - Created `BootstrapInput.tsx` - Bootstrap input wrapper (using `login__input` pattern) ✅
+     - Created `BootstrapTextarea.tsx` - Bootstrap textarea wrapper ✅
+     - Created `BootstrapSelect.tsx` - Bootstrap select wrapper ✅
+     - Created `BootstrapAlert.tsx` - Bootstrap alert wrapper ✅
+     - Created `BootstrapProgress.tsx` - Bootstrap progress wrapper ✅
+     - Created `bootstrap-index.ts` - Export index for easy imports ✅
+     - Created `BOOTSTRAP_COMPONENTS.md` - Component documentation and migration guide ✅
+   - **Phase 1.2: Bootstrap Utility API Extensions** ✅ **COMPLETE**
+     - Created `_yuvoo-utilities.scss` - Custom Yuvoo brand utilities using Bootstrap naming conventions ✅
+     - Added Yuvoo brand color utilities (`bg-yuvoo-primary`, `text-yuvoo-primary`, etc.) ✅
+     - Added hover state utilities for Yuvoo colors ✅
+     - Added focus, shadow, responsive, spacing, and button variant utilities ✅
+     - References existing CSS variables from `_root.scss` (`--bd-theme-1`, `--bd-theme-2`, etc.) ✅
+     - Imported in `public/assets/scss/main.scss` ✅
+     - Added to `public/assets/scss/utils/_index.scss` for proper module forwarding ✅
+     - Created `YUVOO_UTILITIES.md` - Comprehensive documentation with usage examples ✅
+   - **Phase 2.2: Replace shadcn Components in Onboarding Forms** ✅ **COMPLETE**
+     - All onboarding forms migrated from Tailwind CSS and shadcn/ui to Bootstrap 5.3.3 ✅
+     - **Shared Components Updated**:
+       - `FormField.tsx` - Replaced Tailwind with Bootstrap utilities ✅
+       - `ServerErrorAlert.tsx` - Replaced Alert component with BootstrapAlert ✅
+       - `InfoBox.tsx` - Replaced Tailwind with Bootstrap utilities ✅
+       - `FormSection.tsx` - Replaced Tailwind with Bootstrap utilities ✅
+     - **Core Onboarding Components Updated**:
+       - `OnboardingLayout.tsx` - All Tailwind classes replaced with Bootstrap ✅
+       - `OnboardingNavigation.tsx` - Button and Alert replaced with Bootstrap components ✅
+       - `OnboardingProgress.tsx` - Progress component replaced with Bootstrap progress bar ✅
+     - **Parent Onboarding Forms**:
+       - `AddChildForm.tsx` - Fully migrated to Bootstrap ✅
+     - **Club Onboarding Forms (6 forms)**:
+       - `ClubBasicInfoForm.tsx` - Fully migrated to Bootstrap ✅
+       - `ClubContactScheduleForm.tsx` - Fully migrated to Bootstrap ✅
+       - `ClubPhotosForm.tsx` - Fully migrated to Bootstrap ✅
+       - `ClubPricingAgesForm.tsx` - Fully migrated to Bootstrap ✅
+       - `ClubVerificationForm.tsx` - Fully migrated to Bootstrap ✅
+       - `ClubCompletionContent.tsx` - Fully migrated to Bootstrap ✅
+     - **Doctor Onboarding Forms (7 forms)**:
+       - `DoctorBasicInfoForm.tsx` - Fully migrated to Bootstrap ✅
+       - `DoctorBioExperienceForm.tsx` - Fully migrated to Bootstrap ✅
+       - `DoctorLocationContactForm.tsx` - Fully migrated to Bootstrap ✅
+       - `DoctorPhotoForm.tsx` - Fully migrated to Bootstrap ✅
+       - `DoctorAvailabilityForm.tsx` - Fully migrated to Bootstrap ✅
+       - `DoctorVerificationForm.tsx` - Fully migrated to Bootstrap ✅
+       - `DoctorCompletionContent.tsx` - Fully migrated to Bootstrap ✅
+     - **Reusable Components Created** (Pattern Recognition):
+       - `FileUploadArea.tsx` - Reusable file upload area with drag-and-drop styling ✅
+         - Used for: logo uploads, photo uploads, document uploads
+         - Features: loading states, file type hints, max files tracking
+       - `ImagePreview.tsx` - Reusable image preview with remove button ✅
+         - Used for: logo previews, photo previews, gallery image previews
+         - Features: Next.js Image optimization, responsive sizing, remove functionality
+       - `DocumentPreview.tsx` - Reusable document preview with file icons ✅
+         - Used for: verification document previews
+         - Features: file type icons (PDF, DOC, images), filename display, remove functionality
+     - **Component Extraction Complete** ✅ (December 2024)
+       - **8 Reusable Components Created**:
+         - `CharacterCounterTextarea.tsx` - Textarea with character counter (min/max validation) ✅
+         - `MultiSelectCheckboxField.tsx` - Multi-select with checkbox grid layout ✅
+         - `TagInputField.tsx` - Tag input with quick-add buttons and custom input ✅
+         - `SingleImageUploadField.tsx` - Single image upload with preview and delete ✅
+         - `GalleryUploadField.tsx` - Multiple image uploads with grid preview ✅
+         - `DocumentUploadField.tsx` - Document upload with file icons and preview ✅
+         - `RadioButtonGroupField.tsx` - Visual radio button group with icons/emojis ✅
+         - `DatePickerWithAgeField.tsx` - Date picker with automatic age calculation ✅
+       - **All 12 Forms Migrated**:
+         - `AddChildForm` → `DatePickerWithAgeField` + `RadioButtonGroupField` ✅
+         - `ClubBasicInfoForm` → `CharacterCounterTextarea` ✅
+         - `ClubPricingAgesForm` → `MultiSelectCheckboxField` (age groups + experience levels) ✅
+         - `ClubPhotosForm` → `SingleImageUploadField` + `GalleryUploadField` ✅
+         - `ClubVerificationForm` → `DocumentUploadField` ✅
+         - `DoctorBasicInfoForm` → `TagInputField` (credentials) ✅
+         - `DoctorBioExperienceForm` → `CharacterCounterTextarea` + `MultiSelectCheckboxField` + `TagInputField` ✅
+         - `DoctorPhotoForm` → `SingleImageUploadField` ✅
+         - `DoctorVerificationForm` → `DocumentUploadField` ✅
+       - **Code Reduction**: ~1,200+ lines of duplicated code removed ✅
+       - **All Forms Verified**: All 12 forms use `useOnboardingForm` hook ✅
+       - **Status**: ✅ Complete - All components exported, all forms migrated, zero linting errors
+     - **Migration Details**:
+       - All Tailwind utility classes replaced with Bootstrap equivalents ✅
+       - All shadcn/ui components replaced with Bootstrap components ✅
+       - Tailwind CSS and shadcn/ui completely removed from project ✅
+       - Yuvoo brand utilities applied throughout (`bg-yuvoo-primary`, `text-yuvoo-primary`, etc.)
+       - All functionality preserved (form validation, file uploads, React Hook Form integration)
+       - No linter errors
+     - Status: ✅ Phase 2.2 complete - All onboarding forms fully migrated to Bootstrap
+   - **Phase 3: Remove Tailwind Dependencies** ✅ **COMPLETE**
+     - All Tailwind packages removed from package.json ✅
+     - All Tailwind files deleted (globals.css, old shadcn components) ✅
+     - Configuration updated (layout.tsx, postcss.config.js, .vscode/settings.json) ✅
+     - 269 packages removed from node_modules ✅
+   - **Phase 4.1: Code Cleanup** ✅ **COMPLETE**
+     - All Tailwind classes removed ✅
+     - All shadcn component files deleted ✅
+     - Documentation updated (CLAUDE.md, memory-bank files, component docs) ✅
+   - **Phase 4.2: Testing** 📋 **READY FOR TESTING**
+     - Comprehensive testing checklist created ✅
+     - See `docs/TAILWIND_REMOVAL_TESTING_CHECKLIST.md` for testing procedures
+
+2. **Authentication System Integration** ✅ (Completed - Migrated to Server-Side)
+   - Stack Auth fully integrated using Server Actions pattern (no client-side provider)
+   - All authentication operations handled server-side for better security
    - All components localized to Romanian
    - Complete authentication flow (sign up, sign in, password reset, email verification)
+   - Forms use Server Actions instead of client-side hooks
    - Ready for end-to-end testing
 
-2. **Legal Pages Development** ✅ (Completed)
+3. **Legal Pages Development** ✅ (Completed)
    - Created all 4 legal pages with comprehensive Romanian content
    - Added footer legal links integration
    - Completed styling and SEO optimization
 
-3. **Homepage Development** ✅ (Completed)
+4. **Homepage Development** ✅ (Completed)
    - All homepage components created and integrated
    - Romanian language content throughout
    - Complete homepage experience with 9 sections
 
-4. **Component Development**
+5. **Onboarding System Development** 🚧 (In Progress)
+   - Database schema complete (onboarding_progress table, updated users/clubs/doctors tables) ✅
+   - Server Actions implemented (state management, progress tracking, resume functionality) ✅
+   - Validation schemas created (onboarding, child, club, doctor) ✅
+   - Drizzle migrations created ✅
+   - **Parent Onboarding (Phase 2)**: ✅ **COMPLETE**
+     - Welcome page ✅
+     - Add child profile form ✅
+     - Platform tour ✅
+     - Quiz introduction CTA ✅
+     - Testing & Polish ✅
+
+- **Club Admin Onboarding (Phase 3)**: ✅ **COMPLETE**
+  - Welcome page ✅
+  - Basic info form ✅
+  - Contact & Schedule step ✅
+  - Pricing & Ages step ✅
+  - Photo Upload step ✅
+  - Verification Documents step ✅
+  - Completion step ✅
+
+- **Doctor Onboarding (Phase 4)**: ✅ **COMPLETE**
+  - Step 1: Welcome page (`/onboarding/doctor/welcome`) ✅
+    - Personalized greeting with doctor name
+    - 8-step progress indicator
+    - Romanian copy with benefits list
+  - Step 2: Basic info (`/onboarding/doctor/basic-info`) ✅
+    - `DoctorBasicInfoForm` component with all required fields
+    - Specialty selection dropdown (4 specialties matching validation enum)
+    - Credentials multi-select with quick-add buttons and custom input
+    - First name, last name, title (optional) fields
+    - Server action creates doctor profile and tracks progress
+  - Step 3: Bio & Experience (`/onboarding/doctor/bio-experience`) ✅
+    - `DoctorBioExperienceForm` component with all required fields
+    - Bio textarea with character counter (100-2000 characters)
+    - Years of experience input (1-50)
+    - Secondary specialties multi-select (optional)
+    - Languages multi-select (required, minimum 1) with common languages and custom input
+    - Server action updates doctor profile and tracks progress
+  - Step 4: Location & Contact (`/onboarding/doctor/location-contact`) ✅
+    - `DoctorLocationContactForm` component with all required fields
+    - City dropdown (30 major Romanian cities)
+    - District/Sector input (optional)
+    - Address input (required, 10-300 characters)
+    - Phone input with Romanian format normalization (+40XXXXXXXXX)
+    - Email input (required)
+    - Website input (optional, URL validation)
+    - Server action updates doctor profile and tracks progress
+  - Step 5: Photo Upload (`/onboarding/doctor/photo`) ✅
+    - `DoctorPhotoForm` component with single photo upload (optional)
+    - Cloudinary integration for image uploads
+    - Image preview with remove functionality
+    - Professional photo recommendations
+    - Skip functionality ("Sari acest pas - adaug mai târziu")
+    - File validation (JPG, PNG, WebP, max 5MB)
+    - Server action updates doctor profile and tracks progress
+  - Step 6: Verification Documents (`/onboarding/doctor/verification`) ✅
+    - `DoctorVerificationForm` component with multi-document upload
+    - Minimum 4 documents required (maximum 10)
+    - Required documents: Diplomă de medic, Certificat de specialist, Licență de liberă practică, Certificat CMR
+    - Optional document: Asigurare malpraxis
+    - Cloudinary integration for document uploads
+    - Document preview with file type icons and filenames
+    - File validation (PDF, JPG, PNG, max 10MB per file)
+    - Verification timeline explanation (2-3 business days)
+    - Skip functionality ("Sari acest pas - verific mai târziu")
+    - Server action updates doctor profile, sets verification status to "in_review", and tracks progress
+  - Step 7: Availability Settings (`/onboarding/doctor/availability`) ✅
+    - `DoctorAvailabilityForm` component with availability settings
+    - Accepting new patients checkbox (default: true)
+    - Online consultations checkbox (default: false)
+    - Optional schedule builder with day, start time, and end time
+    - Dynamic schedule entries (add/remove functionality)
+    - Time pickers for start and end times
+    - Empty state message when no schedule entries
+    - Info box explaining why availability information is needed
+    - Server action updates doctor profile and tracks progress
+  - Step 8: Completion & Dashboard (`/onboarding/doctor/complete`) ✅
+    - `DoctorCompletionContent` component with success message
+    - Personalized greeting with doctor name and title
+    - Success icon with animation
+    - Success details (profile created, documents uploaded, verification timeline)
+    - Next steps section (verification process, email notification, profile visibility)
+    - What you can do section (manage consultations, edit profile, view requests, configure schedule)
+    - Action buttons (Dashboard, View Doctors)
+    - Auto-redirect after 5 seconds to dashboard
+    - Server action marks onboarding as complete and updates all statuses
+  - Romanian Language Review ✅
+    - Reviewed all doctor onboarding form components for Romanian text consistency
+    - Checked all error messages and validation text
+    - Reviewed all page headers and descriptions
+    - Updated COPY_LIBRARY.md with comprehensive doctor onboarding copy
+    - Fixed any translation issues and ensured consistency
+  - Status: ✅ **COMPLETE** - All 8 steps implemented and functional, Romanian language review complete
+
+5. **Component Development**
    - Creating feature-specific components as needed
    - Adapting existing components to Yuvoo branding
    - Ensuring SEO optimization
 
 ## Recent Changes
+
+### Stack Auth Server-Side Migration ✅ (December 2024)
+
+- **Migrated**: Stack Auth from client-side to server-side architecture
+  - Removed `StackProvider` and `StackAuthProvider` client components
+  - Created Server Actions for all authentication operations (`signInAction`, `signUpAction`, `forgotPasswordAction`, `resetPasswordAction`, `verifyEmailAction`)
+  - Updated all authentication forms to use Server Actions instead of `useStackApp` hooks
+  - Converted `EmailConfirmationForm` from client component to server component
+  - Benefits: Better security, smaller client bundle, better SEO, simpler architecture
+  - Status: ✅ Complete - All authentication operations are now server-side only
+  - Documentation: See `docs/STACK_AUTH_SERVER_MIGRATION_PLAN.md` for details
 
 ### Authentication System Integration ✅
 
@@ -40,10 +254,11 @@
   - All phases documented with implementation details
   - Status: ✅ Complete - Serves as reference for authentication system
 
-- **Created**: Stack Auth provider wrapper (`src/providers/StackAuthProvider.tsx`) ✅
-  - Client component wrapper for Stack Auth's StackProvider
-  - Integrated StackProvider and StackTheme in root layout
-  - Status: ✅ Complete - Stack Auth context available globally
+- **Migrated**: Stack Auth to server-side only ✅
+  - Removed StackProvider and StackAuthProvider (client-side components)
+  - All authentication operations now use Server Actions
+  - Forms updated to use Server Actions instead of useStackApp hooks
+  - Status: ✅ Complete - Fully server-side authentication
 
 - **Created**: Error message utility (`src/lib/auth/errors.ts`) ✅
   - Centralized error message mapping for Stack Auth errors
@@ -51,36 +266,48 @@
   - `getErrorMessage()` utility function for consistent error handling
   - Status: ✅ Complete - Used across all authentication forms
 
+- **Created**: Authentication Server Actions (`src/app/actions/auth.ts`) ✅
+  - `signInAction` - Sign in with email/password (server-side)
+  - `signUpAction` - Sign up with email/password (server-side)
+  - `forgotPasswordAction` - Send password reset email (server-side)
+  - `resetPasswordAction` - Reset password with token (server-side)
+  - `verifyEmailAction` - Verify email with token (server-side)
+  - All actions return success/error responses with Romanian error messages
+  - Status: ✅ Complete - All authentication operations server-side
+
 - **Updated**: SignInForm component (`src/components/Form/SignInForm.tsx`) ✅
-  - Integrated Stack Auth `signInWithCredential` method
+  - Migrated from `useStackApp` hook to `signInAction` Server Action
+  - Uses `useTransition` for loading states
   - Added loading states and error handling
   - All text translated to Romanian (placeholders, validation, buttons)
   - Redirects to dashboard on successful login
-  - Status: ✅ Complete - Fully functional
+  - Status: ✅ Complete - Fully functional with Server Actions
 
 - **Updated**: SignUpMain component (`src/components/Form/SignUpMain.tsx`) ✅
-  - Integrated Stack Auth `signUpWithCredential` method
+  - Migrated from `useStackApp` hook to `signUpAction` Server Action
+  - Uses `useTransition` for loading states
   - Added password confirmation validation
   - Added loading states and error handling
   - All text translated to Romanian
   - Redirects to dashboard on successful signup
-  - Status: ✅ Complete - Fully functional
+  - Status: ✅ Complete - Fully functional with Server Actions
 
 - **Updated**: ForgotForm component (`src/components/Form/ForgotForm.tsx`) ✅
-  - Integrated Stack Auth `sendForgotPasswordEmail` method
+  - Migrated from `useStackApp` hook to `forgotPasswordAction` Server Action
+  - Uses `useTransition` for loading states
   - Added success message display
   - Added loading states and error handling
   - All text translated to Romanian
-  - Status: ✅ Complete - Fully functional
+  - Status: ✅ Complete - Fully functional with Server Actions
 
-- **Created**: ResetPasswordForm component (`src/components/Form/ResetPasswordForm.tsx`) ✅
-  - New component for password reset with token
+- **Updated**: ResetPasswordForm component (`src/components/Form/ResetPasswordForm.tsx`) ✅
+  - Migrated from `useStackApp` hook to `resetPasswordAction` Server Action
+  - Uses `useTransition` for loading states
   - Extracts token from URL search params
-  - Uses Stack Auth `resetPasswordWithToken` method
   - Password confirmation validation
   - Auto-redirects to login after successful reset
   - All text translated to Romanian
-  - Status: ✅ Complete - Fully functional
+  - Status: ✅ Complete - Fully functional with Server Actions
 
 - **Created**: ResetPasswordMain component (`src/components/Auth/ResetPasswordMain.tsx`) ✅
   - Wrapper component for reset password page
@@ -92,15 +319,15 @@
   - Wrapped ResetPasswordMain in Suspense (for useSearchParams)
   - Status: ✅ Complete
 
-- **Created**: EmailConfirmationForm component (`src/components/Form/EmailConfirmationForm.tsx`) ✅
-  - New component for email verification
-  - Extracts token from URL search params
-  - Uses Stack Auth `verifyEmail` method
-  - Automatic verification on component mount
-  - Three states: Verifying, Success, Error
+- **Migrated**: EmailConfirmationForm component (`src/components/Form/EmailConfirmationForm.tsx`) ✅
+  - Converted from client component to server component
+  - Uses `verifyEmailAction` Server Action
+  - Receives token as prop from page component
+  - Automatic verification on page load (server-side)
+  - Error and success states handled server-side
   - Auto-redirects to login after successful verification
   - All text translated to Romanian
-  - Status: ✅ Complete - Fully functional
+  - Status: ✅ Complete - Fully functional as server component
 
 - **Created**: EmailConfirmationMain component (`src/components/Auth/EmailConfirmationMain.tsx`) ✅
   - Wrapper component for email confirmation page
@@ -125,20 +352,31 @@
   - Status: ✅ Complete - All pages optimized for SEO
 
 - **Updated**: Stack Auth configuration (`src/lib/auth/stack.ts`) ✅
+  - Server-side only initialization (no client-side provider needed)
   - Added `passwordReset` URL configuration
   - Added `emailVerification` URL configuration
-  - Status: ✅ Complete - Stack Auth URLs configured correctly
+  - Proxy pattern for lazy initialization
+  - Status: ✅ Complete - Stack Auth configured for server-side only usage
 
 - **Updated**: Routes configuration (`src/lib/routes.ts`) ✅
   - Added `emailConfirmation` route
   - Status: ✅ Complete - All auth routes defined
 
-**Authentication Flow Status**: ✅ **COMPLETE**
+**Authentication Flow Status**: ✅ **COMPLETE - Server-Side Migration**
 
+- **Architecture**: All authentication operations use Server Actions (no client-side provider)
 - Registration: User signs up → Email verification sent → User verifies email → Can login ✅
 - Login: User signs in → Redirected to dashboard ✅
 - Password Reset: User requests reset → Email sent → User resets password → Can login ✅
 - Email Verification: User clicks email link → Email verified automatically → Redirected to login ✅
+
+**Migration Completed**:
+
+- ✅ Removed StackProvider and StackAuthProvider
+- ✅ Created Server Actions for all authentication operations
+- ✅ Updated all forms to use Server Actions
+- ✅ Converted EmailConfirmationForm to server component
+- ✅ Updated documentation
 
 **Next Step**: End-to-end testing of complete authentication flow
 
@@ -247,7 +485,139 @@ Current homepage structure (`src/app/(public)/page.tsx`):
 - **Decision**: Keep single alias pattern (no additional aliases needed)
 - **Status**: ✅ Configured and documented
 
+### Onboarding System Development ✅ (Phase 2 Complete, Phase 3 Complete, Phase 4 In Progress)
+
+- **Created**: Onboarding database schema (`src/lib/db/schema.ts`) ✅
+  - `onboarding_progress` table for cross-session state tracking
+  - Updated `users` table with `onboardingCompleted` and `profileCompletionPercentage` fields
+  - Updated `clubs` and `doctors` tables with verification fields
+  - Status: ✅ Complete - Schema defined and migration created
+
+- **Created**: Onboarding Server Actions (`src/app/actions/onboarding.ts`) ✅
+  - State management: `startOnboarding()`, `getOnboardingProgress()`, `updateOnboardingStep()`
+  - Progress tracking: `markStepComplete()`, `saveStepData()`
+  - Resume functionality: Automatic progress retrieval
+  - Parent onboarding: `addChildOnboarding()`, `completeParentOnboarding()` ✅
+  - Club admin onboarding: `createClubOnboarding()` ✅, `submitClubForVerification()`, `completeClubOnboarding()`
+  - Doctor onboarding: `createDoctorOnboarding()`, `submitDoctorForVerification()`, `completeDoctorOnboarding()`
+  - Status: ✅ Complete - All Server Actions implemented with proper TypeScript types
+
+- **Created**: Onboarding validation schemas ✅
+  - `src/lib/validations/onboarding.ts` - Onboarding state management schemas
+  - `src/lib/validations/child.ts` - Child profile validation
+  - `src/lib/validations/club.ts` - Club profile validation (basic info, contact, pricing, photos, verification)
+  - `src/lib/validations/doctor.ts` - Doctor profile validation (basic info, bio, location, photos, verification, availability)
+  - Status: ✅ Complete - All validation schemas with Romanian error messages
+
+- **Created**: Drizzle migration (`drizzle/0000_clever_tyger_tiger.sql`) ✅
+  - Migration for onboarding_progress table
+  - Status: ✅ Complete - Ready for database push
+
+- **Created**: Onboarding base components ✅
+  - `OnboardingLayout` - Shared UI wrapper with Yuvoo branding
+  - `OnboardingProgress` - Visual progress indicator (mobile/desktop responsive)
+  - `OnboardingNavigation` - Navigation buttons (back/next/skip/finish)
+  - Status: ✅ Complete - All base components created and tested
+
+- **Created**: Onboarding routing structure ✅
+  - Parent onboarding routes: `/onboarding/parent/*` (5 steps) ✅
+  - Club admin onboarding routes: `/onboarding/club/*` (7 steps) ✅
+  - Doctor onboarding routes: `/onboarding/doctor/*` (8 steps) ✅
+  - Status: ✅ Parent routes complete, ✅ Club routes complete, ✅ Doctor routes complete
+
+- **Parent Onboarding (Phase 2)**: ✅ **COMPLETE**
+  - Step 1: Welcome page (`/onboarding/parent/welcome`) ✅
+  - Step 2: Add child profile (`/onboarding/parent/add-child`) ✅
+    - `AddChildForm` component with React Hook Form + Zod validation
+    - Date picker with age calculation (4-14 years)
+    - Gender selection (optional)
+  - Step 3: Platform tour (`/onboarding/parent/tour`) ✅
+    - 3-step process visualization (AI Coach Quiz, Găsești Cluburi, Rezervi & Probă)
+  - Step 4: Quiz introduction (`/onboarding/parent/quiz-intro`) ✅
+    - Personalized child name display
+    - Primary CTA: "Începe Chestionarul Acum"
+    - Secondary CTA: "Mai târziu, mergi la dashboard"
+  - Step 5: Complete (redirects automatically) ✅
+  - Testing & Polish: ✅ **COMPLETE**
+    - End-to-end testing completed
+    - Romanian language review completed
+    - Form validation tested
+    - Navigation flow verified
+    - UX refinement completed
+    - Testing report created (`docs/ONBOARDING_TESTING_REPORT.md`)
+
+- **Club Admin Onboarding (Phase 3)**: 🚧 **IN PROGRESS**
+  - Step 1: Welcome page (`/onboarding/club/welcome`) ✅
+    - Personalized greeting with admin name
+    - 7-step progress indicator
+    - Romanian copy with benefits list
+  - Step 2: Basic info (`/onboarding/club/basic-info`) ✅
+    - `ClubBasicInfoForm` component with all required fields
+    - Sport type dropdown (from SPORT_TYPES constant)
+    - City dropdown (30 major Romanian cities)
+    - Description textarea with character counter
+    - Slug generation utility (`generateSlug` in `src/lib/utils.ts`)
+    - Server action creates club and tracks progress
+  - Pending: Contact & Schedule, Pricing & Ages, Photo Upload, Verification, Completion
+
+- **Utility Functions Created**:
+  - `generateSlug()` in `src/lib/utils.ts` ✅
+    - Handles Romanian diacritics
+    - Converts to SEO-friendly URL slugs
+    - Used for club slug generation
+  - `normalizePhoneNumber()` in `src/lib/utils.ts` ✅
+    - Normalizes Romanian phone numbers to +40XXXXXXXXX format
+    - Handles various input formats (with spaces, leading zeros, missing +)
+    - Used for club contact phone validation
+
+### Bootstrap Component Library Development ✅ (Phase 1.1 & 1.2 Complete)
+
+- **Created**: Bootstrap Component Library (`src/components/UI/`) ✅
+  - `BootstrapButton.tsx` - Replaces shadcn/ui Button with `bd-btn` pattern ✅
+  - `BootstrapInput.tsx` - Replaces shadcn/ui Input with `login__input` pattern ✅
+  - `BootstrapTextarea.tsx` - Replaces shadcn/ui Textarea with `form-control` pattern ✅
+  - `BootstrapSelect.tsx` - Replaces shadcn/ui Select with `form-select` pattern ✅
+  - `BootstrapAlert.tsx` - Replaces shadcn/ui Alert with Bootstrap alert classes ✅
+  - `BootstrapProgress.tsx` - Replaces shadcn/ui Progress with Bootstrap progress bar ✅
+  - `bootstrap-index.ts` - Central export file for easy imports ✅
+  - `BOOTSTRAP_COMPONENTS.md` - Comprehensive documentation with usage examples and migration guide ✅
+  - All components follow existing Bootstrap patterns from codebase ✅
+  - All components TypeScript-typed with proper props ✅
+  - Status: ✅ Phase 1.1 complete - Ready for Phase 2 (Replace shadcn Components)
+
+- **Created**: Bootstrap Utility API Extensions (`public/assets/scss/utils/`) ✅
+  - `_yuvoo-utilities.scss` - Custom Yuvoo brand utilities using Bootstrap naming conventions ✅
+  - Background color utilities: `bg-yuvoo-primary`, `bg-yuvoo-secondary`, `bg-yuvoo-accent`, plus light variants ✅
+  - Text color utilities: `text-yuvoo-primary`, `text-yuvoo-secondary`, `text-yuvoo-accent`, `text-yuvoo-heading`, `text-yuvoo-body` ✅
+  - Border color utilities: `border-yuvoo-primary`, `border-yuvoo-secondary`, `border-yuvoo-accent` ✅
+  - Hover state utilities: `bg-yuvoo-primary-hover`, `text-yuvoo-primary-hover`, etc. ✅
+  - Focus state utilities: `focus-yuvoo-primary`, `focus-yuvoo-secondary` ✅
+  - Shadow utilities: `shadow-yuvoo-primary`, `shadow-yuvoo-secondary`, `shadow-yuvoo-accent` ✅
+  - Responsive utilities: `d-md-none-yuvoo`, `d-md-block-yuvoo`, `d-md-flex-yuvoo` ✅
+  - Spacing utilities: `section-padding-yuvoo`, `container-yuvoo` ✅
+  - Button variant utilities: `btn-yuvoo-primary`, `btn-yuvoo-secondary`, `btn-yuvoo-outline-primary`, `btn-yuvoo-outline-secondary` ✅
+  - All utilities use CSS variables from `_root.scss` (no hardcoded colors) ✅
+  - Imported in `public/assets/scss/main.scss` ✅
+  - Added to `public/assets/scss/utils/_index.scss` for proper module forwarding ✅
+  - `YUVOO_UTILITIES.md` - Comprehensive documentation with usage examples and migration guide ✅
+  - Status: ✅ Phase 1.2 complete - Bootstrap utilities ready for use throughout application
+
 ### Documentation Updates
+
+- **Created**: `CLAUDE.md` - Comprehensive project guide for Claude Code ✅
+  - **Content**: Project overview, quick start, development commands, architecture patterns, critical development rules, documentation structure, external services, component adaptation, development workflow, testing guidelines, troubleshooting, quick reference
+  - **Features**: Table of contents, expanded examples, code snippets, testing checklists, troubleshooting section, quick reference patterns
+  - **Status**: ✅ Complete - Comprehensive guide for working with the codebase
+
+- **Created**: `docs/TAILWIND_REMOVAL_PLAN.md` - Comprehensive Bootstrap migration plan ✅
+  - **Content**: Complete migration strategy to remove Tailwind CSS and shadcn/ui, keep only Bootstrap 5.3.3 and SCSS
+  - **Features**: Phase-by-phase migration plan (4 weeks), Bootstrap Utility API usage guide, component replacement mappings (shadcn → Bootstrap), comprehensive Bootstrap 5.3 documentation links, file removal list, risk assessment, success criteria
+  - **Status**: ✅ Complete - Migration completed, serves as historical reference for Bootstrap-only architecture
+
+- **Created**: `docs/REUSABLE_COMPONENTS_LIST.md` - Comprehensive Bootstrap component inventory ✅
+  - **Content**: Complete list of ~80+ reusable Bootstrap components, component categories (Layout, Features, Common, etc.), Bootstrap 5.3 component reference with documentation links, shadcn → Bootstrap component mapping table
+  - **Features**: Form components reference, Layout & Grid reference, Utilities reference, Customization reference, Bootstrap Utility API examples
+  - **Status**: ✅ Complete - Complete reference for all reusable Bootstrap components in the project
 
 - **Created**: `docs/ PROMPTING_RULES_FOR_CODEGEN.md` - Comprehensive code generation guidelines
   - **Content**: Next.js 16 patterns, Cache Components rules, file naming, error handling, TypeScript patterns, Romanian language requirements
@@ -262,12 +632,13 @@ Current homepage structure (`src/app/(public)/page.tsx`):
   - **Status**: ✅ Complete - Complete reference for brand consistency across all touchpoints
 
 - **Created**: `docs/COMPONENTS_GUIDE.md` - Comprehensive components guide
-  - **Content**: Component organization, styling approach (Bootstrap + Tailwind), button patterns, input patterns, card types (club, doctor, sport), modal & toast guidelines, layout components, naming conventions, component patterns (Server/Client Components), best practices, and usage examples
+  - **Content**: Component organization, styling approach (Bootstrap 5.3.3 + SCSS), button patterns, input patterns, card types (club, doctor, sport), modal & toast guidelines, layout components, naming conventions, component patterns (Server/Client Components), best practices, and usage examples
   - **Status**: ✅ Complete - Complete reference for creating consistent UI components
 
 - **Created**: `docs/COPY_LIBRARY.md` - Comprehensive copy library
   - **Content**: Single source of truth for all user-facing text including CTAs, form microcopy, error messages, success messages, empty states, loading states, modal messages, toast notifications, quiz copy, club/doctor copy, navigation labels, trust messages, onboarding copy, search & filters, booking copy, profile & settings, help & support, legal & compliance, email templates, and usage guidelines
-  - **Status**: ✅ Complete - Complete reference for all Romanian language copy across the platform
+  - **Updated**: Added comprehensive Doctor Onboarding Copy section with all text from all 8 steps (Welcome, Basic Info, Bio & Experience, Location & Contact, Photo, Verification, Availability, Completion)
+  - **Status**: ✅ Complete - Complete reference for all Romanian language copy across the platform, including full doctor onboarding flow
 
 - **Updated**: `docs/COPYWRITING_GUIDE.md` - Comprehensive copywriting guide
   - **Content**: Brand essence, brand voice (70% warm & supportive, 30% expert & confident), writing principles (clarity, empathy, microcopy, trust building, positivity), language & style guidelines, writing structure, content types (UI, marketing, email, help, errors), writing templates, common mistakes, content checklist, and quick reference
@@ -276,6 +647,212 @@ Current homepage structure (`src/app/(public)/page.tsx`):
 - **Created**: `docs/DATA_MODELS.md` - Comprehensive data models documentation
   - **Content**: Core models (User, Child, Club, Doctor, Quiz, Booking, Favorite, Review), TypeScript interfaces, database schema mappings, relationships, enums, field conventions, usage examples, common patterns, and database vs TypeScript differences
   - **Status**: ✅ Complete - Complete reference for all data structures and models used in the platform
+
+- **Created**: `docs/ONBOARDING_WORKFLOW.md` - Comprehensive onboarding workflow documentation ✅
+  - **Content**: Complete onboarding system design, user flows for parent/club/doctor onboarding, step-by-step implementation guide, component specifications, validation schemas, Server Actions, database schema, UI/UX guidelines, and implementation phases
+  - **Status**: ✅ Complete - Comprehensive reference for onboarding system implementation
+  - **Updated**: Marked Contact & Schedule, Pricing & Ages, and Photo Upload steps as complete for Club Admin Onboarding
+  - **Updated**: Marked Welcome & Basic Info step as complete for Doctor Onboarding
+
+### Doctor Onboarding Implementation ✅ (All 8 Steps Complete)
+
+- **Step 1: Welcome** (`/onboarding/doctor/welcome`) ✅
+  - Created welcome page with `OnboardingLayout` and `OnboardingProgress`
+  - Personalized greeting with doctor name
+  - 8-step progress indicator
+  - Romanian copy with benefits list (Informații profesionale, Specializare și experiență, Cabinet și program, Documente de verificare)
+  - Estimated time display (10-15 minute)
+  - Navigation to basic info step
+  - Status: ✅ Complete - Fully functional with proper UI components
+
+- **Step 2: Basic Info** (`/onboarding/doctor/basic-info`) ✅
+  - Created `DoctorBasicInfoForm` component
+  - First name and last name fields (required)
+  - Professional title field (optional)
+  - Specialty selection dropdown with 4 options:
+    - Ortopedie pediatrică (orthopedist)
+    - Nutriție pediatrică (nutritionist)
+    - Psihologie sportivă (psychologist)
+    - Medicină sportivă pediatrică (sports_medicine)
+  - Credentials multi-select with:
+    - Quick-add buttons for common credentials (MD, Dr., Conf. Dr., Prof. Dr., Specialist, Primar, Board Certified, CMR)
+    - Custom credential input with add/remove functionality
+    - Minimum 1 credential required (validated)
+  - React Hook Form with Zod validation
+  - Romanian labels and error messages
+  - Server action: `createDoctorOnboarding` (creates doctor profile, tracks progress, moves to step 3)
+  - Status: ✅ Complete - Fully functional with validation and progress tracking
+
+- **Step 3: Bio & Experience** (`/onboarding/doctor/bio-experience`) ✅
+  - Created `DoctorBioExperienceForm` component
+  - Bio textarea with character counter (100-2000 characters, required)
+  - Years of experience input (1-50, required)
+  - Secondary specialties multi-select (optional) with 6 specialty options
+  - Languages multi-select (required, minimum 1) with:
+    - Common languages: Română, Engleză, Maghiară, Germană, Franceză, Italiană, Spaniolă
+    - Custom language input with add functionality
+    - Selected languages display with remove functionality
+  - React Hook Form with Zod validation
+  - Romanian labels and error messages
+  - Server action: `updateDoctorBioExperience` (updates doctor profile, tracks progress, moves to step 4)
+  - Status: ✅ Complete - Fully functional with validation and progress tracking
+
+- **Step 4: Location & Contact** (`/onboarding/doctor/location-contact`) ✅
+  - Created `DoctorLocationContactForm` component
+  - City dropdown with 30 major Romanian cities (required)
+  - District/Sector input (optional)
+  - Address input (required, 10-300 characters) with help text
+  - Phone input with Romanian format normalization (+40XXXXXXXXX, required)
+  - Email input (required, email validation)
+  - Website input (optional, URL validation)
+  - React Hook Form with Zod validation
+  - Romanian labels and error messages
+  - Server action: `updateDoctorLocationContact` (updates doctor profile, tracks progress, moves to step 5)
+  - Status: ✅ Complete - Fully functional with validation and progress tracking
+
+- **Step 5: Photo Upload** (`/onboarding/doctor/photo`) ✅
+  - Created `DoctorPhotoForm` component
+  - Single professional photo upload (optional step)
+  - Cloudinary integration for image uploads (folder: `yuvoo/doctors/photos`)
+  - Image preview with remove functionality
+  - Professional photo recommendations (professional background, clothing, clear frontal image)
+  - Skip functionality ("Sari acest pas - adaug mai târziu")
+  - File validation (JPG, PNG, WebP, max 5MB)
+  - Upload area with drag-and-drop styling
+  - Loading states during upload
+  - React Hook Form with Zod validation
+  - Romanian labels and error messages
+  - Server action: `updateDoctorPhoto` (updates doctor profile, tracks progress, moves to step 6)
+  - Status: ✅ Complete - Fully functional with Cloudinary integration and progress tracking
+
+- **Step 6: Verification Documents** (`/onboarding/doctor/verification`) ✅
+  - Created `DoctorVerificationForm` component
+  - Multi-document upload (4-10 documents required, minimum 4 for verification)
+  - Required documents clearly listed:
+    - Diplomă de medic (required)
+    - Certificat de specialist (required)
+    - Licență de liberă practică (required)
+    - Certificat Colegiul Medicilor din România (required)
+    - Asigurare malpraxis (optional)
+  - Cloudinary integration for document uploads (folder: `yuvoo/doctors/verification`)
+  - Document preview with file type icons (PDF, DOC, images) and filenames
+  - Remove functionality for uploaded documents
+  - File validation (PDF, JPG, PNG, max 10MB per file)
+  - Verification timeline explanation (2-3 business days)
+  - Skip functionality ("Sari acest pas - verific mai târziu")
+  - Info box with detailed document requirements
+  - Upload area with drag-and-drop styling
+  - Loading states during upload
+  - React Hook Form with Zod validation
+  - Romanian labels and error messages
+  - Server action: `updateDoctorVerification` (updates doctor profile, sets verification status to "in_review", tracks progress, moves to step 7)
+  - Status: ✅ Complete - Fully functional with Cloudinary integration and progress tracking
+
+- **Step 7: Availability Settings** (`/onboarding/doctor/availability`) ✅
+  - Created `DoctorAvailabilityForm` component
+  - Accepting new patients checkbox (default: true) with description
+  - Online consultations checkbox (default: false) with description
+  - Optional schedule builder with:
+    - Day selector (Luni-Duminică in Romanian)
+    - Start time input (HTML5 time picker)
+    - End time input (HTML5 time picker)
+    - Add/remove schedule entries dynamically
+  - Empty state message when no schedule entries are added
+  - Info box explaining why availability information is needed
+  - Upload area with drag-and-drop styling
+  - Loading states during form submission
+  - React Hook Form with Zod validation
+  - Romanian labels and error messages
+  - Server action: `updateDoctorAvailability` (updates doctor profile with availability settings, saves schedule as JSONB array, tracks progress, moves to step 8)
+  - Status: ✅ Complete - Fully functional with validation and progress tracking
+
+- **Step 8: Completion & Dashboard** (`/onboarding/doctor/complete`) ✅
+  - Created `DoctorCompletionContent` component
+  - Personalized success message with doctor name and title
+  - Success icon with animated ping effect
+  - Success details section:
+    - Profile created confirmation
+    - Documents uploaded confirmation
+    - Verification process timeline (2-3 business days)
+  - Next steps section:
+    - Document verification (2-3 days)
+    - Email notification on approval
+    - Profile visible on platform
+  - What you can do section:
+    - Manage consultations
+    - Edit professional profile
+    - View parent requests
+    - Configure schedule
+  - Action buttons:
+    - "Mergi la Dashboard" (primary CTA)
+    - "Vezi Doctori" (secondary CTA)
+  - Auto-redirect after 5 seconds to dashboard
+  - Server action: `completeDoctorOnboarding` (updates user onboarding status, marks profile complete, updates progress, returns success/error)
+  - Page fetches doctor information from database for personalized display
+  - Romanian labels and messages throughout
+  - Status: ✅ Complete - Fully functional with completion flow and dashboard redirect
+
+### Club Admin Onboarding Implementation ✅ (Steps 2-5 Complete)
+
+- **Step 3: Contact & Schedule** (`/onboarding/club/contact-schedule`) ✅
+  - Created `ClubContactScheduleForm` component
+  - Phone input with Romanian format normalization
+  - Email and website inputs
+  - Dynamic schedule builder with day/time entries
+  - Phone number normalization utility
+  - Server action: `updateClubContactSchedule`
+  - Status: ✅ Complete - Fully functional with validation
+
+- **Step 4: Pricing & Ages** (`/onboarding/club/pricing-ages`) ✅
+  - Created `ClubPricingAgesForm` component
+  - Dynamic pricing builder (multiple pricing options)
+  - Age group selector (ages 4-14, multi-select)
+  - Experience level selector (beginner, intermediate, advanced, multi-select)
+  - Server action: `updateClubPricingAges`
+  - Status: ✅ Complete - Fully functional with validation
+
+- **Step 5: Photo Upload** (`/onboarding/club/photos`) ✅
+  - Created `ClubPhotosForm` component
+  - Logo upload with preview and removal
+  - Gallery upload (multiple images, 3-10 required)
+  - Cloudinary integration implemented
+  - File validation (JPG, PNG, WebP, max 5MB)
+  - Image preview grid with remove functionality
+  - Upload and delete server actions
+    - Server action: `updateClubPhotos`
+    - Status: ✅ Complete - Fully functional with Cloudinary integration
+  - Step 6: Verification Documents (`/onboarding/club/verification`) ✅
+    - `ClubVerificationForm` component
+    - Document upload (multiple documents, 2-5 required)
+    - Document types supported (PDF, DOC, DOCX, JPG, PNG)
+    - Document validation (type and size checks, max 10MB per file)
+    - Document preview with file type icons and filenames
+    - Remove functionality for uploaded documents
+    - Upload and delete server actions (`uploadDocumentAction`, `deleteDocumentAction`)
+    - Server action: `updateClubVerification`
+    - Info box explaining required documents (certificat înregistrare, asigurare)
+    - Status: ✅ Complete - Fully functional with document upload support
+  - Step 7: Completion (`/onboarding/club/complete`) ✅
+    - `ClubCompletionContent` component
+    - Success message with animated checkmark icon
+    - Personalized greeting with user name
+    - Success checklist showing completed steps
+    - Verification timeline explanation (1-3 business days)
+    - Next steps guidance (explore dashboard, complete profile, await verification, receive bookings)
+    - Manual navigation buttons (Go to Dashboard, View Clubs)
+    - Auto-redirect to dashboard after 5 seconds
+    - Server action: `completeClubOnboarding` (marks onboarding complete, updates user and club status)
+    - Status: ✅ Complete - Full onboarding flow complete with success messaging
+
+- **Onboarding Layout Fix** ✅
+  - Fixed prerendering issue with Next.js 16 Cache Components
+  - Removed incompatible `export const dynamic = "force-dynamic"`
+  - Routes now dynamic by default via `cookies()` access
+  - Status: ✅ Complete - Build errors resolved
+
+- **Created**: `docs/ONBOARDING_PHASE_1.md` - Parent onboarding phase 1 documentation ✅
+  - **Content**: Detailed specifications for parent onboarding flow (5 steps), component requirements, validation rules, Romanian copy, and implementation checklist
+  - **Status**: ✅ Complete - Reference for parent onboarding implementation
 
 ### Next.js 16 Upgrade & Cache Components Migration ✅
 
@@ -322,9 +899,9 @@ Current homepage structure (`src/app/(public)/page.tsx`):
 **Action Plan**:
 
 - Adapt existing components (Class→Club, Teacher→Doctor, Program→Sport)
-- Keep Bootstrap for existing components initially
-- Use Tailwind for new components (Quiz, Dashboard)
-- Gradual migration strategy
+- Use Bootstrap 5.3.3 + SCSS for all components ✅
+- Custom Yuvoo utilities via Bootstrap Utility API ✅
+- Bootstrap wrapper components for consistent API ✅
 - See `designSystem.md` for detailed adaptation plan
 
 ## Active Decisions & Considerations
@@ -337,7 +914,7 @@ Current homepage structure (`src/app/(public)/page.tsx`):
 - Server Actions pattern
 - Drizzle ORM
 - Stack Auth
-- Tailwind CSS + shadcn/ui
+- Bootstrap 5.3.3 + SCSS ✅
 - Modular service layer
 
 **Current Codebase**:
@@ -351,26 +928,27 @@ Current homepage structure (`src/app/(public)/page.tsx`):
 
 ### Technology Stack Alignment
 
-**Current Stack** (Kindedo Theme):
+**Current Stack** (Yuvoo):
 
 - ✅ Next.js 16.0.8 with Cache Components (upgraded from 15.3.1) ✅
 - ✅ React 19.2.1 (upgraded from 19.0.0) ✅
 - ✅ TypeScript 5.x (matches requirements)
-- ✅ Bootstrap 5.3.3 + SCSS (actual, to be gradually migrated)
+- ✅ Bootstrap 5.3.3 + SCSS (all components) ✅
 - ✅ Redux Toolkit (actual, to be gradually replaced with Server Actions)
 
-**To Setup**:
+**Completed**:
 
-- [ ] Database setup (Neon + Drizzle)
-- [ ] Authentication setup (Stack Auth)
-- [x] Tailwind CSS setup (for new components) ✅ - Completed and upgraded to v4.1.17
-- [ ] shadcn/ui installation (for new components)
+- [x] Database setup (Neon + Drizzle) ✅
+- [x] Authentication setup (Stack Auth) ✅
+- [x] Bootstrap 5.3.3 setup (all components) ✅
+- [x] Bootstrap wrapper components created ✅
+- [x] Tailwind CSS and shadcn/ui removed ✅
 
-**Migration Strategy**:
+**Styling Architecture**:
 
-- Keep Bootstrap/SCSS for existing adapted components
-- Use Tailwind for new components (Quiz, Dashboard, etc.)
-- Gradually migrate as components are refactored
+- All components use Bootstrap 5.3.3 + SCSS ✅
+- Custom Yuvoo utilities via Bootstrap Utility API ✅
+- Bootstrap wrapper components for consistent API ✅
 - See `designSystem.md` for component adaptation plan
 
 ### Development Environment
@@ -392,8 +970,8 @@ Current homepage structure (`src/app/(public)/page.tsx`):
    - [x] Verify/upgrade Next.js to latest version ✅ (Upgraded to 16.0.8)
    - [x] Enable Cache Components ✅ (Migrated to Cache Components mode)
    - [x] Install required dependencies ✅
-   - [x] Set up Tailwind CSS ✅ (v4.1.17 installed)
-   - [x] Install shadcn/ui components ✅ (Initialized)
+   - [x] Set up Bootstrap 5.3.3 ✅ (all components)
+   - [x] Create Bootstrap wrapper components ✅ (BootstrapButton, BootstrapInput, etc.)
    - [ ] Remove/replace Bootstrap if needed (gradual migration planned)
 
 2. **Database Setup**
@@ -593,6 +1171,8 @@ Current homepage structure (`src/app/(public)/page.tsx`):
 - **Wireframes**: See `docs/WIREFRAMES.md` for detailed page structures, component placement, and layout specifications for all major pages
 - **Legal Pages Plan**: See `docs/LEGAL_PAGES_DEVELOPMENT_PLAN.md` for comprehensive legal pages development plan, content templates, and implementation guidelines
 - **Authentication Integration Plan**: See `docs/AUTH_INTEGRATION_PLAN.md` for complete authentication system integration details, Stack Auth setup, and Romanian localization guidelines
+- **Stack Auth Server Migration**: See `docs/STACK_AUTH_SERVER_MIGRATION_PLAN.md` for migration plan and implementation details
+- **Claude Guide**: See `CLAUDE.md` for comprehensive project guide, quick start, development commands, architecture patterns, troubleshooting, and quick reference
 - **Phase 1 Focus**: Sports only, ages 4-14, Bucharest
 - **No Payments**: Payment-enabled bookings in Phase 2
 - **No Calendar**: Family calendar in Phase 2

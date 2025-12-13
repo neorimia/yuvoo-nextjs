@@ -36,7 +36,7 @@ yuvoo-nextjs/
 │   └── actions/                 # Server Actions (main backend)
 │
 ├── components/
-│   ├── ui/                      # shadcn/ui components (planned)
+│   ├── ui/                      # Bootstrap wrapper components
 │   ├── layout/                  # Header, Footer, Sidebar
 │   ├── features/                # Feature-specific components
 │   │   └── clubs/               # Club components (✅ created)
@@ -61,8 +61,69 @@ yuvoo-nextjs/
 │   └── favorites/
 │
 ├── types/                        # Global TypeScript types
-└── styles/                       # Global styles + Tailwind
+└── styles/                       # Global styles (Bootstrap + SCSS)
 ```
+
+## Reusable Component Patterns
+
+### Onboarding Form Components
+
+**Location**: `src/components/features/onboarding/components/`
+
+**Shared Components**:
+
+- `FormField.tsx` - Reusable form field with label, input, error display
+- `ServerErrorAlert.tsx` - Server-side error message display
+- `InfoBox.tsx` - Information box with icon and variant support
+- `FormSection.tsx` - Section wrapper for form groups
+
+**File Upload Components** (Created from pattern recognition):
+
+- `FileUploadArea.tsx` - Reusable file upload area with drag-and-drop styling
+  - Used for: logo uploads, photo uploads, document uploads
+  - Features: loading states, file type hints, max files tracking, Bootstrap styling
+- `ImagePreview.tsx` - Reusable image preview with remove button
+  - Used for: logo previews, photo previews, gallery image previews
+  - Features: Next.js Image optimization, responsive sizing, remove functionality
+- `DocumentPreview.tsx` - Reusable document preview with file icons
+  - Used for: verification document previews
+  - Features: file type icons (PDF, DOC, images), filename display, remove functionality
+
+**Form Field Components** (Created from component extraction - December 2024):
+
+- `CharacterCounterTextarea.tsx` - Textarea with character counter and min/max validation
+  - Used for: bio fields, description fields with character limits
+  - Features: real-time character count, validation feedback, Bootstrap styling
+- `MultiSelectCheckboxField.tsx` - Multi-select with checkbox grid layout
+  - Used for: age groups, experience levels, specialties, languages
+  - Features: responsive grid layout, React Hook Form integration, error handling
+- `TagInputField.tsx` - Tag input with quick-add buttons and custom input
+  - Used for: credentials, languages, custom tags
+  - Features: quick-add options, custom tag input, remove functionality, validation
+- `SingleImageUploadField.tsx` - Single image upload with preview and delete
+  - Used for: logo uploads, profile photo uploads
+  - Features: Cloudinary integration, image preview, delete functionality, loading states
+- `GalleryUploadField.tsx` - Multiple image uploads with grid preview
+  - Used for: club gallery uploads, multiple photo uploads
+  - Features: grid preview, sequential upload, min/max image limits, remove functionality
+- `DocumentUploadField.tsx` - Document upload with file icons and preview
+  - Used for: verification documents, file uploads
+  - Features: file type icons, filename display, min/max document limits, remove functionality
+- `RadioButtonGroupField.tsx` - Visual radio button group with icons/emojis
+  - Used for: gender selection, single-choice options with visual feedback
+  - Features: icon/emoji support, Bootstrap styling, React Hook Form integration
+- `DatePickerWithAgeField.tsx` - Date picker with automatic age calculation
+  - Used for: date of birth inputs with age display
+  - Features: age calculation, age validation (4-14 years), Bootstrap date input styling
+
+**Pattern Recognition Principle**: When the same UI pattern appears in multiple components, extract it into a reusable component to avoid duplication and ensure consistency. All extracted components follow consistent patterns:
+
+- React Hook Form integration (register, control, setValue)
+- Bootstrap 5.3.3 styling
+- Romanian language labels and error messages
+- Loading states and error handling
+- TypeScript type safety with generics
+- Accessibility (ARIA attributes, semantic HTML)
 
 ## Key Design Patterns
 
@@ -220,31 +281,33 @@ users (1) ──→ (many) favorites (clubs/doctors)
 
 ## Authentication Pattern
 
-### Stack Auth Integration ✅ COMPLETE
+### Stack Auth Integration ✅ COMPLETE - Server-Side Only
 
-**Configuration**: `lib/auth/stack.ts`
+**Configuration**: `lib/auth/stack.ts` (server-side only)
 **Session Management**: `lib/auth/session.ts`
-**Client Provider**: `src/providers/StackAuthProvider.tsx` (wraps StackProvider and StackTheme)
+**Server Actions**: `app/actions/auth.ts` (all authentication operations)
 **Error Handling**: `lib/auth/errors.ts` (Romanian error messages)
 
-**Client-Side Integration**:
+**Server-Side Architecture**:
 
-- **Provider Setup**: `StackAuthProvider` wraps entire app in root layout
-- **Hooks Used**: `useStackApp()` for authentication methods
-- **Forms**: All authentication forms are client components using Stack Auth methods
-  - `signInWithCredential()` - Sign in
-  - `signUpWithCredential()` - Sign up
-  - `sendForgotPasswordEmail()` - Password reset request
-  - `resetPasswordWithToken()` - Password reset with token
-  - `verifyEmail()` - Email verification
+- **No Client Provider**: Removed StackProvider - authentication is fully server-side
+- **Server Actions**: All authentication operations use Server Actions
+  - `signInAction()` - Sign in with email/password
+  - `signUpAction()` - Sign up with email/password
+  - `forgotPasswordAction()` - Send password reset email
+  - `resetPasswordAction()` - Reset password with token
+  - `verifyEmailAction()` - Verify email with token
+- **Forms**: Client components call Server Actions via `useTransition`
+- **Email Confirmation**: Server component that calls Server Action directly
 
 **Authentication Flow**:
 
-1. User authenticates via Stack Auth (client-side)
-2. Stack Auth manages session
-3. Server Actions can check Stack Auth session via `lib/auth/session.ts`
-4. Syncs with local `users` table (creates if needed)
-5. Returns local user record
+1. User submits form → Client component calls Server Action
+2. Server Action authenticates via Stack Auth (server-side)
+3. Stack Auth manages session (server-side)
+4. Server Actions check Stack Auth session via `lib/auth/session.ts`
+5. Syncs with local `users` table (creates if needed)
+6. Returns local user record
 
 **Session Helper**:
 
@@ -259,7 +322,7 @@ requireAuth() → throws if not authenticated
 - Server Actions: Use `requireAuth()` helper
 - Middleware: Optional for additional protection
 
-**Authentication Pages** (All completed with Romanian localization):
+**Authentication Pages** (All completed with Romanian localization, using Server Actions):
 
 - `/auth/login` - Sign in page
 - `/auth/register` - Sign up page
@@ -273,13 +336,85 @@ requireAuth() → throws if not authenticated
 - All error messages in Romanian
 - `getErrorMessage()` utility function extracts user-friendly messages from Stack Auth errors
 - Forms display errors with consistent styling
+- Server Actions return `{ success: boolean, error?: string, redirect?: string }` format
 
-**Redirects**:
+**Redirects** (handled by Server Actions and form components):
 
 - Successful login → `/parent/dashboard`
 - Successful signup → `/parent/dashboard`
 - Successful password reset → `/auth/login`
 - Successful email verification → `/auth/login`
+
+**Benefits of Server-Side Architecture**:
+
+- ✅ Better security (no client-side auth logic)
+- ✅ Smaller client bundle (no Stack Auth client code)
+- ✅ Better SEO (server-side rendering)
+- ✅ Simpler architecture (Server Actions pattern)
+- ✅ Better error handling (server-side validation)
+
+## Onboarding Pattern
+
+### Onboarding System Architecture
+
+**Status**: ✅ Foundation Complete, ✅ Parent Onboarding Complete, ✅ Club Admin Onboarding Complete, 🚧 Doctor Onboarding In Progress
+
+**Location**:
+
+- Server Actions: `app/actions/onboarding.ts`
+- Validation: `lib/validations/onboarding.ts`, `lib/validations/child.ts`, `lib/validations/club.ts`, `lib/validations/doctor.ts`
+- Database: `lib/db/schema.ts` (onboarding_progress table)
+
+**Pattern**:
+
+1. **Cross-Session State Management**: `onboarding_progress` table tracks user onboarding state across sessions
+2. **Role-Based Flows**: Separate onboarding flows for parent (5 steps), club_admin (7 steps), doctor (8 steps)
+3. **Progress Tracking**: Step-by-step progress with `completedSteps` array and `stepData` JSONB field
+4. **Resume Functionality**: Automatic progress retrieval on page load
+5. **Server Actions**: All onboarding operations via Server Actions with proper TypeScript types
+
+**Key Server Actions**:
+
+- `startOnboarding(role)` - Initialize onboarding flow
+- `getOnboardingProgress()` - Retrieve current progress
+- `updateOnboardingStep(stepNumber, stepData)` - Update current step
+- `markStepComplete(stepNumber)` - Mark step as completed
+- `saveStepData(key, value)` - Save step-specific data (JSONB)
+- Role-specific actions: `addChildOnboarding()`, `createClubOnboarding()`, `createDoctorOnboarding()`
+
+**Validation Strategy**:
+
+- Zod schemas for each onboarding step
+- Romanian error messages via `zodRomanianErrors`
+- Type-safe input validation
+- Separate schemas for child, club, and doctor profiles
+
+**Database Schema**:
+
+```typescript
+onboarding_progress {
+  id: string (UUID)
+  userId: string (FK to users)
+  role: "parent" | "club_admin" | "doctor"
+  currentStep: number
+  totalSteps: number
+  completedSteps: number[] (array of completed step numbers)
+  stepData: JSONB (flexible step-specific data)
+  isCompleted: boolean
+  createdAt: Date
+  updatedAt: Date
+}
+```
+
+**Implementation Status**:
+
+- ✅ Middleware and routing (onboarding protection, route structure) - Complete
+- ✅ Base UI components (OnboardingLayout, OnboardingProgress, OnboardingNavigation) - Complete
+- ✅ Parent onboarding UI (welcome, add child, platform tour, quiz CTA) - Complete
+- ✅ Club admin onboarding UI - Complete
+  - ✅ Welcome, Basic Info, Contact & Schedule, Pricing & Ages, Photo Upload, Verification, Completion
+- ✅ Doctor onboarding UI - Complete
+  - ✅ Welcome, Basic Info, Bio & Experience, Location & Contact, Photo Upload, Verification, Availability, Completion (All 8 steps complete)
 
 ## AI Integration Pattern
 
@@ -339,14 +474,56 @@ requireAuth() → throws if not authenticated
 
 ### Cloudinary Integration
 
+**Status**: ✅ Implemented
+
 **Location**: `lib/integrations/cloudinary/`
+
+**Implementation**:
+
+- Client configuration (`client.ts`) - Cloudinary SDK setup
+- Upload utilities (`upload.ts`) - File validation, base64 conversion, upload, deletion
+- Server Actions (`app/actions/uploads.ts`) - `uploadImageAction`, `deleteImageAction`
 
 **Use Cases**:
 
-- Club logos and photos
+- Club logos and photos (✅ implemented in Club Admin Onboarding)
+- Club verification documents (✅ implemented - PDF, DOC, DOCX, JPG, PNG)
 - Doctor profile photos
 - Child avatars
-- User avatars
+
+**Features**:
+
+- Image uploads: File validation (JPG, PNG, WebP, max 5MB)
+- Document uploads: File validation (PDF, DOC, DOCX, JPG, PNG, max 10MB)
+- Base64 conversion for server-side upload
+- Folder organization (`yuvoo/clubs/logos`, `yuvoo/clubs/gallery`, `yuvoo/clubs/verification`, `yuvoo/clubs/documents`)
+- Resource type handling (images vs raw files)
+- Image/document deletion with public ID extraction (handles both resource types)
+- Romanian error messages
+- Authentication checks in server actions
+
+**Flow**:
+
+1. Client component handles file selection and preview
+2. File uploaded via `uploadImageAction` or `uploadDocumentAction` Server Action
+3. Server Action validates file (type, size)
+4. Server Action converts to base64 and uploads to Cloudinary
+5. Cloudinary returns secure URL
+6. URL saved to database (club.logoUrl, club.galleryUrls, club.verificationDocuments)
+7. Files can be deleted via `deleteImageAction` or `deleteDocumentAction` Server Action
+
+**Pattern**:
+
+```typescript
+// Upload
+const formData = new FormData();
+formData.append("file", file);
+formData.append("folder", "yuvoo/clubs/logos");
+const result = await uploadImageAction(formData);
+
+// Delete
+await deleteImageAction(imageUrl);
+```
 
 **Flow**:
 
@@ -529,7 +706,29 @@ data-wow-delay=".3s"
 </Link>
 ```
 
-**Migration Strategy**: See `designSystem.md` for detailed migration plan from Bootstrap to Tailwind.
+**Styling Strategy**: All components use Bootstrap 5.3.3 with custom Yuvoo-branded utilities.
+
+### Yuvoo Brand Color Utilities
+
+**Bootstrap Utility Classes**: Use Yuvoo-specific color utilities via Bootstrap Utility API:
+
+✅ **Available Utilities**:
+
+- `bg-yuvoo-primary`, `text-yuvoo-primary`, `border-yuvoo-primary`
+- `bg-yuvoo-secondary`, `text-yuvoo-secondary`, `border-yuvoo-secondary`
+- `bg-yuvoo-accent`, `text-yuvoo-accent`, `border-yuvoo-accent`
+- `bg-yuvoo-primary-light`, `bg-yuvoo-secondary-light`
+- Hover states: `bg-yuvoo-primary-hover`, `text-yuvoo-primary-hover`
+- Focus states: `focus-yuvoo-primary`, `focus-yuvoo-secondary`
+
+**Location**: `public/assets/scss/utils/_yuvoo-utilities.scss`
+
+**Rationale**:
+
+- Directly maps to existing CSS variables (`--bd-theme-1`, `--bd-theme-2`, etc.)
+- Consistent with Bootstrap utility naming conventions
+- Better semantic meaning in code
+- Easier to identify brand-specific styling
 
 ## Component Patterns
 
@@ -692,13 +891,14 @@ Does component need interactivity?
 
 ## Security Patterns
 
-1. **Authentication**: Stack Auth handles all auth
+1. **Authentication**: Stack Auth handles all auth (server-side only, no client-side provider)
 2. **Authorization**: Role-based (parent, club_admin, doctor, admin)
-3. **Input Validation**: Zod schemas for all inputs
+3. **Input Validation**: Zod schemas for all inputs (server-side validation in Server Actions)
 4. **SQL Injection**: Drizzle ORM parameterized queries
 5. **XSS**: React automatic escaping
-6. **CSRF**: Next.js built-in protection
+6. **CSRF**: Next.js built-in protection (Server Actions are CSRF-protected)
 7. **File Uploads**: Cloudinary handles storage and CDN
+8. **Server Actions**: All authentication operations are server-side only
 
 ## Performance Patterns
 
@@ -712,6 +912,7 @@ Does component need interactivity?
 
 ## Documentation References
 
+- **Claude Guide**: `CLAUDE.md` - Comprehensive project guide for Claude Code with quick start, development commands, architecture patterns, troubleshooting, and quick reference
 - **Architecture Overview**: `docs/ARCHITECTURE_OVERVIEW.md` - Complete architecture documentation
 - **Code Generation Rules**: `docs/ PROMPTING_RULES_FOR_CODEGEN.md` - Code generation guidelines
 - **Brand Guidelines**: `docs/BRAND_GUIDELINES.md` - Visual identity, tone of voice, UX principles, and brand consistency guidelines
@@ -725,6 +926,9 @@ Does component need interactivity?
 - **Wireframes**: `docs/WIREFRAMES.md` - Detailed page structures, component placement, and layout specifications for all major pages
 - **Legal Pages Plan**: `docs/LEGAL_PAGES_DEVELOPMENT_PLAN.md` - Comprehensive legal pages development plan, content templates, SEO guidelines, and implementation checklist
 - **Authentication Integration Plan**: `docs/AUTH_INTEGRATION_PLAN.md` - Complete authentication system integration details, Stack Auth setup, Romanian localization, and implementation checklist
+- **Stack Auth Server Migration**: `docs/STACK_AUTH_SERVER_MIGRATION_PLAN.md` - Migration plan and implementation details for server-side authentication
+- **Tailwind Removal Plan**: `docs/TAILWIND_REMOVAL_PLAN.md` - Comprehensive migration strategy to remove Tailwind CSS and shadcn/ui, keep only Bootstrap 5.3.3 and SCSS
+- **Reusable Components List**: `docs/REUSABLE_COMPONENTS_LIST.md` - Complete inventory of ~80+ reusable Bootstrap components with Bootstrap 5.3 documentation references
 - **System Patterns**: `memory-bank/systemPatterns.md` - This file
 - **Technical Context**: `memory-bank/techContext.md` - Technology stack details
 - **Product Context**: `memory-bank/productContext.md` - Product requirements

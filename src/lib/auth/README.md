@@ -70,15 +70,30 @@ const { user, dbUser } = await requireRole("club_admin");
 
 ### Client Components
 
-For client-side authentication, use Stack Auth's React hooks:
+Authentication is now handled server-side via Server Actions. Forms use Server Actions instead of client-side hooks.
+
+For authentication operations, use the Server Actions in `src/app/actions/auth.ts`:
+
+- `signInAction` - Sign in with email/password
+- `signUpAction` - Sign up with email/password
+- `forgotPasswordAction` - Send password reset email
+- `resetPasswordAction` - Reset password with token
+- `verifyEmailAction` - Verify email with token
+
+Example:
 
 ```typescript
 "use client";
 
-import { useUser } from "@stackframe/stack";
+import { signInAction } from "@/app/actions/auth";
 
-export function MyComponent() {
-  const user = useUser();
+export function LoginForm() {
+  const onSubmit = async (formData: FormData) => {
+    const result = await signInAction(formData);
+    if (result.success) {
+      // Redirect handled by form component
+    }
+  };
 
   if (!user) {
     return <div>Not authenticated</div>;

@@ -1,13 +1,11 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useTransition } from "react";
 import { useForm } from "react-hook-form";
 import { useRouter } from "next/navigation";
-import { useStackApp } from "@stackframe/stack";
+import { signUpAction } from "@/app/actions/auth";
 import ErrorMsg from "./ErrorMassage";
 import { EmailSvgIcon, EyeCutSvgIcon, LockSvgIcon } from "../SVG";
-import { routes } from "@/lib/routes";
-import { getErrorMessage } from "@/lib/auth/errors";
 
 type SignUpFormData = {
   email: string;
@@ -18,45 +16,42 @@ type SignUpFormData = {
 const SignUpForm = () => {
   const [showPass, setShowPass] = useState(false);
   const [showConPass, setShowConPass] = useState(false);
-  const [isLoading, setIsLoading] = useState(false);
+  const [isPending, startTransition] = useTransition();
   const [authError, setAuthError] = useState<string | null>(null);
+  const router = useRouter();
   const {
     register,
     handleSubmit,
     formState: { errors },
     watch,
   } = useForm<SignUpFormData>();
-  const stackApp = useStackApp();
-  const router = useRouter();
 
   const password = watch("password");
 
   const onSubmit = async (data: SignUpFormData) => {
-    setIsLoading(true);
     setAuthError(null);
 
     // Validate password confirmation
     if (data.password !== data.passwordConfirmation) {
       setAuthError("Parolele nu se potrivesc. Te rugăm să verifici.");
-      setIsLoading(false);
       return;
     }
 
-    try {
-      await stackApp.signUpWithCredential({
-        email: data.email,
-        password: data.password,
-      });
+    startTransition(async () => {
+      const formData = new FormData();
+      formData.append("email", data.email);
+      formData.append("password", data.password);
+      formData.append("passwordConfirmation", data.passwordConfirmation);
 
-      // Redirect to dashboard after successful signup
-      router.push(routes.parent.dashboard);
-      router.refresh(); // Refresh to update server-side session
-    } catch (error) {
-      // Handle authentication error
-      const errorMessage = getErrorMessage(error);
-      setAuthError(errorMessage);
-      setIsLoading(false);
-    }
+      const result = await signUpAction(formData);
+
+      if (result.success && result.redirect) {
+        router.push(result.redirect);
+        router.refresh();
+      } else {
+        setAuthError(result.error || "Eroare la înregistrare");
+      }
+    });
   };
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
@@ -80,7 +75,7 @@ const SignUpForm = () => {
               id="emailAddress"
               type="email"
               placeholder="Adresă de email"
-              disabled={isLoading}
+              disabled={isPending}
             />
             <span>
               <EmailSvgIcon />
@@ -103,7 +98,7 @@ const SignUpForm = () => {
                 type={showPass ? "text" : "password"}
                 placeholder="Parola ta"
                 autoComplete="new-password"
-                disabled={isLoading}
+                disabled={isPending}
               />
               <span>
                 <LockSvgIcon />
@@ -112,7 +107,7 @@ const SignUpForm = () => {
             <span
               className="login-input-eye"
               onClick={() => setShowPass(!showPass)}
-              style={{ cursor: isLoading ? "not-allowed" : "pointer" }}
+              style={{ cursor: isPending ? "not-allowed" : "pointer" }}
             >
               {showPass ? <i className="fa-regular fa-eye"></i> : <EyeCutSvgIcon />}
             </span>
@@ -135,7 +130,7 @@ const SignUpForm = () => {
                 type={showConPass ? "text" : "password"}
                 placeholder="Confirmă parola"
                 autoComplete="new-password"
-                disabled={isLoading}
+                disabled={isPending}
               />
               <span>
                 <LockSvgIcon />
@@ -144,7 +139,7 @@ const SignUpForm = () => {
             <span
               className="login-input-eye"
               onClick={() => setShowConPass(!showConPass)}
-              style={{ cursor: isLoading ? "not-allowed" : "pointer" }}
+              style={{ cursor: isPending ? "not-allowed" : "pointer" }}
             >
               {showConPass ? <i className="fa-regular fa-eye"></i> : <EyeCutSvgIcon />}
             </span>
@@ -153,13 +148,13 @@ const SignUpForm = () => {
         </div>
       </div>
       <div className="login__btn text-center">
-        <button type="submit" className="bd-btn" disabled={isLoading}>
+        <button type="submit" className="bd-btn" disabled={isPending}>
           <span className="bd-btn-inner">
             <span className="bd-btn-normal">
-              {isLoading ? "Se înregistrează..." : "Înregistrare"}
+              {isPending ? "Se înregistrează..." : "Înregistrare"}
             </span>
             <span className="bd-btn-hover">
-              {isLoading ? "Se înregistrează..." : "Înregistrare"}
+              {isPending ? "Se înregistrează..." : "Înregistrare"}
             </span>
           </span>
         </button>

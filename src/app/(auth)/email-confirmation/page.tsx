@@ -38,12 +38,19 @@ export const metadata: Metadata = {
  * Authentication page for email verification.
  * Route: /auth/email-confirmation?token=<verification-token>
  */
-export default function EmailConfirmationPage() {
+export default async function EmailConfirmationPage({
+  searchParams,
+}: {
+  searchParams: Promise<{ token?: string }>;
+}) {
+  const params = await searchParams;
+  const token = params.token || null;
+
   return (
     <>
       <BreadcrumbOne title="Verificare Email" subTitle="Verificare Email" />
       <Suspense fallback={<div className="text-center py-5">Se încarcă...</div>}>
-        <EmailConfirmationMain />
+        <EmailConfirmationMain token={token} />
       </Suspense>
     </>
   );

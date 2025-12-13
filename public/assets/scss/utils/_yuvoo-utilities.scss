@@ -1,0 +1,254 @@
+/**
+ * Yuvoo Bootstrap Utility Extensions
+ * 
+ * Custom utility classes using Bootstrap naming conventions.
+ * These utilities use Yuvoo brand colors from CSS variables.
+ * 
+ * @see docs/TAILWIND_REMOVAL_PLAN.md for migration strategy
+ * @see public/assets/scss/utils/_colors.scss for color definitions
+ */
+
+/* ============================================
+   Background Color Utilities
+   ============================================ */
+
+// Primary (Turcoaz/Cyan) - #00BBAE
+.bg-yuvoo-primary {
+  background-color: var(--bd-theme-1) !important;
+}
+
+.bg-yuvoo-primary-light {
+  background-color: var(--bd-theme-7) !important; // #EBFFFE
+}
+
+// Secondary (Portocaliu/Orange) - #FF9B24
+.bg-yuvoo-secondary {
+  background-color: var(--bd-theme-2) !important;
+}
+
+.bg-yuvoo-secondary-light {
+  background-color: var(--bd-theme-8) !important; // #FFECD6
+}
+
+.bg-yuvoo-secondary-very-light {
+  background-color: var(--bd-theme-6) !important; // #FFF6EB
+}
+
+// Accent (Violet/Blue) - #7C81FF
+.bg-yuvoo-accent {
+  background-color: var(--bd-theme-10) !important;
+}
+
+/* ============================================
+   Text Color Utilities
+   ============================================ */
+
+// Primary text color
+.text-yuvoo-primary {
+  color: var(--bd-theme-1) !important;
+}
+
+// Secondary text color
+.text-yuvoo-secondary {
+  color: var(--bd-theme-2) !important;
+}
+
+// Accent text color
+.text-yuvoo-accent {
+  color: var(--bd-theme-10) !important;
+}
+
+// Heading text color
+.text-yuvoo-heading {
+  color: var(--bd-heading-primary) !important;
+}
+
+// Body text color
+.text-yuvoo-body {
+  color: var(--bd-text-body) !important;
+}
+
+/* ============================================
+   Border Color Utilities
+   ============================================ */
+
+.border-yuvoo-primary {
+  border-color: var(--bd-theme-1) !important;
+}
+
+.border-yuvoo-secondary {
+  border-color: var(--bd-theme-2) !important;
+}
+
+.border-yuvoo-accent {
+  border-color: var(--bd-theme-10) !important;
+}
+
+/* ============================================
+   Hover State Utilities
+   ============================================ */
+
+// Background hover states
+.bg-yuvoo-primary-hover:hover {
+  background-color: #00998d !important; // Darker primary for hover
+}
+
+.bg-yuvoo-secondary-hover:hover {
+  background-color: #e68a1f !important; // Darker secondary for hover
+}
+
+.bg-yuvoo-accent-hover:hover {
+  background-color: #6b70e6 !important; // Darker accent for hover
+}
+
+// Text hover states
+.text-yuvoo-primary-hover:hover {
+  color: var(--bd-theme-1) !important;
+}
+
+.text-yuvoo-secondary-hover:hover {
+  color: var(--bd-theme-2) !important;
+}
+
+.text-yuvoo-accent-hover:hover {
+  color: var(--bd-theme-10) !important;
+}
+
+// Border hover states
+.border-yuvoo-primary-hover:hover {
+  border-color: var(--bd-theme-1) !important;
+}
+
+.border-yuvoo-secondary-hover:hover {
+  border-color: var(--bd-theme-2) !important;
+}
+
+.border-yuvoo-accent-hover:hover {
+  border-color: var(--bd-theme-10) !important;
+}
+
+/* ============================================
+   Focus State Utilities
+   ============================================ */
+
+.focus-yuvoo-primary:focus {
+  outline-color: var(--bd-theme-1) !important;
+  border-color: var(--bd-theme-1) !important;
+}
+
+.focus-yuvoo-secondary:focus {
+  outline-color: var(--bd-theme-2) !important;
+  border-color: var(--bd-theme-2) !important;
+}
+
+/* ============================================
+   Shadow Utilities (Yuvoo Brand)
+   ============================================ */
+
+.shadow-yuvoo-primary {
+  box-shadow: 0px 4px 12px rgba(0, 187, 174, 0.2) !important;
+}
+
+.shadow-yuvoo-secondary {
+  box-shadow: 0px 4px 12px rgba(255, 155, 36, 0.2) !important;
+}
+
+.shadow-yuvoo-accent {
+  box-shadow: 0px 4px 12px rgba(124, 129, 255, 0.2) !important;
+}
+
+/* ============================================
+   Responsive Utilities
+   ============================================ */
+
+// Hide on mobile, show on desktop
+@media (max-width: 767.98px) {
+  .d-md-none-yuvoo {
+    display: none !important;
+  }
+}
+
+@media (min-width: 768px) {
+  .d-md-block-yuvoo {
+    display: block !important;
+  }
+
+  .d-md-flex-yuvoo {
+    display: flex !important;
+  }
+}
+
+/* ============================================
+   Spacing Utilities (Yuvoo-specific)
+   ============================================ */
+
+// Section padding utilities
+.section-padding-yuvoo {
+  padding-top: 80px;
+  padding-bottom: 80px;
+}
+
+@media (max-width: 767.98px) {
+  .section-padding-yuvoo {
+    padding-top: 60px;
+    padding-bottom: 60px;
+  }
+}
+
+// Container max-width utilities
+.container-yuvoo {
+  max-width: 1320px;
+  margin-left: auto;
+  margin-right: auto;
+  padding-left: 15px;
+  padding-right: 15px;
+}
+
+/* ============================================
+   Button Variant Utilities
+   ============================================ */
+
+// Button background variants
+.btn-yuvoo-primary {
+  background-color: var(--bd-theme-1) !important;
+  border-color: var(--bd-theme-1) !important;
+  color: #ffffff !important;
+
+  &:hover {
+    background-color: #00998d !important;
+    border-color: #00998d !important;
+  }
+}
+
+.btn-yuvoo-secondary {
+  background-color: var(--bd-theme-2) !important;
+  border-color: var(--bd-theme-2) !important;
+  color: #ffffff !important;
+
+  &:hover {
+    background-color: #e68a1f !important;
+    border-color: #e68a1f !important;
+  }
+}
+
+.btn-yuvoo-outline-primary {
+  background-color: transparent !important;
+  border-color: var(--bd-theme-1) !important;
+  color: var(--bd-theme-1) !important;
+
+  &:hover {
+    background-color: var(--bd-theme-1) !important;
+    color: #ffffff !important;
+  }
+}
+
+.btn-yuvoo-outline-secondary {
+  background-color: transparent !important;
+  border-color: var(--bd-theme-2) !important;
+  color: var(--bd-theme-2) !important;
+
+  &:hover {
+    background-color: var(--bd-theme-2) !important;
+    color: #ffffff !important;
+  }
+}

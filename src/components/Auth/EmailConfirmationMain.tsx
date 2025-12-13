@@ -1,7 +1,11 @@
 import React from "react";
 import EmailConfirmationForm from "../Form/EmailConfirmationForm";
 
-const EmailConfirmationMain = () => {
+interface EmailConfirmationMainProps {
+  token: string | null;
+}
+
+const EmailConfirmationMain = ({ token }: EmailConfirmationMainProps) => {
   return (
     <section className="login__area pt-110 pb-110">
       <div className="container">
@@ -14,7 +18,7 @@ const EmailConfirmationMain = () => {
                   <p>Verificăm adresa ta de email...</p>
                 </div>
                 <div className="login__form">
-                  <EmailConfirmationForm />
+                  <EmailConfirmationForm token={token} />
                 </div>
               </div>
             </div>
