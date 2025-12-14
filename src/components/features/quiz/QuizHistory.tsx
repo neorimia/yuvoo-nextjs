@@ -51,7 +51,7 @@ const QuizHistory: React.FC<QuizHistoryProps> = ({ quizzes, childName, className
                 ? `Nu ai completat încă niciun chestionar pentru ${childName}.`
                 : "Nu ai completat încă niciun chestionar."}
             </p>
-            <Link href={routes.quiz.intro} className="btn btn-primary">
+            <Link href={routes.quiz.intro} className="btn btn-yuvoo-primary">
               <i className="bi bi-plus-circle me-2"></i>
               Începe Primul Chestionar
             </Link>
@@ -66,7 +66,7 @@ const QuizHistory: React.FC<QuizHistoryProps> = ({ quizzes, childName, className
       <div className="card border-0 shadow-sm">
         <div className="card-header bg-white border-bottom">
           <h5 className="mb-0">
-            <i className="bi bi-clock-history me-2 text-primary"></i>
+            <i className="bi bi-clock-history me-2 text-yuvoo-primary"></i>
             Istoric Chestionare
             {childName && <span className="text-muted"> - {childName}</span>}
           </h5>
@@ -79,7 +79,7 @@ const QuizHistory: React.FC<QuizHistoryProps> = ({ quizzes, childName, className
                   <div className="flex-grow-1">
                     <div className="d-flex align-items-center gap-2 mb-2">
                       <h6 className="mb-0">Chestionar din {formatDate(quiz.createdAt)}</h6>
-                      <span className="badge bg-primary">
+                      <span className="badge bg-yuvoo-primary">
                         {quiz.recommendations.length} recomandări
                       </span>
                     </div>
@@ -120,7 +120,7 @@ const QuizHistory: React.FC<QuizHistoryProps> = ({ quizzes, childName, className
         </div>
         {quizzes.length > 0 && (
           <div className="card-footer bg-white border-top text-center">
-            <Link href={routes.quiz.intro} className="btn btn-primary">
+            <Link href={routes.quiz.intro} className="btn btn-yuvoo-primary">
               <i className="bi bi-plus-circle me-2"></i>
               Completează un Nou Chestionar
             </Link>

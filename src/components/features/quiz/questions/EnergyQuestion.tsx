@@ -56,7 +56,7 @@ const EnergyQuestion = memo(function EnergyQuestion() {
   return (
     <QuestionWrapper
       title="Cât de energic este copilul tău?"
-      description="Nivelul de energie ne ajută să recomandăm sporturi cu intensitatea potrivită."
+      description="Înțelegerea nivelului de energie al copilului tău ne ajută să găsim sporturi care se potrivesc perfect - fie că are nevoie de activități mai liniștite sau de ceva care să-i consume energia abundentă."
       error={errors.energyLevel}
     >
       <div className="energy-options">
@@ -65,8 +65,10 @@ const EnergyQuestion = memo(function EnergyQuestion() {
             <div key={option.value} className="col-12 col-md-6">
               <button
                 type="button"
-                className={`btn w-100 h-100 p-3 text-start ${
-                  answers.energyLevel === option.value ? "btn-primary" : "btn-outline-primary"
+                className={`btn w-100 h-100 p-3 p-md-4 text-start position-relative ${
+                  answers.energyLevel === option.value
+                    ? "btn-yuvoo-primary"
+                    : "btn-yuvoo-outline-primary"
                 }`}
                 onClick={() => handleEnergyChange(option.value)}
                 aria-pressed={answers.energyLevel === option.value}
@@ -75,13 +77,19 @@ const EnergyQuestion = memo(function EnergyQuestion() {
                   <span className="fs-2 me-3" role="img" aria-label={option.label}>
                     {option.icon}
                   </span>
-                  <div>
+                  <div className="flex-grow-1">
                     <div className="fw-semibold mb-1">{option.label}</div>
-                    <small className="text-muted">{option.description}</small>
+                    <small
+                      className={
+                        answers.energyLevel === option.value ? "text-white-50" : "text-muted"
+                      }
+                    >
+                      {option.description}
+                    </small>
                   </div>
                 </div>
                 {answers.energyLevel === option.value && (
-                  <i className="bi bi-check-circle-fill position-absolute top-0 end-0 m-2 text-white"></i>
+                  <i className="bi bi-check-circle-fill position-absolute top-0 end-0 m-2 fs-5 text-white"></i>
                 )}
               </button>
             </div>

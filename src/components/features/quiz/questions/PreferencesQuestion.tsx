@@ -33,8 +33,8 @@ const PreferencesQuestion = memo(function PreferencesQuestion() {
   return (
     <QuestionWrapper
       title="Preferințele copilului tău"
-      description="Selectează preferințele pentru activități sportive."
-      helpText="Selectează cel puțin o preferință pentru fiecare categorie."
+      description="Ultimul pas! Preferințele pentru locație (interior/exterior) și tipul de activitate (echipă/individual) ne ajută să finalizăm recomandările perfecte. Poți selecta ambele opțiuni dacă copilul tău este deschis la ambele."
+      helpText="Selectează cel puțin o preferință pentru fiecare categorie. Poți selecta ambele opțiuni dacă sunt relevante."
       error={errors.preferences}
     >
       {/* Location preferences */}
@@ -47,7 +47,7 @@ const PreferencesQuestion = memo(function PreferencesQuestion() {
           <div className="col-6">
             <button
               type="button"
-              className={`btn w-100 h-100 p-3 ${preferences.indoor ? "btn-primary" : "btn-outline-primary"}`}
+              className={`btn w-100 h-100 p-3 p-md-4 position-relative ${preferences.indoor ? "btn-yuvoo-primary" : "btn-yuvoo-outline-primary"}`}
               onClick={() => updatePreference("indoor", !preferences.indoor)}
               aria-pressed={preferences.indoor}
             >
@@ -56,12 +56,15 @@ const PreferencesQuestion = memo(function PreferencesQuestion() {
               <small className={preferences.indoor ? "text-white-50" : "text-muted"}>
                 Săli, bazine acoperite
               </small>
+              {preferences.indoor && (
+                <i className="bi bi-check-circle-fill position-absolute top-0 end-0 m-2 fs-5 text-white"></i>
+              )}
             </button>
           </div>
           <div className="col-6">
             <button
               type="button"
-              className={`btn w-100 h-100 p-3 ${preferences.outdoor ? "btn-primary" : "btn-outline-primary"}`}
+              className={`btn w-100 h-100 p-3 p-md-4 position-relative ${preferences.outdoor ? "btn-yuvoo-primary" : "btn-yuvoo-outline-primary"}`}
               onClick={() => updatePreference("outdoor", !preferences.outdoor)}
               aria-pressed={preferences.outdoor}
             >
@@ -70,6 +73,9 @@ const PreferencesQuestion = memo(function PreferencesQuestion() {
               <small className={preferences.outdoor ? "text-white-50" : "text-muted"}>
                 Terenuri, parcuri
               </small>
+              {preferences.outdoor && (
+                <i className="bi bi-check-circle-fill position-absolute top-0 end-0 m-2 fs-5 text-white"></i>
+              )}
             </button>
           </div>
         </div>
@@ -93,7 +99,7 @@ const PreferencesQuestion = memo(function PreferencesQuestion() {
           <div className="col-6">
             <button
               type="button"
-              className={`btn w-100 h-100 p-3 ${preferences.team ? "btn-primary" : "btn-outline-primary"}`}
+              className={`btn w-100 h-100 p-3 p-md-4 position-relative ${preferences.team ? "btn-yuvoo-primary" : "btn-yuvoo-outline-primary"}`}
               onClick={() => updatePreference("team", !preferences.team)}
               aria-pressed={preferences.team}
             >
@@ -102,12 +108,15 @@ const PreferencesQuestion = memo(function PreferencesQuestion() {
               <small className={preferences.team ? "text-white-50" : "text-muted"}>
                 Fotbal, baschet, volei
               </small>
+              {preferences.team && (
+                <i className="bi bi-check-circle-fill position-absolute top-0 end-0 m-2 fs-5 text-white"></i>
+              )}
             </button>
           </div>
           <div className="col-6">
             <button
               type="button"
-              className={`btn w-100 h-100 p-3 ${preferences.individual ? "btn-primary" : "btn-outline-primary"}`}
+              className={`btn w-100 h-100 p-3 p-md-4 position-relative ${preferences.individual ? "btn-yuvoo-primary" : "btn-yuvoo-outline-primary"}`}
               onClick={() => updatePreference("individual", !preferences.individual)}
               aria-pressed={preferences.individual}
             >
@@ -116,6 +125,9 @@ const PreferencesQuestion = memo(function PreferencesQuestion() {
               <small className={preferences.individual ? "text-white-50" : "text-muted"}>
                 Tenis, înot, gimnastică
               </small>
+              {preferences.individual && (
+                <i className="bi bi-check-circle-fill position-absolute top-0 end-0 m-2 fs-5 text-white"></i>
+              )}
             </button>
           </div>
         </div>

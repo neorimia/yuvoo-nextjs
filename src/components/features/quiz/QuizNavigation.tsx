@@ -23,7 +23,7 @@ interface QuizNavigationProps {
 
 export default function QuizNavigation({
   currentStep,
-  totalSteps,
+  totalSteps: _totalSteps,
   canGoBack,
   canGoNext,
   isLastStep,
@@ -33,43 +33,46 @@ export default function QuizNavigation({
   isSubmitting = false,
 }: QuizNavigationProps) {
   return (
-    <div className="quiz-navigation d-flex justify-content-between align-items-center gap-3 mt-4">
+    <div className="quiz-navigation d-flex justify-content-between align-items-center gap-3 mt-4 pt-3 border-top">
       {/* Back button */}
       <button
         type="button"
-        className="btn btn-outline-secondary"
+        className="btn btn-outline-secondary btn-lg"
         onClick={onBack}
-        disabled={!canGoBack || currentStep === 1}
+        disabled={!canGoBack || currentStep === 1 || isSubmitting}
         aria-label="Mergi la întrebarea anterioară"
       >
         <i className="bi bi-arrow-left me-2"></i>
-        Înapoi
+        <span className="d-none d-sm-inline">Înapoi</span>
+        <span className="d-sm-none">←</span>
       </button>
 
-      {/* Step indicator (mobile-friendly) */}
-      <div className="d-none d-md-block text-muted small">
-        Pasul {currentStep}/{totalSteps}
+      {/* Step indicator (mobile-friendly) - removed as it's now in progress bar */}
+      <div className="d-none d-md-flex align-items-center text-muted small">
+        <i className="bi bi-info-circle me-1"></i>
+        Poți reveni oricând pentru a modifica răspunsurile
       </div>
 
       {/* Next or Submit button */}
       {!isLastStep ? (
         <button
           type="button"
-          className="btn btn-primary"
+          className="btn btn-yuvoo-primary btn-lg px-4"
           onClick={onNext}
-          disabled={!canGoNext}
-          aria-label="Mergi la următoarea întrebare"
+          disabled={!canGoNext || isSubmitting}
+          aria-label="Mergi la următoarea întrebare (sau apasă Enter)"
         >
-          Următorul
+          Continuă
           <i className="bi bi-arrow-right ms-2"></i>
+          <span className="d-none d-md-inline ms-2 text-white-50 small">(Enter)</span>
         </button>
       ) : (
         <button
           type="button"
-          className="btn btn-primary"
+          className="btn btn-yuvoo-primary btn-lg px-4"
           onClick={onSubmit}
           disabled={!canGoNext || isSubmitting}
-          aria-label="Finalizează chestionarul"
+          aria-label="Finalizează chestionarul și vezi recomandările (sau apasă Enter)"
         >
           {isSubmitting ? (
             <>
@@ -78,12 +81,13 @@ export default function QuizNavigation({
                 role="status"
                 aria-hidden="true"
               ></span>
-              Se procesează...
+              <span className="d-none d-sm-inline">Se procesează...</span>
+              <span className="d-sm-none">Procesare...</span>
             </>
           ) : (
             <>
-              Finalizează
-              <i className="bi bi-check-lg ms-2"></i>
+              <i className="bi bi-check-circle me-2"></i>
+              Vezi recomandările
             </>
           )}
         </button>

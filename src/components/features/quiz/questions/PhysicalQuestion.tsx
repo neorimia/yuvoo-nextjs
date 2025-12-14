@@ -55,8 +55,8 @@ const PhysicalQuestion = memo(function PhysicalQuestion() {
   return (
     <QuestionWrapper
       title="Cum ai descrie constituția fizică a copilului tău?"
-      description="Această informație ne ajută să recomandăm sporturi potrivite pentru tipul fizic al copilului."
-      helpText="Alege constituția care descrie cel mai bine copilul tău. Informațiile sunt confidențiale."
+      description="Constituția fizică este un factor important în alegerea sportului potrivit. Fiecare tip de constituție are avantaje în anumite sporturi - de exemplu, copiii mai înalți pot excela în baschet, în timp ce cei mai agili pot fi potriviți pentru gimnastică."
+      helpText="Alege constituția care descrie cel mai bine copilul tău. Informațiile sunt confidențiale și folosite doar pentru recomandări."
       error={errors.physicalBuild}
     >
       {/* Physical build selection */}
@@ -69,8 +69,10 @@ const PhysicalQuestion = memo(function PhysicalQuestion() {
             <div key={option.value} className="col-12 col-md-4">
               <button
                 type="button"
-                className={`btn w-100 h-100 p-3 ${
-                  answers.physicalBuild === option.value ? "btn-primary" : "btn-outline-primary"
+                className={`btn w-100 h-100 p-3 p-md-4 position-relative ${
+                  answers.physicalBuild === option.value
+                    ? "btn-yuvoo-primary"
+                    : "btn-yuvoo-outline-primary"
                 }`}
                 onClick={() => handleBuildChange(option.value)}
                 aria-pressed={answers.physicalBuild === option.value}
@@ -89,7 +91,7 @@ const PhysicalQuestion = memo(function PhysicalQuestion() {
                   </small>
                 </div>
                 {answers.physicalBuild === option.value && (
-                  <i className="bi bi-check-circle-fill position-absolute top-0 end-0 m-2 text-white"></i>
+                  <i className="bi bi-check-circle-fill position-absolute top-0 end-0 m-2 fs-5 text-white"></i>
                 )}
               </button>
             </div>

@@ -7,7 +7,7 @@
 
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { useRouter } from "next/navigation";
 import { QuizProvider, useQuiz } from "./QuizContext";
 import QuizProgress from "./QuizProgress";
@@ -32,12 +32,36 @@ interface QuizContainerProps {
 
 function QuizContent({ childId }: { childId: string }) {
   const router = useRouter();
-  const { currentStep, canGoNext, isComplete, nextStep, prevStep, answers, resetQuiz } = useQuiz();
+  const {
+    currentStep,
+    canGoNext,
+    isComplete,
+    nextStep: contextNextStep,
+    prevStep: contextPrevStep,
+    answers,
+    resetQuiz,
+  } = useQuiz();
+
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitError, setSubmitError] = useState<string | null>(null);
+  const [isTransitioning, setIsTransitioning] = useState(false);
+
+  // Wrapper for nextStep with loading state
+  const handleNextStep = React.useCallback(() => {
+    setIsTransitioning(true);
+    contextNextStep();
+  }, [contextNextStep]);
+
+  // Wrapper for prevStep with loading state
+  const handlePrevStep = React.useCallback(() => {
+    setIsTransitioning(true);
+    contextPrevStep();
+  }, [contextPrevStep]);
+  const questionContentRef = useRef<HTMLDivElement>(null);
+  const prevStepRef = useRef(currentStep);
 
   // Handle quiz submission
-  const handleSubmit = async () => {
+  const handleSubmit = React.useCallback(async () => {
     if (!isComplete) {
       setSubmitError("Te rugăm să completezi toate câmpurile obligatorii.");
       return;
@@ -90,7 +114,70 @@ function QuizContent({ childId }: { childId: string }) {
     } finally {
       setIsSubmitting(false);
     }
-  };
+  }, [isComplete, childId, answers, resetQuiz, router]);
+
+  // Auto-focus first input when moving to next question
+  useEffect(() => {
+    if (currentStep !== prevStepRef.current && questionContentRef.current) {
+      // Find first input, textarea, or button in the question
+      const firstInput = questionContentRef.current.querySelector<HTMLElement>(
+        "input:not([type='hidden']), textarea, button[type='button']"
+      );
+      if (firstInput && firstInput.focus) {
+        // Small delay to ensure DOM is ready, then clear transition state
+        setTimeout(() => {
+          firstInput.focus();
+          setIsTransitioning(false);
+        }, 150);
+      } else {
+        // If no input found, clear transition state after short delay
+        setTimeout(() => setIsTransitioning(false), 150);
+      }
+    }
+    prevStepRef.current = currentStep;
+  }, [currentStep]);
+
+  // Keyboard navigation: Enter key to proceed
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      // Only handle Enter if not in an input/textarea or if it's a button
+      const target = e.target as HTMLElement;
+      const isInput = target.tagName === "INPUT" || target.tagName === "TEXTAREA";
+      const isButton = target.tagName === "BUTTON";
+
+      // If Enter is pressed and we're not in a text input (or it's a button)
+      if (e.key === "Enter" && (!isInput || isButton)) {
+        // Don't proceed if we're in a custom input field (let it handle its own Enter)
+        if (isInput && target.closest(".input-group")) {
+          return;
+        }
+
+        e.preventDefault();
+        if (currentStep < TOTAL_STEPS && canGoNext && !isTransitioning) {
+          handleNextStep();
+        } else if (
+          currentStep === TOTAL_STEPS &&
+          canGoNext &&
+          !isSubmitting &&
+          !isTransitioning &&
+          isComplete
+        ) {
+          handleSubmit();
+        }
+      }
+    };
+
+    window.addEventListener("keydown", handleKeyDown);
+    return () => window.removeEventListener("keydown", handleKeyDown);
+  }, [
+    currentStep,
+    canGoNext,
+    isSubmitting,
+    isComplete,
+    isTransitioning,
+    handleNextStep,
+    handleSubmit,
+  ]);
 
   // Render current question component
   const renderQuestion = () => {
@@ -113,24 +200,52 @@ function QuizContent({ childId }: { childId: string }) {
   };
 
   return (
-    <div className="quiz-container">
-      <div className="container py-5">
+    <div className="quiz-container bg-light min-vh-100 py-4 py-md-5">
+      <div className="container">
         <div className="row justify-content-center">
-          <div className="col-12 col-lg-8 col-xl-6">
+          <div className="col-12 col-lg-9 col-xl-7">
             {/* Quiz card */}
-            <div className="card shadow-sm">
+            <div className="card shadow-lg border-0 position-relative">
+              {/* Loading overlay during step transitions */}
+              {isTransitioning && (
+                <div
+                  className="position-absolute top-0 start-0 w-100 h-100 d-flex align-items-center justify-content-center bg-white bg-opacity-75 rounded"
+                  style={{ zIndex: 10 }}
+                >
+                  <div className="text-center">
+                    <div
+                      className="spinner-border text-yuvoo-primary mb-2"
+                      role="status"
+                      style={{ width: "3rem", height: "3rem" }}
+                    >
+                      <span className="visually-hidden">Se încarcă...</span>
+                    </div>
+                    <div className="text-muted small">Se încarcă următoarea întrebare...</div>
+                  </div>
+                </div>
+              )}
+
               <div className="card-body p-4 p-md-5">
                 {/* Progress indicator */}
-                <QuizProgress currentStep={currentStep} totalSteps={TOTAL_STEPS} className="mb-4" />
+                <QuizProgress currentStep={currentStep} totalSteps={TOTAL_STEPS} className="mb-5" />
 
                 {/* Current question */}
-                <div className="quiz-question-content mb-4">{renderQuestion()}</div>
+                <div ref={questionContentRef} className="quiz-question-content mb-4">
+                  {renderQuestion()}
+                </div>
 
-                {/* Submit error message */}
+                {/* Submit error message - improved visibility with better positioning */}
                 {submitError && (
-                  <div className="alert alert-danger" role="alert">
-                    <i className="bi bi-exclamation-triangle me-2"></i>
-                    {submitError}
+                  <div
+                    className="alert alert-danger d-flex align-items-start gap-3 mb-4 shadow-sm"
+                    role="alert"
+                    style={{ borderLeft: "4px solid var(--bd-danger)" }}
+                  >
+                    <i className="bi bi-exclamation-triangle-fill fs-4 flex-shrink-0 mt-1"></i>
+                    <div className="flex-grow-1">
+                      <strong className="d-block mb-1">Eroare la trimitere:</strong>
+                      <div className="mb-0">{submitError}</div>
+                    </div>
                   </div>
                 )}
 
@@ -138,23 +253,25 @@ function QuizContent({ childId }: { childId: string }) {
                 <QuizNavigation
                   currentStep={currentStep}
                   totalSteps={TOTAL_STEPS}
-                  canGoBack={currentStep > 1}
-                  canGoNext={canGoNext}
+                  canGoBack={currentStep > 1 && !isTransitioning}
+                  canGoNext={canGoNext && !isTransitioning}
                   isLastStep={currentStep === TOTAL_STEPS}
-                  onBack={prevStep}
-                  onNext={nextStep}
+                  onBack={handlePrevStep}
+                  onNext={handleNextStep}
                   onSubmit={handleSubmit}
-                  isSubmitting={isSubmitting}
+                  isSubmitting={isSubmitting || isTransitioning}
                 />
               </div>
             </div>
 
-            {/* Help text */}
-            <div className="text-center mt-3">
-              <small className="text-muted">
-                <i className="bi bi-shield-check me-1"></i>
-                Datele tale sunt protejate și confidențiale
-              </small>
+            {/* Help text - more visible */}
+            <div className="text-center mt-4">
+              <div className="d-inline-flex align-items-center gap-2 px-3 py-2 bg-white rounded-pill shadow-sm">
+                <i className="bi bi-shield-check text-success"></i>
+                <small className="text-muted fw-semibold">
+                  Datele tale sunt protejate și confidențiale
+                </small>
+              </div>
             </div>
           </div>
         </div>

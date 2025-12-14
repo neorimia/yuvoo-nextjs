@@ -84,8 +84,8 @@ const PersonalityQuestion = memo(function PersonalityQuestion() {
   return (
     <QuestionWrapper
       title="Ce trăsături descriu cel mai bine copilul tău?"
-      description="Selectează una sau mai multe trăsături de personalitate."
-      helpText="Selectează cel puțin o trăsătură. Poți selecta până la 10 trăsături."
+      description="Personalitatea copilului tău joacă un rol important în alegerea sportului potrivit. Un copil extrovertit s-ar putea simți mai bine într-un sport de echipă, în timp ce unul mai analitic ar putea prefera sporturi strategice."
+      helpText="Selectează cel puțin o trăsătură. Poți selecta până la 10 trăsături care descriu cel mai bine copilul tău."
       error={errors.personality}
     >
       <div className="personality-traits">
@@ -97,8 +97,8 @@ const PersonalityQuestion = memo(function PersonalityQuestion() {
               <div key={trait.value} className="col-12 col-md-6">
                 <button
                   type="button"
-                  className={`btn w-100 h-100 p-3 text-start position-relative ${
-                    isSelected ? "btn-primary" : "btn-outline-secondary"
+                  className={`btn w-100 h-100 p-3 p-md-4 text-start position-relative ${
+                    isSelected ? "btn-yuvoo-primary" : "btn-outline-secondary"
                   }`}
                   onClick={() => toggleTrait(trait.value)}
                   aria-pressed={isSelected}
@@ -107,7 +107,7 @@ const PersonalityQuestion = memo(function PersonalityQuestion() {
                     <span className="fs-3 me-3" role="img" aria-label={trait.label}>
                       {trait.icon}
                     </span>
-                    <div>
+                    <div className="flex-grow-1">
                       <div className="fw-semibold mb-1">{trait.label}</div>
                       <small className={isSelected ? "text-white-50" : "text-muted"}>
                         {trait.description}
@@ -115,7 +115,7 @@ const PersonalityQuestion = memo(function PersonalityQuestion() {
                     </div>
                   </div>
                   {isSelected && (
-                    <i className="bi bi-check-circle-fill position-absolute top-0 end-0 m-2 text-white"></i>
+                    <i className="bi bi-check-circle-fill position-absolute top-0 end-0 m-2 fs-5 text-white"></i>
                   )}
                 </button>
               </div>

@@ -83,8 +83,8 @@ const InterestsQuestion = memo(function InterestsQuestion() {
   return (
     <QuestionWrapper
       title="Ce îi place să facă copilului tău?"
-      description="Selectează interesele și hobby-urile copilului tău."
-      helpText="Selectează cel puțin un interes. Poți adăuga și altele personalizate."
+      description="Interesele actuale ale copilului tău ne ajută să înțelegem ce tipuri de activități îi aduc bucurie. Acestea pot fi un indiciu excelent pentru sporturile care ar putea să-l pasioneze."
+      helpText="Selectează cel puțin un interes. Poți adăuga și altele personalizate dacă nu le găsești în listă."
       error={errors.interests}
     >
       {/* Interests section */}
@@ -99,7 +99,7 @@ const InterestsQuestion = memo(function InterestsQuestion() {
               <div key={interest.value} className="col-6 col-md-4">
                 <button
                   type="button"
-                  className={`btn w-100 ${isSelected ? "btn-primary" : "btn-outline-secondary"} btn-sm`}
+                  className={`btn w-100 ${isSelected ? "btn-yuvoo-primary" : "btn-outline-secondary"} btn-sm`}
                   onClick={() => toggleInterest(interest.value)}
                   aria-pressed={isSelected}
                 >

@@ -21,7 +21,7 @@ interface SportRecommendationCardProps {
  */
 function getMatchScoreColor(score: number): string {
   if (score >= 90) return "text-success";
-  if (score >= 80) return "text-primary";
+  if (score >= 80) return "text-yuvoo-primary";
   if (score >= 70) return "text-info";
   return "text-muted";
 }
@@ -31,7 +31,7 @@ function getMatchScoreColor(score: number): string {
  */
 function getMatchScoreBadge(score: number): string {
   if (score >= 90) return "bg-success";
-  if (score >= 80) return "bg-primary";
+  if (score >= 80) return "bg-yuvoo-primary";
   if (score >= 70) return "bg-info";
   return "bg-secondary";
 }
@@ -99,7 +99,7 @@ const SportRecommendationCard: React.FC<SportRecommendationCardProps> = ({
             {/* Sport name and icon */}
             <div>
               <h3 className="h5 mb-0 d-flex align-items-center gap-2">
-                <i className={`bi ${sportIcon} text-primary`}></i>
+                <i className={`bi ${sportIcon} text-yuvoo-primary`}></i>
                 {recommendation.sportName}
               </h3>
             </div>
@@ -122,7 +122,7 @@ const SportRecommendationCard: React.FC<SportRecommendationCardProps> = ({
         {/* Benefits */}
         {recommendation.benefits && recommendation.benefits.length > 0 && (
           <div className="mb-3">
-            <h6 className="text-primary mb-2">
+            <h6 className="text-yuvoo-primary mb-2">
               <i className="bi bi-check-circle-fill me-2"></i>
               Beneficii
             </h6>
@@ -159,7 +159,7 @@ const SportRecommendationCard: React.FC<SportRecommendationCardProps> = ({
         <div className="mt-4 pt-3 border-top">
           <Link
             href={`${routes.clubs.list}?sport=${recommendation.sportId}&quiz=true`}
-            className="btn btn-primary w-100"
+            className="btn btn-yuvoo-primary w-100"
           >
             <i className="bi bi-search me-2"></i>
             Vezi cluburi pentru {recommendation.sportName}

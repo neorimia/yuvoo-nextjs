@@ -11,12 +11,33 @@ import { useQuiz } from "../QuizContext";
 import QuestionWrapper from "../QuestionWrapper";
 
 const AgeQuestion = memo(function AgeQuestion() {
-  const { answers, setAnswer, errors } = useQuiz();
+  const { answers, setAnswer, setAnswers, errors } = useQuiz();
 
   const handleAgeChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const value = parseInt(e.target.value, 10);
-    if (!isNaN(value)) {
+    const inputValue = e.target.value;
+
+    // Allow empty input (for clearing)
+    if (inputValue === "") {
+      // Clear the age - use setAnswers to remove the field
+      // TypeScript: PartialQuizAnswers allows undefined for age
+      setAnswers({ age: undefined });
+      return;
+    }
+
+    // Parse and validate
+    const value = parseInt(inputValue, 10);
+    if (!isNaN(value) && value >= 4 && value <= 14) {
       setAnswer("age", value);
+    }
+    // If invalid, don't update (prevents invalid values)
+  };
+
+  const handleAgeBlur = (e: React.FocusEvent<HTMLInputElement>) => {
+    const value = parseInt(e.target.value, 10);
+    // Clear invalid values on blur
+    if (isNaN(value) || value < 4 || value > 14) {
+      // TypeScript: PartialQuizAnswers allows undefined for age
+      setAnswers({ age: undefined });
     }
   };
 
@@ -27,7 +48,7 @@ const AgeQuestion = memo(function AgeQuestion() {
   return (
     <QuestionWrapper
       title="Câți ani are copilul tău?"
-      description="Vârsta copilului ne ajută să oferim recomandări potrivite pentru dezvoltarea sa."
+      description="Vârsta este esențială pentru a recomanda sporturi potrivite pentru etapa de dezvoltare a copilului tău. Fiecare vârstă are nevoi și abilități specifice."
       helpText="Acceptăm copii cu vârste între 4 și 14 ani."
       error={errors.age}
     >
@@ -43,13 +64,17 @@ const AgeQuestion = memo(function AgeQuestion() {
           name="age"
           min={4}
           max={14}
+          step={1}
           value={answers.age || ""}
           onChange={handleAgeChange}
+          onBlur={handleAgeBlur}
           placeholder="Introdu vârsta (4-14 ani)"
           required
           aria-describedby="age-help"
+          aria-invalid={errors.age ? "true" : "false"}
         />
         <div id="age-help" className="form-text">
+          <i className="bi bi-info-circle me-1"></i>
           Introdu vârsta în ani (minimum 4, maximum 14).
         </div>
       </div>
@@ -60,7 +85,7 @@ const AgeQuestion = memo(function AgeQuestion() {
         <div className="d-flex gap-2 flex-wrap">
           <button
             type="button"
-            className={`btn ${answers.gender === "male" ? "btn-primary" : "btn-outline-primary"}`}
+            className={`btn ${answers.gender === "male" ? "btn-yuvoo-primary" : "btn-yuvoo-outline-primary"}`}
             onClick={() => handleGenderChange("male")}
             aria-pressed={answers.gender === "male"}
           >
@@ -69,7 +94,7 @@ const AgeQuestion = memo(function AgeQuestion() {
           </button>
           <button
             type="button"
-            className={`btn ${answers.gender === "female" ? "btn-primary" : "btn-outline-primary"}`}
+            className={`btn ${answers.gender === "female" ? "btn-yuvoo-primary" : "btn-yuvoo-outline-primary"}`}
             onClick={() => handleGenderChange("female")}
             aria-pressed={answers.gender === "female"}
           >
@@ -78,7 +103,7 @@ const AgeQuestion = memo(function AgeQuestion() {
           </button>
           <button
             type="button"
-            className={`btn ${answers.gender === "other" ? "btn-primary" : "btn-outline-primary"}`}
+            className={`btn ${answers.gender === "other" ? "btn-yuvoo-primary" : "btn-yuvoo-outline-primary"}`}
             onClick={() => handleGenderChange("other")}
             aria-pressed={answers.gender === "other"}
           >

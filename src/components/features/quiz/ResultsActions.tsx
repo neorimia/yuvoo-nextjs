@@ -13,12 +13,12 @@ import React, { useState } from "react";
 import Link from "next/link";
 import { useRouter, usePathname } from "next/navigation";
 import { routes } from "@/lib/routes";
-import { useUser } from "@stackframe/stack";
 import { saveQuizResultsAction } from "@/app/actions/quiz";
 
 interface ResultsActionsProps {
   quizId: string;
   className?: string;
+  isAuthenticated?: boolean; // Pass auth status from server
 }
 
 /**
@@ -26,16 +26,17 @@ interface ResultsActionsProps {
  *
  * Displays action buttons for quiz results.
  * Handles authentication state and save functionality.
+ * Auth status is passed from server to avoid StackProvider dependency.
  */
-const ResultsActions: React.FC<ResultsActionsProps> = ({ quizId, className = "" }) => {
+const ResultsActions: React.FC<ResultsActionsProps> = ({
+  quizId,
+  className = "",
+  isAuthenticated = false,
+}) => {
   const router = useRouter();
   const pathname = usePathname(); // Safe way to get current pathname
-  const user = useUser();
   const [isSaving, setIsSaving] = useState(false);
   const [saveMessage, setSaveMessage] = useState<string | null>(null);
-
-  // Check if user is authenticated
-  const isAuthenticated = !!user;
 
   // Handle save results
   const handleSaveResults = async () => {
@@ -74,7 +75,7 @@ const ResultsActions: React.FC<ResultsActionsProps> = ({ quizId, className = "" 
             {isAuthenticated && (
               <button
                 type="button"
-                className="btn btn-primary"
+                className="btn btn-yuvoo-primary"
                 onClick={handleSaveResults}
                 disabled={isSaving}
               >

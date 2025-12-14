@@ -123,13 +123,87 @@ export function QuizProvider({ children, childId }: QuizProviderProps) {
     });
   }, []);
 
-  // Navigate to next step
+  // Validate current step and return validation result
+  const validateCurrentStep = useCallback((): {
+    isValid: boolean;
+    errors: Record<string, string>;
+  } => {
+    const stepErrors: Record<string, string> = {};
+
+    // Step-specific validation with helpful error messages
+    switch (currentStep) {
+      case 1: // Age
+        if (answers.age === undefined) {
+          stepErrors.age = "Te rugăm să introduci vârsta copilului.";
+        } else if (answers.age < 4 || answers.age > 14) {
+          stepErrors.age = "Vârsta trebuie să fie între 4 și 14 ani.";
+        }
+        break;
+      case 2: // Energy Level
+        if (answers.energyLevel === undefined) {
+          stepErrors.energyLevel = "Te rugăm să selectezi nivelul de energie al copilului.";
+        }
+        break;
+      case 3: // Personality
+        if (!answers.personality || answers.personality.length === 0) {
+          stepErrors.personality = "Te rugăm să selectezi cel puțin o trăsătură de personalitate.";
+        }
+        break;
+      case 4: // Interests
+        if (!answers.interests || answers.interests.length === 0) {
+          stepErrors.interests = "Te rugăm să selectezi cel puțin un interes sau hobby.";
+        }
+        break;
+      case 5: // Physical Build
+        if (answers.physicalBuild === undefined) {
+          stepErrors.physicalBuild = "Te rugăm să selectezi constituția fizică a copilului.";
+        }
+        break;
+      case 6: // Preferences
+        if (!answers.preferences) {
+          stepErrors.preferences = "Te rugăm să completezi preferințele.";
+        } else {
+          if (!answers.preferences.indoor && !answers.preferences.outdoor) {
+            stepErrors.preferences =
+              "Te rugăm să selectezi cel puțin o locație preferată (interior sau exterior).";
+          } else if (!answers.preferences.team && !answers.preferences.individual) {
+            stepErrors.preferences =
+              "Te rugăm să selectezi cel puțin un tip de activitate (echipă sau individual).";
+          }
+        }
+        break;
+    }
+
+    return {
+      isValid: Object.keys(stepErrors).length === 0,
+      errors: stepErrors,
+    };
+  }, [currentStep, answers]);
+
+  // Navigate to next step (with validation)
   const nextStep = useCallback(() => {
+    // Validate current step before proceeding
+    const validation = validateCurrentStep();
+
+    if (!validation.isValid) {
+      // Set errors for current step
+      setErrorsState((prev) => ({
+        ...prev,
+        ...validation.errors,
+      }));
+      // Scroll to top to show error messages
+      window.scrollTo({ top: 0, behavior: "smooth" });
+      return;
+    }
+
+    // Clear errors for current step before moving forward
+    setErrorsState({});
+
     if (currentStep < TOTAL_STEPS) {
       setCurrentStep((prev) => prev + 1);
       window.scrollTo({ top: 0, behavior: "smooth" });
     }
-  }, [currentStep]);
+  }, [currentStep, validateCurrentStep]);
 
   // Navigate to previous step
   const prevStep = useCallback(() => {
@@ -159,30 +233,11 @@ export function QuizProvider({ children, childId }: QuizProviderProps) {
     }
   }, []);
 
-  // Check if current step is valid (basic validation)
+  // Check if current step is valid (for button state)
   const canGoNext = useCallback(() => {
-    // Step-specific validation
-    switch (currentStep) {
-      case 1: // Age
-        return answers.age !== undefined && answers.age >= 4 && answers.age <= 14;
-      case 2: // Energy Level
-        return answers.energyLevel !== undefined;
-      case 3: // Personality
-        return answers.personality !== undefined && answers.personality.length > 0;
-      case 4: // Interests
-        return answers.interests !== undefined && answers.interests.length > 0;
-      case 5: // Physical Build
-        return answers.physicalBuild !== undefined;
-      case 6: // Preferences
-        return (
-          answers.preferences !== undefined &&
-          (answers.preferences.indoor || answers.preferences.outdoor) &&
-          (answers.preferences.team || answers.preferences.individual)
-        );
-      default:
-        return false;
-    }
-  }, [currentStep, answers]);
+    const validation = validateCurrentStep();
+    return validation.isValid;
+  }, [validateCurrentStep]);
 
   // Check if quiz is complete (all required fields filled)
   const isComplete = useCallback(() => {

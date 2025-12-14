@@ -403,6 +403,13 @@
 
 **Recent Implementation** (January 2025):
 
+- **Quiz System Bug Fixes** ✅ **COMPLETE**
+  - Fixed authentication requirement blocking unauthenticated users ✅
+  - Fixed placeholder child ID validation error ✅
+  - Fixed login redirect parameter handling ✅
+  - Fixed StackProvider error on public routes ✅
+  - Added rate limiting for quiz submissions ✅
+
 - **Phase 5.3: Testing & Quality Assurance** ✅ **COMPLETE**
   - **Fixed**: Child ownership verification in `getQuizHistoryAction` ✅
     - Added import for `getChildById` from children service
@@ -470,7 +477,7 @@
     - Created migration SQL file for documentation
     - Indexes automatically created by Drizzle ORM
 
-**Quiz System Status**: ✅ **ALL PHASES COMPLETE - Production Ready**
+**Quiz System Status**: ✅ **ALL PHASES COMPLETE - Production Ready & Bug Fixes Applied**
 
 The quiz system is now fully implemented, tested, optimized, and documented. All 5 phases are complete:
 
@@ -480,7 +487,135 @@ The quiz system is now fully implemented, tested, optimized, and documented. All
 - ✅ Phase 5.4: Performance optimization (caching, memoization, indexes)
 - ✅ Phase 5.5: Documentation (README, JSDoc)
 
-**Next Steps**: Quiz system is production-ready. Focus can shift to other features (Club Discovery, Doctor Profiles, etc.)
+**Recent Bug Fixes** (January 2025):
+
+- **Quiz Authentication Fix** ✅
+  - **Problem**: Quiz submission required authentication, blocking unauthenticated users
+  - **Solution**: Updated quiz submission to support both authenticated and unauthenticated users
+  - **Implementation**:
+    - Changed `requireAuth()` to `getSession()` (optional authentication)
+    - Added `createTemporaryChildForQuiz()` function in `quiz.service.ts`
+    - Creates temporary child records for unauthenticated users
+    - Creates or reuses anonymous system user for temporary children
+    - Uses quiz answers (age, gender) to populate basic child info
+  - **Files Modified**:
+    - `src/app/actions/quiz.ts` - Optional auth, placeholder handling, temporary child creation
+    - `src/modules/quiz/quiz.service.ts` - Added `createTemporaryChildForQuiz()` function
+  - **Status**: ✅ Complete - Quiz works for both authenticated and unauthenticated users
+
+- **Placeholder Child ID Fix** ✅
+  - **Problem**: Validation schema required valid UUID for childId, but placeholder was validated before temporary child creation
+  - **Solution**: Reordered validation flow to handle placeholders before UUID validation
+  - **Implementation**:
+    - Check for placeholder child ID before validation
+    - Validate answers separately using `quizAnswersSchema` (without childId UUID requirement)
+    - Create temporary child if placeholder detected
+    - Only validate childId as UUID if it's not a placeholder
+  - **Files Modified**:
+    - `src/app/actions/quiz.ts` - Reordered validation, separate answer validation, placeholder handling
+  - **Status**: ✅ Complete - Quiz works with placeholder child IDs
+
+- **Login Redirect Fix** ✅
+  - **Problem**: Login page didn't handle `redirect` query parameter, always redirected to dashboard
+  - **Solution**: Added support for both `redirect` and `returnUrl` query parameters
+  - **Implementation**:
+    - Made login page async to read `searchParams`
+    - Supports both `redirect` and `returnUrl` query parameters
+    - Passes redirect URL through component chain (page → LoginMain → SignInForm → signInAction)
+    - Validates redirect URL (must start with `/`) to prevent open redirect vulnerabilities
+  - **Files Modified**:
+    - `src/app/(auth)/login/page.tsx` - Async page with searchParams support
+    - `src/components/Auth/LoginMain.tsx` - Added redirectUrl prop
+    - `src/components/Form/SignInForm.tsx` - Added redirectUrl prop
+    - `src/app/actions/auth.ts` - Added redirectUrl parameter with security validation
+  - **Status**: ✅ Complete - Login correctly redirects to intended destination
+
+- **StackProvider Error Fix** ✅
+  - **Problem**: `useUser()` hook required StackProvider context, causing runtime error on public routes
+  - **Solution**: Moved authentication check to server-side and passed status as prop
+  - **Implementation**:
+    - Removed `useUser()` hook dependency from `ResultsActions` component
+    - Added server-side auth check using `getSession()` in quiz results page
+    - Passes `isAuthenticated` prop to `ResultsActions` component
+    - Component no longer requires StackProvider context
+  - **Files Modified**:
+    - `src/components/features/quiz/ResultsActions.tsx` - Removed Stack Auth hook, added isAuthenticated prop
+    - `src/app/(public)/chestionar/rezultate/[id]/page.tsx` - Added server-side auth check
+  - **Status**: ✅ Complete - Quiz results page works without StackProvider
+
+- **Rate Limiting Implementation** ✅
+  - **Created**: `src/lib/rate-limit.ts` - In-memory rate limiting utility
+    - Per-user rate limiting (authenticated users)
+    - Per-IP rate limiting (anonymous users)
+    - Configurable limits (default: 3 submissions per hour)
+    - Automatic cleanup of expired entries
+    - Statistics and monitoring functions
+  - **Integrated**: Rate limiting in `submitQuizAction`
+    - Prevents abuse and controls OpenAI API costs
+    - Romanian error messages for rate limit exceeded
+    - Returns reset time to user
+  - **Files Modified**:
+    - `src/lib/rate-limit.ts` - New rate limiting utility (in-memory, MVP-ready)
+    - `src/app/actions/quiz.ts` - Integrated rate limiting before quiz submission
+  - **Status**: ✅ Complete - Rate limiting protects against abuse and controls costs
+
+- **Quiz UX/UI Improvements** ✅ **COMPLETE** (January 2025)
+  - **Improved Romanian Quiz Questions** ✅
+    - All 6 questions updated with friendlier, parent-friendly language
+    - Added contextual explanations for why each question matters
+    - Examples: Age question explains developmental stages, Energy question explains intensity matching, Personality question explains sport preferences
+  - **Enhanced Progress Indicator** ✅
+    - Badge showing "Pasul X din 6" with contextual encouragement messages
+    - Animated progress bar (12px height, striped, Bootstrap progress-bar-animated)
+    - Progress percentage displayed prominently
+    - Mobile-responsive design
+  - **Improved Error Handling & Validation** ✅
+    - Inline validation with specific, actionable Romanian error messages
+    - Errors clear automatically when user corrects input
+    - Validation runs before allowing next step
+    - Better error visibility with improved positioning and styling
+  - **Better Button Labels & States** ✅
+    - "Continuă" instead of "Următorul" for better clarity
+    - "Vezi recomandările" instead of "Finalizează" for better action clarity
+    - Loading states with spinners and disabled states during submission
+    - Larger buttons (btn-lg) for better mobile UX
+    - Keyboard hint "(Enter)" shown on desktop
+  - **Enhanced Spacing & Visual Hierarchy** ✅
+    - Improved card layout with shadow-lg
+    - Better padding (p-4 p-md-5)
+    - Question headers with h3 fw-bold
+    - Description boxes with left border accent (alert-light with border-primary)
+    - Better mobile spacing (p-3 p-md-4 for buttons)
+    - Trust indicators more visible with rounded-pill styling
+  - **Improved Mobile Layout** ✅
+    - Responsive button sizes
+    - Better touch targets
+    - Improved spacing on small screens
+    - Progress indicator adapts to screen size
+    - Navigation buttons stack properly on mobile
+  - **Keyboard Navigation** ✅
+    - Enter key support to proceed to next step or submit
+    - Smart handling: doesn't interfere with custom input fields
+    - Visual hint on buttons for desktop users
+  - **Auto-Focus Enhancement** ✅
+    - Automatically focuses first input/button when moving to next question
+    - Improves flow and accessibility
+    - 100ms delay to ensure DOM is ready
+  - **Enhanced Age Input Validation** ✅
+    - Prevents invalid values (negative numbers, decimals, out-of-range)
+    - Clears invalid input on blur
+    - Better error handling with aria-invalid attribute
+    - Step attribute set to 1 to prevent decimals
+  - **Files Modified**:
+    - All 6 question components (AgeQuestion, EnergyQuestion, PersonalityQuestion, InterestsQuestion, PhysicalQuestion, PreferencesQuestion)
+    - QuizProgress.tsx - Enhanced progress indicator
+    - QuizNavigation.tsx - Better button labels and states
+    - QuestionWrapper.tsx - Improved layout and error display
+    - QuizContainer.tsx - Better spacing, keyboard navigation, auto-focus
+    - QuizContext.tsx - Enhanced validation with better error messages
+  - **Status**: ✅ Complete - Quiz UX/UI significantly improved for higher completion rate and better parent trust
+
+**Next Steps**: Quiz system is production-ready with all bug fixes and UX/UI improvements applied. Focus can shift to other features (Club Discovery, Doctor Profiles, etc.)
 
 ### Stack Auth Server-Side Migration ✅ (December 2024)
 

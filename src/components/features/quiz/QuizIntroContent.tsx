@@ -16,14 +16,14 @@ export default function QuizIntroContent() {
     <div className="quiz-intro-content">
       {/* Hero Section */}
       <div className="text-center mb-5">
-        <h1 className="display-4 fw-bold mb-3 text-primary">
+        <h1 className="display-4 fw-bold mb-3 text-yuvoo-primary">
           Descoperă ce sport i se potrivește copilului tău
         </h1>
         <p className="lead text-muted mb-4">
           Chestionar AI personalizat pentru recomandări inteligente
         </p>
         <div className="d-flex align-items-center justify-content-center gap-2 mb-4">
-          <i className="bi bi-clock text-primary"></i>
+          <i className="bi bi-clock text-yuvoo-primary"></i>
           <span className="text-muted">
             Doar 3–4 minute, 6 întrebări pentru recomandări personalizate
           </span>
@@ -40,8 +40,8 @@ export default function QuizIntroContent() {
                 <div className="col-md-6">
                   <div className="d-flex align-items-start gap-3">
                     <div className="flex-shrink-0">
-                      <div className="bg-primary bg-opacity-10 rounded-circle p-2">
-                        <i className="bi bi-check-circle-fill text-primary fs-4"></i>
+                      <div className="bg-yuvoo-primary bg-opacity-10 rounded-circle p-2">
+                        <i className="bi bi-check-circle-fill text-yuvoo-primary fs-4"></i>
                       </div>
                     </div>
                     <div>
@@ -55,8 +55,8 @@ export default function QuizIntroContent() {
                 <div className="col-md-6">
                   <div className="d-flex align-items-start gap-3">
                     <div className="flex-shrink-0">
-                      <div className="bg-primary bg-opacity-10 rounded-circle p-2">
-                        <i className="bi bi-lightbulb-fill text-primary fs-4"></i>
+                      <div className="bg-yuvoo-primary bg-opacity-10 rounded-circle p-2">
+                        <i className="bi bi-lightbulb-fill text-yuvoo-primary fs-4"></i>
                       </div>
                     </div>
                     <div>
@@ -70,8 +70,8 @@ export default function QuizIntroContent() {
                 <div className="col-md-6">
                   <div className="d-flex align-items-start gap-3">
                     <div className="flex-shrink-0">
-                      <div className="bg-primary bg-opacity-10 rounded-circle p-2">
-                        <i className="bi bi-building text-primary fs-4"></i>
+                      <div className="bg-yuvoo-primary bg-opacity-10 rounded-circle p-2">
+                        <i className="bi bi-building text-yuvoo-primary fs-4"></i>
                       </div>
                     </div>
                     <div>
@@ -85,8 +85,8 @@ export default function QuizIntroContent() {
                 <div className="col-md-6">
                   <div className="d-flex align-items-start gap-3">
                     <div className="flex-shrink-0">
-                      <div className="bg-primary bg-opacity-10 rounded-circle p-2">
-                        <i className="bi bi-heart-pulse-fill text-primary fs-4"></i>
+                      <div className="bg-yuvoo-primary bg-opacity-10 rounded-circle p-2">
+                        <i className="bi bi-heart-pulse-fill text-yuvoo-primary fs-4"></i>
                       </div>
                     </div>
                     <div>
@@ -111,10 +111,10 @@ export default function QuizIntroContent() {
             <div className="col-md-4">
               <div className="text-center">
                 <div
-                  className="bg-primary bg-opacity-10 rounded-circle d-inline-flex align-items-center justify-content-center mb-3"
+                  className="bg-yuvoo-primary bg-opacity-10 rounded-circle d-inline-flex align-items-center justify-content-center mb-3"
                   style={{ width: "64px", height: "64px" }}
                 >
-                  <span className="fs-3 fw-bold text-primary">1</span>
+                  <span className="fs-3 fw-bold text-yuvoo-primary">1</span>
                 </div>
                 <h3 className="h6 fw-semibold mb-2">Răspunde la 6 întrebări</h3>
                 <p className="text-muted small mb-0">
@@ -125,10 +125,10 @@ export default function QuizIntroContent() {
             <div className="col-md-4">
               <div className="text-center">
                 <div
-                  className="bg-primary bg-opacity-10 rounded-circle d-inline-flex align-items-center justify-content-center mb-3"
+                  className="bg-yuvoo-primary bg-opacity-10 rounded-circle d-inline-flex align-items-center justify-content-center mb-3"
                   style={{ width: "64px", height: "64px" }}
                 >
-                  <span className="fs-3 fw-bold text-primary">2</span>
+                  <span className="fs-3 fw-bold text-yuvoo-primary">2</span>
                 </div>
                 <h3 className="h6 fw-semibold mb-2">Analiza AI</h3>
                 <p className="text-muted small mb-0">
@@ -139,10 +139,10 @@ export default function QuizIntroContent() {
             <div className="col-md-4">
               <div className="text-center">
                 <div
-                  className="bg-primary bg-opacity-10 rounded-circle d-inline-flex align-items-center justify-content-center mb-3"
+                  className="bg-yuvoo-primary bg-opacity-10 rounded-circle d-inline-flex align-items-center justify-content-center mb-3"
                   style={{ width: "64px", height: "64px" }}
                 >
-                  <span className="fs-3 fw-bold text-primary">3</span>
+                  <span className="fs-3 fw-bold text-yuvoo-primary">3</span>
                 </div>
                 <h3 className="h6 fw-semibold mb-2">Primești recomandări</h3>
                 <p className="text-muted small mb-0">
@@ -156,7 +156,7 @@ export default function QuizIntroContent() {
 
       {/* CTA Section */}
       <div className="text-center mb-4">
-        <Link href={routes.quiz.container} className="btn btn-primary btn-lg px-5 py-3">
+        <Link href={routes.quiz.container} className="btn btn-yuvoo-primary btn-lg px-5 py-3">
           <i className="bi bi-play-circle me-2"></i>
           Începe Chestionarul
         </Link>
@@ -169,9 +169,9 @@ export default function QuizIntroContent() {
       {/* Trust Indicators */}
       <div className="row justify-content-center">
         <div className="col-lg-8">
-          <div className="alert alert-info border-0 bg-primary bg-opacity-10">
+          <div className="alert alert-info border-0 bg-yuvoo-primary bg-opacity-10">
             <div className="d-flex align-items-start gap-3">
-              <i className="bi bi-info-circle-fill text-primary fs-4"></i>
+              <i className="bi bi-info-circle-fill text-yuvoo-primary fs-4"></i>
               <div>
                 <h4 className="h6 fw-semibold mb-2">De ce să ai încredere în Yuvoo?</h4>
                 <ul className="small mb-0 ps-3">

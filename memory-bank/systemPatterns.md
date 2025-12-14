@@ -230,7 +230,7 @@ import { routes } from "@/lib/routes";
 - ✅ `components/features/clubs/` - Club components created (ClubsMain, ClubDetailsMain, HomeClubArea, ClubCard, VerificationBadge)
 - 📋 `components/features/doctors/` - Doctor components (planned)
 - 📋 `components/features/sports/` - Sport components (planned)
-- 📋 `components/features/quiz/` - Quiz components (planned)
+- ✅ `components/features/quiz/` - Quiz components complete (QuizContainer, QuizProgress, QuizNavigation, QuizContext, QuestionWrapper, 6 question components, ResultsActions, SportRecommendationCard, QuizHistory)
 
 **Layout Components**: `components/layout/`
 
@@ -515,6 +515,134 @@ Parent Dashboard → getQuizHistoryAction(childId) → Quiz Repository
                                                           ↓
                                                     Quiz History Component
 ```
+
+### Quiz Authentication Pattern
+
+**Location**: `app/actions/quiz.ts`, `modules/quiz/quiz.service.ts`
+
+**Pattern**:
+
+1. Quiz submission works for both authenticated and unauthenticated users
+2. For unauthenticated users: Creates temporary child record with anonymous parent
+3. For authenticated users: Uses selected child or creates temporary if needed
+4. Placeholder child IDs are handled before validation
+
+**Temporary Child Creation**:
+
+- Uses quiz answers (age, gender) to populate basic info
+- Creates or reuses anonymous system user (`anonymous@yuvoo.local`)
+- Generic child name: "Copil Temporar"
+- Date of birth calculated from age (January 1st of birth year)
+
+**Validation Flow**:
+
+1. Check if childId is placeholder (`"placeholder-child-id"` or empty)
+2. Validate answers separately (without childId UUID requirement)
+3. Create temporary child if placeholder detected
+4. Validate childId as UUID only if not a placeholder
+5. Submit quiz with real childId
+
+**Rate Limiting**:
+
+- Location: `lib/rate-limit.ts`
+- In-memory rate limiting (MVP-ready, can migrate to Redis for production)
+- Per-user (authenticated) or per-IP (anonymous) limiting
+- Default: 3 quiz submissions per hour
+- Prevents abuse and controls OpenAI API costs
+
+### Quiz UX/UI Patterns
+
+**Location**: `components/features/quiz/`
+
+**Key Patterns**:
+
+1. **Progress Indicator**:
+   - Badge showing "Pasul X din 6" with contextual encouragement
+   - Animated Bootstrap progress bar (progress-bar-striped, progress-bar-animated)
+   - Progress percentage displayed prominently
+   - Mobile-responsive design
+
+2. **Question Wrapper Pattern**:
+   - Consistent layout for all questions
+   - Title with required indicator (\*)
+   - Description box with left border accent (alert-light border-primary)
+   - Help text with info icon
+   - Inline error display with clear styling
+
+3. **Validation Pattern**:
+   - Step-specific validation in QuizContext
+   - Inline error messages in Romanian
+   - Errors clear automatically when user corrects input
+   - Validation runs before allowing next step
+   - Specific, actionable error messages
+
+4. **Navigation Pattern**:
+   - Back button (disabled on first step)
+   - Continue button with keyboard hint "(Enter)" on desktop
+   - Submit button: "Vezi recomandările" (not "Finalizează")
+   - Loading states with spinners
+   - Disabled states during submission
+
+5. **Keyboard Navigation**:
+   - Enter key to proceed to next step or submit
+   - Smart handling: doesn't interfere with custom input fields
+   - Auto-focus first input when moving to next question
+   - 100ms delay to ensure DOM is ready
+
+6. **Input Validation Pattern**:
+   - Age input: Prevents invalid values (negative, decimals, out-of-range)
+   - Clears invalid input on blur
+   - aria-invalid attribute for accessibility
+   - Step attribute set to 1 to prevent decimals
+
+7. **Mobile-First Design**:
+   - Responsive button sizes (btn-lg)
+   - Better touch targets
+   - Improved spacing on small screens
+   - Progress indicator adapts to screen size
+   - Navigation buttons stack properly on mobile
+
+**Question Components**:
+
+- All 6 question components use React.memo for performance
+- Consistent styling with Bootstrap utilities
+- Parent-friendly Romanian language throughout
+- Contextual explanations for why each question matters
+- Visual feedback for selections (check icons, color changes)
+
+### Authentication Redirect Pattern
+
+**Location**: `app/(auth)/login/page.tsx`, `app/actions/auth.ts`
+
+**Pattern**:
+
+1. Login page reads `redirect` or `returnUrl` query parameter
+2. Passes redirect URL through component chain (page → LoginMain → SignInForm → signInAction)
+3. Validates redirect URL (must start with `/`) to prevent open redirect vulnerabilities
+4. Redirects to provided URL after successful login, or defaults to dashboard
+
+**Security**:
+
+- Only allows relative URLs (starting with `/`)
+- Prevents open redirect attacks
+- Validates URL format before redirect
+
+### Server-Side Authentication Pattern (Public Routes)
+
+**Location**: `app/(public)/chestionar/rezultate/[id]/page.tsx`, `components/features/quiz/ResultsActions.tsx`
+
+**Pattern**:
+
+1. Public routes don't have StackProvider context
+2. Authentication check performed server-side using `getSession()`
+3. Auth status passed as prop to client components
+4. Avoids StackProvider dependency issues
+
+**Implementation**:
+
+- Server Component: Checks auth using `getSession()` (server-side only)
+- Client Component: Receives `isAuthenticated` prop (no hooks needed)
+- Follows server-first authentication pattern
 
 ## Search & Filtering Pattern
 
