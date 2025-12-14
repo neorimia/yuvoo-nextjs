@@ -59,7 +59,7 @@ const AgeQuestion = memo(function AgeQuestion() {
         </label>
         <input
           type="number"
-          className={`form-control form-control-lg ${errors.age ? "is-invalid" : ""}`}
+          className={`form-control form-control-lg ${errors.age ? "is-invalid border-danger" : ""}`}
           id="age"
           name="age"
           min={4}
@@ -70,10 +70,16 @@ const AgeQuestion = memo(function AgeQuestion() {
           onBlur={handleAgeBlur}
           placeholder="Introdu vârsta (4-14 ani)"
           required
-          aria-describedby="age-help"
+          aria-describedby={errors.age ? "age-error age-help" : "age-help"}
           aria-invalid={errors.age ? "true" : "false"}
         />
-        <div id="age-help" className="form-text">
+        {errors.age && (
+          <div id="age-error" className="invalid-feedback d-block">
+            <i className="bi bi-exclamation-circle me-1"></i>
+            {errors.age}
+          </div>
+        )}
+        <div id="age-help" className={`form-text ${errors.age ? "text-danger" : ""}`}>
           <i className="bi bi-info-circle me-1"></i>
           Introdu vârsta în ani (minimum 4, maximum 14).
         </div>

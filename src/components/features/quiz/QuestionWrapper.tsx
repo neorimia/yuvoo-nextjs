@@ -43,29 +43,33 @@ export default function QuestionWrapper({
       </div>
 
       {/* Question content */}
-      <div className="question-content mb-4">{children}</div>
+      <div className="question-content mb-3">{children}</div>
 
-      {/* Help text */}
-      {helpText && (
-        <div className="question-help mb-3">
-          <div className="d-flex align-items-start gap-2">
-            <i className="bi bi-info-circle text-yuvoo-primary mt-1"></i>
-            <small className="text-muted">{helpText}</small>
+      {/* Error message - positioned right after content for better visibility */}
+      {error && (
+        <div
+          className="alert alert-danger d-flex align-items-start gap-3 mb-3 shadow-sm"
+          role="alert"
+          style={{
+            borderLeft: "5px solid var(--bd-danger)",
+            backgroundColor: "#fff5f5",
+            animation: "fadeIn 0.3s ease-in",
+          }}
+        >
+          <i className="bi bi-exclamation-triangle-fill fs-3 flex-shrink-0 mt-1 text-danger"></i>
+          <div className="flex-grow-1">
+            <strong className="d-block mb-2 text-danger fs-6">Eroare:</strong>
+            <div className="mb-0 text-danger">{error}</div>
           </div>
         </div>
       )}
 
-      {/* Error message - improved visibility with better positioning */}
-      {error && (
-        <div
-          className="alert alert-danger d-flex align-items-start gap-3 mt-3 mb-0 shadow-sm"
-          role="alert"
-          style={{ borderLeft: "4px solid var(--bd-danger)" }}
-        >
-          <i className="bi bi-exclamation-triangle-fill fs-4 flex-shrink-0 mt-1"></i>
-          <div className="flex-grow-1">
-            <strong className="d-block mb-1">Eroare:</strong>
-            <div className="mb-0">{error}</div>
+      {/* Help text - shown after error if present */}
+      {helpText && (
+        <div className="question-help mb-0">
+          <div className="d-flex align-items-start gap-2">
+            <i className="bi bi-info-circle text-yuvoo-primary mt-1"></i>
+            <small className="text-muted">{helpText}</small>
           </div>
         </div>
       )}

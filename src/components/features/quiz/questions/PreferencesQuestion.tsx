@@ -80,9 +80,9 @@ const PreferencesQuestion = memo(function PreferencesQuestion() {
           </div>
         </div>
         {!preferences.indoor && !preferences.outdoor && (
-          <div className="text-danger small mt-2">
-            <i className="bi bi-exclamation-circle me-1"></i>
-            Selectează cel puțin o locație preferată
+          <div className="alert alert-danger d-flex align-items-center gap-2 mt-3 mb-0 py-2 shadow-sm">
+            <i className="bi bi-exclamation-circle-fill flex-shrink-0"></i>
+            <small className="mb-0">Selectează cel puțin o locație preferată</small>
           </div>
         )}
       </div>
@@ -132,9 +132,9 @@ const PreferencesQuestion = memo(function PreferencesQuestion() {
           </div>
         </div>
         {!preferences.team && !preferences.individual && (
-          <div className="text-danger small mt-2">
-            <i className="bi bi-exclamation-circle me-1"></i>
-            Selectează cel puțin un tip de activitate
+          <div className="alert alert-danger d-flex align-items-center gap-2 mt-3 mb-0 py-2 shadow-sm">
+            <i className="bi bi-exclamation-circle-fill flex-shrink-0"></i>
+            <small className="mb-0">Selectează cel puțin un tip de activitate</small>
           </div>
         )}
       </div>

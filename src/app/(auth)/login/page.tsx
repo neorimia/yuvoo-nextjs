@@ -31,16 +31,28 @@ export const metadata: Metadata = {
   },
 };
 
+interface LoginPageProps {
+  searchParams: Promise<{
+    redirect?: string;
+    returnUrl?: string;
+  }>;
+}
+
 /**
  * Login Page
  *
  * Authentication page for user login.
+ * Supports redirect parameter for post-login navigation.
  * Route: /auth/login
  */
-export default function LoginPage() {
+export default async function LoginPage({ searchParams }: LoginPageProps) {
+  const params = await searchParams;
+  // Support both 'redirect' and 'returnUrl' query parameters
+  const redirectUrl = params.redirect || params.returnUrl || undefined;
+
   return (
     <>
-      <LoginMain />
+      <LoginMain redirectUrl={redirectUrl} />
     </>
   );
 }

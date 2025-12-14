@@ -5,9 +5,12 @@
  * Handles quiz submission, AI analysis, and sport recommendations.
  */
 
+import { db } from "@/lib/db";
+import { children, users } from "@/lib/db/schema";
+import { eq } from "drizzle-orm";
 import { quizRepository } from "./quiz.repository";
 import { quizAnalyzer } from "./quiz.analyzer";
-import type { QuizResult, CreateQuizInput } from "./quiz.types";
+import type { QuizResult, CreateQuizInput, QuizAnswers } from "./quiz.types";
 
 /**
  * Submit quiz and get AI recommendations
@@ -83,4 +86,68 @@ export async function getQuizResult(quizId: string): Promise<QuizResult | null> 
  */
 export async function getQuizHistory(childId: string): Promise<QuizResult[]> {
   return quizRepository.findByChildId(childId);
+}
+
+/**
+ * Create temporary child for quiz (unauthenticated users)
+ *
+ * Creates a temporary child record for quiz submission when user is not authenticated
+ * or when using a placeholder child ID. Uses quiz answers to populate basic info.
+ *
+ * @param answers - Quiz answers containing age and gender
+ * @param parentId - Optional parent ID (null for anonymous users)
+ * @returns Child ID for quiz submission
+ */
+export async function createTemporaryChildForQuiz(
+  answers: QuizAnswers,
+  parentId: string | null
+): Promise<string> {
+  // Calculate date of birth from age (approximate - use January 1st of birth year)
+  const currentYear = new Date().getFullYear();
+  const birthYear = currentYear - answers.age;
+  const dateOfBirth = new Date(birthYear, 0, 1); // January 1st
+
+  let actualParentId: string;
+
+  if (parentId) {
+    // Use provided parent ID
+    actualParentId = parentId;
+  } else {
+    // Create or get anonymous system user
+    const anonymousEmail = "anonymous@yuvoo.local";
+    const existingAnonymousUser = await db
+      .select()
+      .from(users)
+      .where(eq(users.email, anonymousEmail))
+      .limit(1);
+
+    if (existingAnonymousUser.length > 0) {
+      actualParentId = existingAnonymousUser[0].id;
+    } else {
+      // Create anonymous system user
+      const [newUser] = await db
+        .insert(users)
+        .values({
+          id: crypto.randomUUID(),
+          email: anonymousEmail,
+          role: "parent",
+          stackUserId: `anonymous-${crypto.randomUUID()}`, // Placeholder Stack user ID
+        })
+        .returning();
+      actualParentId = newUser.id;
+    }
+  }
+
+  // Create temporary child
+  const childId = crypto.randomUUID();
+  await db.insert(children).values({
+    id: childId,
+    parentId: actualParentId,
+    firstName: "Copil", // Generic name
+    lastName: "Temporar",
+    dateOfBirth,
+    gender: answers.gender || "other",
+  });
+
+  return childId;
 }

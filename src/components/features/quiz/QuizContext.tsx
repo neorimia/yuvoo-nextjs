@@ -191,8 +191,23 @@ export function QuizProvider({ children, childId }: QuizProviderProps) {
         ...prev,
         ...validation.errors,
       }));
-      // Scroll to top to show error messages
-      window.scrollTo({ top: 0, behavior: "smooth" });
+      // Scroll to show error messages - scroll to question content area
+      setTimeout(() => {
+        const questionContent = document.querySelector(".question-content");
+        const questionWrapper = document.querySelector(".question-wrapper");
+        const errorAlert = document.querySelector(".alert-danger");
+
+        // Prioritize scrolling to error if visible
+        if (errorAlert) {
+          errorAlert.scrollIntoView({ behavior: "smooth", block: "center" });
+        } else if (questionContent) {
+          questionContent.scrollIntoView({ behavior: "smooth", block: "start" });
+        } else if (questionWrapper) {
+          questionWrapper.scrollIntoView({ behavior: "smooth", block: "start" });
+        } else {
+          window.scrollTo({ top: 0, behavior: "smooth" });
+        }
+      }, 150);
       return;
     }
 

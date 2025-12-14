@@ -566,8 +566,15 @@ Parent Dashboard → getQuizHistoryAction(childId) → Quiz Repository
    - Consistent layout for all questions
    - Title with required indicator (\*)
    - Description box with left border accent (alert-light border-primary)
-   - Help text with info icon
-   - Inline error display with clear styling
+   - Help text with info icon (shown after error if present)
+   - **Error Display Pattern**:
+     - Errors positioned immediately after question content (before help text) for maximum visibility
+     - Enhanced styling: 5px solid left border (var(--bd-danger)), light red background (#fff5f5)
+     - Larger warning icon (fs-3) with text-danger color
+     - FadeIn animation (0.3s ease-in) with translateY(-10px) for smooth appearance
+     - Improved text hierarchy: fs-6 for error title, explicit text-danger classes
+     - Stronger shadows (shadow-sm for question errors, shadow-lg for submit errors)
+     - Consistent alert-danger styling with flex layout for icon and message
 
 3. **Validation Pattern**:
    - Step-specific validation in QuizContext
@@ -575,6 +582,14 @@ Parent Dashboard → getQuizHistoryAction(childId) → Quiz Repository
    - Errors clear automatically when user corrects input
    - Validation runs before allowing next step
    - Specific, actionable error messages
+   - **Error Visibility & Positioning**:
+     - Smart scroll behavior: scrolls to error message when validation fails
+     - Prioritizes scrolling to error alert if visible, then question content
+     - 150ms delay for smooth animation
+     - Errors appear with fadeIn animation for better user attention
+     - Inline validation feedback: AgeQuestion uses invalid-feedback with icon
+     - PreferencesQuestion uses alert-danger styling for inline validation errors
+     - Submit errors use same enhanced styling for consistency
 
 4. **Navigation Pattern**:
    - Back button (disabled on first step)

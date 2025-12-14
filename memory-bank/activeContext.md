@@ -573,7 +573,16 @@ The quiz system is now fully implemented, tested, optimized, and documented. All
     - Inline validation with specific, actionable Romanian error messages
     - Errors clear automatically when user corrects input
     - Validation runs before allowing next step
-    - Better error visibility with improved positioning and styling
+    - **Enhanced Error Visibility** ✅
+      - Errors positioned immediately after question content (before help text) for better visibility
+      - Enhanced styling: 5px left border, light red background (#fff5f5), larger icons (fs-3)
+      - FadeIn animation (0.3s) with smooth upward motion for error appearance
+      - Improved text hierarchy with fs-6 for error titles
+      - Stronger shadows (shadow-sm for questions, shadow-lg for submit errors)
+      - Inline error feedback for AgeQuestion with invalid-feedback display
+      - PreferencesQuestion inline errors use alert-danger styling instead of plain text
+      - Smart scroll behavior: scrolls to error message when validation fails (centers error in view)
+      - Submit errors enhanced with same styling improvements for consistency
   - **Better Button Labels & States** ✅
     - "Continuă" instead of "Următorul" for better clarity
     - "Vezi recomandările" instead of "Finalizează" for better action clarity
@@ -610,9 +619,12 @@ The quiz system is now fully implemented, tested, optimized, and documented. All
     - All 6 question components (AgeQuestion, EnergyQuestion, PersonalityQuestion, InterestsQuestion, PhysicalQuestion, PreferencesQuestion)
     - QuizProgress.tsx - Enhanced progress indicator
     - QuizNavigation.tsx - Better button labels and states
-    - QuestionWrapper.tsx - Improved layout and error display
-    - QuizContainer.tsx - Better spacing, keyboard navigation, auto-focus
-    - QuizContext.tsx - Enhanced validation with better error messages
+    - QuestionWrapper.tsx - Improved layout and error display with enhanced visibility
+    - QuizContainer.tsx - Better spacing, keyboard navigation, auto-focus, enhanced submit error display
+    - QuizContext.tsx - Enhanced validation with better error messages and smart scroll behavior
+    - AgeQuestion.tsx - Inline error feedback with invalid-feedback display
+    - PreferencesQuestion.tsx - Alert-danger styling for inline validation errors
+    - \_animation.scss - Added fadeIn keyframe animation for error appearance
   - **Status**: ✅ Complete - Quiz UX/UI significantly improved for higher completion rate and better parent trust
 
 **Next Steps**: Quiz system is production-ready with all bug fixes and UX/UI improvements applied. Focus can shift to other features (Club Discovery, Doctor Profiles, etc.)

@@ -5,11 +5,14 @@
  * Reduces API calls and improves response times.
  *
  * Cache Strategy:
- * - Cache key: Hash of normalized quiz answers
+ * - Cache key: SHA-256 hash of normalized quiz answers
  * - TTL: 7 days (1 week)
  * - Storage: In-memory cache (can be extended to Redis for production)
+ *
+ * Security: Uses cryptographic hash (SHA-256) to prevent collisions
  */
 
+import { createHash } from "crypto";
 import { generateRecommendations as generateRecommendationsOriginal } from "./ai-recommendations.service";
 import type { QuizAnswers, SportRecommendation } from "./quiz.types";
 
@@ -29,13 +32,22 @@ const cache = new Map<string, CacheEntry>();
 const CACHE_TTL_MS = 7 * 24 * 60 * 60 * 1000;
 
 /**
- * Generate a cache key from quiz answers
+ * Generate a secure cache key from quiz answers
  *
  * Normalizes answers to create a consistent cache key.
- * Only includes fields that significantly affect recommendations.
+ * Uses SHA-256 cryptographic hash to prevent collisions.
+ *
+ * Security:
+ * - SHA-256 provides 2^256 possible hashes (virtually collision-free)
+ * - Deterministic: same input always produces same hash
+ * - Fixed-length output: 64 hexadecimal characters
+ *
+ * @param answers - Quiz answers to hash
+ * @returns Cache key in format "quiz:{sha256_hash}"
  */
 function generateCacheKey(answers: QuizAnswers): string {
   // Normalize answers for consistent caching
+  // Only include fields that significantly affect recommendations
   const normalized = {
     age: answers.age,
     energyLevel: answers.energyLevel,
@@ -51,18 +63,13 @@ function generateCacheKey(answers: QuizAnswers): string {
     },
   };
 
-  // Create hash from normalized object
+  // Create deterministic JSON string (keys are already ordered consistently)
   const keyString = JSON.stringify(normalized);
 
-  // Simple hash function (for production, consider crypto.createHash)
-  let hash = 0;
-  for (let i = 0; i < keyString.length; i++) {
-    const char = keyString.charCodeAt(i);
-    hash = (hash << 5) - hash + char;
-    hash = hash & hash; // Convert to 32-bit integer
-  }
+  // Generate SHA-256 cryptographic hash (collision-resistant)
+  const hash = createHash("sha256").update(keyString).digest("hex");
 
-  return `quiz:${Math.abs(hash)}`;
+  return `quiz:${hash}`;
 }
 
 /**

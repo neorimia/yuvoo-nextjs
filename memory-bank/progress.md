@@ -961,6 +961,14 @@
   - [x] Added step intro text explaining why each question matters ✅
   - [x] Enhanced progress indicator (badges, animations, better visibility) ✅
   - [x] Improved error messages with inline validation feedback ✅
+  - [x] Enhanced error visibility with better positioning and styling ✅
+    - [x] Errors positioned immediately after question content (before help text) ✅
+    - [x] Enhanced styling: 5px left border, light red background, larger icons ✅
+    - [x] FadeIn animation (0.3s) for smooth error appearance ✅
+    - [x] Improved text hierarchy and stronger shadows ✅
+    - [x] Inline error feedback for AgeQuestion and PreferencesQuestion ✅
+    - [x] Smart scroll behavior to center errors in view ✅
+    - [x] Enhanced submit error styling for consistency ✅
   - [x] Better button labels ("Continuă", "Vezi recomandările") ✅
   - [x] Enhanced spacing, hierarchy, and mobile layout ✅
   - [x] Keyboard navigation (Enter key to proceed) ✅

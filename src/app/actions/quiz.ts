@@ -3,49 +3,130 @@
  *
  * Server Actions for AI Coach Quiz submission and results.
  * All error messages are in Romanian as per project requirements.
+ *
+ * Security:
+ * - Rate limiting: 3 quiz submissions per hour per user/IP
+ * - Input validation with Zod schemas
+ * - Authentication checks for protected operations
  */
 
 "use server";
 
 import { revalidatePath } from "next/cache";
-import { requireAuth } from "@/modules/auth/auth.service";
+import { headers } from "next/headers";
+import { getSession, requireAuth } from "@/lib/auth/session";
 import { getChildById } from "@/modules/children/children.service";
-import { submitQuiz, getQuizResult, getQuizHistory } from "@/modules/quiz/quiz.service";
-import { createQuizInputSchema } from "@/lib/validations/quiz";
+import {
+  submitQuiz,
+  getQuizResult,
+  getQuizHistory,
+  createTemporaryChildForQuiz,
+} from "@/modules/quiz/quiz.service";
+import { createQuizInputSchema, quizAnswersSchema } from "@/lib/validations/quiz";
+import { rateLimit, getClientIdentifier } from "@/lib/rate-limit";
 import type { QuizResult, CreateQuizInput } from "@/modules/quiz/quiz.types";
 
 /**
  * Submit quiz and get AI recommendations
  *
- * Validates input, requires authentication, and orchestrates quiz submission.
- * Returns success/error response with Romanian error messages.
+ * Validates input and orchestrates quiz submission.
+ * Works for both authenticated and unauthenticated users.
+ * For unauthenticated users, creates a temporary child record.
  *
- * @param input - Quiz submission with child ID and answers
+ * Security: Rate limited to 3 submissions per hour per user/IP
+ *
+ * @param input - Quiz submission with child ID (or placeholder) and answers
  * @returns Success response with quiz result or error response
  */
 export async function submitQuizAction(
   input: CreateQuizInput
 ): Promise<{ success: boolean; result?: QuizResult; error?: string }> {
   try {
-    // Step 1: Authentication check
-    await requireAuth();
+    // Step 1: Check authentication (optional)
+    const session = await getSession();
 
-    // Step 2: Validate input with Zod schema
-    const validationResult = createQuizInputSchema.safeParse(input);
+    // Step 2: Rate limiting (prevent abuse and control OpenAI costs)
+    const headersList = await headers();
+    const mockRequest = new Request("http://localhost", {
+      headers: headersList as HeadersInit,
+    });
 
-    if (!validationResult.success) {
+    const identifier = getClientIdentifier(session?.dbUser.id, mockRequest);
+
+    const rateLimitResult = await rateLimit(identifier, {
+      maxAttempts: 3,
+      windowMs: 60 * 60 * 1000, // 1 hour
+    });
+
+    if (!rateLimitResult.success) {
+      return {
+        success: false,
+        error: `Ai atins limita de chestionare (3 per oră). Te rugăm să încerci din nou după ${rateLimitResult.resetTime}.`,
+      };
+    }
+
+    // Step 3: Handle placeholder child ID BEFORE validation
+    // If using placeholder, create temporary child first
+    let childId = input.childId;
+    let needsTemporaryChild = false;
+
+    if (!childId || childId === "placeholder-child-id") {
+      needsTemporaryChild = true;
+      // We'll create the temporary child after validating answers
+      // For now, we'll validate answers separately
+    }
+
+    // Step 4: Validate answers (without childId if it's a placeholder)
+    const answersValidation = quizAnswersSchema.safeParse(input.answers);
+
+    if (!answersValidation.success) {
       // Extract first validation error message (in Romanian)
-      const firstError = validationResult.error.errors[0];
+      const firstError = answersValidation.error.errors[0];
       return {
         success: false,
         error: firstError?.message || "Date invalide. Te rugăm să verifici răspunsurile.",
       };
     }
 
-    // Step 3: Submit quiz (includes AI processing)
-    const result = await submitQuiz(validationResult.data);
+    // Step 5: Create temporary child if needed
+    if (needsTemporaryChild) {
+      if (session) {
+        // Authenticated user but no child selected
+        childId = await createTemporaryChildForQuiz(answersValidation.data, session.dbUser.id);
+      } else {
+        // Unauthenticated user - create temporary child with anonymous parent
+        childId = await createTemporaryChildForQuiz(answersValidation.data, null);
+      }
+    } else {
+      // Validate childId is a valid UUID
+      const childIdValidation = createQuizInputSchema.shape.childId.safeParse(childId);
+      if (!childIdValidation.success) {
+        return {
+          success: false,
+          error: "ID-ul copilului trebuie să fie un UUID valid.",
+        };
+      }
 
-    // Step 4: Revalidate cache
+      // Verify child belongs to authenticated user (if authenticated)
+      if (session) {
+        const child = await getChildById(childId, session.dbUser.id);
+        if (!child) {
+          return {
+            success: false,
+            error: "Copilul selectat nu îți aparține sau nu există.",
+          };
+        }
+      }
+    }
+
+    // Step 6: Submit quiz (includes AI processing)
+    const quizInput = {
+      childId,
+      answers: answersValidation.data,
+    };
+    const result = await submitQuiz(quizInput);
+
+    // Step 7: Revalidate cache
     revalidatePath("/chestionar");
     revalidatePath(`/chestionar/rezultate/${result.id}`);
 
@@ -111,7 +192,7 @@ export async function getQuizResultAction(quizId: string): Promise<QuizResult | 
 export async function getQuizHistoryAction(childId: string): Promise<QuizResult[]> {
   try {
     // Step 1: Authentication check
-    const user = await requireAuth();
+    const session = await requireAuth();
 
     // Step 2: Validate childId format
     if (!childId || typeof childId !== "string" || childId.length !== 36) {
@@ -120,9 +201,9 @@ export async function getQuizHistoryAction(childId: string): Promise<QuizResult[
     }
 
     // Step 3: Verify child belongs to user
-    const child = await getChildById(childId, user.id);
+    const child = await getChildById(childId, session.dbUser.id);
     if (!child) {
-      console.error(`Child ${childId} not found or access denied for user ${user.id}`);
+      console.error(`Child ${childId} not found or access denied for user ${session.dbUser.id}`);
       return [];
     }
 

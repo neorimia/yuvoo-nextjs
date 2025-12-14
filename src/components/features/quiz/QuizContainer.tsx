@@ -124,14 +124,14 @@ function QuizContent({ childId }: { childId: string }) {
         "input:not([type='hidden']), textarea, button[type='button']"
       );
       if (firstInput && firstInput.focus) {
-        // Small delay to ensure DOM is ready, then clear transition state
+        // Delay to ensure DOM is ready and show loading state briefly, then clear transition state
         setTimeout(() => {
           firstInput.focus();
           setIsTransitioning(false);
-        }, 150);
+        }, 300);
       } else {
-        // If no input found, clear transition state after short delay
-        setTimeout(() => setIsTransitioning(false), 150);
+        // If no input found, clear transition state after delay
+        setTimeout(() => setIsTransitioning(false), 300);
       }
     }
     prevStepRef.current = currentStep;
@@ -209,18 +209,23 @@ function QuizContent({ childId }: { childId: string }) {
               {/* Loading overlay during step transitions */}
               {isTransitioning && (
                 <div
-                  className="position-absolute top-0 start-0 w-100 h-100 d-flex align-items-center justify-content-center bg-white bg-opacity-75 rounded"
-                  style={{ zIndex: 10 }}
+                  className="position-absolute top-0 start-0 w-100 h-100 d-flex align-items-center justify-content-center rounded"
+                  style={{
+                    zIndex: 10,
+                    backgroundColor: "rgba(255, 255, 255, 0.9)",
+                    backdropFilter: "blur(2px)",
+                  }}
                 >
                   <div className="text-center">
                     <div
-                      className="spinner-border text-yuvoo-primary mb-2"
+                      className="spinner-border text-yuvoo-primary mb-3"
                       role="status"
                       style={{ width: "3rem", height: "3rem" }}
                     >
                       <span className="visually-hidden">Se încarcă...</span>
                     </div>
-                    <div className="text-muted small">Se încarcă următoarea întrebare...</div>
+                    <div className="text-muted fw-semibold">Se încarcă următoarea întrebare...</div>
+                    <div className="text-muted small mt-1">Te rugăm să aștepți</div>
                   </div>
                 </div>
               )}
@@ -230,21 +235,31 @@ function QuizContent({ childId }: { childId: string }) {
                 <QuizProgress currentStep={currentStep} totalSteps={TOTAL_STEPS} className="mb-5" />
 
                 {/* Current question */}
-                <div ref={questionContentRef} className="quiz-question-content mb-4">
+                <div
+                  ref={questionContentRef}
+                  className="quiz-question-content mb-4"
+                  id="quiz-question-content"
+                >
                   {renderQuestion()}
                 </div>
 
                 {/* Submit error message - improved visibility with better positioning */}
                 {submitError && (
                   <div
-                    className="alert alert-danger d-flex align-items-start gap-3 mb-4 shadow-sm"
+                    className="alert alert-danger d-flex align-items-start gap-3 mb-4 shadow-lg border-0"
                     role="alert"
-                    style={{ borderLeft: "4px solid var(--bd-danger)" }}
+                    style={{
+                      borderLeft: "5px solid var(--bd-danger)",
+                      backgroundColor: "#fff5f5",
+                      animation: "fadeIn 0.3s ease-in",
+                    }}
                   >
-                    <i className="bi bi-exclamation-triangle-fill fs-4 flex-shrink-0 mt-1"></i>
+                    <i className="bi bi-exclamation-triangle-fill fs-3 flex-shrink-0 mt-1 text-danger"></i>
                     <div className="flex-grow-1">
-                      <strong className="d-block mb-1">Eroare la trimitere:</strong>
-                      <div className="mb-0">{submitError}</div>
+                      <strong className="d-block mb-2 text-danger fs-6">
+                        Eroare la trimitere:
+                      </strong>
+                      <div className="mb-0 text-danger">{submitError}</div>
                     </div>
                   </div>
                 )}

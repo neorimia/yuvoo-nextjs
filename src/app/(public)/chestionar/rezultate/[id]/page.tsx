@@ -6,6 +6,7 @@ import { getQuizResultAction } from "@/app/actions/quiz";
 import SportRecommendationCard from "@/components/features/quiz/SportRecommendationCard";
 import ResultsActions from "@/components/features/quiz/ResultsActions";
 import { routes } from "@/lib/routes";
+import { getSession } from "@/lib/auth/session";
 
 interface QuizResultsPageProps {
   params: Promise<{ id: string }>;
@@ -73,6 +74,10 @@ export default async function QuizResultsPage({ params }: QuizResultsPageProps) 
     notFound();
   }
 
+  // Check authentication status (server-side)
+  const session = await getSession();
+  const isAuthenticated = !!session;
+
   // Sort recommendations by match score (highest first)
   const sortedRecommendations = [...quizResult.recommendations].sort(
     (a, b) => b.matchScore - a.matchScore
@@ -95,7 +100,11 @@ export default async function QuizResultsPage({ params }: QuizResultsPageProps) 
               </div>
 
               {/* Results Actions */}
-              <ResultsActions quizId={quizResult.id} className="mb-4" />
+              <ResultsActions
+                quizId={quizResult.id}
+                className="mb-4"
+                isAuthenticated={isAuthenticated}
+              />
 
               {/* Sport Recommendations */}
               <div className="recommendations-list">
