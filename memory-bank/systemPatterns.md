@@ -420,21 +420,101 @@ onboarding_progress {
 
 ### OpenAI Integration
 
-**Location**: `modules/quiz/quiz.service.ts`
+**Location**: `modules/quiz/ai-recommendations.service.ts` (AI service), `modules/quiz/quiz.analyzer.ts` (orchestration)
 
 **Pattern**:
 
 1. Collect quiz answers
-2. Build structured prompt
+2. Build structured prompt (Romanian)
 3. Call OpenAI with system prompt (pediatric sports specialist persona)
 4. Parse JSON response
-5. Store recommendations in database
+5. Validate and normalize recommendations
+6. Store recommendations in database
+7. Fallback to generic recommendations if AI fails
 
 **AI Model**: GPT-4 Turbo (Phase 1)
 **Response Format**: Structured JSON with recommendations array
 **Language Requirement**: System prompts must explicitly instruct AI to generate all content (recommendations, explanations, reasoning) in Romanian language only.
 
+**Error Handling**:
+
+- Retry logic with timeout (30 seconds)
+- Fallback to age-based generic recommendations
+- Romanian error messages for all failure scenarios
+
+**Service Flow**:
+
+```
+Quiz Submission → quiz.service.ts → quiz.analyzer.ts → ai-recommendations.service.ts → OpenAI API
+                                                                                        ↓
+                                                                              Fallback (if error)
+```
+
 **Future**: ML models for improved matching
+
+## Quiz Integration Pattern
+
+### Quiz-Club Integration
+
+**Location**: `modules/quiz/sport-club-mapping.service.ts`
+
+**Pattern**:
+
+1. Extract sport IDs from quiz recommendations
+2. Filter clubs by recommended sports
+3. Optionally filter by location (parent's city)
+4. Rank clubs by recommendation match score
+5. Display with recommended badges
+
+**Service Functions**:
+
+- `getClubsForRecommendations()` - Main filtering function
+- `getRecommendedSportIds()` - Extract sport IDs
+- `isClubRecommended()` - Check club match
+- `rankClubsByRecommendations()` - Sort by match score
+
+**Club Listing Integration**:
+
+- Query params: `?sport={sportId}&quiz=true&city={city}`
+- Banner: Shows quiz context when `quiz=true`
+- Badges: "Recomandat" badge on matching clubs
+- Filtering: Pre-filters clubs by recommended sport
+
+**Usage Flow**:
+
+```
+Quiz Results → "Vezi cluburi" button → /cluburi?sport={sportId}&quiz=true
+                                                      ↓
+                                    Club Page filters by sport
+                                                      ↓
+                                    Shows recommended badge
+```
+
+### Quiz History Pattern
+
+**Location**: `components/features/quiz/QuizHistory.tsx`
+
+**Pattern**:
+
+1. Display list of completed quizzes
+2. Show date, recommended sports, match scores
+3. Link to view full results
+4. Option to retake quiz
+5. Empty state with CTA
+
+**Integration Points**:
+
+- Parent Dashboard: Shows recent quiz activity
+- Child Profile: Shows all quizzes for specific child
+- Quick Stats: Quiz count, recommendations count
+
+**Data Flow**:
+
+```
+Parent Dashboard → getQuizHistoryAction(childId) → Quiz Repository
+                                                          ↓
+                                                    Quiz History Component
+```
 
 ## Search & Filtering Pattern
 

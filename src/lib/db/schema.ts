@@ -15,7 +15,16 @@
  * - onboarding_progress: Cross-session onboarding state tracking (NEW)
  */
 
-import { pgTable, text, timestamp, boolean, integer, jsonb, pgEnum } from "drizzle-orm/pg-core";
+import {
+  pgTable,
+  text,
+  timestamp,
+  boolean,
+  integer,
+  jsonb,
+  pgEnum,
+  index,
+} from "drizzle-orm/pg-core";
 import { sql } from "drizzle-orm";
 
 // Enums
@@ -68,15 +77,24 @@ export const children = pgTable("children", {
 });
 
 // Quizzes table
-export const quizzes = pgTable("quizzes", {
-  id: text("id").primaryKey(),
-  childId: text("child_id")
-    .notNull()
-    .references(() => children.id),
-  answers: jsonb("answers").notNull(), // Quiz answers as JSON
-  recommendations: jsonb("recommendations"), // AI recommendations as JSON
-  createdAt: timestamp("created_at").defaultNow().notNull(),
-});
+export const quizzes = pgTable(
+  "quizzes",
+  {
+    id: text("id").primaryKey(),
+    childId: text("child_id")
+      .notNull()
+      .references(() => children.id),
+    answers: jsonb("answers").notNull(), // Quiz answers as JSON
+    recommendations: jsonb("recommendations"), // AI recommendations as JSON
+    createdAt: timestamp("created_at").defaultNow().notNull(),
+  },
+  (table) => ({
+    // Performance indexes for quiz queries
+    childIdIdx: index("idx_quizzes_child_id").on(table.childId),
+    createdAtIdx: index("idx_quizzes_created_at").on(table.createdAt),
+    childCreatedIdx: index("idx_quizzes_child_created").on(table.childId, table.createdAt),
+  })
+);
 
 // Clubs table
 export const clubs = pgTable("clubs", {

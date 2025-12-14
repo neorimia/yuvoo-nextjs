@@ -16,12 +16,36 @@ import VerificationBadge from "./VerificationBadge";
 
 interface ClubsMainProps {
   clubs: Club[];
+  recommendedSportIds?: string[]; // Sport IDs from quiz recommendations
+  isQuizContext?: boolean; // Whether this is a quiz-based recommendation view
 }
 
-const ClubsMain: React.FC<ClubsMainProps> = ({ clubs }) => {
+const ClubsMain: React.FC<ClubsMainProps> = ({
+  clubs,
+  recommendedSportIds = [],
+  isQuizContext = false,
+}) => {
   return (
     <section className="bd-club-area pt-110 pb-70">
       <div className="container">
+        {/* Quiz Recommendations Banner */}
+        {isQuizContext && recommendedSportIds.length > 0 && (
+          <div className="row mb-4">
+            <div className="col-12">
+              <div className="alert alert-info d-flex align-items-center" role="alert">
+                <i className="bi bi-star-fill text-warning me-3 fs-4"></i>
+                <div className="flex-grow-1">
+                  <h5 className="alert-heading mb-1">Cluburi Recomandate</h5>
+                  <p className="mb-0">
+                    Aceste cluburi oferă sporturile recomandate pentru copilul tău. Explorează
+                    opțiunile și rezervă o probă gratuită!
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+        )}
+
         <div className="row">
           {clubs.map((club) => {
             const mainImage = club.images?.[0] || "/assets/img/placeholder-club.jpg";
@@ -42,11 +66,16 @@ const ClubsMain: React.FC<ClubsMainProps> = ({ clubs }) => {
                         style={{ width: "100%", height: "100%", objectFit: "cover" }}
                       />
                     )}
-                    {club.verified && (
-                      <div className="position-absolute top-0 end-0 m-3">
-                        <VerificationBadge verified={club.verified} />
-                      </div>
-                    )}
+                    {/* Badges: Recommended (from quiz) and Verified */}
+                    <div className="position-absolute top-0 end-0 m-3 d-flex flex-column gap-2">
+                      {recommendedSportIds.includes(club.sportId) && (
+                        <span className="badge bg-warning text-dark">
+                          <i className="bi bi-star-fill me-1"></i>
+                          Recomandat
+                        </span>
+                      )}
+                      {club.verified && <VerificationBadge verified={club.verified} />}
+                    </div>
                   </div>
                   <div className="bd-club-content-3 theme-bg-6">
                     <h3 className="bd-club-title-3">
