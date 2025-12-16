@@ -202,9 +202,11 @@ export async function resetPasswordAction(formData: FormData) {
   }
 
   try {
-    await stackServerApp.resetPasswordWithToken({
-      token,
-      newPassword: password,
+    // Stack Auth uses resetPassword method with code and password
+    // The token from the URL is actually a reset code
+    await stackServerApp.resetPassword({
+      code: token, // Stack Auth expects 'code' parameter
+      password: password,
     });
 
     // Return success - redirect will be handled by the form component

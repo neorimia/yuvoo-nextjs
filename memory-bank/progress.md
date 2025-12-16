@@ -1067,15 +1067,109 @@ The quiz system is production-ready with full functionality, security, optimizat
 ### Week 15-16: Polish & Deploy
 
 - [ ] Brevo email integration
-- [ ] Email templates
-- [ ] Booking confirmation emails
-- [ ] Quiz result email summaries
+  - [x] Implementation plan created (`docs/BREVO_EMAIL_INTEGRATION_PLAN.md`) ✅
+  - [x] Setup guide created (`docs/BREVO_SETUP_GUIDE.md`) ✅
+  - [x] Test script created (`src/lib/integrations/brevo/test-brevo.ts`) ✅
+  - [ ] **User Action Required**: Set up Brevo account and get API key (see `docs/BREVO_SETUP_GUIDE.md`)
+  - [x] Phase 1: Core email infrastructure (client, templates, service) ✅
+    - [x] Enhanced Brevo client with error handling, retry logic, and type-safe email sending ✅
+    - [x] Email templates module with HTML templates for all email types ✅
+    - [x] Email service with high-level functions for sending emails ✅
+  - [x] Phase 2: Booking notifications integration ✅
+    - [x] Updated bookings notifications with email integration ✅
+    - [x] Integrated with booking service (already calls notifications) ✅
+    - [x] Email confirmation sent on booking creation ✅
+    - [x] Email cancellation sent on booking cancellation ✅
+    - [x] Email reminder function ready (for future cron job) ✅
+  - [x] Phase 3: Quiz results email integration ✅
+    - [x] Created quiz email service (`src/modules/quiz/quiz.email.ts`) ✅
+    - [x] Integrated with quiz server action (sends email after quiz submission) ✅
+    - [x] Email sent automatically for authenticated users ✅
+    - [x] Email collection for unauthenticated users (optional email field) ✅
+    - [x] Email validation for unauthenticated users ✅
+    - [x] Non-blocking email sending (doesn't affect quiz submission) ✅
+  - [ ] Phase 4: Testing & validation
+- [x] Email templates ✅
+  - [x] Booking confirmation template ✅
+  - [x] Booking cancellation template ✅
+  - [x] Booking reminder template ✅
+  - [x] Quiz results template ✅
+  - [x] Welcome email template ✅
+  - [x] Club verification status template ✅
+  - [x] Doctor verification status template ✅
+  - [x] All templates with Romanian content ✅
+  - [x] Responsive HTML design ✅
+  - [x] Plain text fallback versions ✅
+  - [x] Template documentation created (`src/lib/integrations/brevo/README.md`) ✅
 - [ ] Manual testing
 - [ ] User flow testing
-- [ ] Bug fixes
-- [ ] Image optimization
-- [ ] Performance optimization
-- [ ] Database query optimization
+- [x] Bug fixes ✅
+  - [x] Fixed TypeScript error in `resetPasswordAction` - Stack Auth API method signature corrected ✅
+    - Changed from `resetPasswordWithToken({ token, newPassword })` to `resetPassword({ code, password })` ✅
+    - Stack Auth uses code-based password reset, not token-based ✅
+- [x] Image optimization ✅
+  - [x] Created image optimization utilities (`src/lib/utils/image-optimization.ts`) ✅
+    - Cloudinary URL optimization with transformations ✅
+    - Responsive image sizes generation ✅
+    - Image optimization presets (thumbnail, card, hero, detail, avatar, logo) ✅
+  - [x] Created Cloudinary optimization utilities (`src/lib/integrations/cloudinary/optimization.ts`) ✅
+    - Cloudinary URL generation with transformations ✅
+    - Responsive srcSet generation ✅
+    - Cloudinary presets for common use cases ✅
+  - [x] Created OptimizedImage component (`src/components/ui/OptimizedImage.tsx`) ✅
+    - Automatic Cloudinary optimization ✅
+    - Error handling with fallback ✅
+    - Loading states ✅
+    - Responsive sizes support ✅
+  - [x] Enhanced image helpers (`src/lib/utils/image-helpers.ts`) ✅
+    - Added `getImageDimensions()` function ✅
+  - [x] Optimized key components ✅
+    - ClubCard - Added sizes and quality attributes ✅
+    - ClubDetailsMain - Added sizes, quality, and priority ✅
+    - DoctorCard - Added sizes and quality attributes ✅
+    - DoctorDetailsMain - Added sizes, quality, and priority ✅
+    - ClubGallery - Added sizes and quality attributes ✅
+  - [x] Created comprehensive documentation (`docs/IMAGE_OPTIMIZATION_GUIDE.md`) ✅
+    - Best practices guide ✅
+    - Usage examples ✅
+    - Migration guide ✅
+    - Performance metrics ✅
+    - Troubleshooting ✅
+  - [x] Updated integrations README with image optimization section ✅
+- [x] Performance optimization ✅
+  - [x] Database query optimization ✅
+    - [x] Added indexes to all tables for common query patterns ✅
+    - [x] Users table: email, stack_user_id, role indexes ✅
+    - [x] Children table: parent_id index ✅
+    - [x] Clubs table: slug, sport_type, city, verified, featured, verification_status indexes ✅
+    - [x] Clubs table: Composite indexes (sport_city, verified_featured) ✅
+    - [x] Doctors table: slug, specialty, city, verified, verification_status indexes ✅
+    - [x] Doctors table: Composite indexes (specialty_city, verified_specialty) ✅
+    - [x] Bookings table: parent_id, child_id, club_id, doctor_id, status, scheduled_at indexes ✅
+    - [x] Bookings table: Composite indexes (parent_status, scheduled_status) ✅
+    - [x] Favorites table: user_id, club_id, doctor_id indexes ✅
+    - [x] Favorites table: Composite indexes (user_club, user_doctor) ✅
+    - [x] Reviews table: user_id, club_id, doctor_id, moderated, rating indexes ✅
+    - [x] Reviews table: Composite indexes (club_moderated, doctor_moderated) ✅
+  - [x] React component optimization ✅
+    - [x] Created React optimization utilities (`src/lib/performance/react-optimization.ts`) ✅
+    - [x] Memoized ClubCard component to prevent unnecessary re-renders ✅
+    - [x] Memoized DoctorCard component to prevent unnecessary re-renders ✅
+    - [x] Created memoization helpers (memoizeComponent, useStableCallback, useStableValue) ✅
+    - [x] Created shallow comparison utility for prop comparison ✅
+  - [x] Query result caching ✅
+    - [x] Created performance optimization utilities (`src/lib/performance/optimization.ts`) ✅
+    - [x] Simple in-memory cache with TTL support ✅
+    - [x] Query result caching function (`cachedQuery`) ✅
+    - [x] Debounce and throttle utilities ✅
+    - [x] Performance monitoring utilities ✅
+    - [x] Cache cleanup utilities ✅
+  - [x] Created comprehensive documentation (`docs/PERFORMANCE_OPTIMIZATION_GUIDE.md`) ✅
+    - Database optimization strategies ✅
+    - React component optimization patterns ✅
+    - Caching strategies ✅
+    - Performance monitoring ✅
+    - Best practices and troubleshooting ✅
 - [ ] Vercel deployment configuration
 - [ ] Environment variables setup
 - [ ] Production deployment

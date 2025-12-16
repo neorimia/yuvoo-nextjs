@@ -25,6 +25,7 @@ Quiz Flow:
 - `quiz.service.ts` - Business logic for quiz operations (orchestration)
 - `quiz.repository.ts` - Data access layer (Drizzle ORM)
 - `quiz.analyzer.ts` - AI analysis orchestration (with fallback and risk signal detection)
+- `quiz.email.ts` - Email notifications for quiz results (✅ Brevo integration complete)
 - `ai-recommendations.service.ts` - OpenAI integration (GPT-4 Turbo)
 - `ai-recommendations-cache.service.ts` - Response caching for AI recommendations
 - `risk-signal-detection.service.ts` - Programmatic risk signal detection
@@ -95,6 +96,41 @@ Retrieves a complete quiz result by ID (public access, no auth required).
 ### `getQuizHistory(childId: string): Promise<QuizResult[]>`
 
 Gets all completed quizzes for a child, ordered by most recent first.
+
+## Email Integration
+
+### `sendQuizResultsEmail(quizResult, userEmail, user?)`
+
+Sends quiz results email with top 3 recommendations and specialist recommendations (if any).
+
+**Parameters:**
+
+- `quizResult` - Complete quiz result with recommendations
+- `userEmail` - Email address to send to (required)
+- `user` - Optional authenticated user (for personalization)
+
+**Features:**
+
+- ✅ Automatically called after quiz submission
+- ✅ Works for both authenticated and unauthenticated users
+- ✅ Authenticated users: Uses their account email automatically
+- ✅ Unauthenticated users: Uses provided email address (optional)
+- ✅ Non-blocking (email failures don't affect quiz submission)
+- ✅ Romanian language content
+- ✅ Includes top 3 sport recommendations with match scores
+- ✅ Includes specialist recommendations if detected
+- ✅ Links to full results page and club discovery
+
+**Integration:** Email is sent automatically in `submitQuizAction` after quiz results are generated:
+
+- **Authenticated users**: Email sent automatically using their account email
+- **Unauthenticated users**: Email sent if `email` field is provided in quiz submission
+
+**Email Collection for Unauthenticated Users:**
+
+- Frontend should collect email address before quiz submission
+- Email is optional but recommended for receiving results
+- Email is validated before sending
 
 **Parameters:**
 

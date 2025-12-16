@@ -22,9 +22,11 @@ import {
   getQuizHistory,
   createTemporaryChildForQuiz,
 } from "@/modules/quiz/quiz.service";
+import { sendQuizResultsEmail } from "@/modules/quiz/quiz.email";
 import { createQuizInputSchema, quizAnswersSchema } from "@/lib/validations/quiz";
 import { rateLimit, getClientIdentifier } from "@/lib/rate-limit";
 import type { QuizResult, CreateQuizInput } from "@/modules/quiz/quiz.types";
+import type { AuthUser } from "@/modules/auth/auth.types";
 
 /**
  * Submit quiz and get AI recommendations
@@ -35,7 +37,9 @@ import type { QuizResult, CreateQuizInput } from "@/modules/quiz/quiz.types";
  *
  * Security: Rate limited to 3 submissions per hour per user/IP
  *
- * @param input - Quiz submission with child ID (or placeholder) and answers
+ * @param input - Quiz submission with child ID (or placeholder), answers, and optional email
+ *   - For authenticated users: email is optional (uses account email)
+ *   - For unauthenticated users: email is optional but recommended to receive results
  * @returns Success response with quiz result or error response
  */
 export async function submitQuizAction(
@@ -76,7 +80,7 @@ export async function submitQuizAction(
       // For now, we'll validate answers separately
     }
 
-    // Step 4: Validate answers (without childId if it's a placeholder)
+    // Step 4: Validate answers and optional email (separate from childId validation)
     const answersValidation = quizAnswersSchema.safeParse(input.answers);
 
     if (!answersValidation.success) {
@@ -86,6 +90,17 @@ export async function submitQuizAction(
         success: false,
         error: firstError?.message || "Date invalide. Te rugăm să verifici răspunsurile.",
       };
+    }
+
+    // Validate email if provided (for unauthenticated users)
+    if (input.email && input.email.trim() !== "") {
+      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      if (!emailRegex.test(input.email.trim())) {
+        return {
+          success: false,
+          error: "Email-ul introdus nu este valid.",
+        };
+      }
     }
 
     // Step 5: Create temporary child if needed
@@ -123,10 +138,45 @@ export async function submitQuizAction(
     const quizInput = {
       childId,
       answers: answersValidation.data,
+      // Note: email is not passed to submitQuiz, it's only used for email sending
     };
     const result = await submitQuiz(quizInput);
 
-    // Step 7: Revalidate cache
+    // Step 7: Send quiz results email (non-blocking)
+    // Determine email address and user info
+    let emailToSend: string | null = null;
+    let authUser: AuthUser | undefined = undefined;
+
+    if (session?.user?.primaryEmail) {
+      // Authenticated user - use their email
+      emailToSend = session.user.primaryEmail;
+      authUser = {
+        id: session.dbUser.id,
+        email: session.user.primaryEmail,
+        name:
+          session.dbUser.firstName && session.dbUser.lastName
+            ? `${session.dbUser.firstName} ${session.dbUser.lastName}`
+            : session.user.displayName || null,
+        role: session.dbUser.role as "parent" | "club_admin" | "doctor" | "admin",
+        emailVerified: session.user.primaryEmailVerified || false,
+        createdAt: session.dbUser.createdAt,
+        updatedAt: session.dbUser.updatedAt,
+      };
+    } else if (input.email && input.email.trim() !== "") {
+      // Unauthenticated user - use provided email
+      emailToSend = input.email.trim();
+      // No authUser for unauthenticated users (will be undefined)
+    }
+
+    // Send email if we have an email address
+    if (emailToSend) {
+      sendQuizResultsEmail(result, emailToSend, authUser).catch((error) => {
+        // Log error but don't block quiz submission
+        console.error("[Quiz Action] Error sending quiz results email:", error);
+      });
+    }
+
+    // Step 8: Revalidate cache
     revalidatePath("/chestionar");
     revalidatePath(`/chestionar/rezultate/${result.id}`);
 

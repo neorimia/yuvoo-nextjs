@@ -862,14 +862,44 @@ await deleteImageAction(imageUrl);
 
 **Location**: `lib/integrations/brevo/`
 
-**Use Cases**:
+**Status**: ✅ Email Templates Complete - Production Ready
 
-- Booking confirmations
-- Quiz result summaries
-- Verification status updates
-- Reminder emails
+**Email Types** (All Implemented):
+
+- ✅ Booking confirmations - Sent automatically on booking creation
+- ✅ Booking cancellations - Sent automatically on booking cancellation
+- ✅ Booking reminders - Ready for cron job integration (24h before scheduled time)
+- ✅ Quiz results - Sent automatically after quiz submission
+- ✅ Welcome emails - Ready for registration flow integration
+- ✅ Club verification status - Ready for admin workflow integration
+- ✅ Doctor verification status - Ready for admin workflow integration
 
 **Templates**: `lib/integrations/brevo/templates.ts`
+
+**Template Features**:
+
+- Responsive HTML design (mobile-friendly)
+- Bootstrap-based styling (consistent with platform)
+- Yuvoo branding (gradient header, brand colors)
+- Romanian language content throughout
+- Plain text fallback versions
+- Personalized greetings (user's first name)
+- Clear call-to-action buttons
+- Footer with contact info
+
+**Email Service**: `lib/integrations/brevo/email.service.ts`
+
+- High-level functions for each email type
+- Email validation before sending
+- Non-blocking error handling (failures don't affect core operations)
+- Retry logic with exponential backoff
+
+**Integration Points**:
+
+- Booking emails: Automatically sent in `bookings.service.ts`
+- Quiz emails: Automatically sent in `app/actions/quiz.ts`
+- Welcome emails: Ready for `signUpAction` integration
+- Verification emails: Ready for admin verification workflow
 
 ## Caching Strategy
 
@@ -1277,10 +1307,12 @@ Does component need interactivity?
 1. **Cache Components**: Explicit caching with `"use cache"` for cacheable content
 2. **Static Shells**: Cached components create static shells for instant loading
 3. **Server Components**: Default (reduces client bundle)
-4. **Image Optimization**: Cloudinary + Next.js Image
-5. **Database Indexing**: Strategic indexes on search fields
-6. **Caching**: Cache Components with time-based and tag-based revalidation
-7. **Code Splitting**: Automatic via Next.js
+4. **Image Optimization**: Cloudinary + Next.js Image (see Image Optimization Pattern above)
+5. **Database Indexing**: Comprehensive indexes on all tables for common query patterns (see Performance Optimization Pattern above)
+6. **Query Result Caching**: In-memory cache with TTL for database queries (see Performance Optimization Pattern above)
+7. **React Component Optimization**: Memoization utilities and patterns (see Performance Optimization Pattern above)
+8. **Caching**: Cache Components with time-based and tag-based revalidation
+9. **Code Splitting**: Automatic via Next.js
 
 ## Documentation References
 

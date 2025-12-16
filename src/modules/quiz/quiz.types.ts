@@ -72,4 +72,5 @@ export interface QuizResult {
 export interface CreateQuizInput {
   childId: string;
   answers: QuizAnswers;
+  email?: string; // Optional email for unauthenticated users to receive results
 }

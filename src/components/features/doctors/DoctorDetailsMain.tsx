@@ -51,7 +51,10 @@ const DoctorDetailsMain: React.FC<DoctorDetailsMainProps> = ({ doctor }) => {
                   alt={doctor.name}
                   width={500}
                   height={600}
+                  sizes="(max-width: 768px) 100vw, 50vw"
                   style={{ width: "100%", height: "100%", objectFit: "cover" }}
+                  quality={90}
+                  priority
                   unoptimized={isPlaceholderUrl(doctorImage)}
                 />
                 <div className="panel wow"></div>
