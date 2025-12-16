@@ -142,15 +142,39 @@ npm run db:seed
 This will create:
 
 - **Test users** (3 parent accounts)
-- **Sample clubs** (30+ sports clubs across Romania)
-- **Sample doctors** (8 pediatric specialists)
+- **Sample clubs** (60+ sports clubs across Romania with all fields populated)
+- **Sample doctors** (18 pediatric specialists with all fields populated)
 
-**Note**: The seed script is idempotent - running it multiple times won't create duplicates. Existing records are skipped.
+**Note**: The seed script is idempotent - running it multiple times won't create duplicates. Existing records are skipped based on unique constraints (slug, email).
+
+**Seed Data Structure**:
+
+The seed data is organized in modular files:
+
+```
+src/lib/db/seed-data/
+├── helpers.ts      # Utility functions (slug generation, coordinates, etc.)
+├── sports.ts       # Sports reference data (25+ sports)
+├── clubs.ts        # Clubs seed data (60+ clubs)
+└── doctors.ts      # Doctors seed data (18 doctors)
+```
 
 **Seed Data Includes**:
 
-- Clubs covering 20+ different sports (fotbal, baschet, tenis, înot, gimnastică, dans, etc.)
-- Clubs in multiple Romanian cities (București, Cluj-Napoca, Timișoara, Iași, etc.)
-- Mix of verified and unverified clubs
-- Featured clubs for homepage display
-- Doctors specializing in: Ortopedie pediatrică, Nutriție pediatrică, Psihologie sportivă, Medicină sportivă pediatrică, Cardiologie pediatrică, Fizioterapie pediatrică
+- **Clubs** (60+ clubs):
+  - Covering 20+ different sports (fotbal, baschet, tenis, înot, gimnastică, dans, karate, judo, etc.)
+  - In multiple Romanian cities (București with all sectors, Cluj-Napoca, Timișoara, Iași, Constanța, Brașov, etc.)
+  - All fields populated: slug, ageGroups, experienceLevels, schedule, pricing, coordinates, images, etc.
+  - Mix of verified (60%) and unverified (40%) clubs
+  - Featured clubs (10-15) for homepage display
+  - Realistic Romanian addresses, phone numbers, and descriptions
+
+- **Doctors** (18 specialists):
+  - Specialties: Ortopedie pediatrică, Nutriție pediatrică, Psihologie sportivă, Medicină sportivă pediatrică, Cardiologie pediatrică, Fizioterapie pediatrică, Kineziterapie pediatrică
+  - All fields populated: slug, title, credentials, bio, schedule, languages, etc.
+  - Mix of verified (70%) and unverified (30%) doctors
+  - Geographic distribution across major Romanian cities
+
+- **Sports Reference Data**:
+  - 25+ sports with metadata (name, slug, description, age ranges, category)
+  - Currently used as reference data (can be migrated to sports table in future)

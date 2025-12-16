@@ -17,7 +17,7 @@ interface ClubDetailsMainProps {
 
 const ClubDetailsMain: React.FC<ClubDetailsMainProps> = ({ club }) => {
   const mainImage = club.images?.[0] || "/assets/img/placeholder-club.jpg";
-  const pricingDisplay = club.pricing
+  const pricingDisplay = club.pricing?.amount
     ? `${club.pricing.amount} ${club.pricing.currency}/${club.pricing.type === "monthly" ? "lună" : club.pricing.type === "per_class" ? "ședință" : "semestru"}`
     : "Contactează pentru preț";
 
@@ -67,16 +67,21 @@ const ClubDetailsMain: React.FC<ClubDetailsMainProps> = ({ club }) => {
                 <div className="bd-club-details-info">
                   <div className="bd-club-details-sport">
                     <span>
-                      <i className="flaticon-sports me-2"></i>Sport
+                      <i className="fa-regular fa-football me-2"></i>Sport
                     </span>
-                    <h5>{club.sportName}</h5>
+                    <h5>
+                      {club.sportName
+                        .split(" ")
+                        .map((word) => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase())
+                        .join(" ")}
+                    </h5>
                   </div>
                 </div>
 
                 {/* Location Information */}
                 <div className="bd-club-details-location">
                   <span>
-                    <i className="flaticon-location me-2"></i>Locație
+                    <i className="fa-regular fa-location me-2"></i>Locație
                   </span>
                   <h5>
                     {club.location.city}
@@ -94,7 +99,7 @@ const ClubDetailsMain: React.FC<ClubDetailsMainProps> = ({ club }) => {
                 {club.pricing && (
                   <div className="bd-club-details-pricing">
                     <span>
-                      <i className="flaticon-money me-2"></i>Preț
+                      <i className="fa-regular fa-money-bill-wave me-2"></i>Preț
                     </span>
                     <h5>{pricingDisplay}</h5>
                   </div>
@@ -104,7 +109,7 @@ const ClubDetailsMain: React.FC<ClubDetailsMainProps> = ({ club }) => {
                 {club.ageGroups && club.ageGroups.length > 0 && (
                   <div className="bd-club-details-age">
                     <span>
-                      <i className="flaticon-calendar me-2"></i>Vârste
+                      <i className="fa-regular fa-calendar me-2"></i>Vârste
                     </span>
                     <h5>
                       {club.ageGroups.length === 1
@@ -123,7 +128,7 @@ const ClubDetailsMain: React.FC<ClubDetailsMainProps> = ({ club }) => {
                 {club.levels && club.levels.length > 0 && (
                   <div className="bd-club-details-levels">
                     <span>
-                      <i className="flaticon-star me-2"></i>Niveluri
+                      <i className="fa-regular fa-star me-2"></i>Niveluri
                     </span>
                     <h5>
                       {club.levels
@@ -144,7 +149,7 @@ const ClubDetailsMain: React.FC<ClubDetailsMainProps> = ({ club }) => {
                 {club.verified && (
                   <div className="bd-club-details-verified">
                     <span>
-                      <i className="flaticon-check me-2"></i>Status
+                      <i className="fa-regular fa-check me-2"></i>Status
                     </span>
                     <h5>
                       <VerificationBadge verified={club.verified} />
@@ -158,12 +163,12 @@ const ClubDetailsMain: React.FC<ClubDetailsMainProps> = ({ club }) => {
                 (club.contact.phone || club.contact.email || club.contact.website) && (
                   <div className="bd-club-details-contact mt-4 pt-4 border-top">
                     <h5 className="mb-3">
-                      <i className="flaticon-phone me-2"></i>Informații de Contact
+                      <i className="fa-regular fa-phone me-2"></i>Informații de Contact
                     </h5>
                     <div className="d-flex flex-column gap-3">
                       {club.contact.phone && (
                         <div className="d-flex align-items-center">
-                          <i className="flaticon-phone text-primary me-3 fs-5"></i>
+                          <i className="fa-regular fa-phone text-primary me-3 fs-5"></i>
                           <div>
                             <span className="d-block small text-muted">Telefon</span>
                             <a href={`tel:${club.contact.phone}`} className="text-decoration-none">
@@ -174,7 +179,7 @@ const ClubDetailsMain: React.FC<ClubDetailsMainProps> = ({ club }) => {
                       )}
                       {club.contact.email && (
                         <div className="d-flex align-items-center">
-                          <i className="flaticon-email text-primary me-3 fs-5"></i>
+                          <i className="fa-regular fa-envelope text-primary me-3 fs-5"></i>
                           <div>
                             <span className="d-block small text-muted">Email</span>
                             <a
@@ -188,7 +193,7 @@ const ClubDetailsMain: React.FC<ClubDetailsMainProps> = ({ club }) => {
                       )}
                       {club.contact.website && (
                         <div className="d-flex align-items-center">
-                          <i className="flaticon-website text-primary me-3 fs-5"></i>
+                          <i className="fa-regular fa-globe text-primary me-3 fs-5"></i>
                           <div>
                             <span className="d-block small text-muted">Website</span>
                             <a

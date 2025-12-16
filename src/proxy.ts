@@ -25,6 +25,27 @@ import { stackServerApp } from "@/lib/auth/stack";
 const AUTH_ROUTES = ["/auth/login", "/auth/register", "/auth/forgot-password"];
 const PROTECTED_ROUTE_PREFIXES = ["/parent", "/club", "/doctor", "/admin", "/onboarding"];
 
+// Public routes that should never require authentication
+// Note: These are public routes that might conflict with protected route prefixes
+// e.g., /cluburi (public) vs /club (protected), /doctori (public) vs /doctor (protected)
+const PUBLIC_ROUTES = [
+  "/",
+  "/cluburi", // Public club listing (not /club which is protected)
+  "/doctori", // Public doctor listing (not /doctor which is protected)
+  "/sporturi",
+  "/chestionar",
+  "/cautare",
+  "/despre-noi",
+  "/parteneri",
+  "/contact",
+  "/intrebari-frecvente",
+  "/ajutor",
+  "/confidentialitate",
+  "/termeni",
+  "/cookies",
+  "/gdpr-parinti",
+];
+
 // Onboarding routes by role
 const ONBOARDING_ROUTES = {
   parent: "/onboarding/parent/welcome",
@@ -34,10 +55,50 @@ const ONBOARDING_ROUTES = {
 };
 
 /**
+ * Check if path is a public route
+ */
+function isPublicRoute(pathname: string): boolean {
+  // Check exact matches
+  if (PUBLIC_ROUTES.includes(pathname)) {
+    return true;
+  }
+
+  // Check if it starts with public route patterns
+  if (
+    pathname.startsWith("/cluburi") || // Public club routes
+    pathname.startsWith("/doctori") || // Public doctor routes
+    pathname.startsWith("/sporturi") ||
+    pathname.startsWith("/chestionar") ||
+    pathname.startsWith("/auth") ||
+    pathname.startsWith("/confidentialitate") ||
+    pathname.startsWith("/termeni") ||
+    pathname.startsWith("/cookies") ||
+    pathname.startsWith("/gdpr-parinti")
+  ) {
+    return true;
+  }
+
+  return false;
+}
+
+/**
  * Check if path is a protected route
+ * Note: Must check public routes first to avoid conflicts
+ * e.g., /cluburi (public) vs /club (protected), /doctori (public) vs /doctor (protected)
  */
 function isProtectedRoute(pathname: string): boolean {
-  return PROTECTED_ROUTE_PREFIXES.some((prefix) => pathname.startsWith(prefix));
+  // First check if it's a public route - if so, it's not protected
+  if (isPublicRoute(pathname)) {
+    return false;
+  }
+
+  // Now check protected route prefixes
+  // Note: /club matches /club/* but NOT /cluburi/*
+  // Note: /doctor matches /doctor/* but NOT /doctori/*
+  return PROTECTED_ROUTE_PREFIXES.some((prefix) => {
+    // Exact match or starts with prefix followed by /
+    return pathname === prefix || pathname.startsWith(prefix + "/");
+  });
 }
 
 /**
@@ -107,6 +168,11 @@ export async function proxy(request: NextRequest) {
     return NextResponse.next();
   }
 
+  // IMPORTANT: Allow all public routes without authentication check
+  if (isPublicRoute(pathname)) {
+    return NextResponse.next();
+  }
+
   try {
     // Get Stack Auth user
     const stackUser = await stackServerApp.getUser();
@@ -120,7 +186,7 @@ export async function proxy(request: NextRequest) {
         return NextResponse.redirect(loginUrl);
       }
 
-      // Allow access to public routes
+      // Allow access to all other routes (public routes already handled above)
       return NextResponse.next();
     }
 
@@ -179,15 +245,18 @@ export async function proxy(request: NextRequest) {
     // --- Role-Based Route Protection ---
 
     // Protect role-specific routes
-    if (pathname.startsWith("/parent") && dbUser.role !== "parent") {
+    // Note: Check exact matches or /prefix/ to avoid matching public routes
+    // e.g., /club matches /club/* but NOT /cluburi/*
+    // e.g., /doctor matches /doctor/* but NOT /doctori/*
+    if (pathname.startsWith("/parent/") && dbUser.role !== "parent") {
       return NextResponse.redirect(new URL("/auth/login", request.url));
     }
 
-    if (pathname.startsWith("/club") && dbUser.role !== "club_admin") {
+    if (pathname.startsWith("/club/") && dbUser.role !== "club_admin") {
       return NextResponse.redirect(new URL("/auth/login", request.url));
     }
 
-    if (pathname.startsWith("/doctor") && dbUser.role !== "doctor") {
+    if (pathname.startsWith("/doctor/") && dbUser.role !== "doctor") {
       return NextResponse.redirect(new URL("/auth/login", request.url));
     }
 
