@@ -1053,16 +1053,16 @@ The quiz system is production-ready with full functionality, security, optimizat
 
 ### Week 13-14: Doctor Profiles
 
-- [ ] Adapt Teacher components → Doctor components
-- [ ] Doctor listing page (adapt TeachersMain)
-- [ ] Doctor search and filters (new component)
-- [ ] Doctor card component (adapt Teacher cards)
-- [ ] Doctor profile page (SSG) (adapt TeacherDetailsMain)
-- [ ] Professional information display (adapt TeacherInfo)
-- [ ] Availability calendar (new component)
-- [ ] Appointment booking form (new component)
-- [ ] AI Coach → Specialist recommendation logic
-- [ ] Risk signal detection
+- [x] Adapt Teacher components → Doctor components ✅
+- [x] Doctor listing page (adapt TeachersMain) ✅
+- [x] Doctor search and filters (new component) ✅
+- [x] Doctor card component (adapt Teacher cards) ✅
+- [x] Doctor profile page (SSG) (adapt TeacherDetailsMain) ✅
+- [x] Professional information display (adapt TeacherInfo) ✅
+- [x] Availability calendar (new component) ✅
+- [x] Appointment booking form (new component) ✅
+- [x] AI Coach → Specialist recommendation logic ✅
+- [x] Risk signal detection ✅
 
 ### Week 15-16: Polish & Deploy
 
@@ -1097,38 +1097,153 @@ The quiz system is production-ready with full functionality, security, optimizat
 
 ### Club Directory
 
-**Status**: Not Started
-**Components Needed**:
+**Status**: Core Components Complete ✅
+**Components Created**:
 
-- Club listing page
-- Club search/filter UI
-- Club card component
-- Club detail page
-- Club search service
-- Location search
-- Map integration
+- ✅ Club listing page (`ClubsMain.tsx`) - Client Component with quiz integration
+- ✅ Club card component (`ClubCard.tsx`) - Multiple variants with verification badges
+- ✅ Club detail page (`ClubDetailsMain.tsx`) - Server Component, SSG-compatible
+- ✅ Club search filters (`ClubSearchFilters.tsx`) - Search and filter UI
+- ✅ Club details widgets (`ClubDetailsWidget.tsx`, `ClubDetailsWidgetTwo.tsx`) - Sidebar widgets
+- ✅ Club gallery (`ClubGallery.tsx`) - Photo gallery component
+- ✅ Club map (`ClubMap.tsx`) - Location map integration
+- ✅ Club schedule (`ClubSchedule.tsx`) - Training schedule display
+- ✅ Verification badge (`VerificationBadge.tsx`) - Multi-status badge component
+- ✅ Booking form (`BookingForm.tsx`, `BookingFormSection.tsx`) - Trial session booking
+- ✅ Homepage club sections (`HomeClubArea.tsx`, `HomeTwoClubArea.tsx`) - Swiper slider and background variants
+- ✅ SCSS styling - All club component classes with Bootstrap utilities
+- ✅ Component exports (`index.ts`) - Central export file
+- ✅ Documentation (`README.md`) - Component usage guide
+
+**Components Still Needed**:
+
+- None - All core components complete ✅
+
+**Backend Services** (✅ Complete):
+
+- ✅ Club search service (`clubs.search.ts`) - Full search functionality with filters, sorting, pagination
+- ✅ Location-based search - Haversine formula for radius-based search (latitude/longitude + radiusKm)
+- ✅ Advanced filtering - sportId, age, city, district, level, verified, featured, location-based radius
+- ✅ Sorting options - name, verified, rating, distance
+- ✅ Pagination support
 
 ### Club Verification System
 
-**Status**: Not Started
-**Components Needed**:
+**Status**: Partial - UI Components Complete, Admin Workflow Missing
+**Components Created**:
 
-- Verification status badges
-- Admin verification interface
-- Verification workflow
-- Status updates
+- ✅ Verification status badges (`VerificationBadge.tsx`) - Multi-status badge component (pending, in_review, approved, rejected)
+- ✅ Club admin document submission (`ClubVerificationForm.tsx`) - Document upload during onboarding
+- ✅ Verification status display - Integrated in club cards and detail pages
+
+**Components Still Needed**:
+
+- [ ] Admin verification interface - Admin dashboard for reviewing club verification requests
+- [ ] Verification workflow - Approve/reject actions for admins
+- [ ] Status update actions - Server actions to update club verification status
 
 ### Doctor Directory
 
-**Status**: Not Started
-**Components Needed**:
+**Status**: Core Components Complete ✅
+**Components Created**:
 
-- Doctor listing page
-- Doctor search/filter UI
-- Doctor card component
-- Doctor profile page
-- Availability calendar
-- Booking form
+- ✅ Doctor listing page (`DoctorsMain.tsx`) - Client Component with empty state
+- ✅ Doctor card component (`DoctorCard.tsx`) - Multiple variants (listing, default, compact, featured)
+- ✅ Doctor profile page (`DoctorDetailsMain.tsx`) - Server Component, SSG-compatible
+- ✅ Doctor search filters (`DoctorSearchFilters.tsx`) - Search and filter UI with URL state management
+  - Specialty filter (orthopedist, nutritionist, psychologist, general) with Romanian labels
+  - City filter (20 major Romanian cities)
+  - District/Sector text input filter
+  - Verified doctors checkbox
+  - Accepting new patients checkbox
+  - Online consultations checkbox
+  - Sort options (name, specialty, verified)
+  - URL state management (filters persist in query params)
+  - Active filter count display
+  - Clear all filters functionality
+- ✅ Appointment booking form (`DoctorAppointmentForm.tsx`, `DoctorAppointmentFormSection.tsx`) - Consultation booking
+  - Optional child selection (doctor consultations can be for parent or child)
+  - Consultation type selection (in-person or online, shown only if doctor offers online consultations)
+  - Date and time picker with validation (must be in future)
+  - Notes field for symptoms, questions, or additional information
+  - React Hook Form validation with Romanian error messages
+  - Integration with `createBookingAction` using `doctor_consultation` type
+  - Success handling with redirect to bookings page
+  - Loading states and error handling
+- ✅ Professional information display (`DoctorInfo.tsx`) - Contact, credentials, location
+- ✅ Medical specialties display (`DoctorSpecialties.tsx`) - Primary specialty and credentials
+- ✅ Availability calendar (`DoctorAvailability.tsx`) - Schedule display with availability indicators
+- ✅ Homepage doctor sections (`HomeDoctorArea.tsx`, `HomeTwoDoctorArea.tsx`) - Swiper slider and background variants
+- ✅ SCSS styling (`_teacher.scss`) - All doctor component classes with hover effects, variants, and filter styles
+- ✅ TypeScript types updated (`doctors.types.ts`) - Added `acceptingNewPatients` and `onlineConsultations` fields
+- ✅ Component exports (`index.ts`) - Central export file
+- ✅ Documentation (`README.md`) - Component usage guide
+
+**Components Still Needed**:
+
+- [ ] Specialist referral flow (UI components for displaying recommendations)
+
+**Backend Services** (✅ Complete):
+
+- ✅ Doctor repository (`doctors.repository.ts`) - Data access layer with Drizzle ORM
+  - `mapDbDoctorToDoctor()` - Maps database records to Doctor type
+  - `generateSlug()` - Generates URL-friendly slugs from names (handles Romanian diacritics)
+  - `findBySlug()` - Finds doctor by slug (direct database query with index)
+  - `findBySpecialty()` - Finds doctors by specialty with sorting
+  - `findAll()` - Gets all doctors with sorting
+  - Slug field added to doctors table schema for performance
+  - Backward compatibility: Falls back to generated slug if database slug is missing
+- ✅ Doctor search service (`doctors.search.ts`) - Full search functionality with filters, sorting, pagination
+  - Specialty filter (orthopedist, nutritionist, psychologist, general)
+  - City filter (case-insensitive)
+  - District filter (case-insensitive)
+  - Verified filter
+  - Accepting new patients filter
+  - Online consultations filter
+  - Sorting options: name, specialty, verified (default)
+  - Pagination support with total count
+  - Type-safe filters with DoctorSearchFilters interface
+
+**AI Coach Specialist Recommendations** (✅ Complete):
+
+- ✅ Specialist recommendation types (`SpecialistRecommendation` interface) - orthopedist, nutritionist, psychologist, general
+- ✅ AI recommendations service updated to generate specialist recommendations with priority levels (high, medium, low)
+- ✅ Risk signal detection in AI system prompt:
+  - Orthopedist: Physical limitations, coordination issues, posture problems
+  - Nutritionist: Weight concerns, dietary needs, performance nutrition
+  - Psychologist: Social anxiety, motivation issues, behavioral concerns
+  - General Pediatrician: General health concerns, energy level issues
+- ✅ Quiz analyzer updated to handle specialist recommendations (returns `AnalysisResult` with both sport and specialist recommendations)
+- ✅ Quiz repository updated to save and retrieve specialist recommendations (stored in JSONB with sport recommendations)
+- ✅ Doctor-specialist mapping service (`doctor-specialist-mapping.service.ts`):
+  - `getRecommendedDoctors()` - Finds doctors matching specialist recommendation
+  - `getSpecialtyDisplayName()` - Romanian display names for specialties
+  - `getPriorityDisplayName()` - Romanian display names for priority levels
+- ✅ Integration with doctor search service for finding recommended doctors
+- ✅ Cache service updated to handle specialist recommendations
+- ✅ All text and display names in Romanian language
+- ✅ Risk signal detection service (`risk-signal-detection.service.ts`) - Programmatic detection of risk signals
+  - **Orthopedist risk detection**:
+    - Coordination level: "challenges" (high) or "developing" (medium)
+    - Physical considerations: keywords for pain, joints, posture, balance, mobility, injuries
+    - Health conditions: orthopedic-related conditions
+  - **Nutritionist risk detection**:
+    - Health conditions: weight, nutrition, dietary restrictions
+    - Physical considerations: weight or nutrition keywords
+  - **Psychologist risk detection**:
+    - Personality traits: anxiety, fear, isolation indicators (medium)
+    - Reasons for stopping sports: psychological factors (high)
+    - Health conditions: mental health conditions (anxiety, depression, ADHD, autism) (high)
+  - **General pediatrician risk detection**:
+    - Very low energy level (medium)
+    - Multiple health conditions (high)
+    - Young age (under 6) with health considerations (low)
+    - General health conditions without specific specialist match (medium)
+  - **Risk severity levels**: high, medium, low with structured indicators
+  - **Integration**: Runs automatically in quiz analyzer, takes precedence over AI recommendations
+  - **Conversion**: Automatic conversion from risk signals to specialist recommendations
+  - **Functions**: `detectRiskSignals()`, `riskSignalsToSpecialistRecommendation()`
+  - **All detection logic in Romanian language**
 
 ### Parent & Child Profiles
 

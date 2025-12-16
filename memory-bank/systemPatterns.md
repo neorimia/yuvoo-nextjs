@@ -39,7 +39,8 @@ yuvoo-nextjs/
 │   ├── ui/                      # Bootstrap wrapper components
 │   ├── layout/                  # Header, Footer, Sidebar
 │   ├── features/                # Feature-specific components
-│   │   └── clubs/               # Club components (✅ created)
+│   │   ├── clubs/               # Club components (✅ created)
+│   │   └── doctors/             # Doctor components (✅ created)
 │   ├── forms/                   # Reusable form components
 │   └── shared/                  # Common components
 │
@@ -54,9 +55,23 @@ yuvoo-nextjs/
 ├── modules/                      # Backend Business Logic (Service Layer)
 │   ├── auth/
 │   ├── children/
-│   ├── quiz/
+│   ├── quiz/                     # AI Coach Quiz logic
+│   │   ├── quiz.service.ts       # Quiz orchestration
+│   │   ├── quiz.repository.ts    # Data access layer
+│   │   ├── quiz.analyzer.ts      # AI analysis orchestration + risk detection
+│   │   ├── ai-recommendations.service.ts  # OpenAI integration
+│   │   ├── ai-recommendations-cache.service.ts  # Response caching
+│   │   ├── risk-signal-detection.service.ts  # Programmatic risk detection
+│   │   ├── doctor-specialist-mapping.service.ts  # Specialist recommendations
+│   │   ├── sport-club-mapping.service.ts  # Club recommendations
+│   │   └── quiz.types.ts         # TypeScript types
 │   ├── clubs/
-│   ├── doctors/
+│   ├── doctors/                     # Doctor directory logic
+│   │   ├── doctors.service.ts      # Service layer (orchestration)
+│   │   ├── doctors.repository.ts   # Data access layer (Drizzle queries)
+│   │   ├── doctors.search.ts       # Search and filtering logic
+│   │   ├── doctors.types.ts        # TypeScript types
+│   │   └── README.md               # Module documentation
 │   ├── bookings/
 │   └── favorites/
 │
@@ -227,8 +242,8 @@ import { routes } from "@/lib/routes";
 
 **Current Status**:
 
-- ✅ `components/features/clubs/` - Club components created (ClubsMain, ClubDetailsMain, HomeClubArea, ClubCard, VerificationBadge)
-- 📋 `components/features/doctors/` - Doctor components (planned)
+- ✅ `components/features/clubs/` - Club components created (ClubsMain, ClubDetailsMain, HomeClubArea, ClubCard, VerificationBadge, ClubSearchFilters, ClubDetailsWidget, ClubGallery, ClubMap, ClubSchedule, BookingForm)
+- ✅ `components/features/doctors/` - Doctor components created (DoctorsMain, DoctorCard, DoctorDetailsMain, DoctorSearchFilters, DoctorAppointmentForm, DoctorAppointmentFormSection, DoctorInfo, DoctorSpecialties, HomeDoctorArea, HomeTwoDoctorArea, DoctorAvailability)
 - 📋 `components/features/sports/` - Sport components (planned)
 - ✅ `components/features/quiz/` - Quiz components complete (QuizContainer, QuizProgress, QuizNavigation, QuizContext, QuestionWrapper, 6 question components, ResultsActions, SportRecommendationCard, QuizHistory)
 
@@ -450,6 +465,46 @@ Quiz Submission → quiz.service.ts → quiz.analyzer.ts → ai-recommendations.
                                                                               Fallback (if error)
 ```
 
+**Specialist Recommendations**:
+
+The AI also detects risk signals and recommends pediatric specialists when needed:
+
+- **Orthopedist**: Physical limitations, coordination issues, posture problems
+- **Nutritionist**: Weight concerns, dietary needs, performance nutrition
+- **Psychologist**: Social anxiety, motivation issues, behavioral concerns
+- **General Pediatrician**: General health concerns, energy level issues
+
+**Specialist Recommendation Flow**:
+
+```
+Quiz Answers → AI Analysis → Risk Signal Detection → Specialist Recommendation
+                                                                      ↓
+                                                          doctor-specialist-mapping.service.ts
+                                                                      ↓
+                                                          Find matching doctors by specialty
+```
+
+**Storage**: Specialist recommendations are stored alongside sport recommendations in the quiz results JSONB field.
+
+**Risk Signal Detection**:
+
+The system includes programmatic risk signal detection (`risk-signal-detection.service.ts`) that analyzes quiz answers independently of AI to identify risk signals:
+
+- **Orthopedist Risks**: Coordination challenges, physical considerations (pain, joints, posture), orthopedic health conditions
+- **Nutritionist Risks**: Weight-related conditions, nutrition-related health conditions, dietary restrictions
+- **Psychologist Risks**: Anxiety-related personality traits, psychological reasons for stopping sports, mental health conditions
+- **General Pediatrician Risks**: Very low energy, multiple health conditions, young age with concerns
+
+**Detection Flow**:
+
+```
+Quiz Answers → detectRiskSignals() → Risk Signals → riskSignalsToSpecialistRecommendation()
+                                                                      ↓
+                                                          Specialist Recommendation
+```
+
+**Integration**: Programmatic risk detection runs first and takes precedence over AI-generated specialist recommendations for reliability and consistency.
+
 **Future**: ML models for improved matching
 
 ## Quiz Integration Pattern
@@ -465,6 +520,24 @@ Quiz Submission → quiz.service.ts → quiz.analyzer.ts → ai-recommendations.
 3. Optionally filter by location (parent's city)
 4. Rank clubs by recommendation match score
 5. Display with recommended badges
+
+### Quiz-Doctor Integration
+
+**Location**: `modules/quiz/doctor-specialist-mapping.service.ts`
+
+**Pattern**:
+
+1. Extract specialist recommendation from quiz results
+2. Search doctors by specialty using `searchDoctors()`
+3. Prioritize verified doctors and those accepting new patients
+4. Optionally filter by city for location-based recommendations
+5. Return top N recommended doctors (default: 5)
+
+**Functions**:
+
+- `getRecommendedDoctors()` - Finds doctors matching specialist recommendation
+- `getSpecialtyDisplayName()` - Romanian display names for specialties
+- `getPriorityDisplayName()` - Romanian display names for priority levels
 
 **Service Functions**:
 
@@ -687,11 +760,39 @@ Parent Dashboard → getQuizHistoryAction(childId) → Quiz Repository
 
 **Filter Types**:
 
-- Specialty (exact match)
+- Specialty (exact match: orthopedist, nutritionist, psychologist, general)
 - City (exact match)
-- Verified status
-- Accepting new patients
-- Text search (name, bio)
+- District (exact match, optional)
+- Verified status (boolean)
+- Accepting new patients (boolean)
+- Online consultations (boolean)
+- Text search (name, bio, credentials)
+
+**Ordering**:
+
+1. Verified doctors first
+2. Accepting new patients
+3. Name (alphabetical)
+
+**Component Integration**:
+
+- `DoctorSearchFilters.tsx` - Filter UI with URL state management
+- `DoctorsMain.tsx` - Displays search results with empty state
+- `DoctorCard.tsx` - Shows verification badge, specialty, location, credentials
+- `DoctorDetailsMain.tsx` - Full profile with specialties, info, availability
+- `DoctorAvailability.tsx` - Schedule display with availability indicators
+
+**Filter Features**:
+
+- Specialty dropdown with Romanian labels
+- City dropdown (20 major Romanian cities)
+- District/Sector text input
+- Verified checkbox filter
+- Accepting new patients checkbox
+- Online consultations checkbox
+- Sort dropdown (name, specialty, verified)
+- URL query parameter synchronization
+- Active filter count and clear all functionality
 
 ## File Upload Pattern
 
@@ -857,21 +958,69 @@ await deleteImageAction(imageUrl);
      - `ClubDetailsMain.tsx` - Club detail page (adapted from `Class/ClassDetailsMain.tsx`)
      - `HomeClubArea.tsx` - Homepage club section (adapted from `Class/HomeClassArea.tsx`)
      - `ClubCard.tsx` - Reusable club card component
-     - `VerificationBadge.tsx` - Club verification badge component
-   - Features added:
-     - ✅ Verification badge display
-     - ✅ Sport information display
-     - ✅ Location display (city, district, address)
-     - ✅ Age groups display
-     - ✅ Pricing information (RON, monthly/per_class/per_semester)
-     - ✅ SEO-friendly routes (`/cluburi`, `/cluburi/:slug`)
-   - Data: `class-data.ts` → `club-data.ts` (📋 Planned)
+     - `ClubSearchFilters.tsx` - Search and filter UI
+     - `ClubDetailsWidget.tsx`, `ClubDetailsWidgetTwo.tsx` - Sidebar widgets
+     - `ClubGallery.tsx` - Photo gallery
+     - `ClubMap.tsx` - Location map
+     - `ClubSchedule.tsx` - Training schedule
+     - `BookingForm.tsx`, `BookingFormSection.tsx` - Booking forms
+     - `VerificationBadge.tsx` - Multi-status verification badge
+
+**Doctor Components** (✅ Created - January 2025): - `DoctorsMain.tsx` - Doctor listing page (adapted from `Teacher/TeachersMain.tsx`) - `DoctorDetailsMain.tsx` - Doctor detail page (adapted from `Teacher/TeacherDetailsMain.tsx`) - `DoctorCard.tsx` - Reusable doctor card component with variants (listing, default, compact, featured) - `DoctorSearchFilters.tsx` - Search and filter UI component (new component, follows ClubSearchFilters pattern) - `DoctorInfo.tsx` - Professional information display (adapted from `Teacher/TeacherInfo.tsx`) - `DoctorSpecialties.tsx` - Medical specialties display (adapted from `Teacher/TeacherSkills.tsx`) - `HomeDoctorArea.tsx` - Homepage doctor section with Swiper slider (adapted from `Teacher/HomeTeacherArea.tsx`) - `HomeTwoDoctorArea.tsx` - Alternative homepage section (adapted from `Teacher/HomeTwoTeacherArea.tsx`) - `DoctorAvailability.tsx` - Availability calendar (adapted from `Teacher/TeacherTimeTable.tsx`)
+
+- Features added:
+  - ✅ Verification badge display
+  - ✅ Medical specialty information (orthopedist, nutritionist, psychologist, general)
+  - ✅ Professional credentials display
+  - ✅ Location display (city, district, address)
+  - ✅ Contact information (email, phone, website)
+  - ✅ Availability calendar with schedule display
+  - ✅ Online consultations indicator
+  - ✅ Accepting new patients indicator
+  - ✅ Search and filtering (specialty, city, district, verified, accepting new patients, online consultations)
+  - ✅ URL-based filter state (filters persist in URL query params)
+  - ✅ SEO-friendly routes (`/doctori`, `/doctori/:slug`)
+- SCSS Styling: All doctor component classes added to `_teacher.scss`
+  - `bd-doctor-card` with variants (default, compact, featured, listing)
+  - `bd-doctor-thumb`, `bd-doctor-badge`, `bd-doctor-content`
+  - `bd-doctor-title`, `bd-doctor-specialty`, `bd-doctor-description`, `bd-doctor-meta`
+  - `bd-doctor-filters-*` classes for search filters component
+  - `bd-featured-doctor-*` classes for featured doctor cards
+  - Extended `bd-teacher-credentials` and `bd-teacher-location` classes
+- Type Updates: Added `acceptingNewPatients` and `onlineConsultations` fields to Doctor interface
+- Data: `teacher-data.ts` → `doctor-data.ts` (📋 Planned - using database schema instead)
 
 2. **Teacher → Doctor**:
-   - Location: `src/components/Teacher/`
-   - Adapt: Teacher profiles → Doctor profiles
-   - Add: Medical specialties, availability calendar
-   - Data: `teacher-data.ts` → `doctor-data.ts`
+   - Location: `src/components/Teacher/` → `src/components/features/doctors/`
+   - Status: ✅ Core components created
+   - Components created:
+     - `DoctorsMain.tsx` - Doctor listing page (adapted from `Teacher/TeachersMain.tsx`)
+     - `DoctorDetailsMain.tsx` - Doctor detail page (adapted from `Teacher/TeacherDetailsMain.tsx`)
+     - `DoctorCard.tsx` - Reusable doctor card component with variants
+     - `DoctorInfo.tsx` - Professional information display (adapted from `Teacher/TeacherInfo.tsx`)
+     - `DoctorSpecialties.tsx` - Medical specialties display (adapted from `Teacher/TeacherSkills.tsx`)
+     - `HomeDoctorArea.tsx` - Homepage doctor section with Swiper (adapted from `Teacher/HomeTeacherArea.tsx`)
+     - `HomeTwoDoctorArea.tsx` - Alternative homepage section (adapted from `Teacher/HomeTwoTeacherArea.tsx`)
+     - `DoctorAvailability.tsx` - Availability calendar (adapted from `Teacher/TeacherTimeTable.tsx`)
+   - Features added:
+     - ✅ Verification badge display
+     - ✅ Medical specialty information (orthopedist, nutritionist, psychologist, general)
+     - ✅ Professional credentials display
+     - ✅ Location display (city, district, address)
+     - ✅ Contact information (email, phone, website)
+     - ✅ Availability calendar with schedule display
+     - ✅ Online consultations indicator
+     - ✅ Accepting new patients indicator
+     - ✅ Specialty translation to Romanian
+     - ✅ SEO-friendly routes (`/doctori`, `/doctori/:slug`)
+   - SCSS Styling: All doctor component classes added to `_teacher.scss`
+     - `bd-doctor-card` with variants (default, compact, featured, listing)
+     - `bd-doctor-thumb`, `bd-doctor-badge`, `bd-doctor-content`
+     - `bd-doctor-title`, `bd-doctor-specialty`, `bd-doctor-description`, `bd-doctor-meta`
+     - `bd-featured-doctor-*` classes for featured doctor cards
+     - Extended `bd-teacher-credentials` and `bd-teacher-location` classes
+   - Type Updates: Added `acceptingNewPatients` and `onlineConsultations` fields to Doctor interface
+   - Data: `teacher-data.ts` → `doctor-data.ts` (📋 Planned - using database schema instead)
 
 3. **Program → Sport**:
    - Location: `src/components/Program/`

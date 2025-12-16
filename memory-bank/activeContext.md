@@ -48,6 +48,21 @@
      - Enhanced quiz module README ✅
      - Added JSDoc comments to all functions ✅
      - Comprehensive documentation complete ✅
+   - **Phase 5.6: Specialist Recommendation Logic** ✅ **COMPLETE**
+     - Updated quiz types with `SpecialistRecommendation` interface ✅
+     - Enhanced AI recommendations service to detect risk signals and recommend specialists ✅
+     - Updated quiz analyzer to handle specialist recommendations ✅
+     - Updated quiz repository to save and retrieve specialist recommendations ✅
+     - Created doctor-specialist mapping service for finding recommended doctors ✅
+     - Integrated with doctor search service for location-based recommendations ✅
+     - All specialist recommendations in Romanian language ✅
+   - **Phase 5.7: Risk Signal Detection** ✅ **COMPLETE**
+     - Created risk signal detection service (`risk-signal-detection.service.ts`) ✅
+     - Programmatic detection of orthopedist, nutritionist, psychologist, and general pediatrician risks ✅
+     - Risk severity levels (high, medium, low) with structured indicators ✅
+     - Integration with quiz analyzer (programmatic detection takes precedence over AI) ✅
+     - Automatic conversion of risk signals to specialist recommendations ✅
+     - All risk detection logic in Romanian language ✅
    - **Status**: ✅ **ALL PHASES COMPLETE** - Quiz system is production-ready and fully optimized
 
 2. **Bootstrap Migration** ✅ (Phase 2.2 Complete - All Onboarding Forms Migrated)
@@ -275,6 +290,65 @@
    - Ensuring SEO optimization
 
 ## Recent Changes
+
+### Doctors Backend Implementation ✅ (January 2025 - COMPLETE)
+
+- **Repository Layer** (`doctors.repository.ts`):
+  - ✅ `mapDbDoctorToDoctor()` - Maps database records to Doctor type with full field mapping
+  - ✅ `generateSlug()` - Generates URL-friendly slugs from names (handles Romanian diacritics)
+  - ✅ `findBySlug()` - Direct database query by slug (O(1) performance with index)
+  - ✅ `findBySpecialty()` - Finds doctors by specialty with sorting
+  - ✅ `findAll()` - Gets all doctors with proper sorting
+  - ✅ Slug field added to doctors table schema for performance optimization
+  - ✅ Backward compatibility: Falls back to generated slug if database slug is missing
+
+- **Search Service** (`doctors.search.ts`):
+  - ✅ Full search functionality with filters, sorting, and pagination
+  - ✅ Filters: specialty, city, district, verified, acceptingNewPatients, onlineConsultations
+  - ✅ Sorting: name, specialty, verified (default)
+  - ✅ Pagination with total count for metadata
+  - ✅ Type-safe filters with DoctorSearchFilters interface
+  - ✅ Case-insensitive city and district filtering
+
+- **Schema Updates**:
+  - ✅ Added `slug` field to doctors table (unique, SEO-friendly)
+  - ✅ Matches clubs table pattern for consistency
+
+- **Integration**:
+  - ✅ Updated doctor listing page (`/doctori`) to use search service
+  - ✅ Updated doctor detail page (`/doctori/[slug]`) to use repository
+  - ✅ All filters from UI component supported in backend
+  - ✅ TypeScript types updated with new filter fields
+
+### Doctor Components Adaptation ✅ (January 2025 - COMPLETE)
+
+- **Adapted**: All Teacher components to Doctor components following Club adaptation pattern
+  - **Created**: `src/components/features/doctors/` directory with 9 core components
+  - **Components**: DoctorsMain, DoctorCard, DoctorDetailsMain, DoctorSearchFilters, DoctorInfo, DoctorSpecialties, HomeDoctorArea, HomeTwoDoctorArea, DoctorAvailability
+  - **Pattern**: Server Components for data display, Client Components for interactivity
+  - **Styling**: Bootstrap 5.3.3 utilities + custom SCSS in `_teacher.scss`
+  - **Routes**: All navigation uses `@/lib/routes` helper (`routes.doctors.list`, `routes.doctors.detail(slug)`)
+  - **Language**: All user-facing text in Romanian
+  - **Type Safety**: TypeScript types from `@/modules/doctors/doctors.types`
+  - **SCSS Updates**: Added all doctor component classes with hover effects, variants, responsive design, and filter styles
+  - **Type Updates**: Added `acceptingNewPatients` and `onlineConsultations` optional fields to Doctor interface
+  - **Search & Filters**: Created `DoctorSearchFilters.tsx` with URL state management, specialty/city/district filters, availability filters, and sort options
+  - **Appointment Booking**: Created `DoctorAppointmentForm.tsx` and `DoctorAppointmentFormSection.tsx` for consultation bookings
+    - Optional child selection (doctor consultations can be for parent or child)
+    - Consultation type selection (in-person or online, conditional on doctor availability)
+    - Date and time picker with future date validation
+    - Notes field for symptoms, questions, or additional information
+    - React Hook Form validation with Romanian error messages
+    - Integration with `createBookingAction` using `doctor_consultation` type
+    - Uses existing booking form SCSS styles for consistency
+  - **Documentation**: Created README.md with component usage guide and migration notes
+  - **Status**: ✅ Complete - All components created, styled, typed, and documented (including search filters and appointment booking)
+
+### Club Components Status ✅ (Previously Complete)
+
+- **Created**: All core club components in `src/components/features/clubs/`
+- **Features**: Verification badges, quiz integration, booking forms, search filters, maps, galleries
+- **Status**: ✅ Complete - All major components created and functional
 
 ### Quiz System Implementation ✅ (January 2025 - ALL PHASES COMPLETE - Production Ready & Optimized)
 
@@ -860,16 +934,71 @@ Current homepage structure (`src/app/(public)/page.tsx`):
 - **Features**: Type-safe routes, helper functions, legacy route mapping
 - **Status**: ✅ Complete - All routes defined and organized
 
-### Component Adaptation - Class → Club
+### Component Adaptation - Class → Club ✅
 
 - **Created**: Club components in `components/features/clubs/`
-  - `ClubsMain.tsx` - Club listing page component
-  - `ClubDetailsMain.tsx` - Club detail page component
-  - `HomeClubArea.tsx` - Homepage club section component
-  - `ClubCard.tsx` - Reusable club card component
-  - `VerificationBadge.tsx` - Club verification badge component
-- **Features**: Verification badges, sport info, location, age groups, pricing, SEO routes
-- **Status**: ✅ Core components created - Ready for integration
+  - `ClubsMain.tsx` - Club listing page component with quiz integration
+  - `ClubDetailsMain.tsx` - Club detail page component (Server Component, SSG-compatible)
+  - `ClubCard.tsx` - Reusable club card component with multiple variants
+  - `ClubSearchFilters.tsx` - Search and filter UI component
+  - `ClubDetailsWidget.tsx`, `ClubDetailsWidgetTwo.tsx` - Sidebar widgets
+  - `ClubGallery.tsx` - Photo gallery component
+  - `ClubMap.tsx` - Location map integration
+  - `ClubSchedule.tsx` - Training schedule display
+  - `VerificationBadge.tsx` - Multi-status verification badge component
+  - `BookingForm.tsx`, `BookingFormSection.tsx` - Trial session booking forms
+  - `HomeClubArea.tsx`, `HomeTwoClubArea.tsx` - Homepage club sections
+- **Features**: Verification badges, sport info, location, age groups, pricing, SEO routes, quiz integration, booking flow
+- **Status**: ✅ Core components complete - All major components created and styled
+
+### Component Adaptation - Teacher → Doctor ✅
+
+- **Created**: Doctor components in `components/features/doctors/`
+  - `DoctorsMain.tsx` - Doctor listing page component (Client Component)
+  - `DoctorDetailsMain.tsx` - Doctor detail page component (Server Component, SSG-compatible)
+  - `DoctorCard.tsx` - Reusable doctor card component with multiple variants (listing, default, compact, featured)
+  - `DoctorSearchFilters.tsx` - Search and filter UI component (Client Component) ✅
+  - `DoctorAppointmentForm.tsx` - Appointment booking form component (Client Component) ✅
+  - `DoctorAppointmentFormSection.tsx` - Appointment form section wrapper (Server Component) ✅
+  - `DoctorInfo.tsx` - Professional information display (contact, credentials, location)
+  - `DoctorSpecialties.tsx` - Medical specialties and credentials display
+  - `DoctorAvailability.tsx` - Availability calendar/schedule display (Client Component)
+  - `HomeDoctorArea.tsx` - Homepage doctor section with Swiper slider
+  - `HomeTwoDoctorArea.tsx` - Alternative homepage section with background image
+  - `index.ts` - Central export file
+  - `README.md` - Component documentation
+- **Features**: Verification badges, medical specialties, professional credentials, location, contact info, availability calendar, online consultations indicator, accepting new patients indicator, search and filtering
+- **Search & Filtering** (`DoctorSearchFilters.tsx`): ✅ **COMPLETE**
+  - Specialty filter (orthopedist, nutritionist, psychologist, general) with Romanian labels
+  - City filter (20 major Romanian cities)
+  - District/Sector text input filter
+  - Verified doctors checkbox
+  - Accepting new patients checkbox
+  - Online consultations checkbox
+  - Sort options (name, specialty, verified)
+  - URL state management (filters persist in query params)
+  - Active filter count display
+  - Clear all filters functionality
+  - Loading states during transitions
+- **Appointment Booking** (`DoctorAppointmentForm.tsx`, `DoctorAppointmentFormSection.tsx`): ✅ **COMPLETE**
+  - Optional child selection (doctor consultations can be for parent or child)
+  - Consultation type selection (in-person or online, shown only if doctor offers online consultations)
+  - Date and time picker with validation (must be in future)
+  - Notes field for symptoms, questions, or additional information
+  - React Hook Form validation with Romanian error messages
+  - Integration with `createBookingAction` using `doctor_consultation` type
+  - Success handling with redirect to bookings page
+  - Loading states and error handling
+  - Uses existing booking form SCSS styles (`.bd-booking-form`) for consistency
+- **SCSS Styling**: All doctor component classes added to `_teacher.scss`:
+  - `bd-doctor-card` with variants (default, compact, featured, listing)
+  - `bd-doctor-thumb`, `bd-doctor-badge`, `bd-doctor-content`
+  - `bd-doctor-title`, `bd-doctor-specialty`, `bd-doctor-description`, `bd-doctor-meta`
+  - `bd-doctor-filters-*` classes for search filters component
+  - `bd-featured-doctor-*` classes for featured doctor cards
+  - Extended `bd-teacher-credentials` and `bd-teacher-location` classes
+- **Type Updates**: Added `acceptingNewPatients` and `onlineConsultations` fields to `Doctor` interface
+- **Status**: ✅ Core components complete - All major components created, styled, and documented (including search filters)
 
 ### TypeScript Configuration
 
@@ -1480,10 +1609,13 @@ Current homepage structure (`src/app/(public)/page.tsx`):
    - [ ] Availability calendar
    - [ ] Booking form
 
-3. **Specialist Integration**
-   - [ ] AI Coach → Specialist recommendation
-   - [ ] Risk signal detection
-   - [ ] Specialist referral flow
+3. **Specialist Integration** ✅ **COMPLETE**
+   - ✅ AI Coach → Specialist recommendation logic implemented
+   - ✅ Risk signal detection (orthopedist, nutritionist, psychologist, general pediatrician)
+   - ✅ Priority levels (high, medium, low) for recommendations
+   - ✅ Doctor-specialist mapping service for finding recommended doctors
+   - ✅ Integration with doctor search service
+   - [ ] Specialist referral flow (UI components for displaying recommendations)
 
 ### Week 15-16: Polish & Deploy
 

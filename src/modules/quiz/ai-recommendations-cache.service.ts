@@ -13,14 +13,18 @@
  */
 
 import { createHash } from "crypto";
-import { generateRecommendations as generateRecommendationsOriginal } from "./ai-recommendations.service";
-import type { QuizAnswers, SportRecommendation } from "./quiz.types";
+import {
+  generateRecommendations as generateRecommendationsOriginal,
+  type RecommendationResult,
+} from "./ai-recommendations.service";
+import type { QuizAnswers, SportRecommendation, SpecialistRecommendation } from "./quiz.types";
 
 // Re-export fallback function
 export { generateFallbackRecommendations } from "./ai-recommendations.service";
 
 interface CacheEntry {
-  recommendations: SportRecommendation[];
+  sportRecommendations: SportRecommendation[];
+  specialistRecommendation?: SpecialistRecommendation;
   timestamp: number;
   ttl: number; // Time to live in milliseconds
 }
@@ -75,7 +79,7 @@ function generateCacheKey(answers: QuizAnswers): string {
 /**
  * Get cached recommendations if available and not expired
  */
-function getCached(key: string): SportRecommendation[] | null {
+function getCached(key: string): RecommendationResult | null {
   const entry = cache.get(key);
 
   if (!entry) {
@@ -90,15 +94,19 @@ function getCached(key: string): SportRecommendation[] | null {
     return null;
   }
 
-  return entry.recommendations;
+  return {
+    sportRecommendations: entry.sportRecommendations,
+    specialistRecommendation: entry.specialistRecommendation,
+  };
 }
 
 /**
  * Store recommendations in cache
  */
-function setCached(key: string, recommendations: SportRecommendation[]): void {
+function setCached(key: string, result: RecommendationResult): void {
   cache.set(key, {
-    recommendations,
+    sportRecommendations: result.sportRecommendations,
+    specialistRecommendation: result.specialistRecommendation,
     timestamp: Date.now(),
     ttl: CACHE_TTL_MS,
   });
@@ -111,11 +119,11 @@ function setCached(key: string, recommendations: SportRecommendation[]): void {
  * Automatically caches successful responses.
  *
  * @param answers - Complete quiz answers
- * @returns Array of sport recommendations (from cache or AI)
+ * @returns Recommendation result with sport recommendations and optional specialist recommendation
  */
 export async function generateRecommendationsWithCache(
   answers: QuizAnswers
-): Promise<SportRecommendation[]> {
+): Promise<RecommendationResult> {
   // Generate cache key
   const cacheKey = generateCacheKey(answers);
 
@@ -128,12 +136,12 @@ export async function generateRecommendationsWithCache(
 
   // Cache miss - generate recommendations
   console.log(`Cache miss for quiz pattern: ${cacheKey}`);
-  const recommendations = await generateRecommendationsOriginal(answers);
+  const result = await generateRecommendationsOriginal(answers);
 
   // Store in cache
-  setCached(cacheKey, recommendations);
+  setCached(cacheKey, result);
 
-  return recommendations;
+  return result;
 }
 
 /**

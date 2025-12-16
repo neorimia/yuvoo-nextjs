@@ -1,42 +1,64 @@
 import React from "react";
 import type { Metadata } from "next";
 import BreadcrumbOne from "@/components/Breadcrumb/BreadcrumbOne";
+import DoctorsMain from "@/components/features/doctors/DoctorsMain";
+import DoctorSearchFilters from "@/components/features/doctors/DoctorSearchFilters";
+import { searchDoctors } from "@/modules/doctors/doctors.service";
+import type {
+  Doctor,
+  DoctorSearchFilters as DoctorSearchFiltersType,
+} from "@/modules/doctors/doctors.types";
 
 export const metadata: Metadata = {
-  title: "Doctori - Yuvoo",
+  title: "Specialiști Pediatri - Yuvoo",
   description:
     "Găsește specialiști pediatri verificați pentru consultații despre activitățile sportive ale copilului tău.",
 };
+
+interface DoctorsPageProps {
+  searchParams: Promise<{
+    specialty?: string;
+    city?: string;
+    district?: string;
+    verified?: string;
+    acceptingNewPatients?: string;
+    onlineConsultations?: string;
+    sortBy?: string;
+  }>;
+}
 
 /**
  * Doctors Listing Page
  *
  * Public page displaying all pediatric specialists.
+ * Supports filtering by specialty, city, district, and other criteria.
  * SEO-friendly route: /doctori
  */
-export default function DoctorsPage() {
+export default async function DoctorsPage({ searchParams }: DoctorsPageProps) {
+  const params = await searchParams;
+  const { specialty, city, district, verified, acceptingNewPatients, onlineConsultations, sortBy } =
+    params;
+
+  // Build filters object from search params
+  const filters: DoctorSearchFiltersType = {
+    specialty: specialty as DoctorSearchFiltersType["specialty"] | undefined,
+    city: city || undefined,
+    district: district || undefined,
+    verified: verified === "true" ? true : undefined,
+    acceptingNewPatients: acceptingNewPatients === "true" ? true : undefined,
+    onlineConsultations: onlineConsultations === "true" ? true : undefined,
+    sortBy: (sortBy as "name" | "specialty" | "verified") || "verified",
+  };
+
+  // Fetch doctors with filters
+  const result = await searchDoctors(filters);
+  const doctors: Doctor[] = result.doctors;
+
   return (
     <>
       <BreadcrumbOne title="Specialiști Pediatri" subTitle="Doctori" />
-      <section className="bd-doctors-area pt-120 pb-70">
-        <div className="container">
-          <div className="row">
-            <div className="col-12">
-              <div className="bd-doctors-content text-center">
-                <h1 className="bd-section-title mb-30">Specialiști Pediatri</h1>
-                <p className="mb-40">
-                  Găsește specialiști pediatri verificați pentru consultații despre activitățile
-                  sportive ale copilului tău.
-                </p>
-                {/* TODO: Add doctors listing component */}
-                <div className="bd-doctors-placeholder">
-                  <p>Lista de doctori va fi adăugată aici.</p>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
+      <DoctorSearchFilters initialFilters={filters} />
+      <DoctorsMain doctors={doctors} />
     </>
   );
 }

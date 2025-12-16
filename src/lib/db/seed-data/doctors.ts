@@ -41,7 +41,9 @@ export interface DoctorSeedData {
  * Generate comprehensive doctor seed data
  */
 function createDoctor(data: Omit<DoctorSeedData, "slug" | "profileComplete">): DoctorSeedData {
-  const slug = generateSlug(`${data.firstName} ${data.lastName}`);
+  // Generate slug matching repository format: firstName-lastName
+  // This matches the generateSlug function in doctors.repository.ts
+  const slug = generateSlug(`${data.firstName}-${data.lastName}`);
 
   // Ensure schedule is always an array (required by schema)
   const schedule = data.schedule || generateDoctorSchedule();
