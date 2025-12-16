@@ -57,6 +57,7 @@ const EnergyQuestion = memo(function EnergyQuestion() {
     <QuestionWrapper
       title="Cât de energic este copilul tău?"
       description="Înțelegerea nivelului de energie al copilului tău ne ajută să găsim sporturi care se potrivesc perfect - fie că are nevoie de activități mai liniștite sau de ceva care să-i consume energia abundentă."
+      helpText="Gândește-te la energia copilului în mod obișnuit, când este odihnit și sănătos. Dacă energia este foarte scăzută în mod persistent, poate fi util să consulți un pediatru."
       error={errors.energyLevel}
     >
       <div className="energy-options">

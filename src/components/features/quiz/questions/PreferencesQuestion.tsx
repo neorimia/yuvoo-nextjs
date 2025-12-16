@@ -21,6 +21,7 @@ const PreferencesQuestion = memo(function PreferencesQuestion() {
     individual: false,
     timeAvailability: undefined,
     budgetConsiderations: undefined,
+    parentInvolvement: undefined,
   };
 
   const updatePreference = (key: keyof typeof preferences, value: boolean | string | undefined) => {
@@ -53,7 +54,7 @@ const PreferencesQuestion = memo(function PreferencesQuestion() {
             >
               <i className="bi bi-house-door fs-3 d-block mb-2"></i>
               <div className="fw-semibold">Interior</div>
-              <small className={preferences.indoor ? "text-white-50" : "text-muted"}>
+              <small className={preferences.indoor ? "text-white-80" : "text-muted"}>
                 Săli, bazine acoperite
               </small>
               {preferences.indoor && (
@@ -70,7 +71,7 @@ const PreferencesQuestion = memo(function PreferencesQuestion() {
             >
               <i className="bi bi-tree fs-3 d-block mb-2"></i>
               <div className="fw-semibold">Exterior</div>
-              <small className={preferences.outdoor ? "text-white-50" : "text-muted"}>
+              <small className={preferences.outdoor ? "text-white-80" : "text-muted"}>
                 Terenuri, parcuri
               </small>
               {preferences.outdoor && (
@@ -105,7 +106,7 @@ const PreferencesQuestion = memo(function PreferencesQuestion() {
             >
               <i className="bi bi-people fs-3 d-block mb-2"></i>
               <div className="fw-semibold">Echipă</div>
-              <small className={preferences.team ? "text-white-50" : "text-muted"}>
+              <small className={preferences.team ? "text-white-80" : "text-muted"}>
                 Fotbal, baschet, volei
               </small>
               {preferences.team && (
@@ -122,7 +123,7 @@ const PreferencesQuestion = memo(function PreferencesQuestion() {
             >
               <i className="bi bi-person fs-3 d-block mb-2"></i>
               <div className="fw-semibold">Individual</div>
-              <small className={preferences.individual ? "text-white-50" : "text-muted"}>
+              <small className={preferences.individual ? "text-white-80" : "text-muted"}>
                 Tenis, înot, gimnastică
               </small>
               {preferences.individual && (
@@ -157,6 +158,67 @@ const PreferencesQuestion = memo(function PreferencesQuestion() {
         />
         <div id="time-help" className="form-text">
           Câte ore pe săptămână poate dedica copilul tău activităților sportive?
+        </div>
+      </div>
+
+      {/* Parent involvement (optional) */}
+      <div className="mb-4">
+        <label className="form-label fw-semibold">Implicarea ta ca părinte (opțional)</label>
+        <p className="text-muted small mb-2">
+          Cât timp poți să te implici în activitățile sportive ale copilului tău?
+        </p>
+        <div className="row g-2">
+          {[
+            {
+              value: "transport-only",
+              label: "Doar transport",
+              description: "Duc și iau copilul de la antrenamente",
+            },
+            {
+              value: "attend",
+              label: "Asist la antrenamente",
+              description: "Stau și urmăresc antrenamentele",
+            },
+            {
+              value: "participate",
+              label: "Particip activ",
+              description: "Mă implic în activități cu copilul",
+            },
+            {
+              value: "minimal",
+              label: "Implicare minimă",
+              description: "Copilul merge singur sau cu altcineva",
+            },
+          ].map((option) => (
+            <div key={option.value} className="col-12 col-md-6">
+              <button
+                type="button"
+                className={`btn w-100 text-start p-3 ${
+                  preferences.parentInvolvement === option.value
+                    ? "btn-yuvoo-primary"
+                    : "btn-outline-secondary"
+                }`}
+                onClick={() => updatePreference("parentInvolvement", option.value)}
+                aria-pressed={preferences.parentInvolvement === option.value}
+              >
+                <div className="fw-semibold mb-1">{option.label}</div>
+                <small
+                  className={
+                    preferences.parentInvolvement === option.value ? "text-white-80" : "text-muted"
+                  }
+                >
+                  {option.description}
+                </small>
+                {preferences.parentInvolvement === option.value && (
+                  <i className="bi bi-check-circle-fill position-absolute top-0 end-0 m-2"></i>
+                )}
+              </button>
+            </div>
+          ))}
+        </div>
+        <div className="form-text mt-2">
+          <i className="bi bi-info-circle me-1"></i>
+          Acest lucru ne ajută să recomandăm cluburi cu cerințe adecvate pentru familia ta.
         </div>
       </div>
 

@@ -1,7 +1,7 @@
 /**
  * Physical Build Question Component (Question 5)
  *
- * Collects child's physical build and optional considerations.
+ * Collects child's physical build, coordination level, and medical safety screening.
  */
 
 "use client";
@@ -11,6 +11,7 @@ import { useQuiz } from "../QuizContext";
 import QuestionWrapper from "../QuestionWrapper";
 
 type PhysicalBuild = "slim" | "average" | "athletic";
+type CoordinationLevel = "excellent" | "good" | "developing" | "challenges";
 
 interface BuildOption {
   value: PhysicalBuild;
@@ -19,24 +20,53 @@ interface BuildOption {
   description: string;
 }
 
+interface CoordinationOption {
+  value: CoordinationLevel;
+  label: string;
+  description: string;
+}
+
 const BUILD_OPTIONS: BuildOption[] = [
   {
     value: "slim",
     label: "Subțire",
     icon: "🌱",
-    description: "Constituție subțire, uneori fragil",
+    description: "Constituție mai subțire",
   },
   {
     value: "average",
     label: "Mediu",
     icon: "⭐",
-    description: "Constituție medie, echilibrată",
+    description: "Constituție medie",
   },
   {
     value: "athletic",
     label: "Atletic",
     icon: "💪",
-    description: "Constituție atletică, musculară",
+    description: "Constituție atletică",
+  },
+];
+
+const COORDINATION_OPTIONS: CoordinationOption[] = [
+  {
+    value: "excellent",
+    label: "Foarte bine coordonat",
+    description: "Excelează la activități care necesită coordonare",
+  },
+  {
+    value: "good",
+    label: "Coordonare bună",
+    description: "Se descurcă bine la majoritatea activităților fizice",
+  },
+  {
+    value: "developing",
+    label: "Încă dezvoltă coordonarea",
+    description: "Își dezvoltă abilitățile motorii pe măsură ce crește",
+  },
+  {
+    value: "challenges",
+    label: "Dificultăți de coordonare",
+    description: "Are nevoie de mai mult timp pentru a stăpâni mișcările",
   },
 ];
 
@@ -47,17 +77,32 @@ const PhysicalQuestion = memo(function PhysicalQuestion() {
     setAnswer("physicalBuild", build);
   };
 
+  const handleCoordinationChange = (coordination: CoordinationLevel) => {
+    setAnswer("coordinationLevel", coordination);
+  };
+
+  const toggleHealthCondition = (condition: string) => {
+    const current = answers.healthConditions || [];
+    const updated = current.includes(condition)
+      ? current.filter((c) => c !== condition)
+      : [...current, condition];
+    setAnswer("healthConditions", updated.length > 0 ? updated : undefined);
+  };
+
   const handleConsiderationsChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     const value = e.target.value;
     setAnswer("physicalConsiderations", value || undefined);
   };
 
+  const healthConditions = answers.healthConditions || [];
+  const hasHealthConditions = healthConditions.length > 0;
+
   return (
     <QuestionWrapper
-      title="Cum ai descrie constituția fizică a copilului tău?"
-      description="Constituția fizică este un factor important în alegerea sportului potrivit. Fiecare tip de constituție are avantaje în anumite sporturi - de exemplu, copiii mai înalți pot excela în baschet, în timp ce cei mai agili pot fi potriviți pentru gimnastică."
-      helpText="Alege constituția care descrie cel mai bine copilul tău. Informațiile sunt confidențiale și folosite doar pentru recomandări."
-      error={errors.physicalBuild}
+      title="Sănătate și abilități fizice"
+      description="Pentru a recomanda sporturi sigure și potrivite, avem nevoie să înțelegem nivelul de coordonare și orice considerații medicale. Toate informațiile sunt confidențiale."
+      helpText="Informațiile despre sănătate ne ajută să recomandăm sporturi sigure și adaptate nevoilor copilului tău."
+      error={errors.physicalBuild || errors.coordinationLevel}
     >
       {/* Physical build selection */}
       <div className="mb-4">
@@ -84,7 +129,7 @@ const PhysicalQuestion = memo(function PhysicalQuestion() {
                   <div className="fw-semibold mb-1">{option.label}</div>
                   <small
                     className={
-                      answers.physicalBuild === option.value ? "text-white-50" : "text-muted"
+                      answers.physicalBuild === option.value ? "text-white-80" : "text-muted"
                     }
                   >
                     {option.description}
@@ -99,10 +144,96 @@ const PhysicalQuestion = memo(function PhysicalQuestion() {
         </div>
       </div>
 
-      {/* Physical considerations (optional) */}
+      {/* Coordination level selection */}
+      <div className="mb-4">
+        <label className="form-label fw-semibold">
+          Nivel de coordonare <span className="text-danger">*</span>
+        </label>
+        <p className="text-muted small mb-2">
+          Cât de bine se descurcă copilul tău la activități care necesită coordonare (prindere
+          minge, echilibru, alergare, etc.)?
+        </p>
+        <div className="row g-2">
+          {COORDINATION_OPTIONS.map((option) => (
+            <div key={option.value} className="col-12 col-md-6">
+              <button
+                type="button"
+                className={`btn w-100 text-start p-3 ${
+                  answers.coordinationLevel === option.value
+                    ? "btn-yuvoo-primary"
+                    : "btn-outline-secondary"
+                }`}
+                onClick={() => handleCoordinationChange(option.value)}
+                aria-pressed={answers.coordinationLevel === option.value}
+              >
+                <div className="fw-semibold mb-1">{option.label}</div>
+                <small
+                  className={
+                    answers.coordinationLevel === option.value ? "text-white-80" : "text-muted"
+                  }
+                >
+                  {option.description}
+                </small>
+                {answers.coordinationLevel === option.value && (
+                  <i className="bi bi-check-circle-fill position-absolute top-0 end-0 m-2"></i>
+                )}
+              </button>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      {/* Health conditions screening */}
+      <div className="mb-4">
+        <label className="form-label fw-semibold">Considerații medicale (opțional)</label>
+        <p className="text-muted small mb-2">
+          Selectează dacă copilul are una dintre aceste condiții. Dacă medicul a recomandat
+          restricții pentru activități fizice, te rugăm să menționezi mai jos.
+        </p>
+        <div className="row g-2">
+          {[
+            { value: "asthma", label: "Astm sau probleme respiratorii" },
+            { value: "allergies", label: "Alergii severe (poți specifica mai jos)" },
+            { value: "vision", label: "Probleme de vedere (necesită ochelari)" },
+            { value: "hearing", label: "Probleme de auz" },
+            { value: "joint-pain", label: "Dureri articulare sau osoase persistente" },
+            { value: "recent-injury", label: "Accidentare recentă (ultimele 3 luni)" },
+            { value: "chronic-condition", label: "Condiție cronică (diabet, epilepsie, etc.)" },
+            { value: "doctor-restrictions", label: "Medicul a recomandat restricții" },
+          ].map((condition) => {
+            const isSelected = healthConditions.includes(condition.value);
+            return (
+              <div key={condition.value} className="col-12 col-md-6">
+                <button
+                  type="button"
+                  className={`btn w-100 text-start btn-sm ${
+                    isSelected ? "btn-warning" : "btn-outline-secondary"
+                  }`}
+                  onClick={() => toggleHealthCondition(condition.value)}
+                  aria-pressed={isSelected}
+                >
+                  <i className={`bi ${isSelected ? "bi-check-square-fill" : "bi-square"} me-2`}></i>
+                  {condition.label}
+                </button>
+              </div>
+            );
+          })}
+        </div>
+        {hasHealthConditions && (
+          <div className="alert alert-info d-flex align-items-start gap-2 mt-3 mb-0 py-2">
+            <i className="bi bi-info-circle-fill flex-shrink-0 mt-1"></i>
+            <small className="mb-0">
+              Recomandările noastre vor ține cont de aceste aspecte. Pentru condiții medicale
+              serioase, te încurajăm să consulți un medic pediatru înainte de a începe un nou sport.
+            </small>
+          </div>
+        )}
+      </div>
+
+      {/* Physical considerations (optional - detailed notes) */}
       <div className="mb-3">
         <label htmlFor="physicalConsiderations" className="form-label fw-semibold">
-          Considerații fizice (opțional)
+          Detalii suplimentare (opțional)
         </label>
         <textarea
           className="form-control"
@@ -111,7 +242,7 @@ const PhysicalQuestion = memo(function PhysicalQuestion() {
           rows={3}
           value={answers.physicalConsiderations || ""}
           onChange={handleConsiderationsChange}
-          placeholder="Adaugă orice detalii relevante despre sănătatea sau condițiile fizice ale copilului (ex: astigmatism, alergii, etc.)"
+          placeholder="Exemplu: 'Are astm ușor, controlat cu medicație' sau 'Medicul a recomandat să evite sporturile de contact pentru încă 2 luni din cauza unei accidentări'"
           maxLength={500}
           aria-describedby="considerations-help"
         />

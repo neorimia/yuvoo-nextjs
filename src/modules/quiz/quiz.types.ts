@@ -25,9 +25,12 @@ export interface QuizAnswers {
   // Question 4: Interests & Hobbies
   interests: string[]; // Current interests
   previousSports: string[]; // Previously tried sports
+  whyStoppedSports?: string[]; // Optional: reasons for stopping previous sports
 
-  // Question 5: Physical Build
+  // Question 5: Physical Build, Coordination & Health
   physicalBuild: "slim" | "average" | "athletic";
+  coordinationLevel: "excellent" | "good" | "developing" | "challenges";
+  healthConditions?: string[]; // Optional: medical conditions or safety concerns
   physicalConsiderations?: string; // Optional notes about physical considerations
 
   // Question 6: Preferences
@@ -38,6 +41,7 @@ export interface QuizAnswers {
     individual: boolean; // Prefers individual sports
     timeAvailability?: string; // Optional: time availability notes
     budgetConsiderations?: string; // Optional: budget notes
+    parentInvolvement?: string; // Optional: parent involvement level (transport-only, attend, participate, minimal)
   };
 }
 

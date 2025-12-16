@@ -154,9 +154,13 @@ export function QuizProvider({ children, childId }: QuizProviderProps) {
           stepErrors.interests = "Te rugăm să selectezi cel puțin un interes sau hobby.";
         }
         break;
-      case 5: // Physical Build
+      case 5: // Physical Build, Coordination & Health
         if (answers.physicalBuild === undefined) {
           stepErrors.physicalBuild = "Te rugăm să selectezi constituția fizică a copilului.";
+        }
+        if ((answers as QuizAnswers).coordinationLevel === undefined) {
+          stepErrors.coordinationLevel =
+            "Te rugăm să selectezi nivelul de coordonare al copilului.";
         }
         break;
       case 6: // Preferences
@@ -264,6 +268,7 @@ export function QuizProvider({ children, childId }: QuizProviderProps) {
       answers.interests !== undefined &&
       answers.interests.length > 0 &&
       answers.physicalBuild !== undefined &&
+      (answers as QuizAnswers).coordinationLevel !== undefined &&
       answers.preferences !== undefined &&
       (answers.preferences.indoor || answers.preferences.outdoor) &&
       (answers.preferences.team || answers.preferences.individual)

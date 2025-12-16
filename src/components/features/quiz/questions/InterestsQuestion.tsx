@@ -49,6 +49,7 @@ const InterestsQuestion = memo(function InterestsQuestion() {
 
   const interests = answers.interests || [];
   const previousSports = answers.previousSports || [];
+  const whyStoppedSports = answers.whyStoppedSports || [];
 
   const toggleInterest = (interest: string) => {
     const newInterests = interests.includes(interest)
@@ -64,6 +65,14 @@ const InterestsQuestion = memo(function InterestsQuestion() {
       : [...previousSports, sport];
 
     setAnswer("previousSports", newSports);
+  };
+
+  const toggleWhyStoppedReason = (reason: string) => {
+    const updated = whyStoppedSports.includes(reason)
+      ? whyStoppedSports.filter((r) => r !== reason)
+      : [...whyStoppedSports, reason];
+
+    setAnswer("whyStoppedSports", updated.length > 0 ? updated : undefined);
   };
 
   const addCustomInterest = () => {
@@ -184,6 +193,56 @@ const InterestsQuestion = memo(function InterestsQuestion() {
           </div>
         )}
       </div>
+
+      {/* Why stopped sports (conditional - only if previousSports selected) */}
+      {previousSports.length > 0 && (
+        <div className="mb-3">
+          <label className="form-label fw-semibold">
+            De ce a încetat sporturile anterioare? (opțional)
+          </label>
+          <p className="text-muted small mb-2">
+            Înțelegerea motivelor ne ajută să recomandăm sporturi care evită aceleași probleme.
+          </p>
+          <div className="row g-2">
+            {[
+              { value: "bored", label: "S-a plictisit / Nu i-a plăcut" },
+              { value: "too-difficult", label: "A fost prea dificil" },
+              { value: "injury", label: "Accidentare" },
+              { value: "conflict", label: "Conflict cu antrenorul sau colegii" },
+              { value: "cost", label: "Costuri prea mari" },
+              { value: "schedule", label: "Program incompatibil" },
+              { value: "other", label: "Alt motiv" },
+            ].map((reason) => {
+              const isSelected = whyStoppedSports.includes(reason.value);
+              return (
+                <div key={reason.value} className="col-12 col-md-6">
+                  <button
+                    type="button"
+                    className={`btn w-100 text-start btn-sm ${
+                      isSelected ? "btn-info" : "btn-outline-secondary"
+                    }`}
+                    onClick={() => toggleWhyStoppedReason(reason.value)}
+                    aria-pressed={isSelected}
+                  >
+                    <i
+                      className={`bi ${isSelected ? "bi-check-square-fill" : "bi-square"} me-2`}
+                    ></i>
+                    {reason.label}
+                  </button>
+                </div>
+              );
+            })}
+          </div>
+          {whyStoppedSports.length > 0 && (
+            <div className="mt-2">
+              <small className="text-info">
+                {whyStoppedSports.length}{" "}
+                {whyStoppedSports.length === 1 ? "motiv selectat" : "motive selectate"}
+              </small>
+            </div>
+          )}
+        </div>
+      )}
     </QuestionWrapper>
   );
 });

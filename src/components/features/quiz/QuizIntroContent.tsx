@@ -41,7 +41,7 @@ export default function QuizIntroContent() {
                   <div className="d-flex align-items-start gap-3">
                     <div className="flex-shrink-0">
                       <div className="bg-yuvoo-primary bg-opacity-10 rounded-circle p-2">
-                        <i className="bi bi-check-circle-fill text-yuvoo-primary fs-4"></i>
+                        <i className="bi bi-check-circle-fill text-white fs-4"></i>
                       </div>
                     </div>
                     <div>
@@ -56,7 +56,7 @@ export default function QuizIntroContent() {
                   <div className="d-flex align-items-start gap-3">
                     <div className="flex-shrink-0">
                       <div className="bg-yuvoo-primary bg-opacity-10 rounded-circle p-2">
-                        <i className="bi bi-lightbulb-fill text-yuvoo-primary fs-4"></i>
+                        <i className="bi bi-lightbulb-fill text-white fs-4"></i>
                       </div>
                     </div>
                     <div>
@@ -71,7 +71,7 @@ export default function QuizIntroContent() {
                   <div className="d-flex align-items-start gap-3">
                     <div className="flex-shrink-0">
                       <div className="bg-yuvoo-primary bg-opacity-10 rounded-circle p-2">
-                        <i className="bi bi-building text-yuvoo-primary fs-4"></i>
+                        <i className="bi bi-building text-white fs-4"></i>
                       </div>
                     </div>
                     <div>
@@ -86,7 +86,7 @@ export default function QuizIntroContent() {
                   <div className="d-flex align-items-start gap-3">
                     <div className="flex-shrink-0">
                       <div className="bg-yuvoo-primary bg-opacity-10 rounded-circle p-2">
-                        <i className="bi bi-heart-pulse-fill text-yuvoo-primary fs-4"></i>
+                        <i className="bi bi-heart-pulse-fill ttext-white fs-4"></i>
                       </div>
                     </div>
                     <div>
@@ -104,7 +104,7 @@ export default function QuizIntroContent() {
       </div>
 
       {/* How It Works */}
-      <div className="row justify-content-center mb-5">
+      <div className="row justify-content-center my-5">
         <div className="col-lg-10">
           <h2 className="h4 fw-semibold mb-4 text-center">Cum funcționează?</h2>
           <div className="row g-4">
@@ -114,7 +114,7 @@ export default function QuizIntroContent() {
                   className="bg-yuvoo-primary bg-opacity-10 rounded-circle d-inline-flex align-items-center justify-content-center mb-3"
                   style={{ width: "64px", height: "64px" }}
                 >
-                  <span className="fs-3 fw-bold text-yuvoo-primary">1</span>
+                  <span className="fs-3 fw-bold text-white">1</span>
                 </div>
                 <h3 className="h6 fw-semibold mb-2">Răspunde la 6 întrebări</h3>
                 <p className="text-muted small mb-0">
@@ -128,7 +128,7 @@ export default function QuizIntroContent() {
                   className="bg-yuvoo-primary bg-opacity-10 rounded-circle d-inline-flex align-items-center justify-content-center mb-3"
                   style={{ width: "64px", height: "64px" }}
                 >
-                  <span className="fs-3 fw-bold text-yuvoo-primary">2</span>
+                  <span className="fs-3 fw-bold text-white">2</span>
                 </div>
                 <h3 className="h6 fw-semibold mb-2">Analiza AI</h3>
                 <p className="text-muted small mb-0">
@@ -142,7 +142,7 @@ export default function QuizIntroContent() {
                   className="bg-yuvoo-primary bg-opacity-10 rounded-circle d-inline-flex align-items-center justify-content-center mb-3"
                   style={{ width: "64px", height: "64px" }}
                 >
-                  <span className="fs-3 fw-bold text-yuvoo-primary">3</span>
+                  <span className="fs-3 fw-bold text-white">3</span>
                 </div>
                 <h3 className="h6 fw-semibold mb-2">Primești recomandări</h3>
                 <p className="text-muted small mb-0">
@@ -170,10 +170,10 @@ export default function QuizIntroContent() {
       <div className="row justify-content-center">
         <div className="col-lg-8">
           <div className="alert alert-info border-0 bg-yuvoo-primary bg-opacity-10">
-            <div className="d-flex align-items-start gap-3">
-              <i className="bi bi-info-circle-fill text-yuvoo-primary fs-4"></i>
+            <div className="d-flex align-items-start gap-3 text-white">
+              <i className="bi bi-info-circle-fill fs-4"></i>
               <div>
-                <h4 className="h6 fw-semibold mb-2">De ce să ai încredere în Yuvoo?</h4>
+                <h4 className="h6 fw-semibold mb-2 text-white">De ce să ai încredere în Yuvoo?</h4>
                 <ul className="small mb-0 ps-3">
                   <li>Recomandări bazate pe specialiști în psihologie sportivă</li>
                   <li>Date sigure. Proces transparent. GDPR compliant.</li>

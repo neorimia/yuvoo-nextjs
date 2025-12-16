@@ -40,7 +40,13 @@ const PERSONALITY_TRAITS: PersonalityTrait[] = [
     value: "cooperant",
     label: "Cooperant",
     icon: "🤝",
-    description: "Lucrează bine în echipă",
+    description: "Lucrează bine în echipă și este empatic",
+  },
+  {
+    value: "persistent",
+    label: "Persistent",
+    icon: "💪",
+    description: "Nu renunță ușor, continuă până reușește",
   },
   {
     value: "creativ",
@@ -52,7 +58,13 @@ const PERSONALITY_TRAITS: PersonalityTrait[] = [
     value: "aventuros",
     label: "Aventuros",
     icon: "🧗",
-    description: "Îi place să încerce lucruri noi",
+    description: "Îi place să încerce lucruri noi și provocări",
+  },
+  {
+    value: "prudent",
+    label: "Prudent",
+    icon: "🛡️",
+    description: "Preferă siguranța, evită riscurile",
   },
   {
     value: "analitic",
@@ -61,10 +73,10 @@ const PERSONALITY_TRAITS: PersonalityTrait[] = [
     description: "Gândește logic și strategic",
   },
   {
-    value: "empatic",
-    label: "Empatic",
-    icon: "❤️",
-    description: "Înțelege sentimentele altora",
+    value: "sensibil",
+    label: "Sensibil",
+    icon: "🌸",
+    description: "Simte lucrurile intens, sensibil la critici",
   },
 ];
 
@@ -85,7 +97,7 @@ const PersonalityQuestion = memo(function PersonalityQuestion() {
     <QuestionWrapper
       title="Ce trăsături descriu cel mai bine copilul tău?"
       description="Personalitatea copilului tău joacă un rol important în alegerea sportului potrivit. Un copil extrovertit s-ar putea simți mai bine într-un sport de echipă, în timp ce unul mai analitic ar putea prefera sporturi strategice."
-      helpText="Selectează cel puțin o trăsătură. Poți selecta până la 10 trăsături care descriu cel mai bine copilul tău."
+      helpText="Selectează cel puțin o trăsătură. Poți selecta până la 10 trăsături care descriu cel mai bine copilul tău. Este normal ca copiii să aibă trăsături aparent contradictorii (de exemplu, extrovert la școală dar introvert acasă)."
       error={errors.personality}
     >
       <div className="personality-traits">
@@ -109,7 +121,7 @@ const PersonalityQuestion = memo(function PersonalityQuestion() {
                     </span>
                     <div className="flex-grow-1">
                       <div className="fw-semibold mb-1">{trait.label}</div>
-                      <small className={isSelected ? "text-white-50" : "text-muted"}>
+                      <small className={isSelected ? "text-white-80" : "text-muted"}>
                         {trait.description}
                       </small>
                     </div>

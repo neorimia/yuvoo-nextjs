@@ -63,16 +63,25 @@ export const interestsQuestionSchema = z.object({
     .array(z.string())
     .max(10, "Poți introduce maximum 10 sporturi anterioare")
     .default([]),
+  whyStoppedSports: z.array(z.string()).max(10, "Poți selecta maximum 10 motive").optional(),
 });
 
 /**
- * Question 5: Physical Build
+ * Question 5: Physical Build, Coordination & Health
  */
 export const physicalQuestionSchema = z.object({
   physicalBuild: z.enum(["slim", "average", "athletic"], {
     required_error: "Selectează constituția fizică a copilului",
     invalid_type_error: "Constituție fizică invalidă",
   }),
+  coordinationLevel: z.enum(["excellent", "good", "developing", "challenges"], {
+    required_error: "Selectează nivelul de coordonare al copilului",
+    invalid_type_error: "Nivel de coordonare invalid",
+  }),
+  healthConditions: z
+    .array(z.string())
+    .max(10, "Poți selecta maximum 10 considerații medicale")
+    .optional(),
   physicalConsiderations: z
     .string()
     .max(500, "Considerațiile fizice nu pot depăși 500 caractere")
@@ -109,6 +118,11 @@ export const preferencesQuestionSchema = z.object({
           .string()
           .max(200, "Considerațiile de buget nu pot depăși 200 caractere")
           .optional(),
+        parentInvolvement: z
+          .enum(["transport-only", "attend", "participate", "minimal"], {
+            errorMap: () => ({ message: "Selectează o opțiune validă pentru implicare" }),
+          })
+          .optional(),
       },
       {
         required_error: "Preferințele sunt obligatorii",
@@ -143,9 +157,12 @@ export const quizAnswersSchema = z.object({
   // Question 4: Interests & Hobbies
   interests: interestsQuestionSchema.shape.interests,
   previousSports: interestsQuestionSchema.shape.previousSports,
+  whyStoppedSports: interestsQuestionSchema.shape.whyStoppedSports,
 
-  // Question 5: Physical Build
+  // Question 5: Physical Build, Coordination & Health
   physicalBuild: physicalQuestionSchema.shape.physicalBuild,
+  coordinationLevel: physicalQuestionSchema.shape.coordinationLevel,
+  healthConditions: physicalQuestionSchema.shape.healthConditions,
   physicalConsiderations: physicalQuestionSchema.shape.physicalConsiderations,
 
   // Question 6: Preferences
