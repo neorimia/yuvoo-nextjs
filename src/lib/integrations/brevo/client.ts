@@ -37,11 +37,13 @@ const DEFAULT_RETRY_CONFIG: RetryConfig = {
 function isRetryableError(error: unknown): boolean {
   // Retry on network errors, timeouts, and 5xx server errors
   if (!error || typeof error !== "object" || !("response" in error)) {
-    return true; // Network error
+    return true; // Network error, retry
   }
 
-  const status = error.response.status || error.response.statusCode;
-  return status >= 500 || status === 429; // Server error or rate limit
+  const errorWithResponse = error as { response?: { status?: number; statusCode?: number } };
+  const response = errorWithResponse.response;
+  const status = response?.status || response?.statusCode;
+  return status ? status >= 500 || status === 429 : false; // Server error or rate limit
 }
 
 /**
