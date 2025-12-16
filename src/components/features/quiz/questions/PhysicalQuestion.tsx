@@ -209,6 +209,7 @@ const PhysicalQuestion = memo(function PhysicalQuestion() {
                   className={`btn w-100 text-start btn-sm ${
                     isSelected ? "btn-warning" : "btn-outline-secondary"
                   }`}
+                  style={{ minHeight: "40px" }}
                   onClick={() => toggleHealthCondition(condition.value)}
                   aria-pressed={isSelected}
                 >

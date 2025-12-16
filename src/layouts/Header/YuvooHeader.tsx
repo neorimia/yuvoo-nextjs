@@ -12,17 +12,23 @@ import MenuSidebar from "./components/Sidebar/MenuSidebar";
 import { routes } from "@/lib/routes";
 
 const YuvooHeader = () => {
-  const { scrollDirection, sideMenuOpen, setSideMenuOpen, isSearchOpen, setIsSearchOpen } =
-    useGlobalContext();
+  const {
+    scrollDirection: _scrollDirection,
+    sideMenuOpen,
+    setSideMenuOpen,
+    isSearchOpen,
+    setIsSearchOpen,
+  } = useGlobalContext();
   return (
     <>
       <header>
         <div className="bd-header">
           <TopbarFour />
-          <div
-            id="header-sticky"
-            className={`bd-header-bottom ${scrollDirection === "down" ? "header-sticky" : ""}`}
-          >
+          {/*<div*/}
+          {/*  id="header-sticky"*/}
+          {/*  className={`bd-header-bottom ${scrollDirection === "down" ? "header-sticky" : ""}`}*/}
+          {/*>*/}
+          <div id="header-sticky" className={`bd-header-bottom`}>
             <div className="container">
               <div className="mega-menu-wrapper p-relative">
                 <div className="d-flex align-items-center justify-content-between">

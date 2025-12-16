@@ -44,7 +44,6 @@ export default function QuizNavigation({
       >
         <i className="bi bi-arrow-left me-2"></i>
         <span className="d-none d-sm-inline">Înapoi</span>
-        <span className="d-sm-none">←</span>
       </button>
 
       {/* Step indicator (mobile-friendly) - removed as it's now in progress bar */}

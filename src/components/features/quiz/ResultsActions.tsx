@@ -75,7 +75,7 @@ const ResultsActions: React.FC<ResultsActionsProps> = ({
             {isAuthenticated && (
               <button
                 type="button"
-                className="btn btn-yuvoo-primary"
+                className="btn btn-yuvoo-primary w-100 w-lg-auto"
                 onClick={handleSaveResults}
                 disabled={isSaving}
               >
@@ -101,7 +101,7 @@ const ResultsActions: React.FC<ResultsActionsProps> = ({
             {!isAuthenticated && (
               <Link
                 href={`${routes.login}?returnUrl=${encodeURIComponent(pathname)}`}
-                className="btn btn-outline-primary"
+                className="btn btn-outline-primary  w-100 w-lg-auto"
               >
                 <i className="bi bi-person-plus me-2"></i>
                 Autentifică-te pentru a salva rezultatele
@@ -109,13 +109,13 @@ const ResultsActions: React.FC<ResultsActionsProps> = ({
             )}
 
             {/* Retake Quiz Button */}
-            <Link href={routes.quiz.intro} className="btn btn-outline-secondary">
+            <Link href={routes.quiz.intro} className="btn btn-outline-secondary  w-100 w-lg-auto">
               <i className="bi bi-arrow-repeat me-2"></i>
               Repetă chestionarul
             </Link>
 
             {/* View All Clubs Button */}
-            <Link href={routes.clubs.list} className="btn btn-outline-primary">
+            <Link href={routes.clubs.list} className="btn btn-outline-primary  w-100 w-lg-auto">
               <i className="bi bi-search me-2"></i>
               Vezi toate cluburile
             </Link>

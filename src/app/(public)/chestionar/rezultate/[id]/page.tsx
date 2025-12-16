@@ -130,7 +130,7 @@ export default async function QuizResultsPage({ params }: QuizResultsPageProps) 
               </div>
 
               {/* Additional Information */}
-              <div className="mt-5 pt-4 border-top">
+              <div className="mt-4 pt-4 border-top">
                 <div className="row g-4">
                   <div className="col-12 col-md-6">
                     <div className="d-flex align-items-start">

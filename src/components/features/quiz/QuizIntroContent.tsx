@@ -34,13 +34,16 @@ export default function QuizIntroContent() {
       <div className="row justify-content-center mb-5">
         <div className="col-lg-10">
           <div className="card border-0 shadow-sm">
-            <div className="card-body p-4 p-md-5">
+            <div className="card-body">
               <h2 className="h4 fw-semibold mb-4 text-center">Ce vei primi:</h2>
               <div className="row g-4">
                 <div className="col-md-6">
                   <div className="d-flex align-items-start gap-3">
-                    <div className="flex-shrink-0">
-                      <div className="bg-yuvoo-primary bg-opacity-10 rounded-circle p-2">
+                    <div className="w-auto d-flex justify-content-center align-items-center">
+                      <div
+                        className="bg-yuvoo-primary bg-opacity-10 rounded-circle p-2"
+                        style={{ width: "40px", height: "40px" }}
+                      >
                         <i className="bi bi-check-circle-fill text-white fs-4"></i>
                       </div>
                     </div>
@@ -54,8 +57,11 @@ export default function QuizIntroContent() {
                 </div>
                 <div className="col-md-6">
                   <div className="d-flex align-items-start gap-3">
-                    <div className="flex-shrink-0">
-                      <div className="bg-yuvoo-primary bg-opacity-10 rounded-circle p-2">
+                    <div className="w-auto d-flex justify-content-center align-items-center">
+                      <div
+                        className="bg-yuvoo-primary bg-opacity-10 rounded-circle p-2"
+                        style={{ width: "40px", height: "40px" }}
+                      >
                         <i className="bi bi-lightbulb-fill text-white fs-4"></i>
                       </div>
                     </div>
@@ -69,8 +75,11 @@ export default function QuizIntroContent() {
                 </div>
                 <div className="col-md-6">
                   <div className="d-flex align-items-start gap-3">
-                    <div className="flex-shrink-0">
-                      <div className="bg-yuvoo-primary bg-opacity-10 rounded-circle p-2">
+                    <div className="d-flex align-items-start gap-3">
+                      <div
+                        className="bg-yuvoo-primary bg-opacity-10 rounded-circle p-2"
+                        style={{ width: "40px", height: "40px" }}
+                      >
                         <i className="bi bi-building text-white fs-4"></i>
                       </div>
                     </div>
@@ -84,9 +93,12 @@ export default function QuizIntroContent() {
                 </div>
                 <div className="col-md-6">
                   <div className="d-flex align-items-start gap-3">
-                    <div className="flex-shrink-0">
-                      <div className="bg-yuvoo-primary bg-opacity-10 rounded-circle p-2">
-                        <i className="bi bi-heart-pulse-fill ttext-white fs-4"></i>
+                    <div className="d-flex align-items-start gap-3">
+                      <div
+                        className="bg-yuvoo-primary bg-opacity-10 rounded-circle p-2"
+                        style={{ width: "40px", height: "40px" }}
+                      >
+                        <i className="bi bi-heart-pulse-fill text-white fs-4"></i>
                       </div>
                     </div>
                     <div>

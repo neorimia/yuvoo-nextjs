@@ -75,14 +75,14 @@ const InterestsQuestion = memo(function InterestsQuestion() {
     setAnswer("whyStoppedSports", updated.length > 0 ? updated : undefined);
   };
 
-  const addCustomInterest = () => {
+  const _addCustomInterest = () => {
     if (customInterest.trim() && !interests.includes(customInterest.trim())) {
       setAnswer("interests", [...interests, customInterest.trim()]);
       setCustomInterest("");
     }
   };
 
-  const addCustomSport = () => {
+  const _addCustomSport = () => {
     if (customSport.trim() && !previousSports.includes(customSport.trim())) {
       setAnswer("previousSports", [...previousSports, customSport.trim()]);
       setCustomSport("");
@@ -105,10 +105,11 @@ const InterestsQuestion = memo(function InterestsQuestion() {
           {COMMON_INTERESTS.map((interest) => {
             const isSelected = interests.includes(interest.value);
             return (
-              <div key={interest.value} className="col-6 col-md-4">
+              <div key={interest.value} className="col-md-4">
                 <button
                   type="button"
                   className={`btn w-100 ${isSelected ? "btn-yuvoo-primary" : "btn-outline-secondary"} btn-sm`}
+                  style={{ minHeight: "40px" }}
                   onClick={() => toggleInterest(interest.value)}
                   aria-pressed={isSelected}
                 >
@@ -122,28 +123,29 @@ const InterestsQuestion = memo(function InterestsQuestion() {
           })}
         </div>
 
+        {/* Hide for MVP */}
         {/* Custom interest input */}
-        <div className="mt-3">
-          <div className="input-group">
-            <input
-              type="text"
-              className="form-control"
-              placeholder="Adaugă alt interes..."
-              value={customInterest}
-              onChange={(e) => setCustomInterest(e.target.value)}
-              onKeyPress={(e) => e.key === "Enter" && (e.preventDefault(), addCustomInterest())}
-            />
-            <button type="button" className="btn btn-outline-secondary" onClick={addCustomInterest}>
-              <i className="bi bi-plus-lg"></i> Adaugă
-            </button>
-          </div>
-        </div>
+        {/*<div className="mt-3">*/}
+        {/*  <div className="input-group">*/}
+        {/*    <input*/}
+        {/*      type="text"*/}
+        {/*      className="form-control"*/}
+        {/*      placeholder="Adaugă alt interes..."*/}
+        {/*      value={customInterest}*/}
+        {/*      onChange={(e) => setCustomInterest(e.target.value)}*/}
+        {/*      onKeyPress={(e) => e.key === "Enter" && (e.preventDefault(), addCustomInterest())}*/}
+        {/*    />*/}
+        {/*    <button type="button" className="btn btn-outline-secondary" onClick={addCustomInterest}>*/}
+        {/*      <i className="bi bi-plus-lg"></i> Adaugă*/}
+        {/*    </button>*/}
+        {/*  </div>*/}
+        {/*</div>*/}
 
-        {interests.length > 0 && (
-          <div className="mt-2">
-            <small className="text-muted">{interests.length} selectate</small>
-          </div>
-        )}
+        {/*{interests.length > 0 && (*/}
+        {/*  <div className="mt-2">*/}
+        {/*    <small className="text-muted">{interests.length} selectate</small>*/}
+        {/*  </div>*/}
+        {/*)}*/}
       </div>
 
       {/* Previous sports section */}
@@ -157,6 +159,7 @@ const InterestsQuestion = memo(function InterestsQuestion() {
                 <button
                   type="button"
                   className={`btn w-100 ${isSelected ? "btn-success" : "btn-outline-secondary"} btn-sm`}
+                  style={{ minHeight: "40px" }}
                   onClick={() => toggleSport(sport.value)}
                   aria-pressed={isSelected}
                 >
@@ -170,28 +173,29 @@ const InterestsQuestion = memo(function InterestsQuestion() {
           })}
         </div>
 
+        {/* Hide for MVP */}
         {/* Custom sport input */}
-        <div className="mt-3">
-          <div className="input-group">
-            <input
-              type="text"
-              className="form-control"
-              placeholder="Adaugă alt sport..."
-              value={customSport}
-              onChange={(e) => setCustomSport(e.target.value)}
-              onKeyPress={(e) => e.key === "Enter" && (e.preventDefault(), addCustomSport())}
-            />
-            <button type="button" className="btn btn-outline-secondary" onClick={addCustomSport}>
-              <i className="bi bi-plus-lg"></i> Adaugă
-            </button>
-          </div>
-        </div>
+        {/*<div className="mt-3">*/}
+        {/*  <div className="input-group">*/}
+        {/*    <input*/}
+        {/*      type="text"*/}
+        {/*      className="form-control"*/}
+        {/*      placeholder="Adaugă alt sport..."*/}
+        {/*      value={customSport}*/}
+        {/*      onChange={(e) => setCustomSport(e.target.value)}*/}
+        {/*      onKeyPress={(e) => e.key === "Enter" && (e.preventDefault(), addCustomSport())}*/}
+        {/*    />*/}
+        {/*    <button type="button" className="btn btn-outline-secondary" onClick={addCustomSport}>*/}
+        {/*      <i className="bi bi-plus-lg"></i> Adaugă*/}
+        {/*    </button>*/}
+        {/*  </div>*/}
+        {/*</div>*/}
 
-        {previousSports.length > 0 && (
-          <div className="mt-2">
-            <small className="text-success">{previousSports.length} sport(uri) anterior(e)</small>
-          </div>
-        )}
+        {/*{previousSports.length > 0 && (*/}
+        {/*  <div className="mt-2">*/}
+        {/*    <small className="text-success">{previousSports.length} sport(uri) anterior(e)</small>*/}
+        {/*  </div>*/}
+        {/*)}*/}
       </div>
 
       {/* Why stopped sports (conditional - only if previousSports selected) */}
