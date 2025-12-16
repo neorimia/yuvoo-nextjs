@@ -46,7 +46,7 @@ export const routes = {
     intro: "/chestionar",
     container: "/chestionar/container",
     preview: "/chestionar/previzualizare",
-    results: "/chestionar/rezultate",
+    results: (id: string) => `/chestionar/rezultate/${id}`,
   },
   // Search
   search: "/cautare",
@@ -125,6 +125,7 @@ export const routes = {
       add: "/parent/children/add",
       edit: (id: string) => `/parent/children/${id}/edit`,
       detail: (id: string) => `/parent/children/${id}`,
+      quizzes: (id: string) => `/parent/children/${id}/quizzes`,
     },
     savedItems: "/parent/saved",
     settings: "/parent/settings",

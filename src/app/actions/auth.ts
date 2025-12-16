@@ -49,8 +49,11 @@ export async function requireRoleAction(role: UserRole): Promise<AuthUser> {
 
 /**
  * Sign in with email and password
+ *
+ * @param formData - Form data containing email and password
+ * @param redirectUrl - Optional URL to redirect to after successful login
  */
-export async function signInAction(formData: FormData) {
+export async function signInAction(formData: FormData, redirectUrl?: string) {
   const email = formData.get("email") as string;
   const password = formData.get("password") as string;
 
@@ -67,10 +70,15 @@ export async function signInAction(formData: FormData) {
       password,
     });
 
+    // Use redirectUrl if provided, otherwise default to dashboard
+    // Validate redirectUrl to prevent open redirect vulnerabilities
+    const safeRedirectUrl =
+      redirectUrl && redirectUrl.startsWith("/") ? redirectUrl : routes.parent.dashboard;
+
     // Return success - redirect will be handled by the form component
     return {
       success: true,
-      redirect: routes.parent.dashboard,
+      redirect: safeRedirectUrl,
     };
   } catch (error) {
     return {

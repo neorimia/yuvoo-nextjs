@@ -1,7 +1,10 @@
-@forward '../../public/assets/css/bootstrap.css';
-@forward '../../public/assets/css/animate.css';
-@forward '../../public/assets/css/flaticon_kindedo.css';
-@forward '../../public/assets/css/font-awesome-pro.css';
-@forward '../../public/assets/css/nice-select.css';
-@forward '../../public/assets/css/spacing.css';
-@forward '../../public/assets/scss/main.scss';
+@forward "../../public/assets/css/bootstrap.css";
+@forward "../../public/assets/css/animate.css";
+@forward "../../public/assets/css/flaticon_kindedo.css";
+@forward "../../public/assets/css/font-awesome-pro.css";
+@forward "../../public/assets/css/nice-select.css";
+@forward "../../public/assets/css/spacing.css";
+@forward "../../public/assets/scss/main.scss";
+
+// Bootstrap Icons
+@import "bootstrap-icons/font/bootstrap-icons.css";

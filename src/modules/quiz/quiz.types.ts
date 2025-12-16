@@ -12,17 +12,36 @@ export interface QuizSubmission {
 }
 
 export interface QuizAnswers {
-  age: number;
-  energyLevel: "low" | "medium" | "high";
-  personality: string[];
-  interests: string[];
+  // Question 1: Age & Basic Info
+  age: number; // 4-14 years
+  gender?: "male" | "female" | "other"; // Optional
+
+  // Question 2: Energy Level
+  energyLevel: "low" | "medium" | "high" | "very_high";
+
+  // Question 3: Personality Traits
+  personality: string[]; // e.g., ["outgoing", "competitive", "cooperative"]
+
+  // Question 4: Interests & Hobbies
+  interests: string[]; // Current interests
+  previousSports: string[]; // Previously tried sports
+  whyStoppedSports?: string[]; // Optional: reasons for stopping previous sports
+
+  // Question 5: Physical Build, Coordination & Health
   physicalBuild: "slim" | "average" | "athletic";
-  previousSports: string[];
+  coordinationLevel: "excellent" | "good" | "developing" | "challenges";
+  healthConditions?: string[]; // Optional: medical conditions or safety concerns
+  physicalConsiderations?: string; // Optional notes about physical considerations
+
+  // Question 6: Preferences
   preferences: {
-    indoor: boolean;
-    outdoor: boolean;
-    team: boolean;
-    individual: boolean;
+    indoor: boolean; // Prefers indoor activities
+    outdoor: boolean; // Prefers outdoor activities
+    team: boolean; // Prefers team sports
+    individual: boolean; // Prefers individual sports
+    timeAvailability?: string; // Optional: time availability notes
+    budgetConsiderations?: string; // Optional: budget notes
+    parentInvolvement?: string; // Optional: parent involvement level (transport-only, attend, participate, minimal)
   };
 }
 

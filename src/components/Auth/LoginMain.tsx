@@ -3,7 +3,11 @@ import React from "react";
 import SignInForm from "../Form/SignInForm";
 import { routes } from "@/lib/routes";
 
-const LoginMain = () => {
+interface LoginMainProps {
+  redirectUrl?: string;
+}
+
+const LoginMain: React.FC<LoginMainProps> = ({ redirectUrl }) => {
   return (
     <section className="login__area pt-110 pb-110">
       <div className="container">
@@ -16,7 +20,7 @@ const LoginMain = () => {
                   <p>Introdu datele de autentificare pentru a accesa contul tău.</p>
                 </div>
                 <div className="login__form">
-                  <SignInForm />
+                  <SignInForm redirectUrl={redirectUrl} />
                   <div className="login__register-now">
                     <p>
                       Nu ai cont? <Link href={routes.register}>Înregistrează-te acum</Link>

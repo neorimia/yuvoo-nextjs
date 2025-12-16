@@ -1,11 +1,33 @@
 import React from "react";
 import type { Metadata } from "next";
 import BreadcrumbOne from "@/components/Breadcrumb/BreadcrumbOne";
+import QuizIntroContent from "@/components/features/quiz/QuizIntroContent";
 
 export const metadata: Metadata = {
-  title: "Chestionar AI - Yuvoo",
+  title: "Chestionar AI - Descoperă Sportul Potrivit | Yuvoo",
   description:
-    "Descoperă sportul potrivit pentru copilul tău cu ajutorul chestionarului nostru AI. Răspunde la câteva întrebări și primește recomandări personalizate.",
+    "Chestionar AI personalizat pentru recomandări de sporturi. Doar 3-4 minute, 6 întrebări simple pentru a găsi sportul perfect pentru copilul tău. Recomandări bazate pe specialiști.",
+  keywords: [
+    "chestionar sporturi copii",
+    "AI recomandări sport",
+    "sport potrivit copil",
+    "test sporturi copii",
+    "activități sportive copii",
+    "chestionar activități copii",
+  ],
+  openGraph: {
+    title: "Chestionar AI - Descoperă Sportul Potrivit | Yuvoo",
+    description:
+      "Chestionar AI personalizat pentru recomandări de sporturi. Doar 3-4 minute pentru recomandări bazate pe specialiști.",
+    type: "website",
+    locale: "ro_RO",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Chestionar AI - Descoperă Sportul Potrivit | Yuvoo",
+    description:
+      "Chestionar AI personalizat pentru recomandări de sporturi. Doar 3-4 minute pentru recomandări bazate pe specialiști.",
+  },
 };
 
 /**
@@ -18,22 +40,11 @@ export default function QuizIntroPage() {
   return (
     <>
       <BreadcrumbOne title="Chestionar AI" subTitle="Chestionar" />
-      <section className="bd-quiz-intro-area pt-120 pb-70">
+      <section className="quiz-intro-section py-5">
         <div className="container">
           <div className="row justify-content-center">
-            <div className="col-xl-8 col-lg-10">
-              <div className="bd-quiz-intro-content text-center">
-                <h1 className="bd-section-title mb-30">Chestionar AI pentru Sporturi</h1>
-                <p className="mb-40">
-                  Descoperă sportul potrivit pentru copilul tău cu ajutorul chestionarului nostru
-                  AI. Răspunde la câteva întrebări despre copilul tău și primește recomandări
-                  personalizate.
-                </p>
-                {/* TODO: Add quiz intro component */}
-                <div className="bd-quiz-intro-placeholder">
-                  <p>Componenta de introducere a chestionarului va fi adăugată aici.</p>
-                </div>
-              </div>
+            <div className="col-12">
+              <QuizIntroContent />
             </div>
           </div>
         </div>

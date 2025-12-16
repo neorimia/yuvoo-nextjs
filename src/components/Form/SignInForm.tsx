@@ -14,7 +14,11 @@ type SignInFormData = {
   password: string;
 };
 
-const SignInForm = () => {
+interface SignInFormProps {
+  redirectUrl?: string;
+}
+
+const SignInForm: React.FC<SignInFormProps> = ({ redirectUrl }) => {
   const [showPass, setShowPass] = useState(false);
   const [isPending, startTransition] = useTransition();
   const [authError, setAuthError] = useState<string | null>(null);
@@ -33,7 +37,7 @@ const SignInForm = () => {
       formData.append("email", data.email);
       formData.append("password", data.password);
 
-      const result = await signInAction(formData);
+      const result = await signInAction(formData, redirectUrl);
 
       if (result.success && result.redirect) {
         router.push(result.redirect);

@@ -230,7 +230,7 @@ import { routes } from "@/lib/routes";
 - ✅ `components/features/clubs/` - Club components created (ClubsMain, ClubDetailsMain, HomeClubArea, ClubCard, VerificationBadge)
 - 📋 `components/features/doctors/` - Doctor components (planned)
 - 📋 `components/features/sports/` - Sport components (planned)
-- 📋 `components/features/quiz/` - Quiz components (planned)
+- ✅ `components/features/quiz/` - Quiz components complete (QuizContainer, QuizProgress, QuizNavigation, QuizContext, QuestionWrapper, 6 question components, ResultsActions, SportRecommendationCard, QuizHistory)
 
 **Layout Components**: `components/layout/`
 
@@ -420,21 +420,244 @@ onboarding_progress {
 
 ### OpenAI Integration
 
-**Location**: `modules/quiz/quiz.service.ts`
+**Location**: `modules/quiz/ai-recommendations.service.ts` (AI service), `modules/quiz/quiz.analyzer.ts` (orchestration)
 
 **Pattern**:
 
 1. Collect quiz answers
-2. Build structured prompt
+2. Build structured prompt (Romanian)
 3. Call OpenAI with system prompt (pediatric sports specialist persona)
 4. Parse JSON response
-5. Store recommendations in database
+5. Validate and normalize recommendations
+6. Store recommendations in database
+7. Fallback to generic recommendations if AI fails
 
 **AI Model**: GPT-4 Turbo (Phase 1)
 **Response Format**: Structured JSON with recommendations array
 **Language Requirement**: System prompts must explicitly instruct AI to generate all content (recommendations, explanations, reasoning) in Romanian language only.
 
+**Error Handling**:
+
+- Retry logic with timeout (30 seconds)
+- Fallback to age-based generic recommendations
+- Romanian error messages for all failure scenarios
+
+**Service Flow**:
+
+```
+Quiz Submission → quiz.service.ts → quiz.analyzer.ts → ai-recommendations.service.ts → OpenAI API
+                                                                                        ↓
+                                                                              Fallback (if error)
+```
+
 **Future**: ML models for improved matching
+
+## Quiz Integration Pattern
+
+### Quiz-Club Integration
+
+**Location**: `modules/quiz/sport-club-mapping.service.ts`
+
+**Pattern**:
+
+1. Extract sport IDs from quiz recommendations
+2. Filter clubs by recommended sports
+3. Optionally filter by location (parent's city)
+4. Rank clubs by recommendation match score
+5. Display with recommended badges
+
+**Service Functions**:
+
+- `getClubsForRecommendations()` - Main filtering function
+- `getRecommendedSportIds()` - Extract sport IDs
+- `isClubRecommended()` - Check club match
+- `rankClubsByRecommendations()` - Sort by match score
+
+**Club Listing Integration**:
+
+- Query params: `?sport={sportId}&quiz=true&city={city}`
+- Banner: Shows quiz context when `quiz=true`
+- Badges: "Recomandat" badge on matching clubs
+- Filtering: Pre-filters clubs by recommended sport
+
+**Usage Flow**:
+
+```
+Quiz Results → "Vezi cluburi" button → /cluburi?sport={sportId}&quiz=true
+                                                      ↓
+                                    Club Page filters by sport
+                                                      ↓
+                                    Shows recommended badge
+```
+
+### Quiz History Pattern
+
+**Location**: `components/features/quiz/QuizHistory.tsx`
+
+**Pattern**:
+
+1. Display list of completed quizzes
+2. Show date, recommended sports, match scores
+3. Link to view full results
+4. Option to retake quiz
+5. Empty state with CTA
+
+**Integration Points**:
+
+- Parent Dashboard: Shows recent quiz activity
+- Child Profile: Shows all quizzes for specific child
+- Quick Stats: Quiz count, recommendations count
+
+**Data Flow**:
+
+```
+Parent Dashboard → getQuizHistoryAction(childId) → Quiz Repository
+                                                          ↓
+                                                    Quiz History Component
+```
+
+### Quiz Authentication Pattern
+
+**Location**: `app/actions/quiz.ts`, `modules/quiz/quiz.service.ts`
+
+**Pattern**:
+
+1. Quiz submission works for both authenticated and unauthenticated users
+2. For unauthenticated users: Creates temporary child record with anonymous parent
+3. For authenticated users: Uses selected child or creates temporary if needed
+4. Placeholder child IDs are handled before validation
+
+**Temporary Child Creation**:
+
+- Uses quiz answers (age, gender) to populate basic info
+- Creates or reuses anonymous system user (`anonymous@yuvoo.local`)
+- Generic child name: "Copil Temporar"
+- Date of birth calculated from age (January 1st of birth year)
+
+**Validation Flow**:
+
+1. Check if childId is placeholder (`"placeholder-child-id"` or empty)
+2. Validate answers separately (without childId UUID requirement)
+3. Create temporary child if placeholder detected
+4. Validate childId as UUID only if not a placeholder
+5. Submit quiz with real childId
+
+**Rate Limiting**:
+
+- Location: `lib/rate-limit.ts`
+- In-memory rate limiting (MVP-ready, can migrate to Redis for production)
+- Per-user (authenticated) or per-IP (anonymous) limiting
+- Default: 3 quiz submissions per hour
+- Prevents abuse and controls OpenAI API costs
+
+### Quiz UX/UI Patterns
+
+**Location**: `components/features/quiz/`
+
+**Key Patterns**:
+
+1. **Progress Indicator**:
+   - Badge showing "Pasul X din 6" with contextual encouragement
+   - Animated Bootstrap progress bar (progress-bar-striped, progress-bar-animated)
+   - Progress percentage displayed prominently
+   - Mobile-responsive design
+
+2. **Question Wrapper Pattern**:
+   - Consistent layout for all questions
+   - Title with required indicator (\*)
+   - Description box with left border accent (alert-light border-primary)
+   - Help text with info icon (shown after error if present)
+   - **Error Display Pattern**:
+     - Errors positioned immediately after question content (before help text) for maximum visibility
+     - Enhanced styling: 5px solid left border (var(--bd-danger)), light red background (#fff5f5)
+     - Larger warning icon (fs-3) with text-danger color
+     - FadeIn animation (0.3s ease-in) with translateY(-10px) for smooth appearance
+     - Improved text hierarchy: fs-6 for error title, explicit text-danger classes
+     - Stronger shadows (shadow-sm for question errors, shadow-lg for submit errors)
+     - Consistent alert-danger styling with flex layout for icon and message
+
+3. **Validation Pattern**:
+   - Step-specific validation in QuizContext
+   - Inline error messages in Romanian
+   - Errors clear automatically when user corrects input
+   - Validation runs before allowing next step
+   - Specific, actionable error messages
+   - **Error Visibility & Positioning**:
+     - Smart scroll behavior: scrolls to error message when validation fails
+     - Prioritizes scrolling to error alert if visible, then question content
+     - 150ms delay for smooth animation
+     - Errors appear with fadeIn animation for better user attention
+     - Inline validation feedback: AgeQuestion uses invalid-feedback with icon
+     - PreferencesQuestion uses alert-danger styling for inline validation errors
+     - Submit errors use same enhanced styling for consistency
+
+4. **Navigation Pattern**:
+   - Back button (disabled on first step)
+   - Continue button with keyboard hint "(Enter)" on desktop
+   - Submit button: "Vezi recomandările" (not "Finalizează")
+   - Loading states with spinners
+   - Disabled states during submission
+
+5. **Keyboard Navigation**:
+   - Enter key to proceed to next step or submit
+   - Smart handling: doesn't interfere with custom input fields
+   - Auto-focus first input when moving to next question
+   - 100ms delay to ensure DOM is ready
+
+6. **Input Validation Pattern**:
+   - Age input: Prevents invalid values (negative, decimals, out-of-range)
+   - Clears invalid input on blur
+   - aria-invalid attribute for accessibility
+   - Step attribute set to 1 to prevent decimals
+
+7. **Mobile-First Design**:
+   - Responsive button sizes (btn-lg)
+   - Better touch targets
+   - Improved spacing on small screens
+   - Progress indicator adapts to screen size
+   - Navigation buttons stack properly on mobile
+
+**Question Components**:
+
+- All 6 question components use React.memo for performance
+- Consistent styling with Bootstrap utilities
+- Parent-friendly Romanian language throughout
+- Contextual explanations for why each question matters
+- Visual feedback for selections (check icons, color changes)
+
+### Authentication Redirect Pattern
+
+**Location**: `app/(auth)/login/page.tsx`, `app/actions/auth.ts`
+
+**Pattern**:
+
+1. Login page reads `redirect` or `returnUrl` query parameter
+2. Passes redirect URL through component chain (page → LoginMain → SignInForm → signInAction)
+3. Validates redirect URL (must start with `/`) to prevent open redirect vulnerabilities
+4. Redirects to provided URL after successful login, or defaults to dashboard
+
+**Security**:
+
+- Only allows relative URLs (starting with `/`)
+- Prevents open redirect attacks
+- Validates URL format before redirect
+
+### Server-Side Authentication Pattern (Public Routes)
+
+**Location**: `app/(public)/chestionar/rezultate/[id]/page.tsx`, `components/features/quiz/ResultsActions.tsx`
+
+**Pattern**:
+
+1. Public routes don't have StackProvider context
+2. Authentication check performed server-side using `getSession()`
+3. Auth status passed as prop to client components
+4. Avoids StackProvider dependency issues
+
+**Implementation**:
+
+- Server Component: Checks auth using `getSession()` (server-side only)
+- Client Component: Receives `isAuthenticated` prop (no hooks needed)
+- Follows server-first authentication pattern
 
 ## Search & Filtering Pattern
 
