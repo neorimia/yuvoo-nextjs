@@ -60,7 +60,7 @@ function createDoctor(data: Omit<DoctorSeedData, "slug" | "profileComplete">): D
     schedule,
     photoUrl:
       data.photoUrl ||
-      `https://via.placeholder.com/400x400?text=Dr.+${data.firstName}+${data.lastName}`,
+      `https://picsum.photos/seed/doctor-${data.firstName}-${data.lastName}/400/400`,
     credentials,
   };
 }

@@ -11,6 +11,7 @@ import Link from "next/link";
 import { routes } from "@/lib/routes";
 import type { Club } from "@/modules/clubs/clubs.types";
 import VerificationBadge from "./VerificationBadge";
+import { isPlaceholderUrl } from "@/lib/utils/image-helpers";
 
 interface ClubCardProps {
   club: Club;
@@ -50,6 +51,7 @@ const ClubCard: React.FC<ClubCardProps> = ({
               width={400}
               height={300}
               style={{ width: "100%", height: "100%", objectFit: "cover" }}
+              unoptimized={isPlaceholderUrl(mainImage)}
             />
           )}
           {/* Badges: Recommended (from quiz) and Verified */}
@@ -111,6 +113,7 @@ const ClubCard: React.FC<ClubCardProps> = ({
             width={400}
             height={300}
             style={{ width: "100%", height: "100%", objectFit: "cover" }}
+            unoptimized={isPlaceholderUrl(mainImage)}
           />
         )}
         {club.verified && (

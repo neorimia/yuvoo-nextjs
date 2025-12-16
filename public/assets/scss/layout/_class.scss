@@ -334,6 +334,41 @@
       }
     }
   }
+
+  // Club variant 2 (for HomeTwoClubArea)
+  &-2 {
+    background: linear-gradient(359.18deg, #fff6eb 0.69%, #fffaf5 98.52%);
+    border-radius: 24px;
+    padding: 55px 50px;
+    text-align: center;
+    margin: 0px 6px 6px 0;
+    @include transition(0.3s);
+
+    @media #{$md,$xs} {
+      padding: 30px 20px;
+    }
+
+    &:hover {
+      filter: drop-shadow(6px 6px 0 var(--bd-theme-2));
+    }
+  }
+
+  // Club age (single age display, different from age-groups)
+  &-age {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    color: var(--bd-text-body);
+
+    i {
+      color: var(--bd-theme-1);
+      font-size: 18px;
+    }
+
+    span {
+      font-weight: 500;
+    }
+  }
 }
 
 .bd-class {

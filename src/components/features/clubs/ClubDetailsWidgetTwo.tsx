@@ -8,6 +8,7 @@
 import React from "react";
 import Image from "next/image";
 import type { Club } from "@/modules/clubs/clubs.types";
+import { isPlaceholderUrl } from "@/lib/utils/image-helpers";
 
 interface ClubDetailsWidgetTwoProps {
   club: Club;
@@ -68,6 +69,7 @@ const ClubDetailsWidgetTwo: React.FC<ClubDetailsWidgetTwoProps> = ({ club }) => 
                 width={600}
                 height={400}
                 style={{ width: "100%", height: "100%", objectFit: "cover" }}
+                unoptimized={isPlaceholderUrl(secondaryImage)}
               />
               <div className="panel wow"></div>
             </div>

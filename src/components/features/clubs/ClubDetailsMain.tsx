@@ -10,6 +10,7 @@ import React from "react";
 import Image from "next/image";
 import type { Club } from "@/modules/clubs/clubs.types";
 import VerificationBadge from "./VerificationBadge";
+import { isPlaceholderUrl } from "@/lib/utils/image-helpers";
 
 interface ClubDetailsMainProps {
   club: Club;
@@ -37,6 +38,7 @@ const ClubDetailsMain: React.FC<ClubDetailsMainProps> = ({ club }) => {
                 width={600}
                 height={400}
                 style={{ width: "100%", height: "100%", objectFit: "cover" }}
+                unoptimized={isPlaceholderUrl(mainImage)}
               />
               <div className="panel wow"></div>
               {club.verified && (

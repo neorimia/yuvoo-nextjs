@@ -12,6 +12,7 @@ import React from "react";
 import Image from "next/image";
 import { PhotoProvider, PhotoView } from "react-photo-view";
 import "react-photo-view/dist/react-photo-view.css";
+import { isPlaceholderUrl } from "@/lib/utils/image-helpers";
 
 interface ClubGalleryProps {
   images: string[];
@@ -82,6 +83,7 @@ const ClubGallery: React.FC<ClubGalleryProps> = ({ images, clubName }) => {
                             objectFit: "cover",
                             cursor: "pointer",
                           }}
+                          unoptimized={isPlaceholderUrl(imageUrl)}
                         />
                       </div>
                     </PhotoView>
