@@ -160,6 +160,9 @@ const DoctorAppointmentForm: React.FC<DoctorAppointmentFormProps> = ({
     );
   }
 
+  // Show helpful message if no children but allow booking anyway (child is optional for doctor consultations)
+  const showNoChildrenInfo = children.length === 0;
+
   return (
     <div className="bd-booking-form">
       <div className="bd-booking-form-header mb-4">
@@ -198,6 +201,23 @@ const DoctorAppointmentForm: React.FC<DoctorAppointmentFormProps> = ({
             aria-label="Close"
             onClick={() => setSubmitError(null)}
           ></button>
+        </div>
+      )}
+
+      {showNoChildrenInfo && (
+        <div className="alert alert-info mb-4">
+          <h6 className="alert-heading">
+            <i className="bi bi-info-circle me-2"></i>
+            Informație
+          </h6>
+          <p className="mb-2">
+            Nu ai adăugat încă copii în profilul tău. Poți programa consultația fără să selectezi un
+            copil, sau poți adăuga un copil pentru a asocia consultația cu profilul lui.
+          </p>
+          <a href={routes.parent.children.add} className="btn btn-sm btn-outline-primary">
+            <i className="bi bi-plus-circle me-1"></i>
+            Adaugă copil
+          </a>
         </div>
       )}
 

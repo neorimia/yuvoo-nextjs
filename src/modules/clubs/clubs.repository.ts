@@ -7,7 +7,7 @@
 
 import { db } from "@/lib/db";
 import { clubs } from "@/lib/db/schema";
-import { eq, desc, asc } from "drizzle-orm";
+import { eq, desc, asc, inArray } from "drizzle-orm";
 import type { Club } from "./clubs.types";
 
 /**
@@ -48,94 +48,113 @@ function mapDbClubToClub(dbClub: typeof clubs.$inferSelect): Club {
         : undefined,
   };
 
-  // Build contact info
-  const contact: Club["contact"] = {
-    phone: dbClub.phone || undefined,
-    email: dbClub.email || undefined,
-    website: dbClub.website || undefined,
-  };
-
-  // Map sportType to sportId and sportName
-  // For now, sportType is the sportId, and we'll use it as sportName too
-  // TODO: Join with sports table when available
-  const sportId = dbClub.sportType;
-  const sportName = dbClub.sportType; // Will be replaced with actual sport name from sports table
+  // Map images
+  const images: string[] = [];
+  if (dbClub.logoUrl) {
+    images.push(dbClub.logoUrl);
+  }
+  if (dbClub.galleryUrls && Array.isArray(dbClub.galleryUrls)) {
+    images.push(...dbClub.galleryUrls);
+  }
 
   return {
     id: dbClub.id,
     name: dbClub.name,
-    slug: dbClub.slug || dbClub.id, // Fallback to ID if slug is null
+    slug: dbClub.slug || "",
     description: dbClub.description || "",
-    sportId,
-    sportName,
+    sportId: dbClub.sportType, // Map sportType to sportId
+    sportName: dbClub.sportType, // TODO: Map to sport name from sports table
     location,
     ageGroups: dbClub.ageGroups || [],
     levels: dbClub.experienceLevels || [],
-    verified: dbClub.verified || false,
-    featured: dbClub.featured || false,
-    images: dbClub.galleryUrls || [],
-    contact,
+    verified: dbClub.verified,
+    featured: dbClub.featured,
+    images,
+    contact: {
+      phone: dbClub.phone || undefined,
+      email: dbClub.email || undefined,
+      website: dbClub.website || undefined,
+    },
     schedule,
     pricing,
+    verificationStatus: dbClub.verificationStatus,
+    verificationDocuments: dbClub.verificationDocuments || [],
     createdAt: dbClub.createdAt,
     updatedAt: dbClub.updatedAt,
   };
 }
 
 /**
- * Find club by slug
+ * Get club by slug
  */
-export async function findBySlug(slug: string): Promise<Club | null> {
-  const club = await db.query.clubs.findFirst({
+export async function getClubBySlug(slug: string): Promise<Club | null> {
+  const dbClub = await db.query.clubs.findFirst({
     where: eq(clubs.slug, slug),
   });
 
-  if (!club) {
+  if (!dbClub) {
     return null;
   }
 
-  return mapDbClubToClub(club);
+  return mapDbClubToClub(dbClub);
 }
 
 /**
- * Find clubs by sport
+ * Get club by ID
  */
-export async function findBySport(sportId: string): Promise<Club[]> {
-  const results = await db.query.clubs.findMany({
-    where: eq(clubs.sportType, sportId),
-    orderBy: [desc(clubs.verified), desc(clubs.rating), asc(clubs.name)],
+export async function getClubById(id: string): Promise<Club | null> {
+  const dbClub = await db.query.clubs.findFirst({
+    where: eq(clubs.id, id),
   });
 
-  return results.map(mapDbClubToClub);
+  if (!dbClub) {
+    return null;
+  }
+
+  return mapDbClubToClub(dbClub);
 }
 
 /**
- * Find verified clubs
+ * Get all clubs
  */
-export async function findVerified(): Promise<Club[]> {
-  const results = await db.query.clubs.findMany({
-    where: eq(clubs.verified, true),
-    orderBy: [desc(clubs.featured), desc(clubs.rating), asc(clubs.name)],
+export async function getAllClubs(): Promise<Club[]> {
+  const dbClubs = await db.query.clubs.findMany({
+    orderBy: [desc(clubs.createdAt)],
   });
 
-  return results.map(mapDbClubToClub);
+  return dbClubs.map(mapDbClubToClub);
 }
 
 /**
- * Find all clubs
+ * Get clubs by verification status
  */
-export async function findAll(): Promise<Club[]> {
-  const results = await db.query.clubs.findMany({
-    orderBy: [desc(clubs.verified), desc(clubs.featured), desc(clubs.rating), asc(clubs.name)],
+export async function getClubsByVerificationStatus(
+  status: "pending" | "in_review" | "approved" | "rejected"
+): Promise<Club[]> {
+  const dbClubs = await db.query.clubs.findMany({
+    where: eq(clubs.verificationStatus, status),
+    orderBy: [asc(clubs.createdAt)], // Oldest first (FIFO for review queue)
   });
 
-  return results.map(mapDbClubToClub);
+  return dbClubs.map(mapDbClubToClub);
+}
+
+/**
+ * Get clubs pending verification (pending or in_review)
+ */
+export async function getClubsPendingVerification(): Promise<Club[]> {
+  const dbClubs = await db.query.clubs.findMany({
+    where: inArray(clubs.verificationStatus, ["pending", "in_review"]),
+    orderBy: [asc(clubs.createdAt)], // Oldest first
+  });
+
+  return dbClubs.map(mapDbClubToClub);
 }
 
 export const clubsRepository = {
-  findBySlug,
-  findBySport,
-  findVerified,
-  findAll,
-  mapDbClubToClub, // Export for use in search service
+  getClubBySlug,
+  getClubById,
+  getAllClubs,
+  getClubsByVerificationStatus,
+  getClubsPendingVerification,
 };

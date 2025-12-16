@@ -39,6 +39,8 @@ export interface Club {
     amount: number;
     currency: "RON";
   };
+  verificationStatus?: "pending" | "in_review" | "approved" | "rejected";
+  verificationDocuments?: string[];
   createdAt: Date;
   updatedAt: Date;
 }

@@ -1314,6 +1314,148 @@ Does component need interactivity?
 8. **Caching**: Cache Components with time-based and tag-based revalidation
 9. **Code Splitting**: Automatic via Next.js
 
+## Admin Verification Pattern
+
+**Location**: `src/app/admin/verifications/`, `src/app/actions/verifications.ts`, `src/components/features/admin/VerificationRequestCard.tsx`
+
+**Purpose**: Admin workflow for reviewing and approving/rejecting club and doctor verification requests.
+
+**Status**: ✅ **COMPLETE** - Full admin verification workflow implemented
+
+**Architecture**:
+
+1. **Admin Page** (`/admin/verifications`):
+   - Server Component with admin role check
+   - Fetches pending and in-review verification requests
+   - Displays statistics dashboard
+   - Lists clubs and doctors separately
+
+2. **Verification Request Cards**:
+   - Client Component for interactive actions
+   - Displays entity information (name, location, sport/specialty)
+   - Shows verification documents with download links
+   - Action buttons: Approve, Reject (with reason), Set in Review
+   - Loading states and error handling
+
+3. **Server Actions**:
+   - `updateClubVerificationStatusAction()` - Update club verification
+   - `updateDoctorVerificationStatusAction()` - Update doctor verification
+   - Admin role required (enforced via `requireRole("admin")`)
+   - Zod validation for input
+   - Email notifications on status changes
+   - Cache revalidation
+
+4. **Repository Functions**:
+   - `getClubsByVerificationStatus(status)` - Get clubs by status
+   - `getClubsPendingVerification()` - Get pending/in_review clubs
+   - `getDoctorsByVerificationStatus(status)` - Get doctors by status
+   - `getDoctorsPendingVerification()` - Get pending/in_review doctors
+
+**Verification Workflow**:
+
+1. Club/Doctor submits documents during onboarding
+2. Status set to "in_review" automatically
+3. Admin views requests at `/admin/verifications`
+4. Admin reviews documents and entity information
+5. Admin approves/rejects with optional reason
+6. Email notification sent to club admin/doctor
+7. Status updated in database
+8. Cache revalidated
+
+**Status Values**:
+
+- `pending` - Initial state, no documents submitted
+- `in_review` - Documents submitted, admin reviewing
+- `approved` - Verified and approved
+- `rejected` - Rejected, needs resubmission
+
+**Email Notifications**:
+
+- Sent automatically on status changes
+- Includes status update and optional rejection reason
+- Uses existing Brevo email templates
+- Non-blocking (failures don't affect verification updates)
+
+**Security**:
+
+- Admin role required (enforced server-side)
+- Input validation with Zod
+- Type-safe operations
+- Error handling with Romanian messages
+
+**Files**:
+
+- `src/app/admin/verifications/page.tsx` - Admin verification page
+- `src/app/actions/verifications.ts` - Verification server actions
+
+## Quiz Referral Flow Pattern
+
+**Purpose**: Display recommended doctors and clubs directly from quiz results, enabling seamless discovery and booking.
+
+**Architecture**:
+
+```
+Quiz Results Page
+  ↓
+SpecialistRecommendationCard (if specialist recommendation exists)
+  ↓
+getRecommendedDoctorsAction() → doctorsSearch.search()
+  ↓
+DoctorCard (compact variant)
+  ↓
+Doctor Directory (pre-filtered by specialty)
+
+Quiz Results Page
+  ↓
+SportRecommendationCard (for each sport recommendation)
+  ↓
+getRecommendedClubsAction() → clubsSearch.search()
+  ↓
+ClubCard (compact variant)
+  ↓
+Club Directory (pre-filtered by sport)
+```
+
+**Components**:
+
+- `SpecialistRecommendationCard` - Displays specialist recommendation with interactive doctor discovery
+- `SportRecommendationCard` - Enhanced with interactive club discovery
+- `DoctorCard` - Reusable doctor card (compact variant for recommendations)
+- `ClubCard` - Reusable club card (compact variant for recommendations)
+
+**Server Actions**:
+
+- `getRecommendedDoctorsAction(specialty, city?, limit?)` - Get recommended doctors by specialty
+- `getRecommendedClubsAction(sportId, city?, limit?)` - Get recommended clubs by sport
+
+**Features**:
+
+- **On-Demand Loading**: Recommendations load only when user clicks "View Recommended" button
+- **Filtering**: Only verified entities, accepting new patients (doctors), prioritized results
+- **Limit**: Maximum 5 recommendations per entity type
+- **Navigation**: Links to full directories with pre-applied filters
+- **Empty States**: Graceful handling when no recommendations found
+- **Loading States**: Spinner and disabled state during data fetching
+
+**User Flow**:
+
+1. User completes quiz and views results
+2. If specialist recommendation exists, user can click "View Recommended Doctors"
+3. System loads and displays up to 5 verified doctors matching specialty
+4. For each sport recommendation, user can click "View Recommended Clubs"
+5. System loads and displays up to 5 verified clubs for that sport
+6. User can view entity details or browse full directory with filters applied
+
+**Files**:
+
+- `src/components/features/quiz/SpecialistRecommendationCard.tsx` - Specialist recommendation display
+- `src/components/features/quiz/SportRecommendationCard.tsx` - Sport recommendation with club discovery
+- `src/app/actions/doctors.ts` - Doctor recommendation server action
+- `src/app/actions/clubs.ts` - Club recommendation server action
+- `src/components/features/admin/VerificationRequestCard.tsx` - Verification request card component
+- `src/modules/clubs/clubs.repository.ts` - Club verification queries
+- `src/modules/doctors/doctors.repository.ts` - Doctor verification queries
+
 ## Documentation References
 
 - **Claude Guide**: `CLAUDE.md` - Comprehensive project guide for Claude Code with quick start, development commands, architecture patterns, troubleshooting, and quick reference

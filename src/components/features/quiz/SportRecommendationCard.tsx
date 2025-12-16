@@ -3,12 +3,18 @@
  *
  * Displays a single sport recommendation with match score, reasoning, benefits, and considerations.
  * Used in quiz results page to show AI-generated recommendations.
+ * Includes interactive club recommendations.
  */
 
-import React from "react";
+"use client";
+
+import React, { useState } from "react";
 import Link from "next/link";
 import { routes } from "@/lib/routes";
+import { getRecommendedClubsAction } from "@/app/actions/clubs";
+import ClubCard from "@/components/features/clubs/ClubCard";
 import type { SportRecommendation } from "@/modules/quiz/quiz.types";
+import type { Club } from "@/modules/clubs/clubs.types";
 
 interface SportRecommendationCardProps {
   recommendation: SportRecommendation;
@@ -78,9 +84,32 @@ const SportRecommendationCard: React.FC<SportRecommendationCardProps> = ({
   rank,
   className = "",
 }) => {
+  const [recommendedClubs, setRecommendedClubs] = useState<Club[]>([]);
+  const [loadingClubs, setLoadingClubs] = useState(false);
+  const [showClubs, setShowClubs] = useState(false);
+
   const matchScoreColor = getMatchScoreColor(recommendation.matchScore);
   const matchScoreBadge = getMatchScoreBadge(recommendation.matchScore);
   const sportIcon = getSportIcon(recommendation.sportId);
+
+  // Load recommended clubs when user clicks to view
+  const handleViewClubs = async () => {
+    if (recommendedClubs.length > 0) {
+      setShowClubs(!showClubs);
+      return;
+    }
+
+    setLoadingClubs(true);
+    try {
+      const result = await getRecommendedClubsAction(recommendation.sportId, undefined, 5);
+      setRecommendedClubs(result.clubs);
+      setShowClubs(true);
+    } catch (error) {
+      console.error("Error loading recommended clubs:", error);
+    } finally {
+      setLoadingClubs(false);
+    }
+  };
 
   return (
     <div className={`card shadow-sm h-100 ${className}`}>
@@ -155,16 +184,75 @@ const SportRecommendationCard: React.FC<SportRecommendationCardProps> = ({
           </div>
         )}
 
-        {/* CTA Button */}
+        {/* CTA Buttons */}
         <div className="mt-4 pt-3 border-top">
-          <Link
-            href={`${routes.clubs.list}?sport=${recommendation.sportId}&quiz=true`}
-            className="btn btn-yuvoo-primary w-100"
-          >
-            <i className="bi bi-search me-2"></i>
-            Vezi cluburi pentru {recommendation.sportName}
-          </Link>
+          <div className="d-flex gap-2 flex-wrap">
+            <button
+              type="button"
+              className="btn btn-yuvoo-primary flex-grow-1"
+              onClick={handleViewClubs}
+              disabled={loadingClubs}
+            >
+              {loadingClubs ? (
+                <>
+                  <span
+                    className="spinner-border spinner-border-sm me-2"
+                    role="status"
+                    aria-hidden="true"
+                  ></span>
+                  Se încarcă...
+                </>
+              ) : (
+                <>
+                  <i className="bi bi-search me-2"></i>
+                  {showClubs ? "Ascunde" : "Vezi"} Cluburi Recomandate
+                </>
+              )}
+            </button>
+            <Link
+              href={`${routes.clubs.list}?sport=${recommendation.sportId}&quiz=true`}
+              className="btn btn-outline-yuvoo-primary"
+            >
+              <i className="bi bi-list-ul me-2"></i>
+              Vezi toate cluburile
+            </Link>
+          </div>
         </div>
+
+        {/* Recommended Clubs List */}
+        {showClubs && recommendedClubs.length > 0 && (
+          <div className="mt-4 pt-4 border-top">
+            <h6 className="mb-3">
+              <i className="bi bi-trophy-fill text-yuvoo-primary me-2"></i>
+              Cluburi Recomandate pentru {recommendation.sportName} ({recommendedClubs.length})
+            </h6>
+            <div className="row g-3">
+              {recommendedClubs.map((club) => (
+                <div key={club.id} className="col-12 col-md-6">
+                  <ClubCard club={club} variant="compact" />
+                </div>
+              ))}
+            </div>
+            <div className="mt-3 text-center">
+              <Link
+                href={`${routes.clubs.list}?sport=${recommendation.sportId}`}
+                className="btn btn-sm btn-outline-yuvoo-primary"
+              >
+                Vezi toate cluburile pentru {recommendation.sportName}
+              </Link>
+            </div>
+          </div>
+        )}
+
+        {showClubs && recommendedClubs.length === 0 && !loadingClubs && (
+          <div className="mt-4 pt-4 border-top">
+            <div className="alert alert-info mb-0" role="alert">
+              <i className="bi bi-info-circle me-2"></i>
+              Nu s-au găsit cluburi disponibile pentru {recommendation.sportName} în acest moment.
+              Te rugăm să verifici din nou mai târziu.
+            </div>
+          </div>
+        )}
       </div>
     </div>
   );
