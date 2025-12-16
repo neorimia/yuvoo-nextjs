@@ -36,3 +36,30 @@ export async function getClubsBySport(sportId: string): Promise<Club[]> {
 export async function getVerifiedClubs(): Promise<Club[]> {
   return clubsRepository.findVerified();
 }
+
+/**
+ * Search clubs near a location
+ *
+ * Convenience function for location-based search.
+ * Finds clubs within a specified radius of given coordinates.
+ *
+ * @param latitude - Latitude of the search location
+ * @param longitude - Longitude of the search location
+ * @param radiusKm - Search radius in kilometers (default: 10km)
+ * @param additionalFilters - Additional search filters (sport, age, etc.)
+ * @returns Search result with clubs sorted by distance
+ */
+export async function searchNearbyClubs(
+  latitude: number,
+  longitude: number,
+  radiusKm: number = 10,
+  additionalFilters?: Omit<ClubSearchFilters, "latitude" | "longitude" | "radiusKm" | "sortBy">
+): Promise<ClubSearchResult> {
+  return clubsSearch.search({
+    ...additionalFilters,
+    latitude,
+    longitude,
+    radiusKm,
+    sortBy: "distance", // Always sort by distance for nearby search
+  });
+}

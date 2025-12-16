@@ -51,9 +51,13 @@ export interface ClubSearchFilters {
   level?: string;
   verified?: boolean;
   featured?: boolean;
+  // Location-based search
+  latitude?: number;
+  longitude?: number;
+  radiusKm?: number; // Search radius in kilometers
   page?: number;
   pageSize?: number;
-  sortBy?: "name" | "verified" | "rating";
+  sortBy?: "name" | "verified" | "rating" | "distance";
 }
 
 export interface ClubSearchResult {
@@ -61,4 +65,6 @@ export interface ClubSearchResult {
   total: number;
   page: number;
   pageSize: number;
+  // Distance in kilometers (if location-based search was used)
+  distances?: Map<string, number>;
 }

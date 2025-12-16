@@ -2,8 +2,9 @@ import React from "react";
 import type { Metadata } from "next";
 import BreadcrumbOne from "@/components/Breadcrumb/BreadcrumbOne";
 import ClubsMain from "@/components/features/clubs/ClubsMain";
+import ClubSearchFilters from "@/components/features/clubs/ClubSearchFilters";
 import { searchClubs } from "@/modules/clubs/clubs.service";
-import type { Club } from "@/modules/clubs/clubs.types";
+import type { Club, ClubSearchFilters as ClubSearchFiltersType } from "@/modules/clubs/clubs.types";
 
 export const metadata: Metadata = {
   title: "Cluburi Sportive - Yuvoo",
@@ -16,6 +17,12 @@ interface ClubsPageProps {
     sport?: string;
     quiz?: string;
     city?: string;
+    district?: string;
+    age?: string;
+    level?: string;
+    verified?: string;
+    featured?: string;
+    sortBy?: string;
   }>;
 }
 
@@ -28,35 +35,39 @@ interface ClubsPageProps {
  */
 export default async function ClubsPage({ searchParams }: ClubsPageProps) {
   const params = await searchParams;
-  const { sport: sportId, quiz: isQuizContext, city } = params;
+  const {
+    sport: sportId,
+    quiz: isQuizContext,
+    city,
+    district,
+    age,
+    level,
+    verified,
+    featured,
+    sortBy,
+  } = params;
+
+  // Build filters object from search params
+  const filters: ClubSearchFiltersType = {
+    sportId: sportId || undefined,
+    city: city || undefined,
+    district: district || undefined,
+    age: age ? parseInt(age) : undefined,
+    level: level || undefined,
+    verified: verified === "true" ? true : undefined,
+    featured: featured === "true" ? true : undefined,
+    sortBy: (sortBy as "name" | "verified" | "rating") || "verified",
+  };
 
   // Fetch clubs with filters
-  let clubs: Club[] = [];
-  let recommendedSportIds: string[] = [];
-
-  if (sportId) {
-    // Filter by specific sport (from quiz recommendation)
-    const result = await searchClubs({
-      sportId,
-      city: city || undefined,
-      verified: true, // Prefer verified clubs
-      sortBy: "verified",
-    });
-    clubs = result.clubs;
-    recommendedSportIds = [sportId];
-  } else {
-    // Fetch all clubs (or with city filter)
-    const result = await searchClubs({
-      city: city || undefined,
-      verified: true,
-      sortBy: "verified",
-    });
-    clubs = result.clubs;
-  }
+  const result = await searchClubs(filters);
+  const clubs: Club[] = result.clubs;
+  const recommendedSportIds: string[] = sportId ? [sportId] : [];
 
   return (
     <>
       <BreadcrumbOne title="Cluburi Sportive" subTitle="Cluburi" />
+      <ClubSearchFilters initialFilters={filters} />
       <ClubsMain
         clubs={clubs}
         recommendedSportIds={isQuizContext === "true" ? recommendedSportIds : undefined}

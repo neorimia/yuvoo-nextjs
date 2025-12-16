@@ -15,6 +15,7 @@ import Link from "next/link";
 import { routes } from "@/lib/routes";
 import type { Club } from "@/modules/clubs/clubs.types";
 import VerificationBadge from "./VerificationBadge";
+import { isPlaceholderUrl } from "@/lib/utils/image-helpers";
 
 interface HomeClubAreaProps {
   clubs: Club[];
@@ -120,6 +121,7 @@ const HomeClubArea: React.FC<HomeClubAreaProps> = ({ clubs }) => {
                                   height: "100%",
                                   objectFit: "cover",
                                 }}
+                                unoptimized={isPlaceholderUrl(mainImage)}
                               />
                             )}
                             {club.verified && (

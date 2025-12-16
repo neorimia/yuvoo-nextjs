@@ -8,11 +8,10 @@
 "use client";
 
 import React from "react";
-import Image from "next/image";
 import Link from "next/link";
 import { routes } from "@/lib/routes";
 import type { Club } from "@/modules/clubs/clubs.types";
-import VerificationBadge from "./VerificationBadge";
+import ClubCard from "./ClubCard";
 
 interface ClubsMainProps {
   clubs: Club[];
@@ -25,6 +24,37 @@ const ClubsMain: React.FC<ClubsMainProps> = ({
   recommendedSportIds = [],
   isQuizContext = false,
 }) => {
+  // Empty state
+  if (!clubs || clubs.length === 0) {
+    return (
+      <section className="bd-club-area pt-110 pb-70">
+        <div className="container">
+          <div className="row">
+            <div className="col-12">
+              <div className="text-center py-5">
+                <div className="mb-4">
+                  <i className="flaticon-sports" style={{ fontSize: "4rem", color: "#ccc" }}></i>
+                </div>
+                <h3 className="mb-3">Nu s-au găsit cluburi</h3>
+                <p className="text-muted mb-4">
+                  În prezent nu există cluburi disponibile care să corespundă criteriilor tale.
+                  <br />
+                  Încearcă să modifici filtrele sau revino mai târziu.
+                </p>
+                <Link href={routes.clubs.list} className="bd-btn">
+                  <span className="bd-btn-inner">
+                    <span className="bd-btn-normal">Vezi toate cluburile</span>
+                    <span className="bd-btn-hover">Vezi toate cluburile</span>
+                  </span>
+                </Link>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+    );
+  }
+
   return (
     <section className="bd-club-area pt-110 pb-70">
       <div className="container">
@@ -46,76 +76,29 @@ const ClubsMain: React.FC<ClubsMainProps> = ({
           </div>
         )}
 
-        <div className="row">
-          {clubs.map((club) => {
-            const mainImage = club.images?.[0] || "/assets/img/placeholder-club.jpg";
-            const pricingDisplay = club.pricing
-              ? `${club.pricing.amount} ${club.pricing.currency}/${club.pricing.type === "monthly" ? "lună" : club.pricing.type === "per_class" ? "ședință" : "semestru"}`
-              : "Contactează pentru preț";
+        {/* Results count */}
+        <div className="row mb-4">
+          <div className="col-12">
+            <p className="text-muted mb-0">
+              {clubs.length} {clubs.length === 1 ? "club găsit" : "cluburi găsite"}
+            </p>
+          </div>
+        </div>
 
-            return (
-              <div className="col-xl-4 col-lg-6 col-md-6" key={club.id}>
-                <div className="bd-club-3 fix radius-24 p-relative mb-50 wow fadeInUp">
-                  <div className="bd-club-thumb position-relative">
-                    {mainImage && (
-                      <Image
-                        src={mainImage}
-                        alt={club.name}
-                        width={400}
-                        height={300}
-                        style={{ width: "100%", height: "100%", objectFit: "cover" }}
-                      />
-                    )}
-                    {/* Badges: Recommended (from quiz) and Verified */}
-                    <div className="position-absolute top-0 end-0 m-3 d-flex flex-column gap-2">
-                      {recommendedSportIds.includes(club.sportId) && (
-                        <span className="badge bg-warning text-dark">
-                          <i className="bi bi-star-fill me-1"></i>
-                          Recomandat
-                        </span>
-                      )}
-                      {club.verified && <VerificationBadge verified={club.verified} />}
-                    </div>
-                  </div>
-                  <div className="bd-club-content-3 theme-bg-6">
-                    <h3 className="bd-club-title-3">
-                      <Link href={routes.clubs.detail(club.slug)}>{club.name}</Link>
-                    </h3>
-                    <p className="mb-20">{club.description?.substring(0, 120)}...</p>
-                    <div className="bd-club-meta-wrapper d-flex justify-content-between align-items-center flex-wrap">
-                      <div className="bd-club-meta d-flex align-items-center flex-wrap">
-                        <div className="bd-club-sport me-3">
-                          <i className="flaticon-sports"></i>
-                          <span>{club.sportName}</span>
-                        </div>
-                        <div className="bd-club-location">
-                          <i className="flaticon-location"></i>
-                          <span>{club.location.city}</span>
-                        </div>
-                      </div>
-                      {club.pricing && (
-                        <div className="bd-club-meta">
-                          <div className="bd-club-meta-price">
-                            <span>{pricingDisplay}</span>
-                          </div>
-                        </div>
-                      )}
-                    </div>
-                    {club.ageGroups && club.ageGroups.length > 0 && (
-                      <div className="bd-club-age-groups mt-2">
-                        <small className="text-muted">
-                          Vârste: {club.ageGroups.join(", ")} ani
-                        </small>
-                      </div>
-                    )}
-                  </div>
-                  <div className="bd-club-btn-3 theme-bg-2 text-center">
-                    <Link href={routes.clubs.detail(club.slug)}>Vezi detalii</Link>
-                  </div>
-                </div>
+        <div className="row">
+          {clubs.map((club, index) => (
+            <div className="col-xl-4 col-lg-6 col-md-6" key={club.id}>
+              <div className="wow fadeInUp">
+                <ClubCard
+                  club={club}
+                  variant="listing"
+                  recommended={recommendedSportIds.includes(club.sportId)}
+                  showAgeGroups={true}
+                  delay={`.${(index + 1) * 2}s`}
+                />
               </div>
-            );
-          })}
+            </div>
+          ))}
         </div>
       </div>
     </section>
