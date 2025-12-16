@@ -1,11 +1,11 @@
-import React from "react";
-import type { Metadata } from "next";
-import BreadcrumbOne from "@/components/Breadcrumb/BreadcrumbOne";
+"use client";
 
-export const metadata: Metadata = {
-  title: "Căutare - Yuvoo",
-  description: "Caută cluburi sportive, doctori și sporturi pe platforma Yuvoo.",
-};
+import React from "react";
+import BreadcrumbOne from "@/components/Breadcrumb/BreadcrumbOne";
+import SearchResults from "@/components/features/search/SearchResults";
+
+// Note: Metadata cannot be exported from client components
+// Metadata is handled via layout or moved to a separate metadata file
 
 /**
  * Search Page
@@ -21,17 +21,17 @@ export default function SearchPage() {
         <div className="container">
           <div className="row">
             <div className="col-12">
-              <div className="bd-search-content">
+              <div className="bd-search-content mb-50">
                 <h1 className="bd-section-title mb-30">Caută pe Yuvoo</h1>
-                {/* TODO: Add search component */}
-                <div className="bd-search-placeholder">
-                  <p>Componenta de căutare va fi adăugată aici.</p>
-                </div>
+                <p className="text-muted">
+                  Caută cluburi sportive, doctori sau sporturi folosind termenii de căutare din URL.
+                </p>
               </div>
             </div>
           </div>
         </div>
       </section>
+      <SearchResults />
     </>
   );
 }

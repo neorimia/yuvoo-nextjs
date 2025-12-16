@@ -23,7 +23,7 @@ export default async function AdminVerificationsPage() {
   try {
     await requireRole("admin");
   } catch (_error) {
-    redirect(routes.auth.login);
+    redirect(routes.login);
   }
 
   // Get pending verification requests

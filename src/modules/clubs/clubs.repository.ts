@@ -151,10 +151,23 @@ export async function getClubsPendingVerification(): Promise<Club[]> {
   return dbClubs.map(mapDbClubToClub);
 }
 
+/**
+ * Get clubs by sport type
+ */
+export async function findBySportType(sportType: string): Promise<Club[]> {
+  const dbClubs = await db.query.clubs.findMany({
+    where: eq(clubs.sportType, sportType),
+    orderBy: [desc(clubs.verified), desc(clubs.createdAt)], // Verified first, then newest
+  });
+
+  return dbClubs.map(mapDbClubToClub);
+}
+
 export const clubsRepository = {
   getClubBySlug,
   getClubById,
   getAllClubs,
   getClubsByVerificationStatus,
   getClubsPendingVerification,
+  findBySportType,
 };

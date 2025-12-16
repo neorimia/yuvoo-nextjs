@@ -15,7 +15,8 @@ import {
   updateChild,
   deleteChild,
 } from "@/modules/children/children.service";
-import type { Child, CreateChildInput, UpdateChildInput } from "@/modules/children/children.types";
+import { createChildSchema, updateChildSchema } from "@/lib/validations/child";
+import type { Child } from "@/modules/children/children.types";
 
 /**
  * Get all children for current parent
@@ -47,15 +48,16 @@ export async function getChildAction(childId: string): Promise<Child | null> {
  * Create new child profile
  */
 export async function createChildAction(
-  input: CreateChildInput
+  input: unknown
 ): Promise<{ success: boolean; child?: Child; error?: string }> {
   try {
     const user = await requireAuth();
 
-    // TODO: Validate input with Zod schema
+    // Validate input with Zod schema
+    const validatedInput = createChildSchema.parse(input);
 
     const child = await createChild({
-      ...input,
+      ...validatedInput,
       parentId: user.id,
     });
 
@@ -76,14 +78,15 @@ export async function createChildAction(
  */
 export async function updateChildAction(
   childId: string,
-  input: UpdateChildInput
+  input: unknown
 ): Promise<{ success: boolean; child?: Child; error?: string }> {
   try {
     const user = await requireAuth();
 
-    // TODO: Validate input with Zod schema
+    // Validate input with Zod schema
+    const validatedInput = updateChildSchema.parse(input);
 
-    const child = await updateChild(childId, user.id, input);
+    const child = await updateChild(childId, user.id, validatedInput);
 
     revalidatePath("/children");
     revalidatePath(`/children/${childId}`);

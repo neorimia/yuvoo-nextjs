@@ -94,6 +94,13 @@ pnpm install
 
 3. **Configurează variabilele de mediu**
 
+**Opțiune 1: Script automat (recomandat)**
+
+```bash
+npm run setup:dev
+```
+
+**Opțiune 2: Manual**
 Creează un fișier `.env.local` în root-ul proiectului:
 
 ```bash
@@ -122,7 +129,24 @@ BREVO_SENDER_NAME="Yuvoo"
 NEXT_PUBLIC_APP_URL="http://localhost:3000"
 ```
 
-4. **Rulează serverul de dezvoltare**
+4. **Verifică configurarea**
+
+```bash
+# Verifică că toate variabilele de mediu sunt configurate
+npm run verify:setup
+```
+
+5. **Inițializează baza de date**
+
+```bash
+# Push schema to database
+npm run db:push
+
+# (Opțional) Seed cu date de test
+npm run db:seed
+```
+
+6. **Rulează serverul de dezvoltare**
 
 ```bash
 npm run dev

@@ -14,21 +14,23 @@ import {
   getBookingsByUserId,
   cancelBooking,
 } from "@/modules/bookings/bookings.service";
-import type { Booking, CreateBookingInput } from "@/modules/bookings/bookings.types";
+import { createBookingSchema } from "@/lib/validations/booking";
+import type { Booking } from "@/modules/bookings/bookings.types";
 
 /**
  * Create new booking
  */
 export async function createBookingAction(
-  input: CreateBookingInput
+  input: unknown
 ): Promise<{ success: boolean; booking?: Booking; error?: string }> {
   try {
     const user = await requireAuth();
 
-    // TODO: Validate input with Zod schema
+    // Validate input with Zod schema
+    const validatedInput = createBookingSchema.parse(input);
 
     const booking = await createBooking({
-      ...input,
+      ...validatedInput,
       userId: user.id,
     });
 

@@ -51,9 +51,13 @@ This file provides comprehensive guidance to Claude Code (claude.ai/code) when w
 # Install dependencies
 npm install
 
-# Set up environment variables
-cp .env.example .env.local
-# Edit .env.local with your credentials
+# Set up environment variables (interactive script - recommended)
+npm run setup:dev
+# Or manually: cp .env.local.example .env.local
+# Then edit .env.local with your credentials
+
+# Verify setup (checks all environment variables)
+npm run verify:setup
 
 # Initialize database
 npm run db:push
@@ -61,9 +65,15 @@ npm run db:push
 # Seed database (optional)
 npm run db:seed
 
+# Test connections (optional but recommended)
+npx tsx src/lib/db/test-connection.ts   # Test database
+npx tsx src/lib/auth/test-auth.ts       # Test Stack Auth
+
 # Start development server
 npm run dev
 ```
+
+**Quick Setup Guide**: See `docs/DEVELOPMENT_SETUP_GUIDE.md` for detailed step-by-step instructions for each service.
 
 ### Daily Development
 

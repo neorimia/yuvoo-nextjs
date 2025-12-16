@@ -1,11 +1,18 @@
 import React from "react";
 import type { Metadata } from "next";
 import BreadcrumbOne from "@/components/Breadcrumb/BreadcrumbOne";
+import AboutMain from "@/components/features/about/AboutMain";
 
 export const metadata: Metadata = {
   title: "Despre Noi - Yuvoo",
   description:
     "Află mai multe despre Yuvoo, platforma AI care ajută părinții să găsească activitățile sportive potrivite pentru copiii lor.",
+  openGraph: {
+    title: "Despre Noi - Yuvoo",
+    description:
+      "Află mai multe despre Yuvoo, platforma AI care ajută părinții să găsească activitățile sportive potrivite pentru copiii lor.",
+    type: "website",
+  },
 };
 
 /**
@@ -22,17 +29,18 @@ export default function AboutPage() {
         <div className="container">
           <div className="row">
             <div className="col-12">
-              <div className="bd-about-content">
+              <div className="bd-about-content text-center mb-50">
                 <h1 className="bd-section-title mb-30">Despre Yuvoo</h1>
-                {/* TODO: Add about content component */}
-                <div className="bd-about-placeholder">
-                  <p>Conținutul despre Yuvoo va fi adăugat aici.</p>
-                </div>
+                <p className="lead mb-40">
+                  Platforma AI care transformă modul în care părinții din România găsesc
+                  activitățile sportive perfecte pentru copiii lor.
+                </p>
               </div>
             </div>
           </div>
         </div>
       </section>
+      <AboutMain />
     </>
   );
 }
