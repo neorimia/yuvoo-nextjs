@@ -24,8 +24,11 @@ Quiz Flow:
 
 - `quiz.service.ts` - Business logic for quiz operations (orchestration)
 - `quiz.repository.ts` - Data access layer (Drizzle ORM)
-- `quiz.analyzer.ts` - AI analysis orchestration (with fallback)
+- `quiz.analyzer.ts` - AI analysis orchestration (with fallback and risk signal detection)
 - `ai-recommendations.service.ts` - OpenAI integration (GPT-4 Turbo)
+- `ai-recommendations-cache.service.ts` - Response caching for AI recommendations
+- `risk-signal-detection.service.ts` - Programmatic risk signal detection
+- `doctor-specialist-mapping.service.ts` - Maps specialist recommendations to doctors
 - `sport-club-mapping.service.ts` - Maps quiz recommendations to clubs
 - `quiz.types.ts` - TypeScript interfaces and types
 
@@ -101,23 +104,25 @@ Gets all completed quizzes for a child, ordered by most recent first.
 
 ## Analyzer Functions
 
-### `analyze(submission: QuizSubmission): Promise<SportRecommendation[]>`
+### `analyze(submission: QuizSubmission): Promise<AnalysisResult>`
 
-Analyzes quiz submission and generates sport recommendations using AI.
+Analyzes quiz submission and generates sport and specialist recommendations.
 
 **Flow:**
 
-1. Attempts AI-powered recommendations via OpenAI
-2. Falls back to generic age-based recommendations if AI fails
-3. Returns 3-5 sport recommendations
+1. Detects risk signals programmatically from quiz answers
+2. Attempts AI-powered recommendations via OpenAI
+3. Merges programmatic and AI specialist recommendations (programmatic takes precedence)
+4. Falls back to generic age-based recommendations if AI fails
+5. Returns sport recommendations and optional specialist recommendation
 
 **Parameters:**
 
 - `submission` - Quiz submission with answers
 
-**Returns:** Array of `SportRecommendation` objects
+**Returns:** `AnalysisResult` with sport recommendations and optional specialist recommendation
 
-**Error Handling:** Automatic fallback to generic recommendations
+**Error Handling:** Automatic fallback to generic recommendations (still includes programmatic risk signals)
 
 ## Repository Functions
 
@@ -258,6 +263,40 @@ All quiz inputs are validated using Zod schemas in `lib/validations/quiz.ts`:
 - **Caching:** Results are cacheable (public results page)
 - **Fallback:** Ensures submission always completes even if AI fails
 
+## Risk Signal Detection
+
+The quiz system includes programmatic risk signal detection that analyzes quiz answers to identify potential health, developmental, or behavioral concerns.
+
+### Risk Signal Types
+
+**Orthopedist Signals**:
+
+- Coordination level: "challenges" or "developing"
+- Physical considerations mentioning pain, joints, posture, balance, mobility, injuries
+- Health conditions related to orthopedics
+
+**Nutritionist Signals**:
+
+- Health conditions related to weight, nutrition, or dietary restrictions
+- Physical considerations mentioning weight or nutrition
+
+**Psychologist Signals**:
+
+- Personality traits indicating anxiety, fear, isolation
+- Reasons for stopping previous sports related to psychological factors
+- Health conditions related to mental health (anxiety, depression, ADHD, autism)
+
+**General Pediatrician Signals**:
+
+- Very low energy level
+- Multiple health conditions
+- Young age (under 6) with health considerations
+- General health conditions without specific specialist match
+
+### Integration
+
+Risk signal detection runs automatically during quiz analysis and takes precedence over AI-generated specialist recommendations for reliability and consistency.
+
 ## Future Enhancements
 
 - [ ] Cache common quiz patterns to reduce AI calls
@@ -265,3 +304,4 @@ All quiz inputs are validated using Zod schemas in `lib/validations/quiz.ts`:
 - [ ] Export quiz results as PDF
 - [ ] Add quiz sharing functionality
 - [ ] Implement quiz favorites/bookmarks
+- [ ] Risk signal analytics and tracking

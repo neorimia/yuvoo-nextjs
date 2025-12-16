@@ -8,12 +8,12 @@
 import { db } from "@/lib/db";
 import { quizzes } from "@/lib/db/schema";
 import { eq, desc } from "drizzle-orm";
-import { v4 as uuidv4 } from "uuid";
 import type {
   QuizSubmission,
   QuizResult,
   CreateQuizInput,
   SportRecommendation,
+  SpecialistRecommendation,
   QuizAnswers,
 } from "./quiz.types";
 
@@ -26,7 +26,7 @@ import type {
  * @returns Quiz submission with generated ID and submission timestamp
  */
 export async function create(input: CreateQuizInput): Promise<QuizSubmission> {
-  const quizId = uuidv4();
+  const quizId = crypto.randomUUID();
 
   await db.insert(quizzes).values({
     id: quizId,
@@ -44,23 +44,39 @@ export async function create(input: CreateQuizInput): Promise<QuizSubmission> {
 }
 
 /**
+ * Quiz results structure stored in database
+ */
+interface StoredQuizResults {
+  sportRecommendations: SportRecommendation[];
+  specialistRecommendation?: SpecialistRecommendation;
+}
+
+/**
  * Save quiz results
  *
- * Updates quiz record with AI-generated recommendations.
+ * Updates quiz record with AI-generated recommendations (sport and specialist).
  *
  * @param quizId - UUID of the quiz submission
- * @param recommendations - Array of AI-generated sport recommendations
+ * @param sportRecommendations - Array of AI-generated sport recommendations
+ * @param specialistRecommendation - Optional specialist recommendation
  * @returns Complete quiz result with recommendations
  * @throws Error if quiz not found after update
  */
 export async function saveResults(
   quizId: string,
-  recommendations: SportRecommendation[]
+  sportRecommendations: SportRecommendation[],
+  specialistRecommendation?: SpecialistRecommendation
 ): Promise<QuizResult> {
+  // Structure results for storage
+  const results: StoredQuizResults = {
+    sportRecommendations,
+    ...(specialistRecommendation && { specialistRecommendation }),
+  };
+
   await db
     .update(quizzes)
     .set({
-      recommendations: recommendations as unknown as Record<string, unknown>[], // JSONB type
+      recommendations: results as unknown as Record<string, unknown>, // JSONB type
     })
     .where(eq(quizzes.id, quizId));
 
@@ -72,10 +88,14 @@ export async function saveResults(
     throw new Error(`Quiz with ID ${quizId} not found after saving results`);
   }
 
+  // Parse stored results
+  const storedResults = quiz.recommendations as unknown as StoredQuizResults;
+
   return {
     id: quiz.id,
     childId: quiz.childId,
-    recommendations: quiz.recommendations as unknown as SportRecommendation[],
+    recommendations: storedResults.sportRecommendations || [],
+    specialistRecommendation: storedResults.specialistRecommendation,
     createdAt: quiz.createdAt,
   };
 }
@@ -103,10 +123,14 @@ export async function findResultById(quizId: string): Promise<QuizResult | null>
     return null;
   }
 
+  // Parse stored results
+  const storedResults = quiz.recommendations as unknown as StoredQuizResults;
+
   return {
     id: quiz.id,
     childId: quiz.childId,
-    recommendations: quiz.recommendations as unknown as SportRecommendation[],
+    recommendations: storedResults.sportRecommendations || [],
+    specialistRecommendation: storedResults.specialistRecommendation,
     createdAt: quiz.createdAt,
   };
 }
@@ -129,12 +153,16 @@ export async function findByChildId(childId: string): Promise<QuizResult[]> {
   // Filter out quizzes without recommendations (incomplete)
   return childQuizzes
     .filter((quiz) => quiz.recommendations !== null)
-    .map((quiz) => ({
-      id: quiz.id,
-      childId: quiz.childId,
-      recommendations: quiz.recommendations as unknown as SportRecommendation[],
-      createdAt: quiz.createdAt,
-    }));
+    .map((quiz) => {
+      const storedResults = quiz.recommendations as unknown as StoredQuizResults;
+      return {
+        id: quiz.id,
+        childId: quiz.childId,
+        recommendations: storedResults.sportRecommendations || [],
+        specialistRecommendation: storedResults.specialistRecommendation,
+        createdAt: quiz.createdAt,
+      };
+    });
 }
 
 /**

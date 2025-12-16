@@ -11,6 +11,7 @@ import { eq } from "drizzle-orm";
 import { quizRepository } from "./quiz.repository";
 import { quizAnalyzer } from "./quiz.analyzer";
 import type { QuizResult, CreateQuizInput, QuizAnswers } from "./quiz.types";
+import type { AnalysisResult } from "./quiz.analyzer";
 
 /**
  * Submit quiz and get AI recommendations
@@ -31,15 +32,19 @@ export async function submitQuiz(input: CreateQuizInput): Promise<QuizResult> {
     const submission = await quizRepository.create(input);
 
     // Step 2: Analyze with AI (includes fallback mechanism)
-    const recommendations = await quizAnalyzer.analyze(submission);
+    const analysisResult: AnalysisResult = await quizAnalyzer.analyze(submission);
 
     // Validate recommendations were generated
-    if (!recommendations || recommendations.length === 0) {
+    if (!analysisResult.sportRecommendations || analysisResult.sportRecommendations.length === 0) {
       throw new Error("Nu s-au putut genera recomandări. Te rugăm să încerci din nou.");
     }
 
-    // Step 3: Save results
-    const result = await quizRepository.saveResults(submission.id, recommendations);
+    // Step 3: Save results (including specialist recommendation if present)
+    const result = await quizRepository.saveResults(
+      submission.id,
+      analysisResult.sportRecommendations,
+      analysisResult.specialistRecommendation
+    );
 
     return result;
   } catch (error) {

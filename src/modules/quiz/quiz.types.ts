@@ -54,10 +54,18 @@ export interface SportRecommendation {
   considerations: string[];
 }
 
+export interface SpecialistRecommendation {
+  specialty: "orthopedist" | "nutritionist" | "psychologist" | "general";
+  needed: boolean;
+  reason: string; // AI-generated explanation in Romanian
+  priority?: "high" | "medium" | "low"; // Priority level for consultation
+}
+
 export interface QuizResult {
   id: string;
   childId: string;
   recommendations: SportRecommendation[];
+  specialistRecommendation?: SpecialistRecommendation;
   createdAt: Date;
 }
 

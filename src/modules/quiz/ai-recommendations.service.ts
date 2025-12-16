@@ -7,7 +7,7 @@
  */
 
 import { openai, AI_MODEL, AI_TEMPERATURE, AI_MAX_TOKENS } from "@/lib/integrations/openai/client";
-import type { QuizAnswers, SportRecommendation } from "./quiz.types";
+import type { QuizAnswers, SportRecommendation, SpecialistRecommendation } from "./quiz.types";
 
 /**
  * Romanian System Prompt for AI Coach
@@ -58,12 +58,31 @@ STIL DE COMUNICARE:
 - Beneficii: 2-4 beneficii specifice și concrete
 - Considerente: 1-3 aspecte practice de luat în considerare
 
-IDENTIFICAREA SEMNALELOR DE RISC:
-Dacă observi urmatoarele semnale în răspunsuri, menționează necesitatea consultării unui specialist:
+IDENTIFICAREA SEMNALELOR DE RISC ȘI RECOMANDAREA SPECIALIȘTILOR:
+Dacă observi urmatoarele semnale în răspunsuri, recomandă consultarea unui specialist:
+
+**Ortopedie pediatrică** (orthopedist):
+- Mențiuni despre limitări fizice, probleme de coordonare sau dezvoltare motorie
+- Dureri articulare sau probleme de postură
+- Accidentări anterioare care necesită monitorizare
+- Probleme de echilibru sau mobilitate
+
+**Nutriție pediatrică** (nutritionist):
+- Probleme de greutate (subponderal sau supraponderal)
+- Alimentație neechilibrată sau restricții alimentare
+- Necesități nutriționale speciale pentru sport
+- Optimizarea performanței sportive prin nutriție
+
+**Psihologie pediatrică** (psychologist):
+- Anxietate socială severă sau izolare
+- Probleme de motivație sau încredere în sine
+- Dificultăți de concentrare sau comportament
+- Frică excesivă sau rezistență față de activități fizice
+
+**Medic pediatru general** (general):
 - Copil foarte inactiv sau cu nivel de energie extrem de scăzut
-- Mențiuni despre limitări fizice sau probleme de sănătate
-- Indicii de probleme de coordonare sau dezvoltare motorie
-- Mențiuni despre anxietate socială severă sau izolare
+- Condiții de sănătate generale care necesită evaluare
+- Verificare generală înainte de începerea unui sport nou
 
 FORMAT RĂSPUNS:
 Returnează DOAR un obiect JSON valid (fără text suplimentar) în următorul format:
@@ -88,7 +107,9 @@ Returnează DOAR un obiect JSON valid (fără text suplimentar) în următorul f
   ],
   "specialistRecommendation": {
     "needed": false,
-    "reason": "Explicație în română dacă este recomandat specialist (sau null dacă nu)"
+    "specialty": "orthopedist" | "nutritionist" | "psychologist" | "general",
+    "reason": "Explicație detaliată în română despre de ce este recomandat acest specialist (sau null dacă nu este necesar)",
+    "priority": "high" | "medium" | "low"
   }
 }
 
@@ -198,21 +219,26 @@ interface AIResponse {
   specialistRecommendation?: {
     needed: boolean;
     reason?: string;
+    specialty?: "orthopedist" | "nutritionist" | "psychologist" | "general";
+    priority?: "high" | "medium" | "low";
   };
 }
 
 /**
- * Generate sport recommendations using OpenAI
+ * Generate sport and specialist recommendations using OpenAI
  *
  * Main function that calls OpenAI API and processes the response.
  *
  * @param answers - Complete quiz answers from parent
- * @returns Array of personalized sport recommendations
+ * @returns Object containing sport recommendations and optional specialist recommendation
  * @throws Error if AI generation fails or returns invalid data
  */
-export async function generateRecommendations(
-  answers: QuizAnswers
-): Promise<SportRecommendation[]> {
+export interface RecommendationResult {
+  sportRecommendations: SportRecommendation[];
+  specialistRecommendation?: SpecialistRecommendation;
+}
+
+export async function generateRecommendations(answers: QuizAnswers): Promise<RecommendationResult> {
   try {
     // Build prompt from quiz answers
     const userPrompt = buildUserPrompt(answers);
@@ -275,16 +301,32 @@ export async function generateRecommendations(
       throw new Error("AI generated no valid recommendations");
     }
 
-    // Log specialist recommendation if present (for future use)
+    // Process specialist recommendation if present
+    let specialistRecommendation: SpecialistRecommendation | undefined;
     if (aiResponse.specialistRecommendation?.needed) {
-      console.log(
-        "Specialist consultation recommended:",
-        aiResponse.specialistRecommendation.reason
-      );
-      // TODO: Store this recommendation for display in results
+      const specialty = aiResponse.specialistRecommendation.specialty || "general";
+      const priority = aiResponse.specialistRecommendation.priority || "medium";
+
+      // Validate specialty
+      const validSpecialties = ["orthopedist", "nutritionist", "psychologist", "general"];
+      const validatedSpecialty = validSpecialties.includes(specialty)
+        ? (specialty as SpecialistRecommendation["specialty"])
+        : "general";
+
+      specialistRecommendation = {
+        specialty: validatedSpecialty,
+        needed: true,
+        reason:
+          aiResponse.specialistRecommendation.reason ||
+          "Consultare recomandată pentru evaluare suplimentară.",
+        priority: priority as "high" | "medium" | "low",
+      };
     }
 
-    return recommendations;
+    return {
+      sportRecommendations: recommendations,
+      specialistRecommendation,
+    };
   } catch (error) {
     // Enhanced error handling
     if (error instanceof Error) {

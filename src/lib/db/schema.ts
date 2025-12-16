@@ -164,6 +164,7 @@ export const doctors = pgTable("doctors", {
   firstName: text("first_name").notNull(),
   lastName: text("last_name").notNull(),
   title: text("title"), // "Dr.", "Conf. Dr.", etc.
+  slug: text("slug").unique(), // SEO-friendly URL slug
 
   // Professional info
   specialty: text("specialty").notNull(), // Primary specialty

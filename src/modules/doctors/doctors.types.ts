@@ -29,6 +29,8 @@ export interface Doctor {
   };
   image?: string;
   verified: boolean;
+  acceptingNewPatients?: boolean; // Whether doctor is accepting new patients
+  onlineConsultations?: boolean; // Whether doctor offers online consultations
   createdAt: Date;
   updatedAt: Date;
 }
@@ -38,6 +40,8 @@ export interface DoctorSearchFilters {
   city?: string;
   district?: string;
   verified?: boolean;
+  acceptingNewPatients?: boolean;
+  onlineConsultations?: boolean;
   page?: number;
   pageSize?: number;
   sortBy?: "name" | "specialty" | "verified";
