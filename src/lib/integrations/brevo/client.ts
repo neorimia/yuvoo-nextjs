@@ -152,8 +152,16 @@ export async function sendEmail(
   }
 
   // All retries failed
-  const errorMessage =
-    lastError?.response?.body?.message || lastError?.message || "Unknown error occurred";
+  // Extract error message with proper type checking
+  let errorMessage = "Unknown error occurred";
+  if (lastError && typeof lastError === "object") {
+    const errorWithResponse = lastError as {
+      response?: { body?: { message?: string } };
+      message?: string;
+    };
+    errorMessage =
+      errorWithResponse.response?.body?.message || errorWithResponse.message || errorMessage;
+  }
 
   // Log error
   console.error("[Brevo] Failed to send email:", {
