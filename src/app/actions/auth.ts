@@ -151,11 +151,21 @@ export async function signUpAction(formData: FormData) {
   const email = formData.get("email") as string;
   const password = formData.get("password") as string;
   const passwordConfirmation = formData.get("passwordConfirmation") as string;
+  const role = formData.get("role") as string;
 
-  if (!email || !password || !passwordConfirmation) {
+  if (!email || !password || !passwordConfirmation || !role) {
     return {
       success: false,
       error: "Toate câmpurile sunt obligatorii",
+    };
+  }
+
+  // Validate role
+  const validRoles = ["parent", "club_admin", "doctor"];
+  if (!validRoles.includes(role)) {
+    return {
+      success: false,
+      error: "Tipul de cont selectat nu este valid",
     };
   }
 
@@ -184,6 +194,24 @@ export async function signUpAction(formData: FormData) {
       password,
       verificationCallbackUrl,
     });
+
+    // Update user metadata with role after signup
+    // Get the user and update metadata to ensure role is stored
+    try {
+      const user = await stackServerApp.getUser();
+      if (user) {
+        await user.update({
+          clientMetadata: {
+            role: role,
+          },
+        });
+      }
+    } catch (metadataError) {
+      // Log error but don't fail signup - role will use default "parent" in database
+      if (process.env.NODE_ENV === "development") {
+        console.error("[Stack Auth] Error updating user metadata:", metadataError);
+      }
+    }
 
     // After signup, user is automatically synced to database via getSession
     // Check onboarding status to determine redirect

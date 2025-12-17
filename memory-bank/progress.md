@@ -660,6 +660,12 @@
     - [x] `verifyEmailAction` - Verify email with token (server-side) ✅
   - [x] Migrated SignInForm to use `signInAction` Server Action ✅
   - [x] Migrated SignUpForm to use `signUpAction` Server Action ✅
+  - [x] Enhanced SignUpForm styling (January 2025) ✅
+    - [x] Added role selection with styled radio buttons (parent, club_admin, doctor) ✅
+    - [x] Radio buttons styled with Yuvoo brand colors (card-style layout) ✅
+    - [x] Added GDPR consent checkbox with Yuvoo brand styling ✅
+    - [x] Checkbox and radio button styles override Bootstrap defaults with Yuvoo primary color ✅
+    - [x] Styles added to `_login.scss` and `_yuvoo-utilities.scss` ✅
   - [x] Migrated ForgotPasswordForm to use `forgotPasswordAction` Server Action ✅
   - [x] Created ResetPasswordForm with `resetPasswordAction` Server Action ✅
   - [x] Migrated EmailConfirmationForm to server component with `verifyEmailAction` ✅
@@ -752,7 +758,7 @@
   - [x] Add StackProvider to root layout (✅ created: `src/providers/StackAuthProvider.tsx`, integrated in `src/app/layout.tsx`)
   - [x] Integrate Stack Auth into SignInForm component (✅ completed: Stack Auth integration, Romanian localization, error handling, loading states, redirect to dashboard)
   - [x] Create error message mappings (✅ created: `src/lib/auth/errors.ts` with Romanian error messages)
-  - [x] Integrate Stack Auth into SignUpForm component (✅ completed: Stack Auth integration, Romanian localization, password confirmation validation, error handling, loading states, redirect to dashboard)
+  - [x] Integrate Stack Auth into SignUpForm component (✅ completed: Stack Auth integration, Romanian localization, password confirmation validation, error handling, loading states, redirect to dashboard, role selection with styled radio buttons, GDPR consent checkbox with Yuvoo brand styling)
   - [x] Integrate Stack Auth into ForgotPasswordForm component (✅ completed: Stack Auth integration, Romanian localization, success/error feedback, loading states)
   - [x] Update auth pages metadata and text to Romanian (✅ completed: LoginMain, RegisterMain, ForgotPasswordMain localized, all page metadata updated with SEO)
   - [x] Create reset password page and component (✅ completed: ResetPasswordForm, ResetPasswordMain, page with Stack Auth integration, Romanian localization, auto-redirect to login)

@@ -437,6 +437,10 @@ requireAuth() → throws if not authenticated
 - `getErrorMessage()` utility function extracts user-friendly messages from Stack Auth errors
 - Forms display errors with consistent styling
 - Server Actions return `{ success: boolean, error?: string, redirect?: string }` format
+- Form inputs use Yuvoo-branded styling (checkboxes and radio buttons styled with Yuvoo primary color)
+  - Checkboxes: `.yuvoo-checkbox-wrapper` and `.yuvoo-checkbox` classes override Bootstrap defaults
+  - Radio buttons: `.yuvoo-radio-group`, `.yuvoo-radio-wrapper`, and `.yuvoo-radio` classes for card-style layout
+  - All form inputs use Yuvoo primary turquoise (`#00BBAE`) instead of Bootstrap default blue
 
 **Redirects** (handled by Server Actions and form components):
 

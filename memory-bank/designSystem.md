@@ -313,6 +313,63 @@ border-color: var(--bd-grey-1); // #E6E6E6
 
 **Pattern**: Bootstrap form styling cu validare
 
+#### Form Input Styling (Yuvoo Brand) - January 2025
+
+**Checkbox Styling**:
+
+- Custom Yuvoo-branded checkbox styling using `.yuvoo-checkbox-wrapper` and `.yuvoo-radio` classes
+- Overrides Bootstrap default blue color with Yuvoo primary turquoise (`#00BBAE`)
+- Checked state: Background and border set to `var(--bd-theme-1)`
+- Focus state: Yuvoo primary border with subtle box-shadow
+- Location: Styles in `public/assets/scss/layout/_login.scss` and `public/assets/scss/utils/_yuvoo-utilities.scss`
+
+**Radio Button Styling**:
+
+- Card-style radio button layout for better visual hierarchy
+- Wrapper: `.yuvoo-radio-group` container with `.yuvoo-radio-wrapper` for each option
+- Radio input: `.yuvoo-radio.form-check-input` class
+- Styling features:
+  - Card-style layout with border, padding, and rounded corners
+  - Hover effects (border color changes to Yuvoo primary)
+  - Selected state with Yuvoo primary border and subtle background tint
+  - Split labels: `.yuvoo-radio-title` (bold, 16px) and `.yuvoo-radio-description` (14px, gray)
+- Colors: Yuvoo primary (`var(--bd-theme-1)`) for checked state and borders
+- Location: Styles in `public/assets/scss/layout/_login.scss` and `public/assets/scss/utils/_yuvoo-utilities.scss`
+
+**Implementation Example** (from SignUpMain):
+
+```tsx
+<div className="yuvoo-radio-group d-flex flex-column gap-3">
+  <div className="yuvoo-radio-wrapper form-check">
+    <input
+      className="yuvoo-radio form-check-input"
+      type="radio"
+      name="role"
+      id="role-parent"
+      value="parent"
+    />
+    <label className="form-check-label yuvoo-radio-label" htmlFor="role-parent">
+      <span className="yuvoo-radio-title">Părinte</span>
+      <span className="yuvoo-radio-description">Caută sporturi și cluburi pentru copilul meu</span>
+    </label>
+  </div>
+</div>
+```
+
+**Consent Checkbox Example**:
+
+```tsx
+<div className="form-check d-flex align-items-start yuvoo-checkbox-wrapper">
+  <input className="form-check-input mt-1 yuvoo-checkbox" type="checkbox" id="consent-check" />
+  <label className="form-check-label ms-2" htmlFor="consent-check">
+    Sunt de acord cu{" "}
+    <Link href={routes.terms} className="text-yuvoo-primary">
+      termenii
+    </Link>
+  </label>
+</div>
+```
+
 #### Home Page Components (January 2025)
 
 **Componente Create/Actualizate**:
