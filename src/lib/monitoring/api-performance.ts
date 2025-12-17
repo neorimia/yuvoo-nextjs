@@ -23,13 +23,11 @@ export function trackApiPerformance(
 ): void {
   // Send to Sentry as performance metric
   try {
+    Sentry.setTag("route", route);
+    Sentry.setTag("method", method);
+    Sentry.setTag("status_code", statusCode.toString());
+    Sentry.setTag("status", statusCode >= 400 ? "error" : "success");
     Sentry.metrics.distribution("api.response_time", duration, {
-      tags: {
-        route,
-        method,
-        status_code: statusCode.toString(),
-        status: statusCode >= 400 ? "error" : "success",
-      },
       unit: "millisecond",
     });
 
@@ -87,7 +85,7 @@ export function trackApiHandler<T extends (...args: unknown[]) => Promise<unknow
       const duration = Date.now() - startTime;
       trackApiPerformance(route, "GET", duration, statusCode);
 
-      return result;
+      return result as ReturnType<T>;
     } catch (error) {
       const duration = Date.now() - startTime;
       statusCode =
@@ -114,11 +112,9 @@ export function trackServerActionPerformance(
   success: boolean
 ): void {
   try {
+    Sentry.setTag("action", actionName);
+    Sentry.setTag("status", success ? "success" : "error");
     Sentry.metrics.distribution("server_action.duration", duration, {
-      tags: {
-        action: actionName,
-        status: success ? "success" : "error",
-      },
       unit: "millisecond",
     });
   } catch (error) {
@@ -155,7 +151,7 @@ export function trackServerAction<T extends (...args: unknown[]) => Promise<unkn
       success = true;
       const duration = Date.now() - startTime;
       trackServerActionPerformance(actionName, duration, success);
-      return result;
+      return result as ReturnType<T>;
     } catch (error) {
       const duration = Date.now() - startTime;
       trackServerActionPerformance(actionName, duration, success);
