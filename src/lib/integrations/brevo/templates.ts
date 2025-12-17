@@ -171,6 +171,289 @@ function baseEmailTemplate(content: string, title: string): { html: string; text
 }
 
 /**
+ * Contact form submission template
+ *
+ * Email template sent to Yuvoo team when a user submits the contact form.
+ */
+export function contactFormTemplate(data: {
+  firstName: string;
+  email: string;
+  phone: string;
+  subject: string;
+  message: string;
+}): { html: string; text: string } {
+  const appUrl = process.env.NEXT_PUBLIC_APP_URL || "https://yuvoo.ro";
+  const senderEmail = process.env.BREVO_SENDER_EMAIL || "noreply@yuvoo.ro";
+
+  const html = `
+<!DOCTYPE html>
+<html lang="ro">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Mesaj nou de la ${data.firstName}</title>
+  <style>
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+      line-height: 1.6;
+      color: #333;
+      margin: 0;
+      padding: 0;
+      background-color: #f5f5f5;
+    }
+    .email-container {
+      max-width: 600px;
+      margin: 0 auto;
+      background-color: #ffffff;
+    }
+    .email-header {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      padding: 30px 20px;
+      text-align: center;
+    }
+    .email-header h1 {
+      color: #ffffff;
+      margin: 0;
+      font-size: 24px;
+      font-weight: 600;
+    }
+    .email-body {
+      padding: 30px 20px;
+    }
+    .email-content {
+      color: #333;
+      font-size: 16px;
+      line-height: 1.8;
+    }
+    .contact-details {
+      background-color: #f9f9f9;
+      border-left: 4px solid #667eea;
+      padding: 20px;
+      margin: 20px 0;
+    }
+    .contact-details p {
+      margin: 8px 0;
+    }
+    .contact-details strong {
+      color: #667eea;
+    }
+    .message-box {
+      background-color: #f9f9f9;
+      border: 1px solid #e0e0e0;
+      border-radius: 8px;
+      padding: 20px;
+      margin: 20px 0;
+      white-space: pre-wrap;
+    }
+    .email-footer {
+      background-color: #f9f9f9;
+      padding: 20px;
+      text-align: center;
+      font-size: 14px;
+      color: #666;
+    }
+    .email-footer a {
+      color: #667eea;
+      text-decoration: none;
+    }
+  </style>
+</head>
+<body>
+  <div class="email-container">
+    <div class="email-header">
+      <h1>Mesaj nou de la ${data.firstName}</h1>
+    </div>
+    <div class="email-body">
+      <div class="email-content">
+        <p>Ai primit un mesaj nou prin formularul de contact de pe platforma Yuvoo.</p>
+        
+        <div class="contact-details">
+          <p><strong>Nume:</strong> ${data.firstName}</p>
+          <p><strong>Email:</strong> <a href="mailto:${data.email}">${data.email}</a></p>
+          <p><strong>Telefon:</strong> <a href="tel:${data.phone}">${data.phone}</a></p>
+          <p><strong>Subiect:</strong> ${data.subject}</p>
+        </div>
+
+        <p><strong>Mesaj:</strong></p>
+        <div class="message-box">${data.message}</div>
+
+        <p style="margin-top: 30px;">
+          <strong>Acțiuni:</strong><br>
+          • Răspunde direct la <a href="mailto:${data.email}">${data.email}</a><br>
+          • Contactează utilizatorul la <a href="tel:${data.phone}">${data.phone}</a>
+        </p>
+      </div>
+    </div>
+    <div class="email-footer">
+      <p>Acest email a fost trimis automat de la <a href="${appUrl}">Yuvoo</a></p>
+      <p>Pentru întrebări, contactează-ne la <a href="mailto:${senderEmail}">${senderEmail}</a></p>
+    </div>
+  </div>
+</body>
+</html>
+  `;
+
+  const text = `
+Mesaj nou de la ${data.firstName}
+
+Ai primit un mesaj nou prin formularul de contact de pe platforma Yuvoo.
+
+Detalii contact:
+- Nume: ${data.firstName}
+- Email: ${data.email}
+- Telefon: ${data.phone}
+- Subiect: ${data.subject}
+
+Mesaj:
+${data.message}
+
+Acțiuni:
+- Răspunde direct la ${data.email}
+- Contactează utilizatorul la ${data.phone}
+
+---
+Acest email a fost trimis automat de la Yuvoo (${appUrl})
+Pentru întrebări, contactează-ne la ${senderEmail}
+  `;
+
+  return { html, text };
+}
+
+/**
+ * Contact form confirmation template
+ *
+ * Email template sent to user confirming their contact form submission.
+ */
+export function contactFormConfirmationTemplate(data: { firstName: string; subject: string }): {
+  html: string;
+  text: string;
+} {
+  const appUrl = process.env.NEXT_PUBLIC_APP_URL || "https://yuvoo.ro";
+  const senderEmail = process.env.BREVO_SENDER_EMAIL || "noreply@yuvoo.ro";
+
+  const html = `
+<!DOCTYPE html>
+<html lang="ro">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Confirmare mesaj - Yuvoo</title>
+  <style>
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+      line-height: 1.6;
+      color: #333;
+      margin: 0;
+      padding: 0;
+      background-color: #f5f5f5;
+    }
+    .email-container {
+      max-width: 600px;
+      margin: 0 auto;
+      background-color: #ffffff;
+    }
+    .email-header {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      padding: 30px 20px;
+      text-align: center;
+    }
+    .email-header h1 {
+      color: #ffffff;
+      margin: 0;
+      font-size: 24px;
+      font-weight: 600;
+    }
+    .email-body {
+      padding: 30px 20px;
+    }
+    .email-content {
+      color: #333;
+      font-size: 16px;
+      line-height: 1.8;
+    }
+    .success-box {
+      background-color: #e8f5e9;
+      border-left: 4px solid #4caf50;
+      padding: 20px;
+      margin: 20px 0;
+      border-radius: 4px;
+    }
+    .email-footer {
+      background-color: #f9f9f9;
+      padding: 20px;
+      text-align: center;
+      font-size: 14px;
+      color: #666;
+    }
+    .email-footer a {
+      color: #667eea;
+      text-decoration: none;
+    }
+  </style>
+</head>
+<body>
+  <div class="email-container">
+    <div class="email-header">
+      <h1>Mesajul tău a fost trimis cu succes</h1>
+    </div>
+    <div class="email-body">
+      <div class="email-content">
+        <p>Bună ${data.firstName},</p>
+        
+        <div class="success-box">
+          <p><strong>✓ Confirmare</strong></p>
+          <p>Mesajul tău cu subiectul <strong>"${data.subject}"</strong> a fost trimis cu succes echipei Yuvoo.</p>
+        </div>
+
+        <p>Vom răspunde la mesajul tău în cel mai scurt timp posibil, de obicei în termen de 24-48 de ore.</p>
+
+        <p>Dacă ai întrebări urgente, poți ne contacta direct la:</p>
+        <ul>
+          <li>Email: <a href="mailto:${senderEmail}">${senderEmail}</a></li>
+          <li>Telefon: +40 700 000 000</li>
+        </ul>
+
+        <p style="margin-top: 30px;">
+          Mulțumim că ai ales Yuvoo!<br>
+          <strong>Echipa Yuvoo</strong>
+        </p>
+      </div>
+    </div>
+    <div class="email-footer">
+      <p><a href="${appUrl}">Vizitează Yuvoo</a> | <a href="${appUrl}/ajutor">Ajutor</a></p>
+      <p>Pentru întrebări, contactează-ne la <a href="mailto:${senderEmail}">${senderEmail}</a></p>
+    </div>
+  </div>
+</body>
+</html>
+  `;
+
+  const text = `
+Mesajul tău a fost trimis cu succes
+
+Bună ${data.firstName},
+
+Confirmare: Mesajul tău cu subiectul "${data.subject}" a fost trimis cu succes echipei Yuvoo.
+
+Vom răspunde la mesajul tău în cel mai scurt timp posibil, de obicei în termen de 24-48 de ore.
+
+Dacă ai întrebări urgente, poți ne contacta direct la:
+- Email: ${senderEmail}
+- Telefon: +40 700 000 000
+
+Mulțumim că ai ales Yuvoo!
+Echipa Yuvoo
+
+---
+Vizitează Yuvoo: ${appUrl}
+Ajutor: ${appUrl}/ajutor
+Pentru întrebări, contactează-ne la ${senderEmail}
+  `;
+
+  return { html, text };
+}
+
+/**
  * Format date in Romanian format
  */
 function formatDate(date: Date): string {

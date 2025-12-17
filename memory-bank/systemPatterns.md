@@ -312,8 +312,8 @@ import { routes } from "@/lib/routes";
 
 **Current Status**:
 
-- ✅ `components/features/clubs/` - Club components created (ClubsMain, ClubDetailsMain, HomeClubArea, ClubCard, VerificationBadge, ClubSearchFilters, ClubDetailsWidget, ClubGallery, ClubMap, ClubSchedule, BookingForm)
-- ✅ `components/features/doctors/` - Doctor components created (DoctorsMain, DoctorCard, DoctorDetailsMain, DoctorSearchFilters, DoctorAppointmentForm, DoctorAppointmentFormSection, DoctorInfo, DoctorSpecialties, HomeDoctorArea, HomeTwoDoctorArea, DoctorAvailability)
+- ✅ `components/features/clubs/` - Club components created (ClubsMain, ClubDetailsMain, HomeClubArea, ClubCard, VerificationBadge, ClubSearchFilters, ClubDetailsWidget, ClubGallery, ClubMap, ClubSchedule, BookingForm, ClubContentExpanded)
+- ✅ `components/features/doctors/` - Doctor components created (DoctorsMain, DoctorCard, DoctorDetailsMain, DoctorSearchFilters, DoctorAppointmentForm, DoctorAppointmentFormSection, DoctorInfo, DoctorSpecialties, HomeDoctorArea, HomeTwoDoctorArea, DoctorAvailability, DoctorContentExpanded)
 - ✅ `components/features/sports/` - Sport components complete (January 2025)
   - ✅ `SportsMain.tsx` - Main listing component with category filtering, enhanced empty state, and results display
   - ✅ `SportCard.tsx` - Redesigned card component with category badges, icon display, and hover effects
@@ -1136,7 +1136,41 @@ await deleteImageAction(imageUrl);
    - Type Updates: Added `acceptingNewPatients` and `onlineConsultations` fields to Doctor interface
    - Data: `teacher-data.ts` → `doctor-data.ts` (📋 Planned - using database schema instead)
 
-3. **Program → Sport**:
+3. **About Page Components** (✅ Complete - January 2025):
+   - Location: `src/components/features/about/`
+   - Status: ✅ All components created and styled
+   - Components created:
+     - `AboutMain.tsx` - Main About page component with mission, value propositions, how it works, and CTA sections
+     - `AboutTeam.tsx` - Team members display component (4 team members)
+     - `AboutPartners.tsx` - Partners display component organized by category (6 partners)
+   - Features:
+     - ✅ Trust signals section (reuses `HomeTrustSignals` component)
+     - ✅ Statistics section (reuses `HomeStats` component)
+     - ✅ Team section with 4 members (Founder & CEO, Co-founder & CTO, Medical Advisor, Head of Partnerships)
+     - ✅ Partners section with 6 partners organized by category (Medical, Sports, Technology, Education)
+     - ✅ Value propositions cards (AI Coach Quiz, Cluburi Verificate, Rețea de Specialiști)
+     - ✅ How It Works section with 3 steps (styled step numbers with primary brand color)
+     - ✅ CTA section with Yuvoo button structure
+     - ✅ All sections follow Yuvoo design system
+   - Data files:
+     - ✅ `src/data/team-data.ts` - Team member data (name, role, bio, credentials, social links)
+     - ✅ `src/data/partners-data.ts` - Partner data (name, type, category, description, logo, website)
+   - SCSS Styling: `layout/_about.scss` - Comprehensive styling for all About page components
+     - `bd-about-*` classes for hero, mission, value propositions, how it works, CTA sections
+     - `bd-about-team-*` classes for team cards, thumbnails, social links
+     - `bd-about-partners-*` classes for partner cards, categories, logos
+     - `bd-about-step-*` classes for how it works steps with numbered badges
+     - All styles responsive with proper breakpoints
+     - Hover effects and animations following Yuvoo patterns
+   - Design System Compliance:
+     - ✅ Uses `SectionTitle` component for section headers
+     - ✅ Uses Yuvoo button structure (`bd-btn`, `bd-btn-inner`, etc.)
+     - ✅ Uses Font Awesome icons (`fa-solid`) instead of Bootstrap icons
+     - ✅ Uses theme background utilities (`theme-bg-6`, `theme-bg-7`)
+     - ✅ Uses primary brand color (`var(--bd-theme-1)`) for step numbers
+     - ✅ All content in Romanian, SEO-optimized
+
+4. **Program → Sport**:
    - Location: `src/components/Program/`
    - Adapt: Program listings → Sport recommendations
    - Add: AI recommendation display, match scores
@@ -1521,6 +1555,71 @@ Club Directory (pre-filtered by sport)
 - **Empty States**: Graceful handling when no recommendations found
 - **Loading States**: Spinner and disabled state during data fetching
 
+## Contact Form Pattern
+
+**Location**: `src/components/features/contact/ContactForm.tsx`, `src/app/actions/contact.ts`, `src/lib/validations/contact.ts`, `src/lib/integrations/brevo/email.service.ts`, `src/lib/integrations/brevo/templates.ts`
+
+**Purpose**: Contact form submission with dual email notifications (team notification + user confirmation).
+
+**Status**: ✅ **COMPLETE** - Full contact form system implemented with email notifications
+
+**Architecture**:
+
+1. **Client Component** (`ContactForm.tsx`):
+   - React Hook Form for form state management
+   - Romanian validation messages
+   - Loading states during submission
+   - Success/error message display
+   - Form reset on successful submission
+   - Disabled submit button during submission
+
+2. **Server Action** (`app/actions/contact.ts`):
+   - Zod validation using `contactFormSchema`
+   - Sends dual emails non-blocking (team notification + user confirmation)
+   - Error handling with Romanian error messages
+   - Returns success/error response
+
+3. **Validation Schema** (`lib/validations/contact.ts`):
+   - `contactFormSchema` with Romanian validation messages
+   - Validates: firstName (2-100 chars), email (valid email format), phone (Romanian format: +40XXXXXXXXX or 0XXXXXXXXX), subject (3-200 chars), message (10-2000 chars), privacy (required checkbox)
+
+4. **Email Templates** (`lib/integrations/brevo/templates.ts`):
+   - `contactFormTemplate()` - Email sent to Yuvoo team with user's message
+     - Includes all contact details (name, email, phone, subject, message)
+     - Reply-to set to user's email for direct replies
+     - Responsive HTML design with Yuvoo branding
+   - `contactFormConfirmationTemplate()` - Confirmation email sent to user
+     - Confirms message was received
+     - Sets expectation (24-48 hour response time)
+     - Includes contact information for urgent inquiries
+
+5. **Email Service Functions** (`lib/integrations/brevo/email.service.ts`):
+   - `sendContactFormSubmission()` - Sends email to Yuvoo team
+     - Uses `CONTACT_EMAIL` env var or falls back to `BREVO_SENDER_EMAIL`
+     - Sets reply-to to user's email
+     - Non-blocking (errors logged but don't fail form submission)
+   - `sendContactFormConfirmation()` - Sends confirmation to user
+     - Sent to user's email address
+     - Non-blocking (errors logged but don't fail form submission)
+
+**Key Features**:
+
+- ✅ Dual email notifications (team receives message, user receives confirmation)
+- ✅ Non-blocking email sending (failures logged but don't block form submission)
+- ✅ Loading states and user feedback (success/error messages)
+- ✅ Form reset on successful submission
+- ✅ Romanian validation messages throughout
+- ✅ Email templates with Yuvoo branding
+- ✅ Reply-to set to user's email for team notification
+
+**Files**:
+
+- `src/components/features/contact/ContactForm.tsx` - Contact form component
+- `src/app/actions/contact.ts` - Contact form server action
+- `src/lib/validations/contact.ts` - Contact form validation schema
+- `src/lib/integrations/brevo/templates.ts` - Email templates (contact form templates)
+- `src/lib/integrations/brevo/email.service.ts` - Email service functions
+
 **User Flow**:
 
 1. User completes quiz and views results
@@ -1552,7 +1651,7 @@ Club Directory (pre-filtered by sport)
 - **Data Models**: `docs/DATA_MODELS.md` - All data structures, TypeScript interfaces, database schemas, and model relationships
 - **Design Tokens**: `docs/DESIGN_TOKENS.md` - Comprehensive design tokens reference (colors, typography, spacing, shadows, border radius, animations, breakpoints)
 - **SEO Guidelines**: `docs/SEO_GUIDELINES.md` - SEO strategy, slug generation, meta tags templates, Open Graph templates, and SEO best practices
-- **SEO Improvement Plan**: `docs/SEO_IMPROVEMENT_PLAN.md` - Comprehensive SEO analysis and implementation roadmap (Week 1-3 technical foundation complete, content expansion in progress)
+- **SEO Improvement Plan**: `docs/SEO_IMPROVEMENT_PLAN.md` - Comprehensive SEO analysis and implementation roadmap (Week 1-3 technical foundation complete, club/doctor content expansion complete, internal linking complete)
 - **Sport Metadata Helper**: `src/lib/seo/sport-metadata.ts` - Enhanced SEO metadata generator for sport detail pages (top 5 sports with rich descriptions, keywords, and OpenGraph tags)
   - Includes sport-specific OG image support via `getSportOGImagePath()` helper function
   - Path format: `/assets/img/og/sports/{sport-slug}.jpg` (1200x630px recommended)

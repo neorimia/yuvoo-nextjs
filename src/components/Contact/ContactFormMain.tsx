@@ -1,27 +1,53 @@
-import React from 'react';
-import ContactForm from '../Form/ContactForm';
+import React from "react";
+import ContactForm from "@/components/features/contact/ContactForm";
+import SectionTitle from "@/components/shared/SectionTitle";
 
 const ContactFormMain = () => {
-    return (
-        <section className="bd-contact-area pb-60">
-            <div className="container">
-                <div className="row">
-                    <div className="col-xl-6 mb-60">
-                        <div className="bd-contact-form wow fadeInLeft" data-wow-duration="1s" data-wow-delay=".3s">
-                            <h3 className="bd-contact-form-title mb-25">Contact Us Right Here</h3>
-                            <ContactForm />
-                        </div>
-                    </div>
-                    <div className="col-xl-6 mb-60">
-                        <div className="bd-contact-map wow fadeInRight" data-wow-duration="1s" data-wow-delay=".3s">
-                            <iframe src="https://www.google.com/maps/embed?pb=!1m14!1m12!1m3!1d14596.899807208923!2d90.3654215!3d23.8461445!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!5e0!3m2!1sen!2sbd!4v1673765392297!5m2!1sen!2sbd"
-                                loading="lazy" referrerPolicy="no-referrer-when-downgrade"></iframe>
-                        </div>
-                    </div>
-                </div>
+  return (
+    <section className="bd-contact-area pt-120 pb-70">
+      <div className="container">
+        <div className="row mb-60">
+          <div className="col-lg-8 mx-auto">
+            <SectionTitle
+              title="Trimite-ne un mesaj"
+              subtitle="Ai întrebări despre Yuvoo, chestionarul AI sau cluburile verificate? Completează formularul de mai jos și te vom contacta în cel mai scurt timp."
+              className="text-center mb-50"
+              animationDelay=".2s"
+            />
+          </div>
+        </div>
+        <div className="row">
+          <div className="col-xl-8 mx-auto mb-60">
+            <div
+              className="bd-contact-form wow fadeInUp"
+              data-wow-duration="1s"
+              data-wow-delay=".3s"
+            >
+              <ContactForm />
             </div>
-        </section>
-    );
+          </div>
+          <div className="col-xl-10 mx-auto">
+            <div
+              className="bd-contact-map wow fadeInUp"
+              data-wow-duration="1s"
+              data-wow-delay=".4s"
+            >
+              <iframe
+                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2850.892489373652!2d26.09762361585209!3d44.43789807910244!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x40b1ff47c1d75eab%3A0x22d4c1e5c6c5c5c5!2sBucure%C8%99ti!5e0!3m2!1sro!2sro!4v1234567890"
+                width="100%"
+                height="450"
+                style={{ border: 0, borderRadius: "24px" }}
+                allowFullScreen
+                loading="lazy"
+                referrerPolicy="no-referrer-when-downgrade"
+                title="Yuvoo - București, România"
+              ></iframe>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  );
 };
 
 export default ContactFormMain;

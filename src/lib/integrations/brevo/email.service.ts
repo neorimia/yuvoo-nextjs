@@ -14,6 +14,8 @@ import {
   welcomeEmailTemplate,
   clubVerificationStatusTemplate,
   doctorVerificationStatusTemplate,
+  contactFormTemplate,
+  contactFormConfirmationTemplate,
 } from "./templates";
 import type { Booking } from "@/modules/bookings/bookings.types";
 import type { Club } from "@/modules/clubs/clubs.types";
@@ -361,5 +363,93 @@ export async function sendDoctorVerificationStatus(
   } catch (error) {
     // Don't throw - email failures shouldn't block verification updates
     console.error("[Email Service] Error sending doctor verification status email:", error);
+  }
+}
+
+/**
+ * Send contact form submission email to Yuvoo team
+ *
+ * @param data - Contact form data
+ * @returns Promise that resolves when email is sent (or fails silently)
+ */
+export async function sendContactFormSubmission(data: {
+  firstName: string;
+  email: string;
+  phone: string;
+  subject: string;
+  message: string;
+}): Promise<void> {
+  try {
+    // Validate user email
+    if (!isValidEmail(data.email)) {
+      console.error("[Email Service] Invalid email for contact form:", data.email);
+      return;
+    }
+
+    // Get contact email from environment or use default
+    const contactEmail =
+      process.env.CONTACT_EMAIL || process.env.BREVO_SENDER_EMAIL || "contact@yuvoo.ro";
+
+    // Generate email template
+    const { html, text } = contactFormTemplate(data);
+
+    // Send email to Yuvoo team
+    const result = await sendEmail({
+      to: contactEmail,
+      subject: `Mesaj nou de contact: ${data.subject}`,
+      htmlContent: html,
+      textContent: text,
+      replyTo: data.email, // Allow replying directly to the user
+      tags: ["contact", "contact-form"],
+    });
+
+    if (!result.success) {
+      console.error("[Email Service] Failed to send contact form submission:", result.error);
+    }
+  } catch (error) {
+    // Don't throw - email failures shouldn't block form submission
+    console.error("[Email Service] Error sending contact form submission email:", error);
+  }
+}
+
+/**
+ * Send contact form confirmation email to user
+ *
+ * @param data - Contact form data (with firstName and subject)
+ * @returns Promise that resolves when email is sent (or fails silently)
+ */
+export async function sendContactFormConfirmation(data: {
+  firstName: string;
+  email: string;
+  subject: string;
+}): Promise<void> {
+  try {
+    // Validate user email
+    if (!isValidEmail(data.email)) {
+      console.error("[Email Service] Invalid email for contact form confirmation:", data.email);
+      return;
+    }
+
+    // Generate email template
+    const { html, text } = contactFormConfirmationTemplate({
+      firstName: data.firstName,
+      subject: data.subject,
+    });
+
+    // Send confirmation email to user
+    const result = await sendEmail({
+      to: data.email,
+      subject: "Confirmare mesaj - Yuvoo",
+      htmlContent: html,
+      textContent: text,
+      tags: ["contact", "contact-form", "confirmation"],
+    });
+
+    if (!result.success) {
+      console.error("[Email Service] Failed to send contact form confirmation:", result.error);
+    }
+  } catch (error) {
+    // Don't throw - email failures shouldn't block form submission
+    console.error("[Email Service] Error sending contact form confirmation email:", error);
   }
 }

@@ -16,7 +16,7 @@ const ContactInfoArea = () => {
                 <div className="bd-contact-info-content">
                   <div className="bd-contact-info-icon cat-1">
                     <a href="tel:+40700000000">
-                      <i className="flaticon-phone-call"></i>
+                      <i className="fa-solid fa-phone"></i>
                     </a>
                   </div>
                   <h6>
@@ -66,7 +66,7 @@ const ContactInfoArea = () => {
                 <div className="bd-contact-info-content">
                   <div className="bd-contact-info-icon cat-3">
                     <a href={externalLinks.contactEmail}>
-                      <i className="flaticon-email"></i>
+                      <i className="fa-solid fa-envelope"></i>
                     </a>
                   </div>
                   <h6>

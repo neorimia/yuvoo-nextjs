@@ -1244,10 +1244,37 @@ CTA: "Vezi alte cluburi de [sport]" → Link către /cluburi?sport=[sport-id]
 
 **Week 9-10: FAQ & About Pages**
 
-- [ ] Expand FAQ page with 20+ questions across categories
-- [ ] Add FAQPage schema
-- [ ] Expand About page with trust signals, team, partners
-- [ ] Create missing pages (Contact, Help) if needed
+- [x] Expand FAQ page with 20+ questions across categories
+  - ✅ Expanded FAQ data to 26 questions organized into 7 categories
+  - ✅ Categories: Despre Platformă (4 questions), Chestionarul AI (4 questions), Cluburi Sportive (5 questions), Specialiști Pediatri (4 questions), Siguranță și Confidențialitate (3 questions), Cont și Profil (3 questions), Parteneri și Verificare (3 questions)
+  - ✅ Created `FaqMainEnhanced` component with category support
+  - ✅ Updated FAQ page to use enhanced component with category sections
+  - ✅ All questions in Romanian, SEO-optimized
+  - ✅ FAQPage schema already implemented (Week 2-3) ✅
+- [x] Add FAQPage schema ✅ (Completed in Week 2-3)
+- [x] Expand About page with trust signals, team, partners
+  - ✅ Added trust signals section using HomeTrustSignals component (6 trust badges: verified clubs, GDPR compliant, verified doctors, secure platform, 100% free, AI recommendations)
+  - ✅ Added statistics section using HomeStats component (animated counters: families, verified clubs, pediatric specialists, sports)
+  - ✅ Created AboutTeam component with team members section (4 team members: Founder & CEO, Co-founder & CTO, Medical Advisor, Head of Partnerships)
+  - ✅ Created AboutPartners component with partners organized by category (6 partners: Medical, Sports, Technology, Education)
+  - ✅ Created team data file (`src/data/team-data.ts`) with team member information (name, role, bio, credentials, social links)
+  - ✅ Created partners data file (`src/data/partners-data.ts`) with partner information (name, type, category, description, logo, website)
+  - ✅ Enhanced About page metadata with SEO keywords and improved descriptions
+  - ✅ Added comprehensive SCSS styles (`layout/_about.scss`) for team and partners sections
+  - ✅ All content in Romanian, SEO-optimized
+  - ✅ Responsive design for all screen sizes
+- [x] Create missing pages (Contact, Help) if needed
+  - ✅ Created Contact page at `/contact` with SEO-optimized metadata
+  - ✅ Created Help page at `/ajutor` with comprehensive help content and SEO-optimized metadata
+  - ✅ Updated `ContactFormMain` component to follow Yuvoo design system (uses `SectionTitle`, improved layout, Romanian content)
+  - ✅ Created new `ContactForm` component in `src/components/features/contact/ContactForm.tsx` with Romanian validation messages and Yuvoo button structure
+  - ✅ Updated `ContactInfoArea` component to use Font Awesome icons instead of Flaticon (consistent with Yuvoo design)
+  - ✅ Help page includes 6 help sections: Primii pași, Găsirea cluburilor, Contactarea specialiștilor, Gestionarea contului, Siguranță și confidențialitate, Contact și suport
+  - ✅ Help page includes quick links section to FAQ, Contact, Privacy, and Support email
+  - ✅ Created comprehensive SCSS styles (`layout/_help.scss`) for Help page components
+  - ✅ Updated contact form styles for better integration with Yuvoo design system
+  - ✅ All content in Romanian, SEO-optimized
+  - ✅ Both pages include breadcrumbs, proper metadata, and internal linking
 
 **Week 11-12: Internal Linking & Cache Optimization**
 
