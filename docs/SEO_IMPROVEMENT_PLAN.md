@@ -1278,7 +1278,23 @@ CTA: "Vezi alte cluburi de [sport]" → Link către /cluburi?sport=[sport-id]
 
 **Week 11-12: Internal Linking & Cache Optimization**
 
-- [ ] Implement systematic internal linking across all pages
+- [x] Implement systematic internal linking across all pages
+  - ✅ Enhanced FAQ answers with internal links (quiz, clubs, doctors, sports, register, privacy, GDPR pages)
+  - ✅ Updated FAQPageSchema to extract text from React.ReactNode answers for schema compatibility
+  - ✅ Added internal links to About page value propositions and "How It Works" sections
+  - ✅ Added internal links to Contact page subtitle and "Related Links" section (FAQ, Help, About)
+  - ✅ Enhanced Help page descriptions with internal links (quiz, clubs, sports, doctors)
+  - ✅ Added intro sections with internal links to Sports, Clubs, and Doctors listing pages
+  - ✅ Added contextual links to Home page components (FeaturedSports, FeaturedClubs, FeaturedDoctors, HowItWorks)
+  - ✅ Enhanced ContactFormMain subtitle with links to quiz, clubs, FAQ, and help pages
+  - ✅ Updated SectionTitle component to support React.ReactNode for subtitle (enables linking)
+  - ✅ Updated FaqAccordionItem to support React.ReactNode for answers (enables linking)
+  - ✅ Added internal links to sports FAQ data
+  - ✅ Added internal links to QuizIntroContent component (clubs, sports, doctors)
+  - ✅ All links use routes from @/lib/routes for consistency
+  - ✅ All links use descriptive anchor text for SEO
+  - ✅ Contextual inline links in content text where relevant
+  - ✅ All content in Romanian, SEO-optimized
 - [ ] Optimize cache strategy for club/doctor listings (if dynamic)
 - [ ] Add ItemList schema to listing pages
 - [ ] Create location-specific landing pages (optional, Phase 2)

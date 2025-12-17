@@ -1,10 +1,12 @@
 import React from "react";
+import Link from "next/link";
 import type { Metadata } from "next";
 import BreadcrumbOne from "@/components/Breadcrumb/BreadcrumbOne";
 import ClubsMain from "@/components/features/clubs/ClubsMain";
 import ClubSearchFilters from "@/components/features/clubs/ClubSearchFilters";
 import { searchClubs } from "@/modules/clubs/clubs.service";
 import { routes } from "@/lib/routes";
+import SectionTitle from "@/components/shared/SectionTitle";
 import type { Club, ClubSearchFilters as ClubSearchFiltersType } from "@/modules/clubs/clubs.types";
 
 /**
@@ -86,6 +88,40 @@ export default async function ClubsPage({ searchParams }: ClubsPageProps) {
           { name: "Cluburi", url: routes.clubs.list }, // Current page
         ]}
       />
+      <section className="bd-clubs-intro-area pt-120 pb-70">
+        <div className="container">
+          <div className="row">
+            <div className="col-lg-10 mx-auto">
+              <SectionTitle
+                title="Cluburi Sportive Verificate"
+                subtitle={
+                  <>
+                    Descoperă cluburi sportive verificate pentru copii. Filtrează după sport,
+                    locație sau vârstă. Dacă nu ești sigur ce sport se potrivește copilului tău,
+                    încearcă{" "}
+                    <Link
+                      href={routes.quiz.intro}
+                      className="text-primary text-decoration-underline"
+                    >
+                      chestionarul AI
+                    </Link>{" "}
+                    pentru recomandări personalizate. Explorează și{" "}
+                    <Link
+                      href={routes.sports.list}
+                      className="text-primary text-decoration-underline"
+                    >
+                      toate sporturile disponibile
+                    </Link>{" "}
+                    pentru a înțelege mai bine opțiunile.
+                  </>
+                }
+                className="text-center mb-50"
+                animationDelay=".2s"
+              />
+            </div>
+          </div>
+        </div>
+      </section>
       <ClubSearchFilters initialFilters={filters} />
       <ClubsMain
         clubs={clubs}

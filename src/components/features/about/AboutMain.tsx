@@ -62,10 +62,16 @@ const AboutMain: React.FC = () => {
                 <div className="bd-about-value-icon mb-25">
                   <i className="fa-solid fa-robot"></i>
                 </div>
-                <h3 className="bd-about-value-title mb-20">AI Coach Quiz</h3>
+                <h3 className="bd-about-value-title mb-20">
+                  <Link href={routes.quiz.intro} className="text-decoration-none">
+                    AI Coach Quiz
+                  </Link>
+                </h3>
                 <p className="bd-about-value-text">
-                  Recomandări personalizate de sporturi bazate pe profilul unic al copilului tău,
-                  generate cu inteligență artificială.
+                  <Link href={routes.quiz.intro} className="text-primary text-decoration-underline">
+                    Recomandări personalizate de sporturi
+                  </Link>{" "}
+                  bazate pe profilul unic al copilului tău, generate cu inteligență artificială.
                 </p>
               </div>
             </div>
@@ -78,10 +84,16 @@ const AboutMain: React.FC = () => {
                 <div className="bd-about-value-icon mb-25">
                   <i className="fa-solid fa-shield-check"></i>
                 </div>
-                <h3 className="bd-about-value-title mb-20">Cluburi Verificate</h3>
+                <h3 className="bd-about-value-title mb-20">
+                  <Link href={routes.clubs.list} className="text-decoration-none">
+                    Cluburi Verificate
+                  </Link>
+                </h3>
                 <p className="bd-about-value-text">
-                  Listă curată de cluburi sportive verificate, cu informații complete despre
-                  programe, prețuri și locații.
+                  <Link href={routes.clubs.list} className="text-primary text-decoration-underline">
+                    Listă curată de cluburi sportive verificate
+                  </Link>
+                  , cu informații complete despre programe, prețuri și locații.
                 </p>
               </div>
             </div>
@@ -94,10 +106,19 @@ const AboutMain: React.FC = () => {
                 <div className="bd-about-value-icon mb-25">
                   <i className="fa-solid fa-user-doctor"></i>
                 </div>
-                <h3 className="bd-about-value-title mb-20">Rețea de Specialiști</h3>
+                <h3 className="bd-about-value-title mb-20">
+                  <Link href={routes.doctors.list} className="text-decoration-none">
+                    Rețea de Specialiști
+                  </Link>
+                </h3>
                 <p className="bd-about-value-text">
-                  Acces la specialiști pediatri relevanți pentru sport, când recomandările AI indică
-                  nevoia de consultare medicală.
+                  <Link
+                    href={routes.doctors.list}
+                    className="text-primary text-decoration-underline"
+                  >
+                    Acces la specialiști pediatri relevanți pentru sport
+                  </Link>
+                  , când recomandările AI indică nevoia de consultare medicală.
                 </p>
               </div>
             </div>
@@ -129,10 +150,18 @@ const AboutMain: React.FC = () => {
                       </div>
                     </div>
                     <div className="bd-about-step-content">
-                      <h4 className="bd-about-step-title mb-20">Completează Chestionarul</h4>
+                      <h4 className="bd-about-step-title mb-20">
+                        <Link href={routes.quiz.intro} className="text-decoration-none">
+                          Completează Chestionarul
+                        </Link>
+                      </h4>
                       <p className="bd-about-step-text">
-                        Răspunde la întrebări simple despre copilul tău. AI-ul nostru analizează
-                        răspunsurile și generează recomandări personalizate.
+                        Răspunde la întrebări simple despre copilul tău.{" "}
+                        <Link href={routes.quiz.intro} className="text-primary">
+                          AI-ul nostru analizează răspunsurile și generează recomandări
+                          personalizate
+                        </Link>
+                        .
                       </p>
                     </div>
                   </div>
@@ -149,10 +178,16 @@ const AboutMain: React.FC = () => {
                       </div>
                     </div>
                     <div className="bd-about-step-content">
-                      <h4 className="bd-about-step-title mb-20">Descoperă Cluburi</h4>
+                      <h4 className="bd-about-step-title mb-20">
+                        <Link href={routes.clubs.list} className="text-decoration-none">
+                          Descoperă Cluburi
+                        </Link>
+                      </h4>
                       <p className="bd-about-step-text">
-                        Explorează cluburile sportive verificate care oferă sporturile recomandate.
-                        Filtrează după locație, vârstă și nivel.
+                        <Link href={routes.clubs.list} className="text-primary">
+                          Explorează cluburile sportive verificate
+                        </Link>{" "}
+                        care oferă sporturile recomandate. Filtrează după locație, vârstă și nivel.
                       </p>
                     </div>
                   </div>

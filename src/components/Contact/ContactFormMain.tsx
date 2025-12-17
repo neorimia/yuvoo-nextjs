@@ -1,6 +1,8 @@
 import React from "react";
+import Link from "next/link";
 import ContactForm from "@/components/features/contact/ContactForm";
 import SectionTitle from "@/components/shared/SectionTitle";
+import { routes } from "@/lib/routes";
 
 const ContactFormMain = () => {
   return (
@@ -10,7 +12,28 @@ const ContactFormMain = () => {
           <div className="col-lg-8 mx-auto">
             <SectionTitle
               title="Trimite-ne un mesaj"
-              subtitle="Ai întrebări despre Yuvoo, chestionarul AI sau cluburile verificate? Completează formularul de mai jos și te vom contacta în cel mai scurt timp."
+              subtitle={
+                <>
+                  Ai întrebări despre Yuvoo,{" "}
+                  <Link href={routes.quiz.intro} className="text-primary">
+                    chestionarul AI
+                  </Link>{" "}
+                  sau{" "}
+                  <Link href={routes.clubs.list} className="text-primary">
+                    cluburile verificate
+                  </Link>
+                  ? Completează formularul de mai jos și te vom contacta în cel mai scurt timp. Sau
+                  verifică{" "}
+                  <Link href={routes.faq} className="text-primary">
+                    întrebările frecvente
+                  </Link>{" "}
+                  și{" "}
+                  <Link href={routes.help} className="text-primary">
+                    pagina de ajutor
+                  </Link>
+                  .
+                </>
+              }
               className="text-center mb-50"
               animationDelay=".2s"
             />

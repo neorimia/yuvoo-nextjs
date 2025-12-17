@@ -123,6 +123,7 @@ yuvoo-nextjs/
 - Memoized components for performance
 - All content in Romanian, SEO-optimized
 - Internal linking to clubs filtered by sport
+- Systematic internal linking throughout all pages with contextual links
 
 ## Reusable Component Patterns
 
@@ -133,8 +134,8 @@ yuvoo-nextjs/
 **Home Page Components** (Created January 2025):
 
 - `SectionTitle.tsx` - Reusable section title component with title and optional subtitle
-  - Used in: All home page sections (FeaturedSports, FeaturedClubs, FeaturedDoctors, HowItWorks, HomeTestimonial, HomeFaq)
-  - Features: Consistent styling, WOW.js animations, customizable classes
+  - Used in: All home page sections (FeaturedSports, FeaturedClubs, FeaturedDoctors, HowItWorks, HomeTestimonial, HomeFaq), listing pages, detail pages
+  - Features: Consistent styling, WOW.js animations, customizable classes, supports React.ReactNode for subtitle (enables internal linking)
 - `ViewAllLink.tsx` - Reusable "View All" link component
   - Used in: Featured sections (clubs, doctors, sports)
   - Features: Consistent styling, hover effects, arrow icon
@@ -148,8 +149,8 @@ yuvoo-nextjs/
   - Used in: Testimonials, user profiles, comments
   - Features: Size variants (sm, md, lg), customizable colors
 - `FaqAccordionItem.tsx` - Reusable FAQ accordion item component
-  - Used in: FAQ sections, help pages
-  - Features: Bootstrap accordion integration, customizable open state
+  - Used in: FAQ sections, help pages, sports FAQ sections
+  - Features: Bootstrap accordion integration, customizable open state, supports React.ReactNode for answers (enables internal linking)
 
 ### Onboarding Form Components
 
@@ -1619,6 +1620,92 @@ Club Directory (pre-filtered by sport)
 - `src/lib/validations/contact.ts` - Contact form validation schema
 - `src/lib/integrations/brevo/templates.ts` - Email templates (contact form templates)
 - `src/lib/integrations/brevo/email.service.ts` - Email service functions
+
+### Internal Linking Pattern (January 2025)
+
+**Purpose**: Systematic internal linking across all pages for improved SEO, user navigation, and site structure.
+
+**Location**: Implemented throughout all public pages and components.
+
+**Components Supporting Internal Linking**:
+
+- `SectionTitle.tsx` - Enhanced to support `React.ReactNode` for subtitle prop (enables linking in subtitles)
+  - Handles both string and React.ReactNode types for subtitle
+  - Used in: Home page sections, listing pages, detail pages, About page, Contact page
+- `FaqAccordionItem.tsx` - Enhanced to support `React.ReactNode` for answer prop (enables linking in FAQ answers)
+  - Handles both string and React.ReactNode types for answer
+  - Used in: FAQ page, Home FAQ, Sports FAQ
+- `FAQPageSchema.tsx` - Enhanced to extract plain text from React.ReactNode answers for schema compatibility
+  - Includes `extractTextFromNode()` helper function to convert React nodes to plain text
+  - Ensures FAQPage schema works correctly with React.ReactNode answers
+
+**Data Files with Internal Links**:
+
+- `src/data/faq-data.tsx` - FAQ data with React.ReactNode answers containing internal links
+  - All 26 FAQ items enhanced with contextual links to relevant pages
+  - Links to: quiz intro, clubs list, doctors list, sports list, register, privacy, GDPR, contact, help
+- `src/data/sports-faq-data.tsx` - Sports-specific FAQ data with React.ReactNode answers
+  - 6 sports FAQ items enhanced with contextual links
+  - Links to: quiz intro, clubs list, sports list
+
+**Implementation Strategy**:
+
+1. **Contextual Links in Content**: Links are placed contextually in content text where relevant pages are mentioned
+   - Example: "Folosește [chestionarul AI](/chestionar) pentru recomandări personalizate"
+   - Links use descriptive anchor text (not generic "click here")
+
+2. **Intro Sections on Listing Pages**: Added intro sections to Sports, Clubs, and Doctors listing pages
+   - Provide context and include relevant internal links
+   - Link to related services (quiz, other listing pages)
+
+3. **Home Page Component Subtitles**: Enhanced subtitles in FeaturedSports, FeaturedClubs, FeaturedDoctors, HowItWorks
+   - Include internal links to related pages for better navigation
+
+4. **Related Links Sections**: Added "Related Links" sections where appropriate
+   - Contact page includes section linking to FAQ, Help, and About pages
+
+5. **Route Consistency**: All links use routes from `@/lib/routes` for consistency
+   - Ensures single source of truth for URLs
+   - Makes refactoring easier
+
+**SEO Benefits**:
+
+- Improved crawlability: Search engines can discover and index all pages
+- Better site structure: Clear hierarchy and relationships between pages
+- Enhanced user experience: Users can easily navigate to related content
+- Keyword relevance: Anchor text reinforces keyword associations
+- Page authority distribution: Internal links help distribute page authority
+
+**Files Modified**:
+
+- `src/components/shared/SectionTitle.tsx` - Added React.ReactNode support
+- `src/components/shared/FaqAccordionItem.tsx` - Added React.ReactNode support
+- `src/components/SEO/FAQPageSchema.tsx` - Added text extraction from React nodes
+- `src/data/faq-data.tsx` - Enhanced with internal links (renamed from .ts to .tsx)
+- `src/data/sports-faq-data.tsx` - Enhanced with internal links (renamed from .ts to .tsx)
+- `src/components/features/about/AboutMain.tsx` - Added internal links
+- `src/app/(public)/contact/page.tsx` - Added related links section
+- `src/components/Contact/ContactFormMain.tsx` - Added links in subtitle
+- `src/app/(public)/ajutor/page.tsx` - Enhanced with internal links
+- `src/app/(public)/sporturi/page.tsx` - Added intro section with links
+- `src/app/(public)/cluburi/page.tsx` - Added intro section with links
+- `src/app/(public)/doctori/page.tsx` - Added intro section with links
+- `src/components/features/home/FeaturedSports.tsx` - Enhanced subtitle with links
+- `src/components/features/home/FeaturedClubs.tsx` - Enhanced subtitle with links
+- `src/components/features/home/FeaturedDoctors.tsx` - Enhanced subtitle with links
+- `src/components/features/home/HowItWorks.tsx` - Enhanced with internal links
+- `src/components/features/quiz/QuizIntroContent.tsx` - Added links to benefits section
+- `public/assets/scss/layout/_contact.scss` - Added styles for related links section
+
+**Key Features**:
+
+- ✅ All links use descriptive anchor text in Romanian
+- ✅ Links are contextually placed in content where relevant
+- ✅ All links use routes from `@/lib/routes` for consistency
+- ✅ Components support React.ReactNode for flexible linking
+- ✅ FAQPageSchema extracts plain text for schema compatibility
+- ✅ Comprehensive coverage across all public pages
+- ✅ SEO-optimized with proper anchor text and context
 
 **User Flow**:
 

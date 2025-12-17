@@ -5,12 +5,13 @@ import React from "react";
  *
  * Reusable accordion item component for FAQ sections.
  * Uses Bootstrap accordion structure with custom styling.
+ * Supports internal links in answers using ReactNode.
  */
 
 interface FaqAccordionItemProps {
   id: string;
   question: string;
-  answer: string;
+  answer: string | React.ReactNode;
   isOpen?: boolean;
   accordionId: string;
 }
@@ -46,7 +47,11 @@ const FaqAccordionItem: React.FC<FaqAccordionItemProps> = ({
         data-bs-parent={`#${accordionId}`}
       >
         <div className="accordion-body">
-          <p className="bd-faq-answer-text">{answer}</p>
+          {typeof answer === "string" ? (
+            <p className="bd-faq-answer-text">{answer}</p>
+          ) : (
+            <div className="bd-faq-answer-text">{answer}</div>
+          )}
         </div>
       </div>
     </div>

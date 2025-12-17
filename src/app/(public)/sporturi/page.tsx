@@ -1,6 +1,7 @@
 "use cache";
 
 import React from "react";
+import Link from "next/link";
 import type { Metadata } from "next";
 import BreadcrumbOne from "@/components/Breadcrumb/BreadcrumbOne";
 import SportsMain from "@/components/features/sports/SportsMain";
@@ -105,9 +106,16 @@ export default async function SportsPage() {
                 </div>
                 <h3 className="bd-sports-intro-card-title">Găsește Sportul Potrivit</h3>
                 <p className="bd-sports-intro-card-text">
-                  Folosește chestionarul nostru AI pentru a primi recomandări personalizate bazate
-                  pe profilul copilului tău. Sau explorează manual toate sporturile disponibile și
-                  descoperă opțiunile care se potrivesc cel mai bine.
+                  <Link href={routes.quiz.intro} className="text-primary text-decoration-underline">
+                    Folosește chestionarul nostru AI
+                  </Link>{" "}
+                  pentru a primi recomandări personalizate bazate pe profilul copilului tău. Sau
+                  explorează manual toate sporturile disponibile și descoperă opțiunile care se
+                  potrivesc cel mai bine. După ce alegi un sport,{" "}
+                  <Link href={routes.clubs.list} className="text-primary text-decoration-underline">
+                    găsește cluburi verificate
+                  </Link>{" "}
+                  care îl oferă.
                 </p>
               </div>
             </div>
@@ -122,9 +130,11 @@ export default async function SportsPage() {
                 </div>
                 <h3 className="bd-sports-intro-card-title">Cluburi Verificate</h3>
                 <p className="bd-sports-intro-card-text">
-                  Toate cluburile de pe Yuvoo sunt verificate de echipa noastră pentru siguranță și
-                  calitate. Găsește cluburi aproape de tine, vezi programe, prețuri și rezervă o
-                  probă gratuită direct din platformă.
+                  <Link href={routes.clubs.list} className="text-primary text-decoration-underline">
+                    Toate cluburile de pe Yuvoo sunt verificate
+                  </Link>{" "}
+                  de echipa noastră pentru siguranță și calitate. Găsește cluburi aproape de tine,
+                  vezi programe, prețuri și rezervă o probă gratuită direct din platformă.
                 </p>
               </div>
             </div>

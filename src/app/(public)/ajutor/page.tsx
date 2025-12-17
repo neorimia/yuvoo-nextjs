@@ -53,8 +53,16 @@ const helpSections: HelpSection[] = [
     id: 1,
     icon: "fa-solid fa-question-circle",
     title: "Primii pași pe Yuvoo",
-    description:
-      "Află cum să începi să folosești platforma Yuvoo pentru a găsi activitățile sportive potrivite pentru copilul tău.",
+    description: (
+      <>
+        Află cum să începi să folosești platforma Yuvoo pentru a găsi activitățile sportive
+        potrivite pentru copilul tău. Începe cu{" "}
+        <Link href={routes.quiz.intro} className="text-primary text-decoration-underline">
+          chestionarul AI
+        </Link>{" "}
+        pentru recomandări personalizate.
+      </>
+    ),
     link: routes.quiz.intro,
     items: [
       "Cum funcționează chestionarul AI",
@@ -67,8 +75,19 @@ const helpSections: HelpSection[] = [
     id: 2,
     icon: "fa-solid fa-magnifying-glass",
     title: "Găsirea cluburilor sportive",
-    description:
-      "Descoperă cum să căuți și să filtrezi cluburile sportive verificate pentru a găsi cea mai bună opțiune.",
+    description: (
+      <>
+        Descoperă cum să căuți și să filtrezi{" "}
+        <Link href={routes.clubs.list} className="text-primary text-decoration-underline">
+          cluburile sportive verificate
+        </Link>{" "}
+        pentru a găsi cea mai bună opțiune. Explorează și{" "}
+        <Link href={routes.sports.list} className="text-primary text-decoration-underline">
+          toate sporturile disponibile
+        </Link>
+        .
+      </>
+    ),
     link: routes.clubs.list,
     items: [
       "Cum cauti cluburi după sport",
@@ -81,8 +100,15 @@ const helpSections: HelpSection[] = [
     id: 3,
     icon: "fa-solid fa-user-doctor",
     title: "Contactarea specialiștilor pediatri",
-    description:
-      "Află cum să contactezi și să programezi consultații cu specialiștii pediatri verificați de pe platformă.",
+    description: (
+      <>
+        Află cum să contactezi și să programezi consultații cu{" "}
+        <Link href={routes.doctors.list} className="text-primary text-decoration-underline">
+          specialiștii pediatri verificați
+        </Link>{" "}
+        de pe platformă. Recomandările AI te vor ghida când este necesar.
+      </>
+    ),
     link: routes.doctors.list,
     items: [
       "Cum găsești specialiști pediatri",
@@ -182,7 +208,7 @@ export default function HelpPage() {
                     <i className={section.icon}></i>
                   </div>
                   <h3 className="bd-help-title mb-20">{section.title}</h3>
-                  <p className="bd-help-description mb-25">{section.description}</p>
+                  <div className="bd-help-description mb-25">{section.description}</div>
                   {section.items && section.items.length > 0 && (
                     <ul className="bd-help-items mb-25">
                       {section.items.map((item, itemIndex) => (

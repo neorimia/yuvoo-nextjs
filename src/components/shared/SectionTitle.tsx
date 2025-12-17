@@ -5,11 +5,12 @@ import React from "react";
  *
  * Reusable section title component for consistent page sections.
  * Used across home page components (FeaturedSports, FeaturedClubs, HowItWorks, etc.)
+ * Supports React.ReactNode for subtitle to enable internal linking.
  */
 
 interface SectionTitleProps {
-  title: string;
-  subtitle?: string;
+  title: string | React.ReactNode;
+  subtitle?: string | React.ReactNode;
   className?: string;
   titleClassName?: string;
   subtitleClassName?: string;
@@ -30,8 +31,17 @@ const SectionTitle: React.FC<SectionTitleProps> = ({
       data-wow-duration="1s"
       data-wow-delay={animationDelay}
     >
-      <h2 className={`bd-section-title mb-0 ${titleClassName}`}>{title}</h2>
-      {subtitle && <p className={`mt-3 ${subtitleClassName}`}>{subtitle}</p>}
+      {typeof title === "string" ? (
+        <h2 className={`bd-section-title mb-0 ${titleClassName}`}>{title}</h2>
+      ) : (
+        <div className={`bd-section-title mb-0 ${titleClassName}`}>{title}</div>
+      )}
+      {subtitle &&
+        (typeof subtitle === "string" ? (
+          <p className={`mt-3 ${subtitleClassName}`}>{subtitle}</p>
+        ) : (
+          <div className={`mt-3 ${subtitleClassName}`}>{subtitle}</div>
+        ))}
     </div>
   );
 };
