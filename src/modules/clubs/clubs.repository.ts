@@ -13,7 +13,7 @@ import type { Club } from "./clubs.types";
 /**
  * Map database club record to Club type
  */
-function mapDbClubToClub(dbClub: typeof clubs.$inferSelect): Club {
+export function mapDbClubToClub(dbClub: typeof clubs.$inferSelect): Club {
   // Parse schedule from JSONB
   const scheduleData = dbClub.schedule as unknown;
   const schedule =
@@ -170,4 +170,5 @@ export const clubsRepository = {
   getClubsByVerificationStatus,
   getClubsPendingVerification,
   findBySportType,
+  mapDbClubToClub,
 };

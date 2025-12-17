@@ -21,7 +21,7 @@ export const metadata: Metadata = {
     description: "Informații despre protecția datelor copiilor conform GDPR.",
   },
   alternates: {
-    canonical: "/gdpr-parinti",
+    canonical: `${process.env.NEXT_PUBLIC_APP_URL || "https://yuvoo.ro"}/gdpr-parinti`,
   },
 };
 

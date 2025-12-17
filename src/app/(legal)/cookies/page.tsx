@@ -21,7 +21,7 @@ export const metadata: Metadata = {
     description: "Află cum folosim cookie-urile pe platforma Yuvoo.",
   },
   alternates: {
-    canonical: "/cookies",
+    canonical: `${process.env.NEXT_PUBLIC_APP_URL || "https://yuvoo.ro"}/cookies`,
   },
 };
 

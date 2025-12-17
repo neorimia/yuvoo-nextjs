@@ -54,6 +54,14 @@ export async function generateMetadata({ params }: QuizResultsPageProps): Promis
       title: `Rezultate Chestionar - Recomandări Personalizate | Yuvoo`,
       description: "Vezi recomandările personalizate de sporturi pentru copilul tău.",
     },
+    robots: {
+      index: false, // Private/personalized results - should not be indexed
+      follow: false,
+      googleBot: {
+        index: false,
+        follow: false,
+      },
+    },
   };
 }
 

@@ -13,7 +13,7 @@ import type { Club, ClubSearchFilters, ClubSearchResult } from "./clubs.types";
  * Get club by slug
  */
 export async function getClubBySlug(slug: string): Promise<Club | null> {
-  return clubsRepository.findBySlug(slug);
+  return clubsRepository.getClubBySlug(slug);
 }
 
 /**
@@ -27,14 +27,22 @@ export async function searchClubs(filters: ClubSearchFilters): Promise<ClubSearc
  * Get clubs by sport
  */
 export async function getClubsBySport(sportId: string): Promise<Club[]> {
-  return clubsRepository.findBySport(sportId);
+  return clubsRepository.findBySportType(sportId);
 }
 
 /**
  * Get verified clubs only
  */
 export async function getVerifiedClubs(): Promise<Club[]> {
-  return clubsRepository.findVerified();
+  return clubsRepository.getClubsByVerificationStatus("approved");
+}
+
+/**
+ * Get all clubs
+ * Used for sitemap generation and bulk operations
+ */
+export async function getAllClubs(): Promise<Club[]> {
+  return clubsRepository.getAllClubs();
 }
 
 /**

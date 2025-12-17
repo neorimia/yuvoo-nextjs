@@ -89,6 +89,8 @@ export async function generateMetadata({ params }: ClubDetailPageProps): Promise
     };
   }
 
+  const baseUrl = process.env.NEXT_PUBLIC_APP_URL || "https://yuvoo.ro";
+
   return {
     title: `${club.name} - Cluburi Sportive Yuvoo`,
     description:
@@ -98,6 +100,9 @@ export async function generateMetadata({ params }: ClubDetailPageProps): Promise
       description: club.description || `Club sportiv pentru copii în ${club.location.city}`,
       type: "website",
       images: club.images && club.images.length > 0 ? [club.images[0]] : [],
+    },
+    alternates: {
+      canonical: `${baseUrl}/cluburi/${slug}`,
     },
   };
 }

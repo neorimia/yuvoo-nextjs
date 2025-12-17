@@ -15,6 +15,9 @@ export const metadata: Metadata = {
     description: "Descoperă toate sporturile disponibile pentru copii pe platforma Yuvoo.",
     type: "website",
   },
+  alternates: {
+    canonical: "/sporturi",
+  },
 };
 
 /**

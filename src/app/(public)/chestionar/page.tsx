@@ -28,6 +28,9 @@ export const metadata: Metadata = {
     description:
       "Chestionar AI personalizat pentru recomandări de sporturi. Doar 3-4 minute pentru recomandări bazate pe specialiști.",
   },
+  alternates: {
+    canonical: "/chestionar",
+  },
 };
 
 /**

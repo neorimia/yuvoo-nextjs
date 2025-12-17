@@ -9,11 +9,22 @@ import type {
   DoctorSearchFilters as DoctorSearchFiltersType,
 } from "@/modules/doctors/doctors.types";
 
-export const metadata: Metadata = {
-  title: "Specialiști Pediatri - Yuvoo",
-  description:
-    "Găsește specialiști pediatri verificați pentru consultații despre activitățile sportive ale copilului tău.",
-};
+/**
+ * Generate metadata for doctors listing page
+ * Uses base URL without query params as canonical URL
+ */
+export async function generateMetadata(): Promise<Metadata> {
+  const baseUrl = process.env.NEXT_PUBLIC_APP_URL || "https://yuvoo.ro";
+
+  return {
+    title: "Specialiști Pediatri - Yuvoo",
+    description:
+      "Găsește specialiști pediatri verificați pentru consultații despre activitățile sportive ale copilului tău.",
+    alternates: {
+      canonical: `${baseUrl}/doctori`,
+    },
+  };
+}
 
 interface DoctorsPageProps {
   searchParams: Promise<{

@@ -72,6 +72,8 @@ export async function generateMetadata({ params }: SportDetailPageProps): Promis
     };
   }
 
+  const baseUrl = process.env.NEXT_PUBLIC_APP_URL || "https://yuvoo.ro";
+
   return {
     title: `${sport.name} - Sporturi Yuvoo`,
     description:
@@ -80,6 +82,9 @@ export async function generateMetadata({ params }: SportDetailPageProps): Promis
       title: `${sport.name} - Yuvoo`,
       description: sport.description || `Sport pentru copii: ${sport.name}`,
       type: "website",
+    },
+    alternates: {
+      canonical: `${baseUrl}/sporturi/${slug}`,
     },
   };
 }

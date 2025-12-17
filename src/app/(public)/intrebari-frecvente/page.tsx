@@ -11,6 +11,9 @@ export const metadata: Metadata = {
     description: "Răspunsuri la cele mai frecvente întrebări despre Yuvoo.",
     type: "website",
   },
+  alternates: {
+    canonical: "/intrebari-frecvente",
+  },
 };
 
 /**

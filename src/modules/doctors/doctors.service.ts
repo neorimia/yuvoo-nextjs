@@ -29,3 +29,11 @@ export async function searchDoctors(filters: DoctorSearchFilters): Promise<Docto
 export async function getDoctorsBySpecialty(specialty: string): Promise<Doctor[]> {
   return doctorsRepository.findBySpecialty(specialty);
 }
+
+/**
+ * Get all doctors
+ * Used for sitemap generation and bulk operations
+ */
+export async function getAllDoctors(): Promise<Doctor[]> {
+  return doctorsRepository.findAll();
+}

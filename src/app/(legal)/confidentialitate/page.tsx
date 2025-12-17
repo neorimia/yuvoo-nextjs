@@ -21,7 +21,7 @@ export const metadata: Metadata = {
     description: "Află cum protejăm datele tale personale și ale copilului tău.",
   },
   alternates: {
-    canonical: "/confidentialitate",
+    canonical: `${process.env.NEXT_PUBLIC_APP_URL || "https://yuvoo.ro"}/confidentialitate`,
   },
 };
 

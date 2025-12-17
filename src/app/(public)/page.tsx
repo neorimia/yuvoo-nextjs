@@ -51,7 +51,7 @@ export const metadata: Metadata = {
     images: ["/assets/img/logo/og-image.jpg"],
   },
   alternates: {
-    canonical: "/",
+    canonical: process.env.NEXT_PUBLIC_APP_URL || "https://yuvoo.ro",
   },
 };
 

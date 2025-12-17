@@ -79,6 +79,8 @@ export async function generateMetadata({ params }: DoctorDetailPageProps): Promi
     };
   }
 
+  const baseUrl = process.env.NEXT_PUBLIC_APP_URL || "https://yuvoo.ro";
+
   return {
     title: `${doctor.name} - Specialiști Pediatri Yuvoo`,
     description:
@@ -89,6 +91,9 @@ export async function generateMetadata({ params }: DoctorDetailPageProps): Promi
       description: doctor.description || `Specialist pediatric în ${doctor.location.city}`,
       type: "website",
       images: doctor.image ? [doctor.image] : [],
+    },
+    alternates: {
+      canonical: `${baseUrl}/doctori/${slug}`,
     },
   };
 }

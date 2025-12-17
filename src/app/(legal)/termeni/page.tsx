@@ -21,7 +21,7 @@ export const metadata: Metadata = {
     description: "Termenii și condițiile de utilizare a platformei Yuvoo.",
   },
   alternates: {
-    canonical: "/termeni",
+    canonical: `${process.env.NEXT_PUBLIC_APP_URL || "https://yuvoo.ro"}/termeni`,
   },
 };
 

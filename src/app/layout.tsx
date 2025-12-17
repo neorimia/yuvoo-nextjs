@@ -1,6 +1,7 @@
 import { Gabarito } from "next/font/google";
 import GlobalVideoModal from "@/components/Popup/GlobalVideoModal";
 import CookieConsentBanner from "@/components/CookieConsent/CookieConsentBanner";
+import OrganizationSchema from "@/components/SEO/OrganizationSchema";
 import { VideoProvider } from "@/provider/VideoProvider";
 import AppProvider from "@/provider/AppProvider";
 import type { Metadata } from "next";
@@ -108,6 +109,7 @@ export default function RootLayout({
   return (
     <html lang="ro">
       <body suppressHydrationWarning className={`${gabarito.variable}`}>
+        <OrganizationSchema />
         <VideoProvider>
           <ReduxProvider>
             <AppProvider>{children}</AppProvider>

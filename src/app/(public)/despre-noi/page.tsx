@@ -13,6 +13,9 @@ export const metadata: Metadata = {
       "Află mai multe despre Yuvoo, platforma AI care ajută părinții să găsească activitățile sportive potrivite pentru copiii lor.",
     type: "website",
   },
+  alternates: {
+    canonical: "/despre-noi",
+  },
 };
 
 /**
