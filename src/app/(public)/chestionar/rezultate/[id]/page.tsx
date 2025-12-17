@@ -1,6 +1,7 @@
 import React from "react";
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
+import { cookies } from "next/headers";
 import BreadcrumbOne from "@/components/Breadcrumb/BreadcrumbOne";
 import { getQuizResultAction } from "@/app/actions/quiz";
 import SportRecommendationCard from "@/components/features/quiz/SportRecommendationCard";
@@ -73,6 +74,9 @@ export async function generateMetadata({ params }: QuizResultsPageProps): Promis
  * SEO-friendly route: /chestionar/rezultate/[id]
  */
 export default async function QuizResultsPage({ params }: QuizResultsPageProps) {
+  // Access dynamic data sources first to mark route as dynamic
+  // This allows crypto.randomUUID() usage in downstream code
+  const _cookies = await cookies(); // Mark route as dynamic
   const { id } = await params;
 
   // Fetch quiz results

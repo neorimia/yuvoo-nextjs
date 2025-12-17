@@ -21,8 +21,12 @@ export default async function ClubLayout({ children }: { children: React.ReactNo
         userId={session.user.id}
         email={session.user.primaryEmail}
         role={session.dbUser.role}
-        name={session.dbUser.firstName || session.dbUser.email || undefined}
+        firstName={session.dbUser.firstName}
+        lastName={session.dbUser.lastName}
+        phone={session.dbUser.phone}
         signupDate={session.dbUser.createdAt}
+        emailVerified={session.user.primaryEmailVerified ?? undefined}
+        onboardingCompleted={session.dbUser.onboardingCompleted}
       />
       {children}
     </>

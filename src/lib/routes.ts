@@ -53,14 +53,16 @@ export const routes = {
   search: "/cautare",
 
   // Authentication - Internal routes (English OK)
-  login: "/auth/login",
-  register: "/auth/register",
-  forgotPassword: "/auth/forgot-password",
-  resetPassword: "/auth/reset-password",
-  verifyEmail: "/auth/verify-email",
-  emailConfirmation: "/auth/email-confirmation",
-  verificationPending: "/auth/verification-pending",
-  chooseRole: "/auth/choose-role",
+  // Note: Files are in (auth)/ route group, but URLs don't include parentheses
+  // (auth)/login/page.tsx → /auth/login
+  login: "/login",
+  register: "/register",
+  forgotPassword: "/forgot-password",
+  resetPassword: "/reset-password",
+  verifyEmail: "/verify-email",
+  emailConfirmation: "/email-confirmation",
+  verificationPending: "/verification-pending",
+  chooseRole: "/choose-role",
 
   // Public Information Pages - SEO-friendly Romanian paths
   about: "/despre-noi",

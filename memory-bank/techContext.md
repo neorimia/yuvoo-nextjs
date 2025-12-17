@@ -872,10 +872,18 @@ import { getClubBySlug } from "@/modules/clubs/clubs.service";
   - ✅ Integrated into protected route layouts (parent, club, doctor)
   - ✅ Connects anonymous sessions with authenticated users
   - ✅ Uses person properties (`$set` for updatable, `$set_once` for immutable)
-- ✅ Person properties optimization ✅
+- ✅ Person properties optimization ✅ **COMPLETE** (January 2025)
   - ✅ `identifyUser()` supports `$set` and `$set_once` properties
   - ✅ User metadata stored as person properties (not sent with every event)
   - ✅ More efficient and follows PostHog best practices
+  - ✅ Enhanced person properties implementation ✅
+    - ✅ Signup: `email`, `role`, `name`, `signupDate` (via `user_signed_up` event)
+    - ✅ Email verification: `emailVerified`, `emailVerifiedDate` (via `email_verified` event)
+    - ✅ Login: `lastLoginDate` (via `user_logged_in` event)
+    - ✅ Onboarding: `onboardingCompleted`, `onboardingCompletedDate`, `onboardingRole` (via `onboarding_completed` event)
+    - ✅ Automatic sync: All properties updated on every protected page visit via `PostHogUserIdentification` component
+    - ✅ TypeScript support: `PostHogEventProperties` type updated to support `$set` and `$set_once`
+    - ✅ Documentation: `docs/POSTHOG_PERSON_PROPERTIES_IMPLEMENTATION.md` created
 
 **Documentation**: `docs/POSTHOG_IMPLEMENTATION_PLAN.md`, `docs/MONITORING_SETUP_GUIDE.md`
 

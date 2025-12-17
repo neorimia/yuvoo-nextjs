@@ -48,7 +48,25 @@ interface LoginPageProps {
 export default async function LoginPage({ searchParams }: LoginPageProps) {
   const params = await searchParams;
   // Support both 'redirect' and 'returnUrl' query parameters
-  const redirectUrl = params.redirect || params.returnUrl || undefined;
+  // Next.js automatically decodes query parameters, but we need to ensure it's a valid path
+  let redirectUrl = params.redirect || params.returnUrl || undefined;
+
+  // Validate and decode if needed (Next.js should already decode, but be safe)
+  if (redirectUrl) {
+    try {
+      // Decode if it's still encoded (shouldn't happen, but safety check)
+      if (redirectUrl.startsWith("%2F") || redirectUrl.includes("%")) {
+        redirectUrl = decodeURIComponent(redirectUrl);
+      }
+      // Validate it's a relative path (security: prevent open redirect)
+      if (!redirectUrl.startsWith("/")) {
+        redirectUrl = undefined;
+      }
+    } catch (_error) {
+      // If decoding fails, ignore the redirectUrl
+      redirectUrl = undefined;
+    }
+  }
 
   return (
     <>

@@ -111,4 +111,19 @@ export const PostHogProperties = {
  * Type-safe event tracking types
  */
 export type PostHogEventName = (typeof PostHogEvents)[keyof typeof PostHogEvents];
-export type PostHogEventProperties = Record<string, string | number | boolean | null | undefined>;
+
+/**
+ * PostHog event properties type
+ * Supports standard properties and PostHog person properties ($set, $set_once)
+ */
+export type PostHogEventProperties = {
+  $set?: Record<string, string | number | boolean | undefined>;
+  $set_once?: Record<string, string | number | boolean | undefined>;
+  [key: string]:
+    | string
+    | number
+    | boolean
+    | null
+    | undefined
+    | Record<string, string | number | boolean | undefined>;
+};

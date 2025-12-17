@@ -5,14 +5,11 @@
  * Handles complex queries with multiple filters, sorting, and pagination.
  */
 
-"use cache";
-
 import { db } from "@/lib/db";
 import { doctors } from "@/lib/db/schema";
 import { eq, and, ilike, desc, asc, sql } from "drizzle-orm";
 import { doctorsRepository } from "./doctors.repository";
 import type { DoctorSearchFilters, DoctorSearchResult } from "./doctors.types";
-import { cacheLife, cacheTag } from "next/cache";
 
 /**
  * Search doctors with filters
@@ -33,21 +30,6 @@ import { cacheLife, cacheTag } from "next/cache";
  * Supports pagination with page and pageSize.
  */
 export async function search(filters: DoctorSearchFilters): Promise<DoctorSearchResult> {
-  // Cache strategy: Cache for 1 hour, revalidate on doctor updates
-  cacheLife("hours");
-  cacheTag("doctors-list");
-
-  // Add specific cache tags based on filters for better granular revalidation
-  if (filters.specialty) {
-    cacheTag(`doctors-specialty-${filters.specialty}`);
-  }
-  if (filters.city) {
-    cacheTag(`doctors-city-${filters.city.toLowerCase()}`);
-  }
-  if (filters.verified !== undefined) {
-    cacheTag(`doctors-verified-${filters.verified}`);
-  }
-
   const page = filters.page || 1;
   const pageSize = filters.pageSize || 20;
   const offset = (page - 1) * pageSize;

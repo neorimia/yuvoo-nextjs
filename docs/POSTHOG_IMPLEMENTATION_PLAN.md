@@ -919,7 +919,8 @@ NEXT_PUBLIC_POSTHOG_HOST=https://eu.i.posthog.com # Optional (default: eu.i.post
 
 ## Next Steps After Implementation
 
-1. **Configure PostHog Dashboard**:
+1. **Configure PostHog Dashboard** ✅ **GUIDE CREATED**
+   - 📖 **See**: `docs/POSTHOG_DASHBOARD_SETUP.md` for complete setup guide
    - Set up funnels (Quiz → Booking conversion)
    - Create user cohorts
    - Set up alerts for key events
@@ -931,10 +932,12 @@ NEXT_PUBLIC_POSTHOG_HOST=https://eu.i.posthog.com # Optional (default: eu.i.post
 3. **Session Recordings**:
    - Review session recordings for UX insights
    - Identify user pain points
+   - 📖 **See**: `docs/POSTHOG_DASHBOARD_SETUP.md` for session recording best practices
 
 4. **Performance Monitoring**:
    - Track Core Web Vitals via PostHog
    - Monitor API response times
+   - 📖 **See**: `docs/POSTHOG_DASHBOARD_SETUP.md` for performance monitoring setup
 
 ---
 

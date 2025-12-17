@@ -23,6 +23,8 @@ import {
   clubPhotoSchema,
   clubVerificationSchema,
 } from "@/lib/validations/club";
+import { trackEventServer } from "@/lib/analytics/tracking-server";
+import { PostHogEvents, PostHogProperties } from "@/lib/analytics/events";
 import {
   doctorBasicInfoSchema,
   doctorBioExperienceSchema,
@@ -336,6 +338,27 @@ export async function completeParentOnboarding(action: "quiz" | "dashboard"): Pr
       .where(eq(onboardingProgress.userId, session.dbUser.id));
 
     await markStepComplete(5);
+
+    // Track onboarding completion with person properties
+    try {
+      await trackEventServer(PostHogEvents.ONBOARDING_COMPLETED, {
+        distinctId: session.user.id,
+        [PostHogProperties.ONBOARDING_ROLE]: session.dbUser.role,
+        // Person properties: mark onboarding as complete
+        $set: {
+          onboardingCompleted: true,
+        },
+        $set_once: {
+          onboardingCompletedDate: new Date().toISOString(),
+          onboardingRole: session.dbUser.role,
+        },
+      });
+    } catch (trackingError) {
+      // Don't fail onboarding completion if tracking fails
+      if (process.env.NODE_ENV === "development") {
+        console.error("[PostHog] Error tracking onboarding completion:", trackingError);
+      }
+    }
 
     if (action === "quiz") {
       redirect(routes.quiz?.intro || "/chestionar");
@@ -698,6 +721,27 @@ export async function completeClubOnboarding(): Promise<{ success: boolean; erro
         .update(clubs)
         .set({ profileComplete: true, updatedAt: new Date() })
         .where(eq(clubs.id, progressData.data?.stepData?.club_id as string));
+    }
+
+    // Track onboarding completion with person properties
+    try {
+      await trackEventServer(PostHogEvents.ONBOARDING_COMPLETED, {
+        distinctId: session.user.id,
+        [PostHogProperties.ONBOARDING_ROLE]: session.dbUser.role,
+        // Person properties: mark onboarding as complete
+        $set: {
+          onboardingCompleted: true,
+        },
+        $set_once: {
+          onboardingCompletedDate: new Date().toISOString(),
+          onboardingRole: session.dbUser.role,
+        },
+      });
+    } catch (trackingError) {
+      // Don't fail onboarding completion if tracking fails
+      if (process.env.NODE_ENV === "development") {
+        console.error("[PostHog] Error tracking onboarding completion:", trackingError);
+      }
     }
 
     return { success: true };
@@ -1130,6 +1174,27 @@ export async function completeDoctorOnboarding(): Promise<{ success: boolean; er
         .update(doctors)
         .set({ profileComplete: true, updatedAt: new Date() })
         .where(eq(doctors.id, progressData.data?.stepData?.doctor_id as string));
+    }
+
+    // Track onboarding completion with person properties
+    try {
+      await trackEventServer(PostHogEvents.ONBOARDING_COMPLETED, {
+        distinctId: session.user.id,
+        [PostHogProperties.ONBOARDING_ROLE]: session.dbUser.role,
+        // Person properties: mark onboarding as complete
+        $set: {
+          onboardingCompleted: true,
+        },
+        $set_once: {
+          onboardingCompletedDate: new Date().toISOString(),
+          onboardingRole: session.dbUser.role,
+        },
+      });
+    } catch (trackingError) {
+      // Don't fail onboarding completion if tracking fails
+      if (process.env.NODE_ENV === "development") {
+        console.error("[PostHog] Error tracking onboarding completion:", trackingError);
+      }
     }
 
     return { success: true };

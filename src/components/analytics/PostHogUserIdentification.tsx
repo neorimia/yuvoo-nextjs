@@ -8,7 +8,12 @@ interface PostHogUserIdentificationProps {
   email?: string | null;
   role?: string | null;
   name?: string | null;
+  firstName?: string | null;
+  lastName?: string | null;
+  phone?: string | null;
   signupDate?: Date | string | null; // User signup date for $set_once
+  emailVerified?: boolean | null; // Email verification status
+  onboardingCompleted?: boolean | null; // Onboarding completion status
 }
 
 /**
@@ -41,7 +46,12 @@ export default function PostHogUserIdentification({
   email,
   role,
   name,
+  firstName,
+  lastName,
+  phone,
   signupDate,
+  emailVerified,
+  onboardingCompleted,
 }: PostHogUserIdentificationProps) {
   const hasIdentified = useRef(false);
 
@@ -57,14 +67,23 @@ export default function PostHogUserIdentification({
           ? signupDate
           : undefined;
 
+    // Build full name from firstName and lastName if name not provided
+    const fullName =
+      name ||
+      (firstName && lastName ? `${firstName} ${lastName}` : firstName || lastName || undefined);
+
     // Identify user with PostHog using person properties
-    // $set: Properties that can be updated (email, role, name)
+    // $set: Properties that can be updated (email, role, name, phone, etc.)
     // $set_once: Properties that should only be set once (signupDate)
     identifyUser(userId, {
       $set: {
         ...(email && { email }),
         ...(role && { role }),
-        ...(name && { name }),
+        ...(fullName && { name: fullName }),
+        ...(phone && { phoneNumber: phone }),
+        ...(emailVerified !== null && emailVerified !== undefined && { emailVerified }),
+        ...(onboardingCompleted !== null &&
+          onboardingCompleted !== undefined && { onboardingCompleted }),
       },
       ...(signupDateString && {
         $set_once: {
@@ -74,7 +93,18 @@ export default function PostHogUserIdentification({
     });
 
     hasIdentified.current = true;
-  }, [userId, email, role, name, signupDate]);
+  }, [
+    userId,
+    email,
+    role,
+    name,
+    firstName,
+    lastName,
+    phone,
+    signupDate,
+    emailVerified,
+    onboardingCompleted,
+  ]);
 
   // This component doesn't render anything
   return null;

@@ -30,6 +30,9 @@ export async function updateProfileAction(
       phone: validatedInput.phone || undefined,
     });
 
+    // Note: Person properties will be updated automatically on next page load
+    // via PostHogUserIdentification component in protected route layouts
+
     revalidatePath("/parent/settings");
     revalidatePath("/parent/dashboard");
 

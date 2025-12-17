@@ -16,6 +16,8 @@ import { cacheTag } from "next/cache";
 import type { Doctor } from "@/modules/doctors/doctors.types";
 import { generateDoctorExpandedContent } from "@/lib/content/doctor-expanded-content";
 import { generateDoctorMetadata } from "@/lib/seo/doctor-metadata";
+import PostHogViewTracking from "@/components/analytics/PostHogViewTracking";
+import { PostHogEvents } from "@/lib/analytics/events";
 
 interface DoctorDetailPageProps {
   params: Promise<{
@@ -64,6 +66,12 @@ export default async function DoctorDetailPage({ params }: DoctorDetailPageProps
 
   return (
     <>
+      <PostHogViewTracking
+        eventName={PostHogEvents.DOCTOR_VIEWED}
+        entityId={doctor.id}
+        entityType="doctor"
+        entitySlug={slug}
+      />
       <MedicalBusinessSchema doctor={doctor} />
       <PersonSchema doctor={doctor} />
       <BreadcrumbOne

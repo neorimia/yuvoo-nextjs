@@ -77,11 +77,15 @@ export async function signInAction(formData: FormData, redirectUrl?: string) {
     try {
       const session = await getSession();
       if (session?.user) {
-        // Track login event server-side
+        // Track login event server-side with person properties
         await trackEventServer(PostHogEvents.USER_LOGGED_IN, {
           distinctId: session.user.id,
           [PostHogProperties.USER_ID]: session.user.id,
           [PostHogProperties.USER_ROLE]: session.dbUser?.role || "unknown",
+          // Update last login date
+          $set: {
+            lastLoginDate: new Date().toISOString(),
+          },
         });
       }
     } catch (trackingError) {
@@ -93,8 +97,25 @@ export async function signInAction(formData: FormData, redirectUrl?: string) {
 
     // Use redirectUrl if provided, otherwise default to dashboard
     // Validate redirectUrl to prevent open redirect vulnerabilities
-    const safeRedirectUrl =
-      redirectUrl && redirectUrl.startsWith("/") ? redirectUrl : routes.parent.dashboard;
+    let safeRedirectUrl = routes.parent.dashboard;
+
+    if (redirectUrl) {
+      try {
+        // Decode URL if it's still encoded (Next.js should decode query params, but be safe)
+        let decodedUrl = redirectUrl;
+        if (redirectUrl.includes("%")) {
+          decodedUrl = decodeURIComponent(redirectUrl);
+        }
+
+        // Validate it's a relative path (security: prevent open redirect)
+        if (decodedUrl.startsWith("/") && !decodedUrl.startsWith("//")) {
+          safeRedirectUrl = decodedUrl as typeof routes.parent.dashboard;
+        }
+      } catch (error) {
+        // If decoding fails, use default dashboard
+        console.error("Error decoding redirectUrl:", error);
+      }
+    }
 
     // Return success - redirect will be handled by the form component
     return {
@@ -144,9 +165,15 @@ export async function signUpAction(formData: FormData) {
   }
 
   try {
+    // Build verification callback URL for email verification
+    // Required when calling from Server Action (non-browser environment)
+    const baseUrl = process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000";
+    const verificationCallbackUrl = `${baseUrl}${routes.emailConfirmation}`;
+
     await stackServerApp.signUpWithCredential({
       email,
       password,
+      verificationCallbackUrl,
     });
 
     // After signup, user is automatically synced to database via getSession
@@ -154,12 +181,22 @@ export async function signUpAction(formData: FormData) {
     try {
       const session = await getSession();
       if (session?.dbUser) {
-        // Track signup event server-side
+        // Track signup event server-side with person properties
         try {
+          const signupDate = session.dbUser.createdAt.toISOString();
           await trackEventServer(PostHogEvents.USER_SIGNED_UP, {
             distinctId: session.user.id,
             [PostHogProperties.USER_ID]: session.user.id,
             [PostHogProperties.USER_ROLE]: session.dbUser.role,
+            // Person properties: $set for updatable, $set_once for immutable
+            $set: {
+              email: session.user.primaryEmail || session.dbUser.email,
+              role: session.dbUser.role,
+              ...(session.dbUser.firstName && { name: session.dbUser.firstName }),
+            },
+            $set_once: {
+              signupDate: signupDate,
+            },
           });
         } catch (trackingError) {
           // Don't fail signup if tracking fails
@@ -190,6 +227,15 @@ export async function signUpAction(formData: FormData) {
       redirect: routes.parent.dashboard,
     };
   } catch (error) {
+    // Re-throw NEXT_REDIRECT errors to allow Next.js to handle them
+    // Stack Auth might throw these internally
+    if (error && typeof error === "object" && "digest" in error) {
+      const digest = (error as { digest?: string }).digest;
+      if (digest && typeof digest === "string" && digest.includes("NEXT_REDIRECT")) {
+        throw error;
+      }
+    }
+
     return {
       success: false,
       error: getErrorMessage(error),
@@ -353,6 +399,13 @@ export async function verifyEmailAction(token: string) {
           await trackEventServer(PostHogEvents.EMAIL_VERIFIED, {
             distinctId: session.user.id,
             [PostHogProperties.USER_ID]: session.user.id,
+            // Person properties: mark email as verified
+            $set: {
+              emailVerified: true,
+            },
+            $set_once: {
+              emailVerifiedDate: new Date().toISOString(),
+            },
           });
         }
       } catch (trackingError) {
