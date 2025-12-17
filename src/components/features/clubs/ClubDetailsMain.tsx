@@ -8,9 +8,11 @@
 
 import React from "react";
 import Image from "next/image";
+import Link from "next/link";
 import type { Club } from "@/modules/clubs/clubs.types";
 import VerificationBadge from "./VerificationBadge";
 import { isPlaceholderUrl } from "@/lib/utils/image-helpers";
+import { routes } from "@/lib/routes";
 
 interface ClubDetailsMainProps {
   club: Club;
@@ -75,10 +77,17 @@ const ClubDetailsMain: React.FC<ClubDetailsMainProps> = ({ club }) => {
                       <i className="fa-regular fa-football me-2"></i>Sport
                     </span>
                     <h5>
-                      {club.sportName
-                        .split(" ")
-                        .map((word) => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase())
-                        .join(" ")}
+                      <Link
+                        href={routes.sports.detail(club.sportId)}
+                        className="text-decoration-none bd-club-sport-link"
+                        title={`Află mai multe despre ${club.sportName}`}
+                      >
+                        {club.sportName
+                          .split(" ")
+                          .map((word) => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase())
+                          .join(" ")}
+                        <i className="fa-regular fa-arrow-right ms-2 small"></i>
+                      </Link>
                     </h5>
                   </div>
                 </div>

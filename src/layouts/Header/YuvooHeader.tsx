@@ -2,7 +2,6 @@
 
 import useGlobalContext from "@/hooks/useContext";
 import React from "react";
-import TopbarFour from "./components/Topbar/TopbarFour";
 import Link from "next/link";
 import Image from "next/image";
 import HeaderMenus from "./components/Menu/HeaderMenus";
@@ -10,6 +9,7 @@ import logo from "../../../public/assets/img/logo/logo.svg";
 import SearchPopup from "./components/Popup/SearchPopup";
 import MenuSidebar from "./components/Sidebar/MenuSidebar";
 import { routes } from "@/lib/routes";
+import BetaBanner from "@/components/shared/BetaBanner";
 
 const YuvooHeader = () => {
   const {
@@ -23,7 +23,8 @@ const YuvooHeader = () => {
     <>
       <header>
         <div className="bd-header">
-          <TopbarFour />
+          {/* <TopbarFour /> */}
+          <BetaBanner />
           {/*<div*/}
           {/*  id="header-sticky"*/}
           {/*  className={`bd-header-bottom ${scrollDirection === "down" ? "header-sticky" : ""}`}*/}

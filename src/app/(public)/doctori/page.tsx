@@ -1,14 +1,17 @@
 import React from "react";
+import Link from "next/link";
 import type { Metadata } from "next";
 import BreadcrumbOne from "@/components/Breadcrumb/BreadcrumbOne";
 import DoctorsMain from "@/components/features/doctors/DoctorsMain";
 import DoctorSearchFilters from "@/components/features/doctors/DoctorSearchFilters";
 import { searchDoctors } from "@/modules/doctors/doctors.service";
 import { routes } from "@/lib/routes";
+import SectionTitle from "@/components/shared/SectionTitle";
 import type {
   Doctor,
   DoctorSearchFilters as DoctorSearchFiltersType,
 } from "@/modules/doctors/doctors.types";
+import ItemListSchema from "@/components/SEO/ItemListSchema";
 
 /**
  * Generate metadata for doctors listing page
@@ -68,6 +71,7 @@ export default async function DoctorsPage({ searchParams }: DoctorsPageProps) {
 
   return (
     <>
+      <ItemListSchema items={doctors} type="Doctor" listName="Specialiști Pediatri Verificați" />
       <BreadcrumbOne
         title="Specialiști Pediatri"
         subTitle="Doctori"
@@ -76,6 +80,47 @@ export default async function DoctorsPage({ searchParams }: DoctorsPageProps) {
           { name: "Doctori", url: routes.doctors.list }, // Current page
         ]}
       />
+      <section className="bd-doctors-intro-area pt-120 pb-70">
+        <div className="container">
+          <div className="row">
+            <div className="col-lg-10 mx-auto">
+              <SectionTitle
+                title="Specialiști Pediatri Verificați"
+                subtitle={
+                  <>
+                    Găsește specialiști pediatri verificați pentru consultații despre activitățile
+                    sportive ale copilului tău. Dacă{" "}
+                    <Link
+                      href={routes.quiz.intro}
+                      className="text-primary text-decoration-underline"
+                    >
+                      chestionarul AI
+                    </Link>{" "}
+                    recomandă consultarea unui specialist, vei găsi recomandări personalizate în
+                    rezultate. Explorează și{" "}
+                    <Link
+                      href={routes.sports.list}
+                      className="text-primary text-decoration-underline"
+                    >
+                      sporturile disponibile
+                    </Link>{" "}
+                    și{" "}
+                    <Link
+                      href={routes.clubs.list}
+                      className="text-primary text-decoration-underline"
+                    >
+                      cluburile verificate
+                    </Link>
+                    .
+                  </>
+                }
+                className="text-center mb-50"
+                animationDelay=".2s"
+              />
+            </div>
+          </div>
+        </div>
+      </section>
       <DoctorSearchFilters initialFilters={filters} />
       <DoctorsMain doctors={doctors} />
     </>

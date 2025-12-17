@@ -123,6 +123,7 @@ yuvoo-nextjs/
 - Memoized components for performance
 - All content in Romanian, SEO-optimized
 - Internal linking to clubs filtered by sport
+- Systematic internal linking throughout all pages with contextual links
 
 ## Reusable Component Patterns
 
@@ -133,8 +134,8 @@ yuvoo-nextjs/
 **Home Page Components** (Created January 2025):
 
 - `SectionTitle.tsx` - Reusable section title component with title and optional subtitle
-  - Used in: All home page sections (FeaturedSports, FeaturedClubs, FeaturedDoctors, HowItWorks, HomeTestimonial, HomeFaq)
-  - Features: Consistent styling, WOW.js animations, customizable classes
+  - Used in: All home page sections (FeaturedSports, FeaturedClubs, FeaturedDoctors, HowItWorks, HomeTestimonial, HomeFaq), listing pages, detail pages
+  - Features: Consistent styling, WOW.js animations, customizable classes, supports React.ReactNode for subtitle (enables internal linking)
 - `ViewAllLink.tsx` - Reusable "View All" link component
   - Used in: Featured sections (clubs, doctors, sports)
   - Features: Consistent styling, hover effects, arrow icon
@@ -148,8 +149,8 @@ yuvoo-nextjs/
   - Used in: Testimonials, user profiles, comments
   - Features: Size variants (sm, md, lg), customizable colors
 - `FaqAccordionItem.tsx` - Reusable FAQ accordion item component
-  - Used in: FAQ sections, help pages
-  - Features: Bootstrap accordion integration, customizable open state
+  - Used in: FAQ sections, help pages, sports FAQ sections
+  - Features: Bootstrap accordion integration, customizable open state, supports React.ReactNode for answers (enables internal linking)
 
 ### Onboarding Form Components
 
@@ -270,7 +271,7 @@ Next.js route groups `(group-name)/` organize routes without affecting URL struc
 **Public SEO Routes** (Romanian, indexed by search engines):
 
 - Sports: `/sporturi`, `/sporturi/:slug`
-- Clubs: `/cluburi`, `/cluburi/:slug`, `/cluburi/categorie/:category`, `/cluburi/:slug/recenzii`
+- Clubs: `/cluburi`, `/cluburi/:slug`, `/cluburi/categorie/:category`, `/cluburi/:slug/recenzii`, `/cluburi/locatie/:location` (location-specific landing pages)
 - Doctors: `/doctori`, `/doctori/:slug`
 - Quiz: `/chestionar`, `/chestionar/container`, `/chestionar/previzualizare`, `/chestionar/rezultate`
 - Info: `/despre-noi`, `/parteneri`, `/intrebari-frecvente`, `/contact`, `/ajutor`
@@ -312,8 +313,8 @@ import { routes } from "@/lib/routes";
 
 **Current Status**:
 
-- ✅ `components/features/clubs/` - Club components created (ClubsMain, ClubDetailsMain, HomeClubArea, ClubCard, VerificationBadge, ClubSearchFilters, ClubDetailsWidget, ClubGallery, ClubMap, ClubSchedule, BookingForm)
-- ✅ `components/features/doctors/` - Doctor components created (DoctorsMain, DoctorCard, DoctorDetailsMain, DoctorSearchFilters, DoctorAppointmentForm, DoctorAppointmentFormSection, DoctorInfo, DoctorSpecialties, HomeDoctorArea, HomeTwoDoctorArea, DoctorAvailability)
+- ✅ `components/features/clubs/` - Club components created (ClubsMain, ClubDetailsMain, HomeClubArea, ClubCard, VerificationBadge, ClubSearchFilters, ClubDetailsWidget, ClubGallery, ClubMap, ClubSchedule, BookingForm, ClubContentExpanded)
+- ✅ `components/features/doctors/` - Doctor components created (DoctorsMain, DoctorCard, DoctorDetailsMain, DoctorSearchFilters, DoctorAppointmentForm, DoctorAppointmentFormSection, DoctorInfo, DoctorSpecialties, HomeDoctorArea, HomeTwoDoctorArea, DoctorAvailability, DoctorContentExpanded)
 - ✅ `components/features/sports/` - Sport components complete (January 2025)
   - ✅ `SportsMain.tsx` - Main listing component with category filtering, enhanced empty state, and results display
   - ✅ `SportCard.tsx` - Redesigned card component with category badges, icon display, and hover effects
@@ -989,6 +990,17 @@ await deleteImageAction(imageUrl);
 
 ### Next.js 16 Cache Components
 
+**Cache Strategy for Listings** (January 2025 - ✅ Implemented):
+
+- **Location**: `modules/clubs/clubs.search.ts`, `modules/doctors/doctors.search.ts`
+- **Pattern**: Use `"use cache"` directive in search functions with `cacheLife()` and `cacheTag()` for granular revalidation
+- **Implementation**:
+  - Added `"use cache"` directive at file level
+  - `cacheLife("hours")` for 1-hour cache duration
+  - `cacheTag()` with granular tags: base list tag + filter-specific tags (sport, city, verified status)
+  - Enables efficient cache revalidation when clubs/doctors are updated via tag-based revalidation
+- **Benefits**: Reduced database load, improved page load performance, efficient cache invalidation
+
 **Paradigm Shift**: Dynamic by default, opt-in to caching with `"use cache"`
 
 **Caching Patterns**:
@@ -1026,6 +1038,18 @@ await deleteImageAction(imageUrl);
 - After booking creation/cancellation: `revalidatePath()` or `updateTag()`
 - After profile updates: `revalidatePath()` or `updateTag()`
 - After favorite toggles: `revalidatePath()` or `updateTag()`
+- After club/doctor updates: `revalidateTag("clubs-list")` or `revalidateTag("doctors-list")` plus specific tags (sport, city, verified status)
+
+**Cache Strategy for Listings** (January 2025 - ✅ Implemented):
+
+- **Location**: `modules/clubs/clubs.search.ts`, `modules/doctors/doctors.search.ts`
+- **Pattern**: Use `"use cache"` directive in search functions with `cacheLife()` and `cacheTag()` for granular revalidation
+- **Implementation**:
+  - Added `"use cache"` directive at file level
+  - `cacheLife("hours")` for 1-hour cache duration
+  - `cacheTag()` with granular tags: base list tag + filter-specific tags (sport, city, verified status)
+  - Enables efficient cache revalidation when clubs/doctors are updated via tag-based revalidation
+- **Benefits**: Reduced database load, improved page load performance, efficient cache invalidation
 
 ## Error Handling Pattern
 
@@ -1136,7 +1160,41 @@ await deleteImageAction(imageUrl);
    - Type Updates: Added `acceptingNewPatients` and `onlineConsultations` fields to Doctor interface
    - Data: `teacher-data.ts` → `doctor-data.ts` (📋 Planned - using database schema instead)
 
-3. **Program → Sport**:
+3. **About Page Components** (✅ Complete - January 2025):
+   - Location: `src/components/features/about/`
+   - Status: ✅ All components created and styled
+   - Components created:
+     - `AboutMain.tsx` - Main About page component with mission, value propositions, how it works, and CTA sections
+     - `AboutTeam.tsx` - Team members display component (4 team members)
+     - `AboutPartners.tsx` - Partners display component organized by category (6 partners)
+   - Features:
+     - ✅ Trust signals section (reuses `HomeTrustSignals` component)
+     - ✅ Statistics section (reuses `HomeStats` component)
+     - ✅ Team section with 4 members (Founder & CEO, Co-founder & CTO, Medical Advisor, Head of Partnerships)
+     - ✅ Partners section with 6 partners organized by category (Medical, Sports, Technology, Education)
+     - ✅ Value propositions cards (AI Coach Quiz, Cluburi Verificate, Rețea de Specialiști)
+     - ✅ How It Works section with 3 steps (styled step numbers with primary brand color)
+     - ✅ CTA section with Yuvoo button structure
+     - ✅ All sections follow Yuvoo design system
+   - Data files:
+     - ✅ `src/data/team-data.ts` - Team member data (name, role, bio, credentials, social links)
+     - ✅ `src/data/partners-data.ts` - Partner data (name, type, category, description, logo, website)
+   - SCSS Styling: `layout/_about.scss` - Comprehensive styling for all About page components
+     - `bd-about-*` classes for hero, mission, value propositions, how it works, CTA sections
+     - `bd-about-team-*` classes for team cards, thumbnails, social links
+     - `bd-about-partners-*` classes for partner cards, categories, logos
+     - `bd-about-step-*` classes for how it works steps with numbered badges
+     - All styles responsive with proper breakpoints
+     - Hover effects and animations following Yuvoo patterns
+   - Design System Compliance:
+     - ✅ Uses `SectionTitle` component for section headers
+     - ✅ Uses Yuvoo button structure (`bd-btn`, `bd-btn-inner`, etc.)
+     - ✅ Uses Font Awesome icons (`fa-solid`) instead of Bootstrap icons
+     - ✅ Uses theme background utilities (`theme-bg-6`, `theme-bg-7`)
+     - ✅ Uses primary brand color (`var(--bd-theme-1)`) for step numbers
+     - ✅ All content in Romanian, SEO-optimized
+
+4. **Program → Sport**:
    - Location: `src/components/Program/`
    - Adapt: Program listings → Sport recommendations
    - Add: AI recommendation display, match scores
@@ -1521,6 +1579,160 @@ Club Directory (pre-filtered by sport)
 - **Empty States**: Graceful handling when no recommendations found
 - **Loading States**: Spinner and disabled state during data fetching
 
+## Contact Form Pattern
+
+**Location**: `src/components/features/contact/ContactForm.tsx`, `src/app/actions/contact.ts`, `src/lib/validations/contact.ts`, `src/lib/integrations/brevo/email.service.ts`, `src/lib/integrations/brevo/templates.ts`
+
+**Purpose**: Contact form submission with dual email notifications (team notification + user confirmation).
+
+**Status**: ✅ **COMPLETE** - Full contact form system implemented with email notifications
+
+**Architecture**:
+
+1. **Client Component** (`ContactForm.tsx`):
+   - React Hook Form for form state management
+   - Romanian validation messages
+   - Loading states during submission
+   - Success/error message display
+   - Form reset on successful submission
+   - Disabled submit button during submission
+
+2. **Server Action** (`app/actions/contact.ts`):
+   - Zod validation using `contactFormSchema`
+   - Sends dual emails non-blocking (team notification + user confirmation)
+   - Error handling with Romanian error messages
+   - Returns success/error response
+
+3. **Validation Schema** (`lib/validations/contact.ts`):
+   - `contactFormSchema` with Romanian validation messages
+   - Validates: firstName (2-100 chars), email (valid email format), phone (Romanian format: +40XXXXXXXXX or 0XXXXXXXXX), subject (3-200 chars), message (10-2000 chars), privacy (required checkbox)
+
+4. **Email Templates** (`lib/integrations/brevo/templates.ts`):
+   - `contactFormTemplate()` - Email sent to Yuvoo team with user's message
+     - Includes all contact details (name, email, phone, subject, message)
+     - Reply-to set to user's email for direct replies
+     - Responsive HTML design with Yuvoo branding
+   - `contactFormConfirmationTemplate()` - Confirmation email sent to user
+     - Confirms message was received
+     - Sets expectation (24-48 hour response time)
+     - Includes contact information for urgent inquiries
+
+5. **Email Service Functions** (`lib/integrations/brevo/email.service.ts`):
+   - `sendContactFormSubmission()` - Sends email to Yuvoo team
+     - Uses `CONTACT_EMAIL` env var or falls back to `BREVO_SENDER_EMAIL`
+     - Sets reply-to to user's email
+     - Non-blocking (errors logged but don't fail form submission)
+   - `sendContactFormConfirmation()` - Sends confirmation to user
+     - Sent to user's email address
+     - Non-blocking (errors logged but don't fail form submission)
+
+**Key Features**:
+
+- ✅ Dual email notifications (team receives message, user receives confirmation)
+- ✅ Non-blocking email sending (failures logged but don't block form submission)
+- ✅ Loading states and user feedback (success/error messages)
+- ✅ Form reset on successful submission
+- ✅ Romanian validation messages throughout
+- ✅ Email templates with Yuvoo branding
+- ✅ Reply-to set to user's email for team notification
+
+**Files**:
+
+- `src/components/features/contact/ContactForm.tsx` - Contact form component
+- `src/app/actions/contact.ts` - Contact form server action
+- `src/lib/validations/contact.ts` - Contact form validation schema
+- `src/lib/integrations/brevo/templates.ts` - Email templates (contact form templates)
+- `src/lib/integrations/brevo/email.service.ts` - Email service functions
+
+### Internal Linking Pattern (January 2025)
+
+**Purpose**: Systematic internal linking across all pages for improved SEO, user navigation, and site structure.
+
+**Location**: Implemented throughout all public pages and components.
+
+**Components Supporting Internal Linking**:
+
+- `SectionTitle.tsx` - Enhanced to support `React.ReactNode` for subtitle prop (enables linking in subtitles)
+  - Handles both string and React.ReactNode types for subtitle
+  - Used in: Home page sections, listing pages, detail pages, About page, Contact page
+- `FaqAccordionItem.tsx` - Enhanced to support `React.ReactNode` for answer prop (enables linking in FAQ answers)
+  - Handles both string and React.ReactNode types for answer
+  - Used in: FAQ page, Home FAQ, Sports FAQ
+- `FAQPageSchema.tsx` - Enhanced to extract plain text from React.ReactNode answers for schema compatibility
+  - Includes `extractTextFromNode()` helper function to convert React nodes to plain text
+  - Ensures FAQPage schema works correctly with React.ReactNode answers
+
+**Data Files with Internal Links**:
+
+- `src/data/faq-data.tsx` - FAQ data with React.ReactNode answers containing internal links
+  - All 26 FAQ items enhanced with contextual links to relevant pages
+  - Links to: quiz intro, clubs list, doctors list, sports list, register, privacy, GDPR, contact, help
+- `src/data/sports-faq-data.tsx` - Sports-specific FAQ data with React.ReactNode answers
+  - 6 sports FAQ items enhanced with contextual links
+  - Links to: quiz intro, clubs list, sports list
+
+**Implementation Strategy**:
+
+1. **Contextual Links in Content**: Links are placed contextually in content text where relevant pages are mentioned
+   - Example: "Folosește [chestionarul AI](/chestionar) pentru recomandări personalizate"
+   - Links use descriptive anchor text (not generic "click here")
+
+2. **Intro Sections on Listing Pages**: Added intro sections to Sports, Clubs, and Doctors listing pages
+   - Provide context and include relevant internal links
+   - Link to related services (quiz, other listing pages)
+
+3. **Home Page Component Subtitles**: Enhanced subtitles in FeaturedSports, FeaturedClubs, FeaturedDoctors, HowItWorks
+   - Include internal links to related pages for better navigation
+
+4. **Related Links Sections**: Added "Related Links" sections where appropriate
+   - Contact page includes section linking to FAQ, Help, and About pages
+
+5. **Route Consistency**: All links use routes from `@/lib/routes` for consistency
+   - Ensures single source of truth for URLs
+   - Makes refactoring easier
+
+**SEO Benefits**:
+
+- Improved crawlability: Search engines can discover and index all pages
+- Better site structure: Clear hierarchy and relationships between pages
+- Enhanced user experience: Users can easily navigate to related content
+- Keyword relevance: Anchor text reinforces keyword associations
+- Page authority distribution: Internal links help distribute page authority
+
+**Files Modified**:
+
+- `src/components/shared/SectionTitle.tsx` - Added React.ReactNode support
+- `src/components/shared/FaqAccordionItem.tsx` - Added React.ReactNode support
+- `src/components/SEO/FAQPageSchema.tsx` - Added text extraction from React nodes
+- `src/components/SEO/ItemListSchema.tsx` - ItemList schema component for listing pages (supports Club, Doctor, Sport types)
+- `src/data/faq-data.tsx` - Enhanced with internal links (renamed from .ts to .tsx)
+- `src/data/sports-faq-data.tsx` - Enhanced with internal links (renamed from .ts to .tsx)
+- `src/lib/utils/location.ts` - Location utilities (slug generation, parsing, display names)
+- `src/app/(public)/cluburi/locatie/[location]/page.tsx` - Location-specific landing pages for clubs
+- `src/components/features/about/AboutMain.tsx` - Added internal links
+- `src/app/(public)/contact/page.tsx` - Added related links section
+- `src/components/Contact/ContactFormMain.tsx` - Added links in subtitle
+- `src/app/(public)/ajutor/page.tsx` - Enhanced with internal links
+- `src/app/(public)/sporturi/page.tsx` - Added intro section with links
+- `src/app/(public)/cluburi/page.tsx` - Added intro section with links
+- `src/app/(public)/doctori/page.tsx` - Added intro section with links
+- `src/components/features/home/FeaturedSports.tsx` - Enhanced subtitle with links
+- `src/components/features/home/FeaturedClubs.tsx` - Enhanced subtitle with links
+- `src/components/features/home/FeaturedDoctors.tsx` - Enhanced subtitle with links
+- `src/components/features/home/HowItWorks.tsx` - Enhanced with internal links
+- `src/components/features/quiz/QuizIntroContent.tsx` - Added links to benefits section
+- `public/assets/scss/layout/_contact.scss` - Added styles for related links section
+
+**Key Features**:
+
+- ✅ All links use descriptive anchor text in Romanian
+- ✅ Links are contextually placed in content where relevant
+- ✅ All links use routes from `@/lib/routes` for consistency
+- ✅ Components support React.ReactNode for flexible linking
+- ✅ FAQPageSchema extracts plain text for schema compatibility
+- ✅ Comprehensive coverage across all public pages
+- ✅ SEO-optimized with proper anchor text and context
+
 **User Flow**:
 
 1. User completes quiz and views results
@@ -1540,6 +1752,66 @@ Club Directory (pre-filtered by sport)
 - `src/modules/clubs/clubs.repository.ts` - Club verification queries
 - `src/modules/doctors/doctors.repository.ts` - Doctor verification queries
 
+## SEO Structured Data Patterns
+
+### ItemList Schema (January 2025 - ✅ Implemented)
+
+**Location**: `src/components/SEO/ItemListSchema.tsx`
+
+**Purpose**: Generates Schema.org ItemList structured data for listing pages to help search engines understand list structure.
+
+**Usage**: Added to clubs, doctors, and sports listing pages.
+
+**Features**:
+
+- Supports multiple entity types (Club, Doctor, Sport)
+- Includes type-specific properties in ListItem elements (address, image, sport, specialty, pricing, etc.)
+- Proper Schema.org ItemList structure with position numbers
+- Improves search engine understanding for better rich snippets
+
+**Example**:
+
+```tsx
+<ItemListSchema items={clubs} type="Club" listName="Cluburi Sportive Verificate" />
+```
+
+## Location-Specific Landing Pages Pattern (January 2025 - ✅ Implemented)
+
+**Location**: `src/app/(public)/cluburi/locatie/[location]/page.tsx`, `src/lib/utils/location.ts`
+
+**Purpose**: Dynamic location-based landing pages for local SEO optimization.
+
+**Route Structure**: `/cluburi/locatie/[location]`
+
+**Examples**:
+
+- `/cluburi/locatie/bucuresti` - All clubs in Bucharest
+- `/cluburi/locatie/bucuresti-sector-1` - Clubs in Sector 1, Bucharest
+
+**Implementation**:
+
+- **Location Utilities** (`src/lib/utils/location.ts`):
+  - `generateLocationSlug(city, district?)` - Creates SEO-friendly slugs
+  - `parseLocationSlug(locationSlug)` - Parses slugs back to city/district
+  - `getLocationDisplayName(city, district?)` - Formats display names
+
+- **Repository Function**:
+  - `getUniqueLocations()` - Gets all unique city/district combinations from clubs database
+
+- **Page Features**:
+  - `generateStaticParams()` - Generates pages for all unique locations
+  - SEO-optimized metadata with location-specific titles, descriptions, keywords
+  - ItemListSchema for location-filtered clubs
+  - Cache optimization with cache tags
+  - Sitemap integration
+
+**Benefits**:
+
+- Local SEO optimization for long-tail keywords
+- Better search visibility for location-based queries
+- Automatic page generation for all locations in database
+- Improved user experience for location-based searches
+
 ## Documentation References
 
 - **Claude Guide**: `CLAUDE.md` - Comprehensive project guide for Claude Code with quick start, development commands, architecture patterns, troubleshooting, and quick reference
@@ -1552,7 +1824,7 @@ Club Directory (pre-filtered by sport)
 - **Data Models**: `docs/DATA_MODELS.md` - All data structures, TypeScript interfaces, database schemas, and model relationships
 - **Design Tokens**: `docs/DESIGN_TOKENS.md` - Comprehensive design tokens reference (colors, typography, spacing, shadows, border radius, animations, breakpoints)
 - **SEO Guidelines**: `docs/SEO_GUIDELINES.md` - SEO strategy, slug generation, meta tags templates, Open Graph templates, and SEO best practices
-- **SEO Improvement Plan**: `docs/SEO_IMPROVEMENT_PLAN.md` - Comprehensive SEO analysis and implementation roadmap (Week 1-3 technical foundation complete, content expansion in progress)
+- **SEO Improvement Plan**: `docs/SEO_IMPROVEMENT_PLAN.md` - Comprehensive SEO analysis and implementation roadmap (Week 1-3 technical foundation complete, club/doctor content expansion complete, internal linking complete)
 - **Sport Metadata Helper**: `src/lib/seo/sport-metadata.ts` - Enhanced SEO metadata generator for sport detail pages (top 5 sports with rich descriptions, keywords, and OpenGraph tags)
   - Includes sport-specific OG image support via `getSportOGImagePath()` helper function
   - Path format: `/assets/img/og/sports/{sport-slug}.jpg` (1200x630px recommended)

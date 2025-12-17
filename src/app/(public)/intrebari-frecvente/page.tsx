@@ -1,18 +1,40 @@
 import React from "react";
 import type { Metadata } from "next";
 import BreadcrumbOne from "@/components/Breadcrumb/BreadcrumbOne";
-import FaqMain from "@/components/FAQ/FaqMain";
+import FaqMainEnhanced from "@/components/FAQ/FaqMainEnhanced";
 import FAQPageSchema from "@/components/SEO/FAQPageSchema";
 import { faqItems } from "@/data/faq-data";
 import { routes } from "@/lib/routes";
 
 export const metadata: Metadata = {
-  title: "Întrebări Frecvente - Yuvoo",
-  description: "Răspunsuri la cele mai frecvente întrebări despre Yuvoo.",
+  title: "Întrebări Frecvente - Răspunsuri Despre Yuvoo | FAQ",
+  description:
+    "Răspunsuri la peste 20 de întrebări frecvente despre platforma Yuvoo: cum funcționează chestionarul AI, verificarea cluburilor, contactarea specialiștilor pediatri, siguranța datelor și multe altele. Găsește toate răspunsurile despre serviciile noastre.",
+  keywords: [
+    "FAQ Yuvoo",
+    "întrebări frecvente",
+    "cum funcționează Yuvoo",
+    "chestionar AI",
+    "cluburi sportive verificate",
+    "specialiști pediatri",
+    "siguranță date",
+    "GDPR",
+    "platformă sporturi copii",
+  ],
   openGraph: {
-    title: "Întrebări Frecvente - Yuvoo",
-    description: "Răspunsuri la cele mai frecvente întrebări despre Yuvoo.",
+    title: "Întrebări Frecvente - Răspunsuri Despre Yuvoo | FAQ",
+    description:
+      "Răspunsuri la peste 20 de întrebări frecvente despre platforma Yuvoo, chestionarul AI, cluburile verificate și specialiștii pediatri.",
     type: "website",
+    url: `${process.env.NEXT_PUBLIC_APP_URL || "https://yuvoo.ro"}/intrebari-frecvente`,
+    siteName: "Yuvoo",
+    locale: "ro_RO",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Întrebări Frecvente - Răspunsuri Despre Yuvoo",
+    description:
+      "Răspunsuri la peste 20 de întrebări frecvente despre platforma Yuvoo și serviciile noastre.",
   },
   alternates: {
     canonical: "/intrebari-frecvente",
@@ -52,7 +74,7 @@ export default function FAQPage() {
           </div>
         </div>
       </section>
-      <FaqMain />
+      <FaqMainEnhanced />
     </>
   );
 }

@@ -6,6 +6,9 @@
  * All content in Romanian language for SEO purposes.
  */
 
+import React from "react";
+import Link from "next/link";
+import { routes } from "@/lib/routes";
 import { FAQItem } from "./faq-data";
 
 export const sportsFaqItems: FAQItem[] = [
@@ -16,13 +19,39 @@ export const sportsFaqItems: FAQItem[] = [
   },
   {
     question: "Cum aleg sportul potrivit pentru copilul meu?",
-    answer:
-      "Yuvoo oferă un chestionar AI personalizat care analizează profilul copilului tău (vârstă, interese, nivel de activitate, preferințe fizice) și generează recomandări personalizate. Poți explora și manual toate sporturile disponibile, citi descrierile detaliate și găsi cluburi care oferă programe pentru vârsta copilului tău.",
+    answer: (
+      <>
+        Yuvoo oferă un{" "}
+        <Link href={routes.quiz.intro} className="text-primary">
+          chestionar AI personalizat
+        </Link>{" "}
+        care analizează profilul copilului tău (vârstă, interese, nivel de activitate, preferințe
+        fizice) și generează recomandări personalizate. Poți explora și manual{" "}
+        <Link href={routes.sports.list} className="text-primary">
+          toate sporturile disponibile
+        </Link>
+        , citi descrierile detaliate și{" "}
+        <Link href={routes.clubs.list} className="text-primary">
+          găsi cluburi
+        </Link>{" "}
+        care oferă programe pentru vârsta copilului tău.
+      </>
+    ),
   },
   {
     question: "Cât costă practicarea unui sport?",
-    answer:
-      "Costurile variază în funcție de sport și club. Majoritatea cluburilor oferă probe gratuite sau la preț redus pentru a permite copiilor să încerce sportul înainte de a se angaja. Prețurile lunare pot varia de la 100 RON până la 500+ RON, în funcție de sport, frecvența antrenamentelor și echipamentul necesar. Poți vedea prețurile exacte pe pagina fiecărui club.",
+    answer: (
+      <>
+        Costurile variază în funcție de sport și club. Majoritatea{" "}
+        <Link href={routes.clubs.list} className="text-primary">
+          cluburilor
+        </Link>{" "}
+        oferă probe gratuite sau la preț redus pentru a permite copiilor să încerce sportul înainte
+        de a se angaja. Prețurile lunare pot varia de la 100 RON până la 500+ RON, în funcție de
+        sport, frecvența antrenamentelor și echipamentul necesar. Poți vedea prețurile exacte pe
+        pagina fiecărui club.
+      </>
+    ),
   },
   {
     question: "Ce echipament este necesar pentru a începe?",

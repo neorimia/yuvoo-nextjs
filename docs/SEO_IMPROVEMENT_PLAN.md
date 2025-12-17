@@ -92,12 +92,13 @@ This document provides a prioritized, execution-ready SEO and content copywritin
 **Why it matters**: Potential duplicate content issues, unclear preferred URLs  
 **Fix**: Add canonical URLs to all public pages via `generateMetadata()`
 
-### 4. **Dynamic Routes Missing Cache Strategy** 🟡 MEDIUM
+### 4. **Dynamic Routes Missing Cache Strategy** ✅ FIXED
 
 **Impact**: Medium  
 **Issue**: `/cluburi` and `/doctori` listing pages are dynamic (no `"use cache"`), causing slower indexing  
 **Why it matters**: Slower page loads, worse SEO signals, more server load  
-**Fix**: Implement `"use cache"` with appropriate cache tags for filterable listings
+**Fix**: ✅ Implemented `"use cache"` with appropriate cache tags for filterable listings
+**Implementation**: Added cache directives to `clubs.search.ts` and `doctors.search.ts` with `cacheLife("hours")` and granular `cacheTag()` for efficient revalidation
 
 ### 5. **Thin Content on High-Priority Pages** 🟡 MEDIUM
 
@@ -136,12 +137,13 @@ This document provides a prioritized, execution-ready SEO and content copywritin
 **Fix**: Add `robots: { index: false }` to search page  
 **Status**: ✅ **COMPLETE** - Created layout.tsx with noindex for search page (client component requires layout for metadata)
 
-### 10. **Missing Location-Specific Landing Pages** 🟠 LOW (Future)
+### 10. **Missing Location-Specific Landing Pages** ✅ FIXED
 
 **Impact**: Low (but high ROI potential)  
 **Issue**: No district/city-specific landing pages (e.g., `/cluburi/bucuresti-sector-1`)  
 **Why it matters**: Missed local SEO opportunities, long-tail keyword coverage  
-**Fix**: Create location-based landing pages (Phase 2)
+**Fix**: ✅ Created location-based landing pages at `/cluburi/locatie/[location]`
+**Implementation**: Dynamic pages generated for all unique city/district combinations from clubs database, includes SEO metadata, ItemListSchema, and sitemap integration
 
 ---
 
@@ -186,9 +188,9 @@ This document provides a prioritized, execution-ready SEO and content copywritin
   - Add intro paragraph (100-150 words) explaining sports available
   - Add "How to Choose a Sport" guide section
   - Add FAQ section: "Ce sport i se potriveste copilului?", "La ce vârstă să înceapă copilul sportul?"
-- ⚠️ **Structured Data** (Effort: S)
-  - Add BreadcrumbList schema
-  - Add ItemList schema for sports list
+- ✅ **Structured Data** (Effort: S) ✅
+  - ✅ Add BreadcrumbList schema ✅
+  - ✅ Add ItemList schema for sports list ✅
 - ✅ Cache: Already using `"use cache"` ✅
 
 **Why it matters**: High-traffic informational intent page, entry point for many users
@@ -242,9 +244,9 @@ This document provides a prioritized, execution-ready SEO and content copywritin
   - Add "De ce să alegi un club verificat Yuvoo?" section
   - Add "Cum funcționează verificarea cluburilor?" section
   - Add FAQ: "Ce înseamnă club verificat?", "Cum aleg un club pentru copil?"
-- ⚠️ **Structured Data** (Effort: S)
-  - Add BreadcrumbList schema
-  - Add ItemList schema for clubs (if applicable)
+- ✅ **Structured Data** (Effort: S) ✅
+  - ✅ Add BreadcrumbList schema ✅
+  - ✅ Add ItemList schema for clubs ✅
 
 **Why it matters**: Primary transactional page, high conversion potential
 
@@ -950,9 +952,9 @@ CTA: "Vezi alte cluburi de [sport]" → Link către /cluburi?sport=[sport-id]
 
 ### Priority 2: Secondary Schemas
 
-5. **Person Schema** (Doctor detail pages) - MedicalBusiness type
+5. **Person Schema** (Doctor detail pages) - MedicalBusiness type ✅
 6. **Article Schema** (Sport detail pages, if content is article-like)
-7. **ItemList Schema** (Listing pages)
+7. **ItemList Schema** (Listing pages) ✅
 8. **HowTo Schema** (Quiz intro page, if step-by-step guide added)
 
 **Total Effort**: M-L (4-6 hours)  
@@ -969,7 +971,7 @@ CTA: "Vezi alte cluburi de [sport]" → Link către /cluburi?sport=[sport-id]
 - Quiz intro: "Descoperă sportul potrivit cu AI Coach"
 - Sports listing: "Explorează toate sporturile disponibile"
 - Clubs listing: "Vezi cluburile verificate din București"
-- Doctors listing: "Consultează specialiști pediatri"
+- Doctors listing: "Consultă specialiști pediatri"
 - About: "Află mai multe despre Yuvoo"
 - FAQ: "Întrebări frecvente"
 
@@ -1152,11 +1154,89 @@ CTA: "Vezi alte cluburi de [sport]" → Link către /cluburi?sport=[sport-id]
 
 **Week 7-8: Club & Doctor Pages**
 
-- [ ] Ensure all club detail pages have comprehensive content (600-900 words)
-- [ ] Add LocalBusiness schema to all club pages
-- [ ] Add Person schema to doctor detail pages
-- [ ] Optimize club/doctor metadata with location keywords
-- [ ] Add internal linking from clubs to sports and doctors
+- [x] Ensure all club and doctor detail pages have comprehensive content (600-900 words)
+  - ✅ Created `generateClubExpandedContent()` function that generates 600-900 words of comprehensive content for each club
+  - ✅ Created `generateDoctorExpandedContent()` function that generates 600-900 words of comprehensive content for each doctor
+  - ✅ Created `ClubContentExpanded` component to display expanded content sections (introduction, about, programs, benefits, location, contact info, internal links)
+  - ✅ Created `DoctorContentExpanded` component to display expanded content sections (introduction, about, specialty, services, benefits, location, contact info)
+  - ✅ Integrated expanded content components into club detail pages (`/cluburi/[slug]`)
+  - ✅ Integrated expanded content components into doctor detail pages (`/doctori/[slug]`)
+  - ✅ Content includes sport-specific benefits for clubs and specialty-specific services for doctors
+  - ✅ All content is in Romanian for SEO purposes
+  - ✅ Content is dynamically generated based on club/doctor data (name, location, sport, specialty, etc.)
+- [x] Add LocalBusiness schema to all club pages
+  - ✅ Enhanced `LocalBusinessSchema` component with comprehensive Schema.org properties
+  - ✅ Includes all required properties: `name`, `address`
+  - ✅ Includes all recommended properties: `url`, `telephone`, `email`, `image`, `openingHoursSpecification`, `priceRange`, `geo`
+  - ✅ Uses `SportsActivityLocation` + `LocalBusiness` types for better coverage
+  - ✅ Adds opening hours from schedule data (parsed and formatted for Schema.org)
+  - ✅ Adds audience information based on age groups (targeting children)
+  - ✅ Adds offers with pricing information
+  - ✅ Adds service area (city and district)
+  - ✅ Adds level offerings catalog
+  - ✅ Adds verification status as additional property
+  - ✅ Component is already integrated into all club detail pages (`/cluburi/[slug]`)
+  - ✅ All club pages now have comprehensive LocalBusiness structured data for rich snippets
+- [x] Add Person schema to doctor detail pages
+  - ✅ Created `PersonSchema` component with comprehensive Schema.org Person properties
+  - ✅ Includes all required properties: `name` (with givenName/familyName parsing)
+  - ✅ Includes all recommended properties: `url`, `image`, `jobTitle`, `description`, `sameAs`
+  - ✅ Uses `Person` + `Physician` types for better coverage
+  - ✅ Adds professional credentials as EducationalOccupationalCredential
+  - ✅ Adds `worksFor` (MedicalOrganization affiliation with Yuvoo)
+  - ✅ Adds `medicalSpecialty` and specialty-specific expertise areas
+  - ✅ Adds `knowsAbout` with relevant professional knowledge areas
+  - ✅ Adds `hasOfferCatalog` with available medical services
+  - ✅ Adds `address` and `geo` coordinates for professional location
+  - ✅ Adds `areaServed` (city and district)
+  - ✅ Adds `availableService` (accepting new patients status)
+  - ✅ Adds `sameAs` for external website links
+  - ✅ Adds additional properties (verified status, online consultations)
+  - ✅ Component is integrated into all doctor detail pages (`/doctori/[slug]`)
+  - ✅ Works alongside existing MedicalBusinessSchema for comprehensive structured data
+  - ✅ All doctor pages now have both Person and MedicalBusiness schemas for maximum SEO benefit
+- [x] Optimize club/doctor metadata with location keywords
+  - ✅ Created `generateClubMetadata()` function in `src/lib/seo/club-metadata.ts`
+  - ✅ Created `generateDoctorMetadata()` function in `src/lib/seo/doctor-metadata.ts`
+  - ✅ Enhanced metadata titles with location information (city, district)
+  - ✅ Added comprehensive location-based keywords:
+    - City-based keywords (e.g., "fotbal copii București", "doctor pediatru București")
+    - District-based keywords (e.g., "club tenis Sector 1", "specialist pediatru Sector 2")
+    - Sport/specialty-specific keywords
+    - Age group keywords (e.g., "fotbal copii 5-14 ani")
+    - Verification status keywords
+    - Level keywords (începători, intermediari, avansați)
+    - Regional keywords (România, București)
+  - ✅ Optimized descriptions with location context and key information
+  - ✅ Enhanced Open Graph descriptions with location keywords
+  - ✅ Added Twitter card metadata with location context
+  - ✅ Metadata includes: city, district, address, age groups, sport/specialty, verification status
+  - ✅ Integrated into club detail pages (`/cluburi/[slug]`)
+  - ✅ Integrated into doctor detail pages (`/doctori/[slug]`)
+  - ✅ All club and doctor pages now have location-optimized metadata for better local SEO
+- [x] Add internal linking from clubs to sports and doctors
+  - ✅ Made sport name clickable in `ClubDetailsMain` component (links to sport detail page)
+  - ✅ Added internal links section in `ClubDetailsWidget` linking to sport page and doctors list
+  - ✅ Enhanced `ClubContentExpanded` with:
+    - Link to sport detail page (existing)
+    - New section linking to pediatric specialists filtered by city
+  - ✅ Enhanced `DoctorContentExpanded` with:
+    - Section linking to sports list page
+    - Section linking to clubs filtered by doctor's city
+  - ✅ Added contextual inline links in content text:
+    - Club content mentions sport with context for linking
+    - Club content mentions pediatric specialists for consultation
+    - Doctor content mentions exploring clubs after consultation
+  - ✅ All internal links use routes from `@/lib/routes` for consistency
+  - ✅ Links are contextually relevant (city-based filtering, specialty-based recommendations)
+  - ✅ Links use descriptive anchor text for better SEO
+  - ✅ Added SCSS styles for doctor internal links section (matching club internal links)
+  - ✅ All club pages now link to:
+    - Related sport detail page (multiple locations)
+    - Pediatric specialists list (filtered by city)
+  - ✅ All doctor pages now link to:
+    - Sports list page (all sports)
+    - Clubs list page (filtered by doctor's city)
 
 **Deliverables**: 10+ comprehensive sport pages, all club pages optimized, structured data complete
 
@@ -1166,17 +1246,85 @@ CTA: "Vezi alte cluburi de [sport]" → Link către /cluburi?sport=[sport-id]
 
 **Week 9-10: FAQ & About Pages**
 
-- [ ] Expand FAQ page with 20+ questions across categories
-- [ ] Add FAQPage schema
-- [ ] Expand About page with trust signals, team, partners
-- [ ] Create missing pages (Contact, Help) if needed
+- [x] Expand FAQ page with 20+ questions across categories
+  - ✅ Expanded FAQ data to 26 questions organized into 7 categories
+  - ✅ Categories: Despre Platformă (4 questions), Chestionarul AI (4 questions), Cluburi Sportive (5 questions), Specialiști Pediatri (4 questions), Siguranță și Confidențialitate (3 questions), Cont și Profil (3 questions), Parteneri și Verificare (3 questions)
+  - ✅ Created `FaqMainEnhanced` component with category support
+  - ✅ Updated FAQ page to use enhanced component with category sections
+  - ✅ All questions in Romanian, SEO-optimized
+  - ✅ FAQPage schema already implemented (Week 2-3) ✅
+- [x] Add FAQPage schema ✅ (Completed in Week 2-3)
+- [x] Expand About page with trust signals, team, partners
+  - ✅ Added trust signals section using HomeTrustSignals component (6 trust badges: verified clubs, GDPR compliant, verified doctors, secure platform, 100% free, AI recommendations)
+  - ✅ Added statistics section using HomeStats component (animated counters: families, verified clubs, pediatric specialists, sports)
+  - ✅ Created AboutTeam component with team members section (4 team members: Founder & CEO, Co-founder & CTO, Medical Advisor, Head of Partnerships)
+  - ✅ Created AboutPartners component with partners organized by category (6 partners: Medical, Sports, Technology, Education)
+  - ✅ Created team data file (`src/data/team-data.ts`) with team member information (name, role, bio, credentials, social links)
+  - ✅ Created partners data file (`src/data/partners-data.ts`) with partner information (name, type, category, description, logo, website)
+  - ✅ Enhanced About page metadata with SEO keywords and improved descriptions
+  - ✅ Added comprehensive SCSS styles (`layout/_about.scss`) for team and partners sections
+  - ✅ All content in Romanian, SEO-optimized
+  - ✅ Responsive design for all screen sizes
+- [x] Create missing pages (Contact, Help) if needed
+  - ✅ Created Contact page at `/contact` with SEO-optimized metadata
+  - ✅ Created Help page at `/ajutor` with comprehensive help content and SEO-optimized metadata
+  - ✅ Updated `ContactFormMain` component to follow Yuvoo design system (uses `SectionTitle`, improved layout, Romanian content)
+  - ✅ Created new `ContactForm` component in `src/components/features/contact/ContactForm.tsx` with Romanian validation messages and Yuvoo button structure
+  - ✅ Updated `ContactInfoArea` component to use Font Awesome icons instead of Flaticon (consistent with Yuvoo design)
+  - ✅ Help page includes 6 help sections: Primii pași, Găsirea cluburilor, Contactarea specialiștilor, Gestionarea contului, Siguranță și confidențialitate, Contact și suport
+  - ✅ Help page includes quick links section to FAQ, Contact, Privacy, and Support email
+  - ✅ Created comprehensive SCSS styles (`layout/_help.scss`) for Help page components
+  - ✅ Updated contact form styles for better integration with Yuvoo design system
+  - ✅ All content in Romanian, SEO-optimized
+  - ✅ Both pages include breadcrumbs, proper metadata, and internal linking
 
 **Week 11-12: Internal Linking & Cache Optimization**
 
-- [ ] Implement systematic internal linking across all pages
-- [ ] Optimize cache strategy for club/doctor listings (if dynamic)
-- [ ] Add ItemList schema to listing pages
-- [ ] Create location-specific landing pages (optional, Phase 2)
+- [x] Implement systematic internal linking across all pages
+  - ✅ Enhanced FAQ answers with internal links (quiz, clubs, doctors, sports, register, privacy, GDPR pages)
+  - ✅ Updated FAQPageSchema to extract text from React.ReactNode answers for schema compatibility
+  - ✅ Added internal links to About page value propositions and "How It Works" sections
+  - ✅ Added internal links to Contact page subtitle and "Related Links" section (FAQ, Help, About)
+  - ✅ Enhanced Help page descriptions with internal links (quiz, clubs, sports, doctors)
+  - ✅ Added intro sections with internal links to Sports, Clubs, and Doctors listing pages
+  - ✅ Added contextual links to Home page components (FeaturedSports, FeaturedClubs, FeaturedDoctors, HowItWorks)
+  - ✅ Enhanced ContactFormMain subtitle with links to quiz, clubs, FAQ, and help pages
+  - ✅ Updated SectionTitle component to support React.ReactNode for subtitle (enables linking)
+  - ✅ Updated FaqAccordionItem to support React.ReactNode for answers (enables linking)
+  - ✅ Added internal links to sports FAQ data
+  - ✅ Added internal links to QuizIntroContent component (clubs, sports, doctors)
+  - ✅ All links use routes from @/lib/routes for consistency
+  - ✅ All links use descriptive anchor text for SEO
+  - ✅ Contextual inline links in content text where relevant
+  - ✅ All content in Romanian, SEO-optimized
+- ✅ Optimize cache strategy for club/doctor listings (if dynamic)
+  - ✅ Added "use cache" directive to clubs.search.ts and doctors.search.ts
+  - ✅ Added cacheLife("hours") for 1-hour cache duration
+  - ✅ Added cacheTag() with granular tags for revalidation (clubs-list, doctors-list, plus filter-specific tags)
+  - ✅ Cache tags include: clubs-list, clubs-sport-{sportId}, clubs-city-{city}, clubs-verified-{status}
+  - ✅ Cache tags include: doctors-list, doctors-specialty-{specialty}, doctors-city-{city}, doctors-verified-{status}
+  - ✅ Enables efficient cache revalidation when clubs/doctors are updated
+- ✅ Add ItemList schema to listing pages
+  - ✅ Created ItemListSchema component (`src/components/SEO/ItemListSchema.tsx`)
+  - ✅ Supports Club, Doctor, and Sport entity types
+  - ✅ Added to clubs listing page (`/cluburi`) with "Cluburi Sportive Verificate" list name
+  - ✅ Added to doctors listing page (`/doctori`) with "Specialiști Pediatri Verificați" list name
+  - ✅ Added to sports listing page (`/sporturi`) with "Sporturi Disponibile pentru Copii" list name
+  - ✅ Includes proper Schema.org ItemList structure with ListItem elements
+  - ✅ Each item includes type-specific properties (address, image, sport, specialty, pricing, etc.)
+  - ✅ Improves search engine understanding of listing page structure
+- ✅ Create location-specific landing pages
+  - ✅ Created location utilities (`src/lib/utils/location.ts`) for slug generation and parsing
+  - ✅ Added `getUniqueLocations()` function to clubs service and repository
+  - ✅ Created location landing page (`/cluburi/locatie/[location]`) with dynamic routing
+  - ✅ Supports both city-level (e.g., `/cluburi/locatie/bucuresti`) and district-level (e.g., `/cluburi/locatie/bucuresti-sector-1`) pages
+  - ✅ Added route to `routes.ts`: `routes.clubs.location(locationSlug)`
+  - ✅ Implements `generateStaticParams()` for all unique locations from database
+  - ✅ SEO-optimized metadata with location-specific titles, descriptions, and keywords
+  - ✅ Includes ItemListSchema for location-filtered clubs
+  - ✅ Added location pages to sitemap.xml
+  - ✅ Uses Next.js 16 Cache Components with cache tags for efficient revalidation
+  - ✅ Example URLs: `/cluburi/locatie/bucuresti`, `/cluburi/locatie/bucuresti-sector-1`
 
 **Week 13: Performance & Monitoring**
 
@@ -1205,17 +1353,17 @@ CTA: "Vezi alte cluburi de [sport]" → Link către /cluburi?sport=[sport-id]
 ### Medium Effort (M Effort, High Impact)
 
 - ⚠️ Content expansion (home, sports listing, top sport pages)
-- ⚠️ LocalBusiness schema for clubs
-- ⚠️ FAQPage schema
-- ⚠️ Internal linking strategy
-- ⚠️ Cache optimization for listings
+- ✅ LocalBusiness schema for clubs
+- ✅ FAQPage schema
+- ✅ Internal linking strategy
+- ✅ Cache optimization for listings
 
 **Total**: ~20-30 hours
 
 ### Long-term (L Effort, Medium-High Impact)
 
 - 📋 Complete content expansion (all sport/club/doctor pages)
-- 📋 Location-specific landing pages
+- ✅ Location-specific landing pages
 - 📋 Advanced structured data (HowTo, Article schemas)
 - 📋 OG image creation for all key pages
 

@@ -93,7 +93,26 @@ const FeaturedSports = () => {
           <div className="col-lg-8">
             <SectionTitle
               title="Sporturile preferate de părinți"
-              subtitle="Descoperă cele mai populare sporturi pentru copiii tăi și găsește cluburi verificate în apropierea ta"
+              subtitle={
+                <>
+                  Descoperă cele mai populare sporturi pentru copiii tăi. Explorează{" "}
+                  <Link
+                    href={routes.sports.list}
+                    className="text-primary text-decoration-underline"
+                  >
+                    toate sporturile disponibile
+                  </Link>{" "}
+                  și{" "}
+                  <Link href={routes.clubs.list} className="text-primary text-decoration-underline">
+                    găsește cluburi verificate
+                  </Link>{" "}
+                  în apropierea ta. Sau începe cu{" "}
+                  <Link href={routes.quiz.intro} className="text-primary text-decoration-underline">
+                    chestionarul AI
+                  </Link>{" "}
+                  pentru recomandări personalizate.
+                </>
+              }
               className="bd-featured-sports-title-wrapper"
               titleClassName="bd-featured-sports-section-title"
               subtitleClassName="bd-featured-sports-section-text"

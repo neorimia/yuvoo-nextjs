@@ -2,17 +2,40 @@ import React from "react";
 import type { Metadata } from "next";
 import BreadcrumbOne from "@/components/Breadcrumb/BreadcrumbOne";
 import AboutMain from "@/components/features/about/AboutMain";
+import AboutTeam from "@/components/features/about/AboutTeam";
+import AboutPartners from "@/components/features/about/AboutPartners";
+import HomeTrustSignals from "@/components/features/home/HomeTrustSignals";
+import HomeStats from "@/components/features/home/HomeStats";
 import { routes } from "@/lib/routes";
 
 export const metadata: Metadata = {
-  title: "Despre Noi - Yuvoo",
+  title: "Despre Noi - Misiunea, Echipa și Partenerii Yuvoo",
   description:
-    "Află mai multe despre Yuvoo, platforma AI care ajută părinții să găsească activitățile sportive potrivite pentru copiii lor.",
+    "Află mai multe despre Yuvoo: misiunea noastră, echipa dedicată, partenerii de încredere și cum transformăm modul în care părinții găsesc activitățile sportive perfecte pentru copiii lor. Platformă AI verificată, colaborări medicale și sportive de încredere.",
+  keywords: [
+    "despre Yuvoo",
+    "echipa Yuvoo",
+    "parteneri Yuvoo",
+    "misiune Yuvoo",
+    "platformă AI sporturi copii",
+    "specialiști pediatri România",
+    "cluburi sportive verificate",
+    "despre platformă sport copii",
+  ],
   openGraph: {
-    title: "Despre Noi - Yuvoo",
+    title: "Despre Noi - Misiunea, Echipa și Partenerii Yuvoo",
     description:
-      "Află mai multe despre Yuvoo, platforma AI care ajută părinții să găsească activitățile sportive potrivite pentru copiii lor.",
+      "Află mai multe despre Yuvoo: misiunea, echipa dedicată și partenerii de încredere care stau în spatele platformei AI pentru sporturi copii.",
     type: "website",
+    url: `${process.env.NEXT_PUBLIC_APP_URL || "https://yuvoo.ro"}/despre-noi`,
+    siteName: "Yuvoo",
+    locale: "ro_RO",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Despre Noi - Misiunea, Echipa și Partenerii Yuvoo",
+    description:
+      "Află mai multe despre Yuvoo: misiunea, echipa dedicată și partenerii de încredere.",
   },
   alternates: {
     canonical: "/despre-noi",
@@ -33,25 +56,18 @@ export default function AboutPage() {
         subTitle="Despre Noi"
         items={[
           { name: "Yuvoo", url: routes.home },
-          { name: "Despre Noi", url: routes.about }, // Current page
+          { name: "Despre Noi", url: routes.about },
         ]}
       />
-      <section className="bd-about-area pt-120 pb-70">
-        <div className="container">
-          <div className="row">
-            <div className="col-12">
-              <div className="bd-about-content text-center mb-50">
-                <h1 className="bd-section-title mb-30">Despre Yuvoo</h1>
-                <p className="lead mb-40">
-                  Platforma AI care transformă modul în care părinții din România găsesc
-                  activitățile sportive perfecte pentru copiii lor.
-                </p>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
       <AboutMain />
+      {/* Trust Signals Section */}
+      <HomeTrustSignals />
+      {/* Statistics Section */}
+      <HomeStats />
+      {/* Team Section */}
+      <AboutTeam />
+      {/* Partners Section */}
+      <AboutPartners />
     </>
   );
 }

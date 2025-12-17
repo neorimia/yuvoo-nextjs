@@ -14,7 +14,119 @@ import {
   welcomeEmailTemplate,
   clubVerificationStatusTemplate,
   doctorVerificationStatusTemplate,
+  contactFormTemplate,
+  contactFormConfirmationTemplate,
 } from "./templates";
+
+// Simple feedback email template (inline for simplicity)
+function feedbackEmailTemplate(data: { email?: string; message: string; type: string }): {
+  html: string;
+  text: string;
+} {
+  const typeLabels: Record<string, string> = {
+    general: "Feedback general",
+    bug: "Raportare problemă",
+    suggestion: "Sugestie îmbunătățire",
+  };
+
+  const html = `
+<!DOCTYPE html>
+<html lang="ro">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Feedback nou - Yuvoo Beta</title>
+  <style>
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      line-height: 1.6;
+      color: #333;
+      margin: 0;
+      padding: 0;
+      background-color: #f5f5f5;
+    }
+    .email-container {
+      max-width: 600px;
+      margin: 0 auto;
+      background-color: #ffffff;
+    }
+    .email-header {
+      background: linear-gradient(135deg, #00BBAE 0%, #FF9B24 100%);
+      padding: 30px 20px;
+      text-align: center;
+    }
+    .email-header h1 {
+      color: #ffffff;
+      margin: 0;
+      font-size: 24px;
+      font-weight: 600;
+    }
+    .email-body {
+      padding: 30px 20px;
+    }
+    .feedback-type {
+      background-color: #EBFFFE;
+      border-left: 4px solid #00BBAE;
+      padding: 15px;
+      margin: 20px 0;
+      font-weight: 600;
+      color: #00BBAE;
+    }
+    .message-box {
+      background-color: #f9f9f9;
+      border: 1px solid #e0e0e0;
+      border-radius: 8px;
+      padding: 20px;
+      margin: 20px 0;
+      white-space: pre-wrap;
+    }
+    .email-footer {
+      background-color: #f9f9f9;
+      padding: 20px;
+      text-align: center;
+      font-size: 14px;
+      color: #666;
+    }
+  </style>
+</head>
+<body>
+  <div class="email-container">
+    <div class="email-header">
+      <h1>Feedback nou - Yuvoo Beta</h1>
+    </div>
+    <div class="email-body">
+      <p>Ai primit un nou feedback de la un utilizator beta:</p>
+      
+      <div class="feedback-type">
+        Tip: ${typeLabels[data.type] || data.type}
+      </div>
+      
+      ${data.email ? `<p><strong>Email:</strong> ${data.email}</p>` : "<p><strong>Email:</strong> Nu a fost furnizat</p>"}
+      
+      <div class="message-box">
+        ${data.message}
+      </div>
+    </div>
+    <div class="email-footer">
+      <p>Acest email a fost generat automat de platforma Yuvoo.</p>
+    </div>
+  </div>
+</body>
+</html>
+  `;
+
+  const text = `
+Feedback nou - Yuvoo Beta
+
+Tip: ${typeLabels[data.type] || data.type}
+${data.email ? `Email: ${data.email}` : "Email: Nu a fost furnizat"}
+
+Mesaj:
+${data.message}
+  `;
+
+  return { html, text };
+}
 import type { Booking } from "@/modules/bookings/bookings.types";
 import type { Club } from "@/modules/clubs/clubs.types";
 import type { Doctor } from "@/modules/doctors/doctors.types";
@@ -361,5 +473,139 @@ export async function sendDoctorVerificationStatus(
   } catch (error) {
     // Don't throw - email failures shouldn't block verification updates
     console.error("[Email Service] Error sending doctor verification status email:", error);
+  }
+}
+
+/**
+ * Send contact form submission email to Yuvoo team
+ *
+ * @param data - Contact form data
+ * @returns Promise that resolves when email is sent (or fails silently)
+ */
+export async function sendContactFormSubmission(data: {
+  firstName: string;
+  email: string;
+  phone: string;
+  subject: string;
+  message: string;
+}): Promise<void> {
+  try {
+    // Validate user email
+    if (!isValidEmail(data.email)) {
+      console.error("[Email Service] Invalid email for contact form:", data.email);
+      return;
+    }
+
+    // Get contact email from environment or use default
+    const contactEmail =
+      process.env.CONTACT_EMAIL || process.env.BREVO_SENDER_EMAIL || "contact@yuvoo.ro";
+
+    // Generate email template
+    const { html, text } = contactFormTemplate(data);
+
+    // Send email to Yuvoo team
+    const result = await sendEmail({
+      to: contactEmail,
+      subject: `Mesaj nou de contact: ${data.subject}`,
+      htmlContent: html,
+      textContent: text,
+      replyTo: data.email, // Allow replying directly to the user
+      tags: ["contact", "contact-form"],
+    });
+
+    if (!result.success) {
+      console.error("[Email Service] Failed to send contact form submission:", result.error);
+    }
+  } catch (error) {
+    // Don't throw - email failures shouldn't block form submission
+    console.error("[Email Service] Error sending contact form submission email:", error);
+  }
+}
+
+/**
+ * Send contact form confirmation email to user
+ *
+ * @param data - Contact form data (with firstName and subject)
+ * @returns Promise that resolves when email is sent (or fails silently)
+ */
+export async function sendContactFormConfirmation(data: {
+  firstName: string;
+  email: string;
+  subject: string;
+}): Promise<void> {
+  try {
+    // Validate user email
+    if (!isValidEmail(data.email)) {
+      console.error("[Email Service] Invalid email for contact form confirmation:", data.email);
+      return;
+    }
+
+    // Generate email template
+    const { html, text } = contactFormConfirmationTemplate({
+      firstName: data.firstName,
+      subject: data.subject,
+    });
+
+    // Send confirmation email to user
+    const result = await sendEmail({
+      to: data.email,
+      subject: "Confirmare mesaj - Yuvoo",
+      htmlContent: html,
+      textContent: text,
+      tags: ["contact", "contact-form", "confirmation"],
+    });
+
+    if (!result.success) {
+      console.error("[Email Service] Failed to send contact form confirmation:", result.error);
+    }
+  } catch (error) {
+    // Don't throw - email failures shouldn't block form submission
+    console.error("[Email Service] Error sending contact form confirmation email:", error);
+  }
+}
+
+/**
+ * Send feedback submission email to Yuvoo team
+ *
+ * @param data - Feedback form data
+ * @returns Promise that resolves when email is sent (or fails silently)
+ */
+export async function sendFeedbackSubmission(data: {
+  email?: string;
+  message: string;
+  type: string;
+}): Promise<void> {
+  try {
+    // Get contact email from environment or use default
+    const contactEmail =
+      process.env.CONTACT_EMAIL || process.env.BREVO_SENDER_EMAIL || "contact@yuvoo.ro";
+
+    // Generate email template
+    const { html, text } = feedbackEmailTemplate(data);
+
+    // Determine subject based on feedback type
+    const typeLabels: Record<string, string> = {
+      general: "Feedback general",
+      bug: "Raportare problemă",
+      suggestion: "Sugestie îmbunătățire",
+    };
+    const typeLabel = typeLabels[data.type] || data.type;
+
+    // Send email to Yuvoo team
+    const result = await sendEmail({
+      to: contactEmail,
+      subject: `[Beta Feedback] ${typeLabel}`,
+      htmlContent: html,
+      textContent: text,
+      replyTo: data.email || undefined, // Allow replying directly to the user if email provided
+      tags: ["feedback", "beta", data.type],
+    });
+
+    if (!result.success) {
+      console.error("[Email Service] Failed to send feedback submission:", result.error);
+    }
+  } catch (error) {
+    // Don't throw - email failures shouldn't block feedback submission
+    console.error("[Email Service] Error sending feedback submission email:", error);
   }
 }

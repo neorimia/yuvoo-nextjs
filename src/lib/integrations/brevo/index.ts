@@ -17,6 +17,9 @@ export {
   sendWelcomeEmail,
   sendClubVerificationStatus,
   sendDoctorVerificationStatus,
+  sendContactFormSubmission,
+  sendContactFormConfirmation,
+  sendFeedbackSubmission,
 } from "./email.service";
 
 // Templates (for advanced usage)

@@ -84,9 +84,21 @@ export default function QuizIntroContent() {
                       </div>
                     </div>
                     <div>
-                      <h3 className="h6 fw-semibold mb-1">Cluburi potrivite</h3>
+                      <h3 className="h6 fw-semibold mb-1">
+                        <Link href={routes.clubs.list} className="text-decoration-none">
+                          Cluburi potrivite
+                        </Link>
+                      </h3>
                       <p className="text-muted small mb-0">
-                        Acces direct la cluburi verificate care oferă sporturile recomandate
+                        Acces direct la{" "}
+                        <Link href={routes.clubs.list} className="text-primary">
+                          cluburi verificate
+                        </Link>{" "}
+                        care oferă sporturile recomandate. Explorează{" "}
+                        <Link href={routes.sports.list} className="text-primary">
+                          toate sporturile disponibile
+                        </Link>
+                        .
                       </p>
                     </div>
                   </div>

@@ -916,12 +916,34 @@ import { getClubBySlug } from "@/modules/clubs/clubs.service";
   - `src/components/SEO/FAQPageSchema.tsx` - FAQPage JSON-LD structured data (FAQ page)
   - `src/components/SEO/LocalBusinessSchema.tsx` - LocalBusiness (SportsActivityLocation) JSON-LD structured data (club detail pages)
   - `src/components/SEO/MedicalBusinessSchema.tsx` - MedicalBusiness (Physician) JSON-LD structured data (doctor detail pages)
+  - `src/components/SEO/PersonSchema.tsx` - Person (Physician) JSON-LD structured data (doctor detail pages)
+    - Includes comprehensive Person schema properties (credentials, professional affiliation, expertise areas, service catalog)
+    - Complements MedicalBusiness schema for complete doctor structured data
   - `src/components/SEO/ArticleSchema.tsx` - Article JSON-LD structured data (sport detail pages)
     - Includes comprehensive Article schema properties for better SEO and rich snippets
     - Uses sport-specific OG images and expanded content when available
-  - `src/components/SEO/ArticleSchema.tsx` - Article JSON-LD structured data (sport detail pages)
-    - Includes comprehensive Article schema properties for better SEO and rich snippets
-    - Uses sport-specific OG images and expanded content when available
+  - `src/lib/content/club-expanded-content.ts` - Dynamic content generator for club detail pages (600-900 words)
+    - Generates comprehensive Romanian content dynamically from club data
+    - Includes sport-specific benefits and contextual content
+  - `src/lib/content/doctor-expanded-content.ts` - Dynamic content generator for doctor detail pages (600-900 words)
+    - Generates comprehensive Romanian content dynamically from doctor data
+    - Includes specialty-specific services and contextual content
+  - `src/lib/seo/club-metadata.ts` - Enhanced metadata generator for club pages
+    - Location-optimized titles, descriptions, keywords (city, district, sport, age groups)
+    - Enhanced Open Graph and Twitter card metadata with location context
+  - `src/lib/seo/doctor-metadata.ts` - Enhanced metadata generator for doctor pages
+    - Location-optimized titles, descriptions, keywords (city, district, specialty, services)
+    - Enhanced Open Graph and Twitter card metadata with location context
+- **About Page Components**:
+  - `src/components/features/about/AboutMain.tsx` - Main About page component with mission, value propositions, how it works, CTA sections
+  - `src/components/features/about/AboutTeam.tsx` - Team members display component (4 members with bios, credentials, social links)
+  - `src/components/features/about/AboutPartners.tsx` - Partners display component (6 partners organized by category)
+  - `src/data/team-data.ts` - Team member data source with Romanian content
+  - `src/data/partners-data.ts` - Partner data source with Romanian content
+  - `public/assets/scss/layout/_about.scss` - Comprehensive SCSS styling for all About page components
+    - Styles for hero, mission, value propositions, team, partners, how it works, and CTA sections
+    - Responsive breakpoints, hover effects, animations following Yuvoo design patterns
+    - Uses primary brand color (`var(--bd-theme-1)`) for step numbers and accents
 - **Site Map**: `docs/SITE_MAP.md` - Complete application structure, all routes, user flows, and navigation patterns
 - **Wireframes**: `docs/WIREFRAMES.md` - Detailed page structures, component placement, and layout specifications for all major pages
 - **Authentication Integration Plan**: `docs/AUTH_INTEGRATION_PLAN.md` - Complete authentication system integration details, Stack Auth setup, Romanian localization, and implementation checklist

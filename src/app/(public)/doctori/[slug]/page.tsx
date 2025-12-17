@@ -5,13 +5,17 @@ import { notFound } from "next/navigation";
 import type { Metadata } from "next";
 import BreadcrumbOne from "@/components/Breadcrumb/BreadcrumbOne";
 import MedicalBusinessSchema from "@/components/SEO/MedicalBusinessSchema";
+import PersonSchema from "@/components/SEO/PersonSchema";
 import DoctorDetailsMain from "@/components/features/doctors/DoctorDetailsMain";
 import DoctorAvailability from "@/components/features/doctors/DoctorAvailability";
 import DoctorAppointmentFormSection from "@/components/features/doctors/DoctorAppointmentFormSection";
+import DoctorContentExpanded from "@/components/features/doctors/DoctorContentExpanded";
 import { getDoctorBySlug } from "@/modules/doctors/doctors.service";
 import { routes } from "@/lib/routes";
 import { cacheTag } from "next/cache";
 import type { Doctor } from "@/modules/doctors/doctors.types";
+import { generateDoctorExpandedContent } from "@/lib/content/doctor-expanded-content";
+import { generateDoctorMetadata } from "@/lib/seo/doctor-metadata";
 
 interface DoctorDetailPageProps {
   params: Promise<{
@@ -55,9 +59,13 @@ export default async function DoctorDetailPage({ params }: DoctorDetailPageProps
   cacheTag(`doctor-${doctor.id}`);
   cacheTag(`doctor-slug-${slug}`);
 
+  // Generate expanded content for SEO (600-900 words)
+  const expandedContent = generateDoctorExpandedContent(doctor);
+
   return (
     <>
       <MedicalBusinessSchema doctor={doctor} />
+      <PersonSchema doctor={doctor} />
       <BreadcrumbOne
         title={doctor.name}
         subTitle="Doctori"
@@ -69,13 +77,15 @@ export default async function DoctorDetailPage({ params }: DoctorDetailPageProps
       />
       <DoctorDetailsMain doctor={doctor} />
       <DoctorAvailability doctor={doctor} />
+      {/* Expanded Content Section for SEO (600-900 words) */}
+      <DoctorContentExpanded content={expandedContent} />
       <DoctorAppointmentFormSection doctor={doctor} />
     </>
   );
 }
 
 /**
- * Generate metadata for SEO
+ * Generate metadata for SEO with location keywords
  */
 export async function generateMetadata({ params }: DoctorDetailPageProps): Promise<Metadata> {
   const { slug } = await params;
@@ -92,19 +102,6 @@ export async function generateMetadata({ params }: DoctorDetailPageProps): Promi
 
   const baseUrl = process.env.NEXT_PUBLIC_APP_URL || "https://yuvoo.ro";
 
-  return {
-    title: `${doctor.name} - Specialiști Pediatri Yuvoo`,
-    description:
-      doctor.description ||
-      `Informații despre specialistul pediatric ${doctor.name} pe platforma Yuvoo.`,
-    openGraph: {
-      title: `${doctor.name} - Yuvoo`,
-      description: doctor.description || `Specialist pediatric în ${doctor.location.city}`,
-      type: "website",
-      images: doctor.image ? [doctor.image] : [],
-    },
-    alternates: {
-      canonical: `${baseUrl}/doctori/${slug}`,
-    },
-  };
+  // Use enhanced metadata with location keywords
+  return generateDoctorMetadata(doctor, baseUrl);
 }

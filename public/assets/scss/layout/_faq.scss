@@ -67,6 +67,23 @@
     }
   }
 
+  // FAQ Category Styles
+  &-category {
+    margin-bottom: 70px;
+
+    @media #{$md,$sm,$xs} {
+      margin-bottom: 50px;
+    }
+
+    &-content {
+      padding: 0 20px;
+
+      @media #{$md,$sm,$xs} {
+        padding: 0;
+      }
+    }
+  }
+
   //faq accordion css
   .accordion {
     &-item {
