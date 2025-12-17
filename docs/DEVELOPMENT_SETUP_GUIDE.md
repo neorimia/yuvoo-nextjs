@@ -85,6 +85,21 @@ Edit `.env.local` and configure the following services:
 
 #### Authentication (Stack Auth) - **REQUIRED**
 
+**Option 1: Automated Setup (Recommended)**
+
+```bash
+# Run automated authentication setup script
+npm run setup:auth
+```
+
+This script will:
+
+- Verify Stack Auth environment variables are configured
+- Test Stack Auth configuration
+- Provide next steps for testing
+
+**Option 2: Manual Setup**
+
 1. **Create Stack Auth Project**:
    - Go to [Stack Auth Dashboard](https://stack-auth.com/dashboard)
    - Sign up for a free account
@@ -217,6 +232,21 @@ NEXT_PUBLIC_APP_URL="http://localhost:3000"
 ```
 
 ## Step 3: Initialize Database
+
+**Option 1: Automated Setup (Recommended)**
+
+```bash
+# Run automated database setup script
+npm run setup:db
+```
+
+This script will:
+
+- Test database connection
+- Push schema to database
+- Verify setup completion
+
+**Option 2: Manual Setup**
 
 ```bash
 # Push schema to database
@@ -381,17 +411,21 @@ After completing setup:
 ```bash
 # Setup
 npm run setup:dev        # Interactive setup script
-npm run verify:setup     # Verify environment configuration
+npm run setup:db        # Automated database setup
+npm run setup:auth      # Automated authentication setup
+npm run verify:setup    # Verify environment configuration
 
 # Development
-npm run dev              # Start dev server
-npm run build            # Production build
-npm run lint             # Check code quality
+npm run dev             # Start dev server
+npm run build           # Production build
+npm run lint            # Check code quality
 
 # Database
-npm run db:push          # Push schema changes
-npm run db:studio        # Open database GUI
-npm run db:seed          # Seed sample data
+npm run db:push         # Push schema changes
+npm run db:studio       # Open database GUI
+npm run db:seed         # Seed sample data
+npm run db:generate     # Generate migrations
+npm run db:migrate      # Run migrations
 
 # Testing
 npx tsx src/lib/db/test-connection.ts      # Test database

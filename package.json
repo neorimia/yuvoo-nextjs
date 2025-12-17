@@ -4,6 +4,8 @@
   "private": true,
   "scripts": {
     "setup:dev": "bash scripts/setup-dev.sh",
+    "setup:db": "bash scripts/setup-database.sh",
+    "setup:auth": "bash scripts/setup-auth.sh",
     "verify:setup": "tsx scripts/verify-setup.ts",
     "dev": "next dev",
     "build": "next build",
