@@ -8,6 +8,7 @@ import { signInAction } from "@/app/actions/auth";
 import ErrorMsg from "./ErrorMassage";
 import { EmailSvgIcon, EyeCutSvgIcon, LockSvgIcon } from "../SVG";
 import { routes } from "@/lib/routes";
+import { trackEvent, PostHogEvents } from "@/lib/analytics/tracking";
 
 type SignInFormData = {
   email: string;
@@ -40,6 +41,12 @@ const SignInForm: React.FC<SignInFormProps> = ({ redirectUrl }) => {
       const result = await signInAction(formData, redirectUrl);
 
       if (result.success && result.redirect) {
+        // Track login event client-side and identify user
+        trackEvent(PostHogEvents.USER_LOGGED_IN);
+
+        // Note: User identification will happen after redirect when session is available
+        // We identify in a useEffect after successful login redirect
+
         router.push(result.redirect);
         router.refresh();
       } else {

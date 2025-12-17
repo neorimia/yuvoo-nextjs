@@ -13,6 +13,8 @@ import { getSession } from "@/lib/auth/session";
 import type { AuthUser, UserRole } from "@/modules/auth/auth.types";
 import { routes } from "@/lib/routes";
 import { getErrorMessage } from "@/lib/auth/errors";
+import { trackEventServer } from "@/lib/analytics/tracking-server";
+import { PostHogEvents, PostHogProperties } from "@/lib/analytics/events";
 
 /**
  * Get current authenticated user
@@ -70,6 +72,24 @@ export async function signInAction(formData: FormData, redirectUrl?: string) {
       email,
       password,
     });
+
+    // Get user session for tracking
+    try {
+      const session = await getSession();
+      if (session?.user) {
+        // Track login event server-side
+        await trackEventServer(PostHogEvents.USER_LOGGED_IN, {
+          distinctId: session.user.id,
+          [PostHogProperties.USER_ID]: session.user.id,
+          [PostHogProperties.USER_ROLE]: session.dbUser?.role || "unknown",
+        });
+      }
+    } catch (trackingError) {
+      // Don't fail login if tracking fails
+      if (process.env.NODE_ENV === "development") {
+        console.error("[PostHog] Error tracking login event:", trackingError);
+      }
+    }
 
     // Use redirectUrl if provided, otherwise default to dashboard
     // Validate redirectUrl to prevent open redirect vulnerabilities
@@ -134,6 +154,20 @@ export async function signUpAction(formData: FormData) {
     try {
       const session = await getSession();
       if (session?.dbUser) {
+        // Track signup event server-side
+        try {
+          await trackEventServer(PostHogEvents.USER_SIGNED_UP, {
+            distinctId: session.user.id,
+            [PostHogProperties.USER_ID]: session.user.id,
+            [PostHogProperties.USER_ROLE]: session.dbUser.role,
+          });
+        } catch (trackingError) {
+          // Don't fail signup if tracking fails
+          if (process.env.NODE_ENV === "development") {
+            console.error("[PostHog] Error tracking signup event:", trackingError);
+          }
+        }
+
         // Check if onboarding is completed
         if (!session.dbUser.onboardingCompleted) {
           // Redirect to onboarding based on role
@@ -198,6 +232,19 @@ export async function forgotPasswordAction(formData: FormData) {
   try {
     await stackServerApp.sendForgotPasswordEmail(email);
 
+    // Track password reset request (no distinctId since user might not be authenticated)
+    try {
+      // Use email as distinctId if available
+      await trackEventServer(PostHogEvents.PASSWORD_RESET_REQUESTED, {
+        distinctId: email, // Use email as distinctId for unauthenticated users
+      });
+    } catch (trackingError) {
+      // Don't fail if tracking fails
+      if (process.env.NODE_ENV === "development") {
+        console.error("[PostHog] Error tracking password reset request:", trackingError);
+      }
+    }
+
     return {
       success: true,
       message:
@@ -255,6 +302,22 @@ export async function resetPasswordAction(formData: FormData) {
       password: password,
     });
 
+    // Try to get user session for tracking (user might be authenticated now)
+    try {
+      const session = await getSession();
+      if (session?.user) {
+        await trackEventServer(PostHogEvents.PASSWORD_RESET_COMPLETED, {
+          distinctId: session.user.id,
+          [PostHogProperties.USER_ID]: session.user.id,
+        });
+      }
+    } catch (trackingError) {
+      // Don't fail if tracking fails
+      if (process.env.NODE_ENV === "development") {
+        console.error("[PostHog] Error tracking password reset completion:", trackingError);
+      }
+    }
+
     // Return success - redirect will be handled by the form component
     return {
       success: true,
@@ -283,6 +346,22 @@ export async function verifyEmailAction(token: string) {
     const result = await stackServerApp.verifyEmail(token);
 
     if ("status" in result && result.status === "ok") {
+      // Try to get user session for tracking
+      try {
+        const session = await getSession();
+        if (session?.user) {
+          await trackEventServer(PostHogEvents.EMAIL_VERIFIED, {
+            distinctId: session.user.id,
+            [PostHogProperties.USER_ID]: session.user.id,
+          });
+        }
+      } catch (trackingError) {
+        // Don't fail if tracking fails
+        if (process.env.NODE_ENV === "development") {
+          console.error("[PostHog] Error tracking email verification:", trackingError);
+        }
+      }
+
       // Return success - redirect will be handled by the component
       return {
         success: true,

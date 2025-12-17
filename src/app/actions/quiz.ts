@@ -27,6 +27,8 @@ import { createQuizInputSchema, quizAnswersSchema } from "@/lib/validations/quiz
 import { rateLimit, getClientIdentifier } from "@/lib/rate-limit";
 import type { QuizResult, CreateQuizInput } from "@/modules/quiz/quiz.types";
 import type { AuthUser } from "@/modules/auth/auth.types";
+import { trackEventServer } from "@/lib/analytics/tracking-server";
+import { PostHogEvents, PostHogProperties } from "@/lib/analytics/events";
 
 /**
  * Submit quiz and get AI recommendations
@@ -176,7 +178,37 @@ export async function submitQuizAction(
       });
     }
 
-    // Step 8: Revalidate cache
+    // Step 8: Track quiz completion event
+    try {
+      let childAge = answersValidation.data.age;
+      if (session?.dbUser?.id) {
+        try {
+          const child = await getChildById(childId, session.dbUser.id);
+          if (child) {
+            childAge = child.age;
+          }
+        } catch (childError) {
+          // Child fetch failed, use age from answers
+          if (process.env.NODE_ENV === "development") {
+            console.error("[PostHog] Error fetching child for tracking:", childError);
+          }
+        }
+      }
+      await trackEventServer(PostHogEvents.QUIZ_COMPLETED, {
+        distinctId: session?.user.id || "anonymous",
+        [PostHogProperties.QUIZ_ID]: result.id,
+        [PostHogProperties.CHILD_ID]: childId,
+        [PostHogProperties.CHILD_AGE]: childAge,
+        [PostHogProperties.RECOMMENDATIONS_COUNT]: result.recommendations?.length || 0,
+      });
+    } catch (trackingError) {
+      // Don't fail quiz submission if tracking fails
+      if (process.env.NODE_ENV === "development") {
+        console.error("[PostHog] Error tracking quiz completion:", trackingError);
+      }
+    }
+
+    // Step 9: Revalidate cache
     revalidatePath("/chestionar");
     revalidatePath(`/chestionar/rezultate/${result.id}`);
 

@@ -6,6 +6,7 @@ import { useRouter } from "next/navigation";
 import { signUpAction } from "@/app/actions/auth";
 import ErrorMsg from "./ErrorMassage";
 import { EmailSvgIcon, EyeCutSvgIcon, LockSvgIcon } from "../SVG";
+import { trackEvent, PostHogEvents } from "@/lib/analytics/tracking";
 
 type SignUpFormData = {
   email: string;
@@ -46,6 +47,11 @@ const SignUpForm = () => {
       const result = await signUpAction(formData);
 
       if (result.success && result.redirect) {
+        // Track signup event client-side
+        trackEvent(PostHogEvents.USER_SIGNED_UP);
+
+        // Note: User identification will happen after redirect when session is available
+
         router.push(result.redirect);
         router.refresh();
       } else {

@@ -16,6 +16,8 @@ import {
 } from "@/modules/favorites/favorites.service";
 import { addFavoriteSchema } from "@/lib/validations/favorite";
 import type { Favorite } from "@/modules/favorites/favorites.types";
+import { trackEventServer } from "@/lib/analytics/tracking-server";
+import { PostHogEvents, PostHogProperties } from "@/lib/analytics/events";
 
 /**
  * Get all favorites for current user
@@ -47,6 +49,25 @@ export async function addFavoriteAction(
       userId: user.id,
     });
 
+    // Track favorite event
+    try {
+      const eventName =
+        validatedInput.entityType === "club"
+          ? PostHogEvents.CLUB_FAVORITED
+          : PostHogEvents.DOCTOR_FAVORITED;
+      await trackEventServer(eventName, {
+        distinctId: user.id,
+        ...(validatedInput.entityType === "club"
+          ? { [PostHogProperties.CLUB_ID]: validatedInput.entityId }
+          : { [PostHogProperties.DOCTOR_ID]: validatedInput.entityId }),
+      });
+    } catch (trackingError) {
+      // Don't fail if tracking fails
+      if (process.env.NODE_ENV === "development") {
+        console.error("[PostHog] Error tracking favorite:", trackingError);
+      }
+    }
+
     revalidatePath("/favorites");
 
     return { success: true, favorite };
@@ -68,7 +89,36 @@ export async function removeFavoriteAction(
   try {
     const user = await requireAuth();
 
+    // Get favorite before removing to check entity type
+    const { favoritesRepository } = await import("@/modules/favorites/favorites.repository");
+    const favorite = await favoritesRepository.findById(favoriteId);
+    if (!favorite || favorite.userId !== user.id) {
+      return {
+        success: false,
+        error: "Favorite-ul nu a fost găsit sau nu îți aparține.",
+      };
+    }
+
     await removeFavorite(favoriteId, user.id);
+
+    // Track unfavorite event
+    try {
+      const eventName =
+        favorite.entityType === "club"
+          ? PostHogEvents.CLUB_UNFAVORITED
+          : PostHogEvents.DOCTOR_UNFAVORITED;
+      await trackEventServer(eventName, {
+        distinctId: user.id,
+        ...(favorite.entityType === "club"
+          ? { [PostHogProperties.CLUB_ID]: favorite.entityId }
+          : { [PostHogProperties.DOCTOR_ID]: favorite.entityId }),
+      });
+    } catch (trackingError) {
+      // Don't fail if tracking fails
+      if (process.env.NODE_ENV === "development") {
+        console.error("[PostHog] Error tracking unfavorite:", trackingError);
+      }
+    }
 
     revalidatePath("/favorites");
 

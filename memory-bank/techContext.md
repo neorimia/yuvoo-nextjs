@@ -88,6 +88,12 @@
 - **Brevo** (formerly Sendinblue): `@getbrevo/brevo ^2.2.0` - Email service
   - Transactional emails
   - Email templates
+- **PostHog**: `posthog-js@^1.309.1`, `posthog-node@^5.17.4` - Analytics & product analytics
+  - User analytics and event tracking
+  - Session recordings (privacy-first configuration)
+  - Error tracking
+  - Feature flags support (for future use)
+  - GDPR-compliant (cookie consent integration)
 
 ### Utility Functions
 
@@ -201,6 +207,10 @@ CLOUDINARY_API_SECRET="your-api-secret"
 BREVO_API_KEY="your-brevo-key"
 BREVO_SENDER_EMAIL="noreply@yuvoo.com"
 BREVO_SENDER_NAME="Yuvoo"
+
+# PostHog Analytics
+NEXT_PUBLIC_POSTHOG_KEY="your-posthog-key"
+NEXT_PUBLIC_POSTHOG_HOST="https://eu.i.posthog.com"
 
 # App URLs
 NEXT_PUBLIC_APP_URL="http://localhost:3000"
@@ -381,6 +391,7 @@ export default defineConfig({
 - OpenAI: `OPENAI_API_KEY`
 - Cloudinary: `NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME`, `CLOUDINARY_API_KEY`, `CLOUDINARY_API_SECRET`
 - Brevo: `BREVO_API_KEY`, `BREVO_SENDER_EMAIL`, `BREVO_SENDER_NAME`
+- PostHog: `NEXT_PUBLIC_POSTHOG_KEY`, `NEXT_PUBLIC_POSTHOG_HOST` (optional)
 - App URLs: `NEXT_PUBLIC_APP_URL`
 
 **Configuration**:
@@ -825,9 +836,48 @@ import { getClubBySlug } from "@/modules/clubs/clubs.service";
 
 ## Monitoring & Analytics ✅ COMPLETE
 
-**Status**: ✅ Complete - Comprehensive monitoring setup guide created
+**Status**: ✅ Complete - PostHog Phase 1 & 2 Complete, All Enhancements Complete
 
-**Documentation**: `docs/MONITORING_SETUP_GUIDE.md`
+**PostHog Analytics** (Phase 1 & 2 Complete ✅):
+
+- ✅ PostHog packages installed (`posthog-js@^1.309.1`, `posthog-node@^5.17.4`)
+- ✅ Next.js rewrites configured for PostHog ingestion (`/ingest` routes)
+- ✅ Client-side PostHog setup (`src/lib/analytics/posthog.tsx`)
+  - GDPR-compliant initialization (only after analytics cookie consent)
+  - Privacy-first configuration (masked inputs, session recording)
+  - Automatic pageview tracking
+  - Error tracking enabled
+- ✅ Server-side PostHog client (`src/lib/analytics/posthog-server.ts`)
+  - Singleton pattern for server-side tracking
+  - Graceful shutdown support
+  - `distinctId` properly extracted from properties (no duplication)
+- ✅ Event tracking infrastructure
+  - Event names constants (`src/lib/analytics/events.ts`) - UPPERCASE_WITH_UNDERSCORES
+  - Property names constants - camelCase
+  - Type-safe TypeScript definitions
+  - Client-side tracking utilities (`src/lib/analytics/tracking.ts`)
+  - Server-side tracking utilities (`src/lib/analytics/tracking-server.ts`)
+- ✅ Cookie consent integration
+  - PostHog only initializes after user accepts analytics cookies
+  - Cookie consent banner triggers PostHog initialization
+  - Hook for watching consent changes (`usePostHogConsent`)
+- ✅ Integration in root layout (`PostHogProviderWrapper`)
+- ✅ Event tracking implementation (Phase 2 - Complete ✅)
+  - ✅ Authentication events (signup, login, password reset, email verification)
+  - ✅ Quiz events (started, step completed, completed)
+  - ✅ Booking events (created, cancelled for clubs and doctors)
+  - ✅ Discovery events (searches, favorites for clubs and doctors)
+- ✅ User identification implementation ✅
+  - ✅ `PostHogUserIdentification` component (`src/components/analytics/PostHogUserIdentification.tsx`)
+  - ✅ Integrated into protected route layouts (parent, club, doctor)
+  - ✅ Connects anonymous sessions with authenticated users
+  - ✅ Uses person properties (`$set` for updatable, `$set_once` for immutable)
+- ✅ Person properties optimization ✅
+  - ✅ `identifyUser()` supports `$set` and `$set_once` properties
+  - ✅ User metadata stored as person properties (not sent with every event)
+  - ✅ More efficient and follows PostHog best practices
+
+**Documentation**: `docs/POSTHOG_IMPLEMENTATION_PLAN.md`, `docs/MONITORING_SETUP_GUIDE.md`
 
 **Error Tracking**:
 
@@ -886,6 +936,7 @@ import { getClubBySlug } from "@/modules/clubs/clubs.service";
 3. **Database Limits**: Neon free tier limits (upgrade as needed)
 4. **File Storage**: Cloudinary free tier limits
 5. **Email Limits**: Brevo free tier limits
+6. **Analytics**: PostHog free tier limits (1M events/month)
 
 ## Future Technical Enhancements
 
