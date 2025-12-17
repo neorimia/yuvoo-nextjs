@@ -29,7 +29,7 @@ export const SPORTS_DATA: SportData[] = [
     name: "Fotbal",
     slug: "fotbal",
     description:
-      "Fotbalul este cel mai popular sport de echipă, dezvoltând coordonare, echilibru și spirit de echipă.",
+      "Fotbalul este cel mai popular sport de echipă din lume și unul dintre cele mai iubite sporturi în România. Oferă dezvoltare fizică completă, spirit de echipă, disciplină și abilități sociale esențiale pentru copii. Ideal pentru copiii activi care se bucură de activități în grup.",
     icon: "flaticon-soccer",
     minAge: 5,
     maxAge: 14,
@@ -40,7 +40,7 @@ export const SPORTS_DATA: SportData[] = [
     name: "Baschet",
     slug: "baschet",
     description:
-      "Baschetul dezvoltă agilitatea, coordonarea și înălțimea, fiind ideal pentru copiii activi.",
+      "Baschetul este unul dintre cele mai dinamice și captivante sporturi de echipă, combinând abilități fizice, strategie și spirit de echipă. Dezvoltă coordonarea, agilitatea, înălțimea, gândirea strategică și comunicarea în echipă. Ideal pentru copiii activi care doresc dezvoltare fizică și socială.",
     icon: "flaticon-basketball",
     minAge: 6,
     maxAge: 14,
@@ -51,7 +51,7 @@ export const SPORTS_DATA: SportData[] = [
     name: "Volei",
     slug: "volei",
     description:
-      "Voleiul este un sport de echipă care dezvoltă reflexele, coordonarea și spiritul de echipă.",
+      "Voleiul este un sport de echipă dinamic și captivant care combină abilități fizice, strategie și spirit de echipă. Dezvoltă reflexele rapide, coordonarea, agilitatea, gândirea strategică și comunicarea în echipă. Ideal pentru copiii care doresc un sport tehnic și rapid.",
     icon: "flaticon-volleyball",
     minAge: 8,
     maxAge: 14,
@@ -61,7 +61,8 @@ export const SPORTS_DATA: SportData[] = [
     id: "handbal",
     name: "Handbal",
     slug: "handbal",
-    description: "Handbalul este un sport rapid care dezvoltă viteza, agilitatea și coordonarea.",
+    description:
+      "Handbalul este un sport de echipă rapid și dinamic cu tradiție excepțională în România. Combină abilități fizice, strategie și spirit de echipă, dezvoltând viteza, agilitatea, coordonarea și gândirea strategică. Ideal pentru copiii activi care doresc un sport captivant și tehnic.",
     icon: "flaticon-handball",
     minAge: 8,
     maxAge: 14,
@@ -95,7 +96,7 @@ export const SPORTS_DATA: SportData[] = [
     name: "Tenis",
     slug: "tenis",
     description:
-      "Tenisul dezvoltă coordonarea, agilitatea și concentrarea, fiind un sport complet.",
+      "Tenisul este un sport elegant și complet care combină abilități fizice, mentale și strategice. Dezvoltă coordonarea ochi-mână, agilitatea, concentrarea, strategia și responsabilitatea individuală. În România are tradiție puternică și este ideal pentru dezvoltarea armonioasă a copiilor.",
     icon: "flaticon-tennis",
     minAge: 4,
     maxAge: 14,
@@ -150,7 +151,7 @@ export const SPORTS_DATA: SportData[] = [
     name: "Înot",
     slug: "inot",
     description:
-      "Înotul este un sport complet care dezvoltă toate grupurile musculare și capacitatea pulmonară.",
+      "Înotul este considerat unul dintre cele mai complete și sănătoase sporturi pentru copii, oferind dezvoltare fizică armonioasă și abilități esențiale pentru viață. Dezvoltă toate grupurile musculare, capacitatea pulmonară, siguranța în apă și coordonarea. Ideal pentru copiii de toate tipurile, inclusiv cei cu probleme de articulații.",
     icon: "flaticon-swimming",
     minAge: 4,
     maxAge: 14,
@@ -185,7 +186,7 @@ export const SPORTS_DATA: SportData[] = [
     name: "Karate",
     slug: "karate",
     description:
-      "Karate-ul dezvoltă disciplina, respectul, coordonarea și forța, învățând și autoapărarea.",
+      "Karate-ul este o artă marțială tradițională japoneză care combină tehnici de autoapărare cu dezvoltarea fizică, mentală și spirituală. Dezvoltă disciplina, respectul, coordonarea, forța, autocontrolul și încrederea în sine. În România este unul dintre cele mai populare sporturi de luptă pentru copii, oferind o abordare disciplinată și structurată.",
     icon: "flaticon-karate",
     minAge: 5,
     maxAge: 14,
@@ -196,7 +197,7 @@ export const SPORTS_DATA: SportData[] = [
     name: "Judo",
     slug: "judo",
     description:
-      "Judo-ul dezvoltă forța, echilibrul și disciplina, învățând tehnici de luptă și autoapărare.",
+      "Judo-ul este o artă marțială japoneză modernă și unul dintre cele mai populare sporturi olimpice de luptă pentru copii. Combină tehnici de luptă cu dezvoltarea fizică, mentală și spirituală. Dezvoltă forța, echilibrul, disciplina, respectul, autocontrolul și încrederea în sine. În România are tradiție puternică și este foarte accesibil pentru copii.",
     icon: "flaticon-judo",
     minAge: 5,
     maxAge: 14,
@@ -242,7 +243,7 @@ export const SPORTS_DATA: SportData[] = [
     name: "Gimnastică artistică",
     slug: "gimnastica-artistica",
     description:
-      "Gimnastica artistică dezvoltă flexibilitatea, forța, coordonarea și grația, fiind un sport complet.",
+      "Gimnastica artistică este unul dintre cele mai complete și elegante sporturi pentru copii, combinând forță, flexibilitate, coordonare și grație. În România are tradiție excepțională cu mulți campioni olimpici. Dezvoltă disciplina mentală, concentrarea, perseverența și încrederea în sine. Ideal pentru copiii care doresc dezvoltare fizică și mentală excepțională.",
     icon: "flaticon-gymnastics",
     minAge: 4,
     maxAge: 14,
@@ -264,7 +265,7 @@ export const SPORTS_DATA: SportData[] = [
     name: "Dans",
     slug: "dans",
     description:
-      "Dansul include balet, dans modern și latino, dezvoltând grația, flexibilitatea și expresivitatea.",
+      "Dansul este o formă de artă și expresie care combină mișcarea, muzica și creativitatea. Include balet clasic, dans modern, contemporan și latino. Dezvoltă grația, flexibilitatea, expresivitatea, coordonarea, ritmul și creativitatea. Ideal pentru copiii care doresc să-și exprime personalitatea prin mișcare și artă.",
     icon: "flaticon-dance",
     minAge: 4,
     maxAge: 14,

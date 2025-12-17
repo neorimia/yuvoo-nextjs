@@ -90,10 +90,25 @@ yuvoo-nextjs/
 - `SportsMain.tsx` - Main listing with category filtering (echipa, individual, combat, artistic, altul)
 - `SportCard.tsx` - Card component with category badges, icon display, metadata (age range, club count)
 - `SportDetailsMain.tsx` - Detail page with enhanced info display and CTA buttons
+- `SportContentExpanded.tsx` - Expanded content component displaying comprehensive sport information (introduction, benefits, age recommendations, equipment guide, FAQ, internal links)
+
+**Data Structure**:
+
+- `src/data/sport-expanded-content.ts` - Comprehensive expanded content for top 10 sports
+  - Interface: `SportExpandedContent` with introduction, benefits, ageRecommendations, equipmentGuide, faq, internalLinks
+  - Helper functions: `getExpandedContentBySportId()`, `getExpandedContentBySlug()`
+  - All 10 sports completed: Fotbal, Înot, Tenis, Baschet, Gimnastică artistică, Karate, Dans, Volei, Handbal, Judo
+  - Each sport: 800-1200 words total, all content in Romanian for SEO
 
 **Styling**:
 
 - SCSS files: `_sports-main.scss`, `_sport-card.scss`, `_sport-details.scss`, `_sports-intro.scss`, `_sports-faq.scss`
+- Expanded content styling in `_sport-details.scss`:
+  - Benefits grid (2 columns on desktop, 1 on mobile)
+  - Age recommendations section with gradient background
+  - Equipment guide with essential/optional badges
+  - FAQ accordion section
+  - Internal links CTA section
 - Category badges with color coding (echipa=blue, individual=green, combat=red, artistic=purple, altul=orange)
 - Gradient backgrounds for icon areas (theme-2-light to theme-1)
 - Hover effects with smooth transitions
@@ -104,8 +119,10 @@ yuvoo-nextjs/
 - Category filtering with icons for each category
 - Enhanced empty state with CTA button
 - Results count with category context
+- Expanded content automatically displays when available for a sport
 - Memoized components for performance
 - All content in Romanian, SEO-optimized
+- Internal linking to clubs filtered by sport
 
 ## Reusable Component Patterns
 

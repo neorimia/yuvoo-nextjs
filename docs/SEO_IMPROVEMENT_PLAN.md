@@ -1117,7 +1117,21 @@ CTA: "Vezi alte cluburi de [sport]" → Link către /cluburi?sport=[sport-id]
 
 **Week 5-6: Sport Detail Pages**
 
-- [ ] Expand content for top 10 sport detail pages (800-1200 words each)
+- [x] Expand content for top 10 sport detail pages (800-1200 words each)
+  - ✅ Created data structure and component system (`src/data/sport-expanded-content.ts`, `SportContentExpanded.tsx`)
+  - ✅ Integrated expanded content into `SportDetailsMain` component
+  - ✅ Added comprehensive SCSS styling for all expanded content sections
+  - ✅ Completed all 10 sports with comprehensive Romanian content (800-1200 words each):
+    - ✅ Fotbal - Complete with introduction, 6 benefits, age recommendations, equipment guide (6 items), 5 FAQs, internal links
+    - ✅ Înot - Complete with introduction, 6 benefits, age recommendations, equipment guide (6 items), 5 FAQs, internal links
+    - ✅ Tenis - Complete with introduction, 6 benefits, age recommendations, equipment guide (6 items), 5 FAQs, internal links
+    - ✅ Baschet - Complete with introduction, 6 benefits, age recommendations, equipment guide (6 items), 5 FAQs, internal links
+    - ✅ Gimnastică artistică - Complete with introduction, 6 benefits, age recommendations, equipment guide (6 items), 5 FAQs, internal links
+    - ✅ Karate - Complete with introduction, 6 benefits, age recommendations, equipment guide (5 items), 5 FAQs, internal links
+    - ✅ Dans - Complete with introduction, 6 benefits, age recommendations, equipment guide (5 items), 5 FAQs, internal links
+    - ✅ Volei - Complete with introduction, 6 benefits, age recommendations, equipment guide (6 items), 5 FAQs, internal links
+    - ✅ Handbal - Complete with introduction, 6 benefits, age recommendations, equipment guide (6 items), 5 FAQs, internal links
+    - ✅ Judo - Complete with introduction, 6 benefits, age recommendations, equipment guide (5 items), 5 FAQs, internal links
   - Add benefits sections
   - Add age recommendations
   - Add equipment guides

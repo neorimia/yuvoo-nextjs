@@ -94,6 +94,25 @@
      - ✅ All OG images use absolute URLs (with `NEXT_PUBLIC_APP_URL` or fallback to `https://yuvoo.ro`)
      - ✅ Added Twitter card images for all three pages
      - ✅ OG images configured with proper dimensions (1200x630), alt text, and locale (ro_RO)
+   - ✅ **SEO Content Expansion - Sport Detail Pages Complete**: Expanded content for top 10 sport detail pages
+     - ✅ Created `src/data/sport-expanded-content.ts` with comprehensive Romanian content (800-1200 words per sport)
+     - ✅ Created `SportContentExpanded.tsx` component to display expanded content sections
+     - ✅ Integrated expanded content into `SportDetailsMain` component (conditionally renders when content available)
+     - ✅ Added comprehensive SCSS styling (`_sport-details.scss`) for all expanded content sections
+     - ✅ All 10 sports completed with full content:
+       - ✅ Fotbal - Introduction, 6 benefits, age recommendations, equipment guide (6 items), 5 FAQs, internal links
+       - ✅ Înot - Introduction, 6 benefits, age recommendations, equipment guide (6 items), 5 FAQs, internal links
+       - ✅ Tenis - Introduction, 6 benefits, age recommendations, equipment guide (6 items), 5 FAQs, internal links
+       - ✅ Baschet - Introduction, 6 benefits, age recommendations, equipment guide (6 items), 5 FAQs, internal links
+       - ✅ Gimnastică artistică - Introduction, 6 benefits, age recommendations, equipment guide (6 items), 5 FAQs, internal links
+       - ✅ Karate - Introduction, 6 benefits, age recommendations, equipment guide (5 items), 5 FAQs, internal links
+       - ✅ Dans - Introduction, 6 benefits, age recommendations, equipment guide (5 items), 5 FAQs, internal links
+       - ✅ Volei - Introduction, 6 benefits, age recommendations, equipment guide (6 items), 5 FAQs, internal links
+       - ✅ Handbal - Introduction, 6 benefits, age recommendations, equipment guide (6 items), 5 FAQs, internal links
+       - ✅ Judo - Introduction, 6 benefits, age recommendations, equipment guide (5 items), 5 FAQs, internal links
+     - ✅ All content in Romanian, SEO-optimized, with proper internal linking to clubs
+     - ✅ Helper functions: `getExpandedContentBySportId()`, `getExpandedContentBySlug()`
+     - ✅ Updated `docs/SEO_IMPROVEMENT_PLAN.md` to mark task as complete
    - **Next Steps**: Continue SEO content expansion for clubs listing page, improve metadata for club detail pages
 
 2. **High Priority TODOs Implementation** ✅ (COMPLETE - All Core Features Implemented)
