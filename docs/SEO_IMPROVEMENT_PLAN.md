@@ -1085,9 +1085,29 @@ CTA: "Vezi alte cluburi de [sport]" → Link către /cluburi?sport=[sport-id]
   - ✅ Enhanced HomeFaq component with improved styling and reusable FaqAccordionItem component
   - ✅ All components use reusable components (SectionTitle, ViewAllLink, etc.) and follow design system
   - ✅ All content in Romanian, SEO-optimized, with proper semantic HTML
-- [ ] Expand sports listing page intro and FAQ (2 hours)
-- [ ] Improve metadata descriptions for top 5 sport detail pages (2 hours)
-- [ ] Add OG images for home, quiz, sports listing (2 hours)
+- [x] Expand sports listing page intro and FAQ (2 hours) ✅ **COMPLETED**
+  - ✅ Enhanced intro section with expanded title, subtitle, and two feature cards (Find the Right Sport, Verified Clubs)
+  - ✅ Added sports-specific FAQ section with 6 questions about sports for children
+  - ✅ Created `sports-faq-data.ts` with Romanian FAQ content
+  - ✅ Created SCSS files (`_sports-intro.scss`, `_sports-faq.scss`) for consistent styling
+  - ✅ Used reusable components (SectionTitle, FaqAccordionItem) for consistency
+  - ✅ Improved metadata with better title, description, and keywords
+  - ✅ All content in Romanian, SEO-optimized, with proper semantic HTML
+- [x] Improve metadata descriptions for top 5 sport detail pages (2 hours) ✅ **COMPLETED**
+  - ✅ Created `sport-metadata.ts` helper with enhanced SEO metadata for top 5 sports (Fotbal, Înot, Tenis, Gimnastică artistică, Baschet)
+  - ✅ Enhanced metadata includes: optimized titles, rich descriptions (150-200 words), targeted keywords arrays, improved OpenGraph descriptions
+  - ✅ Added fallback metadata generation for other sports with dynamic keywords and descriptions
+  - ✅ Updated `generateMetadata` function in sport detail page to use enhanced metadata
+  - ✅ All metadata in Romanian, SEO-optimized with location keywords (București), age ranges, and benefits
+  - ✅ Improved titles with location and verification keywords for better search visibility
+- [x] Add OG images for home, quiz, sports listing (2 hours) ✅ **COMPLETED**
+  - ✅ Updated home page OG images to use absolute URLs with baseUrl
+  - ✅ Added OG images to quiz page (`/chestionar`) with proper metadata
+  - ✅ Added OG images to sports listing page (`/sporturi`) with proper metadata
+  - ✅ All OG images use absolute URLs (with `NEXT_PUBLIC_APP_URL` or fallback to `https://yuvoo.ro`)
+  - ✅ Added Twitter card images for all three pages
+  - ✅ OG images configured with proper dimensions (1200x630), alt text, and locale (ro_RO)
+  - ✅ All pages now have complete OpenGraph metadata for better social media sharing
 
 **Deliverables**: Sitemap live, robots.txt live, basic structured data, improved metadata
 

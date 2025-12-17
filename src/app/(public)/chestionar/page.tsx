@@ -20,14 +20,27 @@ export const metadata: Metadata = {
     title: "Chestionar AI - Descoperă Sportul Potrivit | Yuvoo",
     description:
       "Chestionar AI personalizat pentru recomandări de sporturi. Doar 3-4 minute pentru recomandări bazate pe specialiști.",
+    url: `${process.env.NEXT_PUBLIC_APP_URL || "https://yuvoo.ro"}/chestionar`,
+    siteName: "Yuvoo",
     type: "website",
     locale: "ro_RO",
+    images: [
+      {
+        url: `${process.env.NEXT_PUBLIC_APP_URL || "https://yuvoo.ro"}/assets/img/logo/og-image.jpg`,
+        width: 1200,
+        height: 630,
+        alt: "Chestionar AI Yuvoo - Descoperă sportul potrivit pentru copilul tău",
+      },
+    ],
   },
   twitter: {
     card: "summary_large_image",
     title: "Chestionar AI - Descoperă Sportul Potrivit | Yuvoo",
     description:
       "Chestionar AI personalizat pentru recomandări de sporturi. Doar 3-4 minute pentru recomandări bazate pe specialiști.",
+    images: [
+      `${process.env.NEXT_PUBLIC_APP_URL || "https://yuvoo.ro"}/assets/img/logo/og-image.jpg`,
+    ],
   },
   alternates: {
     canonical: "/chestionar",

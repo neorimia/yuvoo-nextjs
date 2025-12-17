@@ -348,6 +348,24 @@ border-color: var(--bd-grey-1); // #E6E6E6
 - ✅ `HomeFaq` - FAQ section
   - Components: Uses `FaqAccordionItem` component
   - Styling: Custom SCSS (`layout/_home-faq.scss`)
+
+**Sports Components** (Created January 2025):
+
+- ✅ `SportsMain` - Main listing component with category filtering
+  - Styling: Custom SCSS (`layout/_sports-main.scss`)
+  - Features: Filter buttons with icons, results count, empty state
+- ✅ `SportCard` - Card component with category badges
+  - Styling: Custom SCSS (`layout/_sport-card.scss`)
+  - Features: Category badges with colors, icon display, hover effects
+- ✅ `SportDetailsMain` - Detail page component
+  - Styling: Custom SCSS (`layout/_sport-details.scss`)
+  - Features: Enhanced info display, CTA buttons with icons
+- ✅ Sports listing page intro section
+  - Styling: Custom SCSS (`layout/_sports-intro.scss`)
+  - Features: Feature cards with icons and descriptions
+- ✅ Sports listing page FAQ section
+  - Styling: Custom SCSS (`layout/_sports-faq.scss`)
+  - Features: Sports-specific FAQ with accordion items
   - Features: Bootstrap accordion, shows top 6 FAQs, link to full FAQ page
 
 **Reusable Components Created**:

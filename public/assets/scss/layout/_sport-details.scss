@@ -1,0 +1,287 @@
+@use "../utils" as *;
+
+//=============== SPORT DETAILS CSS START HERE ================
+
+.bd-sport-details {
+  &-area {
+    padding-top: 90px;
+    padding-bottom: 90px;
+    background-color: var(--bd-common-white);
+
+    @media #{$lg} {
+      padding-top: 80px;
+      padding-bottom: 80px;
+    }
+
+    @media #{$md,$sm} {
+      padding-top: 60px;
+      padding-bottom: 60px;
+    }
+
+    @media #{$xs} {
+      padding-top: 50px;
+      padding-bottom: 50px;
+    }
+  }
+
+  &-thumb {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 400px;
+    background: linear-gradient(
+      135deg,
+      var(--bd-theme-2-light, rgba(235, 255, 254, 0.3)) 0%,
+      var(--bd-theme-1, #f8f9fa) 100%
+    );
+    border-radius: 24px;
+    padding: 60px;
+    position: relative;
+    overflow: hidden;
+
+    @media #{$lg} {
+      min-height: 350px;
+      padding: 50px;
+    }
+
+    @media #{$md,$sm,$xs} {
+      min-height: 300px;
+      padding: 40px;
+      border-radius: 20px;
+    }
+  }
+
+  &-icon-wrapper {
+    position: relative;
+    z-index: 2;
+  }
+
+  &-icon {
+    font-size: 150px;
+    color: var(--bd-theme-2);
+    display: block;
+    @include transition(0.3s);
+
+    @media #{$lg} {
+      font-size: 120px;
+    }
+
+    @media #{$md,$sm} {
+      font-size: 100px;
+    }
+
+    @media #{$xs} {
+      font-size: 80px;
+    }
+  }
+
+  &-content {
+    padding: 50px;
+    border-radius: 24px;
+    height: 100%;
+
+    @media #{$lg} {
+      padding: 40px;
+    }
+
+    @media #{$md,$sm,$xs} {
+      padding: 30px;
+      border-radius: 20px;
+    }
+  }
+
+  &-title {
+    font-size: 36px;
+    font-weight: var(--bd-fw-sbold);
+    color: var(--bd-heading-primary);
+    margin-bottom: 20px;
+    line-height: 1.2;
+
+    @media #{$lg} {
+      font-size: 32px;
+      margin-bottom: 18px;
+    }
+
+    @media #{$md,$sm,$xs} {
+      font-size: 28px;
+      margin-bottom: 15px;
+    }
+  }
+
+  &-description {
+    font-size: 18px;
+    color: var(--bd-text-body);
+    line-height: 1.7;
+    margin-bottom: 40px;
+
+    @media #{$lg} {
+      font-size: 17px;
+      margin-bottom: 35px;
+    }
+
+    @media #{$md,$sm,$xs} {
+      font-size: 16px;
+      margin-bottom: 30px;
+    }
+  }
+
+  &-info-wrapper {
+    display: flex;
+    flex-direction: column;
+    gap: 25px;
+    margin-bottom: 40px;
+
+    @media #{$lg} {
+      gap: 22px;
+      margin-bottom: 35px;
+    }
+
+    @media #{$md,$sm,$xs} {
+      gap: 20px;
+      margin-bottom: 30px;
+    }
+  }
+
+  &-info-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 20px;
+    padding: 25px;
+    background-color: var(--bd-theme-1, #f8f9fa);
+    border-radius: 16px;
+    border: 1px solid var(--bd-grey-1);
+    @include transition(0.3s);
+
+    @media #{$lg} {
+      padding: 22px;
+      gap: 18px;
+    }
+
+    @media #{$md,$sm,$xs} {
+      padding: 20px;
+      gap: 15px;
+      border-radius: 12px;
+    }
+
+    &:hover {
+      border-color: var(--bd-theme-2);
+      background-color: var(--bd-theme-2-light, rgba(235, 255, 254, 0.3));
+      transform: translateX(5px);
+    }
+  }
+
+  &-info-icon {
+    flex-shrink: 0;
+    width: 60px;
+    height: 60px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: var(--bd-theme-2);
+    border-radius: 12px;
+    font-size: 24px;
+    color: var(--bd-common-white);
+
+    @media #{$lg} {
+      width: 55px;
+      height: 55px;
+      font-size: 22px;
+    }
+
+    @media #{$md,$sm,$xs} {
+      width: 50px;
+      height: 50px;
+      font-size: 20px;
+      border-radius: 10px;
+    }
+
+    i {
+      display: block;
+    }
+  }
+
+  &-info-content {
+    flex: 1;
+  }
+
+  &-info-label {
+    display: block;
+    font-size: 14px;
+    color: var(--bd-text-body);
+    margin-bottom: 8px;
+    font-weight: var(--bd-fw-medium);
+
+    @media #{$md,$sm,$xs} {
+      font-size: 13px;
+      margin-bottom: 6px;
+    }
+  }
+
+  &-info-value {
+    font-size: 20px;
+    font-weight: var(--bd-fw-sbold);
+    color: var(--bd-heading-primary);
+    margin: 0;
+    line-height: 1.3;
+
+    @media #{$lg} {
+      font-size: 19px;
+    }
+
+    @media #{$md,$sm,$xs} {
+      font-size: 18px;
+    }
+  }
+
+  &-info-verified {
+    color: var(--bd-success, #28a745);
+    font-size: 16px;
+    font-weight: var(--bd-fw-normal);
+
+    @media #{$md,$sm,$xs} {
+      font-size: 15px;
+    }
+  }
+
+  &-actions {
+    display: flex;
+    gap: 15px;
+    flex-wrap: wrap;
+    margin-top: 40px;
+
+    @media #{$lg} {
+      margin-top: 35px;
+      gap: 12px;
+    }
+
+    @media #{$md,$sm,$xs} {
+      margin-top: 30px;
+      gap: 10px;
+    }
+
+    .bd-btn {
+      flex: 1;
+      min-width: 200px;
+
+      @media #{$md,$sm,$xs} {
+        min-width: 150px;
+        flex: 1 1 calc(50% - 5px);
+      }
+
+      @media #{$xs} {
+        flex: 1 1 100%;
+        min-width: 100%;
+      }
+
+      i {
+        font-size: 16px;
+
+        @media #{$md,$sm,$xs} {
+          font-size: 15px;
+        }
+      }
+    }
+  }
+}
+
+//=============== SPORT DETAILS CSS END HERE ================

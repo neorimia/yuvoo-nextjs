@@ -31,13 +31,13 @@ export const metadata: Metadata = {
     title: "Yuvoo - Descoperă sportul potrivit copilului tău",
     description:
       "Descoperă cluburi sport verificate pentru copii în București. Recomandări personalizate bazate pe profilul copilului tău cu AI Coach.",
-    url: process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000",
+    url: process.env.NEXT_PUBLIC_APP_URL || "https://yuvoo.ro",
     siteName: "Yuvoo",
     locale: "ro_RO",
     type: "website",
     images: [
       {
-        url: "/assets/img/logo/og-image.jpg",
+        url: `${process.env.NEXT_PUBLIC_APP_URL || "https://yuvoo.ro"}/assets/img/logo/og-image.jpg`,
         width: 1200,
         height: 630,
         alt: "Yuvoo - Platformă AI pentru sporturi copii",
@@ -49,7 +49,9 @@ export const metadata: Metadata = {
     title: "Yuvoo - Descoperă sportul potrivit copilului tău",
     description:
       "Descoperă cluburi sport verificate pentru copii în București. Recomandări personalizate cu AI Coach.",
-    images: ["/assets/img/logo/og-image.jpg"],
+    images: [
+      `${process.env.NEXT_PUBLIC_APP_URL || "https://yuvoo.ro"}/assets/img/logo/og-image.jpg`,
+    ],
   },
   alternates: {
     canonical: process.env.NEXT_PUBLIC_APP_URL || "https://yuvoo.ro",

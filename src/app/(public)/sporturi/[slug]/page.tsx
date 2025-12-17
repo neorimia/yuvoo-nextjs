@@ -9,6 +9,7 @@ import { getSportBySlug } from "@/modules/sports/sports.service";
 import { SPORTS_DATA } from "@/lib/db/seed-data/sports";
 import { routes } from "@/lib/routes";
 import { cacheTag } from "next/cache";
+import { generateSportMetadata as generateEnhancedMetadata } from "@/lib/seo/sport-metadata";
 
 interface SportDetailPageProps {
   params: Promise<{
@@ -67,6 +68,7 @@ export default async function SportDetailPage({ params }: SportDetailPageProps) 
 
 /**
  * Generate metadata for SEO
+ * Enhanced metadata for top 5 sports with rich descriptions and keywords
  */
 export async function generateMetadata({ params }: SportDetailPageProps): Promise<Metadata> {
   const { slug } = await params;
@@ -83,17 +85,14 @@ export async function generateMetadata({ params }: SportDetailPageProps): Promis
 
   const baseUrl = process.env.NEXT_PUBLIC_APP_URL || "https://yuvoo.ro";
 
+  // Use enhanced metadata for top 5 sports, fallback for others
+  const enhancedMetadata = generateEnhancedMetadata(sport, baseUrl);
+
   return {
-    title: `${sport.name} - Sporturi Yuvoo`,
-    description:
-      sport.description || `Informații despre ${sport.name} pentru copii pe platforma Yuvoo.`,
-    openGraph: {
-      title: `${sport.name} - Yuvoo`,
-      description: sport.description || `Sport pentru copii: ${sport.name}`,
-      type: "website",
-    },
-    alternates: {
-      canonical: `${baseUrl}/sporturi/${slug}`,
-    },
+    title: enhancedMetadata.title,
+    description: enhancedMetadata.description,
+    keywords: enhancedMetadata.keywords,
+    openGraph: enhancedMetadata.openGraph,
+    alternates: enhancedMetadata.alternates,
   };
 }
