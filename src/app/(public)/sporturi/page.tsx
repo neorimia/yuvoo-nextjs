@@ -5,6 +5,7 @@ import type { Metadata } from "next";
 import BreadcrumbOne from "@/components/Breadcrumb/BreadcrumbOne";
 import SportsMain from "@/components/features/sports/SportsMain";
 import { getAllSports } from "@/modules/sports/sports.service";
+import { routes } from "@/lib/routes";
 import { cacheTag } from "next/cache";
 
 export const metadata: Metadata = {
@@ -36,7 +37,14 @@ export default async function SportsPage() {
 
   return (
     <>
-      <BreadcrumbOne title="Sporturi" subTitle="Sporturi" />
+      <BreadcrumbOne
+        title="Sporturi"
+        subTitle="Sporturi"
+        items={[
+          { name: "Yuvoo", url: routes.home },
+          { name: "Sporturi", url: routes.sports.list }, // Current page
+        ]}
+      />
       <section className="bd-sports-area pt-120 pb-70">
         <div className="container">
           <div className="row">

@@ -1,18 +1,38 @@
 import Link from "next/link";
 import React from "react";
 import Image from "next/image";
+import BreadcrumbSchema from "@/components/SEO/BreadcrumbSchema";
 import bg from "../../../public/assets/img/bg/breadcrumb-bg.jpg";
 import line_1 from "../../../public/assets/img/shape/white-curved-line.png";
 import line_2 from "../../../public/assets/img/shape/curved-line-2.png";
 
+interface BreadcrumbItem {
+  name: string;
+  url: string;
+}
+
 interface BreadcrumbProps {
   title?: string;
   subTitle?: string;
+  items?: BreadcrumbItem[]; // Optional: for BreadcrumbList schema
 }
 
-const BreadcrumbOne: React.FC<BreadcrumbProps> = ({ title, subTitle }) => {
+const BreadcrumbOne: React.FC<BreadcrumbProps> = ({ title, subTitle, items }) => {
+  // Generate breadcrumb items if not provided
+  // For listing pages (title === subTitle), just home + current page
+  // For detail pages, items should be passed explicitly
+  const breadcrumbItems: BreadcrumbItem[] =
+    items ||
+    (title
+      ? [
+          { name: "Yuvoo", url: "/" },
+          { name: title, url: "" }, // Current page - empty URL indicates this is the current page
+        ]
+      : [{ name: "Yuvoo", url: "/" }]);
+
   return (
     <section className="bd-breadcrumb-area p-relative fix theme-bg">
+      <BreadcrumbSchema items={breadcrumbItems} />
       <div className="bd-breadcrumb-bg" style={{ backgroundImage: `url(${bg.src})` }}></div>
       <div className="bd-breadcrumb-wrapper mb-60 p-relative">
         <div className="container">

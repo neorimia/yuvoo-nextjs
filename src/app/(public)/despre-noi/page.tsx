@@ -2,6 +2,7 @@ import React from "react";
 import type { Metadata } from "next";
 import BreadcrumbOne from "@/components/Breadcrumb/BreadcrumbOne";
 import AboutMain from "@/components/features/about/AboutMain";
+import { routes } from "@/lib/routes";
 
 export const metadata: Metadata = {
   title: "Despre Noi - Yuvoo",
@@ -27,7 +28,14 @@ export const metadata: Metadata = {
 export default function AboutPage() {
   return (
     <>
-      <BreadcrumbOne title="Despre Noi" subTitle="Despre Noi" />
+      <BreadcrumbOne
+        title="Despre Noi"
+        subTitle="Despre Noi"
+        items={[
+          { name: "Yuvoo", url: routes.home },
+          { name: "Despre Noi", url: routes.about }, // Current page
+        ]}
+      />
       <section className="bd-about-area pt-120 pb-70">
         <div className="container">
           <div className="row">

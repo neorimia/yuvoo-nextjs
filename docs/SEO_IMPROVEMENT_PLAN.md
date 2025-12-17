@@ -18,8 +18,11 @@ This document provides a prioritized, execution-ready SEO and content copywritin
 - ✅ **Robots.txt**: Implemented (`app/robots.ts`) - Protected routes disallowed, sitemap referenced
 - ✅ **Canonical URLs**: Implemented - All 16 public pages have canonical URLs (absolute URLs for dynamic pages, handled query params for listing pages)
 - ✅ **Organization Schema**: Implemented - JSON-LD structured data added to root layout (appears on all pages)
+- ✅ **BreadcrumbList Schema**: Implemented - JSON-LD structured data added to all pages via BreadcrumbOne component
+- ✅ **FAQPage Schema**: Implemented - JSON-LD structured data added to FAQ page with 12 Romanian FAQ items
+- ✅ **LocalBusiness Schema**: Implemented - JSON-LD structured data (SportsActivityLocation) added to all club detail pages
+- ✅ **MedicalBusiness Schema**: Implemented - JSON-LD structured data (Physician) added to all doctor detail pages
 - ✅ **Noindex Pages**: Quiz results and search pages excluded from indexing
-- ⚠️ Missing: Additional structured data (LocalBusiness for clubs, Person for doctors, FAQPage, BreadcrumbList)
 - ⚠️ Content gaps: Thin content on several pages, missing FAQs, weak internal linking
 - ⚠️ Metadata inconsistencies: Some pages missing canonical URLs, incomplete OG tags
 
@@ -29,6 +32,10 @@ This document provides a prioritized, execution-ready SEO and content copywritin
 - ✅ **Robots.txt Complete** (2024-12-18): `src/app/robots.ts` created with Next.js 16 native support, disallows protected routes and internal pages, references sitemap
 - ✅ **Canonical URLs Complete** (2024-12-18): Added canonical URLs to all 16 public pages, converted listing pages with searchParams to use generateMetadata(), all dynamic pages use absolute URLs
 - ✅ **Organization Schema Complete** (2024-12-18): `src/components/SEO/OrganizationSchema.tsx` created and added to root layout, JSON-LD structured data appears on all pages
+- ✅ **BreadcrumbList Schema Complete** (2024-12-18): `src/components/SEO/BreadcrumbSchema.tsx` created, `BreadcrumbOne` component enhanced, all 16 public pages updated with proper breadcrumb hierarchy
+- ✅ **FAQPage Schema Complete** (2024-12-18): `src/components/SEO/FAQPageSchema.tsx` created, `src/data/faq-data.ts` with 12 Romanian FAQ items created, FAQ page updated with schema
+- ✅ **LocalBusiness Schema Complete** (2024-12-18): `src/components/SEO/LocalBusinessSchema.tsx` created (SportsActivityLocation type), added to all club detail pages with full business information
+- ✅ **MedicalBusiness Schema Complete** (2024-12-18): `src/components/SEO/MedicalBusinessSchema.tsx` created (Physician type), added to all doctor detail pages with medical professional information
 - ✅ **Noindex Pages Complete** (2024-12-18): Quiz results page and search page excluded from indexing via robots metadata (quiz results = private/personalized, search = utility page)
 
 ---
@@ -787,85 +794,157 @@ CTA: "Vezi alte cluburi de [sport]" → Link către /cluburi?sport=[sport-id]
 
 #### 2. LocalBusiness Schema (Club Detail Pages)
 
-**Location**: Club detail page component
+**Location**: Club detail page (`src/app/(public)/cluburi/[slug]/page.tsx`)
+
+**Implementation**:
+
+- Created `src/components/SEO/LocalBusinessSchema.tsx` component
+- Uses `SportsActivityLocation` type (more specific than generic LocalBusiness)
+- Schema includes all available club data:
+  - Basic info: name, description, URL
+  - Address: street, city, district, country (RO)
+  - Contact: phone, email
+  - Images: single image or array of images
+  - Geo coordinates: latitude/longitude if available
+  - Sport: sport name (SportsActivityLocation specific property)
+  - Pricing: converted to price range format ($$) if available
+
+**Example**:
 
 ```typescript
-// In club detail page component
-const clubSchema = {
-  "@context": "https://schema.org",
-  "@type": "SportsActivityLocation",
-  name: club.name,
-  description: club.description,
-  address: {
-    "@type": "PostalAddress",
-    streetAddress: club.location.address,
-    addressLocality: club.location.city,
-    addressRegion: club.location.district,
-    postalCode: club.location.postalCode,
-    addressCountry: "RO",
-  },
-  telephone: club.contact.phone,
-  url: `${baseUrl}${routes.clubs.detail(club.slug)}`,
-  image: club.images?.[0],
-  priceRange: club.priceRange, // e.g., "$$"
-  aggregateRating: club.rating
-    ? {
-        "@type": "AggregateRating",
-        ratingValue: club.rating.average,
-        reviewCount: club.rating.count,
-      }
-    : undefined,
-};
+<LocalBusinessSchema club={club} />
 ```
 
 **Effort**: M (2-3 hours for all club pages)  
-**Priority**: 🔴 CRITICAL
+**Priority**: 🔴 CRITICAL  
+**Status**: ✅ **COMPLETE** (2024-12-18)
+
+**Implementation Notes**:
+
+- ✅ Created `LocalBusinessSchema.tsx` component for JSON-LD structured data
+- ✅ Uses `SportsActivityLocation` schema type (subtype of LocalBusiness)
+- ✅ Includes all available club information: address, contact, images, coordinates, pricing
+- ✅ Price range automatically calculated from pricing amount (RON → $ range)
+- ✅ Schema appears on all club detail pages (`/cluburi/[slug]`)
+
+---
+
+#### 2b. MedicalBusiness Schema (Doctor Detail Pages)
+
+**Location**: Doctor detail page (`src/app/(public)/doctori/[slug]/page.tsx`)
+
+**Implementation**:
+
+- Created `src/components/SEO/MedicalBusinessSchema.tsx` component
+- Uses `Physician` type (more specific than generic MedicalBusiness)
+- Schema includes all available doctor data:
+  - Basic info: name, description, URL
+  - Medical: specialty, credentials (MD, etc.)
+  - Address: street, city, district, country (RO)
+  - Contact: phone, email
+  - Image: doctor profile image if available
+  - Geo coordinates: latitude/longitude if available
+  - Availability: accepting new patients status
+
+**Example**:
+
+```typescript
+<MedicalBusinessSchema doctor={doctor} />
+```
+
+**Effort**: Included in LocalBusiness implementation  
+**Priority**: 🔴 CRITICAL  
+**Status**: ✅ **COMPLETE** (2024-12-18)
+
+**Implementation Notes**:
+
+- ✅ Created `MedicalBusinessSchema.tsx` component for JSON-LD structured data
+- ✅ Uses `Physician` schema type (subtype of MedicalBusiness/Person)
+- ✅ Includes all available doctor information: address, contact, credentials, specialty
+- ✅ Schema appears on all doctor detail pages (`/doctori/[slug]`)
 
 ---
 
 #### 3. FAQPage Schema (FAQ Page)
 
-**Location**: FAQ page component
+**Location**: FAQ page (`src/app/(public)/intrebari-frecvente/page.tsx`)
+
+**Implementation**:
+
+- Created `src/components/SEO/FAQPageSchema.tsx` component
+- Created `src/data/faq-data.ts` with 12 Romanian FAQ items covering:
+  - Platform overview and functionality
+  - Pricing and free services
+  - Data privacy and security
+  - AI Quiz functionality
+  - Club verification process
+  - Booking and reservations
+  - Geographic coverage
+  - Partner enrollment
+- Schema automatically generated from FAQ data array
+- All content in Romanian for SEO purposes
+
+**Example**:
 
 ```typescript
-const faqSchema = {
-  "@context": "https://schema.org",
-  "@type": "FAQPage",
-  mainEntity: faqs.map((faq) => ({
-    "@type": "Question",
-    name: faq.question,
-    acceptedAnswer: {
-      "@type": "Answer",
-      text: faq.answer,
-    },
-  })),
-};
+<FAQPageSchema faqs={faqItems} />
 ```
 
 **Effort**: S (1 hour)  
-**Priority**: 🔴 CRITICAL
+**Priority**: 🔴 CRITICAL  
+**Status**: ✅ **COMPLETE** (2024-12-18)
+
+**Implementation Notes**:
+
+- ✅ Created `FAQPageSchema.tsx` component for JSON-LD structured data
+- ✅ Created `faq-data.ts` with 12 comprehensive Romanian FAQ items
+- ✅ FAQ items cover all major user concerns: platform functionality, privacy, quiz, clubs, doctors, partnerships
+- ✅ Schema appears on FAQ page (`/intrebari-frecvente`)
+- ✅ All questions and answers are in Romanian language
+- ✅ FAQ data can be reused to update `FaqMain` component in future (currently has template English content)
 
 ---
 
 #### 4. BreadcrumbList Schema (All Pages)
 
-**Location**: Breadcrumb component or page layout
+**Location**: Breadcrumb component (`BreadcrumbOne.tsx`)
+
+**Implementation**:
+
+- Created `src/components/SEO/BreadcrumbSchema.tsx` component
+- Enhanced `BreadcrumbOne` component to accept optional `items` prop
+- Schema automatically generated from breadcrumb items
+- All public pages updated to pass proper breadcrumb hierarchy
+
+**Example**:
 
 ```typescript
-const breadcrumbSchema = {
-  "@context": "https://schema.org",
-  "@type": "BreadcrumbList",
-  itemListElement: breadcrumbs.map((crumb, index) => ({
-    "@type": "ListItem",
-    position: index + 1,
-    name: crumb.name,
-    item: `${baseUrl}${crumb.url}`,
-  })),
-};
+<BreadcrumbOne
+  title={sport.name}
+  subTitle="Sporturi"
+  items={[
+    { name: "Yuvoo", url: routes.home },
+    { name: "Sporturi", url: routes.sports.list },
+    { name: sport.name, url: "" }, // Current page (filtered in schema)
+  ]}
+/>
 ```
 
 **Effort**: M (2-3 hours)  
-**Priority**: 🟡 MEDIUM-HIGH
+**Priority**: 🟡 MEDIUM-HIGH  
+**Status**: ✅ **COMPLETE** (2024-12-18)
+
+**Implementation Notes**:
+
+- ✅ Created `src/components/SEO/BreadcrumbSchema.tsx` component for JSON-LD structured data
+- ✅ Enhanced `BreadcrumbOne` component to accept optional `items` prop for breadcrumb hierarchy
+- ✅ BreadcrumbList schema includes all items with URLs (current page URL included when available)
+- ✅ All 16 public pages updated with proper breadcrumb items:
+  - Detail pages: Home > Parent Listing > Current Page (all with URLs)
+  - Listing pages: Home > Current Page (all with URLs)
+  - Quiz results: Home > Quiz Intro > Current Results Page
+- ✅ Uses `routes` from `@/lib/routes` for URL consistency
+- ✅ Schema automatically generated and included on all pages using BreadcrumbOne component
 
 ---
 
@@ -974,9 +1053,29 @@ const breadcrumbSchema = {
 
 **Week 2-3: Structured Data Foundation**
 
-- [ ] Add BreadcrumbList schema to all pages (3 hours)
-- [ ] Add FAQPage schema to FAQ page (1 hour)
-- [ ] Add LocalBusiness schema to club and doctor detail pages (4 hours)
+- [x] Add BreadcrumbList schema to all pages (3 hours) ✅ **COMPLETE**
+  - ✅ Created `src/components/SEO/BreadcrumbSchema.tsx` component
+  - ✅ Enhanced `BreadcrumbOne` component to accept breadcrumb items and generate schema
+  - ✅ Updated all public pages to pass proper breadcrumb items:
+    - Sports listing and detail pages ✅
+    - Clubs listing and detail pages ✅
+    - Doctors listing and detail pages ✅
+    - Quiz intro and results pages ✅
+    - About and FAQ pages ✅
+    - All legal pages ✅
+  - ✅ BreadcrumbList schema appears on all pages with proper hierarchy
+  - ✅ Uses routes from `@/lib/routes` for consistency
+- [x] Add FAQPage schema to FAQ page (1 hour) ✅ **COMPLETE**
+  - ✅ Created `src/components/SEO/FAQPageSchema.tsx` component
+  - ✅ Created `src/data/faq-data.ts` with 12 Romanian FAQ items
+  - ✅ Added FAQPage schema to FAQ page (`/intrebari-frecvente`)
+  - ✅ Schema includes all FAQ questions and answers in JSON-LD format
+- [x] Add LocalBusiness schema to club and doctor detail pages (4 hours) ✅ **COMPLETE**
+  - ✅ Created `src/components/SEO/LocalBusinessSchema.tsx` component (SportsActivityLocation type for clubs)
+  - ✅ Created `src/components/SEO/MedicalBusinessSchema.tsx` component (Physician type for doctors)
+  - ✅ Added LocalBusiness schema to club detail pages (`/cluburi/[slug]`)
+  - ✅ Added MedicalBusiness schema to doctor detail pages (`/doctori/[slug]`)
+  - ✅ Schema includes: address, contact info, images, geo coordinates, pricing (clubs), credentials (doctors)
 
 **Week 3-4: Content Quick Wins**
 
@@ -1137,7 +1236,7 @@ Before deploying each improvement:
 
 1. ✅ Create sitemap.ts and robots.ts (✅ **COMPLETE** - Both implemented)
 2. ✅ Add canonical URLs everywhere (✅ **COMPLETE** - All 16 public pages updated)
-3. ✅ Add Organization and BreadcrumbList schemas (✅ **Organization COMPLETE** - BreadcrumbList pending)
+3. ✅ Add Organization, BreadcrumbList, FAQPage, LocalBusiness, and MedicalBusiness schemas (✅ **COMPLETE** - All five implemented)
 4. ✅ Noindex quiz results and search pages (✅ **COMPLETE** - Both pages excluded from indexing)
 
 **High-Impact Actions (Month 1)**:

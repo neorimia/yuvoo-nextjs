@@ -4,6 +4,7 @@ import BreadcrumbOne from "@/components/Breadcrumb/BreadcrumbOne";
 import ClubsMain from "@/components/features/clubs/ClubsMain";
 import ClubSearchFilters from "@/components/features/clubs/ClubSearchFilters";
 import { searchClubs } from "@/modules/clubs/clubs.service";
+import { routes } from "@/lib/routes";
 import type { Club, ClubSearchFilters as ClubSearchFiltersType } from "@/modules/clubs/clubs.types";
 
 /**
@@ -77,7 +78,14 @@ export default async function ClubsPage({ searchParams }: ClubsPageProps) {
 
   return (
     <>
-      <BreadcrumbOne title="Cluburi Sportive" subTitle="Cluburi" />
+      <BreadcrumbOne
+        title="Cluburi Sportive"
+        subTitle="Cluburi"
+        items={[
+          { name: "Yuvoo", url: routes.home },
+          { name: "Cluburi", url: routes.clubs.list }, // Current page
+        ]}
+      />
       <ClubSearchFilters initialFilters={filters} />
       <ClubsMain
         clubs={clubs}

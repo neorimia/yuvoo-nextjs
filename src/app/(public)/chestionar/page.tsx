@@ -2,6 +2,7 @@ import React from "react";
 import type { Metadata } from "next";
 import BreadcrumbOne from "@/components/Breadcrumb/BreadcrumbOne";
 import QuizIntroContent from "@/components/features/quiz/QuizIntroContent";
+import { routes } from "@/lib/routes";
 
 export const metadata: Metadata = {
   title: "Chestionar AI - Descoperă Sportul Potrivit | Yuvoo",
@@ -42,7 +43,14 @@ export const metadata: Metadata = {
 export default function QuizIntroPage() {
   return (
     <>
-      <BreadcrumbOne title="Chestionar AI" subTitle="Chestionar" />
+      <BreadcrumbOne
+        title="Chestionar AI"
+        subTitle="Chestionar"
+        items={[
+          { name: "Yuvoo", url: routes.home },
+          { name: "Chestionar", url: routes.quiz.intro }, // Current page
+        ]}
+      />
       <section className="quiz-intro-section py-5">
         <div className="container">
           <div className="row justify-content-center">

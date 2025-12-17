@@ -4,10 +4,12 @@ import React from "react";
 import { notFound } from "next/navigation";
 import type { Metadata } from "next";
 import BreadcrumbOne from "@/components/Breadcrumb/BreadcrumbOne";
+import MedicalBusinessSchema from "@/components/SEO/MedicalBusinessSchema";
 import DoctorDetailsMain from "@/components/features/doctors/DoctorDetailsMain";
 import DoctorAvailability from "@/components/features/doctors/DoctorAvailability";
 import DoctorAppointmentFormSection from "@/components/features/doctors/DoctorAppointmentFormSection";
 import { getDoctorBySlug } from "@/modules/doctors/doctors.service";
+import { routes } from "@/lib/routes";
 import { cacheTag } from "next/cache";
 import type { Doctor } from "@/modules/doctors/doctors.types";
 
@@ -55,7 +57,16 @@ export default async function DoctorDetailPage({ params }: DoctorDetailPageProps
 
   return (
     <>
-      <BreadcrumbOne title={doctor.name} subTitle="Doctori" />
+      <MedicalBusinessSchema doctor={doctor} />
+      <BreadcrumbOne
+        title={doctor.name}
+        subTitle="Doctori"
+        items={[
+          { name: "Yuvoo", url: routes.home },
+          { name: "Doctori", url: routes.doctors.list },
+          { name: doctor.name, url: routes.doctors.detail(slug) }, // Current page
+        ]}
+      />
       <DoctorDetailsMain doctor={doctor} />
       <DoctorAvailability doctor={doctor} />
       <DoctorAppointmentFormSection doctor={doctor} />

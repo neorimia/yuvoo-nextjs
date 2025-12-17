@@ -2,6 +2,9 @@ import React from "react";
 import type { Metadata } from "next";
 import BreadcrumbOne from "@/components/Breadcrumb/BreadcrumbOne";
 import FaqMain from "@/components/FAQ/FaqMain";
+import FAQPageSchema from "@/components/SEO/FAQPageSchema";
+import { faqItems } from "@/data/faq-data";
+import { routes } from "@/lib/routes";
 
 export const metadata: Metadata = {
   title: "Întrebări Frecvente - Yuvoo",
@@ -25,7 +28,15 @@ export const metadata: Metadata = {
 export default function FAQPage() {
   return (
     <>
-      <BreadcrumbOne title="Întrebări Frecvente" subTitle="FAQ" />
+      <FAQPageSchema faqs={faqItems} />
+      <BreadcrumbOne
+        title="Întrebări Frecvente"
+        subTitle="FAQ"
+        items={[
+          { name: "Yuvoo", url: routes.home },
+          { name: "Întrebări Frecvente", url: routes.faq }, // Current page
+        ]}
+      />
       <section className="bd-faq-area pt-120 pb-70">
         <div className="container">
           <div className="row">

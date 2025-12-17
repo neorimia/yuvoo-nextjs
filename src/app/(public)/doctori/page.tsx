@@ -4,6 +4,7 @@ import BreadcrumbOne from "@/components/Breadcrumb/BreadcrumbOne";
 import DoctorsMain from "@/components/features/doctors/DoctorsMain";
 import DoctorSearchFilters from "@/components/features/doctors/DoctorSearchFilters";
 import { searchDoctors } from "@/modules/doctors/doctors.service";
+import { routes } from "@/lib/routes";
 import type {
   Doctor,
   DoctorSearchFilters as DoctorSearchFiltersType,
@@ -67,7 +68,14 @@ export default async function DoctorsPage({ searchParams }: DoctorsPageProps) {
 
   return (
     <>
-      <BreadcrumbOne title="Specialiști Pediatri" subTitle="Doctori" />
+      <BreadcrumbOne
+        title="Specialiști Pediatri"
+        subTitle="Doctori"
+        items={[
+          { name: "Yuvoo", url: routes.home },
+          { name: "Doctori", url: routes.doctors.list }, // Current page
+        ]}
+      />
       <DoctorSearchFilters initialFilters={filters} />
       <DoctorsMain doctors={doctors} />
     </>

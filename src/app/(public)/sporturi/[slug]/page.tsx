@@ -7,6 +7,7 @@ import BreadcrumbOne from "@/components/Breadcrumb/BreadcrumbOne";
 import SportDetailsMain from "@/components/features/sports/SportDetailsMain";
 import { getSportBySlug } from "@/modules/sports/sports.service";
 import { SPORTS_DATA } from "@/lib/db/seed-data/sports";
+import { routes } from "@/lib/routes";
 import { cacheTag } from "next/cache";
 
 interface SportDetailPageProps {
@@ -50,7 +51,15 @@ export default async function SportDetailPage({ params }: SportDetailPageProps) 
 
   return (
     <>
-      <BreadcrumbOne title={sport.name} subTitle="Sporturi" />
+      <BreadcrumbOne
+        title={sport.name}
+        subTitle="Sporturi"
+        items={[
+          { name: "Yuvoo", url: routes.home },
+          { name: "Sporturi", url: routes.sports.list },
+          { name: sport.name, url: routes.sports.detail(slug) }, // Current page
+        ]}
+      />
       <SportDetailsMain sport={sport} />
     </>
   );

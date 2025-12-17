@@ -4,6 +4,7 @@ import React from "react";
 import { notFound } from "next/navigation";
 import type { Metadata } from "next";
 import BreadcrumbOne from "@/components/Breadcrumb/BreadcrumbOne";
+import LocalBusinessSchema from "@/components/SEO/LocalBusinessSchema";
 import ClubDetailsMain from "@/components/features/clubs/ClubDetailsMain";
 import ClubDetailsWidget from "@/components/features/clubs/ClubDetailsWidget";
 import ClubDetailsWidgetTwo from "@/components/features/clubs/ClubDetailsWidgetTwo";
@@ -12,6 +13,7 @@ import ClubGallery from "@/components/features/clubs/ClubGallery";
 import ClubMap from "@/components/features/clubs/ClubMap";
 import BookingFormSection from "@/components/features/clubs/BookingFormSection";
 import { getClubBySlug } from "@/modules/clubs/clubs.service";
+import { routes } from "@/lib/routes";
 import { cacheTag } from "next/cache";
 import type { Club } from "@/modules/clubs/clubs.types";
 
@@ -59,7 +61,16 @@ export default async function ClubDetailPage({ params }: ClubDetailPageProps) {
 
   return (
     <>
-      <BreadcrumbOne title={club.name} subTitle="Cluburi" />
+      <LocalBusinessSchema club={club} />
+      <BreadcrumbOne
+        title={club.name}
+        subTitle="Cluburi"
+        items={[
+          { name: "Yuvoo", url: routes.home },
+          { name: "Cluburi", url: routes.clubs.list },
+          { name: club.name, url: routes.clubs.detail(slug) }, // Current page
+        ]}
+      />
       <ClubDetailsMain club={club} />
       {club.images && club.images.length > 0 && (
         <ClubGallery images={club.images} clubName={club.name} />
