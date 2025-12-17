@@ -53,7 +53,21 @@
      - ✅ Updated club and doctor detail pages with LocalBusiness/MedicalBusiness schemas
      - ✅ Updated FAQ page with FAQPage schema
      - ✅ Added `getAllClubs()` and `getAllDoctors()` service functions
-   - **Next Steps**: Content expansion (home page, sports pages, clubs pages), internal linking strategy, on-page SEO optimizations
+   - **Week 3-4: Content Quick Wins** ✅ **IN PROGRESS**
+     - ✅ **Home Page Content Expansion Complete**: Added trust signals, stats, and enhanced FAQ sections
+       - ✅ Created `HomeTrustSignals` component with 6 trust signals (verified clubs, GDPR, verified doctors, secure platform, free for parents, AI recommendations) using Font Awesome icons
+       - ✅ Created `HomeStats` component with animated counters (5000+ families, 500+ verified clubs, 50+ pediatric specialists, 15+ sports) using Flaticon icons
+       - ✅ Enhanced `HomeFaq` component with reusable `FaqAccordionItem` component and improved styling
+       - ✅ Updated `HowItWorks` component with Flaticon icons and improved content
+       - ✅ Updated `FeaturedSports` component with Flaticon icons, improved content, and custom SCSS
+       - ✅ Updated `FeaturedClubs` component with reusable components (`VerificationBadge`, `DistanceBadge`, `ViewAllLink`) and custom SCSS
+       - ✅ Updated `FeaturedDoctors` component with reusable components and custom SCSS
+       - ✅ Updated `HomeTestimonial` component with reusable components (`StarRating`, `AvatarInitials`) and custom SCSS
+       - ✅ Created reusable components: `SectionTitle`, `DistanceBadge`, `ViewAllLink`, `StarRating`, `AvatarInitials`, `FaqAccordionItem`
+       - ✅ Created SCSS files: `_trust.scss`, `_stats.scss`, `_how-it-works.scss`, `_featured-sports.scss`, `_featured-clubs.scss`, `_featured-doctors.scss`, `_home-testimonial.scss`, `_home-faq.scss`
+       - ✅ All components follow design system patterns with consistent styling, hover effects, and responsive breakpoints
+       - ✅ All components use Romanian content and are SEO-optimized
+   - **Next Steps**: Expand sports listing page intro and FAQ, improve metadata descriptions for top 5 sport detail pages, add OG images
 
 2. **High Priority TODOs Implementation** ✅ (COMPLETE - All Core Features Implemented)
    - **Repository Implementation** ✅ **COMPLETE**
@@ -583,13 +597,14 @@
     - `HeroYuvoo` - Hero section with main value prop and quiz CTA ✅
     - `HowItWorks` - 3-step process (Quiz → Recommendations → Find Clubs) ✅
     - `HomePromotionArea` - Promotion section with additional CTA ✅
-    - `HomeThreeFeatureArea` - 4 key value propositions ✅
+    - `HomeTrustSignals` - Trust signals section (6 signals: verified clubs, GDPR, verified doctors, secure platform, free for parents, AI recommendations) with Font Awesome icons ✅
+    - `HomeStats` - Statistics section with animated counters (5000+ families, 500+ clubs, 50+ doctors, 15+ sports) ✅
     - `FeaturedSports` - Featured sports showcase ✅
     - `FeaturedClubs` - Featured verified clubs ✅
     - `FeaturedDoctors` - Featured pediatric specialists ✅
     - `HomeTestimonial` - Parent testimonials ✅
-    - `HomeFaq` - FAQ section ✅
-  - **Status**: ✅ **COMPLETE** - Landing page fully implemented with all required sections
+    - `HomeFaq` - Enhanced FAQ section (top 6 FAQs from full FAQ data, link to full FAQ page) ✅
+  - **Status**: ✅ **COMPLETE** - Landing page fully implemented with all required sections including trust signals, stats, and enhanced FAQ
 
 ### Layout Setup Documentation ✅ (January 2025 - Complete Layout Documentation)
 
@@ -1654,13 +1669,31 @@ The quiz system is now fully implemented, tested, optimized, and documented. All
   - Romanian language content throughout
   - Status: ✅ Complete and integrated into homepage
 
-- **Created**: `src/components/features/home/HomeFaq.tsx` ✅
-  - Bootstrap accordion with 4 FAQ items
-  - Questions: Free service, club verification, data safety, quiz repetition
-  - First item expanded by default
-  - Romanian language content
-  - Fixed visibility issues with proper className construction
+- **Created**: `src/components/features/home/HomeTrustSignals.tsx` ✅
+  - Trust signals section with 6 trust indicators
+  - Icons: Font Awesome Pro (`fa-solid fa-certificate`, `fa-solid fa-shield-check`, `fa-solid fa-user-doctor`, `fa-solid fa-lock`, `fa-solid fa-heart`, `fa-solid fa-robot`)
+  - Clickable cards with links to clubs, doctors, GDPR page
+  - Hover effects with card lift and icon color changes
+  - Romanian language content throughout
+  - SCSS styles in `layout/_trust.scss`
   - Status: ✅ Complete and integrated into homepage
+
+- **Created**: `src/components/features/home/HomeStats.tsx` ✅
+  - Statistics section with animated counters using CountUpContent
+  - 4 stats: 5000+ families, 500+ verified clubs, 50+ pediatric specialists, 15+ sports
+  - Font Awesome icons for each stat
+  - Vertical layout for number and text
+  - Romanian language content
+  - Status: ✅ Complete and integrated into homepage
+
+- **Enhanced**: `src/components/features/home/HomeFaq.tsx` ✅
+  - Now uses full FAQ data from `faq-data.ts` (12 items total)
+  - Shows top 6 most relevant FAQs on home page
+  - Added "Vezi toate întrebările" button linking to full FAQ page
+  - Enhanced section description
+  - Bootstrap accordion with first item expanded by default
+  - Romanian language content
+  - Status: ✅ Enhanced and integrated into homepage
 
 - **Updated**: `src/app/(public)/page.tsx` SEO metadata ✅
   - Enhanced meta description with keywords, benefits, and CTA
@@ -1677,12 +1710,13 @@ Current homepage structure (`src/app/(public)/page.tsx`):
 1. `<HeroYuvoo />` - Main hero section
 2. `<HowItWorks />` - 3-step process explanation
 3. `<HomePromotionArea />` - Promotional section with quiz CTA
-4. `<HomeThreeFeatureArea />` - Key features/benefits
-5. `<FeaturedSports />` - Popular sports showcase
-6. `<FeaturedClubs />` - Verified clubs showcase
-7. `<FeaturedDoctors />` - Pediatric specialists showcase
-8. `<HomeTestimonial />` - Parent testimonial
-9. `<HomeFaq />` - Frequently asked questions
+4. `<HomeTrustSignals />` - Trust signals (6 indicators with Font Awesome icons)
+5. `<HomeStats />` - Statistics with animated counters
+6. `<FeaturedSports />` - Popular sports showcase
+7. `<FeaturedClubs />` - Verified clubs showcase
+8. `<FeaturedDoctors />` - Pediatric specialists showcase
+9. `<HomeTestimonial />` - Parent testimonial
+10. `<HomeFaq />` - Frequently asked questions (top 6 with link to full FAQ)
 
 ### Project Initialization
 
@@ -2513,3 +2547,8 @@ Current homepage structure (`src/app/(public)/page.tsx`):
 - **Language Requirement**: ALL user-facing content must be in Romanian language only
 - **Legal Pages**: All 4 legal pages complete (`/confidentialitate`, `/termeni`, `/cookies`, `/gdpr-parinti`) - Ready for legal review
 - **Deployment Guides**: All deployment guides complete (`docs/VERCEL_DEPLOYMENT_GUIDE.md`, `docs/DATABASE_DEPLOYMENT_GUIDE.md`, `docs/MONITORING_SETUP_GUIDE.md`) - Ready for production deployment
+- **Home Page Components** (January 2025): All home page components updated with improved content, styling, and reusable components
+  - ✅ 8 home page components updated/created (HomeTrustSignals, HomeStats, HowItWorks, FeaturedSports, FeaturedClubs, FeaturedDoctors, HomeTestimonial, HomeFaq)
+  - ✅ 6 reusable shared components created (SectionTitle, ViewAllLink, DistanceBadge, StarRating, AvatarInitials, FaqAccordionItem)
+  - ✅ 8 new SCSS files created for consistent styling (`_trust.scss`, `_stats.scss`, `_how-it-works.scss`, `_featured-sports.scss`, `_featured-clubs.scss`, `_featured-doctors.scss`, `_home-testimonial.scss`, `_home-faq.scss`)
+  - ✅ All components follow design system patterns with consistent hover effects, spacing, responsive breakpoints, and Romanian content

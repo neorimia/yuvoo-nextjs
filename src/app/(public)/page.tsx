@@ -2,13 +2,14 @@ import { Metadata } from "next";
 import HeroYuvoo from "@/components/features/home/HeroYuvoo";
 import React from "react";
 import HomePromotionArea from "@/components/features/home/HomePromotionArea";
-import HomeThreeFeatureArea from "@/components/Feature/HomeThreeFeatureArea";
 import HowItWorks from "@/components/features/home/HowItWorks";
 import FeaturedSports from "@/components/features/home/FeaturedSports";
 import FeaturedClubs from "@/components/features/home/FeaturedClubs";
 import HomeTestimonial from "@/components/features/home/HomeTestimonial";
 import FeaturedDoctors from "@/components/features/home/FeaturedDoctors";
 import HomeFaq from "@/components/features/home/HomeFaq";
+import HomeTrustSignals from "@/components/features/home/HomeTrustSignals";
+import HomeStats from "@/components/features/home/HomeStats";
 
 export const metadata: Metadata = {
   title: "Yuvoo - Descoperă sportul potrivit copilului tău",
@@ -61,7 +62,8 @@ const Home = () => {
       <HeroYuvoo />
       <HowItWorks />
       <HomePromotionArea promo_space="pt-120 pb-60" />
-      <HomeThreeFeatureArea wave={true} />
+      <HomeTrustSignals />
+      <HomeStats />
       <FeaturedSports />
       <FeaturedClubs />
       <FeaturedDoctors />

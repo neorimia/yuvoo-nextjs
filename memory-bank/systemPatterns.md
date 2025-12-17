@@ -81,6 +81,31 @@ yuvoo-nextjs/
 
 ## Reusable Component Patterns
 
+### Shared UI Components
+
+**Location**: `src/components/shared/`
+
+**Home Page Components** (Created January 2025):
+
+- `SectionTitle.tsx` - Reusable section title component with title and optional subtitle
+  - Used in: All home page sections (FeaturedSports, FeaturedClubs, FeaturedDoctors, HowItWorks, HomeTestimonial, HomeFaq)
+  - Features: Consistent styling, WOW.js animations, customizable classes
+- `ViewAllLink.tsx` - Reusable "View All" link component
+  - Used in: Featured sections (clubs, doctors, sports)
+  - Features: Consistent styling, hover effects, arrow icon
+- `DistanceBadge.tsx` - Reusable distance/location badge component
+  - Used in: Club cards, featured sections
+  - Features: Dark/light variants, responsive sizing
+- `StarRating.tsx` - Reusable star rating component
+  - Used in: Testimonials, reviews, ratings
+  - Features: Size variants (sm, md, lg), optional rating number display
+- `AvatarInitials.tsx` - Reusable avatar with initials component
+  - Used in: Testimonials, user profiles, comments
+  - Features: Size variants (sm, md, lg), customizable colors
+- `FaqAccordionItem.tsx` - Reusable FAQ accordion item component
+  - Used in: FAQ sections, help pages
+  - Features: Bootstrap accordion integration, customizable open state
+
 ### Onboarding Form Components
 
 **Location**: `src/components/features/onboarding/components/`
@@ -246,6 +271,15 @@ import { routes } from "@/lib/routes";
 - ✅ `components/features/doctors/` - Doctor components created (DoctorsMain, DoctorCard, DoctorDetailsMain, DoctorSearchFilters, DoctorAppointmentForm, DoctorAppointmentFormSection, DoctorInfo, DoctorSpecialties, HomeDoctorArea, HomeTwoDoctorArea, DoctorAvailability)
 - 📋 `components/features/sports/` - Sport components (planned)
 - ✅ `components/features/quiz/` - Quiz components complete (QuizContainer, QuizProgress, QuizNavigation, QuizContext, QuestionWrapper, 6 question components, ResultsActions, SportRecommendationCard, QuizHistory)
+- ✅ `components/features/home/` - Home page components complete (January 2025)
+  - ✅ `HomeTrustSignals.tsx` - Trust signals section with 6 badges (verified clubs, GDPR, verified doctors, secure platform, free for parents, AI recommendations)
+  - ✅ `HomeStats.tsx` - Statistics section with animated counters (families, clubs, doctors, sports)
+  - ✅ `HowItWorks.tsx` - 3-step process explanation with Flaticon icons
+  - ✅ `FeaturedSports.tsx` - Featured sports display with images, club counts, and descriptions
+  - ✅ `FeaturedClubs.tsx` - Featured clubs display with verification badges, distance, and descriptions
+  - ✅ `FeaturedDoctors.tsx` - Featured doctors display with verification badges and specialties
+  - ✅ `HomeTestimonial.tsx` - Testimonial section with star ratings and avatar initials
+  - ✅ `HomeFaq.tsx` - FAQ section with accordion items (shows top 6, links to full FAQ page)
 
 **Layout Components**: `components/layout/`
 
@@ -1479,3 +1513,4 @@ Club Directory (pre-filtered by sport)
 - **Technical Context**: `memory-bank/techContext.md` - Technology stack details
 - **Product Context**: `memory-bank/productContext.md` - Product requirements
 - **Progress Tracking**: `memory-bank/progress.md` - Development progress
+- **Prompting System**: `memory-bank/promptingSystem.md` - Yuvoo Prompting Standard (templates, constraints, examples)

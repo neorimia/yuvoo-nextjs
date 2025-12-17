@@ -1,0 +1,302 @@
+@use "../utils" as *;
+
+//=============== FEATURED SPORTS CSS START HERE ================
+
+.bd-featured-sports {
+  &-area {
+    padding-top: 120px;
+    padding-bottom: 90px;
+    background-color: var(--bd-common-white);
+
+    @media #{$lg} {
+      padding-top: 100px;
+      padding-bottom: 80px;
+    }
+
+    @media #{$md,$sm} {
+      padding-top: 80px;
+      padding-bottom: 60px;
+    }
+
+    @media #{$xs} {
+      padding-top: 60px;
+      padding-bottom: 50px;
+    }
+  }
+
+  &-title-row {
+    justify-content: center;
+    margin-bottom: 60px;
+
+    @media #{$md,$sm,$xs} {
+      margin-bottom: 50px;
+    }
+  }
+
+  &-title-wrapper {
+    text-align: center;
+  }
+
+  &-section-title {
+    margin-bottom: 0;
+    font-size: var(--bd-fz-h2);
+    font-weight: var(--bd-fw-sbold);
+    color: var(--bd-heading-primary);
+    line-height: 1.2;
+
+    @media #{$md,$sm,$xs} {
+      font-size: 32px;
+    }
+  }
+
+  &-section-text {
+    margin-top: 12px;
+    font-size: 18px;
+    color: var(--bd-text-body);
+    line-height: 1.6;
+
+    @media #{$md,$sm,$xs} {
+      font-size: 16px;
+      margin-top: 10px;
+    }
+  }
+
+  &-cards-row {
+    justify-content: center;
+  }
+
+  &-card-col {
+    margin-bottom: 30px;
+
+    @media #{$md,$sm,$xs} {
+      margin-bottom: 25px;
+    }
+  }
+
+  &-link {
+    text-decoration: none;
+    display: block;
+    height: 100%;
+
+    &:hover {
+      text-decoration: none;
+    }
+
+    &:focus {
+      text-decoration: none;
+      outline: none;
+    }
+  }
+
+  &-card {
+    height: 100%;
+    border-radius: 24px;
+    background-color: var(--bd-common-white);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+    border: 1px solid var(--bd-grey-1);
+    overflow: hidden;
+    @include transition(0.3s);
+    display: flex;
+    flex-direction: column;
+
+    @media #{$md,$sm,$xs} {
+      border-radius: 20px;
+    }
+
+    &:hover {
+      border-color: var(--bd-theme-2);
+      transform: translateY(-5px);
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+
+      .bd-featured-sports-icon {
+        background-color: var(--bd-theme-2);
+        transform: scale(1.1);
+
+        i {
+          color: var(--bd-common-white);
+        }
+      }
+
+      .bd-featured-sports-title {
+        color: var(--bd-theme-2);
+      }
+
+      .bd-featured-sports-link-text {
+        color: var(--bd-theme-2);
+      }
+    }
+  }
+
+  &-thumb {
+    position: relative;
+    width: 100%;
+    margin-bottom: 20px;
+  }
+
+  &-image-wrapper {
+    aspect-ratio: 4/3;
+    overflow: hidden;
+    border-radius: 12px;
+    position: relative;
+    width: 100%;
+
+    @media #{$md,$sm,$xs} {
+      border-radius: 10px;
+    }
+  }
+
+  &-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    @include transition(0.3s);
+  }
+
+  &-chip {
+    position: absolute;
+    top: 12px;
+    right: 12px;
+    z-index: 2;
+
+    @media #{$md,$sm,$xs} {
+      top: 10px;
+      right: 10px;
+    }
+
+    &-text {
+      background-color: var(--bd-theme-2);
+      color: var(--bd-common-white);
+      padding: 6px 12px;
+      border-radius: 20px;
+      font-size: 14px;
+      font-weight: var(--bd-fw-sbold);
+      display: inline-block;
+      line-height: 1.2;
+
+      @media #{$md,$sm,$xs} {
+        font-size: 13px;
+        padding: 5px 10px;
+      }
+    }
+  }
+
+  &-icon {
+    position: absolute;
+    bottom: -25px;
+    left: 20px;
+    font-size: 50px;
+    color: var(--bd-theme-2);
+    height: 70px;
+    width: 70px;
+    background-color: var(--bd-common-white);
+    text-align: center;
+    line-height: 70px;
+    border-radius: 50%;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    @include transition(0.3s);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 3;
+
+    i {
+      color: var(--bd-theme-2);
+      @include transition(0.3s);
+    }
+
+    @media #{$lg} {
+      height: 65px;
+      width: 65px;
+      line-height: 65px;
+      font-size: 45px;
+      bottom: -22px;
+    }
+
+    @media #{$md,$sm,$xs} {
+      height: 60px;
+      width: 60px;
+      line-height: 60px;
+      font-size: 40px;
+      bottom: -20px;
+      left: 15px;
+    }
+  }
+
+  &-content {
+    padding: 35px 20px 25px;
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    flex: 1;
+
+    @media #{$lg} {
+      padding: 32px 18px 22px;
+      gap: 14px;
+    }
+
+    @media #{$md,$sm,$xs} {
+      padding: 30px 15px 20px;
+      gap: 12px;
+    }
+  }
+
+  &-title {
+    font-size: 22px;
+    font-weight: var(--bd-fw-sbold);
+    color: var(--bd-heading-primary);
+    margin-bottom: 0;
+    line-height: 1.3;
+    @include transition(0.3s);
+
+    @media #{$lg} {
+      font-size: 20px;
+    }
+
+    @media #{$md,$sm,$xs} {
+      font-size: 18px;
+    }
+  }
+
+  &-microcopy {
+    font-size: 16px;
+    color: var(--bd-text-body);
+    line-height: 1.6;
+    margin-bottom: 0;
+
+    @media #{$md,$sm,$xs} {
+      font-size: 15px;
+    }
+  }
+
+  &-link-text {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    color: var(--bd-theme-2);
+    font-size: 14px;
+    font-weight: var(--bd-fw-sbold);
+    text-decoration: none;
+    @include transition(0.3s);
+    margin-top: auto;
+
+    i {
+      font-size: 12px;
+      @include transition(0.3s);
+    }
+
+    @media #{$md,$sm,$xs} {
+      font-size: 13px;
+      gap: 6px;
+
+      i {
+        font-size: 11px;
+      }
+    }
+  }
+
+  &-view-all-row {
+    margin-top: 20px;
+  }
+}
+
+//=============== FEATURED SPORTS CSS END HERE ================

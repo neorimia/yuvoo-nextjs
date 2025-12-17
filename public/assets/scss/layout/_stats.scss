@@ -1,0 +1,209 @@
+@use "../utils" as *;
+
+//=============== STATS CSS START HERE ================
+
+.bd-stats {
+  &-area {
+    padding-top: 120px;
+    padding-bottom: 90px;
+    background-color: var(--bd-common-white);
+
+    @media #{$lg} {
+      padding-top: 100px;
+      padding-bottom: 80px;
+    }
+
+    @media #{$md,$sm} {
+      padding-top: 80px;
+      padding-bottom: 60px;
+    }
+
+    @media #{$xs} {
+      padding-top: 60px;
+      padding-bottom: 50px;
+    }
+  }
+
+  &-title-row {
+    justify-content: center;
+    margin-bottom: 60px;
+
+    @media #{$md,$sm,$xs} {
+      margin-bottom: 50px;
+    }
+  }
+
+  &-title-wrapper {
+    text-align: center;
+  }
+
+  &-section-title {
+    margin-bottom: 0;
+    font-size: var(--bd-fz-h2);
+    font-weight: var(--bd-fw-sbold);
+    color: var(--bd-heading-primary);
+    line-height: 1.2;
+
+    @media #{$md,$sm,$xs} {
+      font-size: 32px;
+    }
+  }
+
+  &-section-text {
+    font-size: 18px;
+    color: var(--bd-text-body);
+    line-height: 1.6;
+    margin-bottom: 0;
+    max-width: 600px;
+    margin-left: auto;
+    margin-right: auto;
+
+    @media #{$md,$sm,$xs} {
+      font-size: 16px;
+    }
+  }
+
+  &-cards-row {
+    justify-content: center;
+  }
+
+  &-card-col {
+    margin-bottom: 30px;
+
+    @media #{$md,$sm,$xs} {
+      margin-bottom: 25px;
+    }
+  }
+
+  &-card {
+    height: 100%;
+    padding: 40px 30px;
+    border-radius: 24px;
+    background-color: var(--bd-common-white);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+    border: 1px solid var(--bd-grey-1);
+    text-align: center;
+    @include transition(0.3s);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 20px;
+
+    @media #{$lg} {
+      padding: 35px 25px;
+      gap: 18px;
+    }
+
+    @media #{$md,$sm,$xs} {
+      padding: 30px 20px;
+      border-radius: 20px;
+      gap: 15px;
+    }
+
+    &:hover {
+      border-color: var(--bd-theme-2);
+      transform: translateY(-5px);
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+
+      .bd-stats-icon {
+        background-color: var(--bd-theme-2);
+        transform: scale(1.1);
+
+        i {
+          color: var(--bd-common-white);
+        }
+      }
+
+      .bd-stats-number {
+        span {
+          color: var(--bd-theme-2);
+        }
+      }
+    }
+  }
+
+  &-icon {
+    font-size: 60px;
+    color: var(--bd-theme-2);
+    height: 100px;
+    width: 100px;
+    background-color: var(--bd-theme-2-light, rgba(235, 255, 254, 0.3));
+    text-align: center;
+    line-height: 100px;
+    border-radius: 50%;
+    margin: 0 auto;
+    @include transition(0.3s);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    i {
+      color: var(--bd-theme-2);
+      @include transition(0.3s);
+    }
+
+    @media #{$lg} {
+      height: 90px;
+      width: 90px;
+      line-height: 90px;
+      font-size: 50px;
+    }
+
+    @media #{$md,$sm,$xs} {
+      height: 80px;
+      width: 80px;
+      line-height: 80px;
+      font-size: 45px;
+    }
+  }
+
+  &-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+    width: 100%;
+  }
+
+  &-number {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    span {
+      font-size: 64px;
+      line-height: 1;
+      font-weight: var(--bd-fw-bold);
+      color: var(--bd-heading-primary);
+      @include transition(0.3s);
+
+      @media #{$lg} {
+        font-size: 56px;
+      }
+
+      @media #{$md,$sm} {
+        font-size: 48px;
+      }
+
+      @media #{$xs} {
+        font-size: 42px;
+      }
+    }
+  }
+
+  &-text {
+    span {
+      font-size: 18px;
+      font-weight: var(--bd-fw-medium);
+      color: var(--bd-text-body);
+      line-height: 1.4;
+
+      @media #{$md,$sm,$xs} {
+        font-size: 16px;
+      }
+    }
+  }
+}
+
+//=============== STATS CSS END HERE ================

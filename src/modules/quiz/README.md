@@ -230,7 +230,7 @@ const clubs = await getClubsForRecommendations(
 Quiz history is displayed in:
 
 - Parent Dashboard (`/parent/dashboard`) - Recent quiz activity
-- Child Quiz History (`/parent/children/[childId]/quizzes`) - All quizzes for a child
+- Child Quiz History (`/parent/children/[id]/quizzes`) - All quizzes for a child
 
 ## Error Handling
 

@@ -2,6 +2,17 @@ import React from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { routes } from "@/lib/routes";
+import VerificationBadge from "@/components/features/clubs/VerificationBadge";
+import DistanceBadge from "@/components/shared/DistanceBadge";
+import SectionTitle from "@/components/shared/SectionTitle";
+import ViewAllLink from "@/components/shared/ViewAllLink";
+
+/**
+ * FeaturedClubs Component
+ *
+ * Displays featured clubs on the home page with images, verification badges, distance, and descriptions.
+ * Uses reusable components (VerificationBadge, DistanceBadge) and follows the design system.
+ */
 
 interface IFeaturedClub {
   id: number;
@@ -13,6 +24,7 @@ interface IFeaturedClub {
   tags: string[];
   microcopy: string;
   verified: boolean;
+  sportName?: string;
 }
 
 const featuredClubs: IFeaturedClub[] = [
@@ -24,8 +36,10 @@ const featuredClubs: IFeaturedClub[] = [
     distance: 2.1,
     ageGroups: "5–12 ani",
     tags: ["Program intensiv", "Instructor acreditat"],
-    microcopy: "Mediu prietenos, perfect pentru începători.",
+    microcopy:
+      "Mediu prietenos și sigur, perfect pentru începători. Programe adaptate pentru toate nivelurile.",
     verified: true,
+    sportName: "Înot",
   },
   {
     id: 2,
@@ -35,8 +49,10 @@ const featuredClubs: IFeaturedClub[] = [
     distance: 3.5,
     ageGroups: "4–10 ani",
     tags: ["Program flexibil", "Echipament modern"],
-    microcopy: "Dezvoltă coordonarea și flexibilitatea într-un mediu sigur.",
+    microcopy:
+      "Dezvoltă coordonarea și flexibilitatea într-un mediu sigur și profesional. Antrenori experimentați.",
     verified: true,
+    sportName: "Gimnastică",
   },
   {
     id: 3,
@@ -46,8 +62,10 @@ const featuredClubs: IFeaturedClub[] = [
     distance: 1.8,
     ageGroups: "6–14 ani",
     tags: ["Echipă competitivă", "Antrenor licențiat"],
-    microcopy: "Formare completă pentru viitorii fotbaliști.",
+    microcopy:
+      "Formare completă pentru viitorii fotbaliști. Programe de dezvoltare tehnică și tactică.",
     verified: true,
+    sportName: "Fotbal",
   },
   {
     id: 4,
@@ -57,8 +75,10 @@ const featuredClubs: IFeaturedClub[] = [
     distance: 4.2,
     ageGroups: "7–14 ani",
     tags: ["Disciplină tradițională", "Certificare oficială"],
-    microcopy: "Dezvoltă respectul și autocontrolul prin arte marțiale.",
+    microcopy:
+      "Dezvoltă respectul și autocontrolul prin arte marțiale tradiționale. Metodologie dovedită.",
     verified: true,
+    sportName: "Karate",
   },
   {
     id: 5,
@@ -68,8 +88,10 @@ const featuredClubs: IFeaturedClub[] = [
     distance: 2.9,
     ageGroups: "4–12 ani",
     tags: ["Multiple stiluri", "Spectacole anuale"],
-    microcopy: "Exprimare artistică și dezvoltare a creativității.",
+    microcopy:
+      "Exprimare artistică și dezvoltare a creativității. Oferim multiple stiluri de dans pentru toate preferințele.",
     verified: true,
+    sportName: "Dans",
   },
   {
     id: 6,
@@ -79,8 +101,10 @@ const featuredClubs: IFeaturedClub[] = [
     distance: 3.1,
     ageGroups: "3–10 ani",
     tags: ["Bazin încălzit", "Grupuri mici"],
-    microcopy: "Învățare progresivă într-un mediu sigur și distractiv.",
+    microcopy:
+      "Învățare progresivă într-un mediu sigur și distractiv. Bazin încălzit și grupuri mici pentru atenție individuală.",
     verified: true,
+    sportName: "Înot",
   },
 ];
 
@@ -89,133 +113,77 @@ const FeaturedClubs = () => {
   const displayClubs = featuredClubs.slice(0, 6);
 
   return (
-    <section className="bd-featured-clubs-area pt-120 pb-120">
+    <section className="bd-featured-clubs-area">
       <div className="container">
-        <div className="row justify-content-center">
-          <div className="col-lg-8 col-md-10">
-            <div
-              className="bd-section-title-wrapper text-center mb-60 wow fadeInUp"
-              data-wow-duration="1s"
-              data-wow-delay=".3s"
-            >
-              <h2 className="bd-section-title mb-0">Cluburi verificate lângă tine</h2>
-            </div>
+        <div className="row bd-featured-clubs-title-row">
+          <div className="col-lg-8">
+            <SectionTitle
+              title="Cluburi verificate lângă tine"
+              subtitle="Descoperă cele mai bune cluburi sportive verificate din apropierea ta. Toate cluburile sunt verificate de echipa noastră pentru siguranță și calitate."
+              className="bd-featured-clubs-title-wrapper"
+              titleClassName="bd-featured-clubs-section-title"
+              subtitleClassName="bd-featured-clubs-section-text"
+            />
           </div>
         </div>
-        <div className="row">
-          {displayClubs.map((club, index) => (
-            <div
-              className="col-lg-4 col-md-6 mb-40 wow fadeInUp"
-              data-wow-duration="1s"
-              data-wow-delay={`${0.4 + index * 0.1}s`}
-              key={club.id}
-            >
-              <div className="bd-featured-club-card h-100">
-                <Link href={routes.clubs.detail(club.slug)}>
-                  <div className="bd-featured-club-thumb position-relative mb-20">
-                    <div
-                      className="bd-featured-club-image-wrapper"
-                      style={{ aspectRatio: "16/9", overflow: "hidden", borderRadius: "12px" }}
-                    >
-                      <Image
-                        src={club.image}
-                        alt={club.name}
-                        width={600}
-                        height={338}
-                        sizes="(max-width: 640px) 100vw, (max-width: 768px) 50vw, 33vw"
-                        style={{ width: "100%", height: "100%", objectFit: "cover" }}
-                        quality={85}
-                      />
-                    </div>
-                    {club.verified && (
-                      <div className="bd-featured-club-badge position-absolute top-0 start-0 m-3">
-                        <span
-                          className="bd-verified-badge"
-                          style={{
-                            backgroundColor: "var(--bd-theme-1)",
-                            color: "white",
-                            padding: "6px 12px",
-                            borderRadius: "20px",
-                            fontSize: "13px",
-                            fontWeight: "600",
-                            display: "inline-flex",
-                            alignItems: "center",
-                            gap: "6px",
-                          }}
-                        >
-                          <i className="fal fa-check-circle" style={{ fontSize: "14px" }}></i>
-                          Verificat
-                        </span>
+        <div className="row bd-featured-clubs-cards-row">
+          {displayClubs.map((club) => {
+            const animationDelay = `${0.1 * club.id}s`;
+
+            return (
+              <div className="col-lg-4 col-md-6 col-sm-10 bd-featured-clubs-card-col" key={club.id}>
+                <Link href={routes.clubs.detail(club.slug)} className="bd-featured-clubs-link">
+                  <div
+                    className="bd-featured-clubs-card wow fadeInUp"
+                    data-wow-duration="1s"
+                    data-wow-delay={animationDelay}
+                  >
+                    <div className="bd-featured-clubs-thumb">
+                      <div className="bd-featured-clubs-image-wrapper">
+                        <Image
+                          src={club.image}
+                          alt={club.name}
+                          width={600}
+                          height={338}
+                          sizes="(max-width: 640px) 100vw, (max-width: 768px) 50vw, 33vw"
+                          className="bd-featured-clubs-image"
+                          quality={85}
+                        />
                       </div>
-                    )}
-                    <div className="bd-featured-club-distance position-absolute top-0 end-0 m-3">
-                      <span
-                        style={{
-                          backgroundColor: "rgba(0, 0, 0, 0.6)",
-                          color: "white",
-                          padding: "6px 12px",
-                          borderRadius: "20px",
-                          fontSize: "13px",
-                          fontWeight: "500",
-                          display: "inline-flex",
-                          alignItems: "center",
-                          gap: "6px",
-                        }}
-                      >
-                        <i className="fal fa-map-marker-alt" style={{ fontSize: "12px" }}></i>
-                        {club.distance} km
-                      </span>
+                      {club.verified && (
+                        <div className="bd-featured-clubs-badge">
+                          <VerificationBadge verified={club.verified} variant="compact" />
+                        </div>
+                      )}
+                      <div className="bd-featured-clubs-distance">
+                        <DistanceBadge distance={club.distance} variant="dark" />
+                      </div>
                     </div>
-                  </div>
-                  <div className="bd-featured-club-content">
-                    <h4 className="bd-featured-club-title mb-15">{club.name}</h4>
-                    <div className="bd-featured-club-tags mb-15">
-                      <span
-                        style={{
-                          color: "#424242",
-                          fontSize: "14px",
-                          display: "flex",
-                          flexWrap: "wrap",
-                          gap: "8px",
-                          alignItems: "center",
-                        }}
-                      >
-                        <span style={{ fontWeight: "600" }}>{club.ageGroups}</span>
+                    <div className="bd-featured-clubs-content">
+                      <h4 className="bd-featured-clubs-title">{club.name}</h4>
+                      <div className="bd-featured-clubs-meta">
+                        <span className="bd-featured-clubs-age-groups">{club.ageGroups}</span>
                         {club.tags.map((tag, tagIndex) => (
                           <React.Fragment key={tagIndex}>
-                            <span style={{ color: "#999" }}>•</span>
-                            <span>{tag}</span>
+                            <span className="bd-featured-clubs-meta-separator">•</span>
+                            <span className="bd-featured-clubs-tag">{tag}</span>
                           </React.Fragment>
                         ))}
-                      </span>
-                    </div>
-                    <p
-                      className="bd-featured-club-microcopy mb-20"
-                      style={{ color: "#424242", fontSize: "16px" }}
-                    >
-                      {club.microcopy}
-                    </p>
-                    <div className="bd-featured-club-link">
-                      <span
-                        style={{
-                          color: "var(--bd-theme-1)",
-                          fontSize: "14px",
-                          fontWeight: "600",
-                          textDecoration: "none",
-                          display: "inline-flex",
-                          alignItems: "center",
-                          gap: "8px",
-                        }}
-                      >
-                        Vezi clubul{" "}
-                        <i className="fal fa-arrow-right" style={{ fontSize: "12px" }}></i>
-                      </span>
+                      </div>
+                      <p className="bd-featured-clubs-microcopy">{club.microcopy}</p>
+                      <div className="bd-featured-clubs-link-text">
+                        <span>Vezi clubul</span>
+                        <i className="fal fa-arrow-right"></i>
+                      </div>
                     </div>
                   </div>
                 </Link>
               </div>
-            </div>
-          ))}
+            );
+          })}
+        </div>
+        <div className="row justify-content-end bd-featured-clubs-view-all-row">
+          <ViewAllLink href={routes.clubs.list} text="Vezi toate cluburile" />
         </div>
       </div>
     </section>

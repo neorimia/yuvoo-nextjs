@@ -1079,7 +1079,12 @@ CTA: "Vezi alte cluburi de [sport]" → Link către /cluburi?sport=[sport-id]
 
 **Week 3-4: Content Quick Wins**
 
-- [ ] Expand home page content (add trust signals, stats, FAQ section) (4 hours)
+- [x] Expand home page content (add trust signals, stats, FAQ section) (4 hours) ✅ **COMPLETED**
+  - ✅ Added HomeTrustSignals component with 6 trust signals (verified clubs, GDPR, verified doctors, secure platform, free for parents, AI recommendations)
+  - ✅ Added HomeStats component with animated counters (families, verified clubs, pediatric specialists, available sports)
+  - ✅ Enhanced HomeFaq component with improved styling and reusable FaqAccordionItem component
+  - ✅ All components use reusable components (SectionTitle, ViewAllLink, etc.) and follow design system
+  - ✅ All content in Romanian, SEO-optimized, with proper semantic HTML
 - [ ] Expand sports listing page intro and FAQ (2 hours)
 - [ ] Improve metadata descriptions for top 5 sport detail pages (2 hours)
 - [ ] Add OG images for home, quiz, sports listing (2 hours)
