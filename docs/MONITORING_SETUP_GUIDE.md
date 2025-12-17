@@ -445,63 +445,61 @@ event({
 
 ## 3. Performance Monitoring
 
-### Web Vitals Tracking
+### Web Vitals Tracking ✅ IMPLEMENTED
 
-**Next.js provides Web Vitals automatically**:
+**Status**: ✅ Complete - Web Vitals monitoring implemented
 
-- **LCP** (Largest Contentful Paint)
-- **FID** (First Input Delay)
-- **CLS** (Cumulative Layout Shift)
-- **FCP** (First Contentful Paint)
-- **TTFB** (Time to First Byte)
+**Implementation Location**:
 
-#### Step 3.1: Custom Web Vitals Reporting
+- `src/lib/monitoring/web-vitals.ts` - Web Vitals tracking utilities
+- `src/components/monitoring/WebVitalsReporter.tsx` - React component
+- Integrated in `src/app/layout.tsx`
 
-**Create `src/lib/analytics/web-vitals.ts`**:
+**Tracked Metrics**:
+
+- **LCP** (Largest Contentful Paint) - Target: < 2.5 seconds
+- **INP** (Interaction to Next Paint) - Replaces FID, Target: < 200ms
+- **CLS** (Cumulative Layout Shift) - Target: < 0.1
+- **FCP** (First Contentful Paint) - Target: < 1.8 seconds
+- **TTFB** (Time to First Byte) - Target: < 800ms
+
+**Metrics are sent to**:
+
+- PostHog as `$web_vitals` events
+- Sentry as distribution metrics
+
+**Documentation**: See `docs/PERFORMANCE_MONITORING_SETUP.md` for complete implementation details.
+
+#### Implementation Details
+
+**Code Location**: `src/lib/monitoring/web-vitals.ts`
+
+**API Performance Monitoring**: ✅ Complete
+
+**Implementation Location**: `src/lib/monitoring/api-performance.ts`
+
+Provides utilities for tracking API response times:
+
+- `trackApiPerformance()` - Track API route performance
+- `trackApiHandler()` - Wrap API handlers with performance tracking
+- `trackServerActionPerformance()` - Track Server Action performance
+- `trackServerAction()` - Wrap Server Actions with performance tracking
+
+**Usage Example**:
 
 ```typescript
-import { onCLS, onFID, onFCP, onLCP, onTTFB } from "web-vitals";
+import { trackServerAction } from "@/lib/monitoring/api-performance";
 
-type Metric = {
-  name: string;
-  value: number;
-  id: string;
-  delta: number;
-  entries: PerformanceEntry[];
-};
-
-function sendToAnalytics(metric: Metric) {
-  // Send to Google Analytics
-  if (typeof window !== "undefined" && window.gtag) {
-    window.gtag("event", metric.name, {
-      event_category: "Web Vitals",
-      value: Math.round(metric.name === "CLS" ? metric.value * 1000 : metric.value),
-      event_label: metric.id,
-      non_interaction: true,
-    });
-  }
-
-  // Send to Sentry (if configured)
-  if (typeof window !== "undefined" && (window as any).Sentry) {
-    (window as any).Sentry.metrics.distribution(metric.name, metric.value);
-  }
-
-  // Log to console in development
-  if (process.env.NODE_ENV === "development") {
-    console.log(metric);
-  }
-}
-
-export function reportWebVitals() {
-  onCLS(sendToAnalytics);
-  onFID(sendToAnalytics);
-  onFCP(sendToAnalytics);
-  onLCP(sendToAnalytics);
-  onTTFB(sendToAnalytics);
-}
+export const createBookingAction = trackServerAction(
+  async (formData: FormData) => {
+    // Your action code
+    return { success: true };
+  },
+  "createBooking" // Action name
+);
 ```
 
-#### Step 3.2: Add to App
+**Documentation**: See `docs/PERFORMANCE_MONITORING_SETUP.md` for complete implementation details and usage examples.
 
 **Update `src/app/layout.tsx`**:
 
@@ -705,7 +703,19 @@ logger.error("Failed to create booking", error, { userId: user.id, clubId: club.
 
 ---
 
-## 5. Monitoring Dashboard
+## 5. Monitoring Dashboard ✅ GUIDES CREATED
+
+**Status**: ✅ Complete - Dashboard setup guides created
+
+**Documentation**:
+
+- `docs/MONITORING_DASHBOARDS_SETUP.md` - Complete dashboard setup guide
+  - PostHog dashboards (user flows, error rates, performance)
+  - Sentry dashboards (error overview, performance, user impact)
+  - Dashboard best practices and layout recommendations
+- `docs/POSTHOG_DASHBOARD_SETUP.md` - PostHog-specific dashboard configuration
+
+**Next Steps**: Follow the guides to create dashboards in PostHog and Sentry dashboards.
 
 ### Vercel Dashboard
 
@@ -745,7 +755,21 @@ logger.error("Failed to create booking", error, { userId: user.id, clubId: club.
 
 ---
 
-## 6. Alerting Setup
+## 6. Alerting Setup ✅ GUIDE CREATED
+
+**Status**: ✅ Complete - Alerting setup guide created
+
+**Documentation**: `docs/SENTRY_ALERTING_SETUP.md`
+
+**Includes**:
+
+- Error rate alerts (>5% error rate)
+- Slow page load alerts (>3s page load)
+- New issue alerts
+- Performance degradation alerts
+- Email notification configuration
+
+**Next Steps**: Follow the guide to configure alerts in Sentry dashboard.
 
 ### Sentry Alerts
 
@@ -884,7 +908,34 @@ if (cookies.analytics) {
 
 ---
 
-## 9. Best Practices
+## 9. Related Documentation
+
+### Additional Guides
+
+- **`docs/SENTRY_ALERTING_SETUP.md`** - Complete guide for configuring Sentry email alerts
+  - Error rate alerts (>5% error rate)
+  - Slow page load alerts (>3s page load)
+  - New issue alerts
+  - Performance degradation alerts
+
+- **`docs/PERFORMANCE_MONITORING_SETUP.md`** - Performance monitoring implementation guide
+  - Core Web Vitals tracking (LCP, INP, CLS, FCP, TTFB)
+  - API response time monitoring
+  - Integration with PostHog and Sentry
+
+- **`docs/MONITORING_DASHBOARDS_SETUP.md`** - Dashboard creation guide
+  - PostHog dashboards (user flows, activity, performance)
+  - Sentry dashboards (error overview, performance, user impact)
+  - Dashboard best practices
+
+- **`docs/POSTHOG_DASHBOARD_SETUP.md`** - PostHog-specific dashboard setup
+  - Funnel configuration
+  - Cohort creation
+  - Custom insights
+
+---
+
+## 10. Best Practices
 
 ### Error Tracking
 

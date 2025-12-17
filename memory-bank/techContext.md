@@ -924,14 +924,19 @@ import { getClubBySlug } from "@/modules/clubs/clubs.service";
 
 **Performance Monitoring**:
 
-- ✅ Web Vitals tracking implementation
-  - Custom Web Vitals reporting utility
-  - Integration with Google Analytics and Sentry
-  - Core Web Vitals (LCP, FID, CLS, FCP, TTFB)
-- ✅ Custom performance monitoring
-  - Performance monitoring utility class
-  - Function execution time measurement
-  - Custom metric recording
+- ✅ Web Vitals tracking implementation (January 2025)
+  - ✅ Custom Web Vitals reporting utility (`src/lib/monitoring/web-vitals.ts`)
+  - ✅ Integration with PostHog (`$web_vitals` events) and Sentry (distribution metrics)
+  - ✅ Core Web Vitals tracking: LCP, INP (replaces FID), CLS, FCP, TTFB
+  - ✅ WebVitalsReporter component (`src/components/monitoring/WebVitalsReporter.tsx`)
+  - ✅ Integrated into root layout (`src/app/layout.tsx`)
+  - ✅ `web-vitals` package installed (v5.1.0)
+- ✅ API performance monitoring utilities (January 2025)
+  - ✅ `trackApiPerformance()` - Track API route performance with Sentry
+  - ✅ `trackApiHandler()` - Wrap API handlers with performance tracking
+  - ✅ `trackServerActionPerformance()` - Track Server Action performance
+  - ✅ `trackServerAction()` - Wrap Server Actions with performance tracking
+  - ✅ Implementation location: `src/lib/monitoring/api-performance.ts`
 - ✅ Structured logging utility
   - Log levels (debug, info, warn, error)
   - Structured JSON logging
@@ -939,8 +944,17 @@ import { getClubBySlug } from "@/modules/clubs/clubs.service";
 
 **Additional Features**:
 
-- ✅ Monitoring dashboard documentation (Vercel, Sentry, Google Analytics)
-- ✅ Alerting setup (Sentry alerts, Vercel notifications, custom health checks)
+- ✅ Monitoring dashboard documentation
+  - ✅ `docs/MONITORING_DASHBOARDS_SETUP.md` - Complete dashboard setup guide (PostHog + Sentry)
+  - ✅ `docs/POSTHOG_DASHBOARD_SETUP.md` - PostHog-specific dashboard configuration
+  - ✅ Dashboard layouts, best practices, and visualization recommendations
+- ✅ Alerting setup
+  - ✅ `docs/SENTRY_ALERTING_SETUP.md` - Complete Sentry alerting configuration guide
+  - ✅ Error rate alerts (>5% error rate)
+  - ✅ Slow page load alerts (>3s page load)
+  - ✅ New issue alerts
+  - ✅ Performance degradation alerts
+  - ✅ Email notification configuration steps
 - ✅ GDPR compliance considerations (cookie consent, data privacy)
 - ✅ Implementation checklist, best practices, troubleshooting guide
 
@@ -1025,6 +1039,9 @@ import { getClubBySlug } from "@/modules/clubs/clubs.service";
 - **Vercel Deployment Guide**: `docs/VERCEL_DEPLOYMENT_GUIDE.md` - Complete Vercel deployment guide with step-by-step instructions, environment variables, domain setup, and troubleshooting
 - **Database Deployment Guide**: `docs/DATABASE_DEPLOYMENT_GUIDE.md` - Complete Neon database deployment guide with connection setup, migrations, seed data, and best practices
 - **Monitoring Setup Guide**: `docs/MONITORING_SETUP_GUIDE.md` - Complete monitoring setup guide with error tracking (Sentry), analytics (Vercel Analytics, Google Analytics), performance monitoring, and GDPR compliance
+- **Performance Monitoring Setup**: `docs/PERFORMANCE_MONITORING_SETUP.md` - Complete performance monitoring implementation guide with Web Vitals tracking (LCP, INP, CLS, FCP, TTFB) and API performance monitoring utilities
+- **Sentry Alerting Setup**: `docs/SENTRY_ALERTING_SETUP.md` - Complete Sentry alerting configuration guide with error rate alerts, performance alerts, and email notification setup
+- **Monitoring Dashboards Setup**: `docs/MONITORING_DASHBOARDS_SETUP.md` - Complete dashboard setup guide for PostHog and Sentry with user flows, error rates, performance metrics, and dashboard best practices
 - **System Patterns**: `memory-bank/systemPatterns.md` - Architecture patterns and design decisions
 - **Active Context**: `memory-bank/activeContext.md` - Current work focus and recent changes
 - **Progress Tracking**: `memory-bank/progress.md` - Development progress and completed items
