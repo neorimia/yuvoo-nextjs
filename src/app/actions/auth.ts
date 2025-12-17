@@ -422,8 +422,27 @@ export async function verifyEmailAction(token: string) {
       };
     } else {
       const error = result.error as { humanReadableMessage?: string; message?: string } | undefined;
+      const errorMessage = error?.humanReadableMessage || error?.message || "";
+
+      // Check if the error indicates the link was already used (email already verified)
+      // Stack Auth returns "The verification link has already been used" for already-verified emails
+      if (
+        errorMessage.toLowerCase().includes("already been used") ||
+        errorMessage.toLowerCase().includes("already used") ||
+        errorMessage.toLowerCase().includes("deja folosit")
+      ) {
+        // Email is already verified - treat as success
+        // The user can just log in
+        return {
+          success: true,
+          redirect: routes.login,
+          message: "Email-ul tău este deja verificat. Poți să te autentifici.",
+        };
+      }
+
+      // For other errors, return the error message in Romanian
       const errorMsg =
-        error?.humanReadableMessage || error?.message || "Eroare la verificarea email-ului";
+        errorMessage || "Eroare la verificarea email-ului. Link-ul poate fi expirat sau invalid.";
 
       return {
         success: false,
