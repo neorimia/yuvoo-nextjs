@@ -4,6 +4,7 @@ import React, { useEffect, useState } from "react";
 import Link from "next/link";
 import { routes } from "@/lib/routes";
 import { acceptAllCookies, rejectNonEssentialCookies, hasConsented } from "@/lib/cookies";
+import { initializePostHog } from "@/lib/analytics/posthog";
 
 const CookieConsentBanner: React.FC = () => {
   const [showBanner, setShowBanner] = useState(false);
@@ -22,6 +23,8 @@ const CookieConsentBanner: React.FC = () => {
   const handleAcceptAll = () => {
     acceptAllCookies();
     setShowBanner(false);
+    // Initialize PostHog after consent
+    initializePostHog();
   };
 
   const handleRejectNonEssential = () => {

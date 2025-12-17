@@ -14,6 +14,9 @@ import {
   getDoctorsBySpecialty,
 } from "@/modules/doctors/doctors.service";
 import type { Doctor } from "@/modules/doctors/doctors.types";
+import { trackEventServer } from "@/lib/analytics/tracking-server";
+import { PostHogEvents, PostHogProperties } from "@/lib/analytics/events";
+import { getSession } from "@/lib/auth/session";
 
 /**
  * Get doctor by slug (public action)
@@ -47,7 +50,25 @@ export async function searchDoctorsAction(
   filters: DoctorSearchFilters
 ): Promise<DoctorSearchResult> {
   try {
-    return await searchDoctors(filters);
+    const result = await searchDoctors(filters);
+
+    // Track search event (non-blocking)
+    try {
+      const session = await getSession();
+      const distinctId = session?.user.id || "anonymous";
+      await trackEventServer(PostHogEvents.DOCTOR_SEARCHED, {
+        distinctId,
+        ...(filters.specialty && { [PostHogProperties.DOCTOR_SPECIALTY]: filters.specialty }),
+        ...(filters.city && { [PostHogProperties.CLUB_CITY]: filters.city }), // Reusing CLUB_CITY property for city
+      });
+    } catch (trackingError) {
+      // Don't fail search if tracking fails
+      if (process.env.NODE_ENV === "development") {
+        console.error("[PostHog] Error tracking doctor search:", trackingError);
+      }
+    }
+
+    return result;
   } catch (error) {
     console.error("Error searching doctors:", error);
     return {

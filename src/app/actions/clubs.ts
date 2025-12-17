@@ -8,6 +8,9 @@
 
 import { getClubBySlug, searchClubs, getClubsBySport } from "@/modules/clubs/clubs.service";
 import type { Club, ClubSearchFilters, ClubSearchResult } from "@/modules/clubs/clubs.types";
+import { trackEventServer } from "@/lib/analytics/tracking-server";
+import { PostHogEvents, PostHogProperties } from "@/lib/analytics/events";
+import { getSession } from "@/lib/auth/session";
 
 /**
  * Get club by slug (public action)
@@ -39,9 +42,26 @@ export async function getClubByIdAction(id: string): Promise<Club | null> {
  */
 export async function searchClubsAction(filters: ClubSearchFilters): Promise<ClubSearchResult> {
   try {
-    // TODO: Validate filters with Zod schema
+    const result = await searchClubs(filters);
 
-    return await searchClubs(filters);
+    // Track search event (non-blocking)
+    try {
+      const session = await getSession();
+      const distinctId = session?.user.id || "anonymous";
+      await trackEventServer(PostHogEvents.CLUB_SEARCHED, {
+        distinctId,
+        ...(filters.sportId && { [PostHogProperties.CLUB_SPORT]: filters.sportId }),
+        ...(filters.city && { [PostHogProperties.CLUB_CITY]: filters.city }),
+        // Note: We don't track location (latitude/longitude) for privacy
+      });
+    } catch (trackingError) {
+      // Don't fail search if tracking fails
+      if (process.env.NODE_ENV === "development") {
+        console.error("[PostHog] Error tracking club search:", trackingError);
+      }
+    }
+
+    return result;
   } catch (error) {
     console.error("Error searching clubs:", error);
     return {

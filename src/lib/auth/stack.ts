@@ -101,7 +101,8 @@ function getStackServerApp(): StackServerApp {
         passwordReset: routes.resetPassword, // Password reset page
         emailVerification: routes.emailConfirmation, // Email verification page
         afterSignIn: routes.parent.dashboard, // Protected route - redirect after login (proxy will handle onboarding redirect)
-        afterSignUp: routes.parent.dashboard, // Protected route - redirect after signup (signUpAction will handle onboarding redirect)
+        // Note: afterSignUp is not set here because we handle redirects manually in signUpAction
+        // Setting it would cause Stack Auth to redirect automatically, conflicting with our custom redirect logic
       },
     });
   }

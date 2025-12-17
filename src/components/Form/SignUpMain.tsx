@@ -6,11 +6,16 @@ import { useRouter } from "next/navigation";
 import { signUpAction } from "@/app/actions/auth";
 import ErrorMsg from "./ErrorMassage";
 import { EmailSvgIcon, EyeCutSvgIcon, LockSvgIcon } from "../SVG";
+import { trackEvent, PostHogEvents } from "@/lib/analytics/tracking";
+import { routes } from "@/lib/routes";
+import Link from "next/link";
 
 type SignUpFormData = {
   email: string;
   password: string;
   passwordConfirmation: string;
+  role: "parent" | "club_admin" | "doctor";
+  consent: boolean;
 };
 
 const SignUpForm = () => {
@@ -42,10 +47,16 @@ const SignUpForm = () => {
       formData.append("email", data.email);
       formData.append("password", data.password);
       formData.append("passwordConfirmation", data.passwordConfirmation);
+      formData.append("role", data.role);
 
       const result = await signUpAction(formData);
 
       if (result.success && result.redirect) {
+        // Track signup event client-side
+        trackEvent(PostHogEvents.USER_SIGNED_UP);
+
+        // Note: User identification will happen after redirect when session is available
+
         router.push(result.redirect);
         router.refresh();
       } else {
@@ -145,6 +156,102 @@ const SignUpForm = () => {
             </span>
           </div>
           <ErrorMsg error={errors.passwordConfirmation?.message} />
+        </div>
+        <div className="login__input-item">
+          <label htmlFor="role" className="form-label mb-3 fw-semibold">
+            Tip cont <span className="text-danger">*</span>
+          </label>
+          <div className="yuvoo-radio-group d-flex flex-column gap-3">
+            <div className="yuvoo-radio-wrapper form-check">
+              <input
+                {...register("role", {
+                  required: "Te rugăm să alegi tipul de cont",
+                })}
+                className="yuvoo-radio form-check-input"
+                type="radio"
+                name="role"
+                id="role-parent"
+                value="parent"
+                disabled={isPending}
+              />
+              <label className="form-check-label yuvoo-radio-label" htmlFor="role-parent">
+                <span className="yuvoo-radio-title">Părinte</span>
+                <span className="yuvoo-radio-description">
+                  Caută sporturi și cluburi pentru copilul meu
+                </span>
+              </label>
+            </div>
+            <div className="yuvoo-radio-wrapper form-check">
+              <input
+                {...register("role")}
+                className="yuvoo-radio form-check-input"
+                type="radio"
+                name="role"
+                id="role-club"
+                value="club_admin"
+                disabled={isPending}
+              />
+              <label className="form-check-label yuvoo-radio-label" htmlFor="role-club">
+                <span className="yuvoo-radio-title">Club sportiv</span>
+                <span className="yuvoo-radio-description">
+                  Gestionez un club sportiv pentru copii
+                </span>
+              </label>
+            </div>
+            <div className="yuvoo-radio-wrapper form-check">
+              <input
+                {...register("role")}
+                className="yuvoo-radio form-check-input"
+                type="radio"
+                name="role"
+                id="role-doctor"
+                value="doctor"
+                disabled={isPending}
+              />
+              <label className="form-check-label yuvoo-radio-label" htmlFor="role-doctor">
+                <span className="yuvoo-radio-title">Doctor</span>
+                <span className="yuvoo-radio-description">Sunt specialist pediatric</span>
+              </label>
+            </div>
+          </div>
+          <ErrorMsg error={errors.role?.message} />
+        </div>
+        <div className="login__input-item">
+          <div className="form-check d-flex align-items-start yuvoo-checkbox-wrapper">
+            <input
+              {...register("consent", {
+                required: "Trebuie să accepți termenii și condițiile pentru a continua",
+              })}
+              className="form-check-input mt-1 yuvoo-checkbox"
+              type="checkbox"
+              id="consent-check"
+              disabled={isPending}
+            />
+            <label className="form-check-label ms-2" htmlFor="consent-check">
+              Sunt de acord cu{" "}
+              <Link
+                href={routes.terms}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-yuvoo-primary-hover focus-yuvoo-primary"
+                style={{ textDecoration: "underline" }}
+              >
+                termenii și condițiile
+              </Link>{" "}
+              și{" "}
+              <Link
+                href={routes.privacy}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-yuvoo-primary-hover focus-yuvoo-primary"
+                style={{ textDecoration: "underline" }}
+              >
+                politica de confidențialitate
+              </Link>
+              <span className="text-danger">*</span>
+            </label>
+          </div>
+          <ErrorMsg error={errors.consent?.message} />
         </div>
       </div>
       <div className="login__btn text-center">

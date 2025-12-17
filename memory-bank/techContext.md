@@ -88,6 +88,12 @@
 - **Brevo** (formerly Sendinblue): `@getbrevo/brevo ^2.2.0` - Email service
   - Transactional emails
   - Email templates
+- **PostHog**: `posthog-js@^1.309.1`, `posthog-node@^5.17.4` - Analytics & product analytics
+  - User analytics and event tracking
+  - Session recordings (privacy-first configuration)
+  - Error tracking
+  - Feature flags support (for future use)
+  - GDPR-compliant (cookie consent integration)
 
 ### Utility Functions
 
@@ -201,6 +207,10 @@ CLOUDINARY_API_SECRET="your-api-secret"
 BREVO_API_KEY="your-brevo-key"
 BREVO_SENDER_EMAIL="noreply@yuvoo.com"
 BREVO_SENDER_NAME="Yuvoo"
+
+# PostHog Analytics
+NEXT_PUBLIC_POSTHOG_KEY="your-posthog-key"
+NEXT_PUBLIC_POSTHOG_HOST="https://eu.i.posthog.com"
 
 # App URLs
 NEXT_PUBLIC_APP_URL="http://localhost:3000"
@@ -381,6 +391,7 @@ export default defineConfig({
 - OpenAI: `OPENAI_API_KEY`
 - Cloudinary: `NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME`, `CLOUDINARY_API_KEY`, `CLOUDINARY_API_SECRET`
 - Brevo: `BREVO_API_KEY`, `BREVO_SENDER_EMAIL`, `BREVO_SENDER_NAME`
+- PostHog: `NEXT_PUBLIC_POSTHOG_KEY`, `NEXT_PUBLIC_POSTHOG_HOST` (optional)
 - App URLs: `NEXT_PUBLIC_APP_URL`
 
 **Configuration**:
@@ -825,16 +836,79 @@ import { getClubBySlug } from "@/modules/clubs/clubs.service";
 
 ## Monitoring & Analytics ✅ COMPLETE
 
-**Status**: ✅ Complete - Comprehensive monitoring setup guide created
+**Status**: ✅ Complete - PostHog Phase 1 & 2 Complete, Person Properties Complete, Sentry Error Tracking Complete
 
-**Documentation**: `docs/MONITORING_SETUP_GUIDE.md`
+**PostHog Analytics** (Phase 1 & 2 Complete ✅):
+
+- ✅ PostHog packages installed (`posthog-js@^1.309.1`, `posthog-node@^5.17.4`)
+- ✅ Next.js rewrites configured for PostHog ingestion (`/ingest` routes)
+- ✅ Client-side PostHog setup (`src/lib/analytics/posthog.tsx`)
+  - GDPR-compliant initialization (only after analytics cookie consent)
+  - Privacy-first configuration (masked inputs, session recording)
+  - Automatic pageview tracking
+  - Error tracking enabled
+- ✅ Server-side PostHog client (`src/lib/analytics/posthog-server.ts`)
+  - Singleton pattern for server-side tracking
+  - Graceful shutdown support
+  - `distinctId` properly extracted from properties (no duplication)
+- ✅ Event tracking infrastructure
+  - Event names constants (`src/lib/analytics/events.ts`) - UPPERCASE_WITH_UNDERSCORES
+  - Property names constants - camelCase
+  - Type-safe TypeScript definitions
+  - Client-side tracking utilities (`src/lib/analytics/tracking.ts`)
+  - Server-side tracking utilities (`src/lib/analytics/tracking-server.ts`)
+- ✅ Cookie consent integration
+  - PostHog only initializes after user accepts analytics cookies
+  - Cookie consent banner triggers PostHog initialization
+  - Hook for watching consent changes (`usePostHogConsent`)
+- ✅ Integration in root layout (`PostHogProviderWrapper`)
+- ✅ Event tracking implementation (Phase 2 - Complete ✅)
+  - ✅ Authentication events (signup, login, password reset, email verification)
+  - ✅ Quiz events (started, step completed, completed)
+  - ✅ Booking events (created, cancelled for clubs and doctors)
+  - ✅ Discovery events (searches, favorites for clubs and doctors)
+- ✅ User identification implementation ✅
+  - ✅ `PostHogUserIdentification` component (`src/components/analytics/PostHogUserIdentification.tsx`)
+  - ✅ Integrated into protected route layouts (parent, club, doctor)
+  - ✅ Connects anonymous sessions with authenticated users
+  - ✅ Uses person properties (`$set` for updatable, `$set_once` for immutable)
+- ✅ Person properties optimization ✅ **COMPLETE** (January 2025)
+  - ✅ `identifyUser()` supports `$set` and `$set_once` properties
+  - ✅ User metadata stored as person properties (not sent with every event)
+  - ✅ More efficient and follows PostHog best practices
+  - ✅ Enhanced person properties implementation ✅
+    - ✅ Signup: `email`, `role`, `name`, `signupDate` (via `user_signed_up` event)
+    - ✅ Email verification: `emailVerified`, `emailVerifiedDate` (via `email_verified` event)
+    - ✅ Login: `lastLoginDate` (via `user_logged_in` event)
+    - ✅ Onboarding: `onboardingCompleted`, `onboardingCompletedDate`, `onboardingRole` (via `onboarding_completed` event)
+    - ✅ Automatic sync: All properties updated on every protected page visit via `PostHogUserIdentification` component
+    - ✅ TypeScript support: `PostHogEventProperties` type updated to support `$set` and `$set_once`
+    - ✅ Documentation: `docs/POSTHOG_PERSON_PROPERTIES_IMPLEMENTATION.md` created
+
+**Documentation**: `docs/POSTHOG_IMPLEMENTATION_PLAN.md`, `docs/MONITORING_SETUP_GUIDE.md`
 
 **Error Tracking**:
 
-- ✅ Sentry integration guide (recommended option)
-  - Project creation, SDK installation, configuration files
-  - Next.js config integration, environment variables
-  - ErrorBoundary component, error capture examples
+- ✅ Sentry integration complete ✅ (January 2025)
+  - ✅ Sentry SDK installed (`@sentry/nextjs@^10.31.0`)
+  - ✅ Configuration files updated (server, edge, client)
+    - ✅ Environment variables (NEXT_PUBLIC_SENTRY_DSN, SENTRY_DSN)
+    - ✅ Production-optimized sampling rates (1.0 dev, 0.1 production)
+    - ✅ Privacy-first replay settings (maskAllText, blockAllMedia)
+    - ✅ Error filtering (browser extensions, network errors)
+    - ✅ Debug logging disabled to reduce console noise
+  - ✅ Next.js config integration (`withSentryConfig` in `next.config.ts`)
+  - ✅ ErrorBoundary component (`src/components/shared/ErrorBoundary.tsx`)
+    - ✅ Catches React errors and sends to Sentry
+    - ✅ Romanian fallback UI
+    - ✅ Integrated into root layout
+  - ✅ User context tracking
+    - ✅ `SentryUserContext` component (`src/components/shared/SentryUserContext.tsx`)
+    - ✅ Sentry context utilities (`src/lib/monitoring/sentry-context.ts`)
+    - ✅ Integrated into protected route layouts (parent, club, doctor)
+    - ✅ Tracks user ID, email, role, name with errors
+  - ✅ Environment variables documented in `.env.local.example`
+  - ✅ Integration guide documentation (`docs/MONITORING_SETUP_GUIDE.md`)
 - ✅ Vercel Logs documentation (built-in alternative)
   - Automatic log collection, dashboard access
 
@@ -850,14 +924,19 @@ import { getClubBySlug } from "@/modules/clubs/clubs.service";
 
 **Performance Monitoring**:
 
-- ✅ Web Vitals tracking implementation
-  - Custom Web Vitals reporting utility
-  - Integration with Google Analytics and Sentry
-  - Core Web Vitals (LCP, FID, CLS, FCP, TTFB)
-- ✅ Custom performance monitoring
-  - Performance monitoring utility class
-  - Function execution time measurement
-  - Custom metric recording
+- ✅ Web Vitals tracking implementation (January 2025)
+  - ✅ Custom Web Vitals reporting utility (`src/lib/monitoring/web-vitals.ts`)
+  - ✅ Integration with PostHog (`$web_vitals` events) and Sentry (distribution metrics)
+  - ✅ Core Web Vitals tracking: LCP, INP (replaces FID), CLS, FCP, TTFB
+  - ✅ WebVitalsReporter component (`src/components/monitoring/WebVitalsReporter.tsx`)
+  - ✅ Integrated into root layout (`src/app/layout.tsx`)
+  - ✅ `web-vitals` package installed (v5.1.0)
+- ✅ API performance monitoring utilities (January 2025)
+  - ✅ `trackApiPerformance()` - Track API route performance with Sentry
+  - ✅ `trackApiHandler()` - Wrap API handlers with performance tracking
+  - ✅ `trackServerActionPerformance()` - Track Server Action performance
+  - ✅ `trackServerAction()` - Wrap Server Actions with performance tracking
+  - ✅ Implementation location: `src/lib/monitoring/api-performance.ts`
 - ✅ Structured logging utility
   - Log levels (debug, info, warn, error)
   - Structured JSON logging
@@ -865,8 +944,17 @@ import { getClubBySlug } from "@/modules/clubs/clubs.service";
 
 **Additional Features**:
 
-- ✅ Monitoring dashboard documentation (Vercel, Sentry, Google Analytics)
-- ✅ Alerting setup (Sentry alerts, Vercel notifications, custom health checks)
+- ✅ Monitoring dashboard documentation
+  - ✅ `docs/MONITORING_DASHBOARDS_SETUP.md` - Complete dashboard setup guide (PostHog + Sentry)
+  - ✅ `docs/POSTHOG_DASHBOARD_SETUP.md` - PostHog-specific dashboard configuration
+  - ✅ Dashboard layouts, best practices, and visualization recommendations
+- ✅ Alerting setup
+  - ✅ `docs/SENTRY_ALERTING_SETUP.md` - Complete Sentry alerting configuration guide
+  - ✅ Error rate alerts (>5% error rate)
+  - ✅ Slow page load alerts (>3s page load)
+  - ✅ New issue alerts
+  - ✅ Performance degradation alerts
+  - ✅ Email notification configuration steps
 - ✅ GDPR compliance considerations (cookie consent, data privacy)
 - ✅ Implementation checklist, best practices, troubleshooting guide
 
@@ -886,12 +974,13 @@ import { getClubBySlug } from "@/modules/clubs/clubs.service";
 3. **Database Limits**: Neon free tier limits (upgrade as needed)
 4. **File Storage**: Cloudinary free tier limits
 5. **Email Limits**: Brevo free tier limits
+6. **Analytics**: PostHog free tier limits (1M events/month)
 
 ## Future Technical Enhancements
 
 - **Testing**: Unit, integration, E2E tests
 - **CI/CD**: GitHub Actions
-- **Monitoring**: ✅ Error tracking, analytics (setup guides complete, ready for implementation)
+- **Monitoring**: ✅ Error tracking (Sentry complete), analytics (PostHog complete, Vercel Analytics ready)
 - **Caching**: Redis for advanced caching
 - **Search**: Full-text search (Postgres or Algolia)
 - **Real-time**: WebSockets for notifications
@@ -950,6 +1039,9 @@ import { getClubBySlug } from "@/modules/clubs/clubs.service";
 - **Vercel Deployment Guide**: `docs/VERCEL_DEPLOYMENT_GUIDE.md` - Complete Vercel deployment guide with step-by-step instructions, environment variables, domain setup, and troubleshooting
 - **Database Deployment Guide**: `docs/DATABASE_DEPLOYMENT_GUIDE.md` - Complete Neon database deployment guide with connection setup, migrations, seed data, and best practices
 - **Monitoring Setup Guide**: `docs/MONITORING_SETUP_GUIDE.md` - Complete monitoring setup guide with error tracking (Sentry), analytics (Vercel Analytics, Google Analytics), performance monitoring, and GDPR compliance
+- **Performance Monitoring Setup**: `docs/PERFORMANCE_MONITORING_SETUP.md` - Complete performance monitoring implementation guide with Web Vitals tracking (LCP, INP, CLS, FCP, TTFB) and API performance monitoring utilities
+- **Sentry Alerting Setup**: `docs/SENTRY_ALERTING_SETUP.md` - Complete Sentry alerting configuration guide with error rate alerts, performance alerts, and email notification setup
+- **Monitoring Dashboards Setup**: `docs/MONITORING_DASHBOARDS_SETUP.md` - Complete dashboard setup guide for PostHog and Sentry with user flows, error rates, performance metrics, and dashboard best practices
 - **System Patterns**: `memory-bank/systemPatterns.md` - Architecture patterns and design decisions
 - **Active Context**: `memory-bank/activeContext.md` - Current work focus and recent changes
 - **Progress Tracking**: `memory-bank/progress.md` - Development progress and completed items

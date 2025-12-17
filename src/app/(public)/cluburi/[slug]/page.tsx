@@ -19,6 +19,8 @@ import { cacheTag } from "next/cache";
 import type { Club } from "@/modules/clubs/clubs.types";
 import { generateClubExpandedContent } from "@/lib/content/club-expanded-content";
 import { generateClubMetadata } from "@/lib/seo/club-metadata";
+import PostHogViewTracking from "@/components/analytics/PostHogViewTracking";
+import { PostHogEvents } from "@/lib/analytics/events";
 
 interface ClubDetailPageProps {
   params: Promise<{
@@ -67,6 +69,12 @@ export default async function ClubDetailPage({ params }: ClubDetailPageProps) {
 
   return (
     <>
+      <PostHogViewTracking
+        eventName={PostHogEvents.CLUB_VIEWED}
+        entityId={club.id}
+        entityType="club"
+        entitySlug={slug}
+      />
       <LocalBusinessSchema club={club} />
       <BreadcrumbOne
         title={club.name}

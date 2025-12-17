@@ -15,6 +15,7 @@ import QuizNavigation from "./QuizNavigation";
 import { routes } from "@/lib/routes";
 import { submitQuizAction } from "@/app/actions/quiz";
 import type { QuizAnswers } from "@/modules/quiz/quiz.types";
+import { trackEvent, PostHogEvents, PostHogProperties } from "@/lib/analytics/tracking";
 
 // Question components
 import AgeQuestion from "./questions/AgeQuestion";
@@ -48,11 +49,26 @@ function QuizContent({ childId }: { childId: string }) {
   const [isTransitioning, setIsTransitioning] = useState(false);
   const [showLoadingOverlay, setShowLoadingOverlay] = useState(false);
 
-  // Wrapper for nextStep with loading state
+  // Track quiz started on mount (first step)
+  useEffect(() => {
+    if (currentStep === 1) {
+      trackEvent(PostHogEvents.QUIZ_STARTED, {
+        [PostHogProperties.TOTAL_STEPS]: TOTAL_STEPS,
+      });
+    }
+  }, []); // Only run once on mount
+
+  // Wrapper for nextStep with loading state and tracking
   const handleNextStep = React.useCallback(() => {
+    // Track step completion before moving to next step
+    trackEvent(PostHogEvents.QUIZ_STEP_COMPLETED, {
+      [PostHogProperties.QUIZ_STEP]: currentStep,
+      [PostHogProperties.TOTAL_STEPS]: TOTAL_STEPS,
+    });
+
     setIsTransitioning(true);
     contextNextStep();
-  }, [contextNextStep]);
+  }, [contextNextStep, currentStep]);
 
   // Wrapper for prevStep with loading state
   const handlePrevStep = React.useCallback(() => {

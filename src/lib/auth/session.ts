@@ -13,12 +13,30 @@ import { eq } from "drizzle-orm";
 /**
  * Sync Stack Auth user with local database
  * Creates or updates user record in local users table
+ * Reads role from Stack Auth clientMetadata if available
  */
-async function syncUserWithDatabase(stackUser: { id: string; primaryEmail: string | null }) {
+async function syncUserWithDatabase(stackUser: {
+  id: string;
+  primaryEmail: string | null;
+  clientMetadata?: Record<string, unknown> | null;
+}) {
   try {
     // Ensure we have an email (required for users table)
     if (!stackUser.primaryEmail) {
       throw new Error("User must have a primary email address");
+    }
+
+    let role: "parent" | "club_admin" | "doctor" | "admin" = "parent"; // Default role
+
+    // Extract role from Stack Auth clientMetadata if available
+    if (stackUser.clientMetadata && typeof stackUser.clientMetadata === "object") {
+      const metadata = stackUser.clientMetadata;
+      if (metadata.role && typeof metadata.role === "string") {
+        const roleValue = metadata.role as string;
+        if (["parent", "club_admin", "doctor", "admin"].includes(roleValue)) {
+          role = roleValue as typeof role;
+        }
+      }
     }
 
     // Check if user exists in local database
@@ -29,26 +47,33 @@ async function syncUserWithDatabase(stackUser: { id: string; primaryEmail: strin
       .limit(1);
 
     if (existingUser.length > 0) {
-      // Update existing user
+      // Update existing user (only update role if it's different and we have it from metadata)
+      const updateData: { email: string; updatedAt: Date; role?: typeof role } = {
+        email: stackUser.primaryEmail,
+        updatedAt: new Date(),
+      };
+
+      // Only update role if we got it from metadata and it's different
+      if (role !== existingUser[0].role && role !== "parent") {
+        updateData.role = role;
+      }
+
       const [updatedUser] = await db
         .update(users)
-        .set({
-          email: stackUser.primaryEmail,
-          updatedAt: new Date(),
-        })
+        .set(updateData)
         .where(eq(users.id, existingUser[0].id))
         .returning();
 
       return updatedUser;
     } else {
-      // Create new user
+      // Create new user with role from metadata
       const [newUser] = await db
         .insert(users)
         .values({
           id: crypto.randomUUID(),
           stackUserId: stackUser.id,
           email: stackUser.primaryEmail,
-          role: "parent", // Default role
+          role: role,
         })
         .returning();
 
