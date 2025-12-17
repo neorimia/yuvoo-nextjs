@@ -15,7 +15,19 @@ const Wrapper: React.FC<WrapperProps> = ({ children }) => {
   useEffect(() => {
     if (typeof window !== "undefined") {
       import("bootstrap/dist/js/bootstrap.bundle.min")
-        .then(() => console.log("Bootstrap loaded"))
+        .then((bootstrap) => {
+          // Bootstrap 5.3.3 should automatically expose itself to window.bootstrap
+          // But we ensure it's available
+          const bootstrapDefault = (bootstrap as { default?: unknown }).default;
+          if (!window.bootstrap && bootstrap && bootstrapDefault) {
+            // Type assertion needed for window.bootstrap which isn't in window types
+            (window as { bootstrap?: unknown }).bootstrap = bootstrapDefault;
+          }
+          console.log(
+            "Bootstrap loaded",
+            window.bootstrap ? "and available on window" : "but not on window"
+          );
+        })
         .catch((err) => console.error("Bootstrap failed to load", err));
     }
   }, []);
@@ -43,10 +55,12 @@ const Wrapper: React.FC<WrapperProps> = ({ children }) => {
     }
   }, []);
 
-  return <>
-    {isLoading ? <Preloader /> : children}
-    <BackToTop />
-  </>;
+  return (
+    <>
+      {isLoading ? <Preloader /> : children}
+      <BackToTop />
+    </>
+  );
 };
 
 export default Wrapper;

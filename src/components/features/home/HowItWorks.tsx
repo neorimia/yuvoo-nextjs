@@ -1,8 +1,6 @@
 import React from "react";
 import Link from "next/link";
 import { routes } from "@/lib/routes";
-import { routes } from "@/lib/routes";
-import Link from "next/link";
 import SectionTitle from "@/components/shared/SectionTitle";
 
 /**
