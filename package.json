@@ -28,6 +28,7 @@
     "@getbrevo/brevo": "^2.2.0",
     "@neondatabase/serverless": "^0.10.3",
     "@reduxjs/toolkit": "^2.8.2",
+    "@sentry/nextjs": "^10.31.0",
     "@stackframe/stack": "^2.5.40",
     "@types/prismjs": "^1.26.5",
     "@types/react-redux": "^7.1.34",

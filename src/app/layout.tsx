@@ -12,6 +12,7 @@ import "prismjs/themes/prism-tomorrow.css";
 import ReduxProvider from "@/redux/provider";
 import { PostHogProviderWrapper } from "@/lib/analytics/posthog";
 import { Suspense } from "react";
+import { ErrorBoundary } from "@/components/shared/ErrorBoundary";
 import "./globals.scss"; // Bootstrap + SCSS
 
 const gabarito = Gabarito({
@@ -111,19 +112,21 @@ export default function RootLayout({
   return (
     <html lang="ro">
       <body suppressHydrationWarning className={`${gabarito.variable}`}>
-        <Suspense fallback={null}>
-          <PostHogProviderWrapper>
-            <OrganizationSchema />
-            <VideoProvider>
-              <ReduxProvider>
-                <AppProvider>{children}</AppProvider>
-                <Toaster position="top-center" richColors />
-                <GlobalVideoModal />
-                <CookieConsentBanner />
-              </ReduxProvider>
-            </VideoProvider>
-          </PostHogProviderWrapper>
-        </Suspense>
+        <ErrorBoundary>
+          <Suspense fallback={null}>
+            <PostHogProviderWrapper>
+              <OrganizationSchema />
+              <VideoProvider>
+                <ReduxProvider>
+                  <AppProvider>{children}</AppProvider>
+                  <Toaster position="top-center" richColors />
+                  <GlobalVideoModal />
+                  <CookieConsentBanner />
+                </ReduxProvider>
+              </VideoProvider>
+            </PostHogProviderWrapper>
+          </Suspense>
+        </ErrorBoundary>
       </body>
     </html>
   );

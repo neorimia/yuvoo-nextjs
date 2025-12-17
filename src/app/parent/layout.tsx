@@ -2,6 +2,7 @@ import React from "react";
 import { cookies } from "next/headers";
 import { requireAuth } from "@/lib/auth/session";
 import PostHogUserIdentification from "@/components/analytics/PostHogUserIdentification";
+import { SentryUserContext } from "@/components/shared/SentryUserContext";
 
 /**
  * Parent Routes Layout
@@ -17,6 +18,12 @@ export default async function ParentLayout({ children }: { children: React.React
 
   return (
     <>
+      <SentryUserContext
+        userId={session.user.id}
+        email={session.user.primaryEmail}
+        role={session.dbUser.role}
+        name={session.dbUser.firstName || session.dbUser.email || undefined}
+      />
       <PostHogUserIdentification
         userId={session.user.id}
         email={session.user.primaryEmail}
