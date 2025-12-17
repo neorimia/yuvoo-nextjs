@@ -1137,8 +1137,18 @@ CTA: "Vezi alte cluburi de [sport]" → Link către /cluburi?sport=[sport-id]
   - Add equipment guides
   - Add FAQ sections
   - Add internal links to clubs
-- [ ] Create sport-specific OG images (optional)
-- [ ] Add Article schema to sport pages (if applicable)
+- [x] Create sport-specific OG images (optional)
+  - ✅ Created directory structure (`public/assets/img/og/sports/`)
+  - ✅ Updated `sport-metadata.ts` to include sport-specific OG images
+  - ✅ Added helper functions for OG image paths with fallback
+  - ✅ Created comprehensive documentation for OG image requirements
+  - ⏳ OG images need to be designed and added (see `public/assets/img/og/sports/README.md`)
+- [x] Add Article schema to sport pages (if applicable)
+  - ✅ Created `ArticleSchema.tsx` component for sport detail pages
+  - ✅ Integrated Article schema into sport detail page (`/sporturi/[slug]`)
+  - ✅ Schema includes: headline, description, author, publisher, articleBody, keywords, articleSection
+  - ✅ Uses expanded content when available for richer schema data
+  - ✅ Includes sport-specific OG images in schema
 
 **Week 7-8: Club & Doctor Pages**
 

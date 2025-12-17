@@ -916,6 +916,12 @@ import { getClubBySlug } from "@/modules/clubs/clubs.service";
   - `src/components/SEO/FAQPageSchema.tsx` - FAQPage JSON-LD structured data (FAQ page)
   - `src/components/SEO/LocalBusinessSchema.tsx` - LocalBusiness (SportsActivityLocation) JSON-LD structured data (club detail pages)
   - `src/components/SEO/MedicalBusinessSchema.tsx` - MedicalBusiness (Physician) JSON-LD structured data (doctor detail pages)
+  - `src/components/SEO/ArticleSchema.tsx` - Article JSON-LD structured data (sport detail pages)
+    - Includes comprehensive Article schema properties for better SEO and rich snippets
+    - Uses sport-specific OG images and expanded content when available
+  - `src/components/SEO/ArticleSchema.tsx` - Article JSON-LD structured data (sport detail pages)
+    - Includes comprehensive Article schema properties for better SEO and rich snippets
+    - Uses sport-specific OG images and expanded content when available
 - **Site Map**: `docs/SITE_MAP.md` - Complete application structure, all routes, user flows, and navigation patterns
 - **Wireframes**: `docs/WIREFRAMES.md` - Detailed page structures, component placement, and layout specifications for all major pages
 - **Authentication Integration Plan**: `docs/AUTH_INTEGRATION_PLAN.md` - Complete authentication system integration details, Stack Auth setup, Romanian localization, and implementation checklist

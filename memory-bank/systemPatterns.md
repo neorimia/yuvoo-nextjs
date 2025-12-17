@@ -1554,6 +1554,9 @@ Club Directory (pre-filtered by sport)
 - **SEO Guidelines**: `docs/SEO_GUIDELINES.md` - SEO strategy, slug generation, meta tags templates, Open Graph templates, and SEO best practices
 - **SEO Improvement Plan**: `docs/SEO_IMPROVEMENT_PLAN.md` - Comprehensive SEO analysis and implementation roadmap (Week 1-3 technical foundation complete, content expansion in progress)
 - **Sport Metadata Helper**: `src/lib/seo/sport-metadata.ts` - Enhanced SEO metadata generator for sport detail pages (top 5 sports with rich descriptions, keywords, and OpenGraph tags)
+  - Includes sport-specific OG image support via `getSportOGImagePath()` helper function
+  - Path format: `/assets/img/og/sports/{sport-slug}.jpg` (1200x630px recommended)
+  - Fallback to default OG image available via `getDefaultOGImagePath()`
 - **Site Map**: `docs/SITE_MAP.md` - Complete application structure, all routes, user flows, and navigation patterns
 - **Wireframes**: `docs/WIREFRAMES.md` - Detailed page structures, component placement, and layout specifications for all major pages
 - **Legal Pages Plan**: `docs/LEGAL_PAGES_DEVELOPMENT_PLAN.md` - Comprehensive legal pages development plan, content templates, SEO guidelines, and implementation checklist

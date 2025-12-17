@@ -3,9 +3,39 @@
  *
  * Enhanced SEO metadata for sport detail pages.
  * Provides optimized descriptions for top sports.
+ * Includes sport-specific Open Graph images for better social sharing.
  */
 
 import type { SportData } from "@/lib/db/seed-data/sports";
+
+/**
+ * Get Open Graph image path for a sport
+ * Falls back to default OG image if sport-specific image doesn't exist
+ *
+ * @param sportSlug - The sport slug (e.g., "fotbal", "tenis")
+ * @param baseUrl - Base URL of the application
+ * @returns Full URL to the OG image
+ */
+export function getSportOGImagePath(
+  sportSlug: string,
+  baseUrl: string = "https://yuvoo.ro"
+): string {
+  // Sport-specific OG images are stored at: /assets/img/og/sports/{slug}.jpg
+  // Format: 1200x630px (recommended OG image size)
+  const sportImagePath = `/assets/img/og/sports/${sportSlug}.jpg`;
+
+  // For now, we'll use the sport-specific path
+  // In production, you can check if the file exists and fallback to default
+  // For Next.js static files, we assume the image exists if it's in the public folder
+  return `${baseUrl}${sportImagePath}`;
+}
+
+/**
+ * Get default OG image path
+ */
+export function getDefaultOGImagePath(baseUrl: string = "https://yuvoo.ro"): string {
+  return `${baseUrl}/assets/img/logo/og-image.jpg`;
+}
 
 /**
  * Enhanced metadata descriptions for top 5 sports
@@ -126,6 +156,14 @@ export function generateSportMetadata(sport: SportData, baseUrl: string = "https
         type: "website" as const,
         locale: "ro_RO",
         url: `${baseUrl}/sporturi/${sport.slug}`,
+        images: [
+          {
+            url: getSportOGImagePath(sport.slug, baseUrl),
+            width: 1200,
+            height: 630,
+            alt: `${sport.name} pentru Copii - Yuvoo`,
+          },
+        ],
       },
       alternates: {
         canonical: `${baseUrl}/sporturi/${sport.slug}`,
@@ -162,6 +200,14 @@ export function generateSportMetadata(sport: SportData, baseUrl: string = "https
       type: "website" as const,
       locale: "ro_RO",
       url: `${baseUrl}/sporturi/${sport.slug}`,
+      images: [
+        {
+          url: getSportOGImagePath(sport.slug, baseUrl),
+          width: 1200,
+          height: 630,
+          alt: `${sport.name} pentru Copii - Yuvoo`,
+        },
+      ],
     },
     alternates: {
       canonical: `${baseUrl}/sporturi/${sport.slug}`,

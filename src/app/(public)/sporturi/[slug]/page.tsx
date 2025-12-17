@@ -10,6 +10,8 @@ import { SPORTS_DATA } from "@/lib/db/seed-data/sports";
 import { routes } from "@/lib/routes";
 import { cacheTag } from "next/cache";
 import { generateSportMetadata as generateEnhancedMetadata } from "@/lib/seo/sport-metadata";
+import ArticleSchema from "@/components/SEO/ArticleSchema";
+import { getExpandedContentBySportId } from "@/data/sport-expanded-content";
 
 interface SportDetailPageProps {
   params: Promise<{
@@ -50,8 +52,14 @@ export default async function SportDetailPage({ params }: SportDetailPageProps) 
   cacheTag(`sport-${sport.id}`);
   cacheTag(`sport-slug-${slug}`);
 
+  // Get expanded content for Article schema
+  const expandedContent = getExpandedContentBySportId(sport.id);
+
+  const baseUrl = process.env.NEXT_PUBLIC_APP_URL || "https://yuvoo.ro";
+
   return (
     <>
+      <ArticleSchema sport={sport} expandedContent={expandedContent} baseUrl={baseUrl} />
       <BreadcrumbOne
         title={sport.name}
         subTitle="Sporturi"

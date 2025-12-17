@@ -98,6 +98,19 @@
      - ✅ Created `src/data/sport-expanded-content.ts` with comprehensive Romanian content (800-1200 words per sport)
      - ✅ Created `SportContentExpanded.tsx` component to display expanded content sections
      - ✅ Integrated expanded content into `SportDetailsMain` component (conditionally renders when content available)
+   - ✅ **Sport-Specific OG Images Implementation Complete**: Open Graph images for sport detail pages
+     - ✅ Created directory structure (`public/assets/img/og/sports/`) for sport-specific OG images
+     - ✅ Updated `src/lib/seo/sport-metadata.ts` to include sport-specific OG images in OpenGraph metadata
+     - ✅ Added helper functions: `getSportOGImagePath()` and `getDefaultOGImagePath()` for image path generation
+     - ✅ Created comprehensive documentation (`public/assets/img/og/sports/README.md`) with image specifications, content guidelines, design templates, and priority list
+     - ✅ All sport detail pages now reference sport-specific OG images (path: `/assets/img/og/sports/{sport-slug}.jpg`)
+     - ⏳ OG images need to be designed and added (see `public/assets/img/og/sports/README.md` for specifications)
+   - ✅ **Article Schema Implementation Complete**: Structured data for sport detail pages
+     - ✅ Created `src/components/SEO/ArticleSchema.tsx` component for Article schema (Schema.org)
+     - ✅ Integrated Article schema into sport detail page (`/sporturi/[slug]`)
+     - ✅ Schema includes: headline, description, author (Yuvoo), publisher (Yuvoo with logo), articleBody, keywords, articleSection, mainEntityOfPage, image (sport-specific OG image)
+     - ✅ Uses expanded content when available for richer schema data (articleBody from introduction, articleSection from content structure)
+     - ✅ All sport detail pages now include Article schema for better search engine understanding and rich snippets
      - ✅ Added comprehensive SCSS styling (`_sport-details.scss`) for all expanded content sections
      - ✅ All 10 sports completed with full content:
        - ✅ Fotbal - Introduction, 6 benefits, age recommendations, equipment guide (6 items), 5 FAQs, internal links
