@@ -123,6 +123,15 @@ export async function signInAction(formData: FormData, redirectUrl?: string) {
       redirect: safeRedirectUrl,
     };
   } catch (error) {
+    // Re-throw NEXT_REDIRECT errors to allow Next.js to handle them
+    // Stack Auth might throw these internally
+    if (error && typeof error === "object" && "digest" in error) {
+      const digest = (error as { digest?: string }).digest;
+      if (digest && typeof digest === "string" && digest.includes("NEXT_REDIRECT")) {
+        throw error;
+      }
+    }
+
     return {
       success: false,
       error: getErrorMessage(error),
