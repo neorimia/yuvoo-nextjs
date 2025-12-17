@@ -14,7 +14,8 @@ import {
   removeFavorite,
   isFavorited,
 } from "@/modules/favorites/favorites.service";
-import type { Favorite, CreateFavoriteInput } from "@/modules/favorites/favorites.types";
+import { addFavoriteSchema } from "@/lib/validations/favorite";
+import type { Favorite } from "@/modules/favorites/favorites.types";
 
 /**
  * Get all favorites for current user
@@ -33,15 +34,16 @@ export async function getFavoritesAction(): Promise<Favorite[]> {
  * Add favorite
  */
 export async function addFavoriteAction(
-  input: CreateFavoriteInput
+  input: unknown
 ): Promise<{ success: boolean; favorite?: Favorite; error?: string }> {
   try {
     const user = await requireAuth();
 
-    // TODO: Validate input with Zod schema
+    // Validate input with Zod schema
+    const validatedInput = addFavoriteSchema.parse(input);
 
     const favorite = await addFavorite({
-      ...input,
+      ...validatedInput,
       userId: user.id,
     });
 

@@ -37,7 +37,10 @@ const ClubDetailsMain: React.FC<ClubDetailsMainProps> = ({ club }) => {
                 alt={club.name}
                 width={600}
                 height={400}
+                sizes="(max-width: 768px) 100vw, 50vw"
                 style={{ width: "100%", height: "100%", objectFit: "cover" }}
+                quality={90}
+                priority
                 unoptimized={isPlaceholderUrl(mainImage)}
               />
               <div className="panel wow"></div>

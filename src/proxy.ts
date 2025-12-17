@@ -2,6 +2,7 @@
  * Onboarding & Authentication Proxy (Next.js 16)
  *
  * Handles authentication and onboarding flow redirects for protected routes.
+ * Integrates middleware logic for comprehensive route protection.
  *
  * Flow:
  * 1. Check if user is authenticated
@@ -15,6 +16,11 @@
  * - /doctor/* - Doctor portal
  * - /admin/* - Admin portal
  * - /onboarding/* - Onboarding flows (protected, role-specific)
+ *
+ * Security Note: Due to CVE-2025-29927, middleware can be bypassed.
+ * All protected routes MUST also use requireAuth()/requireRole() in page components/layouts.
+ * This proxy provides UX-level protection (redirects).
+ * Primary security is enforced at the data layer using requireAuth() and requireRole().
  */
 
 import { NextResponse } from "next/server";
@@ -22,7 +28,16 @@ import type { NextRequest } from "next/server";
 import { stackServerApp } from "@/lib/auth/stack";
 
 // Route patterns
-const AUTH_ROUTES = ["/auth/login", "/auth/register", "/auth/forgot-password"];
+const AUTH_ROUTES = [
+  "/auth/login",
+  "/auth/register",
+  "/auth/forgot-password",
+  "/auth/reset-password",
+  "/auth/verify-email",
+  "/auth/email-confirmation",
+  "/auth/verification-pending",
+  "/auth/choose-role",
+];
 const PROTECTED_ROUTE_PREFIXES = ["/parent", "/club", "/doctor", "/admin", "/onboarding"];
 
 // Public routes that should never require authentication
@@ -30,20 +45,29 @@ const PROTECTED_ROUTE_PREFIXES = ["/parent", "/club", "/doctor", "/admin", "/onb
 // e.g., /cluburi (public) vs /club (protected), /doctori (public) vs /doctor (protected)
 const PUBLIC_ROUTES = [
   "/",
+  "/home-2",
+  "/home-3",
+  // Public app pages
   "/cluburi", // Public club listing (not /club which is protected)
   "/doctori", // Public doctor listing (not /doctor which is protected)
   "/sporturi",
   "/chestionar",
   "/cautare",
+  // Public information pages
   "/despre-noi",
   "/parteneri",
   "/contact",
   "/intrebari-frecvente",
+  "/testimonials",
+  "/gallery",
   "/ajutor",
+  // Legal pages
   "/confidentialitate",
   "/termeni",
   "/cookies",
   "/gdpr-parinti",
+  // API routes (public)
+  "/api",
 ];
 
 // Onboarding routes by role
@@ -63,22 +87,22 @@ function isPublicRoute(pathname: string): boolean {
     return true;
   }
 
-  // Check if it starts with public route patterns
-  if (
-    pathname.startsWith("/cluburi") || // Public club routes
-    pathname.startsWith("/doctori") || // Public doctor routes
-    pathname.startsWith("/sporturi") ||
-    pathname.startsWith("/chestionar") ||
-    pathname.startsWith("/auth") ||
-    pathname.startsWith("/confidentialitate") ||
-    pathname.startsWith("/termeni") ||
-    pathname.startsWith("/cookies") ||
-    pathname.startsWith("/gdpr-parinti")
-  ) {
-    return true;
+  // Check if path starts with any public route
+  for (const route of PUBLIC_ROUTES) {
+    if (pathname.startsWith(route)) {
+      return true;
+    }
   }
 
-  return false;
+  // Check for dynamic public routes (quiz results, club/doctor details)
+  const publicPatterns = [
+    /^\/chestionar\/rezultate\/[^/]+$/, // Quiz results
+    /^\/cluburi\/[^/]+$/, // Club details
+    /^\/doctori\/[^/]+$/, // Doctor details
+    /^\/sporturi\/[^/]+$/, // Sport details
+  ];
+
+  return publicPatterns.some((pattern) => pattern.test(pathname));
 }
 
 /**
@@ -155,21 +179,49 @@ function getDashboardUrl(role: string): string {
   }
 }
 
+/**
+ * Get required role for a route
+ */
+function getRequiredRole(pathname: string): "parent" | "club_admin" | "doctor" | "admin" | null {
+  if (pathname.startsWith("/parent/")) {
+    return "parent";
+  }
+  if (pathname.startsWith("/club/")) {
+    return "club_admin";
+  }
+  if (pathname.startsWith("/doctor/")) {
+    return "doctor";
+  }
+  if (pathname.startsWith("/admin/")) {
+    return "admin";
+  }
+  if (pathname.startsWith("/onboarding/parent/")) {
+    return "parent";
+  }
+  if (pathname.startsWith("/onboarding/club/")) {
+    return "club_admin";
+  }
+  if (pathname.startsWith("/onboarding/doctor/")) {
+    return "doctor";
+  }
+  return null;
+}
+
 export async function proxy(request: NextRequest) {
   const { pathname } = request.nextUrl;
 
-  // Skip proxy for static files, api routes, and public assets
-  if (
-    pathname.startsWith("/_next") ||
-    pathname.startsWith("/api") ||
-    pathname.startsWith("/assets") ||
-    pathname.includes(".")
-  ) {
+  // Allow public routes
+  if (isPublicRoute(pathname)) {
     return NextResponse.next();
   }
 
-  // IMPORTANT: Allow all public routes without authentication check
-  if (isPublicRoute(pathname)) {
+  // Allow static files and Next.js internals
+  if (
+    pathname.startsWith("/_next/") ||
+    pathname.startsWith("/static/") ||
+    pathname.startsWith("/assets/") ||
+    pathname.includes(".")
+  ) {
     return NextResponse.next();
   }
 
@@ -188,6 +240,15 @@ export async function proxy(request: NextRequest) {
 
       // Allow access to all other routes (public routes already handled above)
       return NextResponse.next();
+    }
+
+    // Check role-based access (basic check - full role check happens in page components)
+    const requiredRole = getRequiredRole(pathname);
+    if (requiredRole) {
+      // Note: In Edge Runtime, we can't directly access the database for role checks
+      // So we'll rely on the data layer protection (requireRole) in page components
+      // This proxy provides UX-level redirects only
+      // The page component will use requireRole() which checks the database
     }
 
     // --- Authenticated Users ---
@@ -267,26 +328,35 @@ export async function proxy(request: NextRequest) {
     // Allow access
     return NextResponse.next();
   } catch (error) {
-    console.error("Proxy error:", error);
-    // On error, allow request to proceed (fail open for public routes)
+    // If there's an error checking authentication, redirect to login for protected routes
+    console.error("[Proxy] Error checking authentication:", error);
+
+    // If it's a protected route, redirect to login
+    if (isProtectedRoute(pathname)) {
+      const loginUrl = new URL("/auth/login", request.url);
+      loginUrl.searchParams.set("redirect", pathname);
+      return NextResponse.redirect(loginUrl);
+    }
+
+    // On error for public routes, allow request to proceed (fail open)
     // Protected routes will be caught by route-level auth checks
     return NextResponse.next();
   }
 }
 
+/**
+ * Middleware matcher - only run on specific routes
+ */
 export const config = {
   matcher: [
     /*
-     * Match all request paths except for the ones starting with:
+     * Match all request paths except:
      * - api (API routes)
      * - _next/static (static files)
      * - _next/image (image optimization files)
      * - favicon.ico (favicon file)
-     * - icon.* (all icon files)
-     * - apple.* (apple touch icons)
-     * - manifest.json (web app manifest)
-     * - assets (public assets)
+     * - public files (images, etc.)
      */
-    "/((?!api|_next/static|_next/image|favicon\\.ico|icon|apple|manifest\\.json|assets).*)",
+    "/((?!api|_next/static|_next/image|favicon.ico|.*\\.(?:svg|png|jpg|jpeg|gif|webp|ico|css|js)$).*)",
   ],
 };

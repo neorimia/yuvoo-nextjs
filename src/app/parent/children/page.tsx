@@ -2,6 +2,7 @@ import React from "react";
 import type { Metadata } from "next";
 import { cookies } from "next/headers";
 import { requireAuth } from "@/lib/auth/session";
+import ChildrenList from "@/components/features/children/ChildrenList";
 
 // MIGRATED: Removed export const dynamic = 'force-dynamic' (incompatible with Cache Components)
 // This page uses requireAuth() which accesses cookies, so it remains dynamic by default
@@ -30,10 +31,7 @@ export default async function ChildrenPage() {
           <div className="col-12">
             <div className="bd-children-content">
               <h1 className="bd-section-title mb-30">Copiii Mei</h1>
-              {/* TODO: Add children list component */}
-              <div className="bd-children-placeholder">
-                <p>Lista de copii va fi adăugată aici.</p>
-              </div>
+              <ChildrenList />
             </div>
           </div>
         </div>

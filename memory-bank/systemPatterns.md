@@ -862,14 +862,44 @@ await deleteImageAction(imageUrl);
 
 **Location**: `lib/integrations/brevo/`
 
-**Use Cases**:
+**Status**: ✅ Email Templates Complete - Production Ready
 
-- Booking confirmations
-- Quiz result summaries
-- Verification status updates
-- Reminder emails
+**Email Types** (All Implemented):
+
+- ✅ Booking confirmations - Sent automatically on booking creation
+- ✅ Booking cancellations - Sent automatically on booking cancellation
+- ✅ Booking reminders - Ready for cron job integration (24h before scheduled time)
+- ✅ Quiz results - Sent automatically after quiz submission
+- ✅ Welcome emails - Ready for registration flow integration
+- ✅ Club verification status - Ready for admin workflow integration
+- ✅ Doctor verification status - Ready for admin workflow integration
 
 **Templates**: `lib/integrations/brevo/templates.ts`
+
+**Template Features**:
+
+- Responsive HTML design (mobile-friendly)
+- Bootstrap-based styling (consistent with platform)
+- Yuvoo branding (gradient header, brand colors)
+- Romanian language content throughout
+- Plain text fallback versions
+- Personalized greetings (user's first name)
+- Clear call-to-action buttons
+- Footer with contact info
+
+**Email Service**: `lib/integrations/brevo/email.service.ts`
+
+- High-level functions for each email type
+- Email validation before sending
+- Non-blocking error handling (failures don't affect core operations)
+- Retry logic with exponential backoff
+
+**Integration Points**:
+
+- Booking emails: Automatically sent in `bookings.service.ts`
+- Quiz emails: Automatically sent in `app/actions/quiz.ts`
+- Welcome emails: Ready for `signUpAction` integration
+- Verification emails: Ready for admin verification workflow
 
 ## Caching Strategy
 
@@ -1277,10 +1307,154 @@ Does component need interactivity?
 1. **Cache Components**: Explicit caching with `"use cache"` for cacheable content
 2. **Static Shells**: Cached components create static shells for instant loading
 3. **Server Components**: Default (reduces client bundle)
-4. **Image Optimization**: Cloudinary + Next.js Image
-5. **Database Indexing**: Strategic indexes on search fields
-6. **Caching**: Cache Components with time-based and tag-based revalidation
-7. **Code Splitting**: Automatic via Next.js
+4. **Image Optimization**: Cloudinary + Next.js Image (see Image Optimization Pattern above)
+5. **Database Indexing**: Comprehensive indexes on all tables for common query patterns (see Performance Optimization Pattern above)
+6. **Query Result Caching**: In-memory cache with TTL for database queries (see Performance Optimization Pattern above)
+7. **React Component Optimization**: Memoization utilities and patterns (see Performance Optimization Pattern above)
+8. **Caching**: Cache Components with time-based and tag-based revalidation
+9. **Code Splitting**: Automatic via Next.js
+
+## Admin Verification Pattern
+
+**Location**: `src/app/admin/verifications/`, `src/app/actions/verifications.ts`, `src/components/features/admin/VerificationRequestCard.tsx`
+
+**Purpose**: Admin workflow for reviewing and approving/rejecting club and doctor verification requests.
+
+**Status**: ✅ **COMPLETE** - Full admin verification workflow implemented
+
+**Architecture**:
+
+1. **Admin Page** (`/admin/verifications`):
+   - Server Component with admin role check
+   - Fetches pending and in-review verification requests
+   - Displays statistics dashboard
+   - Lists clubs and doctors separately
+
+2. **Verification Request Cards**:
+   - Client Component for interactive actions
+   - Displays entity information (name, location, sport/specialty)
+   - Shows verification documents with download links
+   - Action buttons: Approve, Reject (with reason), Set in Review
+   - Loading states and error handling
+
+3. **Server Actions**:
+   - `updateClubVerificationStatusAction()` - Update club verification
+   - `updateDoctorVerificationStatusAction()` - Update doctor verification
+   - Admin role required (enforced via `requireRole("admin")`)
+   - Zod validation for input
+   - Email notifications on status changes
+   - Cache revalidation
+
+4. **Repository Functions**:
+   - `getClubsByVerificationStatus(status)` - Get clubs by status
+   - `getClubsPendingVerification()` - Get pending/in_review clubs
+   - `getDoctorsByVerificationStatus(status)` - Get doctors by status
+   - `getDoctorsPendingVerification()` - Get pending/in_review doctors
+
+**Verification Workflow**:
+
+1. Club/Doctor submits documents during onboarding
+2. Status set to "in_review" automatically
+3. Admin views requests at `/admin/verifications`
+4. Admin reviews documents and entity information
+5. Admin approves/rejects with optional reason
+6. Email notification sent to club admin/doctor
+7. Status updated in database
+8. Cache revalidated
+
+**Status Values**:
+
+- `pending` - Initial state, no documents submitted
+- `in_review` - Documents submitted, admin reviewing
+- `approved` - Verified and approved
+- `rejected` - Rejected, needs resubmission
+
+**Email Notifications**:
+
+- Sent automatically on status changes
+- Includes status update and optional rejection reason
+- Uses existing Brevo email templates
+- Non-blocking (failures don't affect verification updates)
+
+**Security**:
+
+- Admin role required (enforced server-side)
+- Input validation with Zod
+- Type-safe operations
+- Error handling with Romanian messages
+
+**Files**:
+
+- `src/app/admin/verifications/page.tsx` - Admin verification page
+- `src/app/actions/verifications.ts` - Verification server actions
+
+## Quiz Referral Flow Pattern
+
+**Purpose**: Display recommended doctors and clubs directly from quiz results, enabling seamless discovery and booking.
+
+**Architecture**:
+
+```
+Quiz Results Page
+  ↓
+SpecialistRecommendationCard (if specialist recommendation exists)
+  ↓
+getRecommendedDoctorsAction() → doctorsSearch.search()
+  ↓
+DoctorCard (compact variant)
+  ↓
+Doctor Directory (pre-filtered by specialty)
+
+Quiz Results Page
+  ↓
+SportRecommendationCard (for each sport recommendation)
+  ↓
+getRecommendedClubsAction() → clubsSearch.search()
+  ↓
+ClubCard (compact variant)
+  ↓
+Club Directory (pre-filtered by sport)
+```
+
+**Components**:
+
+- `SpecialistRecommendationCard` - Displays specialist recommendation with interactive doctor discovery
+- `SportRecommendationCard` - Enhanced with interactive club discovery
+- `DoctorCard` - Reusable doctor card (compact variant for recommendations)
+- `ClubCard` - Reusable club card (compact variant for recommendations)
+
+**Server Actions**:
+
+- `getRecommendedDoctorsAction(specialty, city?, limit?)` - Get recommended doctors by specialty
+- `getRecommendedClubsAction(sportId, city?, limit?)` - Get recommended clubs by sport
+
+**Features**:
+
+- **On-Demand Loading**: Recommendations load only when user clicks "View Recommended" button
+- **Filtering**: Only verified entities, accepting new patients (doctors), prioritized results
+- **Limit**: Maximum 5 recommendations per entity type
+- **Navigation**: Links to full directories with pre-applied filters
+- **Empty States**: Graceful handling when no recommendations found
+- **Loading States**: Spinner and disabled state during data fetching
+
+**User Flow**:
+
+1. User completes quiz and views results
+2. If specialist recommendation exists, user can click "View Recommended Doctors"
+3. System loads and displays up to 5 verified doctors matching specialty
+4. For each sport recommendation, user can click "View Recommended Clubs"
+5. System loads and displays up to 5 verified clubs for that sport
+6. User can view entity details or browse full directory with filters applied
+
+**Files**:
+
+- `src/components/features/quiz/SpecialistRecommendationCard.tsx` - Specialist recommendation display
+- `src/components/features/quiz/SportRecommendationCard.tsx` - Sport recommendation with club discovery
+- `src/app/actions/doctors.ts` - Doctor recommendation server action
+- `src/app/actions/clubs.ts` - Club recommendation server action
+- `src/components/features/admin/VerificationRequestCard.tsx` - Verification request card component
+- `src/modules/clubs/clubs.repository.ts` - Club verification queries
+- `src/modules/doctors/doctors.repository.ts` - Doctor verification queries
 
 ## Documentation References
 

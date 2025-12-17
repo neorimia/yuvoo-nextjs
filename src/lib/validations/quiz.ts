@@ -173,6 +173,7 @@ export const quizAnswersSchema = z.object({
  * Create Quiz Input Schema
  *
  * Validates the complete quiz submission with child ID.
+ * Email is optional and only used for unauthenticated users.
  */
 export const createQuizInputSchema = z.object({
   childId: z
@@ -182,6 +183,13 @@ export const createQuizInputSchema = z.object({
     })
     .uuid("ID-ul copilului trebuie să fie un UUID valid"),
   answers: quizAnswersSchema,
+  email: z
+    .string({
+      invalid_type_error: "Email-ul trebuie să fie un text",
+    })
+    .email("Email-ul trebuie să fie valid")
+    .optional()
+    .or(z.literal("")), // Allow empty string (will be treated as undefined)
 });
 
 /**

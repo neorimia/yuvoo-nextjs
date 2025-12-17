@@ -7,7 +7,7 @@
 
 import { db } from "@/lib/db";
 import { doctors } from "@/lib/db/schema";
-import { eq, desc, asc } from "drizzle-orm";
+import { eq, desc, asc, inArray } from "drizzle-orm";
 import type { Doctor } from "./doctors.types";
 
 /**
@@ -72,6 +72,8 @@ function mapDbDoctorToDoctor(dbDoctor: typeof doctors.$inferSelect): Doctor {
     verified: dbDoctor.verified || false,
     acceptingNewPatients: dbDoctor.acceptingNewPatients ?? true,
     onlineConsultations: dbDoctor.onlineConsultations || false,
+    verificationStatus: dbDoctor.verificationStatus,
+    verificationDocuments: dbDoctor.verificationDocuments || [],
     createdAt: dbDoctor.createdAt,
     updatedAt: dbDoctor.updatedAt,
   };
@@ -83,6 +85,21 @@ function mapDbDoctorToDoctor(dbDoctor: typeof doctors.$inferSelect): Doctor {
 export async function findBySlug(slug: string): Promise<Doctor | null> {
   const doctor = await db.query.doctors.findFirst({
     where: eq(doctors.slug, slug),
+  });
+
+  if (!doctor) {
+    return null;
+  }
+
+  return mapDbDoctorToDoctor(doctor);
+}
+
+/**
+ * Get doctor by ID
+ */
+export async function getDoctorById(id: string): Promise<Doctor | null> {
+  const doctor = await db.query.doctors.findFirst({
+    where: eq(doctors.id, id),
   });
 
   if (!doctor) {
@@ -115,9 +132,38 @@ export async function findAll(): Promise<Doctor[]> {
   return results.map(mapDbDoctorToDoctor);
 }
 
+/**
+ * Get doctors by verification status
+ */
+export async function getDoctorsByVerificationStatus(
+  status: "pending" | "in_review" | "approved" | "rejected"
+): Promise<Doctor[]> {
+  const results = await db.query.doctors.findMany({
+    where: eq(doctors.verificationStatus, status),
+    orderBy: [asc(doctors.createdAt)], // Oldest first (FIFO for review queue)
+  });
+
+  return results.map(mapDbDoctorToDoctor);
+}
+
+/**
+ * Get doctors pending verification (pending or in_review)
+ */
+export async function getDoctorsPendingVerification(): Promise<Doctor[]> {
+  const results = await db.query.doctors.findMany({
+    where: inArray(doctors.verificationStatus, ["pending", "in_review"]),
+    orderBy: [asc(doctors.createdAt)], // Oldest first
+  });
+
+  return results.map(mapDbDoctorToDoctor);
+}
+
 export const doctorsRepository = {
   findBySlug,
+  getDoctorById,
   findBySpecialty,
   findAll,
+  getDoctorsByVerificationStatus,
+  getDoctorsPendingVerification,
   mapDbDoctorToDoctor, // Export for use in search service
 };

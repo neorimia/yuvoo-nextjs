@@ -2,6 +2,7 @@ import React from "react";
 import type { Metadata } from "next";
 import { cookies } from "next/headers";
 import { requireAuth } from "@/lib/auth/session";
+import FavoritesList from "@/components/features/favorites/FavoritesList";
 
 // MIGRATED: Removed export const dynamic = 'force-dynamic' (incompatible with Cache Components)
 // This page uses requireAuth() which accesses cookies, so it remains dynamic by default
@@ -30,10 +31,7 @@ export default async function FavoritesPage() {
           <div className="col-12">
             <div className="bd-favorites-content">
               <h1 className="bd-section-title mb-30">Favorite</h1>
-              {/* TODO: Add favorites component */}
-              <div className="bd-favorites-placeholder">
-                <p>Lista de favorite va fi adăugată aici.</p>
-              </div>
+              <FavoritesList />
             </div>
           </div>
         </div>

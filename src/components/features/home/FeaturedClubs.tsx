@@ -122,7 +122,9 @@ const FeaturedClubs = () => {
                         alt={club.name}
                         width={600}
                         height={338}
+                        sizes="(max-width: 640px) 100vw, (max-width: 768px) 50vw, 33vw"
                         style={{ width: "100%", height: "100%", objectFit: "cover" }}
+                        quality={85}
                       />
                     </div>
                     {club.verified && (

@@ -13,3 +13,4 @@ export { BootstrapTextarea, type BootstrapTextareaProps } from "./BootstrapTexta
 export { BootstrapSelect, type BootstrapSelectProps } from "./BootstrapSelect";
 export { BootstrapAlert, type BootstrapAlertProps } from "./BootstrapAlert";
 export { BootstrapProgress, type BootstrapProgressProps } from "./BootstrapProgress";
+export { default as OptimizedImage, type OptimizedImageProps } from "./OptimizedImage";

@@ -20,9 +20,11 @@ Trial bookings and consultations business logic.
 
 ### Notifications
 
-- `sendConfirmation(booking)` - Send confirmation email
-- `sendCancellation(booking)` - Send cancellation email
-- `sendReminder(booking)` - Send reminder email
+- `sendConfirmation(booking)` - Send confirmation email (✅ Brevo integration complete)
+- `sendCancellation(booking)` - Send cancellation email (✅ Brevo integration complete)
+- `sendReminder(booking)` - Send reminder email (✅ Brevo integration complete)
+
+**Email Integration**: All notification functions are integrated with Brevo email service. Emails are sent automatically when bookings are created or cancelled. Email failures do not block booking operations.
 
 ### Repository
 

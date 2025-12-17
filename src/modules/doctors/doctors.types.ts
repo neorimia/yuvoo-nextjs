@@ -31,6 +31,8 @@ export interface Doctor {
   verified: boolean;
   acceptingNewPatients?: boolean; // Whether doctor is accepting new patients
   onlineConsultations?: boolean; // Whether doctor offers online consultations
+  verificationStatus?: "pending" | "in_review" | "approved" | "rejected";
+  verificationDocuments?: string[];
   createdAt: Date;
   updatedAt: Date;
 }

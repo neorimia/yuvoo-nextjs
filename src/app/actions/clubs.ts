@@ -22,6 +22,19 @@ export async function getClubBySlugAction(slug: string): Promise<Club | null> {
 }
 
 /**
+ * Get club by ID (public action)
+ */
+export async function getClubByIdAction(id: string): Promise<Club | null> {
+  try {
+    const { getClubById } = await import("@/modules/clubs/clubs.repository");
+    return await getClubById(id);
+  } catch (error) {
+    console.error("Error getting club by ID:", error);
+    return null;
+  }
+}
+
+/**
  * Search clubs with filters (public action)
  */
 export async function searchClubsAction(filters: ClubSearchFilters): Promise<ClubSearchResult> {
@@ -49,6 +62,41 @@ export async function getClubsBySportAction(sportId: string): Promise<Club[]> {
   } catch (error) {
     console.error("Error getting clubs by sport:", error);
     return [];
+  }
+}
+
+/**
+ * Get recommended clubs based on sport recommendation
+ *
+ * @param sportId - Sport ID from quiz recommendation
+ * @param city - Optional city filter
+ * @param limit - Maximum number of clubs to return (default: 5)
+ * @returns List of recommended clubs
+ */
+export async function getRecommendedClubsAction(
+  sportId: string,
+  city?: string,
+  limit: number = 5
+): Promise<ClubSearchResult> {
+  try {
+    const filters: ClubSearchFilters = {
+      sportId,
+      verified: true, // Only show verified clubs
+      page: 1,
+      pageSize: limit,
+      sortBy: "verified", // Verified clubs first
+    };
+
+    if (city) {
+      filters.city = city;
+    }
+
+    const result = await searchClubs(filters);
+
+    return result;
+  } catch (error) {
+    console.error("[Clubs] Error getting recommended clubs:", error);
+    throw new Error("Eroare la obținerea cluburilor recomandate");
   }
 }
 

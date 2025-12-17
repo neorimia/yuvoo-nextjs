@@ -4,6 +4,7 @@ import { notFound } from "next/navigation";
 import BreadcrumbOne from "@/components/Breadcrumb/BreadcrumbOne";
 import { getQuizResultAction } from "@/app/actions/quiz";
 import SportRecommendationCard from "@/components/features/quiz/SportRecommendationCard";
+import SpecialistRecommendationCard from "@/components/features/quiz/SpecialistRecommendationCard";
 import ResultsActions from "@/components/features/quiz/ResultsActions";
 import { routes } from "@/lib/routes";
 import { getSession } from "@/lib/auth/session";
@@ -105,6 +106,19 @@ export default async function QuizResultsPage({ params }: QuizResultsPageProps) 
                 className="mb-4"
                 isAuthenticated={isAuthenticated}
               />
+
+              {/* Specialist Recommendation */}
+              {quizResult.specialistRecommendation && (
+                <div className="specialist-recommendation-section mb-5">
+                  <h2 className="h4 mb-4">
+                    <i className="bi bi-stethoscope text-primary me-2"></i>
+                    Recomandare Specialist Medical
+                  </h2>
+                  <SpecialistRecommendationCard
+                    recommendation={quizResult.specialistRecommendation}
+                  />
+                </div>
+              )}
 
               {/* Sport Recommendations */}
               <div className="recommendations-list">

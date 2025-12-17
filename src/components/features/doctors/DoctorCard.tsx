@@ -57,7 +57,9 @@ const DoctorCard: React.FC<DoctorCardProps> = ({
               alt={doctor.name}
               width={300}
               height={350}
+              sizes="(max-width: 640px) 100vw, (max-width: 768px) 50vw, 33vw"
               style={{ width: "100%", height: "100%", objectFit: "cover" }}
+              quality={85}
               unoptimized={isPlaceholderUrl(doctorImage)}
             />
             {doctor.verified && (
@@ -100,7 +102,9 @@ const DoctorCard: React.FC<DoctorCardProps> = ({
             alt={doctor.name}
             width={300}
             height={350}
+            sizes="(max-width: 640px) 100vw, (max-width: 768px) 50vw, 33vw"
             style={{ width: "100%", height: "100%", objectFit: "cover" }}
+            quality={85}
             unoptimized={isPlaceholderUrl(doctorImage)}
           />
         )}
@@ -131,4 +135,5 @@ const DoctorCard: React.FC<DoctorCardProps> = ({
   );
 };
 
-export default DoctorCard;
+// Memoize component to prevent unnecessary re-renders when parent re-renders
+export default React.memo(DoctorCard);

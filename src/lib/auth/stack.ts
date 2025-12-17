@@ -100,8 +100,8 @@ function getStackServerApp(): StackServerApp {
         signUp: routes.register,
         passwordReset: routes.resetPassword, // Password reset page
         emailVerification: routes.emailConfirmation, // Email verification page
-        afterSignIn: routes.parent.dashboard, // Protected route - redirect after login
-        afterSignUp: routes.parent.dashboard, // Protected route - redirect after signup
+        afterSignIn: routes.parent.dashboard, // Protected route - redirect after login (proxy will handle onboarding redirect)
+        afterSignUp: routes.parent.dashboard, // Protected route - redirect after signup (signUpAction will handle onboarding redirect)
       },
     });
   }

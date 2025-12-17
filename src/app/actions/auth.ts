@@ -9,6 +9,7 @@
 
 import { stackServerApp } from "@/lib/auth/stack";
 import { getCurrentUser, requireAuth, requireRole } from "@/modules/auth/auth.service";
+import { getSession } from "@/lib/auth/session";
 import type { AuthUser, UserRole } from "@/modules/auth/auth.types";
 import { routes } from "@/lib/routes";
 import { getErrorMessage } from "@/lib/auth/errors";
@@ -90,6 +91,11 @@ export async function signInAction(formData: FormData, redirectUrl?: string) {
 
 /**
  * Sign up with email and password
+ *
+ * After successful signup:
+ * - User is automatically synced to database (via getSession)
+ * - If onboarding not completed, redirects to onboarding
+ * - If onboarding completed, redirects to dashboard
  */
 export async function signUpAction(formData: FormData) {
   const email = formData.get("email") as string;
@@ -123,7 +129,28 @@ export async function signUpAction(formData: FormData) {
       password,
     });
 
-    // Return success - redirect will be handled by the form component
+    // After signup, user is automatically synced to database via getSession
+    // Check onboarding status to determine redirect
+    try {
+      const session = await getSession();
+      if (session?.dbUser) {
+        // Check if onboarding is completed
+        if (!session.dbUser.onboardingCompleted) {
+          // Redirect to onboarding based on role
+          const onboardingUrl = getOnboardingUrl(session.dbUser.role);
+          return {
+            success: true,
+            redirect: onboardingUrl,
+          };
+        }
+      }
+    } catch (sessionError) {
+      // If we can't get session, default to dashboard
+      // User will be redirected to onboarding by proxy if needed
+      console.error("Error checking onboarding status after signup:", sessionError);
+    }
+
+    // Default: redirect to dashboard (proxy will handle onboarding redirect if needed)
     return {
       success: true,
       redirect: routes.parent.dashboard,
@@ -133,6 +160,25 @@ export async function signUpAction(formData: FormData) {
       success: false,
       error: getErrorMessage(error),
     };
+  }
+}
+
+/**
+ * Get onboarding URL based on user role
+ */
+function getOnboardingUrl(role: string): string {
+  switch (role) {
+    case "parent":
+      return routes.onboarding.parent.welcome;
+    case "club_admin":
+      return routes.onboarding.club.welcome;
+    case "doctor":
+      return routes.onboarding.doctor.welcome;
+    case "admin":
+      // Admins don't need onboarding
+      return routes.admin.dashboard;
+    default:
+      return routes.onboarding.parent.welcome;
   }
 }
 
@@ -202,9 +248,11 @@ export async function resetPasswordAction(formData: FormData) {
   }
 
   try {
-    await stackServerApp.resetPasswordWithToken({
-      token,
-      newPassword: password,
+    // Stack Auth uses resetPassword method with code and password
+    // The token from the URL is actually a reset code
+    await stackServerApp.resetPassword({
+      code: token, // Stack Auth expects 'code' parameter
+      password: password,
     });
 
     // Return success - redirect will be handled by the form component

@@ -2,6 +2,7 @@ import React from "react";
 import type { Metadata } from "next";
 import { cookies } from "next/headers";
 import { requireAuth } from "@/lib/auth/session";
+import BookingList from "@/components/features/bookings/BookingList";
 
 // MIGRATED: Removed export const dynamic = 'force-dynamic' (incompatible with Cache Components)
 // This page uses requireAuth() which accesses cookies, so it remains dynamic by default
@@ -30,10 +31,7 @@ export default async function BookingsPage() {
           <div className="col-12">
             <div className="bd-bookings-content">
               <h1 className="bd-section-title mb-30">Rezervările Mele</h1>
-              {/* TODO: Add bookings list component */}
-              <div className="bd-bookings-placeholder">
-                <p>Lista de rezervări va fi adăugată aici.</p>
-              </div>
+              <BookingList />
             </div>
           </div>
         </div>

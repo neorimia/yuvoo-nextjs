@@ -1,0 +1,555 @@
+@use "../utils" as *;
+
+// ============== SPORT CSS START HERE ==============
+
+// Base sport class (similar to bd-club but for sports)
+.bd-sport {
+  padding: 40px;
+  border: 2px dashed var(--bd-grey-2);
+  border-radius: 32px;
+  position: relative;
+  $self: &;
+
+  @media #{$md} {
+    padding: 40px 20px;
+  }
+
+  @media #{$xl} {
+    padding: 25px 20px;
+  }
+
+  // Sport card variants
+  &-card {
+    border-radius: 24px;
+    overflow: hidden;
+    background: var(--bd-common-white);
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    @include transition(0.3s);
+
+    &:hover {
+      box-shadow: 0 8px 12px rgba(0, 0, 0, 0.15);
+      transform: translateY(-4px);
+    }
+
+    &.compact {
+      .bd-sport-content {
+        padding: 20px;
+      }
+    }
+
+    &.featured {
+      border: 2px solid var(--bd-theme-1);
+    }
+  }
+
+  // Sport listing variant (bd-sport-3, matches bd-club-3)
+  &-3 {
+    border-radius: 24px;
+    overflow: hidden;
+    background: var(--bd-common-white);
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    @include transition(0.3s);
+
+    &:hover {
+      box-shadow: 0 8px 12px rgba(0, 0, 0, 0.15);
+      transform: translateY(-4px);
+
+      #{$self} {
+        &-content {
+          &-3 {
+            top: 0;
+          }
+        }
+
+        &-thumb {
+          transform: scale(1.05);
+        }
+      }
+    }
+  }
+
+  // Sport thumb/icon area
+  &-thumb {
+    height: 277px;
+    width: 100%;
+    overflow: hidden;
+    @include transition(0.3s);
+    background: linear-gradient(135deg, var(--bd-theme-7) 0%, var(--bd-theme-4) 100%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    i {
+      @include transition(0.3s);
+      color: var(--bd-theme-1);
+    }
+
+    &:hover {
+      i {
+        transform: scale(1.1);
+      }
+    }
+  }
+
+  // Sport content
+  &-content {
+    padding: 30px;
+    background: var(--bd-common-white);
+
+    p {
+      margin-bottom: 20px;
+      color: var(--bd-text-body);
+      line-height: 26px;
+    }
+
+    &-3 {
+      padding: 25px;
+      position: relative;
+      top: 50px;
+      z-index: 2;
+      margin-top: -50px;
+      @include transition(0.3s);
+    }
+  }
+
+  // Sport title
+  &-title {
+    margin-bottom: 15px;
+    font-size: 28px;
+    font-weight: 700;
+    color: var(--bd-common-black);
+    @include transition(0.3s);
+
+    @media #{$lg,$md,$sm,$xs} {
+      font-size: 24px;
+    }
+
+    @media #{$xs} {
+      font-size: 22px;
+    }
+
+    a {
+      display: inline-block;
+      color: var(--bd-common-black);
+      @include transition(0.3s);
+
+      &:hover {
+        color: var(--bd-theme-1);
+      }
+    }
+
+    &-3 {
+      margin-bottom: 20px;
+      font-size: 24px;
+      font-weight: 700;
+
+      @media #{$sm,$xs} {
+        font-size: 22px;
+      }
+
+      a {
+        color: var(--bd-common-black);
+        @include transition(0.3s);
+
+        &:hover {
+          color: var(--bd-theme-1);
+        }
+      }
+    }
+  }
+
+  // Sport description
+  &-description {
+    color: var(--bd-text-body);
+    line-height: 26px;
+    margin-bottom: 20px;
+  }
+
+  // Sport meta information
+  &-meta {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 16px;
+    color: var(--bd-text-body);
+
+    &-wrapper {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 10px;
+      border-top: 1px solid var(--bd-grey-1);
+      padding-top: 20px;
+      margin-top: 20px;
+    }
+  }
+
+  // Sport category
+  &-category {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    color: var(--bd-text-body);
+
+    i {
+      color: var(--bd-theme-2);
+      font-size: 18px;
+    }
+
+    span {
+      font-weight: 500;
+    }
+  }
+
+  // Sport age range
+  &-age {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    color: var(--bd-text-body);
+
+    i {
+      color: var(--bd-theme-1);
+      font-size: 18px;
+    }
+
+    span {
+      font-weight: 500;
+    }
+  }
+
+  // Sport clubs count
+  &-clubs {
+    font-size: 14px;
+    color: var(--bd-text-body);
+
+    .text-success {
+      color: var(--bd-theme-1) !important;
+    }
+  }
+
+  // Sport button
+  &-btn {
+    padding: 15px 30px;
+    text-align: center;
+    @include transition(0.3s);
+
+    a {
+      color: var(--bd-common-white);
+      font-weight: 600;
+      display: block;
+      @include transition(0.3s);
+
+      &:hover {
+        color: var(--bd-common-white);
+        opacity: 0.9;
+      }
+    }
+
+    &-3 {
+      margin-top: 15px;
+    }
+  }
+
+  // Sport badge
+  &-badge {
+    z-index: 10;
+  }
+
+  // Sport area (section wrapper)
+  &-area {
+    position: relative;
+  }
+
+  // Sport wrapper
+  &-wrapper {
+    text-align: center;
+
+    &-2 {
+      text-align: center;
+    }
+  }
+
+  // Sport active (swiper/carousel)
+  &-active {
+    position: relative;
+
+    &-2 {
+      position: relative;
+    }
+  }
+
+  // Sport pagination
+  &-pagination {
+    margin-top: 40px;
+  }
+
+  // Sport icon
+  &-icon {
+    &-wrapper {
+      margin-bottom: 20px;
+    }
+
+    &-2 {
+      height: 120px;
+      width: 120px;
+      display: inline-flex;
+      justify-content: center;
+      align-items: center;
+      background-color: var(--bd-theme-7);
+      border-radius: 50%;
+      margin: 0 auto;
+
+      i {
+        font-size: 64px;
+        color: var(--bd-theme-1);
+      }
+    }
+  }
+
+  // Sport variant 2 (for HomeTwoSportArea if needed)
+  &-2 {
+    background: linear-gradient(359.18deg, #ebfffe 0.69%, #f5fffe 98.52%);
+    border-radius: 24px;
+    padding: 55px 50px;
+    text-align: center;
+    margin: 0px 6px 6px 0;
+    @include transition(0.3s);
+
+    @media #{$md,$xs} {
+      padding: 30px 20px;
+    }
+
+    &:hover {
+      filter: drop-shadow(6px 6px 0 var(--bd-theme-1));
+    }
+  }
+
+  // Sport filter buttons
+  &-filter {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    justify-content: center;
+    margin-bottom: 30px;
+
+    .bd-btn {
+      &.active {
+        background-color: var(--bd-theme-1);
+        color: var(--bd-common-white);
+        border-color: var(--bd-theme-1);
+      }
+    }
+  }
+}
+
+// Sport Details Styles
+.bd-sport-details {
+  &-widget {
+    &-content {
+      padding: 30px 32px 50px;
+      border-radius: 32px;
+
+      p {
+        line-height: 30px;
+        margin-bottom: 20px;
+      }
+    }
+
+    &-title {
+      font-size: 45px;
+      font-weight: 700;
+      color: var(--bd-common-black);
+      margin-bottom: 20px;
+
+      @media #{$lg} {
+        font-size: 40px;
+      }
+
+      @media #{$sm,$md} {
+        font-size: 45px;
+      }
+
+      @media #{$xs} {
+        font-size: 30px;
+      }
+    }
+
+    &-btn {
+      margin-top: 30px;
+      display: flex;
+      gap: 15px;
+      flex-wrap: wrap;
+
+      .bd-btn {
+        flex: 1;
+        min-width: 200px;
+
+        @media #{$xs} {
+          flex: 100%;
+        }
+      }
+    }
+  }
+
+  &-thumb {
+    border-radius: 32px;
+    overflow: hidden;
+    height: 100%;
+    width: 100%;
+    background: linear-gradient(135deg, var(--bd-theme-7) 0%, var(--bd-theme-4) 100%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    @media #{$md} {
+      height: 450px;
+    }
+
+    @media #{$sm} {
+      height: 400px;
+    }
+
+    @media #{$xs} {
+      height: 350px;
+    }
+
+    i {
+      color: var(--bd-theme-1);
+      @include transition(0.3s);
+    }
+
+    &:hover {
+      i {
+        transform: scale(1.1);
+      }
+    }
+  }
+
+  &-info {
+    &-wrapper {
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+      margin-top: 35px;
+    }
+
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+
+    span {
+      display: inline-block;
+      font-size: 14px;
+      color: var(--bd-text-body);
+      font-weight: 500;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+
+      i {
+        color: var(--bd-theme-1);
+      }
+    }
+
+    h5 {
+      font-size: 20px;
+      font-weight: 600;
+      color: var(--bd-common-black);
+      margin: 0;
+    }
+  }
+
+  &-category,
+  &-age,
+  &-clubs {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+
+    span {
+      display: inline-block;
+      font-size: 14px;
+      color: var(--bd-text-body);
+      font-weight: 500;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+
+      i {
+        color: var(--bd-theme-1);
+      }
+    }
+
+    h5 {
+      font-size: 20px;
+      font-weight: 600;
+      color: var(--bd-common-black);
+      margin: 0;
+    }
+  }
+
+  &-category {
+    span {
+      i {
+        color: var(--bd-theme-2);
+      }
+    }
+  }
+
+  &-age {
+    span {
+      i {
+        color: var(--bd-theme-1);
+      }
+    }
+  }
+
+  &-clubs {
+    span {
+      i {
+        color: var(--bd-theme-1);
+      }
+    }
+
+    .text-success {
+      color: var(--bd-theme-1) !important;
+    }
+  }
+}
+
+// Sport Listing Area
+.bd-sports-area {
+  position: relative;
+}
+
+.bd-sports-content {
+  text-align: center;
+  margin-bottom: 50px;
+
+  h1 {
+    margin-bottom: 20px;
+  }
+
+  p {
+    max-width: 700px;
+    margin: 0 auto;
+    color: var(--bd-text-body);
+    line-height: 26px;
+  }
+}
+
+// Sport Detail Area
+.bd-sport-detail-area {
+  position: relative;
+}
+
+.bd-sport-detail-content {
+  text-align: center;
+  margin-bottom: 50px;
+
+  h1 {
+    margin-bottom: 20px;
+  }
+}
+
+// SPORT CSS END HERE
