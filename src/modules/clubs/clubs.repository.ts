@@ -163,6 +163,38 @@ export async function findBySportType(sportType: string): Promise<Club[]> {
   return dbClubs.map(mapDbClubToClub);
 }
 
+/**
+ * Get unique locations (city/district combinations) from clubs
+ * Returns array of { city, district? } objects
+ */
+export async function getUniqueLocations(): Promise<Array<{ city: string; district?: string }>> {
+  const dbClubs = await db.query.clubs.findMany({
+    columns: {
+      city: true,
+      district: true,
+    },
+  });
+
+  // Use Set to track unique combinations
+  const locationSet = new Set<string>();
+  const locations: Array<{ city: string; district?: string }> = [];
+
+  for (const club of dbClubs) {
+    // Create a unique key for city/district combination
+    const key = club.district ? `${club.city}|${club.district}` : club.city;
+
+    if (!locationSet.has(key)) {
+      locationSet.add(key);
+      locations.push({
+        city: club.city,
+        district: club.district || undefined,
+      });
+    }
+  }
+
+  return locations;
+}
+
 export const clubsRepository = {
   getClubBySlug,
   getClubById,
@@ -170,5 +202,6 @@ export const clubsRepository = {
   getClubsByVerificationStatus,
   getClubsPendingVerification,
   findBySportType,
+  getUniqueLocations,
   mapDbClubToClub,
 };

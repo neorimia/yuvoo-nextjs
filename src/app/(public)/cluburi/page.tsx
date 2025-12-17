@@ -8,6 +8,7 @@ import { searchClubs } from "@/modules/clubs/clubs.service";
 import { routes } from "@/lib/routes";
 import SectionTitle from "@/components/shared/SectionTitle";
 import type { Club, ClubSearchFilters as ClubSearchFiltersType } from "@/modules/clubs/clubs.types";
+import ItemListSchema from "@/components/SEO/ItemListSchema";
 
 /**
  * Generate metadata for clubs listing page
@@ -80,6 +81,7 @@ export default async function ClubsPage({ searchParams }: ClubsPageProps) {
 
   return (
     <>
+      <ItemListSchema items={clubs} type="Club" listName="Cluburi Sportive Verificate" />
       <BreadcrumbOne
         title="Cluburi Sportive"
         subTitle="Cluburi"

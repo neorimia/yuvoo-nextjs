@@ -3,9 +3,10 @@
 import { MetadataRoute } from "next";
 import { routes } from "@/lib/routes";
 import { getAllSports } from "@/modules/sports/sports.service";
-import { getAllClubs } from "@/modules/clubs/clubs.service";
+import { getAllClubs, getUniqueLocations } from "@/modules/clubs/clubs.service";
 import { getAllDoctors } from "@/modules/doctors/doctors.service";
 import { cacheTag } from "next/cache";
+import { generateLocationSlug } from "@/lib/utils/location";
 
 /**
  * Sitemap Generator
@@ -153,5 +154,20 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     // Continue with other pages even if doctors fail
   }
 
-  return [...staticPages, ...sportPages, ...clubPages, ...doctorPages];
+  // Location-specific pages
+  let locationPages: MetadataRoute.Sitemap = [];
+  try {
+    const locations = await getUniqueLocations();
+    locationPages = locations.map((loc) => ({
+      url: `${baseUrl}${routes.clubs.location(generateLocationSlug(loc.city, loc.district))}`,
+      lastModified: new Date(),
+      changeFrequency: "weekly" as const,
+      priority: 0.7, // Medium priority for location pages
+    }));
+  } catch (error) {
+    console.error("Error generating location pages for sitemap:", error);
+    // Continue with other pages even if locations fail
+  }
+
+  return [...staticPages, ...sportPages, ...clubPages, ...doctorPages, ...locationPages];
 }

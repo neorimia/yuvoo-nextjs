@@ -35,6 +35,7 @@ export const routes = {
     detail: (slug: string) => `/cluburi/${slug}`,
     category: (category: string) => `/cluburi/categorie/${category}`,
     reviews: (slug: string) => `/cluburi/${slug}/recenzii`,
+    location: (locationSlug: string) => `/cluburi/locatie/${locationSlug}`,
   },
   // Doctors (Doctori)
   doctors: {

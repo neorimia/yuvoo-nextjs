@@ -5,11 +5,14 @@
  * Handles complex queries with multiple filters, sorting, and pagination.
  */
 
+"use cache";
+
 import { db } from "@/lib/db";
 import { clubs } from "@/lib/db/schema";
 import { eq, and, ilike, desc, asc, sql, arrayOverlaps } from "drizzle-orm";
 import { clubsRepository } from "./clubs.repository";
 import type { ClubSearchFilters, ClubSearchResult } from "./clubs.types";
+import { cacheLife, cacheTag } from "next/cache";
 
 /**
  * Calculate distance between two coordinates using Haversine formula
@@ -51,6 +54,21 @@ function calculateDistance(lat1: number, lon1: number, lat2: number, lon2: numbe
  * Supports pagination with page and pageSize.
  */
 export async function search(filters: ClubSearchFilters): Promise<ClubSearchResult> {
+  // Cache strategy: Cache for 1 hour, revalidate on club updates
+  cacheLife("hours");
+  cacheTag("clubs-list");
+
+  // Add specific cache tags based on filters for better granular revalidation
+  if (filters.sportId) {
+    cacheTag(`clubs-sport-${filters.sportId}`);
+  }
+  if (filters.city) {
+    cacheTag(`clubs-city-${filters.city.toLowerCase()}`);
+  }
+  if (filters.verified !== undefined) {
+    cacheTag(`clubs-verified-${filters.verified}`);
+  }
+
   const page = filters.page || 1;
   const pageSize = filters.pageSize || 20;
   const offset = (page - 1) * pageSize;

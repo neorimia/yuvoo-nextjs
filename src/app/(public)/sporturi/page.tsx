@@ -11,6 +11,7 @@ import { cacheTag } from "next/cache";
 import SectionTitle from "@/components/shared/SectionTitle";
 import FaqAccordionItem from "@/components/shared/FaqAccordionItem";
 import { sportsFaqItems } from "@/data/sports-faq-data";
+import ItemListSchema from "@/components/SEO/ItemListSchema";
 
 export const metadata: Metadata = {
   title: "Sporturi pentru Copii - Descoperă Sportul Perfect | Yuvoo",
@@ -73,6 +74,7 @@ export default async function SportsPage() {
 
   return (
     <>
+      <ItemListSchema items={sports} type="Sport" listName="Sporturi Disponibile pentru Copii" />
       <BreadcrumbOne
         title="Sporturi"
         subTitle="Sporturi"

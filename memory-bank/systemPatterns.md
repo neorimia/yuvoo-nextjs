@@ -271,7 +271,7 @@ Next.js route groups `(group-name)/` organize routes without affecting URL struc
 **Public SEO Routes** (Romanian, indexed by search engines):
 
 - Sports: `/sporturi`, `/sporturi/:slug`
-- Clubs: `/cluburi`, `/cluburi/:slug`, `/cluburi/categorie/:category`, `/cluburi/:slug/recenzii`
+- Clubs: `/cluburi`, `/cluburi/:slug`, `/cluburi/categorie/:category`, `/cluburi/:slug/recenzii`, `/cluburi/locatie/:location` (location-specific landing pages)
 - Doctors: `/doctori`, `/doctori/:slug`
 - Quiz: `/chestionar`, `/chestionar/container`, `/chestionar/previzualizare`, `/chestionar/rezultate`
 - Info: `/despre-noi`, `/parteneri`, `/intrebari-frecvente`, `/contact`, `/ajutor`
@@ -990,6 +990,17 @@ await deleteImageAction(imageUrl);
 
 ### Next.js 16 Cache Components
 
+**Cache Strategy for Listings** (January 2025 - ✅ Implemented):
+
+- **Location**: `modules/clubs/clubs.search.ts`, `modules/doctors/doctors.search.ts`
+- **Pattern**: Use `"use cache"` directive in search functions with `cacheLife()` and `cacheTag()` for granular revalidation
+- **Implementation**:
+  - Added `"use cache"` directive at file level
+  - `cacheLife("hours")` for 1-hour cache duration
+  - `cacheTag()` with granular tags: base list tag + filter-specific tags (sport, city, verified status)
+  - Enables efficient cache revalidation when clubs/doctors are updated via tag-based revalidation
+- **Benefits**: Reduced database load, improved page load performance, efficient cache invalidation
+
 **Paradigm Shift**: Dynamic by default, opt-in to caching with `"use cache"`
 
 **Caching Patterns**:
@@ -1027,6 +1038,18 @@ await deleteImageAction(imageUrl);
 - After booking creation/cancellation: `revalidatePath()` or `updateTag()`
 - After profile updates: `revalidatePath()` or `updateTag()`
 - After favorite toggles: `revalidatePath()` or `updateTag()`
+- After club/doctor updates: `revalidateTag("clubs-list")` or `revalidateTag("doctors-list")` plus specific tags (sport, city, verified status)
+
+**Cache Strategy for Listings** (January 2025 - ✅ Implemented):
+
+- **Location**: `modules/clubs/clubs.search.ts`, `modules/doctors/doctors.search.ts`
+- **Pattern**: Use `"use cache"` directive in search functions with `cacheLife()` and `cacheTag()` for granular revalidation
+- **Implementation**:
+  - Added `"use cache"` directive at file level
+  - `cacheLife("hours")` for 1-hour cache duration
+  - `cacheTag()` with granular tags: base list tag + filter-specific tags (sport, city, verified status)
+  - Enables efficient cache revalidation when clubs/doctors are updated via tag-based revalidation
+- **Benefits**: Reduced database load, improved page load performance, efficient cache invalidation
 
 ## Error Handling Pattern
 
@@ -1681,8 +1704,11 @@ Club Directory (pre-filtered by sport)
 - `src/components/shared/SectionTitle.tsx` - Added React.ReactNode support
 - `src/components/shared/FaqAccordionItem.tsx` - Added React.ReactNode support
 - `src/components/SEO/FAQPageSchema.tsx` - Added text extraction from React nodes
+- `src/components/SEO/ItemListSchema.tsx` - ItemList schema component for listing pages (supports Club, Doctor, Sport types)
 - `src/data/faq-data.tsx` - Enhanced with internal links (renamed from .ts to .tsx)
 - `src/data/sports-faq-data.tsx` - Enhanced with internal links (renamed from .ts to .tsx)
+- `src/lib/utils/location.ts` - Location utilities (slug generation, parsing, display names)
+- `src/app/(public)/cluburi/locatie/[location]/page.tsx` - Location-specific landing pages for clubs
 - `src/components/features/about/AboutMain.tsx` - Added internal links
 - `src/app/(public)/contact/page.tsx` - Added related links section
 - `src/components/Contact/ContactFormMain.tsx` - Added links in subtitle
@@ -1725,6 +1751,66 @@ Club Directory (pre-filtered by sport)
 - `src/components/features/admin/VerificationRequestCard.tsx` - Verification request card component
 - `src/modules/clubs/clubs.repository.ts` - Club verification queries
 - `src/modules/doctors/doctors.repository.ts` - Doctor verification queries
+
+## SEO Structured Data Patterns
+
+### ItemList Schema (January 2025 - ✅ Implemented)
+
+**Location**: `src/components/SEO/ItemListSchema.tsx`
+
+**Purpose**: Generates Schema.org ItemList structured data for listing pages to help search engines understand list structure.
+
+**Usage**: Added to clubs, doctors, and sports listing pages.
+
+**Features**:
+
+- Supports multiple entity types (Club, Doctor, Sport)
+- Includes type-specific properties in ListItem elements (address, image, sport, specialty, pricing, etc.)
+- Proper Schema.org ItemList structure with position numbers
+- Improves search engine understanding for better rich snippets
+
+**Example**:
+
+```tsx
+<ItemListSchema items={clubs} type="Club" listName="Cluburi Sportive Verificate" />
+```
+
+## Location-Specific Landing Pages Pattern (January 2025 - ✅ Implemented)
+
+**Location**: `src/app/(public)/cluburi/locatie/[location]/page.tsx`, `src/lib/utils/location.ts`
+
+**Purpose**: Dynamic location-based landing pages for local SEO optimization.
+
+**Route Structure**: `/cluburi/locatie/[location]`
+
+**Examples**:
+
+- `/cluburi/locatie/bucuresti` - All clubs in Bucharest
+- `/cluburi/locatie/bucuresti-sector-1` - Clubs in Sector 1, Bucharest
+
+**Implementation**:
+
+- **Location Utilities** (`src/lib/utils/location.ts`):
+  - `generateLocationSlug(city, district?)` - Creates SEO-friendly slugs
+  - `parseLocationSlug(locationSlug)` - Parses slugs back to city/district
+  - `getLocationDisplayName(city, district?)` - Formats display names
+
+- **Repository Function**:
+  - `getUniqueLocations()` - Gets all unique city/district combinations from clubs database
+
+- **Page Features**:
+  - `generateStaticParams()` - Generates pages for all unique locations
+  - SEO-optimized metadata with location-specific titles, descriptions, keywords
+  - ItemListSchema for location-filtered clubs
+  - Cache optimization with cache tags
+  - Sitemap integration
+
+**Benefits**:
+
+- Local SEO optimization for long-tail keywords
+- Better search visibility for location-based queries
+- Automatic page generation for all locations in database
+- Improved user experience for location-based searches
 
 ## Documentation References
 

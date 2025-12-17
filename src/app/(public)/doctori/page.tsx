@@ -11,6 +11,7 @@ import type {
   Doctor,
   DoctorSearchFilters as DoctorSearchFiltersType,
 } from "@/modules/doctors/doctors.types";
+import ItemListSchema from "@/components/SEO/ItemListSchema";
 
 /**
  * Generate metadata for doctors listing page
@@ -70,6 +71,7 @@ export default async function DoctorsPage({ searchParams }: DoctorsPageProps) {
 
   return (
     <>
+      <ItemListSchema items={doctors} type="Doctor" listName="Specialiști Pediatri Verificați" />
       <BreadcrumbOne
         title="Specialiști Pediatri"
         subTitle="Doctori"

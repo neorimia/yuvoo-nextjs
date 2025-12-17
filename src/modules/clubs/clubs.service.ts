@@ -46,6 +46,14 @@ export async function getAllClubs(): Promise<Club[]> {
 }
 
 /**
+ * Get unique locations (city/district combinations) from clubs
+ * Used for generating location-specific landing pages
+ */
+export async function getUniqueLocations(): Promise<Array<{ city: string; district?: string }>> {
+  return clubsRepository.getUniqueLocations();
+}
+
+/**
  * Search clubs near a location
  *
  * Convenience function for location-based search.
