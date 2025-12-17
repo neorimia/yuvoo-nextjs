@@ -32,15 +32,40 @@ const ClubDetailsWidget: React.FC<ClubDetailsWidgetProps> = ({ club }) => {
               <h3 className="bd-club-details-widget-title mb-20">Despre Clubul Nostru</h3>
               <p className="mb-25">{club.description}</p>
               <p className="mb-25">
-                Oferim un mediu sigur și stimulativ pentru dezvoltarea copiilor prin sport.
-                Programele noastre sunt adaptate vârstei și nivelului fiecărui copil, asigurând o
+                Oferim un mediu sigur și stimulativ pentru dezvoltarea copiilor prin{" "}
+                <Link
+                  href={routes.sports.detail(club.sportId)}
+                  className="text-decoration-none fw-semibold"
+                  title={`Află mai multe despre ${club.sportName}`}
+                >
+                  {club.sportName.toLowerCase()}
+                </Link>
+                . Programele noastre sunt adaptate vârstei și nivelului fiecărui copil, asigurând o
                 experiență plăcută și educativă.
               </p>
-              <div className="bd-club-details-btn">
-                <Link href={routes.about} className="bd-btn">
+              <div className="bd-club-details-btn d-flex gap-3 flex-wrap">
+                <Link href={routes.sports.detail(club.sportId)} className="bd-btn bd-btn-outline">
                   <span className="bd-btn-inner">
-                    <span className="bd-btn-normal">Află mai multe</span>
-                    <span className="bd-btn-hover">Află mai multe</span>
+                    <span className="bd-btn-normal">
+                      <i className="fa-solid fa-info-circle me-2"></i>
+                      Despre {club.sportName}
+                    </span>
+                    <span className="bd-btn-hover">
+                      <i className="fa-solid fa-info-circle me-2"></i>
+                      Despre {club.sportName}
+                    </span>
+                  </span>
+                </Link>
+                <Link href={routes.doctors.list} className="bd-btn">
+                  <span className="bd-btn-inner">
+                    <span className="bd-btn-normal">
+                      <i className="fa-solid fa-user-doctor me-2"></i>
+                      Specialiști pediatri
+                    </span>
+                    <span className="bd-btn-hover">
+                      <i className="fa-solid fa-user-doctor me-2"></i>
+                      Specialiști pediatri
+                    </span>
                   </span>
                 </Link>
               </div>

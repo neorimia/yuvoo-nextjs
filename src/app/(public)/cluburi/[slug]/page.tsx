@@ -12,10 +12,13 @@ import ClubSchedule from "@/components/features/clubs/ClubSchedule";
 import ClubGallery from "@/components/features/clubs/ClubGallery";
 import ClubMap from "@/components/features/clubs/ClubMap";
 import BookingFormSection from "@/components/features/clubs/BookingFormSection";
+import ClubContentExpanded from "@/components/features/clubs/ClubContentExpanded";
 import { getClubBySlug } from "@/modules/clubs/clubs.service";
 import { routes } from "@/lib/routes";
 import { cacheTag } from "next/cache";
 import type { Club } from "@/modules/clubs/clubs.types";
+import { generateClubExpandedContent } from "@/lib/content/club-expanded-content";
+import { generateClubMetadata } from "@/lib/seo/club-metadata";
 
 interface ClubDetailPageProps {
   params: Promise<{
@@ -59,6 +62,9 @@ export default async function ClubDetailPage({ params }: ClubDetailPageProps) {
   cacheTag(`club-${club.id}`);
   cacheTag(`club-slug-${slug}`);
 
+  // Generate expanded content for SEO (600-900 words)
+  const expandedContent = generateClubExpandedContent(club);
+
   return (
     <>
       <LocalBusinessSchema club={club} />
@@ -79,13 +85,15 @@ export default async function ClubDetailPage({ params }: ClubDetailPageProps) {
       <ClubDetailsWidget club={club} />
       <ClubSchedule club={club} />
       <ClubDetailsWidgetTwo club={club} />
+      {/* Expanded Content Section for SEO (600-900 words) */}
+      <ClubContentExpanded content={expandedContent} />
       <BookingFormSection club={club} />
     </>
   );
 }
 
 /**
- * Generate metadata for SEO
+ * Generate metadata for SEO with location keywords
  */
 export async function generateMetadata({ params }: ClubDetailPageProps): Promise<Metadata> {
   const { slug } = await params;
@@ -102,18 +110,6 @@ export async function generateMetadata({ params }: ClubDetailPageProps): Promise
 
   const baseUrl = process.env.NEXT_PUBLIC_APP_URL || "https://yuvoo.ro";
 
-  return {
-    title: `${club.name} - Cluburi Sportive Yuvoo`,
-    description:
-      club.description || `Informații despre clubul sportiv ${club.name} pe platforma Yuvoo.`,
-    openGraph: {
-      title: `${club.name} - Yuvoo`,
-      description: club.description || `Club sportiv pentru copii în ${club.location.city}`,
-      type: "website",
-      images: club.images && club.images.length > 0 ? [club.images[0]] : [],
-    },
-    alternates: {
-      canonical: `${baseUrl}/cluburi/${slug}`,
-    },
-  };
+  // Use enhanced metadata with location keywords
+  return generateClubMetadata(club, baseUrl);
 }

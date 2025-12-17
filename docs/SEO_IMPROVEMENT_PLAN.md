@@ -969,7 +969,7 @@ CTA: "Vezi alte cluburi de [sport]" → Link către /cluburi?sport=[sport-id]
 - Quiz intro: "Descoperă sportul potrivit cu AI Coach"
 - Sports listing: "Explorează toate sporturile disponibile"
 - Clubs listing: "Vezi cluburile verificate din București"
-- Doctors listing: "Consultează specialiști pediatri"
+- Doctors listing: "Consultă specialiști pediatri"
 - About: "Află mai multe despre Yuvoo"
 - FAQ: "Întrebări frecvente"
 
@@ -1152,11 +1152,89 @@ CTA: "Vezi alte cluburi de [sport]" → Link către /cluburi?sport=[sport-id]
 
 **Week 7-8: Club & Doctor Pages**
 
-- [ ] Ensure all club detail pages have comprehensive content (600-900 words)
-- [ ] Add LocalBusiness schema to all club pages
-- [ ] Add Person schema to doctor detail pages
-- [ ] Optimize club/doctor metadata with location keywords
-- [ ] Add internal linking from clubs to sports and doctors
+- [x] Ensure all club and doctor detail pages have comprehensive content (600-900 words)
+  - ✅ Created `generateClubExpandedContent()` function that generates 600-900 words of comprehensive content for each club
+  - ✅ Created `generateDoctorExpandedContent()` function that generates 600-900 words of comprehensive content for each doctor
+  - ✅ Created `ClubContentExpanded` component to display expanded content sections (introduction, about, programs, benefits, location, contact info, internal links)
+  - ✅ Created `DoctorContentExpanded` component to display expanded content sections (introduction, about, specialty, services, benefits, location, contact info)
+  - ✅ Integrated expanded content components into club detail pages (`/cluburi/[slug]`)
+  - ✅ Integrated expanded content components into doctor detail pages (`/doctori/[slug]`)
+  - ✅ Content includes sport-specific benefits for clubs and specialty-specific services for doctors
+  - ✅ All content is in Romanian for SEO purposes
+  - ✅ Content is dynamically generated based on club/doctor data (name, location, sport, specialty, etc.)
+- [x] Add LocalBusiness schema to all club pages
+  - ✅ Enhanced `LocalBusinessSchema` component with comprehensive Schema.org properties
+  - ✅ Includes all required properties: `name`, `address`
+  - ✅ Includes all recommended properties: `url`, `telephone`, `email`, `image`, `openingHoursSpecification`, `priceRange`, `geo`
+  - ✅ Uses `SportsActivityLocation` + `LocalBusiness` types for better coverage
+  - ✅ Adds opening hours from schedule data (parsed and formatted for Schema.org)
+  - ✅ Adds audience information based on age groups (targeting children)
+  - ✅ Adds offers with pricing information
+  - ✅ Adds service area (city and district)
+  - ✅ Adds level offerings catalog
+  - ✅ Adds verification status as additional property
+  - ✅ Component is already integrated into all club detail pages (`/cluburi/[slug]`)
+  - ✅ All club pages now have comprehensive LocalBusiness structured data for rich snippets
+- [x] Add Person schema to doctor detail pages
+  - ✅ Created `PersonSchema` component with comprehensive Schema.org Person properties
+  - ✅ Includes all required properties: `name` (with givenName/familyName parsing)
+  - ✅ Includes all recommended properties: `url`, `image`, `jobTitle`, `description`, `sameAs`
+  - ✅ Uses `Person` + `Physician` types for better coverage
+  - ✅ Adds professional credentials as EducationalOccupationalCredential
+  - ✅ Adds `worksFor` (MedicalOrganization affiliation with Yuvoo)
+  - ✅ Adds `medicalSpecialty` and specialty-specific expertise areas
+  - ✅ Adds `knowsAbout` with relevant professional knowledge areas
+  - ✅ Adds `hasOfferCatalog` with available medical services
+  - ✅ Adds `address` and `geo` coordinates for professional location
+  - ✅ Adds `areaServed` (city and district)
+  - ✅ Adds `availableService` (accepting new patients status)
+  - ✅ Adds `sameAs` for external website links
+  - ✅ Adds additional properties (verified status, online consultations)
+  - ✅ Component is integrated into all doctor detail pages (`/doctori/[slug]`)
+  - ✅ Works alongside existing MedicalBusinessSchema for comprehensive structured data
+  - ✅ All doctor pages now have both Person and MedicalBusiness schemas for maximum SEO benefit
+- [x] Optimize club/doctor metadata with location keywords
+  - ✅ Created `generateClubMetadata()` function in `src/lib/seo/club-metadata.ts`
+  - ✅ Created `generateDoctorMetadata()` function in `src/lib/seo/doctor-metadata.ts`
+  - ✅ Enhanced metadata titles with location information (city, district)
+  - ✅ Added comprehensive location-based keywords:
+    - City-based keywords (e.g., "fotbal copii București", "doctor pediatru București")
+    - District-based keywords (e.g., "club tenis Sector 1", "specialist pediatru Sector 2")
+    - Sport/specialty-specific keywords
+    - Age group keywords (e.g., "fotbal copii 5-14 ani")
+    - Verification status keywords
+    - Level keywords (începători, intermediari, avansați)
+    - Regional keywords (România, București)
+  - ✅ Optimized descriptions with location context and key information
+  - ✅ Enhanced Open Graph descriptions with location keywords
+  - ✅ Added Twitter card metadata with location context
+  - ✅ Metadata includes: city, district, address, age groups, sport/specialty, verification status
+  - ✅ Integrated into club detail pages (`/cluburi/[slug]`)
+  - ✅ Integrated into doctor detail pages (`/doctori/[slug]`)
+  - ✅ All club and doctor pages now have location-optimized metadata for better local SEO
+- [x] Add internal linking from clubs to sports and doctors
+  - ✅ Made sport name clickable in `ClubDetailsMain` component (links to sport detail page)
+  - ✅ Added internal links section in `ClubDetailsWidget` linking to sport page and doctors list
+  - ✅ Enhanced `ClubContentExpanded` with:
+    - Link to sport detail page (existing)
+    - New section linking to pediatric specialists filtered by city
+  - ✅ Enhanced `DoctorContentExpanded` with:
+    - Section linking to sports list page
+    - Section linking to clubs filtered by doctor's city
+  - ✅ Added contextual inline links in content text:
+    - Club content mentions sport with context for linking
+    - Club content mentions pediatric specialists for consultation
+    - Doctor content mentions exploring clubs after consultation
+  - ✅ All internal links use routes from `@/lib/routes` for consistency
+  - ✅ Links are contextually relevant (city-based filtering, specialty-based recommendations)
+  - ✅ Links use descriptive anchor text for better SEO
+  - ✅ Added SCSS styles for doctor internal links section (matching club internal links)
+  - ✅ All club pages now link to:
+    - Related sport detail page (multiple locations)
+    - Pediatric specialists list (filtered by city)
+  - ✅ All doctor pages now link to:
+    - Sports list page (all sports)
+    - Clubs list page (filtered by doctor's city)
 
 **Deliverables**: 10+ comprehensive sport pages, all club pages optimized, structured data complete
 
