@@ -1,0 +1,291 @@
+@use "../utils" as *;
+
+//=============== FEATURED DOCTORS CSS START HERE ================
+
+.bd-featured-doctors {
+  &-area {
+    padding-top: 120px;
+    padding-bottom: 90px;
+    background-color: var(--bd-common-white);
+
+    @media #{$lg} {
+      padding-top: 100px;
+      padding-bottom: 80px;
+    }
+
+    @media #{$md,$sm} {
+      padding-top: 80px;
+      padding-bottom: 60px;
+    }
+
+    @media #{$xs} {
+      padding-top: 60px;
+      padding-bottom: 50px;
+    }
+  }
+
+  &-title-row {
+    justify-content: center;
+    margin-bottom: 60px;
+
+    @media #{$md,$sm,$xs} {
+      margin-bottom: 50px;
+    }
+  }
+
+  &-title-wrapper {
+    text-align: center;
+  }
+
+  &-section-title {
+    margin-bottom: 0;
+    font-size: var(--bd-fz-h2);
+    font-weight: var(--bd-fw-sbold);
+    color: var(--bd-heading-primary);
+    line-height: 1.2;
+
+    @media #{$md,$sm,$xs} {
+      font-size: 32px;
+    }
+  }
+
+  &-section-text {
+    margin-top: 12px;
+    font-size: 18px;
+    color: var(--bd-text-body);
+    line-height: 1.6;
+
+    @media #{$md,$sm,$xs} {
+      font-size: 16px;
+      margin-top: 10px;
+    }
+  }
+
+  &-cards-row {
+    justify-content: center;
+  }
+
+  &-card-col {
+    margin-bottom: 30px;
+
+    @media #{$md,$sm,$xs} {
+      margin-bottom: 25px;
+    }
+  }
+
+  &-link {
+    text-decoration: none;
+    display: block;
+    height: 100%;
+
+    &:hover {
+      text-decoration: none;
+    }
+
+    &:focus {
+      text-decoration: none;
+      outline: none;
+    }
+  }
+
+  &-card {
+    height: 100%;
+    border-radius: 24px;
+    background-color: var(--bd-common-white);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+    border: 1px solid var(--bd-grey-1);
+    padding: 30px 20px;
+    text-align: center;
+    @include transition(0.3s);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+    @media #{$md,$sm,$xs} {
+      border-radius: 20px;
+      padding: 25px 18px;
+    }
+
+    &:hover {
+      border-color: var(--bd-theme-2);
+      transform: translateY(-5px);
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+
+      .bd-featured-doctors-name {
+        color: var(--bd-theme-2);
+      }
+
+      .bd-featured-doctors-link-text {
+        color: var(--bd-theme-2);
+      }
+    }
+  }
+
+  &-thumb {
+    position: relative;
+    width: 100%;
+    margin-bottom: 25px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  &-avatar-wrapper {
+    width: 150px;
+    height: 150px;
+    border-radius: 50%;
+    overflow: hidden;
+    border: 4px solid var(--bd-theme-2);
+    position: relative;
+    @include transition(0.3s);
+
+    @media #{$lg} {
+      width: 140px;
+      height: 140px;
+    }
+
+    @media #{$md,$sm,$xs} {
+      width: 130px;
+      height: 130px;
+      border-width: 3px;
+    }
+  }
+
+  &-avatar {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    @include transition(0.3s);
+  }
+
+  &-badge {
+    position: absolute;
+    bottom: -15px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 2;
+  }
+
+  &-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 12px;
+    width: 100%;
+    flex: 1;
+  }
+
+  &-name {
+    font-size: 20px;
+    font-weight: var(--bd-fw-sbold);
+    color: var(--bd-heading-primary);
+    margin-bottom: 0;
+    line-height: 1.3;
+    @include transition(0.3s);
+
+    @media #{$lg} {
+      font-size: 18px;
+    }
+
+    @media #{$md,$sm,$xs} {
+      font-size: 17px;
+    }
+  }
+
+  &-specialty {
+    font-size: 14px;
+    color: var(--bd-text-body);
+    line-height: 1.4;
+    margin-bottom: 0;
+    font-weight: var(--bd-fw-medium);
+
+    @media #{$md,$sm,$xs} {
+      font-size: 13px;
+    }
+  }
+
+  &-description {
+    font-size: 14px;
+    color: var(--bd-text-body);
+    line-height: 1.5;
+    margin-bottom: 0;
+    text-align: center;
+    opacity: 0.8;
+
+    @media #{$md,$sm,$xs} {
+      font-size: 13px;
+    }
+  }
+
+  &-link-text {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    color: var(--bd-theme-2);
+    font-size: 14px;
+    font-weight: var(--bd-fw-sbold);
+    text-decoration: none;
+    @include transition(0.3s);
+    margin-top: auto;
+
+    i {
+      font-size: 12px;
+      @include transition(0.3s);
+    }
+
+    @media #{$md,$sm,$xs} {
+      font-size: 13px;
+      gap: 6px;
+
+      i {
+        font-size: 11px;
+      }
+    }
+  }
+
+  &-view-all-row {
+    margin-top: 20px;
+  }
+}
+
+// View All Link Styles
+.bd-view-all-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  color: var(--bd-theme-2);
+  font-size: 16px;
+  font-weight: var(--bd-fw-sbold);
+  text-decoration: none;
+  @include transition(0.3s);
+
+  i {
+    font-size: 14px;
+    @include transition(0.3s);
+  }
+
+  &:hover {
+    color: var(--bd-theme-1);
+    text-decoration: none;
+
+    i {
+      transform: translateX(3px);
+    }
+  }
+
+  &:focus {
+    text-decoration: none;
+    outline: none;
+  }
+
+  @media #{$md,$sm,$xs} {
+    font-size: 15px;
+    gap: 6px;
+
+    i {
+      font-size: 13px;
+    }
+  }
+}
+
+//=============== FEATURED DOCTORS CSS END HERE ================

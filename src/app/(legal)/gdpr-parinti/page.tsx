@@ -1,5 +1,6 @@
 import { Metadata } from "next";
 import BreadcrumbOne from "@/components/Breadcrumb/BreadcrumbOne";
+import { routes } from "@/lib/routes";
 import React from "react";
 
 export const metadata: Metadata = {
@@ -21,7 +22,7 @@ export const metadata: Metadata = {
     description: "Informații despre protecția datelor copiilor conform GDPR.",
   },
   alternates: {
-    canonical: "/gdpr-parinti",
+    canonical: `${process.env.NEXT_PUBLIC_APP_URL || "https://yuvoo.ro"}/gdpr-parinti`,
   },
 };
 
@@ -34,7 +35,14 @@ export default function GDPRForParentsPage() {
 
   return (
     <>
-      <BreadcrumbOne title="GDPR pentru Părinți" subTitle="Legal" />
+      <BreadcrumbOne
+        title="GDPR pentru Părinți"
+        subTitle="Legal"
+        items={[
+          { name: "Yuvoo", url: routes.home },
+          { name: "GDPR", url: routes.gdpr }, // Current page
+        ]}
+      />
       <section className="bd-legal-area pt-120 pb-120">
         <div className="container">
           <div className="row justify-content-center">

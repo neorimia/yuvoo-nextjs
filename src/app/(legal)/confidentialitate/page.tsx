@@ -1,5 +1,6 @@
 import { Metadata } from "next";
 import BreadcrumbOne from "@/components/Breadcrumb/BreadcrumbOne";
+import { routes } from "@/lib/routes";
 import React from "react";
 
 export const metadata: Metadata = {
@@ -21,7 +22,7 @@ export const metadata: Metadata = {
     description: "Află cum protejăm datele tale personale și ale copilului tău.",
   },
   alternates: {
-    canonical: "/confidentialitate",
+    canonical: `${process.env.NEXT_PUBLIC_APP_URL || "https://yuvoo.ro"}/confidentialitate`,
   },
 };
 
@@ -34,7 +35,14 @@ export default function PrivacyPolicyPage() {
 
   return (
     <>
-      <BreadcrumbOne title="Politică de Confidențialitate" subTitle="Legal" />
+      <BreadcrumbOne
+        title="Politică de Confidențialitate"
+        subTitle="Legal"
+        items={[
+          { name: "Yuvoo", url: routes.home },
+          { name: "Confidențialitate", url: routes.privacy }, // Current page
+        ]}
+      />
       <section className="bd-legal-area pt-120 pb-120">
         <div className="container">
           <div className="row justify-content-center">

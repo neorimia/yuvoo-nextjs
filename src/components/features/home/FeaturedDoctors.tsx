@@ -2,6 +2,16 @@ import React from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { routes } from "@/lib/routes";
+import SectionTitle from "@/components/shared/SectionTitle";
+import VerificationBadge from "@/components/features/clubs/VerificationBadge";
+import ViewAllLink from "@/components/shared/ViewAllLink";
+
+/**
+ * FeaturedDoctors Component
+ *
+ * Displays featured doctors on the home page with images, verification badges, and specialties.
+ * Uses reusable components and follows the design system.
+ */
 
 interface IFeaturedDoctor {
   id: number;
@@ -10,6 +20,7 @@ interface IFeaturedDoctor {
   specialty: string;
   image: string;
   verified: boolean;
+  description?: string;
 }
 
 const featuredDoctors: IFeaturedDoctor[] = [
@@ -20,6 +31,7 @@ const featuredDoctors: IFeaturedDoctor[] = [
     specialty: "Pediatrie • Ortopedie sportivă",
     image: "/assets/img/teacher/1.jpg",
     verified: true,
+    description: "Specialistă în dezvoltarea fizică a copiilor și prevenirea accidentelor sportive",
   },
   {
     id: 2,
@@ -28,6 +40,7 @@ const featuredDoctors: IFeaturedDoctor[] = [
     specialty: "Pediatrie • Nutriție sportivă",
     image: "/assets/img/teacher/2.jpg",
     verified: true,
+    description: "Expert în nutriție pentru copiii activi și optimizarea performanței sportive",
   },
   {
     id: 3,
@@ -36,6 +49,7 @@ const featuredDoctors: IFeaturedDoctor[] = [
     specialty: "Pediatrie • Psihologie sportivă",
     image: "/assets/img/teacher/3.jpg",
     verified: true,
+    description: "Specialistă în dezvoltarea emoțională și motivația copiilor în sport",
   },
   {
     id: 4,
@@ -44,135 +58,78 @@ const featuredDoctors: IFeaturedDoctor[] = [
     specialty: "Pediatrie • Cardiologie sportivă",
     image: "/assets/img/teacher/4.jpg",
     verified: true,
+    description: "Expert în evaluarea cardiovasculară pentru copiii care practică sport",
   },
 ];
 
 const FeaturedDoctors = () => {
   return (
-    <section className="bd-featured-doctors-area pt-120 pb-120">
+    <section className="bd-featured-doctors-area">
       <div className="container">
-        <div className="row justify-content-center">
-          <div className="col-lg-8 col-md-10">
-            <div
-              className="bd-section-title-wrapper text-center mb-60 wow fadeInUp"
-              data-wow-duration="1s"
-              data-wow-delay=".3s"
-            >
-              <h2 className="bd-section-title mb-0">
-                Specialiști în dezvoltarea copiilor, verificați de Yuvoo
-              </h2>
-            </div>
+        <div className="row bd-featured-doctors-title-row">
+          <div className="col-lg-8">
+            <SectionTitle
+              title="Specialiști în dezvoltarea copiilor, verificați de Yuvoo"
+              subtitle="Conectează-te cu doctori pediatri verificați, specializați în dezvoltarea și sănătatea copiilor care practică sport"
+              className="bd-featured-doctors-title-wrapper"
+              titleClassName="bd-featured-doctors-section-title"
+              subtitleClassName="bd-featured-doctors-section-text"
+            />
           </div>
         </div>
-        <div className="row">
-          {featuredDoctors.map((doctor, index) => (
-            <div
-              className="col-lg-3 col-md-6 mb-40 wow fadeInUp"
-              data-wow-duration="1s"
-              data-wow-delay={`${0.4 + index * 0.1}s`}
-              key={doctor.id}
-            >
-              <div className="bd-featured-doctor-card h-100 text-center">
-                <Link href={routes.doctors.detail(doctor.slug)}>
-                  <div className="bd-featured-doctor-thumb mb-20 position-relative">
-                    <div
-                      style={{
-                        width: "150px",
-                        height: "150px",
-                        borderRadius: "50%",
-                        overflow: "hidden",
-                        margin: "0 auto",
-                        border: "4px solid var(--bd-theme-1)",
-                      }}
-                    >
-                      <Image
-                        src={doctor.image}
-                        alt={doctor.name}
-                        width={150}
-                        height={150}
-                        style={{ width: "100%", height: "100%", objectFit: "cover" }}
-                      />
-                    </div>
-                    {doctor.verified && (
-                      <div
-                        className="position-absolute"
-                        style={{
-                          bottom: "0",
-                          left: "50%",
-                          transform: "translateX(-50%)",
-                          marginBottom: "-15px",
-                        }}
-                      >
-                        <span
-                          style={{
-                            backgroundColor: "var(--bd-theme-1)",
-                            color: "white",
-                            padding: "4px 10px",
-                            borderRadius: "20px",
-                            fontSize: "12px",
-                            fontWeight: "600",
-                            display: "inline-flex",
-                            alignItems: "center",
-                            gap: "4px",
-                            whiteSpace: "nowrap",
-                          }}
-                        >
-                          <i className="fal fa-check-circle" style={{ fontSize: "12px" }}></i>
-                          Verificat
-                        </span>
+        <div className="row bd-featured-doctors-cards-row">
+          {featuredDoctors.map((doctor) => {
+            const animationDelay = `${0.1 * doctor.id}s`;
+
+            return (
+              <div
+                className="col-lg-3 col-md-6 col-sm-10 bd-featured-doctors-card-col"
+                key={doctor.id}
+              >
+                <Link
+                  href={routes.doctors.detail(doctor.slug)}
+                  className="bd-featured-doctors-link"
+                >
+                  <div
+                    className="bd-featured-doctors-card wow fadeInUp"
+                    data-wow-duration="1s"
+                    data-wow-delay={animationDelay}
+                  >
+                    <div className="bd-featured-doctors-thumb">
+                      <div className="bd-featured-doctors-avatar-wrapper">
+                        <Image
+                          src={doctor.image}
+                          alt={doctor.name}
+                          width={150}
+                          height={150}
+                          className="bd-featured-doctors-avatar"
+                        />
                       </div>
-                    )}
-                  </div>
-                  <div className="bd-featured-doctor-content" style={{ marginTop: "25px" }}>
-                    <h4 className="bd-featured-doctor-name mb-10" style={{ fontWeight: "600" }}>
-                      {doctor.name}
-                    </h4>
-                    <p
-                      className="bd-featured-doctor-specialty mb-20"
-                      style={{ color: "#686868", fontSize: "14px" }}
-                    >
-                      {doctor.specialty}
-                    </p>
-                    <div className="bd-featured-doctor-link">
-                      <span
-                        style={{
-                          color: "var(--bd-theme-1)",
-                          fontSize: "14px",
-                          fontWeight: "600",
-                          textDecoration: "none",
-                          display: "inline-flex",
-                          alignItems: "center",
-                          gap: "8px",
-                        }}
-                      >
-                        Vezi profilul{" "}
-                        <i className="fal fa-arrow-right" style={{ fontSize: "12px" }}></i>
-                      </span>
+                      {doctor.verified && (
+                        <div className="bd-featured-doctors-badge">
+                          <VerificationBadge verified={doctor.verified} variant="compact" />
+                        </div>
+                      )}
+                    </div>
+                    <div className="bd-featured-doctors-content">
+                      <h4 className="bd-featured-doctors-name">{doctor.name}</h4>
+                      <p className="bd-featured-doctors-specialty">{doctor.specialty}</p>
+                      {doctor.description && (
+                        <p className="bd-featured-doctors-description">{doctor.description}</p>
+                      )}
+                      <div className="bd-featured-doctors-link-text">
+                        <span>Vezi profilul</span>
+                        <i className="fal fa-arrow-right"></i>
+                      </div>
                     </div>
                   </div>
                 </Link>
               </div>
-            </div>
-          ))}
+            );
+          })}
         </div>
-        <div className="row justify-content-end mt-20">
-          <div className="col-auto">
-            <Link
-              href={routes.doctors.list}
-              className="bd-secondary-link"
-              style={{
-                color: "var(--bd-theme-1)",
-                fontSize: "16px",
-                fontWeight: "600",
-                textDecoration: "none",
-                display: "inline-flex",
-                alignItems: "center",
-                gap: "8px",
-              }}
-            >
-              Vezi toți doctorii <i className="fal fa-arrow-right" style={{ fontSize: "14px" }}></i>
-            </Link>
-          </div>
+        <div className="row justify-content-end bd-featured-doctors-view-all-row">
+          <ViewAllLink href={routes.doctors.list} text="Vezi toți doctorii" />
         </div>
       </div>
     </section>

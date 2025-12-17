@@ -11,14 +11,14 @@ import BreadcrumbOne from "@/components/Breadcrumb/BreadcrumbOne";
 import { routes } from "@/lib/routes";
 
 interface ChildQuizzesPageProps {
-  params: Promise<{ childId: string }>;
+  params: Promise<{ id: string }>;
 }
 
 /**
  * Generate metadata for child quiz history page
  */
 export async function generateMetadata({ params }: ChildQuizzesPageProps): Promise<Metadata> {
-  const { childId: _childId } = await params; // Not used in metadata, but required for type
+  const { id: _id } = await params; // Not used in metadata, but required for type
 
   return {
     title: `Istoric Chestionare - Yuvoo`,
@@ -31,7 +31,7 @@ export async function generateMetadata({ params }: ChildQuizzesPageProps): Promi
  *
  * Displays all completed quizzes for a specific child.
  * Protected route requiring authentication and child ownership verification.
- * Route: /parent/children/[childId]/quizzes
+ * Route: /parent/children/[id]/quizzes
  */
 export default async function ChildQuizzesPage({ params }: ChildQuizzesPageProps) {
   // Explicitly access cookies to ensure route is dynamic
@@ -39,7 +39,8 @@ export default async function ChildQuizzesPage({ params }: ChildQuizzesPageProps
 
   // Require authentication
   const session = await requireAuth();
-  const { childId } = await params;
+  const { id } = await params;
+  const childId = id; // Use id from route params as childId
 
   // Verify child belongs to parent
   const child = await getChildById(childId, session.dbUser.id);

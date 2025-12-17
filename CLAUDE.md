@@ -594,6 +594,17 @@ You are a sports recommendation assistant.
 `;
 ```
 
+**Prompting System Standard**: All prompts (for code generation, content creation, analysis tasks) MUST follow the **Yuvoo Prompting Standard** defined in `memory-bank/promptingSystem.md`. This standard ensures:
+
+- **Verbosity control** with concrete constraints (length, depth, format)
+- **Scope drift prevention** with explicit "DO NOT" statements
+- **Ambiguity mitigation** by listing interpretations and asking 1 clarifying question
+- **Precision enforcement** with JSON schemas for structured outputs
+- **Recall improvement** with task restatement in long-context tasks
+- **Systematic iteration** via 5-step prompt improvement loop
+
+**Quick Reference**: Use the **Senior Prompt Template** from `memory-bank/promptingSystem.md` for all non-trivial prompts. For code changes, append the **Minimal Diff Add-On** rules.
+
 ### Code Quality Standards
 
 1. **Never hardcode routes** - Always use `@/lib/routes`
@@ -661,6 +672,7 @@ import "@/styles/globals.scss"; // Bootstrap
 - **productContext.md** - Product requirements and business logic
 - **activeContext.md** - Current work focus and recent changes
 - **progress.md** - Development progress tracking
+- **promptingSystem.md** - Yuvoo Prompting Standard (templates, constraints, examples)
 
 **⚠️ Important**: Always read relevant memory bank files before starting work to understand current context.
 

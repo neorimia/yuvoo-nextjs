@@ -180,7 +180,8 @@ export async function search(filters: ClubSearchFilters): Promise<ClubSearchResu
   });
 
   // Map database results to Club type
-  const clubsList = results.map(clubsRepository.mapDbClubToClub);
+  // Ensure results is always an array
+  const clubsList = (results || []).map(clubsRepository.mapDbClubToClub);
 
   // Calculate distances if location-based search was used
   const distances = new Map<string, number>();

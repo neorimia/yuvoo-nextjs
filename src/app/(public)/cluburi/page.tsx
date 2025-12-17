@@ -4,13 +4,25 @@ import BreadcrumbOne from "@/components/Breadcrumb/BreadcrumbOne";
 import ClubsMain from "@/components/features/clubs/ClubsMain";
 import ClubSearchFilters from "@/components/features/clubs/ClubSearchFilters";
 import { searchClubs } from "@/modules/clubs/clubs.service";
+import { routes } from "@/lib/routes";
 import type { Club, ClubSearchFilters as ClubSearchFiltersType } from "@/modules/clubs/clubs.types";
 
-export const metadata: Metadata = {
-  title: "Cluburi Sportive - Yuvoo",
-  description:
-    "Descoperă cluburi sportive verificate pentru copii. Găsește activități sportive potrivite în orașul tău.",
-};
+/**
+ * Generate metadata for clubs listing page
+ * Uses base URL without query params as canonical URL
+ */
+export async function generateMetadata(): Promise<Metadata> {
+  const baseUrl = process.env.NEXT_PUBLIC_APP_URL || "https://yuvoo.ro";
+
+  return {
+    title: "Cluburi Sportive - Yuvoo",
+    description:
+      "Descoperă cluburi sportive verificate pentru copii. Găsește activități sportive potrivite în orașul tău.",
+    alternates: {
+      canonical: `${baseUrl}/cluburi`,
+    },
+  };
+}
 
 interface ClubsPageProps {
   searchParams: Promise<{
@@ -66,7 +78,14 @@ export default async function ClubsPage({ searchParams }: ClubsPageProps) {
 
   return (
     <>
-      <BreadcrumbOne title="Cluburi Sportive" subTitle="Cluburi" />
+      <BreadcrumbOne
+        title="Cluburi Sportive"
+        subTitle="Cluburi"
+        items={[
+          { name: "Yuvoo", url: routes.home },
+          { name: "Cluburi", url: routes.clubs.list }, // Current page
+        ]}
+      />
       <ClubSearchFilters initialFilters={filters} />
       <ClubsMain
         clubs={clubs}

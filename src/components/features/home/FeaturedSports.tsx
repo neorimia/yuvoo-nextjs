@@ -2,6 +2,15 @@ import React from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { routes } from "@/lib/routes";
+import SectionTitle from "@/components/shared/SectionTitle";
+import ViewAllLink from "@/components/shared/ViewAllLink";
+
+/**
+ * FeaturedSports Component
+ *
+ * Displays featured sports on the home page with images, club counts, and descriptions.
+ * Uses Flaticon icons and follows the design system.
+ */
 
 interface IFeaturedSport {
   id: number;
@@ -10,6 +19,7 @@ interface IFeaturedSport {
   clubCount: number;
   microcopy: string;
   image: string;
+  icon: string;
 }
 
 const featuredSports: IFeaturedSport[] = [
@@ -18,134 +28,128 @@ const featuredSports: IFeaturedSport[] = [
     slug: "inot",
     title: "Înot",
     clubCount: 120,
-    microcopy: "Perfect pentru dezvoltarea armonioasă și siguranță în apă.",
+    microcopy:
+      "Dezvoltă coordonarea, rezistența și siguranța în apă. Perfect pentru copiii de toate vârstele.",
     image: "/assets/img/program/home-program-1.jpg",
+    icon: "flaticon-sports",
   },
   {
     id: 2,
     slug: "gimnastica",
     title: "Gimnastică",
     clubCount: 85,
-    microcopy: "Dezvoltă flexibilitatea, coordonarea și disciplina.",
+    microcopy:
+      "Dezvoltă flexibilitatea, forța, coordonarea și disciplina. Ideal pentru copiii activi și energici.",
     image: "/assets/img/program/home-program-2.jpg",
+    icon: "flaticon-sports",
   },
   {
     id: 3,
     slug: "fotbal",
     title: "Fotbal",
     clubCount: 200,
-    microcopy: "Cel mai popular sport de echipă pentru copii.",
+    microcopy:
+      "Cel mai popular sport de echipă. Dezvoltă spiritul de echipă, strategia și coordonarea.",
     image: "/assets/img/program/home-program-3.jpg",
+    icon: "flaticon-sports",
   },
   {
     id: 4,
     slug: "karate",
     title: "Karate",
     clubCount: 65,
-    microcopy: "Dezvoltă respectul, disciplina și autocontrolul.",
+    microcopy:
+      "Dezvoltă respectul, disciplina, autocontrolul și încrederea în sine. Excelent pentru concentrare.",
     image: "/assets/img/program/home-program-4.jpg",
+    icon: "flaticon-sports",
   },
   {
     id: 5,
     slug: "dans",
     title: "Dans",
     clubCount: 95,
-    microcopy: "Exprimare artistică și dezvoltare a coordonării.",
+    microcopy:
+      "Exprimare artistică, creativitate și dezvoltare a coordonării. Perfect pentru copiii creativi.",
     image: "/assets/img/program/home-program-5.jpg",
+    icon: "flaticon-color-palette",
   },
   {
     id: 6,
     slug: "baschet",
     title: "Baschet",
     clubCount: 110,
-    microcopy: "Dezvoltă coordonarea, strategia și echipa.",
+    microcopy:
+      "Dezvoltă coordonarea, strategia, spiritul de echipă și agilitatea. Sport dinamic și captivant.",
     image: "/assets/img/program/home-program-5.jpg",
+    icon: "flaticon-sports",
   },
 ];
 
 const FeaturedSports = () => {
   return (
-    <section className="bd-featured-sports-area pt-120 pb-120">
+    <section className="bd-featured-sports-area">
       <div className="container">
-        <div className="row justify-content-center">
-          <div className="col-lg-8 col-md-10">
-            <div
-              className="bd-section-title-wrapper text-center mb-60 wow fadeInUp"
-              data-wow-duration="1s"
-              data-wow-delay=".3s"
-            >
-              <h2 className="bd-section-title mb-0">Sporturile preferate de părinți</h2>
-            </div>
+        <div className="row bd-featured-sports-title-row">
+          <div className="col-lg-8">
+            <SectionTitle
+              title="Sporturile preferate de părinți"
+              subtitle="Descoperă cele mai populare sporturi pentru copiii tăi și găsește cluburi verificate în apropierea ta"
+              className="bd-featured-sports-title-wrapper"
+              titleClassName="bd-featured-sports-section-title"
+              subtitleClassName="bd-featured-sports-section-text"
+            />
           </div>
         </div>
-        <div className="row">
-          {featuredSports.map((sport, index) => (
-            <div
-              className="col-lg-4 col-md-6 mb-40 wow fadeInUp"
-              data-wow-duration="1s"
-              data-wow-delay={`${0.4 + index * 0.1}s`}
-              key={sport.id}
-            >
-              <div className="bd-featured-sport-card h-100">
-                <Link href={routes.sports.detail(sport.slug)}>
-                  <div className="bd-featured-sport-thumb position-relative mb-20">
-                    <div
-                      className="bd-featured-sport-image-wrapper"
-                      style={{ aspectRatio: "4/3", overflow: "hidden", borderRadius: "12px" }}
-                    >
-                      <Image
-                        src={sport.image}
-                        alt={`Copil practicând ${sport.title.toLowerCase()}`}
-                        width={400}
-                        height={300}
-                        style={{ width: "100%", height: "100%", objectFit: "cover" }}
-                      />
+        <div className="row bd-featured-sports-cards-row">
+          {featuredSports.map((sport) => {
+            const animationDelay = `${0.1 * sport.id}s`;
+
+            return (
+              <div
+                className="col-lg-4 col-md-6 col-sm-10 bd-featured-sports-card-col"
+                key={sport.id}
+              >
+                <Link href={routes.sports.detail(sport.slug)} className="bd-featured-sports-link">
+                  <div
+                    className="bd-featured-sports-card wow fadeInUp"
+                    data-wow-duration="1s"
+                    data-wow-delay={animationDelay}
+                  >
+                    <div className="bd-featured-sports-thumb">
+                      <div className="bd-featured-sports-image-wrapper">
+                        <Image
+                          src={sport.image}
+                          alt={`Copil practicând ${sport.title.toLowerCase()}`}
+                          width={400}
+                          height={300}
+                          className="bd-featured-sports-image"
+                        />
+                      </div>
+                      <div className="bd-featured-sports-chip">
+                        <span className="bd-featured-sports-chip-text">
+                          {sport.clubCount} cluburi
+                        </span>
+                      </div>
+                      <div className="bd-featured-sports-icon">
+                        <i className={sport.icon}></i>
+                      </div>
                     </div>
-                    <div className="bd-featured-sport-chip position-absolute top-0 end-0 m-3">
-                      <span
-                        className="bd-chip"
-                        style={{
-                          backgroundColor: "var(--bd-theme-1)",
-                          color: "white",
-                          padding: "6px 12px",
-                          borderRadius: "20px",
-                          fontSize: "14px",
-                          fontWeight: "600",
-                        }}
-                      >
-                        {sport.clubCount} cluburi
-                      </span>
-                    </div>
-                  </div>
-                  <div className="bd-featured-sport-content">
-                    <h4 className="bd-featured-sport-title mb-15">{sport.title}</h4>
-                    <p
-                      className="bd-featured-sport-microcopy mb-20"
-                      style={{ color: "#424242", fontSize: "16px" }}
-                    >
-                      {sport.microcopy}
-                    </p>
-                    <div className="bd-featured-sport-link">
-                      <span
-                        style={{
-                          color: "var(--bd-theme-1)",
-                          fontSize: "14px",
-                          fontWeight: "600",
-                          textDecoration: "none",
-                          display: "inline-flex",
-                          alignItems: "center",
-                          gap: "8px",
-                        }}
-                      >
-                        Vezi cluburile{" "}
-                        <i className="fal fa-arrow-right" style={{ fontSize: "12px" }}></i>
-                      </span>
+                    <div className="bd-featured-sports-content">
+                      <h4 className="bd-featured-sports-title">{sport.title}</h4>
+                      <p className="bd-featured-sports-microcopy">{sport.microcopy}</p>
+                      <div className="bd-featured-sports-link-text">
+                        <span>Vezi cluburile</span>
+                        <i className="fal fa-arrow-right"></i>
+                      </div>
                     </div>
                   </div>
                 </Link>
               </div>
-            </div>
-          ))}
+            );
+          })}
+        </div>
+        <div className="row justify-content-end bd-featured-sports-view-all-row">
+          <ViewAllLink href={routes.sports.list} text="Vezi toate sporturile" />
         </div>
       </div>
     </section>

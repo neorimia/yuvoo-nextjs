@@ -7,7 +7,11 @@ import BreadcrumbOne from "@/components/Breadcrumb/BreadcrumbOne";
 import SportDetailsMain from "@/components/features/sports/SportDetailsMain";
 import { getSportBySlug } from "@/modules/sports/sports.service";
 import { SPORTS_DATA } from "@/lib/db/seed-data/sports";
+import { routes } from "@/lib/routes";
 import { cacheTag } from "next/cache";
+import { generateSportMetadata as generateEnhancedMetadata } from "@/lib/seo/sport-metadata";
+import ArticleSchema from "@/components/SEO/ArticleSchema";
+import { getExpandedContentBySportId } from "@/data/sport-expanded-content";
 
 interface SportDetailPageProps {
   params: Promise<{
@@ -48,9 +52,23 @@ export default async function SportDetailPage({ params }: SportDetailPageProps) 
   cacheTag(`sport-${sport.id}`);
   cacheTag(`sport-slug-${slug}`);
 
+  // Get expanded content for Article schema
+  const expandedContent = getExpandedContentBySportId(sport.id);
+
+  const baseUrl = process.env.NEXT_PUBLIC_APP_URL || "https://yuvoo.ro";
+
   return (
     <>
-      <BreadcrumbOne title={sport.name} subTitle="Sporturi" />
+      <ArticleSchema sport={sport} expandedContent={expandedContent} baseUrl={baseUrl} />
+      <BreadcrumbOne
+        title={sport.name}
+        subTitle="Sporturi"
+        items={[
+          { name: "Yuvoo", url: routes.home },
+          { name: "Sporturi", url: routes.sports.list },
+          { name: sport.name, url: routes.sports.detail(slug) }, // Current page
+        ]}
+      />
       <SportDetailsMain sport={sport} />
     </>
   );
@@ -58,6 +76,7 @@ export default async function SportDetailPage({ params }: SportDetailPageProps) 
 
 /**
  * Generate metadata for SEO
+ * Enhanced metadata for top 5 sports with rich descriptions and keywords
  */
 export async function generateMetadata({ params }: SportDetailPageProps): Promise<Metadata> {
   const { slug } = await params;
@@ -72,14 +91,16 @@ export async function generateMetadata({ params }: SportDetailPageProps): Promis
     };
   }
 
+  const baseUrl = process.env.NEXT_PUBLIC_APP_URL || "https://yuvoo.ro";
+
+  // Use enhanced metadata for top 5 sports, fallback for others
+  const enhancedMetadata = generateEnhancedMetadata(sport, baseUrl);
+
   return {
-    title: `${sport.name} - Sporturi Yuvoo`,
-    description:
-      sport.description || `Informații despre ${sport.name} pentru copii pe platforma Yuvoo.`,
-    openGraph: {
-      title: `${sport.name} - Yuvoo`,
-      description: sport.description || `Sport pentru copii: ${sport.name}`,
-      type: "website",
-    },
+    title: enhancedMetadata.title,
+    description: enhancedMetadata.description,
+    keywords: enhancedMetadata.keywords,
+    openGraph: enhancedMetadata.openGraph,
+    alternates: enhancedMetadata.alternates,
   };
 }

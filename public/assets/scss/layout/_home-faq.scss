@@ -1,0 +1,233 @@
+@use "../utils" as *;
+
+//=============== HOME FAQ CSS START HERE ================
+
+.bd-home-faq {
+  &-area {
+    padding-top: 120px;
+    padding-bottom: 90px;
+    background-color: var(--bd-common-white);
+
+    @media #{$lg} {
+      padding-top: 100px;
+      padding-bottom: 80px;
+    }
+
+    @media #{$md,$sm} {
+      padding-top: 80px;
+      padding-bottom: 60px;
+    }
+
+    @media #{$xs} {
+      padding-top: 60px;
+      padding-bottom: 50px;
+    }
+  }
+
+  &-title-row {
+    justify-content: center;
+    margin-bottom: 60px;
+
+    @media #{$md,$sm,$xs} {
+      margin-bottom: 50px;
+    }
+  }
+
+  &-title-wrapper {
+    text-align: center;
+  }
+
+  &-section-title {
+    margin-bottom: 0;
+    font-size: var(--bd-fz-h2);
+    font-weight: var(--bd-fw-sbold);
+    color: var(--bd-heading-primary);
+    line-height: 1.2;
+
+    @media #{$md,$sm,$xs} {
+      font-size: 32px;
+    }
+  }
+
+  &-section-text {
+    margin-top: 12px;
+    font-size: 18px;
+    color: var(--bd-text-body);
+    line-height: 1.6;
+
+    @media #{$md,$sm,$xs} {
+      font-size: 16px;
+      margin-top: 10px;
+    }
+  }
+
+  &-content-row {
+    justify-content: center;
+  }
+
+  &-content {
+    margin-bottom: 40px;
+
+    @media #{$md,$sm,$xs} {
+      margin-bottom: 35px;
+    }
+  }
+
+  &-accordion {
+    .accordion {
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+
+      @media #{$md,$sm,$xs} {
+        gap: 15px;
+      }
+    }
+  }
+
+  &-view-all-row {
+    margin-top: 20px;
+  }
+}
+
+// FAQ Accordion Item Styles
+.bd-faq-accordion-item {
+  border: 1px solid var(--bd-grey-1);
+  border-radius: 16px;
+  overflow: hidden;
+  @include transition(0.3s);
+
+  @media #{$md,$sm,$xs} {
+    border-radius: 12px;
+  }
+
+  &:hover {
+    border-color: var(--bd-theme-2);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+  }
+
+  .accordion-header {
+    margin-bottom: 0;
+  }
+
+  .accordion-button {
+    border-radius: 16px;
+    padding: 20px 25px;
+    min-height: 72px;
+    font-size: 18px;
+    font-weight: var(--bd-fw-medium);
+    color: var(--bd-heading-primary);
+    background: var(--bd-common-white);
+    text-align: left;
+    position: relative;
+    padding-right: 60px;
+    border: none;
+    box-shadow: none;
+    @include transition(0.3s);
+
+    @media #{$lg} {
+      font-size: 17px;
+      padding: 18px 23px;
+      min-height: 68px;
+    }
+
+    @media #{$md,$sm,$xs} {
+      font-size: 16px;
+      padding: 16px 20px;
+      min-height: 64px;
+      padding-right: 55px;
+      border-radius: 12px;
+    }
+
+    &::after {
+      content: "\f067";
+      background-image: none;
+      font-family: "Font Awesome 5 Pro";
+      font-size: 14px;
+      font-weight: 400;
+      height: 32px;
+      width: 32px;
+      border: 1px solid var(--bd-heading-primary);
+      line-height: 30px;
+      border-radius: 50%;
+      margin-left: 0;
+      margin-right: 0;
+      text-align: center;
+      color: var(--bd-heading-primary);
+      position: absolute;
+      right: 18px;
+      top: 50%;
+      transform: translateY(-50%);
+      @include transition(0.3s);
+
+      @media #{$md,$sm,$xs} {
+        height: 28px;
+        width: 28px;
+        line-height: 26px;
+        font-size: 12px;
+        right: 15px;
+      }
+    }
+
+    &:not(.collapsed) {
+      background-color: var(--bd-theme-2);
+      color: var(--bd-common-white);
+      box-shadow: none;
+      border-radius: 16px 16px 0 0;
+
+      @media #{$md,$sm,$xs} {
+        border-radius: 12px 12px 0 0;
+      }
+
+      &::after {
+        border-color: var(--bd-common-white);
+        background: var(--bd-common-white);
+        content: "\f068";
+        color: var(--bd-theme-2);
+      }
+
+      .bd-faq-question-text {
+        color: var(--bd-common-white);
+      }
+    }
+
+    &:focus {
+      box-shadow: none;
+      border-color: var(--bd-theme-2);
+    }
+  }
+
+  .bd-faq-question-text {
+    color: var(--bd-heading-primary);
+    line-height: 1.4;
+    @include transition(0.3s);
+  }
+
+  .accordion-body {
+    padding: 20px 25px;
+    background-color: var(--bd-common-white);
+    border-top: 1px solid var(--bd-grey-1);
+
+    @media #{$lg} {
+      padding: 18px 23px;
+    }
+
+    @media #{$md,$sm,$xs} {
+      padding: 16px 20px;
+    }
+  }
+
+  .bd-faq-answer-text {
+    font-size: 16px;
+    line-height: 1.6;
+    color: var(--bd-text-body);
+    margin: 0;
+
+    @media #{$md,$sm,$xs} {
+      font-size: 15px;
+      line-height: 1.5;
+    }
+  }
+}
+
+//=============== HOME FAQ CSS END HERE ================

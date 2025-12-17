@@ -81,6 +81,76 @@ yuvoo-nextjs/
 
 ## Reusable Component Patterns
 
+### Sports Components (January 2025)
+
+**Location**: `components/features/sports/`
+
+**Components**:
+
+- `SportsMain.tsx` - Main listing with category filtering (echipa, individual, combat, artistic, altul)
+- `SportCard.tsx` - Card component with category badges, icon display, metadata (age range, club count)
+- `SportDetailsMain.tsx` - Detail page with enhanced info display and CTA buttons
+- `SportContentExpanded.tsx` - Expanded content component displaying comprehensive sport information (introduction, benefits, age recommendations, equipment guide, FAQ, internal links)
+
+**Data Structure**:
+
+- `src/data/sport-expanded-content.ts` - Comprehensive expanded content for top 10 sports
+  - Interface: `SportExpandedContent` with introduction, benefits, ageRecommendations, equipmentGuide, faq, internalLinks
+  - Helper functions: `getExpandedContentBySportId()`, `getExpandedContentBySlug()`
+  - All 10 sports completed: Fotbal, Înot, Tenis, Baschet, Gimnastică artistică, Karate, Dans, Volei, Handbal, Judo
+  - Each sport: 800-1200 words total, all content in Romanian for SEO
+
+**Styling**:
+
+- SCSS files: `_sports-main.scss`, `_sport-card.scss`, `_sport-details.scss`, `_sports-intro.scss`, `_sports-faq.scss`
+- Expanded content styling in `_sport-details.scss`:
+  - Benefits grid (2 columns on desktop, 1 on mobile)
+  - Age recommendations section with gradient background
+  - Equipment guide with essential/optional badges
+  - FAQ accordion section
+  - Internal links CTA section
+- Category badges with color coding (echipa=blue, individual=green, combat=red, artistic=purple, altul=orange)
+- Gradient backgrounds for icon areas (theme-2-light to theme-1)
+- Hover effects with smooth transitions
+- Responsive breakpoints for all screen sizes
+
+**Features**:
+
+- Category filtering with icons for each category
+- Enhanced empty state with CTA button
+- Results count with category context
+- Expanded content automatically displays when available for a sport
+- Memoized components for performance
+- All content in Romanian, SEO-optimized
+- Internal linking to clubs filtered by sport
+
+## Reusable Component Patterns
+
+### Shared UI Components
+
+**Location**: `src/components/shared/`
+
+**Home Page Components** (Created January 2025):
+
+- `SectionTitle.tsx` - Reusable section title component with title and optional subtitle
+  - Used in: All home page sections (FeaturedSports, FeaturedClubs, FeaturedDoctors, HowItWorks, HomeTestimonial, HomeFaq)
+  - Features: Consistent styling, WOW.js animations, customizable classes
+- `ViewAllLink.tsx` - Reusable "View All" link component
+  - Used in: Featured sections (clubs, doctors, sports)
+  - Features: Consistent styling, hover effects, arrow icon
+- `DistanceBadge.tsx` - Reusable distance/location badge component
+  - Used in: Club cards, featured sections
+  - Features: Dark/light variants, responsive sizing
+- `StarRating.tsx` - Reusable star rating component
+  - Used in: Testimonials, reviews, ratings
+  - Features: Size variants (sm, md, lg), optional rating number display
+- `AvatarInitials.tsx` - Reusable avatar with initials component
+  - Used in: Testimonials, user profiles, comments
+  - Features: Size variants (sm, md, lg), customizable colors
+- `FaqAccordionItem.tsx` - Reusable FAQ accordion item component
+  - Used in: FAQ sections, help pages
+  - Features: Bootstrap accordion integration, customizable open state
+
 ### Onboarding Form Components
 
 **Location**: `src/components/features/onboarding/components/`
@@ -244,8 +314,22 @@ import { routes } from "@/lib/routes";
 
 - ✅ `components/features/clubs/` - Club components created (ClubsMain, ClubDetailsMain, HomeClubArea, ClubCard, VerificationBadge, ClubSearchFilters, ClubDetailsWidget, ClubGallery, ClubMap, ClubSchedule, BookingForm)
 - ✅ `components/features/doctors/` - Doctor components created (DoctorsMain, DoctorCard, DoctorDetailsMain, DoctorSearchFilters, DoctorAppointmentForm, DoctorAppointmentFormSection, DoctorInfo, DoctorSpecialties, HomeDoctorArea, HomeTwoDoctorArea, DoctorAvailability)
-- 📋 `components/features/sports/` - Sport components (planned)
+- ✅ `components/features/sports/` - Sport components complete (January 2025)
+  - ✅ `SportsMain.tsx` - Main listing component with category filtering, enhanced empty state, and results display
+  - ✅ `SportCard.tsx` - Redesigned card component with category badges, icon display, and hover effects
+  - ✅ `SportDetailsMain.tsx` - Enhanced detail page component with improved info display and CTA buttons
+  - ✅ SCSS files: `_sports-main.scss`, `_sport-card.scss`, `_sport-details.scss`, `_sports-intro.scss`, `_sports-faq.scss`
+  - ✅ All components follow design system patterns with consistent styling, hover effects, and responsive breakpoints
 - ✅ `components/features/quiz/` - Quiz components complete (QuizContainer, QuizProgress, QuizNavigation, QuizContext, QuestionWrapper, 6 question components, ResultsActions, SportRecommendationCard, QuizHistory)
+- ✅ `components/features/home/` - Home page components complete (January 2025)
+  - ✅ `HomeTrustSignals.tsx` - Trust signals section with 6 badges (verified clubs, GDPR, verified doctors, secure platform, free for parents, AI recommendations)
+  - ✅ `HomeStats.tsx` - Statistics section with animated counters (families, clubs, doctors, sports)
+  - ✅ `HowItWorks.tsx` - 3-step process explanation with Flaticon icons
+  - ✅ `FeaturedSports.tsx` - Featured sports display with images, club counts, and descriptions
+  - ✅ `FeaturedClubs.tsx` - Featured clubs display with verification badges, distance, and descriptions
+  - ✅ `FeaturedDoctors.tsx` - Featured doctors display with verification badges and specialties
+  - ✅ `HomeTestimonial.tsx` - Testimonial section with star ratings and avatar initials
+  - ✅ `HomeFaq.tsx` - FAQ section with accordion items (shows top 6, links to full FAQ page)
 
 **Layout Components**: `components/layout/`
 
@@ -1468,6 +1552,11 @@ Club Directory (pre-filtered by sport)
 - **Data Models**: `docs/DATA_MODELS.md` - All data structures, TypeScript interfaces, database schemas, and model relationships
 - **Design Tokens**: `docs/DESIGN_TOKENS.md` - Comprehensive design tokens reference (colors, typography, spacing, shadows, border radius, animations, breakpoints)
 - **SEO Guidelines**: `docs/SEO_GUIDELINES.md` - SEO strategy, slug generation, meta tags templates, Open Graph templates, and SEO best practices
+- **SEO Improvement Plan**: `docs/SEO_IMPROVEMENT_PLAN.md` - Comprehensive SEO analysis and implementation roadmap (Week 1-3 technical foundation complete, content expansion in progress)
+- **Sport Metadata Helper**: `src/lib/seo/sport-metadata.ts` - Enhanced SEO metadata generator for sport detail pages (top 5 sports with rich descriptions, keywords, and OpenGraph tags)
+  - Includes sport-specific OG image support via `getSportOGImagePath()` helper function
+  - Path format: `/assets/img/og/sports/{sport-slug}.jpg` (1200x630px recommended)
+  - Fallback to default OG image available via `getDefaultOGImagePath()`
 - **Site Map**: `docs/SITE_MAP.md` - Complete application structure, all routes, user flows, and navigation patterns
 - **Wireframes**: `docs/WIREFRAMES.md` - Detailed page structures, component placement, and layout specifications for all major pages
 - **Legal Pages Plan**: `docs/LEGAL_PAGES_DEVELOPMENT_PLAN.md` - Comprehensive legal pages development plan, content templates, SEO guidelines, and implementation checklist
@@ -1479,3 +1568,4 @@ Club Directory (pre-filtered by sport)
 - **Technical Context**: `memory-bank/techContext.md` - Technology stack details
 - **Product Context**: `memory-bank/productContext.md` - Product requirements
 - **Progress Tracking**: `memory-bank/progress.md` - Development progress
+- **Prompting System**: `memory-bank/promptingSystem.md` - Yuvoo Prompting Standard (templates, constraints, examples)

@@ -1,0 +1,241 @@
+@use "../utils" as *;
+
+//=============== SPORTS MAIN CSS START HERE ================
+
+.bd-sports-main {
+  &-area {
+    padding-top: 60px;
+    padding-bottom: 90px;
+    background-color: var(--bd-common-white);
+
+    @media #{$lg} {
+      padding-top: 50px;
+      padding-bottom: 80px;
+    }
+
+    @media #{$md,$sm} {
+      padding-top: 40px;
+      padding-bottom: 60px;
+    }
+
+    @media #{$xs} {
+      padding-top: 30px;
+      padding-bottom: 50px;
+    }
+  }
+
+  &-filter-row {
+    margin-bottom: 40px;
+
+    @media #{$md,$sm,$xs} {
+      margin-bottom: 30px;
+    }
+  }
+
+  &-grid-row {
+    margin-top: 0;
+  }
+
+  // Empty state
+  &-empty-state {
+    text-align: center;
+    padding: 80px 20px;
+    background-color: var(--bd-theme-1, #f8f9fa);
+    border-radius: 24px;
+
+    @media #{$md,$sm,$xs} {
+      padding: 60px 20px;
+    }
+
+    @media #{$xs} {
+      padding: 40px 15px;
+    }
+  }
+
+  &-empty-icon {
+    font-size: 80px;
+    color: var(--bd-grey-2);
+    margin-bottom: 30px;
+
+    @media #{$md,$sm,$xs} {
+      font-size: 60px;
+      margin-bottom: 20px;
+    }
+
+    @media #{$xs} {
+      font-size: 50px;
+      margin-bottom: 15px;
+    }
+
+    i {
+      display: block;
+    }
+  }
+
+  &-empty-title {
+    font-size: 28px;
+    font-weight: var(--bd-fw-sbold);
+    color: var(--bd-heading-primary);
+    margin-bottom: 15px;
+
+    @media #{$md,$sm,$xs} {
+      font-size: 24px;
+      margin-bottom: 12px;
+    }
+
+    @media #{$xs} {
+      font-size: 20px;
+      margin-bottom: 10px;
+    }
+  }
+
+  &-empty-text {
+    font-size: 16px;
+    color: var(--bd-text-body);
+    margin-bottom: 30px;
+    max-width: 500px;
+    margin-left: auto;
+    margin-right: auto;
+
+    @media #{$md,$sm,$xs} {
+      font-size: 15px;
+      margin-bottom: 25px;
+    }
+
+    @media #{$xs} {
+      font-size: 14px;
+      margin-bottom: 20px;
+    }
+  }
+}
+
+// Filter styles (standalone, not nested under bd-sports-main)
+.bd-sports-filter {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 15px;
+  justify-content: center;
+  align-items: center;
+
+  @media #{$md,$sm,$xs} {
+    gap: 12px;
+  }
+
+  @media #{$xs} {
+    gap: 10px;
+  }
+}
+
+.bd-sports-filter-btn {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 12px 24px;
+  border: 2px solid var(--bd-grey-1);
+  border-radius: 50px;
+  background-color: var(--bd-common-white);
+  color: var(--bd-text-body);
+  font-size: 16px;
+  font-weight: var(--bd-fw-medium);
+  cursor: pointer;
+  @include transition(0.3s);
+
+  @media #{$md,$sm,$xs} {
+    padding: 10px 20px;
+    font-size: 15px;
+    gap: 8px;
+  }
+
+  @media #{$xs} {
+    padding: 8px 16px;
+    font-size: 14px;
+    gap: 6px;
+  }
+
+  &:hover {
+    border-color: var(--bd-theme-2);
+    background-color: var(--bd-theme-2-light, rgba(235, 255, 254, 0.3));
+    color: var(--bd-theme-2);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  }
+
+  &.active {
+    border-color: var(--bd-theme-2);
+    background-color: var(--bd-theme-2);
+    color: var(--bd-common-white);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+
+    .bd-sports-filter-icon {
+      color: var(--bd-common-white);
+    }
+
+    .bd-sports-filter-text {
+      color: var(--bd-common-white);
+    }
+  }
+}
+
+.bd-sports-filter-icon {
+  font-size: 18px;
+  color: var(--bd-theme-2);
+  @include transition(0.3s);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  @media #{$md,$sm,$xs} {
+    font-size: 16px;
+  }
+
+  @media #{$xs} {
+    font-size: 14px;
+  }
+
+  i {
+    display: block;
+  }
+}
+
+.bd-sports-filter-text {
+  @include transition(0.3s);
+}
+
+// Results styles (standalone, not nested)
+.bd-sports-results-row {
+  margin-bottom: 40px;
+  margin-top: 40px;
+
+  @media #{$md,$sm,$xs} {
+    margin-bottom: 30px;
+    margin-top: 30px;
+  }
+}
+
+.bd-sports-results-text {
+  font-size: 18px;
+  color: var(--bd-text-body);
+  margin-bottom: 0;
+  text-align: center;
+
+  @media #{$md,$sm,$xs} {
+    font-size: 16px;
+  }
+}
+
+.bd-sports-results-count {
+  font-weight: var(--bd-fw-sbold);
+  color: var(--bd-theme-2);
+  font-size: 24px;
+
+  @media #{$md,$sm,$xs} {
+    font-size: 20px;
+  }
+}
+
+.bd-sports-results-category {
+  color: var(--bd-text-body);
+  font-style: italic;
+}
+
+//=============== SPORTS MAIN CSS END HERE ================

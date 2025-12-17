@@ -54,6 +54,14 @@ export async function generateMetadata({ params }: QuizResultsPageProps): Promis
       title: `Rezultate Chestionar - Recomandări Personalizate | Yuvoo`,
       description: "Vezi recomandările personalizate de sporturi pentru copilul tău.",
     },
+    robots: {
+      index: false, // Private/personalized results - should not be indexed
+      follow: false,
+      googleBot: {
+        index: false,
+        follow: false,
+      },
+    },
   };
 }
 
@@ -86,7 +94,15 @@ export default async function QuizResultsPage({ params }: QuizResultsPageProps) 
 
   return (
     <>
-      <BreadcrumbOne title="Rezultate Chestionar" subTitle="Rezultate" />
+      <BreadcrumbOne
+        title="Rezultate Chestionar"
+        subTitle="Rezultate"
+        items={[
+          { name: "Yuvoo", url: routes.home },
+          { name: "Chestionar", url: routes.quiz.intro },
+          { name: "Rezultate", url: routes.quiz.results(id) }, // Current page
+        ]}
+      />
       <section className="quiz-results-section py-5">
         <div className="container">
           <div className="row justify-content-center">

@@ -313,6 +313,79 @@ border-color: var(--bd-grey-1); // #E6E6E6
 
 **Pattern**: Bootstrap form styling cu validare
 
+#### Home Page Components (January 2025)
+
+**Componente Create/Actualizate**:
+
+- ✅ `HomeTrustSignals` - Trust signals section (6 badges: verified clubs, GDPR, verified doctors, secure platform, free for parents, AI recommendations)
+  - Icons: Font Awesome Pro (`fa-solid fa-*`)
+  - Styling: Custom SCSS (`layout/_trust.scss`)
+  - Features: Hover effects, clickable cards, theme color integration
+- ✅ `HomeStats` - Statistics section with animated counters
+  - Icons: Flaticon Kindedo (`flaticon-friends`, `flaticon-certificate`, `flaticon-teacher`, `flaticon-sports`)
+  - Styling: Custom SCSS (`layout/_stats.scss`)
+  - Features: CountUpContent integration, responsive design
+- ✅ `HowItWorks` - 3-step process explanation
+  - Icons: Flaticon Kindedo (`flaticon-reading`, `flaticon-presentation`, `flaticon-location-pin`)
+  - Styling: Custom SCSS (`layout/_how-it-works.scss`)
+  - Features: Clickable cards, hover effects, links to quiz and clubs
+- ✅ `FeaturedSports` - Featured sports display
+  - Icons: Flaticon Kindedo (sport-specific icons)
+  - Styling: Custom SCSS (`layout/_featured-sports.scss`)
+  - Features: Image cards, club count badges, hover effects, icon overlays
+- ✅ `FeaturedClubs` - Featured clubs display
+  - Icons: Uses `VerificationBadge` and `DistanceBadge` components
+  - Styling: Custom SCSS (`layout/_featured-clubs.scss`)
+  - Features: Verification badges, distance badges, hover effects, image cards
+- ✅ `FeaturedDoctors` - Featured doctors display
+  - Icons: None (removed as unnecessary)
+  - Styling: Custom SCSS (`layout/_featured-doctors.scss`)
+  - Features: Circular avatars, verification badges, hover effects
+- ✅ `HomeTestimonial` - Testimonial section
+  - Components: Uses `StarRating` and `AvatarInitials` components
+  - Styling: Custom SCSS (`layout/_home-testimonial.scss`)
+  - Features: Star ratings, avatar initials, quote display, location info
+- ✅ `HomeFaq` - FAQ section
+  - Components: Uses `FaqAccordionItem` component
+  - Styling: Custom SCSS (`layout/_home-faq.scss`)
+
+**Sports Components** (Created January 2025):
+
+- ✅ `SportsMain` - Main listing component with category filtering
+  - Styling: Custom SCSS (`layout/_sports-main.scss`)
+  - Features: Filter buttons with icons, results count, empty state
+- ✅ `SportCard` - Card component with category badges
+  - Styling: Custom SCSS (`layout/_sport-card.scss`)
+  - Features: Category badges with colors, icon display, hover effects
+- ✅ `SportDetailsMain` - Detail page component
+  - Styling: Custom SCSS (`layout/_sport-details.scss`)
+  - Features: Enhanced info display, CTA buttons with icons
+- ✅ Sports listing page intro section
+  - Styling: Custom SCSS (`layout/_sports-intro.scss`)
+  - Features: Feature cards with icons and descriptions
+- ✅ Sports listing page FAQ section
+  - Styling: Custom SCSS (`layout/_sports-faq.scss`)
+  - Features: Sports-specific FAQ with accordion items
+  - Features: Bootstrap accordion, shows top 6 FAQs, link to full FAQ page
+
+**Reusable Components Created**:
+
+- ✅ `SectionTitle` - Consistent section titles across all home components
+- ✅ `ViewAllLink` - "View All" links for featured sections
+- ✅ `DistanceBadge` - Distance/location badges for clubs
+- ✅ `StarRating` - Star rating display (sm, md, lg sizes)
+- ✅ `AvatarInitials` - Circular avatar with initials (sm, md, lg sizes)
+- ✅ `FaqAccordionItem` - Reusable FAQ accordion item
+
+**Pattern**: All home components follow consistent design system:
+
+- Custom SCSS classes (no inline styles)
+- Consistent spacing (120px top, 90px bottom for sections)
+- Hover effects (card lift, color transitions)
+- Responsive breakpoints
+- WOW.js animations with staggered delays
+- Romanian content throughout
+
 ### Spacing System
 
 **Bootstrap Spacing**:
@@ -485,11 +558,47 @@ className="wow fadeInUp" data-wow-duration="1s" data-wow-delay=".3s"
 
 **Biblioteci**:
 
-- **Font Awesome Pro** - Iconuri generale
-- **Flaticon Kindedo** - Iconuri custom pentru temă
+- **Font Awesome Pro** - Iconuri principale (folosit pentru componente noi)
+- **Flaticon Kindedo** - Iconuri custom pentru temă (folosit pentru componente existente și noi când sunt disponibile)
 - **SVG Components** - Iconuri custom React
 
-**Pattern**: `<i className="flaticon-search"></i>`
+**Pattern**:
+
+- **Font Awesome** (preferat pentru componente noi): `<i className="fa-solid fa-certificate"></i>`
+- **Flaticon** (folosit când iconurile sunt disponibile și relevante): `<i className="flaticon-sports"></i>`
+
+**Font Awesome Usage** (componente noi):
+
+- `fa-solid` - Solid style icons (primary)
+- `fa-regular` - Regular style icons
+- `fa-brands` - Brand icons
+- `fa-sharp fa-solid` - Sharp solid style
+
+**Flaticon Usage** (când iconurile sunt disponibile):
+
+- `flaticon-sports` - Sports activities
+- `flaticon-friends` - Families/groups
+- `flaticon-certificate` - Verification/certificates
+- `flaticon-teacher` - Doctors/specialists
+- `flaticon-reading` - Quiz/questions
+- `flaticon-presentation` - Recommendations/results
+- `flaticon-location-pin` - Location/distance
+
+**Examples** (HomeTrustSignals component - Font Awesome):
+
+- `fa-solid fa-certificate` - Verified clubs
+- `fa-solid fa-shield-check` - GDPR compliance
+- `fa-solid fa-user-doctor` - Verified doctors
+- `fa-solid fa-lock` - Secure platform
+- `fa-solid fa-heart` - Free for parents
+- `fa-solid fa-robot` - AI recommendations
+
+**Examples** (HomeStats component - Flaticon):
+
+- `flaticon-friends` - Families
+- `flaticon-certificate` - Verified clubs
+- `flaticon-teacher` - Pediatric specialists
+- `flaticon-sports` - Available sports
 
 **Icon Sizes** (implicit):
 

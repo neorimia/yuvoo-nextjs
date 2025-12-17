@@ -2,15 +2,133 @@
 
 ## Current Status
 
-**Phase**: Foundation Setup & Onboarding Development + Bootstrap Migration + Component Extraction + Quiz System Implementation + Brevo Email Integration + Performance Optimization + Admin Verification System + Quiz Referral Flows + Deployment Setup + High Priority TODOs Complete + Child Management Complete + Development Setup Guide Complete + Database Setup Complete + Authentication Setup Complete + Layout Setup Complete + Landing Page Complete + Authentication Pages Complete + Dashboard Complete + Quiz UI Complete + Quiz Backend Complete
+**Phase**: Foundation Setup & Onboarding Development + Bootstrap Migration + Component Extraction + Quiz System Implementation + Brevo Email Integration + Performance Optimization + Admin Verification System + Quiz Referral Flows + Deployment Setup + High Priority TODOs Complete + Child Management Complete + Development Setup Guide Complete + Database Setup Complete + Authentication Setup Complete + Layout Setup Complete + Landing Page Complete + Authentication Pages Complete + Dashboard Complete + Quiz UI Complete + Quiz Backend Complete + SEO Week 1-3 Complete
 **Date**: January 2025
-**Focus**: High Priority TODOs Complete ✅ | All Repositories Implemented ✅ | All Validation Schemas Created ✅ | All UI Components Implemented ✅ | Child Management Complete ✅ | Development Setup Automation Complete ✅ | Database Setup Complete ✅ | Authentication Setup Complete ✅ | Layout Setup Complete ✅ | Landing Page Complete ✅ | Authentication Pages Complete ✅ | Dashboard Complete ✅ | Quiz UI Complete ✅ | Quiz Backend Complete ✅
+**Focus**: SEO Content Expansion 📋 | SEO Week 1-3 Complete ✅ | High Priority TODOs Complete ✅ | All Repositories Implemented ✅ | All Validation Schemas Created ✅ | All UI Components Implemented ✅ | Child Management Complete ✅ | Development Setup Automation Complete ✅ | Database Setup Complete ✅ | Authentication Setup Complete ✅ | Layout Setup Complete ✅ | Landing Page Complete ✅ | Authentication Pages Complete ✅ | Dashboard Complete ✅ | Quiz UI Complete ✅ | Quiz Backend Complete ✅
 
 ## Current Work Focus
 
 ### Immediate Priorities
 
-1. **High Priority TODOs Implementation** ✅ (COMPLETE - All Core Features Implemented)
+1. **SEO Analysis & Implementation** ✅ (Week 1-3 Technical Foundation - COMPLETE)
+   - **SEO Analysis Complete** ✅ **COMPLETE**
+     - Comprehensive analysis of all 16 public SEO pages completed ✅
+     - Document created: `docs/SEO_IMPROVEMENT_PLAN.md` ✅
+     - 10 critical global SEO issues identified with prioritized fixes ✅
+     - Page-level recommendations for all high-priority pages (home, sports, clubs, doctors, quiz) ✅
+     - Technical SEO implementation plan (sitemap, robots.txt, canonical URLs, structured data) ✅
+     - Content expansion templates and FAQ ideas documented ✅
+     - 30-60-90 day implementation roadmap created ✅
+   - **Week 1 Technical SEO Implementation** ✅ **COMPLETE** (5/5 tasks)
+     - ✅ **Sitemap Complete**: Created `src/app/sitemap.ts` with Next.js 16 Cache Components, includes all static and dynamic pages, error handling, service functions (`getAllClubs`, `getAllDoctors`) added ✅
+     - ✅ **Robots.txt Complete**: Created `src/app/robots.ts` with Next.js 16 native support, disallows protected routes and internal pages, references sitemap ✅
+     - ✅ **Canonical URLs Complete**: Added canonical URLs to all 16 public pages, converted listing pages with searchParams to use `generateMetadata()`, all dynamic pages use absolute URLs ✅
+     - ✅ **Organization Schema Complete**: Created `src/components/SEO/OrganizationSchema.tsx` and added to root layout, JSON-LD structured data appears on all pages ✅
+     - ✅ **Noindex Pages Complete**: Quiz results page and search page excluded from indexing (quiz results = private/personalized, search = utility page) ✅
+   - **Week 2-3 Structured Data Foundation** ✅ **COMPLETE** (3/3 tasks)
+     - ✅ **BreadcrumbList Schema Complete**: Created `src/components/SEO/BreadcrumbSchema.tsx`, enhanced `BreadcrumbOne` component, all 16 public pages updated with proper breadcrumb hierarchy ✅
+     - ✅ **FAQPage Schema Complete**: Created `src/components/SEO/FAQPageSchema.tsx`, created `src/data/faq-data.ts` with 12 Romanian FAQ items, FAQ page updated with schema ✅
+     - ✅ **LocalBusiness & MedicalBusiness Schema Complete**: Created `src/components/SEO/LocalBusinessSchema.tsx` (SportsActivityLocation for clubs) and `src/components/SEO/MedicalBusinessSchema.tsx` (Physician for doctors), added to all detail pages ✅
+   - **Key Findings**:
+     - ✅ Good foundation: Romanian routes, metadata structure, Next.js 16 Cache Components ✅
+     - ✅ Critical fixes: Sitemap ✅, robots.txt ✅, all structured data schemas ✅, canonical URLs ✅, noindex ✅
+     - ⚠️ Remaining: Content expansion, internal linking strategy, additional on-page SEO optimizations ⚠️
+   - **Priority Pages Identified**:
+     - HIGH: Home (/), Sports listing (/sporturi), Sport detail (/sporturi/[slug]), Clubs listing (/cluburi), Club detail (/cluburi/[slug]), Quiz intro (/chestionar)
+     - MEDIUM: Doctors listing/详情, About (/despre-noi), FAQ (/intrebari-frecvente)
+     - LOW: Legal pages, Search page (noindex ✅), Quiz results (noindex ✅)
+   - **Status**: ✅ **WEEK 1-3 TECHNICAL SEO COMPLETE** (8/8 tasks) - All technical SEO foundation complete
+   - **Files Created/Modified**:
+     - ✅ `src/app/sitemap.ts` - Sitemap generator with all static and dynamic pages
+     - ✅ `src/app/robots.ts` - Robots.txt with protected route disallows
+     - ✅ `src/components/SEO/OrganizationSchema.tsx` - Organization JSON-LD schema component
+     - ✅ `src/components/SEO/BreadcrumbSchema.tsx` - BreadcrumbList JSON-LD schema component
+     - ✅ `src/components/SEO/FAQPageSchema.tsx` - FAQPage JSON-LD schema component
+     - ✅ `src/components/SEO/LocalBusinessSchema.tsx` - LocalBusiness (SportsActivityLocation) JSON-LD schema component
+     - ✅ `src/components/SEO/MedicalBusinessSchema.tsx` - MedicalBusiness (Physician) JSON-LD schema component
+     - ✅ `src/data/faq-data.ts` - FAQ data source with 12 Romanian FAQ items
+     - ✅ `src/app/(public)/cautare/layout.tsx` - Search page layout with noindex metadata
+     - ✅ Updated all 16 public pages with canonical URLs and breadcrumb schemas
+     - ✅ Updated quiz results page with noindex metadata
+     - ✅ Updated club and doctor detail pages with LocalBusiness/MedicalBusiness schemas
+     - ✅ Updated FAQ page with FAQPage schema
+     - ✅ Added `getAllClubs()` and `getAllDoctors()` service functions
+   - **Week 3-4: Content Quick Wins** ✅ **IN PROGRESS**
+     - ✅ **Home Page Content Expansion Complete**: Added trust signals, stats, and enhanced FAQ sections
+       - ✅ Created `HomeTrustSignals` component with 6 trust signals (verified clubs, GDPR, verified doctors, secure platform, free for parents, AI recommendations) using Font Awesome icons
+       - ✅ Created `HomeStats` component with animated counters (5000+ families, 500+ verified clubs, 50+ pediatric specialists, 15+ sports) using Flaticon icons
+       - ✅ Enhanced `HomeFaq` component with reusable `FaqAccordionItem` component and improved styling
+       - ✅ Updated `HowItWorks` component with Flaticon icons and improved content
+       - ✅ Updated `FeaturedSports` component with Flaticon icons, improved content, and custom SCSS
+       - ✅ Updated `FeaturedClubs` component with reusable components (`VerificationBadge`, `DistanceBadge`, `ViewAllLink`) and custom SCSS
+       - ✅ Updated `FeaturedDoctors` component with reusable components and custom SCSS
+       - ✅ Updated `HomeTestimonial` component with reusable components (`StarRating`, `AvatarInitials`) and custom SCSS
+       - ✅ Created reusable components: `SectionTitle`, `DistanceBadge`, `ViewAllLink`, `StarRating`, `AvatarInitials`, `FaqAccordionItem`
+       - ✅ Created SCSS files: `_trust.scss`, `_stats.scss`, `_how-it-works.scss`, `_featured-sports.scss`, `_featured-clubs.scss`, `_featured-doctors.scss`, `_home-testimonial.scss`, `_home-faq.scss`
+       - ✅ All components follow design system patterns with consistent styling, hover effects, and responsive breakpoints
+       - ✅ All components use Romanian content and are SEO-optimized
+   - ✅ **Sports Listing Page Content Expansion Complete**: Added expanded intro section and sports-specific FAQ
+     - ✅ Created `sports-faq-data.ts` with 6 sports-specific FAQ items in Romanian
+     - ✅ Enhanced intro section with two feature cards (Find the Right Sport, Verified Clubs) with Flaticon icons
+     - ✅ Added sports-specific FAQ section using reusable `FaqAccordionItem` component
+     - ✅ Created SCSS files: `_sports-intro.scss`, `_sports-faq.scss` for consistent styling
+     - ✅ Improved metadata with better title, description, and keywords
+     - ✅ All content in Romanian, SEO-optimized, with proper semantic HTML
+   - ✅ **Sports Components Enhancement Complete**: Updated all sports components with improved styling and content
+     - ✅ Updated `SportsMain` component with enhanced category filtering, improved empty state, and better results display
+     - ✅ Updated `SportCard` component with redesigned layout, category badges with colors, improved metadata display, and hover effects
+     - ✅ Updated `SportDetailsMain` component with enhanced icon display, redesigned info items, and improved CTA buttons
+     - ✅ Created SCSS files: `_sports-main.scss`, `_sport-card.scss`, `_sport-details.scss` for all sports components
+     - ✅ All components follow design system patterns with consistent styling, hover effects, and responsive breakpoints
+     - ✅ Updated `src/components/features/sports/README.md` with comprehensive documentation
+   - ✅ **Enhanced Metadata for Top 5 Sport Detail Pages Complete**: Created SEO-optimized metadata helper
+     - ✅ Created `src/lib/seo/sport-metadata.ts` with enhanced metadata for top 5 sports (Fotbal, Înot, Tenis, Gimnastică artistică, Baschet)
+     - ✅ Enhanced metadata includes: optimized titles, rich descriptions (150-200 words), targeted keywords arrays, improved OpenGraph descriptions
+     - ✅ Added fallback metadata generation for other sports with dynamic keywords and descriptions
+     - ✅ Updated `generateMetadata` function in sport detail page to use enhanced metadata
+     - ✅ All metadata in Romanian, SEO-optimized with location keywords (București), age ranges, and benefits
+   - ✅ **OG Images Implementation Complete**: Added OpenGraph images for key pages
+     - ✅ Updated home page OG images to use absolute URLs with baseUrl
+     - ✅ Added OG images to quiz page (`/chestionar`) with proper metadata
+     - ✅ Added OG images to sports listing page (`/sporturi`) with proper metadata
+     - ✅ All OG images use absolute URLs (with `NEXT_PUBLIC_APP_URL` or fallback to `https://yuvoo.ro`)
+     - ✅ Added Twitter card images for all three pages
+     - ✅ OG images configured with proper dimensions (1200x630), alt text, and locale (ro_RO)
+   - ✅ **SEO Content Expansion - Sport Detail Pages Complete**: Expanded content for top 10 sport detail pages
+     - ✅ Created `src/data/sport-expanded-content.ts` with comprehensive Romanian content (800-1200 words per sport)
+     - ✅ Created `SportContentExpanded.tsx` component to display expanded content sections
+     - ✅ Integrated expanded content into `SportDetailsMain` component (conditionally renders when content available)
+   - ✅ **Sport-Specific OG Images Implementation Complete**: Open Graph images for sport detail pages
+     - ✅ Created directory structure (`public/assets/img/og/sports/`) for sport-specific OG images
+     - ✅ Updated `src/lib/seo/sport-metadata.ts` to include sport-specific OG images in OpenGraph metadata
+     - ✅ Added helper functions: `getSportOGImagePath()` and `getDefaultOGImagePath()` for image path generation
+     - ✅ Created comprehensive documentation (`public/assets/img/og/sports/README.md`) with image specifications, content guidelines, design templates, and priority list
+     - ✅ All sport detail pages now reference sport-specific OG images (path: `/assets/img/og/sports/{sport-slug}.jpg`)
+     - ⏳ OG images need to be designed and added (see `public/assets/img/og/sports/README.md` for specifications)
+   - ✅ **Article Schema Implementation Complete**: Structured data for sport detail pages
+     - ✅ Created `src/components/SEO/ArticleSchema.tsx` component for Article schema (Schema.org)
+     - ✅ Integrated Article schema into sport detail page (`/sporturi/[slug]`)
+     - ✅ Schema includes: headline, description, author (Yuvoo), publisher (Yuvoo with logo), articleBody, keywords, articleSection, mainEntityOfPage, image (sport-specific OG image)
+     - ✅ Uses expanded content when available for richer schema data (articleBody from introduction, articleSection from content structure)
+     - ✅ All sport detail pages now include Article schema for better search engine understanding and rich snippets
+     - ✅ Added comprehensive SCSS styling (`_sport-details.scss`) for all expanded content sections
+     - ✅ All 10 sports completed with full content:
+       - ✅ Fotbal - Introduction, 6 benefits, age recommendations, equipment guide (6 items), 5 FAQs, internal links
+       - ✅ Înot - Introduction, 6 benefits, age recommendations, equipment guide (6 items), 5 FAQs, internal links
+       - ✅ Tenis - Introduction, 6 benefits, age recommendations, equipment guide (6 items), 5 FAQs, internal links
+       - ✅ Baschet - Introduction, 6 benefits, age recommendations, equipment guide (6 items), 5 FAQs, internal links
+       - ✅ Gimnastică artistică - Introduction, 6 benefits, age recommendations, equipment guide (6 items), 5 FAQs, internal links
+       - ✅ Karate - Introduction, 6 benefits, age recommendations, equipment guide (5 items), 5 FAQs, internal links
+       - ✅ Dans - Introduction, 6 benefits, age recommendations, equipment guide (5 items), 5 FAQs, internal links
+       - ✅ Volei - Introduction, 6 benefits, age recommendations, equipment guide (6 items), 5 FAQs, internal links
+       - ✅ Handbal - Introduction, 6 benefits, age recommendations, equipment guide (6 items), 5 FAQs, internal links
+       - ✅ Judo - Introduction, 6 benefits, age recommendations, equipment guide (5 items), 5 FAQs, internal links
+     - ✅ All content in Romanian, SEO-optimized, with proper internal linking to clubs
+     - ✅ Helper functions: `getExpandedContentBySportId()`, `getExpandedContentBySlug()`
+     - ✅ Updated `docs/SEO_IMPROVEMENT_PLAN.md` to mark task as complete
+   - **Next Steps**: Continue SEO content expansion for clubs listing page, improve metadata for club detail pages
+
+2. **High Priority TODOs Implementation** ✅ (COMPLETE - All Core Features Implemented)
    - **Repository Implementation** ✅ **COMPLETE**
      - Favorites repository: findAll, findByUserId, findByUserAndEntity, findById, create, delete ✅
      - Children repository: findByParentId, findById, create, update, delete with age calculation ✅
@@ -53,7 +171,7 @@
      - ChildDetailsMain: Comprehensive profile view with stats, quizzes, bookings ✅
      - Full CRUD operations: Create (onboarding), Read (detail page), Update (edit form), Delete (ChildCard) ✅
 
-2. **Brevo Email Integration** ✅ (Email Templates Complete - Production Ready)
+3. **Brevo Email Integration** ✅ (Email Templates Complete - Production Ready)
    - **Email Templates Implementation** ✅ **COMPLETE**
      - Created 7 email templates (booking confirmation, cancellation, reminder, quiz results, welcome, club verification, doctor verification) ✅
      - All templates with responsive HTML design, Bootstrap-based styling, Yuvoo branding ✅
@@ -76,7 +194,7 @@
    - **Status**: ✅ Email templates complete - All 7 templates implemented and documented, ready for integration in user registration and verification workflows
    - **Next Steps**: Phase 4 - Testing & validation, integrate welcome emails in registration flow, integrate verification emails in admin workflow
 
-3. **Quiz System Implementation** ✅ (ALL PHASES COMPLETE - Production Ready & Optimized)
+4. **Quiz System Implementation** ✅ (ALL PHASES COMPLETE - Production Ready & Optimized)
    - **Phase 3: Quiz Submission & Service Layer** ✅ **COMPLETE**
      - Updated quiz.analyzer.ts to use AI recommendations service with fallback ✅
      - Enhanced quiz.service.ts with error handling and Romanian messages ✅
@@ -131,7 +249,7 @@
      - All risk detection logic in Romanian language ✅
    - **Status**: ✅ **ALL PHASES COMPLETE** - Quiz system is production-ready and fully optimized
 
-4. **Bootstrap Migration** ✅ (Phase 2.2 Complete - All Onboarding Forms Migrated)
+5. **Bootstrap Migration** ✅ (Phase 2.2 Complete - All Onboarding Forms Migrated)
    - Comprehensive migration plan created (`docs/TAILWIND_REMOVAL_PLAN.md`) ✅
    - Reusable components inventory created (`docs/REUSABLE_COMPONENTS_LIST.md`) ✅
    - Bootstrap 5.3 documentation references added ✅
@@ -237,7 +355,7 @@
      - Comprehensive testing checklist created ✅
      - See `docs/TAILWIND_REMOVAL_TESTING_CHECKLIST.md` for testing procedures
 
-5. **Authentication System Integration** ✅ (Completed - Migrated to Server-Side)
+6. **Authentication System Integration** ✅ (Completed - Migrated to Server-Side)
    - Stack Auth fully integrated using Server Actions pattern (no client-side provider)
    - All authentication operations handled server-side for better security
    - All components localized to Romanian
@@ -245,17 +363,17 @@
    - Forms use Server Actions instead of client-side hooks
    - Ready for end-to-end testing
 
-6. **Legal Pages Development** ✅ (Completed)
+7. **Legal Pages Development** ✅ (Completed)
    - Created all 4 legal pages with comprehensive Romanian content
    - Added footer legal links integration
    - Completed styling and SEO optimization
 
-7. **Homepage Development** ✅ (Completed)
+8. **Homepage Development** ✅ (Completed)
    - All homepage components created and integrated
    - Romanian language content throughout
    - Complete homepage experience with 9 sections
 
-8. **Onboarding System Development** 🚧 (In Progress)
+9. **Onboarding System Development** 🚧 (In Progress)
    - Database schema complete (onboarding_progress table, updated users/clubs/doctors tables) ✅
    - Server Actions implemented (state management, progress tracking, resume functionality) ✅
    - Validation schemas created (onboarding, child, club, doctor) ✅
@@ -538,13 +656,14 @@
     - `HeroYuvoo` - Hero section with main value prop and quiz CTA ✅
     - `HowItWorks` - 3-step process (Quiz → Recommendations → Find Clubs) ✅
     - `HomePromotionArea` - Promotion section with additional CTA ✅
-    - `HomeThreeFeatureArea` - 4 key value propositions ✅
+    - `HomeTrustSignals` - Trust signals section (6 signals: verified clubs, GDPR, verified doctors, secure platform, free for parents, AI recommendations) with Font Awesome icons ✅
+    - `HomeStats` - Statistics section with animated counters (5000+ families, 500+ clubs, 50+ doctors, 15+ sports) ✅
     - `FeaturedSports` - Featured sports showcase ✅
     - `FeaturedClubs` - Featured verified clubs ✅
     - `FeaturedDoctors` - Featured pediatric specialists ✅
     - `HomeTestimonial` - Parent testimonials ✅
-    - `HomeFaq` - FAQ section ✅
-  - **Status**: ✅ **COMPLETE** - Landing page fully implemented with all required sections
+    - `HomeFaq` - Enhanced FAQ section (top 6 FAQs from full FAQ data, link to full FAQ page) ✅
+  - **Status**: ✅ **COMPLETE** - Landing page fully implemented with all required sections including trust signals, stats, and enhanced FAQ
 
 ### Layout Setup Documentation ✅ (January 2025 - Complete Layout Documentation)
 
@@ -1609,13 +1728,31 @@ The quiz system is now fully implemented, tested, optimized, and documented. All
   - Romanian language content throughout
   - Status: ✅ Complete and integrated into homepage
 
-- **Created**: `src/components/features/home/HomeFaq.tsx` ✅
-  - Bootstrap accordion with 4 FAQ items
-  - Questions: Free service, club verification, data safety, quiz repetition
-  - First item expanded by default
-  - Romanian language content
-  - Fixed visibility issues with proper className construction
+- **Created**: `src/components/features/home/HomeTrustSignals.tsx` ✅
+  - Trust signals section with 6 trust indicators
+  - Icons: Font Awesome Pro (`fa-solid fa-certificate`, `fa-solid fa-shield-check`, `fa-solid fa-user-doctor`, `fa-solid fa-lock`, `fa-solid fa-heart`, `fa-solid fa-robot`)
+  - Clickable cards with links to clubs, doctors, GDPR page
+  - Hover effects with card lift and icon color changes
+  - Romanian language content throughout
+  - SCSS styles in `layout/_trust.scss`
   - Status: ✅ Complete and integrated into homepage
+
+- **Created**: `src/components/features/home/HomeStats.tsx` ✅
+  - Statistics section with animated counters using CountUpContent
+  - 4 stats: 5000+ families, 500+ verified clubs, 50+ pediatric specialists, 15+ sports
+  - Font Awesome icons for each stat
+  - Vertical layout for number and text
+  - Romanian language content
+  - Status: ✅ Complete and integrated into homepage
+
+- **Enhanced**: `src/components/features/home/HomeFaq.tsx` ✅
+  - Now uses full FAQ data from `faq-data.ts` (12 items total)
+  - Shows top 6 most relevant FAQs on home page
+  - Added "Vezi toate întrebările" button linking to full FAQ page
+  - Enhanced section description
+  - Bootstrap accordion with first item expanded by default
+  - Romanian language content
+  - Status: ✅ Enhanced and integrated into homepage
 
 - **Updated**: `src/app/(public)/page.tsx` SEO metadata ✅
   - Enhanced meta description with keywords, benefits, and CTA
@@ -1632,12 +1769,13 @@ Current homepage structure (`src/app/(public)/page.tsx`):
 1. `<HeroYuvoo />` - Main hero section
 2. `<HowItWorks />` - 3-step process explanation
 3. `<HomePromotionArea />` - Promotional section with quiz CTA
-4. `<HomeThreeFeatureArea />` - Key features/benefits
-5. `<FeaturedSports />` - Popular sports showcase
-6. `<FeaturedClubs />` - Verified clubs showcase
-7. `<FeaturedDoctors />` - Pediatric specialists showcase
-8. `<HomeTestimonial />` - Parent testimonial
-9. `<HomeFaq />` - Frequently asked questions
+4. `<HomeTrustSignals />` - Trust signals (6 indicators with Font Awesome icons)
+5. `<HomeStats />` - Statistics with animated counters
+6. `<FeaturedSports />` - Popular sports showcase
+7. `<FeaturedClubs />` - Verified clubs showcase
+8. `<FeaturedDoctors />` - Pediatric specialists showcase
+9. `<HomeTestimonial />` - Parent testimonial
+10. `<HomeFaq />` - Frequently asked questions (top 6 with link to full FAQ)
 
 ### Project Initialization
 
@@ -2438,6 +2576,7 @@ Current homepage structure (`src/app/(public)/page.tsx`):
 - **Dynamic APIs**: Access `cookies()` or `headers()` at top of page components that need dynamic rendering
 - **Language Requirement**: All user-facing content must be in Romanian
 - **SEO Strategy**: Public routes use Romanian paths (`/cluburi`, `/doctori`, `/chestionar`) for SEO optimization
+- **SEO Implementation**: Week 1 technical foundation complete - sitemap, robots.txt, canonical URLs (all pages), Organization schema, noindex pages implemented
 - **Routes**: Use `@/lib/routes` as single source of truth - never hardcode paths
 - **TypeScript Imports**: Always use `@/` prefix for imports from `src/` directory
 - **Component Organization**: Club components created in `components/features/clubs/` following adaptation strategy
@@ -2450,6 +2589,8 @@ Current homepage structure (`src/app/(public)/page.tsx`):
 - **Copywriting Guide**: See `docs/COPYWRITING_GUIDE.md` for copywriting principles, brand voice guidelines, writing templates, and best practices
 - **Design Tokens**: See `docs/DESIGN_TOKENS.md` for comprehensive design tokens reference (colors, typography, spacing, shadows, border radius, animations, breakpoints)
 - **SEO Guidelines**: See `docs/SEO_GUIDELINES.md` for SEO strategy, slug generation, meta tags templates, Open Graph templates, and SEO best practices
+- **SEO Improvement Plan**: See `docs/SEO_IMPROVEMENT_PLAN.md` for comprehensive SEO analysis of all public pages, critical issues, page-level recommendations, technical implementation plan, content expansion templates, and 30-60-90 day roadmap
+  - ✅ Week 1 Technical Foundation Complete: Sitemap (`src/app/sitemap.ts`), robots.txt (`src/app/robots.ts`), canonical URLs (all 16 pages), Organization schema (`src/components/SEO/OrganizationSchema.tsx`), noindex pages (quiz results, search)
 - **Site Map**: See `docs/SITE_MAP.md` for complete application structure, all routes, user flows, and navigation patterns
 - **Wireframes**: See `docs/WIREFRAMES.md` for detailed page structures, component placement, and layout specifications for all major pages
 - **Legal Pages Plan**: See `docs/LEGAL_PAGES_DEVELOPMENT_PLAN.md` for comprehensive legal pages development plan, content templates, and implementation guidelines
@@ -2465,3 +2606,8 @@ Current homepage structure (`src/app/(public)/page.tsx`):
 - **Language Requirement**: ALL user-facing content must be in Romanian language only
 - **Legal Pages**: All 4 legal pages complete (`/confidentialitate`, `/termeni`, `/cookies`, `/gdpr-parinti`) - Ready for legal review
 - **Deployment Guides**: All deployment guides complete (`docs/VERCEL_DEPLOYMENT_GUIDE.md`, `docs/DATABASE_DEPLOYMENT_GUIDE.md`, `docs/MONITORING_SETUP_GUIDE.md`) - Ready for production deployment
+- **Home Page Components** (January 2025): All home page components updated with improved content, styling, and reusable components
+  - ✅ 8 home page components updated/created (HomeTrustSignals, HomeStats, HowItWorks, FeaturedSports, FeaturedClubs, FeaturedDoctors, HomeTestimonial, HomeFaq)
+  - ✅ 6 reusable shared components created (SectionTitle, ViewAllLink, DistanceBadge, StarRating, AvatarInitials, FaqAccordionItem)
+  - ✅ 8 new SCSS files created for consistent styling (`_trust.scss`, `_stats.scss`, `_how-it-works.scss`, `_featured-sports.scss`, `_featured-clubs.scss`, `_featured-doctors.scss`, `_home-testimonial.scss`, `_home-faq.scss`)
+  - ✅ All components follow design system patterns with consistent hover effects, spacing, responsive breakpoints, and Romanian content

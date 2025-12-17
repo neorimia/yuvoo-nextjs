@@ -1,5 +1,6 @@
 import { Metadata } from "next";
 import BreadcrumbOne from "@/components/Breadcrumb/BreadcrumbOne";
+import { routes } from "@/lib/routes";
 import React from "react";
 
 export const metadata: Metadata = {
@@ -21,7 +22,7 @@ export const metadata: Metadata = {
     description: "Termenii și condițiile de utilizare a platformei Yuvoo.",
   },
   alternates: {
-    canonical: "/termeni",
+    canonical: `${process.env.NEXT_PUBLIC_APP_URL || "https://yuvoo.ro"}/termeni`,
   },
 };
 
@@ -34,7 +35,14 @@ export default function TermsOfServicePage() {
 
   return (
     <>
-      <BreadcrumbOne title="Termeni și Condiții" subTitle="Legal" />
+      <BreadcrumbOne
+        title="Termeni și Condiții"
+        subTitle="Legal"
+        items={[
+          { name: "Yuvoo", url: routes.home },
+          { name: "Termeni", url: routes.terms }, // Current page
+        ]}
+      />
       <section className="bd-legal-area pt-120 pb-120">
         <div className="container">
           <div className="row justify-content-center">

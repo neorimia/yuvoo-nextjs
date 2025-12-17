@@ -1,5 +1,6 @@
 import { Metadata } from "next";
 import BreadcrumbOne from "@/components/Breadcrumb/BreadcrumbOne";
+import { routes } from "@/lib/routes";
 import React from "react";
 
 export const metadata: Metadata = {
@@ -21,7 +22,7 @@ export const metadata: Metadata = {
     description: "Află cum folosim cookie-urile pe platforma Yuvoo.",
   },
   alternates: {
-    canonical: "/cookies",
+    canonical: `${process.env.NEXT_PUBLIC_APP_URL || "https://yuvoo.ro"}/cookies`,
   },
 };
 
@@ -34,7 +35,14 @@ export default function CookiePolicyPage() {
 
   return (
     <>
-      <BreadcrumbOne title="Politică Cookies" subTitle="Legal" />
+      <BreadcrumbOne
+        title="Politică Cookies"
+        subTitle="Legal"
+        items={[
+          { name: "Yuvoo", url: routes.home },
+          { name: "Cookies", url: routes.cookies }, // Current page
+        ]}
+      />
       <section className="bd-legal-area pt-120 pb-120">
         <div className="container">
           <div className="row justify-content-center">

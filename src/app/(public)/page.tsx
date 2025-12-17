@@ -2,13 +2,14 @@ import { Metadata } from "next";
 import HeroYuvoo from "@/components/features/home/HeroYuvoo";
 import React from "react";
 import HomePromotionArea from "@/components/features/home/HomePromotionArea";
-import HomeThreeFeatureArea from "@/components/Feature/HomeThreeFeatureArea";
 import HowItWorks from "@/components/features/home/HowItWorks";
 import FeaturedSports from "@/components/features/home/FeaturedSports";
 import FeaturedClubs from "@/components/features/home/FeaturedClubs";
 import HomeTestimonial from "@/components/features/home/HomeTestimonial";
 import FeaturedDoctors from "@/components/features/home/FeaturedDoctors";
 import HomeFaq from "@/components/features/home/HomeFaq";
+import HomeTrustSignals from "@/components/features/home/HomeTrustSignals";
+import HomeStats from "@/components/features/home/HomeStats";
 
 export const metadata: Metadata = {
   title: "Yuvoo - Descoperă sportul potrivit copilului tău",
@@ -30,13 +31,13 @@ export const metadata: Metadata = {
     title: "Yuvoo - Descoperă sportul potrivit copilului tău",
     description:
       "Descoperă cluburi sport verificate pentru copii în București. Recomandări personalizate bazate pe profilul copilului tău cu AI Coach.",
-    url: process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000",
+    url: process.env.NEXT_PUBLIC_APP_URL || "https://yuvoo.ro",
     siteName: "Yuvoo",
     locale: "ro_RO",
     type: "website",
     images: [
       {
-        url: "/assets/img/logo/og-image.jpg",
+        url: `${process.env.NEXT_PUBLIC_APP_URL || "https://yuvoo.ro"}/assets/img/logo/og-image.jpg`,
         width: 1200,
         height: 630,
         alt: "Yuvoo - Platformă AI pentru sporturi copii",
@@ -48,10 +49,12 @@ export const metadata: Metadata = {
     title: "Yuvoo - Descoperă sportul potrivit copilului tău",
     description:
       "Descoperă cluburi sport verificate pentru copii în București. Recomandări personalizate cu AI Coach.",
-    images: ["/assets/img/logo/og-image.jpg"],
+    images: [
+      `${process.env.NEXT_PUBLIC_APP_URL || "https://yuvoo.ro"}/assets/img/logo/og-image.jpg`,
+    ],
   },
   alternates: {
-    canonical: "/",
+    canonical: process.env.NEXT_PUBLIC_APP_URL || "https://yuvoo.ro",
   },
 };
 
@@ -61,7 +64,8 @@ const Home = () => {
       <HeroYuvoo />
       <HowItWorks />
       <HomePromotionArea promo_space="pt-120 pb-60" />
-      <HomeThreeFeatureArea wave={true} />
+      <HomeTrustSignals />
+      <HomeStats />
       <FeaturedSports />
       <FeaturedClubs />
       <FeaturedDoctors />
