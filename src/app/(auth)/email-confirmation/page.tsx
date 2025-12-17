@@ -36,15 +36,17 @@ export const metadata: Metadata = {
  * Email Confirmation Page
  *
  * Authentication page for email verification.
- * Route: /auth/email-confirmation?token=<verification-token>
+ * Route: /auth/email-confirmation?code=<verification-code>
+ *        /auth/email-confirmation?token=<verification-token> (backwards compatibility)
  */
 export default async function EmailConfirmationPage({
   searchParams,
 }: {
-  searchParams: Promise<{ token?: string }>;
+  searchParams: Promise<{ code?: string; token?: string }>;
 }) {
   const params = await searchParams;
-  const token = params.token || null;
+  // Stack Auth uses 'code' in email links, but we also support 'token' for backwards compatibility
+  const token = params.code || params.token || null;
 
   return (
     <>
