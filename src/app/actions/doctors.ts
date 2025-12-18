@@ -7,7 +7,7 @@
  */
 
 import { headers } from "next/headers";
-import { revalidatePath } from "next/cache";
+import { revalidatePath, revalidateTag } from "next/cache";
 import { doctorsSearch } from "@/modules/doctors/doctors.search";
 import type { DoctorSearchFilters, DoctorSearchResult } from "@/modules/doctors/doctors.types";
 import {
@@ -185,6 +185,11 @@ export async function updateDoctorAction(
     revalidatePath(routes.doctor.profile);
     if (doctor.slug) {
       revalidatePath(`/doctori/${doctor.slug}`);
+      // Revalidate cache tags
+      revalidateTag(`doctor-${doctor.id}`, "max");
+      revalidateTag(`doctor-slug-${doctor.slug}`, "max");
+      revalidateTag("doctors-list", "max");
+      revalidateTag("home-featured-doctors", "max");
     }
 
     return { success: true, doctor };
@@ -219,6 +224,9 @@ export async function deleteDoctorAction(
     // Revalidate cache
     revalidatePath(routes.doctor.dashboard);
     revalidatePath(routes.doctor.profile);
+    // Revalidate cache tags
+    revalidateTag("doctors-list", "max");
+    revalidateTag("home-featured-doctors", "max");
 
     return { success: true };
   } catch (error) {

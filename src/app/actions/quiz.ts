@@ -12,7 +12,7 @@
 
 "use server";
 
-import { revalidatePath } from "next/cache";
+import { revalidatePath, revalidateTag } from "next/cache";
 import { headers } from "next/headers";
 import { getSession } from "@/lib/auth/session";
 import { requireAuth, getCurrentUser } from "@/modules/auth/auth.service";
@@ -224,6 +224,15 @@ export async function submitQuizAction(
     // Step 9: Revalidate cache
     revalidatePath("/chestionar");
     revalidatePath(`/chestionar/rezultate/${result.id}`);
+
+    // Revalidate parent dashboard cache if user is authenticated
+    if (session) {
+      const user = await getCurrentUser();
+      if (user) {
+        revalidateTag(`user-${user.id}`, "max");
+        revalidateTag(`parent-dashboard-${user.id}`, "max");
+      }
+    }
 
     return { success: true, result };
   } catch (error) {

@@ -7,7 +7,7 @@
 "use server";
 
 import { headers } from "next/headers";
-import { revalidatePath } from "next/cache";
+import { revalidatePath, revalidateTag } from "next/cache";
 import {
   getClubBySlug,
   searchClubs,
@@ -212,6 +212,11 @@ export async function updateClubAction(
     revalidatePath(routes.club.profileEdit);
     if (club.slug) {
       revalidatePath(`/cluburi/${club.slug}`);
+      // Revalidate cache tags
+      revalidateTag(`club-${club.id}`, "max");
+      revalidateTag(`club-slug-${club.slug}`, "max");
+      revalidateTag("clubs-list", "max");
+      revalidateTag("home-featured-clubs", "max");
     }
 
     return { success: true, club };
@@ -246,6 +251,9 @@ export async function deleteClubAction(
     // Revalidate cache
     revalidatePath(routes.club.dashboard);
     revalidatePath(routes.club.profile);
+    // Revalidate cache tags
+    revalidateTag("clubs-list", "max");
+    revalidateTag("home-featured-clubs", "max");
 
     return { success: true };
   } catch (error) {

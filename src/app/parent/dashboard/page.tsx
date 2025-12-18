@@ -1,16 +1,17 @@
+"use cache: private";
+
 import React from "react";
 import type { Metadata } from "next";
-import { cookies } from "next/headers";
 import Link from "next/link";
 import { requireAuth } from "@/lib/auth/session";
 import { getChildrenByParentId } from "@/modules/children/children.service";
 import { getQuizHistoryAction } from "@/app/actions/quiz";
 import QuizHistory from "@/components/features/quiz/QuizHistory";
 import { routes } from "@/lib/routes";
+import { cacheLife, cacheTag } from "next/cache";
 
-// MIGRATED: Removed export const dynamic = 'force-dynamic' (incompatible with Cache Components)
-// This page uses requireAuth() which accesses cookies, so it remains dynamic by default
-// Explicitly accessing cookies() to ensure route is dynamic during build
+// MIGRATED: Using "use cache: private" for user-specific prefetchable cache
+// Private cache allows per-user caching while maintaining prefetching capabilities
 
 export const metadata: Metadata = {
   title: "Dashboard - Yuvoo",
@@ -22,13 +23,19 @@ export const metadata: Metadata = {
  *
  * Protected page for parent dashboard.
  * Shows recent quiz activity and quick stats.
+ * Uses Next.js 16 Cache Components with "use cache: private" directive.
  * Route: /parent/dashboard
  */
 export default async function ParentDashboardPage() {
-  // Explicitly access cookies to ensure route is dynamic (prevents prerender errors)
-  await cookies();
   // Require authentication
   const session = await requireAuth();
+
+  // Cache configuration for private cache
+  // Cache for 5 minutes - dashboard data changes frequently
+  cacheLife("minutes");
+  // Cache tag for user-specific revalidation
+  cacheTag(`user-${session.dbUser.id}`);
+  cacheTag(`parent-dashboard-${session.dbUser.id}`);
 
   // Fetch children for this parent
   const children = await getChildrenByParentId(session.dbUser.id);

@@ -12,7 +12,7 @@ import DoctorAppointmentFormSection from "@/components/features/doctors/DoctorAp
 import DoctorContentExpanded from "@/components/features/doctors/DoctorContentExpanded";
 import { getDoctorBySlug } from "@/modules/doctors/doctors.service";
 import { routes } from "@/lib/routes";
-import { cacheTag } from "next/cache";
+import { cacheLife, cacheTag } from "next/cache";
 import type { Doctor } from "@/modules/doctors/doctors.types";
 import { generateDoctorExpandedContent } from "@/lib/content/doctor-expanded-content";
 import { generateDoctorMetadata } from "@/lib/seo/doctor-metadata";
@@ -84,9 +84,13 @@ export default async function DoctorDetailPage({ params }: DoctorDetailPageProps
     );
   }
 
-  // Cache tag for revalidation (only at runtime)
+  // Cache configuration (only at runtime)
+  // Cache for 1 hour - doctor details change infrequently
+  cacheLife("hours");
+  // Cache tags for revalidation
   cacheTag(`doctor-${doctor!.id}`);
   cacheTag(`doctor-slug-${slug}`);
+  cacheTag("doctors-list");
 
   // Generate expanded content for SEO (600-900 words)
   const expandedContent = generateDoctorExpandedContent(doctor!);

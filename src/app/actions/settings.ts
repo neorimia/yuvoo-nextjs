@@ -6,7 +6,7 @@
 
 "use server";
 
-import { revalidatePath } from "next/cache";
+import { revalidatePath, revalidateTag } from "next/cache";
 import { requireAuth } from "@/modules/auth/auth.service";
 import { authRepository } from "@/modules/auth/auth.repository";
 import { updateUserProfileSchema } from "@/lib/validations/user";
@@ -35,6 +35,9 @@ export async function updateProfileAction(
 
     revalidatePath("/parent/settings");
     revalidatePath("/parent/dashboard");
+    // Revalidate parent dashboard cache
+    revalidateTag(`user-${user.id}`, "max");
+    revalidateTag(`parent-dashboard-${user.id}`, "max");
 
     return { success: true };
   } catch (error) {

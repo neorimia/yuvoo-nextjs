@@ -1,5 +1,6 @@
+"use cache";
+
 import { Metadata } from "next";
-import { headers } from "next/headers";
 import HeroYuvoo from "@/components/features/home/HeroYuvoo";
 import React from "react";
 import HomePromotionArea from "@/components/features/home/HomePromotionArea";
@@ -11,6 +12,7 @@ import FeaturedDoctors from "@/components/features/home/FeaturedDoctors";
 import HomeFaq from "@/components/features/home/HomeFaq";
 import HomeTrustSignals from "@/components/features/home/HomeTrustSignals";
 import HomeStats from "@/components/features/home/HomeStats";
+import { cacheLife, cacheTag } from "next/cache";
 
 export const metadata: Metadata = {
   title: "Yuvoo - Descoperă sportul potrivit copilului tău",
@@ -59,9 +61,23 @@ export const metadata: Metadata = {
   },
 };
 
+/**
+ * Home Page
+ *
+ * Public landing page displaying hero, features, and featured content.
+ * Uses Next.js 16 Cache Components with "use cache" directive.
+ * SEO-friendly route: /
+ */
 const Home = async () => {
-  // Make page dynamic to avoid Sentry crypto.randomUUID() issue during build
-  await headers();
+  // Cache configuration for home page
+  // Cache for 1 hour - home page content changes infrequently
+  cacheLife("hours");
+  // Cache tags for revalidation when content changes
+  cacheTag("home");
+  cacheTag("home-featured-sports");
+  cacheTag("home-featured-clubs");
+  cacheTag("home-featured-doctors");
+
   return (
     <>
       <HeroYuvoo />

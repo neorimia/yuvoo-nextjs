@@ -6,7 +6,7 @@
 
 "use server";
 
-import { revalidatePath } from "next/cache";
+import { revalidatePath, revalidateTag } from "next/cache";
 import { requireAuth } from "@/modules/auth/auth.service";
 import {
   getChildrenByParentId,
@@ -62,6 +62,9 @@ export async function createChildAction(
     });
 
     revalidatePath("/children");
+    // Revalidate parent dashboard cache
+    revalidateTag(`user-${user.id}`, "max");
+    revalidateTag(`parent-dashboard-${user.id}`, "max");
 
     return { success: true, child };
   } catch (error) {
@@ -90,6 +93,9 @@ export async function updateChildAction(
 
     revalidatePath("/children");
     revalidatePath(`/children/${childId}`);
+    // Revalidate parent dashboard cache
+    revalidateTag(`user-${user.id}`, "max");
+    revalidateTag(`parent-dashboard-${user.id}`, "max");
 
     return { success: true, child };
   } catch (error) {
@@ -113,6 +119,9 @@ export async function deleteChildAction(
     await deleteChild(childId, user.id);
 
     revalidatePath("/children");
+    // Revalidate parent dashboard cache
+    revalidateTag(`user-${user.id}`, "max");
+    revalidateTag(`parent-dashboard-${user.id}`, "max");
 
     return { success: true };
   } catch (error) {

@@ -15,7 +15,7 @@ import BookingFormSection from "@/components/features/clubs/BookingFormSection";
 import ClubContentExpanded from "@/components/features/clubs/ClubContentExpanded";
 import { getClubBySlug } from "@/modules/clubs/clubs.service";
 import { routes } from "@/lib/routes";
-import { cacheTag } from "next/cache";
+import { cacheLife, cacheTag } from "next/cache";
 import type { Club } from "@/modules/clubs/clubs.types";
 import { generateClubExpandedContent } from "@/lib/content/club-expanded-content";
 import { generateClubMetadata } from "@/lib/seo/club-metadata";
@@ -87,9 +87,13 @@ export default async function ClubDetailPage({ params }: ClubDetailPageProps) {
     );
   }
 
-  // Cache tag for revalidation (only at runtime)
+  // Cache configuration (only at runtime)
+  // Cache for 1 hour - club details change infrequently
+  cacheLife("hours");
+  // Cache tags for revalidation
   cacheTag(`club-${club!.id}`);
   cacheTag(`club-slug-${slug}`);
+  cacheTag("clubs-list");
 
   // Generate expanded content for SEO (600-900 words)
   const expandedContent = generateClubExpandedContent(club!);

@@ -7,7 +7,7 @@ import BreadcrumbOne from "@/components/Breadcrumb/BreadcrumbOne";
 import SportsMain from "@/components/features/sports/SportsMain";
 import { getAllSports } from "@/modules/sports/sports.service";
 import { routes } from "@/lib/routes";
-import { cacheTag } from "next/cache";
+import { cacheLife, cacheTag } from "next/cache";
 import SectionTitle from "@/components/shared/SectionTitle";
 import FaqAccordionItem from "@/components/shared/FaqAccordionItem";
 import { sportsFaqItems } from "@/data/sports-faq-data";
@@ -67,6 +67,9 @@ export default async function SportsPage() {
   // Fetch all sports
   const sports = await getAllSports();
 
+  // Cache configuration
+  // Cache for 1 hour - sports list changes infrequently
+  cacheLife("hours");
   // Cache tag for revalidation
   cacheTag("sports-list");
 
