@@ -1,4 +1,5 @@
 import React from "react";
+import { headers } from "next/headers";
 import type { Metadata } from "next";
 import BreadcrumbOne from "@/components/Breadcrumb/BreadcrumbOne";
 import AboutMain from "@/components/features/about/AboutMain";
@@ -48,7 +49,9 @@ export const metadata: Metadata = {
  * Public marketing page about Yuvoo.
  * SEO-friendly route: /despre-noi
  */
-export default function AboutPage() {
+export default async function AboutPage() {
+  // Make page dynamic to avoid Sentry crypto.randomUUID() issue during build
+  await headers();
   return (
     <>
       <BreadcrumbOne

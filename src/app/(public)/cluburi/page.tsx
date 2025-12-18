@@ -1,4 +1,5 @@
 import React from "react";
+import { headers } from "next/headers";
 import Link from "next/link";
 import type { Metadata } from "next";
 import BreadcrumbOne from "@/components/Breadcrumb/BreadcrumbOne";
@@ -49,6 +50,8 @@ interface ClubsPageProps {
  * SEO-friendly route: /cluburi
  */
 export default async function ClubsPage({ searchParams }: ClubsPageProps) {
+  // Make page dynamic to avoid Sentry crypto.randomUUID() issue during build
+  await headers();
   const params = await searchParams;
   const {
     sport: sportId,

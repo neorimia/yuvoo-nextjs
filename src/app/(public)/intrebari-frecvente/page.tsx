@@ -1,4 +1,5 @@
 import React from "react";
+import { headers } from "next/headers";
 import type { Metadata } from "next";
 import BreadcrumbOne from "@/components/Breadcrumb/BreadcrumbOne";
 import FaqMainEnhanced from "@/components/FAQ/FaqMainEnhanced";
@@ -47,7 +48,9 @@ export const metadata: Metadata = {
  * Public marketing page with frequently asked questions.
  * SEO-friendly route: /intrebari-frecvente
  */
-export default function FAQPage() {
+export default async function FAQPage() {
+  // Make page dynamic to avoid Sentry crypto.randomUUID() issue during build
+  await headers();
   return (
     <>
       <FAQPageSchema faqs={faqItems} />

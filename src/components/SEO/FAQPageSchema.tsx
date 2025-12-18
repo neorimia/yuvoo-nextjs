@@ -29,11 +29,12 @@ function extractTextFromNode(node: string | React.ReactNode): string {
   if (React.isValidElement(node)) {
     // Extract text from React element and its children
     const extract = (element: React.ReactElement): string => {
-      if (typeof element.props.children === "string") {
-        return element.props.children;
+      const props = element.props as { children?: React.ReactNode };
+      if (typeof props.children === "string") {
+        return props.children;
       }
-      if (Array.isArray(element.props.children)) {
-        return element.props.children
+      if (Array.isArray(props.children)) {
+        return props.children
           .map((child: React.ReactNode) => {
             if (typeof child === "string") return child;
             if (React.isValidElement(child)) return extract(child);
@@ -41,8 +42,8 @@ function extractTextFromNode(node: string | React.ReactNode): string {
           })
           .join(" ");
       }
-      if (React.isValidElement(element.props.children)) {
-        return extract(element.props.children);
+      if (React.isValidElement(props.children)) {
+        return extract(props.children);
       }
       return "";
     };

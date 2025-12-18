@@ -8,7 +8,7 @@
     "setup:auth": "bash scripts/setup-auth.sh",
     "verify:setup": "tsx scripts/verify-setup.ts",
     "dev": "next dev",
-    "build": "next build",
+    "build": "next build --webpack",
     "start": "next start",
     "clean": "rm -rf node_modules package-lock.json yarn.lock",
     "buildCommand": "npm rebuild sharp && npm run build",

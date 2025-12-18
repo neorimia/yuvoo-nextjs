@@ -21,7 +21,7 @@ export interface CreateChildInput {
   firstName: string;
   lastName: string;
   dateOfBirth: Date;
-  gender: "male" | "female" | "other";
+  gender?: "male" | "female" | "other";
 }
 
 export interface UpdateChildInput {

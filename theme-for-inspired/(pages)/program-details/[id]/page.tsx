@@ -1,3 +1,6 @@
+"use client";
+
+import { useParams } from "next/navigation";
 import HomeBannerArea from "@/components/Banner/HomeBannerArea";
 import BreadcrumbOne from "@/components/Breadcrumb/BreadcrumbOne";
 import ProgramCategories from "@/components/Categories/ProgramCategories";
@@ -7,18 +10,13 @@ import LearningSchedule from "@/components/Class/LearningSchedule";
 import HomeNewsletter from "@/components/Newsletter/HomeNewsletter";
 import ProgramDetailsMain from "@/components/Program/ProgramDetailsMain";
 import MoreProgrammers from "@/components/Program/ProgramSlider";
-import { PageParamsProps } from "@/types/custom-interface";
 
-// TODO: Implement proper generateStaticParams when real data fetching is added
-// For now, returning a dummy value to satisfy Cache Components requirement
-export async function generateStaticParams() {
-  return [{ id: "1" }];
-}
+// Convert to client component to avoid Sentry crypto.randomUUID() issue during build
+// This is a legacy theme page, so client-side rendering is acceptable
 
-export default async function ProgramDetails(props: PageParamsProps) {
-  // Page uses params which makes it dynamic - no need for headers()
-  const resolvedParams = await props.params;
-  const { id } = resolvedParams;
+export default function ProgramDetails() {
+  const params = useParams();
+  const id = parseInt(params?.id as string);
 
   return (
     <>

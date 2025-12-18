@@ -28,18 +28,27 @@ interface LocationPageProps {
 /**
  * Generate static params for location pages
  * Returns all unique city/district combinations from clubs
+ * Falls back to common locations if database is unavailable during build
  */
 export async function generateStaticParams() {
   try {
     const locations = await getUniqueLocations();
-    return locations.map((loc) => ({
-      location: generateLocationSlug(loc.city, loc.district),
-    }));
+    if (locations && locations.length > 0) {
+      return locations.map((loc) => ({
+        location: generateLocationSlug(loc.city, loc.district),
+      }));
+    }
   } catch (error) {
     console.error("Error generating static params for location pages:", error);
-    // Return at least one placeholder to satisfy Cache Components requirement
-    return [{ location: "bucuresti" }];
   }
+  // Return common locations as fallback to satisfy Cache Components requirement
+  return [
+    { location: "bucuresti" },
+    { location: "cluj-napoca" },
+    { location: "timisoara" },
+    { location: "iasi" },
+    { location: "constanta" },
+  ];
 }
 
 /**

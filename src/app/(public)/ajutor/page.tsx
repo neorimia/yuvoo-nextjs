@@ -43,7 +43,7 @@ interface HelpSection {
   id: number;
   icon: string;
   title: string;
-  description: string;
+  description: string | React.ReactNode;
   link?: string;
   items?: string[];
 }
