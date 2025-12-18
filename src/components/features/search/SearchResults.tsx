@@ -79,7 +79,7 @@ const SearchResults: React.FC = () => {
               doctor.name.toLowerCase().includes(searchLower) ||
               doctor.specialty.toLowerCase().includes(searchLower) ||
               doctor.location.city.toLowerCase().includes(searchLower) ||
-              doctor.bio?.toLowerCase().includes(searchLower)
+              doctor.description?.toLowerCase().includes(searchLower)
           );
           setDoctors(filtered.slice(0, 10));
         }

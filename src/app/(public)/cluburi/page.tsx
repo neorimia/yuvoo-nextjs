@@ -47,8 +47,10 @@ interface ClubsPageProps {
  * Public page displaying all sports clubs.
  * Supports filtering by sport (from quiz recommendations) and quiz context.
  * SEO-friendly route: /cluburi
+ * Dynamic route due to searchParams
  */
 export default async function ClubsPage({ searchParams }: ClubsPageProps) {
+  // Page is dynamic due to searchParams usage
   const params = await searchParams;
   const {
     sport: sportId,

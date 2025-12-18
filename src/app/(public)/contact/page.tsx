@@ -1,5 +1,6 @@
 import React from "react";
 import Link from "next/link";
+import { headers } from "next/headers";
 import type { Metadata } from "next";
 import BreadcrumbOne from "@/components/Breadcrumb/BreadcrumbOne";
 import ContactInfoArea from "@/components/Info/ContactInfoArea";
@@ -45,7 +46,9 @@ export const metadata: Metadata = {
  * Public contact page for Yuvoo.
  * SEO-friendly route: /contact
  */
-export default function ContactPage() {
+export default async function ContactPage() {
+  // Make page dynamic to avoid Sentry crypto.randomUUID() issue during build
+  await headers();
   return (
     <>
       <BreadcrumbOne

@@ -27,19 +27,44 @@ interface LocationPageProps {
 
 /**
  * Generate static params for location pages
- * Returns all unique city/district combinations from clubs
+ * Returns common Romanian cities for static generation during build
+ * Dynamic locations will be handled at runtime via ISR
  */
 export async function generateStaticParams() {
+  // During production builds, skip database queries and use predefined locations
+  // This prevents "Connection terminated unexpectedly" errors during build time
+  // ISR will handle dynamic locations at runtime
+  const isProductionBuild = process.env.NEXT_PHASE === "phase-production-build";
+
+  if (isProductionBuild) {
+    return [
+      { location: "bucuresti" },
+      { location: "cluj-napoca" },
+      { location: "timisoara" },
+      { location: "iasi" },
+      { location: "constanta" },
+      { location: "brasov" },
+      { location: "craiova" },
+      { location: "galati" },
+      { location: "ploiesti" },
+      { location: "oradea" },
+    ];
+  }
+
+  // In development, try to fetch from database for testing
   try {
     const locations = await getUniqueLocations();
-    return locations.map((loc) => ({
-      location: generateLocationSlug(loc.city, loc.district),
-    }));
+    if (locations && locations.length > 0) {
+      return locations.map((loc) => ({
+        location: generateLocationSlug(loc.city, loc.district),
+      }));
+    }
   } catch (error) {
     console.error("Error generating static params for location pages:", error);
-    // Return at least one placeholder to satisfy Cache Components requirement
-    return [{ location: "bucuresti" }];
   }
+
+  // Fallback for development
+  return [{ location: "bucuresti" }, { location: "cluj-napoca" }, { location: "timisoara" }];
 }
 
 /**
@@ -99,6 +124,9 @@ export default async function LocationClubsPage({ params }: LocationPageProps) {
   const { location } = await params;
   const { city, district } = parseLocationSlug(location);
 
+  // Check if we're in production build phase
+  const isProductionBuild = process.env.NEXT_PHASE === "phase-production-build";
+
   // Build filters for this location
   const filters: ClubSearchFiltersType = {
     city,
@@ -106,20 +134,22 @@ export default async function LocationClubsPage({ params }: LocationPageProps) {
     sortBy: "verified",
   };
 
-  // Fetch clubs with location filters
-  const result = await searchClubs(filters);
-  const clubs: Club[] = result.clubs;
+  // During production builds, skip database queries and use empty array
+  // At runtime, ISR will fetch actual clubs
+  const clubs: Club[] = isProductionBuild ? [] : (await searchClubs(filters)).clubs;
 
-  // Cache tag for revalidation
-  cacheTag(`clubs-location-${location}`);
-  cacheTag(`clubs-city-${city.toLowerCase()}`);
-  if (district) {
-    cacheTag(`clubs-district-${district.toLowerCase()}`);
-  }
+  // Cache tag for revalidation (only at runtime)
+  if (!isProductionBuild) {
+    cacheTag(`clubs-location-${location}`);
+    cacheTag(`clubs-city-${city.toLowerCase()}`);
+    if (district) {
+      cacheTag(`clubs-district-${district.toLowerCase()}`);
+    }
 
-  // If no clubs found, return 404
-  if (clubs.length === 0) {
-    notFound();
+    // If no clubs found, return 404 (only at runtime)
+    if (clubs.length === 0) {
+      notFound();
+    }
   }
 
   const locationDisplayName = getLocationDisplayName(city, district);

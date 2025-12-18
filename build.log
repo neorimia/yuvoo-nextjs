@@ -1,0 +1,85 @@
+
+> yuvoo@0.1.0 build
+> next build --webpack
+
+   ▲ Next.js 16.0.8 (webpack, Cache Components)
+   - Environments: .env.local, .env
+   - Experiments (use with caution):
+     · clientTraceMetadata
+
+   Creating an optimized production build ...
+ ✓ Compiled successfully in 41s
+   Running TypeScript ...
+   Collecting page data using 11 workers ...
+[dotenv@17.2.3] injecting env (0) from .env.local -- tip: ⚙️  load multiple .env files with { path: ['.env.local', '.env'] }
+[dotenv@17.2.3] injecting env (0) from .env.local -- tip: 🗂️ backup and recover secrets: https://dotenvx.com/ops
+[dotenv@17.2.3] injecting env (0) from .env.local -- tip: 🔐 prevent committing .env to code: https://dotenvx.com/precommit
+[dotenv@17.2.3] injecting env (0) from .env.local -- tip: ⚙️  load multiple .env files with { path: ['.env.local', '.env'] }
+[dotenv@17.2.3] injecting env (0) from .env.local -- tip: 🔑 add access controls to secrets: https://dotenvx.com/ops
+[dotenv@17.2.3] injecting env (0) from .env.local -- tip: ⚙️  specify custom .env file path with { path: '/custom/path/.env' }
+[dotenv@17.2.3] injecting env (0) from .env.local -- tip: ⚙️  write to custom object with { processEnv: myObject }
+[dotenv@17.2.3] injecting env (0) from .env.local -- tip: ⚙️  override existing env vars with { override: true }
+[dotenv@17.2.3] injecting env (0) from .env.local -- tip: 🛠️  run anywhere with `dotenvx run -- yourcommand`
+[dotenv@17.2.3] injecting env (0) from .env.local -- tip: ⚙️  write to custom object with { processEnv: myObject }
+[dotenv@17.2.3] injecting env (0) from .env.local -- tip: 🔑 add access controls to secrets: https://dotenvx.com/ops
+   Generating static pages using 11 workers (0/105) ...
+[dotenv@17.2.3] injecting env (0) from .env.local -- tip: 🗂️ backup and recover secrets: https://dotenvx.com/ops
+[dotenv@17.2.3] injecting env (0) from .env.local -- tip: 🔄 add secrets lifecycle management: https://dotenvx.com/ops
+[dotenv@17.2.3] injecting env (0) from .env.local -- tip: 🗂️ backup and recover secrets: https://dotenvx.com/ops
+[dotenv@17.2.3] injecting env (0) from .env.local -- tip: ✅ audit secrets and track compliance: https://dotenvx.com/ops
+TypeError: b.mask is not a function
+    at ignore-listed frames
+TypeError: b.mask is not a function
+    at ignore-listed frames
+TypeError: b.mask is not a function
+    at ignore-listed frames
+TypeError: b.mask is not a function
+    at ignore-listed frames
+TypeError: b.mask is not a function
+    at ignore-listed frames
+TypeError: b.mask is not a function
+    at ignore-listed frames
+TypeError: b.mask is not a function
+    at ignore-listed frames
+TypeError: b.mask is not a function
+    at ignore-listed frames
+TypeError: b.mask is not a function
+    at ignore-listed frames
+TypeError: b.mask is not a function
+    at ignore-listed frames
+Error getting session: Error: During prerendering, `cookies()` rejects when the prerender is complete. Typically these errors are handled by React but if you move `cookies()` to a different context by using `setTimeout`, `after`, or similar functions you may observe this error and you should handle it in that context. This occurred at route "/onboarding/club/verification".
+    at new Promise (<anonymous>)
+    at n (webpack://yuvoo/src/server/request/cookies.ts:163:19)
+    at i (webpack://yuvoo/src/lib/auth/session.ts:94:44)
+    at j (webpack://yuvoo/src/lib/auth/session.ts:116:25)
+    at k (webpack://yuvoo/src/lib/auth/session.ts:141:25)
+    at i (webpack://yuvoo/src/app/onboarding/club/layout.tsx:15:11)
+    at Object.apply (webpack://yuvoo/sentry-wrapper-module:47:10)
+    at stringify (<anonymous>)
+  161 |   }
+  162 |
+> 163 |   const promise = makeHangingPromise<ReadonlyRequestCookies>(
+      |                   ^
+  164 |     prerenderStore.renderSignal,
+  165 |     workStore.route,
+  166 |     '`cookies()`' {
+  route: '/onboarding/club/verification',
+  expression: '`cookies()`',
+  digest: 'HANGING_PROMISE_REJECTION'
+}
+Error: Route "/cluburi" used `crypto.randomUUID()` before accessing either uncached data (e.g. `fetch()`) or Request data (e.g. `cookies()`, `headers()`, `connection()`, and `searchParams`). Accessing random cryptographic values synchronously in a Server Component requires reading one of these data sources first. Alternatively, consider moving this expression into a Client Component or Cache Component. See more info here: https://nextjs.org/docs/messages/next-prerender-crypto
+    at Object.apply (webpack://yuvoo/sentry-wrapper-module:47:10)
+    at stringify (<anonymous>)
+  45 |         baggageHeader,
+  46 |         headers,
+> 47 |       }).apply(thisArg, args);
+     |          ^
+  48 |     },
+  49 |   });
+  50 | } else {
+To get a more detailed stack trace and pinpoint the issue, try one of the following:
+  - Start the app in development mode by running `next dev`, then open "/cluburi" in your browser to investigate the error.
+  - Rerun the production build with `next build --debug-prerender` to generate better stack traces.
+Error occurred prerendering page "/cluburi". Read more: https://nextjs.org/docs/messages/prerender-error
+Export encountered an error on /(public)/cluburi/page: /cluburi, exiting the build.
+ ⨯ Next.js build worker exited with code: 1 and signal: null

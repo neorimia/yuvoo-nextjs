@@ -41,7 +41,6 @@ export const signUpSchema = z
       invalid_type_error: "Confirmarea parolei trebuie să fie un text",
     }),
     role: z.enum(["parent", "club_admin", "doctor"], {
-      required_error: "Tipul de cont este obligatoriu",
       errorMap: () => ({ message: "Tipul de cont selectat nu este valid" }),
     }),
   })

@@ -1,4 +1,5 @@
 import React from "react";
+import { headers } from "next/headers";
 import { Metadata } from "next";
 import HomeNewsletter from "@/components/Newsletter/HomeNewsletter";
 import BreadcrumbOne from "@/components/Breadcrumb/BreadcrumbOne";
@@ -10,7 +11,9 @@ export const metadata: Metadata = {
   title: "FAQ - Kindergarten & School Next js Template",
 };
 
-const FAQ = () => {
+const FAQ = async () => {
+  // Make page dynamic to avoid Sentry crypto.randomUUID() issue during build
+  await headers();
   return (
     <>
       <BreadcrumbOne title="FAQ" subTitle="FAQ" />

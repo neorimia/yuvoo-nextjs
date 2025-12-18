@@ -1,4 +1,5 @@
 import React from "react";
+import { headers } from "next/headers";
 import type { Metadata } from "next";
 import BreadcrumbOne from "@/components/Breadcrumb/BreadcrumbOne";
 import AboutMain from "@/components/features/about/AboutMain";
@@ -8,39 +9,42 @@ import HomeTrustSignals from "@/components/features/home/HomeTrustSignals";
 import HomeStats from "@/components/features/home/HomeStats";
 import { routes } from "@/lib/routes";
 
-export const metadata: Metadata = {
-  title: "Despre Noi - Misiunea, Echipa și Partenerii Yuvoo",
-  description:
-    "Află mai multe despre Yuvoo: misiunea noastră, echipa dedicată, partenerii de încredere și cum transformăm modul în care părinții găsesc activitățile sportive perfecte pentru copiii lor. Platformă AI verificată, colaborări medicale și sportive de încredere.",
-  keywords: [
-    "despre Yuvoo",
-    "echipa Yuvoo",
-    "parteneri Yuvoo",
-    "misiune Yuvoo",
-    "platformă AI sporturi copii",
-    "specialiști pediatri România",
-    "cluburi sportive verificate",
-    "despre platformă sport copii",
-  ],
-  openGraph: {
+// Generate metadata for about page
+export async function generateMetadata(): Promise<Metadata> {
+  return {
     title: "Despre Noi - Misiunea, Echipa și Partenerii Yuvoo",
     description:
-      "Află mai multe despre Yuvoo: misiunea, echipa dedicată și partenerii de încredere care stau în spatele platformei AI pentru sporturi copii.",
-    type: "website",
-    url: `${process.env.NEXT_PUBLIC_APP_URL || "https://yuvoo.ro"}/despre-noi`,
-    siteName: "Yuvoo",
-    locale: "ro_RO",
-  },
-  twitter: {
-    card: "summary_large_image",
-    title: "Despre Noi - Misiunea, Echipa și Partenerii Yuvoo",
-    description:
-      "Află mai multe despre Yuvoo: misiunea, echipa dedicată și partenerii de încredere.",
-  },
-  alternates: {
-    canonical: "/despre-noi",
-  },
-};
+      "Află mai multe despre Yuvoo: misiunea noastră, echipa dedicată, partenerii de încredere și cum transformăm modul în care părinții găsesc activitățile sportive perfecte pentru copiii lor. Platformă AI verificată, colaborări medicale și sportive de încredere.",
+    keywords: [
+      "despre Yuvoo",
+      "echipa Yuvoo",
+      "parteneri Yuvoo",
+      "misiune Yuvoo",
+      "platformă AI sporturi copii",
+      "specialiști pediatri România",
+      "cluburi sportive verificate",
+      "despre platformă sport copii",
+    ],
+    openGraph: {
+      title: "Despre Noi - Misiunea, Echipa și Partenerii Yuvoo",
+      description:
+        "Află mai multe despre Yuvoo: misiunea, echipa dedicată și partenerii de încredere care stau în spatele platformei AI pentru sporturi copii.",
+      type: "website",
+      url: `${process.env.NEXT_PUBLIC_APP_URL || "https://yuvoo.ro"}/despre-noi`,
+      siteName: "Yuvoo",
+      locale: "ro_RO",
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: "Despre Noi - Misiunea, Echipa și Partenerii Yuvoo",
+      description:
+        "Află mai multe despre Yuvoo: misiunea, echipa dedicată și partenerii de încredere.",
+    },
+    alternates: {
+      canonical: "/despre-noi",
+    },
+  };
+}
 
 /**
  * About Page
@@ -48,7 +52,11 @@ export const metadata: Metadata = {
  * Public marketing page about Yuvoo.
  * SEO-friendly route: /despre-noi
  */
-export default function AboutPage() {
+export default async function AboutPage() {
+  // Make page dynamic by accessing headers() BEFORE Sentry can wrap it
+  // This prevents crypto.randomUUID() errors during prerendering
+  await headers();
+
   return (
     <>
       <BreadcrumbOne

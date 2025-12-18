@@ -1,4 +1,5 @@
 import { Metadata } from "next";
+import { headers } from "next/headers";
 import HeroYuvoo from "@/components/features/home/HeroYuvoo";
 import React from "react";
 import HomePromotionArea from "@/components/features/home/HomePromotionArea";
@@ -58,7 +59,9 @@ export const metadata: Metadata = {
   },
 };
 
-const Home = () => {
+const Home = async () => {
+  // Make page dynamic to avoid Sentry crypto.randomUUID() issue during build
+  await headers();
   return (
     <>
       <HeroYuvoo />

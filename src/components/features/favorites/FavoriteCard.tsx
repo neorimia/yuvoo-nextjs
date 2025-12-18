@@ -64,14 +64,14 @@ const FavoriteCard: React.FC<FavoriteCardProps> = ({ favorite, entity, onRemove 
   const detailUrl = isClub
     ? routes.clubs.detail((entity as Club).slug)
     : routes.doctors.detail((entity as Doctor).slug);
-  const imageUrl =
-    isClub && (entity as Club).images?.[0]
-      ? (entity as Club).images[0]
-      : !isClub && (entity as Doctor).photoUrl
-        ? (entity as Doctor).photoUrl
-        : isClub
-          ? "/assets/img/placeholder-club.jpg"
-          : "/assets/img/placeholder-doctor.jpg";
+
+  // Get image URL with fallback to placeholder
+  let imageUrl: string;
+  if (isClub) {
+    imageUrl = (entity as Club).images?.[0] || "/assets/img/placeholder-club.jpg";
+  } else {
+    imageUrl = (entity as Doctor).image || "/assets/img/placeholder-doctor.jpg";
+  }
 
   return (
     <div className="card mb-3">
@@ -108,9 +108,9 @@ const FavoriteCard: React.FC<FavoriteCardProps> = ({ favorite, entity, onRemove 
                     {(entity as Club).description.substring(0, 100)}...
                   </p>
                 )}
-                {!isClub && (entity as Doctor).bio && (
+                {!isClub && (entity as Doctor).description && (
                   <p className="card-text small text-muted">
-                    {(entity as Doctor).bio.substring(0, 100)}...
+                    {(entity as Doctor).description.substring(0, 100)}...
                   </p>
                 )}
               </div>

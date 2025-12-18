@@ -1,5 +1,6 @@
 "use cache";
 import React from "react";
+import { headers } from "next/headers";
 import { Metadata } from "next";
 import HomeNewsletter from "@/components/Newsletter/HomeNewsletter";
 import BreadcrumbOne from "@/components/Breadcrumb/BreadcrumbOne";
@@ -13,6 +14,7 @@ export const metadata: Metadata = {
 const ForgotPassword = async () => {
   // CACHED: Static page - no user-specific data, safe to cache
   // cacheLife('hours') - page content changes infrequently
+  void (await headers());
   return (
     <>
       <BreadcrumbOne title="Forgot Password" subTitle="Forgot Password" />

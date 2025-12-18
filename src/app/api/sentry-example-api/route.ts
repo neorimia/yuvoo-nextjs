@@ -1,5 +1,6 @@
 import * as Sentry from "@sentry/nextjs";
-export const dynamic = "force-dynamic";
+// MIGRATED: Removed export const dynamic = 'force-dynamic' (incompatible with Cache Components)
+// API routes are dynamic by default in Next.js 16 with Cache Components
 
 class SentryExampleAPIError extends Error {
   constructor(message: string | undefined) {
