@@ -30,6 +30,9 @@ cloudinary.config({
   cloud_name: cloudName,
   api_key: apiKey,
   api_secret: apiSecret,
+  secure: true,
+  // Use SHA-256 for signature algorithm (default is SHA-1, but some accounts require SHA-256)
+  signature_algorithm: "sha256",
 });
 
 export { cloudinary };

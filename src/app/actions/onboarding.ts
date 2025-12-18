@@ -453,6 +453,39 @@ export async function completeParentOnboarding(action: "quiz" | "dashboard"): Pr
 // ============================================================================
 
 /**
+ * Get club ID for current user with fallback logic
+ * First tries to get from onboarding progress stepData
+ * If not found, queries database by adminUserId
+ * Saves club_id to stepData if found via fallback
+ */
+async function getClubIdForUser(): Promise<string | null> {
+  const user = await requireAuth();
+
+  // Try to get from onboarding progress
+  const progressData = await getOnboardingProgress();
+  if (progressData.success && progressData.data) {
+    const clubId = progressData.data.stepData?.club_id as string | undefined;
+    if (clubId) {
+      return clubId;
+    }
+  }
+
+  // Fallback: query database by adminUserId
+  const userClub = await db.query.clubs.findFirst({
+    where: eq(clubs.adminUserId, user.id),
+    columns: { id: true },
+  });
+
+  if (userClub) {
+    // Save club_id to stepData for future steps
+    await saveStepData("club_id", userClub.id);
+    return userClub.id;
+  }
+
+  return null;
+}
+
+/**
  * Create Club During Onboarding (Club Admin - Step 2)
  */
 export async function createClubOnboarding(
@@ -627,16 +660,8 @@ export async function updateClubContactSchedule(
   try {
     const user = await requireAuth();
 
-    // Get club ID from onboarding progress
-    const progressData = await getOnboardingProgress();
-    if (!progressData.success || !progressData.data) {
-      return {
-        success: false,
-        error: "Nu s-a găsit progresul onboarding-ului. Te rugăm să începi din nou.",
-      };
-    }
-
-    const clubId = progressData.data.stepData?.club_id as string | undefined;
+    // Get club ID with fallback logic
+    const clubId = await getClubIdForUser();
     if (!clubId) {
       return {
         success: false,
@@ -688,16 +713,8 @@ export async function updateClubPricingAges(
   try {
     const user = await requireAuth();
 
-    // Get club ID from onboarding progress
-    const progressData = await getOnboardingProgress();
-    if (!progressData.success || !progressData.data) {
-      return {
-        success: false,
-        error: "Nu s-a găsit progresul onboarding-ului. Te rugăm să începi din nou.",
-      };
-    }
-
-    const clubId = progressData.data.stepData?.club_id as string | undefined;
+    // Get club ID with fallback logic
+    const clubId = await getClubIdForUser();
     if (!clubId) {
       return {
         success: false,
@@ -748,16 +765,8 @@ export async function updateClubPhotos(
   try {
     const user = await requireAuth();
 
-    // Get club ID from onboarding progress
-    const progressData = await getOnboardingProgress();
-    if (!progressData.success || !progressData.data) {
-      return {
-        success: false,
-        error: "Nu s-a găsit progresul onboarding-ului. Te rugăm să începi din nou.",
-      };
-    }
-
-    const clubId = progressData.data.stepData?.club_id as string | undefined;
+    // Get club ID with fallback logic
+    const clubId = await getClubIdForUser();
     if (!clubId) {
       return {
         success: false,
@@ -807,16 +816,8 @@ export async function updateClubVerification(
   try {
     const user = await requireAuth();
 
-    // Get club ID from onboarding progress
-    const progressData = await getOnboardingProgress();
-    if (!progressData.success || !progressData.data) {
-      return {
-        success: false,
-        error: "Nu s-a găsit progresul onboarding-ului. Te rugăm să începi din nou.",
-      };
-    }
-
-    const clubId = progressData.data.stepData?.club_id as string | undefined;
+    // Get club ID with fallback logic
+    const clubId = await getClubIdForUser();
     if (!clubId) {
       return {
         success: false,
