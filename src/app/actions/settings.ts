@@ -7,7 +7,7 @@
 "use server";
 
 import { revalidatePath } from "next/cache";
-import { requireAuth } from "@/lib/auth/session";
+import { requireAuth } from "@/modules/auth/auth.service";
 import { authRepository } from "@/modules/auth/auth.repository";
 import { updateUserProfileSchema } from "@/lib/validations/user";
 
@@ -18,13 +18,13 @@ export async function updateProfileAction(
   input: unknown
 ): Promise<{ success: boolean; error?: string }> {
   try {
-    const session = await requireAuth();
+    const user = await requireAuth();
 
     // Validate input with Zod schema
     const validatedInput = updateUserProfileSchema.parse(input);
 
     // Update user in database
-    await authRepository.update(session.dbUser.id, {
+    await authRepository.update(user.id, {
       firstName: validatedInput.firstName,
       lastName: validatedInput.lastName,
       phone: validatedInput.phone || undefined,
@@ -57,24 +57,16 @@ export async function updateProfileAction(
  */
 export async function getProfileAction() {
   try {
-    const session = await requireAuth();
-    const user = await authRepository.getUserById(session.dbUser.id);
-
-    if (!user) {
-      return {
-        success: false,
-        error: "Utilizatorul nu a fost găsit",
-      };
-    }
+    const user = await requireAuth();
 
     return {
       success: true,
       profile: {
         email: user.email,
         name: user.name,
-        firstName: session.dbUser.firstName || "",
-        lastName: session.dbUser.lastName || "",
-        phone: session.dbUser.phone || "",
+        firstName: user.firstName || "",
+        lastName: user.lastName || "",
+        phone: user.phone || "",
       },
     };
   } catch (error) {

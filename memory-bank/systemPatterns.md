@@ -1440,13 +1440,42 @@ Does component need interactivity?
 ## Security Patterns
 
 1. **Authentication**: Stack Auth handles all auth (server-side only, no client-side provider)
+   - Standardized pattern: Use `requireAuth()` and `requireRole()` from `@/modules/auth/auth.service`
+   - `AuthUser` type includes: `id`, `email`, `name`, `firstName`, `lastName`, `phone`, `role`, `emailVerified`, `createdAt`, `updatedAt`
+   - Optional auth: Use `getSession()` from `@/lib/auth/session` when authentication is optional
+
 2. **Authorization**: Role-based (parent, club_admin, doctor, admin)
+   - All mutation actions require authentication
+   - Role checks via `requireRole(role)` for admin actions
+   - Resource ownership verification in service layer before allowing updates/deletes
 3. **Input Validation**: Zod schemas for all inputs (server-side validation in Server Actions)
 4. **SQL Injection**: Drizzle ORM parameterized queries
 5. **XSS**: React automatic escaping
 6. **CSRF**: Next.js built-in protection (Server Actions are CSRF-protected)
 7. **File Uploads**: Cloudinary handles storage and CDN
 8. **Server Actions**: All authentication operations are server-side only
+
+9. **Rate Limiting**: In-memory rate limiting for abuse prevention
+   - Location: `src/lib/rate-limit.ts`
+   - Applied to: auth actions (sign in, sign up, password reset), uploads, bookings, search actions
+   - Configurable limits per action type (e.g., 5 sign-in attempts per 15 minutes)
+
+10. **Input Validation**: Zod schemas for all Server Actions
+    - Location: `src/lib/validations/`
+    - All error messages in Romanian
+    - Centralized schemas for consistency
+
+11. **Ownership Verification**: Service layer verifies resource ownership
+    - Children: `child.parentId === userId`
+    - Clubs: `club.adminUserId === userId`
+    - Doctors: `doctor.userId === userId`
+    - Uploads: `upload.userId === userId` (via uploads tracking table)
+
+12. **Audit Logging**: Complete audit trail for admin actions
+    - Table: `audit_logs` tracks all admin verification actions
+    - Tracks: userId, action, entityType, entityId, oldValue, newValue, metadata, IP address, user agent, timestamp
+    - Service: `modules/audit/audit.service.ts` with `logVerificationStatusChange()` and `logAdminAction()`
+    - Non-blocking: Audit logging failures don't affect main operations
 
 ## Performance Patterns
 
@@ -1838,6 +1867,7 @@ Club Directory (pre-filtered by sport)
 - **Legal Pages Plan**: `docs/LEGAL_PAGES_DEVELOPMENT_PLAN.md` - Comprehensive legal pages development plan, content templates, SEO guidelines, and implementation checklist
 - **Authentication Integration Plan**: `docs/AUTH_INTEGRATION_PLAN.md` - Complete authentication system integration details, Stack Auth setup, Romanian localization, and implementation checklist
 - **Stack Auth Server Migration**: `docs/STACK_AUTH_SERVER_MIGRATION_PLAN.md` - Migration plan and implementation details for server-side authentication
+- **Security Audit Report**: `docs/SECURITY_AUDIT_REPORT.md` - Comprehensive security audit covering rate limiting, input validation, role-based authorization, ownership verification, and audit logging
 - **Tailwind Removal Plan**: `docs/TAILWIND_REMOVAL_PLAN.md` - Comprehensive migration strategy to remove Tailwind CSS and shadcn/ui, keep only Bootstrap 5.3.3 and SCSS
 - **Reusable Components List**: `docs/REUSABLE_COMPONENTS_LIST.md` - Complete inventory of ~80+ reusable Bootstrap components with Bootstrap 5.3 documentation references
 - **System Patterns**: `memory-bank/systemPatterns.md` - This file

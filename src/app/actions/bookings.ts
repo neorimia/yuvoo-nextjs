@@ -7,6 +7,7 @@
 "use server";
 
 import { revalidatePath } from "next/cache";
+import { headers } from "next/headers";
 import { requireAuth } from "@/modules/auth/auth.service";
 import {
   createBooking,
@@ -18,6 +19,7 @@ import { createBookingSchema } from "@/lib/validations/booking";
 import type { Booking } from "@/modules/bookings/bookings.types";
 import { trackEventServer } from "@/lib/analytics/tracking-server";
 import { PostHogEvents, PostHogProperties } from "@/lib/analytics/events";
+import { rateLimit, getClientIdentifierFromHeaders, RATE_LIMIT_CONFIGS } from "@/lib/rate-limit";
 
 /**
  * Create new booking
@@ -27,6 +29,26 @@ export async function createBookingAction(
 ): Promise<{ success: boolean; booking?: Booking; error?: string }> {
   try {
     const user = await requireAuth();
+
+    // Rate limiting: prevent spam bookings
+    try {
+      const headersList = await headers();
+      const identifier = getClientIdentifierFromHeaders(user.id, headersList);
+      const rateLimitResult = await rateLimit(
+        `create-booking:${identifier}`,
+        RATE_LIMIT_CONFIGS.CREATE_BOOKING
+      );
+
+      if (!rateLimitResult.success) {
+        return {
+          success: false,
+          error: `Prea multe rezervări create. Te rugăm să încerci din nou după ${rateLimitResult.resetTime}.`,
+        };
+      }
+    } catch (rateLimitError) {
+      // Don't block booking if rate limiting fails (log and continue)
+      console.error("[RateLimit] Error checking rate limit for booking creation:", rateLimitError);
+    }
 
     // Validate input with Zod schema
     const validatedInput = createBookingSchema.parse(input);

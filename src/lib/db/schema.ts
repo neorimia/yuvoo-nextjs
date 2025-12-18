@@ -13,6 +13,8 @@
  * - favorites: Saved clubs and doctors
  * - reviews: Club and doctor reviews (moderated)
  * - onboarding_progress: Cross-session onboarding state tracking (NEW)
+ * - uploads: File upload tracking for ownership verification (NEW)
+ * - audit_logs: Admin action audit trail for security and compliance (NEW)
  */
 
 import {
@@ -379,3 +381,62 @@ export const onboardingProgress = pgTable("onboarding_progress", {
   createdAt: timestamp("created_at").notNull().defaultNow(),
   updatedAt: timestamp("updated_at").notNull().defaultNow(),
 });
+
+// Uploads tracking table - tracks all file uploads for ownership verification
+export const uploads = pgTable(
+  "uploads",
+  {
+    id: text("id")
+      .primaryKey()
+      .default(sql`gen_random_uuid()`),
+    userId: text("user_id")
+      .notNull()
+      .references(() => users.id, { onDelete: "cascade" }),
+    url: text("url").notNull(), // Cloudinary URL
+    publicId: text("public_id").notNull(), // Cloudinary public ID
+    resourceType: text("resource_type").notNull(), // "image" or "raw" (document)
+    folder: text("folder"), // Cloudinary folder path
+    createdAt: timestamp("created_at").defaultNow().notNull(),
+  },
+  (table) => ({
+    // Performance indexes
+    userIdIdx: index("idx_uploads_user_id").on(table.userId),
+    urlIdx: index("idx_uploads_url").on(table.url),
+    publicIdIdx: index("idx_uploads_public_id").on(table.publicId),
+    // Composite index for ownership checks
+    userUrlIdx: index("idx_uploads_user_url").on(table.userId, table.url),
+  })
+);
+
+// Audit logs table - tracks admin actions for security and compliance
+export const auditLogs = pgTable(
+  "audit_logs",
+  {
+    id: text("id")
+      .primaryKey()
+      .default(sql`gen_random_uuid()`),
+    userId: text("user_id")
+      .notNull()
+      .references(() => users.id, { onDelete: "cascade" }), // Admin who performed the action
+    action: text("action").notNull(), // e.g., "verification_status_changed"
+    entityType: text("entity_type").notNull(), // "club" or "doctor"
+    entityId: text("entity_id").notNull(), // ID of the club or doctor
+    oldValue: jsonb("old_value"), // Previous state (e.g., { verificationStatus: "pending" })
+    newValue: jsonb("new_value"), // New state (e.g., { verificationStatus: "approved" })
+    metadata: jsonb("metadata"), // Additional context (e.g., { reason: "..." })
+    ipAddress: text("ip_address"), // IP address of the admin
+    userAgent: text("user_agent"), // User agent string
+    createdAt: timestamp("created_at").defaultNow().notNull(),
+  },
+  (table) => ({
+    // Performance indexes
+    userIdIdx: index("idx_audit_logs_user_id").on(table.userId),
+    entityTypeIdx: index("idx_audit_logs_entity_type").on(table.entityType),
+    entityIdIdx: index("idx_audit_logs_entity_id").on(table.entityId),
+    actionIdx: index("idx_audit_logs_action").on(table.action),
+    createdAtIdx: index("idx_audit_logs_created_at").on(table.createdAt),
+    // Composite indexes for common queries
+    entityTypeIdIdx: index("idx_audit_logs_entity_type_id").on(table.entityType, table.entityId),
+    userActionIdx: index("idx_audit_logs_user_action").on(table.userId, table.action),
+  })
+);
