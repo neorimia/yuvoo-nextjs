@@ -127,9 +127,16 @@ export async function requireAuth() {
     // Use static date to avoid "new Date() used before Request data" error
     const staticDate = new Date("2024-01-01T00:00:00Z");
     return {
-      user: { id: "build-mock", primaryEmail: "build@mock.com" } as {
+      user: {
+        id: "build-mock",
+        primaryEmail: "build@mock.com",
+        primaryEmailVerified: false,
+        displayName: "Build User",
+      } as {
         id: string;
         primaryEmail: string | null;
+        primaryEmailVerified?: boolean;
+        displayName?: string | null;
       },
       dbUser: {
         id: "build-mock",
@@ -186,9 +193,16 @@ export async function requireRole(role: "parent" | "club_admin" | "doctor" | "ad
     // Use static date to avoid "new Date() used before Request data" error
     const staticDate = new Date("2024-01-01T00:00:00Z");
     return {
-      user: { id: "build-mock", primaryEmail: "build@mock.com" } as {
+      user: {
+        id: "build-mock",
+        primaryEmail: "build@mock.com",
+        primaryEmailVerified: false,
+        displayName: "Build User",
+      } as {
         id: string;
         primaryEmail: string | null;
+        primaryEmailVerified?: boolean;
+        displayName?: string | null;
       },
       dbUser: {
         id: "build-mock",

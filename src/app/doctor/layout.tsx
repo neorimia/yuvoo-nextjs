@@ -32,7 +32,9 @@ export default async function DoctorLayout({ children }: { children: React.React
         lastName={session.dbUser.lastName}
         phone={session.dbUser.phone}
         signupDate={session.dbUser.createdAt}
-        emailVerified={session.user.primaryEmailVerified ?? undefined}
+        emailVerified={
+          (session.user as { primaryEmailVerified?: boolean }).primaryEmailVerified ?? undefined
+        }
         onboardingCompleted={session.dbUser.onboardingCompleted}
       />
       {children}
