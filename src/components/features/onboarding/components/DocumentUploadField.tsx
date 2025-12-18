@@ -155,20 +155,24 @@ export function DocumentUploadField({
   const canUploadMore = maxDocuments ? currentValues.length < maxDocuments : true;
 
   return (
-    <div className={cn("mb-4", className)}>
+    <div className={cn("bd-document-upload-field mb-4", className)}>
       {/* Label */}
-      <label className="d-flex align-items-center gap-2 small fw-medium text-body mb-2">
+      <label className="bd-document-upload-field-label d-flex align-items-center gap-2 small fw-medium text-body mb-2">
         {label}
         {required && <span className="text-danger">*</span>}
         {helpText && <InfoTooltip content={helpText} size="sm" />}
       </label>
 
       {/* Description */}
-      {description && <p className="small text-secondary mb-3">{description}</p>}
+      {description && (
+        <p className="bd-document-upload-field-description small text-secondary mb-3">
+          {description}
+        </p>
+      )}
 
       {/* Document List */}
       {currentValues.length > 0 && (
-        <div className="mb-3">
+        <div className="bd-document-upload-field-list mb-3">
           {currentValues.map((url, index) => (
             <DocumentPreview
               key={index}
@@ -184,20 +188,22 @@ export function DocumentUploadField({
 
       {/* Upload Area */}
       {canUploadMore && (
-        <FileUploadArea
-          label="Adaugă documente"
-          fileTypeHint={`${formatHint}, maxim ${maxSizeMB}MB`}
-          maxRemainingHint={
-            minDocuments && currentValues.length < minDocuments
-              ? `Minim ${minDocuments} documente necesare`
-              : undefined
-          }
-          isUploading={uploadingIndex !== null}
-          isLoading={isLoading}
-          maxFiles={maxDocuments}
-          currentFiles={currentValues.length}
-          onClick={() => inputRef.current?.click()}
-        />
+        <div className="bd-document-upload-field-upload">
+          <FileUploadArea
+            label="Adaugă documente"
+            fileTypeHint={`${formatHint}, maxim ${maxSizeMB}MB`}
+            maxRemainingHint={
+              minDocuments && currentValues.length < minDocuments
+                ? `Minim ${minDocuments} documente necesare`
+                : undefined
+            }
+            isUploading={uploadingIndex !== null}
+            isLoading={isLoading}
+            maxFiles={maxDocuments}
+            currentFiles={currentValues.length}
+            onClick={() => inputRef.current?.click()}
+          />
+        </div>
       )}
 
       {/* Hidden File Input */}
@@ -213,7 +219,7 @@ export function DocumentUploadField({
 
       {/* Info Text */}
       {minDocuments && (
-        <p className="text-xs text-secondary mt-2">
+        <p className="bd-document-upload-field-info text-xs text-secondary mt-2">
           {currentValues.length < minDocuments ? (
             <span className="text-danger">
               Minim {minDocuments} documente necesare ({currentValues.length}/{minDocuments})
@@ -230,7 +236,7 @@ export function DocumentUploadField({
 
       {/* Error Message */}
       {error && (
-        <p className="mt-2 small text-danger" role="alert">
+        <p className="bd-document-upload-field-error mt-2 small text-danger" role="alert">
           {error.message}
         </p>
       )}

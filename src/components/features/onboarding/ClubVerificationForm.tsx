@@ -48,29 +48,38 @@ export function ClubVerificationForm() {
   const documentUrls = watch("verificationDocuments") || [];
 
   return (
-    <form id="club-verification-form" onSubmit={rhfHandleSubmit(handleSubmit)}>
+    <form
+      id="club-verification-form"
+      onSubmit={rhfHandleSubmit(handleSubmit)}
+      className="bd-onboarding-verification-form"
+    >
       {/* Server error message */}
       <ServerErrorAlert error={serverError} className="mb-4" />
 
-      {/* Document Upload */}
-      <DocumentUploadField
-        label="Documente de verificare"
-        name="verificationDocuments"
-        setValue={setValue}
-        currentValues={documentUrls}
-        error={errors.verificationDocuments as unknown as FieldError}
-        folder="yuvoo/clubs/verification"
-        minDocuments={2}
-        maxDocuments={5}
-        required
-        description="Încarcă cel puțin 2 documente (ex: certificat de înregistrare, asigurare). Acceptă PDF, DOC, DOCX, JPG, PNG (maxim 10MB fiecare)."
-        isLoading={isLoading}
-        setServerError={setServerError}
-      />
+      {/* Document Upload Section */}
+      <div className="bd-onboarding-verification-section mb-5">
+        <DocumentUploadField
+          label="Documente de verificare"
+          name="verificationDocuments"
+          setValue={setValue}
+          currentValues={documentUrls}
+          error={errors.verificationDocuments as unknown as FieldError}
+          folder="yuvoo/clubs/verification"
+          minDocuments={2}
+          maxDocuments={5}
+          required
+          description="Încarcă cel puțin 2 documente (ex: certificat de înregistrare, asigurare). Acceptă PDF, DOC, DOCX, JPG, PNG (maxim 10MB fiecare)."
+          isLoading={isLoading}
+          setServerError={setServerError}
+        />
+      </div>
 
       {/* Info box */}
       <InfoBox title="Ce documente ai nevoie pentru verificare?" className="mb-4">
-        <ul className="small text-body mb-0" style={{ listStyle: "disc", paddingLeft: "1.5rem" }}>
+        <ul
+          className="bd-onboarding-verification-list small text-body mb-0"
+          style={{ listStyle: "disc", paddingLeft: "1.5rem" }}
+        >
           <li className="mb-2">
             <strong>Certificat de înregistrare</strong> - Document oficial care confirmă că clubul
             este înregistrat legal (ex: certificat ONRC pentru asociații, act constitutiv pentru

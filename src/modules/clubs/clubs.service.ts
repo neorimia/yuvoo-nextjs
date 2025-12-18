@@ -160,3 +160,94 @@ export async function deleteClub(clubId: string, userId: string): Promise<void> 
   // Delete club
   await db.delete(clubs).where(and(eq(clubs.id, clubId), eq(clubs.adminUserId, userId)));
 }
+
+/**
+ * Get club by admin user ID
+ */
+export async function getClubByAdminUserId(adminUserId: string): Promise<Club | null> {
+  return clubsRepository.getClubByAdminUserId(adminUserId);
+}
+
+/**
+ * Calculate profile completeness percentage
+ * Checks required fields: name, description, sportType, city, address, phone, email, schedule, pricing, ageGroups, logoUrl
+ */
+export function calculateProfileCompleteness(club: Club): {
+  percentage: number;
+  completedFields: number;
+  totalFields: number;
+  missingFields: string[];
+} {
+  const requiredFields = [
+    { key: "name", label: "Nume" },
+    { key: "description", label: "Descriere" },
+    { key: "sportId", label: "Tip sport" },
+    { key: "location.city", label: "Oraș" },
+    { key: "location.address", label: "Adresă" },
+    { key: "contact.phone", label: "Telefon" },
+    { key: "contact.email", label: "Email" },
+    { key: "schedule", label: "Program" },
+    { key: "pricing", label: "Prețuri" },
+    { key: "ageGroups", label: "Grupuri de vârstă" },
+    { key: "images", label: "Logo" },
+  ];
+
+  let completedFields = 0;
+  const missingFields: string[] = [];
+
+  for (const field of requiredFields) {
+    let isComplete = false;
+
+    switch (field.key) {
+      case "name":
+        isComplete = !!club.name && club.name.trim().length > 0;
+        break;
+      case "description":
+        isComplete = !!club.description && club.description.trim().length > 0;
+        break;
+      case "sportId":
+        isComplete = !!club.sportId && club.sportId.trim().length > 0;
+        break;
+      case "location.city":
+        isComplete = !!club.location?.city && club.location.city.trim().length > 0;
+        break;
+      case "location.address":
+        isComplete = !!club.location?.address && club.location.address.trim().length > 0;
+        break;
+      case "contact.phone":
+        isComplete = !!club.contact?.phone && club.contact.phone.trim().length > 0;
+        break;
+      case "contact.email":
+        isComplete = !!club.contact?.email && club.contact.email.trim().length > 0;
+        break;
+      case "schedule":
+        isComplete = !!club.schedule && Array.isArray(club.schedule) && club.schedule.length > 0;
+        break;
+      case "pricing":
+        isComplete = !!club.pricing;
+        break;
+      case "ageGroups":
+        isComplete = !!club.ageGroups && Array.isArray(club.ageGroups) && club.ageGroups.length > 0;
+        break;
+      case "images":
+        isComplete = !!club.images && Array.isArray(club.images) && club.images.length > 0;
+        break;
+    }
+
+    if (isComplete) {
+      completedFields++;
+    } else {
+      missingFields.push(field.label);
+    }
+  }
+
+  const totalFields = requiredFields.length;
+  const percentage = Math.round((completedFields / totalFields) * 100);
+
+  return {
+    percentage,
+    completedFields,
+    totalFields,
+    missingFields,
+  };
+}

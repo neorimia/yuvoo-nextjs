@@ -141,7 +141,6 @@ export const routes = {
   club: {
     dashboard: "/club/dashboard",
     profile: "/club/profile",
-    profileEdit: "/club/profile/edit",
     classes: {
       list: "/club/classes",
       add: "/club/classes/add",

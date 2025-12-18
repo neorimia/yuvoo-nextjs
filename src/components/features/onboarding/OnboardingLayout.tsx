@@ -82,7 +82,7 @@ export function OnboardingLayout({
 
       {/* Header - Minimal branding only */}
       <header
-        className="position-fixed w-100 top-0 z-99 bg-white border-bottom border-secondary shadow-sm"
+        className="w-100 top-0 z-99 bg-white border-bottom border-yuvoo-primary shadow-sm"
         style={{
           backgroundColor: "rgba(255, 255, 255, 0.95)",
           backdropFilter: "blur(4px)",
@@ -164,10 +164,10 @@ export function OnboardingLayout({
       </main>
 
       {/* Footer - Minimal info only */}
-      <footer className="mt-auto py-3 py-md-4 border-top border-secondary bg-light">
+      <footer className="mt-auto py-3 py-md-4 border-top border-yuvoo-primary bg-light">
         <div className="container mx-auto px-3 px-md-4 px-lg-5">
           {footerContent || (
-            <div className="d-flex flex-column flex-md-row align-items-center justify-content-between gap-3 gap-md-4 small text-secondary">
+            <div className="d-flex flex-column flex-md-row align-items-center justify-content-between gap-3 gap-md-4 small text-yuvoo-primary">
               <p className="text-center text-md-start mb-0">
                 © {new Date().getFullYear()} Yuvoo. Toate drepturile rezervate.
               </p>

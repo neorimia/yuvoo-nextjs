@@ -6,7 +6,6 @@
  */
 
 import { getSession } from "@/lib/auth/session";
-import { authRepository } from "./auth.repository";
 import type { AuthUser, UserRole } from "./auth.types";
 
 /**
@@ -14,11 +13,31 @@ import type { AuthUser, UserRole } from "./auth.types";
  */
 export async function getCurrentUser(): Promise<AuthUser | null> {
   const session = await getSession();
-  if (!session?.user) {
+  if (!session?.dbUser) {
     return null;
   }
 
-  return authRepository.getUserById(session.user.id);
+  // Session already contains the synced database user
+  // Map it to AuthUser format
+  return {
+    id: session.dbUser.id,
+    email: session.dbUser.email,
+    name:
+      session.dbUser.firstName && session.dbUser.lastName
+        ? `${session.dbUser.firstName} ${session.dbUser.lastName}`
+        : session.dbUser.firstName || session.dbUser.lastName || null,
+    firstName: session.dbUser.firstName || null,
+    lastName: session.dbUser.lastName || null,
+    phone: session.dbUser.phone || null,
+    role: session.dbUser.role as AuthUser["role"],
+    emailVerified: session.user.primaryEmailVerified || false,
+    emailNotificationPreferences:
+      (session.dbUser.emailNotificationPreferences as
+        | AuthUser["emailNotificationPreferences"]
+        | null) || null,
+    createdAt: session.dbUser.createdAt,
+    updatedAt: session.dbUser.updatedAt,
+  };
 }
 
 /**

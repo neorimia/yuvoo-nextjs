@@ -30,27 +30,39 @@ export function initializePostHog(): void {
   // Check if already initialized (type-safe check)
   if ((posthog as unknown as { __loaded: boolean }).__loaded) return;
 
-  posthog.init(POSTHOG_KEY, {
-    api_host: "/ingest", // Use Next.js rewrites
-    ui_host: POSTHOG_HOST,
-    loaded: (posthog) => {
-      if (process.env.NODE_ENV === "development") {
-        posthog.debug(); // Enable debug mode in development
-      }
-    },
-    capture_pageview: true, // Automatically capture pageviews
-    capture_pageleave: true, // Capture page leave events
-    autocapture: true, // Automatic event capture
-    disable_session_recording: false, // Enable session recordings
-    session_recording: {
-      maskAllInputs: true, // Privacy: mask all input fields
-      maskInputOptions: {
-        password: true,
-        email: true,
+  try {
+    posthog.init(POSTHOG_KEY, {
+      api_host: "/ingest", // Use Next.js rewrites
+      ui_host: POSTHOG_HOST,
+      loaded: (posthog) => {
+        if (process.env.NODE_ENV === "development") {
+          posthog.debug(); // Enable debug mode in development
+        }
       },
-    },
-    capture_exceptions: true, // Enable error tracking
-  });
+      capture_pageview: true, // Automatically capture pageviews
+      capture_pageleave: true, // Capture page leave events
+      autocapture: true, // Automatic event capture
+      disable_session_recording: false, // Enable session recordings
+      session_recording: {
+        maskAllInputs: true, // Privacy: mask all input fields
+        maskInputOptions: {
+          password: true,
+          email: true,
+        },
+      },
+      capture_exceptions: true, // Enable error tracking
+      // Add error handling for failed requests
+      request_batching: true, // Batch requests to reduce failures
+      persistence: "localStorage+cookie", // Fallback persistence
+    });
+  } catch (error) {
+    // Silently handle initialization errors
+    // PostHog is non-critical, so we don't want to break the app
+    if (process.env.NODE_ENV === "development") {
+      console.warn("[PostHog] Failed to initialize:", error);
+      console.warn("[PostHog] This is non-critical - app will continue without analytics");
+    }
+  }
 }
 
 /**
@@ -59,8 +71,30 @@ export function initializePostHog(): void {
  */
 export function PostHogProviderWrapper({ children }: { children: ReactNode }) {
   useEffect(() => {
+    // Skip if no API key (already handled in component, but double-check)
+    if (!POSTHOG_KEY) {
+      return;
+    }
+
     // Initialize PostHog on mount if consent is given
-    initializePostHog();
+    // Use a small delay to ensure Next.js rewrites are ready and page is fully loaded
+    const timer = setTimeout(() => {
+      try {
+        initializePostHog();
+      } catch (error) {
+        // Silently handle errors - PostHog is non-critical
+        // The error is likely a network issue (Failed to fetch) which is expected
+        // if rewrites aren't working or PostHog service is unavailable
+        if (process.env.NODE_ENV === "development") {
+          console.warn("[PostHog] Initialization error (non-critical):", error);
+          console.warn(
+            "[PostHog] This may be due to: missing API key, network issues, or rewrite configuration"
+          );
+        }
+      }
+    }, 100); // Small delay to ensure rewrites are ready
+
+    return () => clearTimeout(timer);
   }, []);
 
   // Don't render PostHogProvider if API key is not set

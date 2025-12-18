@@ -29,9 +29,9 @@ export default async function ClubContactSchedulePage() {
     <OnboardingLayout>
       <OnboardingProgress currentStep={3} steps={CLUB_STEPS} className="mb-8" />
 
-      <div className="mx-auto" style={{ maxWidth: "42rem" }}>
+      <div className="bd-onboarding-page mx-auto">
         {/* Header */}
-        <div className="text-center mb-5">
+        <div className="bd-onboarding-page-header">
           <h1 className="display-4 fw-bold text-body mb-4">Contact și Program 📞</h1>
           <p className="h5 text-body">
             Adaugă informațiile de contact și programul de antrenamente pentru ca părinții să te
@@ -40,7 +40,9 @@ export default async function ClubContactSchedulePage() {
         </div>
 
         {/* Form */}
-        <ClubContactScheduleForm />
+        <div className="bd-onboarding-page-content">
+          <ClubContactScheduleForm />
+        </div>
       </div>
     </OnboardingLayout>
   );

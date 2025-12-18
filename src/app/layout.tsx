@@ -9,11 +9,13 @@ import { Toaster } from "sonner";
 import "swiper/css/bundle";
 import "react-photo-view/dist/react-photo-view.css";
 import "prismjs/themes/prism-tomorrow.css";
+import "timepicker-ui/main.css";
 import ReduxProvider from "@/redux/provider";
 import { PostHogProviderWrapper } from "@/lib/analytics/posthog";
 import { Suspense } from "react";
 import { ErrorBoundary } from "@/components/shared/ErrorBoundary";
 import { WebVitalsReporter } from "@/components/monitoring/WebVitalsReporter";
+import { StackAuthProvider } from "@/providers/StackAuthProvider";
 import "./globals.scss"; // Bootstrap + SCSS
 
 const gabarito = Gabarito({
@@ -116,16 +118,18 @@ export default function RootLayout({
         <ErrorBoundary>
           <Suspense fallback={null}>
             <PostHogProviderWrapper>
-              <WebVitalsReporter />
-              <OrganizationSchema />
-              <VideoProvider>
-                <ReduxProvider>
-                  <AppProvider>{children}</AppProvider>
-                  <Toaster position="top-center" richColors />
-                  <GlobalVideoModal />
-                  <CookieConsentBanner />
-                </ReduxProvider>
-              </VideoProvider>
+              <StackAuthProvider>
+                <WebVitalsReporter />
+                <OrganizationSchema />
+                <VideoProvider>
+                  <ReduxProvider>
+                    <AppProvider>{children}</AppProvider>
+                    <Toaster position="top-center" richColors />
+                    <GlobalVideoModal />
+                    <CookieConsentBanner />
+                  </ReduxProvider>
+                </VideoProvider>
+              </StackAuthProvider>
             </PostHogProviderWrapper>
           </Suspense>
         </ErrorBoundary>

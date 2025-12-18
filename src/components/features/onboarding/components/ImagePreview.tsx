@@ -73,7 +73,7 @@ export function ImagePreview({
         disabled={isLoading || isUploading}
         className="position-absolute top-0 end-0 p-1 bg-danger text-white rounded-circle text-danger-hover focus-danger"
         style={{
-          transform: "translate(25%, -25%)",
+          transform: "translate(-5%, 5%)",
           transition: "all 0.2s ease-in-out",
         }}
         aria-label={`Șterge ${alt}`}

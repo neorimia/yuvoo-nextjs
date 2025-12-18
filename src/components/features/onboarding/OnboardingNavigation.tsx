@@ -159,7 +159,7 @@ export function OnboardingNavigation({
   }, [onSkipClick]);
 
   return (
-    <div className={cn("mb-4", className)}>
+    <div className={cn("bd-onboarding-navigation", className)}>
       {/* Error message */}
       {error && (
         <BootstrapAlert variant="danger" className="mb-4">
@@ -171,8 +171,7 @@ export function OnboardingNavigation({
       {/* Navigation buttons */}
       <div
         className={cn(
-          "d-flex align-items-center  gap-3 my-4",
-          "mx-auto",
+          "d-flex align-items-center gap-3",
           !backHref ? "justify-content-center" : "justify-content-between"
         )}
       >
@@ -183,26 +182,12 @@ export function OnboardingNavigation({
               <Link
                 href={backHref || "#"}
                 onClick={handleBackClick}
-                className={cn(
-                  "bd-btn bd-btn-lg btn-outline",
-                  "bg-transparent text-white",
-                  "shadow shadow-yuvoo-primary",
-                  "text-yuvoo-primary hover:text-yuvoo-primary-hover",
-                  "border-yuvoo-primary hover:border-yuvoo-primary-hover"
-                )}
+                className="btn btn-outline-secondary btn-lg"
                 style={{ minWidth: "120px" }}
                 aria-label={backText}
               >
-                <span className="bd-btn-inner">
-                  <span className="bd-btn-normal d-flex align-items-center justify-content-center">
-                    <ArrowLeft className="me-1" aria-hidden="true" />
-                    <span className="d-none d-sm-inline">{backText}</span>
-                  </span>
-                  <span className="bd-btn-hover text-white d-flex align-items-center justify-content-center">
-                    <ArrowLeft className="me-1" aria-hidden="true" />
-                    <span className="d-none d-sm-inline">{backText}</span>
-                  </span>
-                </span>
+                <ArrowLeft className="me-1" aria-hidden="true" />
+                <span className="d-none d-sm-inline">{backText}</span>
               </Link>
             ) : (
               <div className="w-16" style={{ width: "96px" }} aria-hidden="true" />
@@ -216,7 +201,7 @@ export function OnboardingNavigation({
             <Link
               href={skipHref}
               onClick={handleSkipClick}
-              className={cn("text-muted text-yuvoo-primary-hover", "focus-yuvoo-primary")}
+              className="text-muted text-yuvoo-primary-hover focus-yuvoo-primary small"
               aria-label={skipText}
             >
               {skipText}
@@ -225,9 +210,9 @@ export function OnboardingNavigation({
         )}
 
         {/* Next/Finish button */}
-        <div style={{ flexShrink: 0 }} className="text-white">
+        <div style={{ flexShrink: 0 }}>
           {isSubmitButton ? (
-            // Submit button (for forms) - Using Yuvoo brand design
+            // Submit button (for forms)
             <BootstrapButton
               type="submit"
               form={formId}
@@ -236,7 +221,7 @@ export function OnboardingNavigation({
               size="lg"
               variant="primary"
               isLoading={isLoading}
-              className={cn("w-100", "bg-yuvoo-primary text-white", "shadow shadow-yuvoo-primary")}
+              className="btn-yuvoo-primary"
               style={{ minWidth: "120px" }}
               aria-label={buttonText}
               aria-busy={isLoading}
@@ -261,8 +246,8 @@ export function OnboardingNavigation({
               disabled
               size="lg"
               variant="primary"
-              className={cn("w-100", "bg-yuvoo-primary text-white", "shadow")}
-              style={{ minWidth: "120px" }}
+              className="btn-yuvoo-primary"
+              style={{ minWidth: "120px", opacity: 0.6 }}
               aria-label={buttonText}
               aria-disabled={true}
             >
@@ -270,51 +255,20 @@ export function OnboardingNavigation({
               <ArrowRight className="ms-2" aria-hidden="true" />
             </BootstrapButton>
           ) : (
-            // Link button (for navigation when enabled) - Using Yuvoo brand design
+            // Link button (for navigation when enabled)
             <Link
               href={nextHref || "#"}
               onClick={handleNextClick}
-              className={cn(
-                "bd-btn bd-btn-lg",
-                "bg-yuvoo-primary text-white",
-                "shadow shadow-yuvoo-primary"
-              )}
+              className="btn btn-yuvoo-primary btn-lg"
               style={{ minWidth: "120px" }}
               aria-label={buttonText}
             >
-              <span className="bd-btn-inner">
-                <span className="bd-btn-normal">
-                  <span>{buttonText}</span>
-                  <ArrowRight className="ms-2" aria-hidden="true" />
-                </span>
-                <span className="bd-btn-hover">
-                  <span>{buttonText}</span>
-                  <ArrowRight className="ms-2" aria-hidden="true" />
-                </span>
-              </span>
+              <span>{buttonText}</span>
+              <ArrowRight className="ms-2" aria-hidden="true" />
             </Link>
           )}
         </div>
       </div>
-
-      {/* Keyboard shortcuts hint (desktop only) */}
-      {/* {enableKeyboardShortcuts && !isLoading && (
-        <div className="d-none d-md-flex align-items-center justify-content-center gap-4 small text-secondary mb-4">
-          <kbd className="px-2 py-1 bg-light text-black border border-secondary rounded small">
-            Enter
-          </kbd>
-          <span>pentru a continua</span>
-          {backHref && (
-            <>
-              <span className="text-secondary">•</span>
-              <kbd className="px-2 py-1 bg-light text-black border border-secondary rounded small">
-                Esc
-              </kbd>
-              <span>pentru a reveni</span>
-            </>
-          )}
-        </div>
-      )} */}
     </div>
   );
 }

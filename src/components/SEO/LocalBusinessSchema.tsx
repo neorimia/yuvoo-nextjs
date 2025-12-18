@@ -45,8 +45,11 @@ function mapDayToSchemaDay(day: string): string | null {
 
 /**
  * Build opening hours specification from schedule
+ * Handles both old format (time: "10:00-12:00") and new format (startTime/endTime)
  */
-function buildOpeningHours(schedule?: Array<{ day: string; time: string }>):
+function buildOpeningHours(
+  schedule?: Array<{ day: string; time?: string; startTime?: string; endTime?: string }>
+):
   | Array<{
       "@type": "OpeningHoursSpecification";
       dayOfWeek: string;
@@ -65,17 +68,29 @@ function buildOpeningHours(schedule?: Array<{ day: string; time: string }>):
     const schemaDay = mapDayToSchemaDay(entry.day);
     if (!schemaDay) continue;
 
-    // Parse time (assuming format like "10:00-12:00" or "09:00 - 18:00")
-    const timeMatch = entry.time.match(/(\d{1,2}):(\d{2})\s*[-–]\s*(\d{1,2}):(\d{2})/);
-    if (!timeMatch) continue;
+    let opens: string | undefined;
+    let closes: string | undefined;
 
-    const opens = `${timeMatch[1].padStart(2, "0")}:${timeMatch[2]}`;
-    const closes = `${timeMatch[3].padStart(2, "0")}:${timeMatch[4]}`;
-
-    if (!hoursByDay[schemaDay]) {
-      hoursByDay[schemaDay] = [];
+    // New format with startTime and endTime
+    if (entry.startTime && entry.endTime) {
+      opens = entry.startTime;
+      closes = entry.endTime;
     }
-    hoursByDay[schemaDay].push({ opens, closes });
+    // Old format with time (backward compatibility)
+    else if (entry.time) {
+      const timeMatch = entry.time.match(/(\d{1,2}):(\d{2})\s*[-–]\s*(\d{1,2}):(\d{2})/);
+      if (timeMatch) {
+        opens = `${timeMatch[1].padStart(2, "0")}:${timeMatch[2]}`;
+        closes = `${timeMatch[3].padStart(2, "0")}:${timeMatch[4]}`;
+      }
+    }
+
+    if (opens && closes) {
+      if (!hoursByDay[schemaDay]) {
+        hoursByDay[schemaDay] = [];
+      }
+      hoursByDay[schemaDay].push({ opens, closes });
+    }
   }
 
   // Convert to Schema.org format

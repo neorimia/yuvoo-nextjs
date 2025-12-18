@@ -49,20 +49,32 @@ export function validateImageFile(file: File): { valid: boolean; error?: string 
 
 /**
  * Convert File to base64 data URL
+ * Works in both browser and Node.js environments
  */
 async function fileToBase64(file: File): Promise<string> {
-  return new Promise((resolve, reject) => {
-    const reader = new FileReader();
-    reader.onloadend = () => {
-      if (typeof reader.result === "string") {
-        resolve(reader.result);
-      } else {
-        reject(new Error("Failed to convert file to base64"));
-      }
-    };
-    reader.onerror = reject;
-    reader.readAsDataURL(file);
-  });
+  // Check if we're in a browser environment
+  if (typeof window !== "undefined" && typeof FileReader !== "undefined") {
+    // Browser: use FileReader
+    return new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        if (typeof reader.result === "string") {
+          resolve(reader.result);
+        } else {
+          reject(new Error("Failed to convert file to base64"));
+        }
+      };
+      reader.onerror = reject;
+      reader.readAsDataURL(file);
+    });
+  } else {
+    // Node.js/Server: use arrayBuffer and Buffer
+    const arrayBuffer = await file.arrayBuffer();
+    const buffer = Buffer.from(arrayBuffer);
+    const base64String = buffer.toString("base64");
+    const mimeType = file.type || "application/octet-stream";
+    return `data:${mimeType};base64,${base64String}`;
+  }
 }
 
 /**
@@ -80,12 +92,24 @@ export async function uploadImage(
 
   // Convert file to base64
   const base64Data = await fileToBase64(file);
-  const base64String = base64Data.split(",")[1]; // Remove data:image/...;base64, prefix
+
+  // Extract base64 string and mime type from data URL
+  // Format: data:[mime-type];base64,[base64-string]
+  const dataUrlMatch = base64Data.match(/^data:([^;]+);base64,(.+)$/);
+  if (!dataUrlMatch) {
+    throw new Error("Formatul datelor base64 este invalid");
+  }
+
+  const mimeType = dataUrlMatch[1] || file.type || "image/jpeg";
+  const base64String = dataUrlMatch[2];
 
   // Prepare upload options
+  // Remove trailing slashes from folder names (can cause signature issues)
+  const folder = options.folder?.replace(/\/+$/, "") || "yuvoo/clubs";
+
   const uploadOptions: Record<string, unknown> = {
     resource_type: "image",
-    folder: options.folder || "yuvoo/clubs",
+    folder,
     ...options.transformation,
   };
 
@@ -94,12 +118,21 @@ export async function uploadImage(
   }
 
   try {
+    // Construct the data URL for Cloudinary
+    // Cloudinary expects: data:[mime-type];base64,[base64-string]
+    const dataUrl = `data:${mimeType};base64,${base64String}`;
+
     // Upload to Cloudinary
-    const result = await cloudinary.uploader.upload(`data:${file.type};base64,${base64String}`, {
+    // Note: When using server-side SDK with API secret, Cloudinary automatically signs the request
+    const result = await cloudinary.uploader.upload(dataUrl, {
       ...uploadOptions,
       overwrite: true,
       invalidate: true,
     });
+
+    if (!result || !result.secure_url) {
+      throw new Error("Cloudinary upload succeeded but no URL was returned");
+    }
 
     return {
       url: result.secure_url,
@@ -107,9 +140,57 @@ export async function uploadImage(
     };
   } catch (error) {
     console.error("Cloudinary upload error:", error);
-    throw new Error(
-      error instanceof Error ? error.message : "Eroare la încărcarea imaginii în Cloudinary"
-    );
+
+    // Extract error message from various error formats
+    let errorMessage = "Eroare la încărcarea imaginii în Cloudinary";
+    let errorDetails: Record<string, unknown> = {};
+
+    if (error instanceof Error) {
+      errorMessage = error.message;
+      errorDetails = {
+        name: error.name,
+        message: error.message,
+        stack: error.stack,
+      };
+    } else if (error && typeof error === "object") {
+      // Handle Cloudinary error objects
+      const cloudinaryError = error as { message?: string; http_code?: number; name?: string };
+      errorMessage = cloudinaryError.message || String(error);
+      errorDetails = {
+        name: cloudinaryError.name || "CloudinaryError",
+        message: cloudinaryError.message,
+        http_code: cloudinaryError.http_code,
+      };
+    } else {
+      errorMessage = String(error);
+    }
+
+    // Log more details in development
+    if (process.env.NODE_ENV === "development") {
+      console.error("Upload details:", {
+        fileType: mimeType,
+        fileSize: file.size,
+        folder: uploadOptions.folder,
+        errorDetails,
+      });
+    }
+
+    // Provide more specific error messages
+    if (errorMessage.includes("Invalid API Key") || errorMessage.includes("401")) {
+      throw new Error(
+        "Configurație Cloudinary invalidă. Verifică variabilele de mediu (API Key/Secret)."
+      );
+    }
+    if (errorMessage.includes("Invalid signature") || errorMessage.includes("Invalid Signature")) {
+      throw new Error(
+        "Semnătură Cloudinary invalidă. Verifică API secret în variabilele de mediu."
+      );
+    }
+    if (errorMessage.includes("File size too large")) {
+      throw new Error("Fișierul este prea mare. Dimensiunea maximă este 5MB.");
+    }
+
+    throw new Error(errorMessage);
   }
 }
 
@@ -181,16 +262,28 @@ export async function uploadDocument(
 
   // Convert file to base64
   const base64Data = await fileToBase64(file);
-  const base64String = base64Data.split(",")[1]; // Remove data:...;base64, prefix
 
-  // Determine resource type based on file type
-  const isImage = file.type.startsWith("image/");
+  // Extract base64 string and mime type from data URL
+  // Format: data:[mime-type];base64,[base64-string]
+  const dataUrlMatch = base64Data.match(/^data:([^;]+);base64,(.+)$/);
+  if (!dataUrlMatch) {
+    throw new Error("Formatul datelor base64 este invalid");
+  }
+
+  const mimeType = dataUrlMatch[1] || file.type || "application/octet-stream";
+  const base64String = dataUrlMatch[2];
+
+  // Determine resource type based on mime type
+  const isImage = mimeType.startsWith("image/");
   const resourceType = isImage ? "image" : "raw";
 
   // Prepare upload options
+  // Remove trailing slashes from folder names (can cause signature issues)
+  const folder = options.folder?.replace(/\/+$/, "") || "yuvoo/clubs/documents";
+
   const uploadOptions: Record<string, unknown> = {
     resource_type: resourceType,
-    folder: options.folder || "yuvoo/clubs/documents",
+    folder,
     ...options.transformation,
   };
 
@@ -199,12 +292,20 @@ export async function uploadDocument(
   }
 
   try {
+    // Construct data URL for Cloudinary
+    const dataUrl = `data:${mimeType};base64,${base64String}`;
+
     // Upload to Cloudinary
-    const result = await cloudinary.uploader.upload(`data:${file.type};base64,${base64String}`, {
+    // Note: When using server-side SDK with API secret, Cloudinary automatically signs the request
+    const result = await cloudinary.uploader.upload(dataUrl, {
       ...uploadOptions,
       overwrite: true,
       invalidate: true,
     });
+
+    if (!result || !result.secure_url) {
+      throw new Error("Cloudinary upload succeeded but no URL was returned");
+    }
 
     return {
       url: result.secure_url,
@@ -212,9 +313,57 @@ export async function uploadDocument(
     };
   } catch (error) {
     console.error("Cloudinary upload error:", error);
-    throw new Error(
-      error instanceof Error ? error.message : "Eroare la încărcarea documentului în Cloudinary"
-    );
+
+    // Extract error message from various error formats
+    let errorMessage = "Eroare la încărcarea documentului în Cloudinary";
+    let errorDetails: Record<string, unknown> = {};
+
+    if (error instanceof Error) {
+      errorMessage = error.message;
+      errorDetails = {
+        name: error.name,
+        message: error.message,
+        stack: error.stack,
+      };
+    } else if (error && typeof error === "object") {
+      // Handle Cloudinary error objects
+      const cloudinaryError = error as { message?: string; http_code?: number; name?: string };
+      errorMessage = cloudinaryError.message || String(error);
+      errorDetails = {
+        name: cloudinaryError.name || "CloudinaryError",
+        message: cloudinaryError.message,
+        http_code: cloudinaryError.http_code,
+      };
+    } else {
+      errorMessage = String(error);
+    }
+
+    // Log more details in development
+    if (process.env.NODE_ENV === "development") {
+      console.error("Upload details:", {
+        fileType: mimeType,
+        fileSize: file.size,
+        folder: uploadOptions.folder,
+        errorDetails,
+      });
+    }
+
+    // Provide more specific error messages
+    if (errorMessage.includes("Invalid API Key") || errorMessage.includes("401")) {
+      throw new Error(
+        "Configurație Cloudinary invalidă. Verifică variabilele de mediu (API Key/Secret)."
+      );
+    }
+    if (errorMessage.includes("Invalid signature") || errorMessage.includes("Invalid Signature")) {
+      throw new Error(
+        "Semnătură Cloudinary invalidă. Verifică API secret în variabilele de mediu."
+      );
+    }
+    if (errorMessage.includes("File size too large")) {
+      throw new Error("Fișierul este prea mare. Dimensiunea maximă este 10MB.");
+    }
+
+    throw new Error(errorMessage);
   }
 }
 

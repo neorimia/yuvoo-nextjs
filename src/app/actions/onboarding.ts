@@ -18,6 +18,7 @@ import { z } from "zod";
 import { startOnboardingSchema, updateOnboardingStepSchema } from "@/lib/validations/onboarding";
 import { createChildSchema } from "@/lib/validations/child";
 import {
+  clubBasicInfoSchema,
   clubContactScheduleSchema,
   clubPricingAgesSchema,
   clubPhotoSchema,
@@ -153,19 +154,73 @@ export async function startOnboarding(
 
 /**
  * Get Onboarding Progress
+ *
+ * Automatically initializes onboarding progress if it doesn't exist.
+ * Determines the role from the user's database record.
  */
 export async function getOnboardingProgress(): Promise<OnboardingResponse<OnboardingProgressData>> {
   try {
     const user = await requireAuth();
 
+    // Get user's role from database
+    const [dbUser] = await db.select().from(users).where(eq(users.id, user.id)).limit(1);
+
+    if (!dbUser) {
+      return {
+        success: false,
+        error: "Utilizatorul nu a fost găsit.",
+      };
+    }
+
+    // Determine onboarding role from user role
+    const onboardingRole: OnboardingRole =
+      dbUser.role === "club_admin" ? "club_admin" : dbUser.role === "doctor" ? "doctor" : "parent";
+
+    // Check if progress exists
     const progress = await db
       .select()
       .from(onboardingProgress)
       .where(eq(onboardingProgress.userId, user.id))
       .limit(1);
 
+    // If no progress exists, create it automatically
     if (progress.length === 0) {
-      return { success: false, error: "Nu există progres de onboarding." };
+      const totalStepsMap: Record<OnboardingRole, number> = {
+        parent: 5,
+        club_admin: 7,
+        doctor: 8,
+      };
+      const totalSteps = totalStepsMap[onboardingRole];
+
+      const [newProgress] = await db
+        .insert(onboardingProgress)
+        .values({
+          id: crypto.randomUUID(),
+          userId: user.id,
+          role: onboardingRole,
+          currentStep: 1,
+          totalSteps,
+          completedSteps: [],
+          stepData: {},
+          isCompleted: false,
+        })
+        .returning();
+
+      return {
+        success: true,
+        data: {
+          id: newProgress.id,
+          userId: newProgress.userId,
+          role: newProgress.role,
+          currentStep: newProgress.currentStep,
+          totalSteps: newProgress.totalSteps,
+          completedSteps: newProgress.completedSteps.map(Number),
+          stepData: newProgress.stepData as Record<string, unknown>,
+          isCompleted: newProgress.isCompleted,
+          createdAt: newProgress.createdAt,
+          updatedAt: newProgress.updatedAt,
+        },
+      };
     }
 
     return {
@@ -398,33 +453,118 @@ export async function completeParentOnboarding(action: "quiz" | "dashboard"): Pr
 // ============================================================================
 
 /**
+ * Get club ID for current user with fallback logic
+ * First tries to get from onboarding progress stepData
+ * If not found, queries database by adminUserId
+ * Saves club_id to stepData if found via fallback
+ */
+async function getClubIdForUser(): Promise<string | null> {
+  const user = await requireAuth();
+
+  // Try to get from onboarding progress
+  const progressData = await getOnboardingProgress();
+  if (progressData.success && progressData.data) {
+    const clubId = progressData.data.stepData?.club_id as string | undefined;
+    if (clubId) {
+      return clubId;
+    }
+  }
+
+  // Fallback: query database by adminUserId
+  const userClub = await db.query.clubs.findFirst({
+    where: eq(clubs.adminUserId, user.id),
+    columns: { id: true },
+  });
+
+  if (userClub) {
+    // Save club_id to stepData for future steps
+    await saveStepData("club_id", userClub.id);
+    return userClub.id;
+  }
+
+  return null;
+}
+
+/**
  * Create Club During Onboarding (Club Admin - Step 2)
  */
 export async function createClubOnboarding(
   data: ClubBasicInfoInput
 ): Promise<OnboardingResponse<{ clubId: string }>> {
   try {
+    // Verify user is authenticated and has club_admin role
     const user = await requireAuth();
 
+    if (user.role !== "club_admin") {
+      return {
+        success: false,
+        error: "Doar administratorii de cluburi pot crea profiluri de club.",
+      };
+    }
+
+    // Log input data for debugging (development only)
+    if (process.env.NODE_ENV === "development") {
+      console.log("[createClubOnboarding] Input data:", JSON.stringify(data, null, 2));
+    }
+
+    // Validate input data
+    let validated: ClubBasicInfoInput;
+    try {
+      validated = clubBasicInfoSchema.parse(data);
+    } catch (validationError) {
+      console.error("[createClubOnboarding] Validation error:", validationError);
+      if (validationError instanceof z.ZodError) {
+        const firstError = validationError.errors[0];
+        return {
+          success: false,
+          error: firstError?.message || "Datele introduse nu sunt valide.",
+        };
+      }
+      throw validationError;
+    }
+
+    // Normalize optional fields (empty string -> null)
+    const district =
+      validated.district && validated.district.trim() !== "" ? validated.district.trim() : null;
+
     // Generate SEO-friendly slug from club name
-    const slug = generateSlug(data.name);
+    const slug = generateSlug(validated.name);
+
+    // Check if slug already exists (unique constraint)
+    const existingClub = await db.query.clubs.findFirst({
+      where: eq(clubs.slug, slug),
+      columns: { id: true },
+    });
+
+    let finalSlug = slug;
+    if (existingClub) {
+      // Append a random suffix if slug exists
+      finalSlug = `${slug}-${Math.random().toString(36).substring(2, 8)}`;
+    }
 
     const [club] = await db
       .insert(clubs)
       .values({
         id: crypto.randomUUID(),
         adminUserId: user.id,
-        name: data.name,
-        slug,
-        sportType: data.sportType,
-        description: data.description,
-        city: data.city,
-        district: data.district,
-        address: data.address,
+        name: validated.name.trim(),
+        slug: finalSlug,
+        sportType: validated.sportType,
+        description: validated.description.trim(),
+        city: validated.city.trim(),
+        district: district,
+        address: validated.address.trim(),
         profileComplete: false,
         verificationStatus: "pending",
       })
       .returning();
+
+    if (!club) {
+      return {
+        success: false,
+        error: "Nu s-a putut crea clubul. Te rugăm să încerci din nou.",
+      };
+    }
 
     await saveStepData("club_id", club.id);
     await markStepComplete(2);
@@ -433,9 +573,80 @@ export async function createClubOnboarding(
     return { success: true, data: { clubId: club.id } };
   } catch (error) {
     console.error("Error creating club during onboarding:", error);
+    console.error("Error details:", {
+      name: error instanceof Error ? error.name : "Unknown",
+      message: error instanceof Error ? error.message : String(error),
+      stack: error instanceof Error ? error.stack : undefined,
+    });
+
+    // Handle authentication errors
+    if (error instanceof Error && error.message.includes("Unauthorized")) {
+      return {
+        success: false,
+        error: "Nu ești autentificat. Te rugăm să te autentifici din nou.",
+      };
+    }
+
+    // Handle Zod validation errors
+    if (error instanceof z.ZodError) {
+      const firstError = error.errors[0];
+      console.error("Validation error:", error.errors);
+      return {
+        success: false,
+        error: firstError?.message || "Datele introduse nu sunt valide.",
+      };
+    }
+
+    // Handle database constraint errors
+    if (error instanceof Error) {
+      // Check for unique constraint violation (slug)
+      if (
+        error.message.includes("unique") ||
+        error.message.includes("duplicate") ||
+        error.message.includes("violates unique constraint")
+      ) {
+        return {
+          success: false,
+          error: "Un club cu acest nume există deja. Te rugăm să alegi un alt nume.",
+        };
+      }
+
+      // Check for foreign key constraint (adminUserId)
+      if (
+        error.message.includes("foreign key") ||
+        error.message.includes("admin_user_id") ||
+        error.message.includes("violates foreign key constraint")
+      ) {
+        return {
+          success: false,
+          error: "Eroare de autentificare. Te rugăm să te autentifici din nou.",
+        };
+      }
+
+      // Check for not null constraint violations
+      if (
+        error.message.includes("not null") ||
+        error.message.includes("null value") ||
+        error.message.includes("violates not-null constraint")
+      ) {
+        return {
+          success: false,
+          error: "Toate câmpurile obligatorii trebuie completate.",
+        };
+      }
+
+      // Return the error message if it's informative (in development)
+      if (process.env.NODE_ENV === "development") {
+        return {
+          success: false,
+          error: `Eroare: ${error.message}. Verifică consola pentru detalii.`,
+        };
+      }
+    }
+
     return {
       success: false,
-      error: "A apărut o eroare la crearea profilului clubului.",
+      error: "A apărut o eroare la crearea profilului clubului. Verifică consola pentru detalii.",
     };
   }
 }
@@ -449,16 +660,8 @@ export async function updateClubContactSchedule(
   try {
     const user = await requireAuth();
 
-    // Get club ID from onboarding progress
-    const progressData = await getOnboardingProgress();
-    if (!progressData.success || !progressData.data) {
-      return {
-        success: false,
-        error: "Nu s-a găsit progresul onboarding-ului. Te rugăm să începi din nou.",
-      };
-    }
-
-    const clubId = progressData.data.stepData?.club_id as string | undefined;
+    // Get club ID with fallback logic
+    const clubId = await getClubIdForUser();
     if (!clubId) {
       return {
         success: false,
@@ -510,16 +713,8 @@ export async function updateClubPricingAges(
   try {
     const user = await requireAuth();
 
-    // Get club ID from onboarding progress
-    const progressData = await getOnboardingProgress();
-    if (!progressData.success || !progressData.data) {
-      return {
-        success: false,
-        error: "Nu s-a găsit progresul onboarding-ului. Te rugăm să începi din nou.",
-      };
-    }
-
-    const clubId = progressData.data.stepData?.club_id as string | undefined;
+    // Get club ID with fallback logic
+    const clubId = await getClubIdForUser();
     if (!clubId) {
       return {
         success: false,
@@ -570,16 +765,8 @@ export async function updateClubPhotos(
   try {
     const user = await requireAuth();
 
-    // Get club ID from onboarding progress
-    const progressData = await getOnboardingProgress();
-    if (!progressData.success || !progressData.data) {
-      return {
-        success: false,
-        error: "Nu s-a găsit progresul onboarding-ului. Te rugăm să începi din nou.",
-      };
-    }
-
-    const clubId = progressData.data.stepData?.club_id as string | undefined;
+    // Get club ID with fallback logic
+    const clubId = await getClubIdForUser();
     if (!clubId) {
       return {
         success: false,
@@ -629,16 +816,8 @@ export async function updateClubVerification(
   try {
     const user = await requireAuth();
 
-    // Get club ID from onboarding progress
-    const progressData = await getOnboardingProgress();
-    if (!progressData.success || !progressData.data) {
-      return {
-        success: false,
-        error: "Nu s-a găsit progresul onboarding-ului. Te rugăm să începi din nou.",
-      };
-    }
-
-    const clubId = progressData.data.stepData?.club_id as string | undefined;
+    // Get club ID with fallback logic
+    const clubId = await getClubIdForUser();
     if (!clubId) {
       return {
         success: false,

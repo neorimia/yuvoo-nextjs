@@ -29,9 +29,9 @@ export default async function ClubBasicInfoPage() {
     <OnboardingLayout>
       <OnboardingProgress currentStep={2} steps={CLUB_STEPS} className="mb-8" />
 
-      <div className="mx-auto" style={{ maxWidth: "42rem" }}>
+      <div className="bd-onboarding-page mx-auto">
         {/* Header */}
-        <div className="text-center mb-5">
+        <div className="bd-onboarding-page-header">
           <h1 className="display-4 fw-bold text-body mb-4">Informații de bază despre club 🏆</h1>
           <p className="h5 text-body">
             Spune-ne despre clubul tău pentru a crea un profil complet și atractiv.
@@ -39,7 +39,9 @@ export default async function ClubBasicInfoPage() {
         </div>
 
         {/* Form */}
-        <ClubBasicInfoForm />
+        <div className="bd-onboarding-page-content">
+          <ClubBasicInfoForm />
+        </div>
       </div>
     </OnboardingLayout>
   );

@@ -24,25 +24,36 @@ const ClubSchedule: React.FC<ClubScheduleProps> = ({ club }) => {
     Duminică: 7,
   };
 
-  // Format time display
-  const formatTime = (time: string): string => {
-    // If already formatted, return as is
-    if (time.includes("-") || time.includes(":")) {
-      return time;
+  // Format time display - handle both old format (time) and new format (startTime/endTime)
+  const formatTime = (item: {
+    day: string;
+    time?: string;
+    startTime?: string;
+    endTime?: string;
+  }): string => {
+    // New format with startTime and endTime
+    if (item.startTime && item.endTime) {
+      return `${item.startTime} - ${item.endTime}`;
     }
-    // Try to parse and format if needed
-    return time;
+    // Old format with time (backward compatibility)
+    if (item.time) {
+      return item.time;
+    }
+    return "";
   };
 
-  // Process schedule
+  // Process schedule - handle both old and new formats
   let schedule: { day: string; time: string }[] = [];
 
   if (club.schedule && club.schedule.length > 0) {
     schedule = club.schedule
       .map((item) => ({
         day: item.day,
-        time: formatTime(item.time),
+        time: formatTime(
+          item as { day: string; time?: string; startTime?: string; endTime?: string }
+        ),
       }))
+      .filter((item) => item.time) // Filter out empty times
       .sort((a, b) => {
         // Sort by day order
         const orderA = dayOrder[a.day] || 99;

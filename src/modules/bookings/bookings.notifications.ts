@@ -33,9 +33,17 @@ function mapDbClubToClub(dbClub: typeof clubs.$inferSelect): Club {
   let pricing: Club["pricing"] = undefined;
   if (pricingData) {
     if (Array.isArray(pricingData) && pricingData.length > 0) {
-      pricing = pricingData[0] as Club["pricing"];
-    } else if (typeof pricingData === "object" && pricingData !== null) {
+      // If array, use directly
       pricing = pricingData as Club["pricing"];
+    } else if (typeof pricingData === "object" && pricingData !== null) {
+      // If single object, wrap in array for backward compatibility
+      pricing = [
+        pricingData as {
+          type: "monthly" | "per_class" | "per_semester";
+          amount: number;
+          currency: "RON";
+        },
+      ];
     }
   }
 

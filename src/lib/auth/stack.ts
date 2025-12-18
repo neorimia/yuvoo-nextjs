@@ -10,7 +10,7 @@
  * - STACK_SECRET_SERVER_KEY: Secret server key (private, server-side only)
  */
 
-import { StackServerApp } from "@stackframe/stack";
+import { StackServerApp, StackClientApp } from "@stackframe/stack";
 import { routes } from "@/lib/routes";
 
 // Note: Environment variables are automatically loaded by Next.js
@@ -120,6 +120,72 @@ export function getStackServerAppInstance(): StackServerApp {
 export const stackServerApp = new Proxy({} as StackServerApp, {
   get(_target, prop, receiver) {
     const app = getStackServerApp();
+    const value = Reflect.get(app, prop, receiver);
+    // If it's a method, bind it to the app instance
+    if (typeof value === "function") {
+      return value.bind(app);
+    }
+    return value;
+  },
+});
+
+// ============================================================================
+// CLIENT-SIDE STACK AUTH CONFIGURATION
+// ============================================================================
+
+/**
+ * Stack Client App for client-side components
+ * Used by StackProvider for client-side hooks (useStackApp, useUser, etc.)
+ *
+ * The client app can either inherit from the server app (server-side) or
+ * be initialized independently (client-side) using public keys.
+ */
+let _stackClientApp: StackClientApp | undefined;
+
+function getStackClientApp(): StackClientApp {
+  if (!_stackClientApp) {
+    const isServer = isServerSide();
+
+    if (isServer) {
+      // On server side: inherit from server app for consistency
+      // This ensures both use the same project configuration
+      const serverApp = getStackServerApp();
+      _stackClientApp = new StackClientApp({
+        inheritsFrom: serverApp as unknown as StackServerApp, // Type assertion needed due to Stack Auth's type system
+      });
+    } else {
+      // On client side: initialize independently using public keys
+      // This avoids requiring server app initialization on client
+      const projectId = process.env.NEXT_PUBLIC_STACK_PROJECT_ID;
+      const publishableClientKey = process.env.NEXT_PUBLIC_STACK_PUBLISHABLE_CLIENT_KEY;
+
+      if (!projectId) {
+        throw new Error("NEXT_PUBLIC_STACK_PROJECT_ID is required. Please set it in .env.local");
+      }
+
+      if (!publishableClientKey) {
+        throw new Error(
+          "NEXT_PUBLIC_STACK_PUBLISHABLE_CLIENT_KEY is required. Please set it in .env.local"
+        );
+      }
+
+      // Type assertion needed: Stack Auth's type system requires either inheritsFrom
+      // or specific tokenStore configuration, but runtime accepts projectId + publishableClientKey
+      // @ts-expect-error - Stack Auth type system limitation, runtime behavior is correct
+      _stackClientApp = new StackClientApp({
+        projectId,
+        publishableClientKey,
+      });
+    }
+  }
+  return _stackClientApp;
+}
+
+// Export client app instance
+// This is safe to use in client components as it only uses public keys
+export const stackClientApp = new Proxy({} as StackClientApp, {
+  get(_target, prop, receiver) {
+    const app = getStackClientApp();
     const value = Reflect.get(app, prop, receiver);
     // If it's a method, bind it to the app instance
     if (typeof value === "function") {

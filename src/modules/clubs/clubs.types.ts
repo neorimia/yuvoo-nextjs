@@ -32,13 +32,17 @@ export interface Club {
   };
   schedule?: {
     day: string;
-    time: string;
+    // New format (preferred)
+    startTime?: string;
+    endTime?: string;
+    // Old format (backward compatibility)
+    time?: string;
   }[];
   pricing?: {
     type: "monthly" | "per_class" | "per_semester";
     amount: number;
     currency: "RON";
-  };
+  }[];
   verificationStatus?: "pending" | "in_review" | "approved" | "rejected";
   verificationDocuments?: string[];
   createdAt: Date;

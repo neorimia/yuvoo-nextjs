@@ -105,6 +105,12 @@ export async function signInAction(formData: FormData, redirectUrl?: string) {
       password,
     });
 
+    // Debug: Check cookies and session (development only)
+    if (process.env.NODE_ENV === "development") {
+      const { logCookieDebug } = await import("@/lib/auth/debug-cookies");
+      await logCookieDebug("signInAction - After login");
+    }
+
     // Get user session for tracking
     try {
       const session = await getSession();

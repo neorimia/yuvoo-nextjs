@@ -14,9 +14,14 @@ import {
   getBookingById,
   getBookingsByUserId,
   cancelBooking,
+  confirmBooking,
+  updateBookingStatus,
+  cancelBookingByEntity,
 } from "@/modules/bookings/bookings.service";
+import { getClubByAdminUserId } from "@/modules/clubs/clubs.service";
 import { createBookingSchema } from "@/lib/validations/booking";
 import type { Booking } from "@/modules/bookings/bookings.types";
+import type { AuthUser } from "@/modules/auth/auth.types";
 import { trackEventServer } from "@/lib/analytics/tracking-server";
 import { PostHogEvents, PostHogProperties } from "@/lib/analytics/events";
 import { rateLimit, getClientIdentifierFromHeaders, RATE_LIMIT_CONFIGS } from "@/lib/rate-limit";
@@ -174,6 +179,198 @@ export async function cancelBookingAction(
     return {
       success: false,
       error: error instanceof Error ? error.message : "Eroare la anularea rezervării",
+    };
+  }
+}
+
+/**
+ * Get parent user by ID (for club admin to view booking details)
+ */
+export async function getParentUserAction(userId: string): Promise<AuthUser | null> {
+  try {
+    const user = await requireAuth();
+
+    if (user.role !== "club_admin") {
+      return null;
+    }
+
+    const { getUserById } = await import("@/modules/auth/auth.repository");
+    return await getUserById(userId);
+  } catch (error) {
+    console.error("Error getting parent user:", error);
+    return null;
+  }
+}
+
+/**
+ * Get bookings for club (for club admin)
+ */
+export async function getClubBookingsAction(): Promise<Booking[]> {
+  try {
+    const user = await requireAuth();
+
+    if (user.role !== "club_admin") {
+      throw new Error("Access denied");
+    }
+
+    // Get club for this admin
+    const club = await getClubByAdminUserId(user.id);
+    if (!club) {
+      return [];
+    }
+
+    // Get bookings for this club
+    const { bookingsRepository } = await import("@/modules/bookings/bookings.repository");
+    return await bookingsRepository.findByClubId(club.id);
+  } catch (error) {
+    console.error("Error getting club bookings:", error);
+    return [];
+  }
+}
+
+/**
+ * Confirm booking (for club admin)
+ */
+export async function confirmBookingAction(
+  bookingId: string
+): Promise<{ success: boolean; error?: string }> {
+  try {
+    const user = await requireAuth();
+
+    if (user.role !== "club_admin") {
+      return {
+        success: false,
+        error: "Access denied",
+      };
+    }
+
+    // Get club for this admin
+    const club = await getClubByAdminUserId(user.id);
+    if (!club) {
+      return {
+        success: false,
+        error: "Club not found",
+      };
+    }
+
+    await confirmBooking(bookingId, club.id);
+
+    // Track booking confirmation event
+    try {
+      await trackEventServer(PostHogEvents.CLUB_BOOKING_CONFIRMED, {
+        distinctId: user.id,
+        [PostHogProperties.BOOKING_ID]: bookingId,
+        [PostHogProperties.CLUB_ID]: club.id,
+      });
+    } catch (trackingError) {
+      if (process.env.NODE_ENV === "development") {
+        console.error("[PostHog] Error tracking booking confirmation:", trackingError);
+      }
+    }
+
+    revalidatePath("/club/bookings");
+    revalidatePath("/club/dashboard");
+
+    return { success: true };
+  } catch (error) {
+    console.error("Error confirming booking:", error);
+    return {
+      success: false,
+      error: error instanceof Error ? error.message : "Eroare la confirmarea rezervării",
+    };
+  }
+}
+
+/**
+ * Cancel booking by club admin
+ */
+export async function cancelBookingByClubAction(
+  bookingId: string
+): Promise<{ success: boolean; error?: string }> {
+  try {
+    const user = await requireAuth();
+
+    if (user.role !== "club_admin") {
+      return {
+        success: false,
+        error: "Access denied",
+      };
+    }
+
+    // Get club for this admin
+    const club = await getClubByAdminUserId(user.id);
+    if (!club) {
+      return {
+        success: false,
+        error: "Club not found",
+      };
+    }
+
+    await cancelBookingByEntity(bookingId, club.id);
+
+    // Track booking cancellation event
+    try {
+      await trackEventServer(PostHogEvents.CLUB_BOOKING_CANCELLED, {
+        distinctId: user.id,
+        [PostHogProperties.BOOKING_ID]: bookingId,
+        [PostHogProperties.CLUB_ID]: club.id,
+      });
+    } catch (trackingError) {
+      if (process.env.NODE_ENV === "development") {
+        console.error("[PostHog] Error tracking booking cancellation:", trackingError);
+      }
+    }
+
+    revalidatePath("/club/bookings");
+    revalidatePath("/club/dashboard");
+
+    return { success: true };
+  } catch (error) {
+    console.error("Error cancelling booking:", error);
+    return {
+      success: false,
+      error: error instanceof Error ? error.message : "Eroare la anularea rezervării",
+    };
+  }
+}
+
+/**
+ * Update booking status (for club admin)
+ */
+export async function updateBookingStatusAction(
+  bookingId: string,
+  status: Booking["status"]
+): Promise<{ success: boolean; error?: string }> {
+  try {
+    const user = await requireAuth();
+
+    if (user.role !== "club_admin") {
+      return {
+        success: false,
+        error: "Access denied",
+      };
+    }
+
+    // Get club for this admin
+    const club = await getClubByAdminUserId(user.id);
+    if (!club) {
+      return {
+        success: false,
+        error: "Club not found",
+      };
+    }
+
+    await updateBookingStatus(bookingId, club.id, status);
+
+    revalidatePath("/club/bookings");
+    revalidatePath("/club/dashboard");
+
+    return { success: true };
+  } catch (error) {
+    console.error("Error updating booking status:", error);
+    return {
+      success: false,
+      error: error instanceof Error ? error.message : "Eroare la actualizarea rezervării",
     };
   }
 }

@@ -1,0 +1,45 @@
+import React from "react";
+import { cookies } from "next/headers";
+import { requireAuth } from "@/lib/auth/session";
+import PostHogUserIdentification from "@/components/analytics/PostHogUserIdentification";
+import { SentryUserContext } from "@/components/shared/SentryUserContext";
+import DashboardShell from "@/components/layout/DashboardShell";
+
+/**
+ * Admin Routes Layout
+ *
+ * Layout for all admin-protected routes.
+ * Wraps content with DashboardShell for consistent navigation and layout.
+ * Automatically identifies users with PostHog for analytics tracking.
+ */
+export default async function AdminLayout({ children }: { children: React.ReactNode }) {
+  // Explicitly access cookies to ensure route is dynamic
+  await cookies();
+  // Require authentication
+  const session = await requireAuth();
+
+  return (
+    <>
+      <SentryUserContext
+        userId={session.user.id}
+        email={session.user.primaryEmail}
+        role={session.dbUser.role}
+        name={session.dbUser.firstName || session.dbUser.email || undefined}
+      />
+      <PostHogUserIdentification
+        userId={session.user.id}
+        email={session.user.primaryEmail}
+        role={session.dbUser.role}
+        firstName={session.dbUser.firstName}
+        lastName={session.dbUser.lastName}
+        phone={session.dbUser.phone}
+        signupDate={session.dbUser.createdAt}
+        emailVerified={
+          (session.user as { primaryEmailVerified?: boolean }).primaryEmailVerified ?? undefined
+        }
+        onboardingCompleted={session.dbUser.onboardingCompleted}
+      />
+      <DashboardShell role="admin">{children}</DashboardShell>
+    </>
+  );
+}

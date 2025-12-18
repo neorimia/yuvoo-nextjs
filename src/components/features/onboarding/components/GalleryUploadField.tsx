@@ -158,20 +158,24 @@ export function GalleryUploadField({
   const canUploadMore = maxImages ? currentValues.length < maxImages : true;
 
   return (
-    <div className={cn("mb-4", className)}>
+    <div className={cn("bd-gallery-upload-field mb-4", className)}>
       {/* Label */}
-      <label className="d-flex align-items-center gap-2 small fw-medium text-body mb-2">
+      <label className="bd-gallery-upload-field-label d-flex align-items-center gap-2 small fw-medium text-body mb-2">
         {label}
         {required && <span className="text-danger">*</span>}
         {helpText && <InfoTooltip content={helpText} size="sm" />}
       </label>
 
       {/* Description */}
-      {description && <p className="small text-secondary mb-3">{description}</p>}
+      {description && (
+        <p className="bd-gallery-upload-field-description small text-secondary mb-3">
+          {description}
+        </p>
+      )}
 
       {/* Gallery Grid */}
       {currentValues.length > 0 && (
-        <div className="row g-3 mb-3">
+        <div className="bd-gallery-upload-field-grid row g-3 mb-3">
           {currentValues.map((url, index) => (
             <div key={index} className={getColClass()}>
               <ImagePreview
@@ -190,20 +194,22 @@ export function GalleryUploadField({
 
       {/* Upload Area */}
       {canUploadMore && (
-        <FileUploadArea
-          label="Adaugă fotografii în galerie"
-          fileTypeHint={`${formatHint}, maxim ${maxSizeMB}MB`}
-          maxRemainingHint={
-            minImages && currentValues.length < minImages
-              ? `Minim ${minImages} imagini necesare`
-              : undefined
-          }
-          isUploading={uploadingIndex !== null}
-          isLoading={isLoading}
-          maxFiles={maxImages}
-          currentFiles={currentValues.length}
-          onClick={() => inputRef.current?.click()}
-        />
+        <div className="bd-gallery-upload-field-upload">
+          <FileUploadArea
+            label="Adaugă fotografii în galerie"
+            fileTypeHint={`${formatHint}, maxim ${maxSizeMB}MB`}
+            maxRemainingHint={
+              minImages && currentValues.length < minImages
+                ? `Minim ${minImages} imagini necesare`
+                : undefined
+            }
+            isUploading={uploadingIndex !== null}
+            isLoading={isLoading}
+            maxFiles={maxImages}
+            currentFiles={currentValues.length}
+            onClick={() => inputRef.current?.click()}
+          />
+        </div>
       )}
 
       {/* Hidden File Input */}
@@ -219,7 +225,7 @@ export function GalleryUploadField({
 
       {/* Info Text */}
       {minImages && (
-        <p className="text-xs text-secondary mt-2">
+        <p className="bd-gallery-upload-field-info text-xs text-secondary mt-2">
           {currentValues.length < minImages ? (
             <span className="text-danger">
               Minim {minImages} imagini necesare ({currentValues.length}/{minImages})
@@ -235,7 +241,7 @@ export function GalleryUploadField({
 
       {/* Error Message */}
       {error && (
-        <p className="mt-2 small text-danger" role="alert">
+        <p className="bd-gallery-upload-field-error mt-2 small text-danger" role="alert">
           {error.message}
         </p>
       )}

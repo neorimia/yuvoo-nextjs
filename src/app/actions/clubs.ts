@@ -17,6 +17,7 @@ import {
   verifyClubOwnership,
 } from "@/modules/clubs/clubs.service";
 import type { Club, ClubSearchFilters, ClubSearchResult } from "@/modules/clubs/clubs.types";
+import type { ClubProfileUpdateInput } from "@/lib/validations/club";
 import { trackEventServer } from "@/lib/analytics/tracking-server";
 import { PostHogEvents, PostHogProperties } from "@/lib/analytics/events";
 import { getSession } from "@/lib/auth/session";
@@ -209,7 +210,7 @@ export async function updateClubAction(
 
     // Revalidate cache
     revalidatePath(routes.club.profile);
-    revalidatePath(routes.club.profileEdit);
+    revalidatePath(routes.club.dashboard);
     if (club.slug) {
       revalidatePath(`/cluburi/${club.slug}`);
       // Revalidate cache tags
@@ -218,6 +219,9 @@ export async function updateClubAction(
       revalidateTag("clubs-list", "max");
       revalidateTag("home-featured-clubs", "max");
     }
+    // Revalidate user-specific cache
+    revalidateTag(`user-${user.id}`, "max");
+    revalidateTag(`club-dashboard-${user.id}`, "max");
 
     return { success: true, club };
   } catch (error) {
@@ -231,6 +235,133 @@ export async function updateClubAction(
     return {
       success: false,
       error: error instanceof Error ? error.message : "Eroare la actualizarea clubului",
+    };
+  }
+}
+
+/**
+ * Update club profile (for club admin - automatically gets club ID)
+ */
+export async function updateClubProfileAction(
+  input: unknown
+): Promise<{ success: boolean; club?: Club; error?: string }> {
+  try {
+    // Require club_admin role
+    const user = await requireRole("club_admin");
+
+    // Get club for this admin
+    const { getClubByAdminUserId } = await import("@/modules/clubs/clubs.service");
+    const club = await getClubByAdminUserId(user.id);
+
+    if (!club) {
+      return {
+        success: false,
+        error: "Clubul nu a fost găsit",
+      };
+    }
+
+    // Validate input with Zod schema
+    const { clubProfileUpdateSchema } = await import("@/lib/validations/club");
+
+    // Debug: Log input before validation
+    if (process.env.NODE_ENV === "development" && input && typeof input === "object") {
+      if ("schedule" in input) {
+        console.log("Schedule in input:", (input as { schedule?: unknown }).schedule);
+      }
+      if ("pricing" in input) {
+        console.log("Pricing in input:", (input as { pricing?: unknown }).pricing);
+      }
+    }
+
+    // Safely parse input - handle potential undefined arrays
+    let validatedInput: ClubProfileUpdateInput;
+    try {
+      validatedInput = clubProfileUpdateSchema.parse(input);
+    } catch (parseError) {
+      // Log detailed error for debugging
+      console.error("Validation error:", parseError);
+      if (parseError && typeof parseError === "object" && "issues" in parseError) {
+        const zodError = parseError as {
+          issues: Array<{ message: string; path?: Array<string | number> }>;
+        };
+        const firstError = zodError.issues[0];
+        const fieldPath = firstError?.path ? firstError.path.join(".") : "";
+        throw new Error(
+          `${firstError?.message || "Date invalide"}${fieldPath ? ` (${fieldPath})` : ""}`
+        );
+      }
+      throw parseError;
+    }
+
+    // Debug: Log validated input
+    if (process.env.NODE_ENV === "development") {
+      if (validatedInput.schedule) {
+        console.log("Schedule after validation:", validatedInput.schedule);
+      }
+      if (validatedInput.pricing) {
+        console.log("Pricing after validation:", validatedInput.pricing);
+      }
+    }
+
+    // Ensure arrays are properly formatted before update
+    const safeUpdates: Parameters<typeof updateClub>[2] = {
+      ...validatedInput,
+      // Ensure arrays are arrays or undefined (not null)
+      schedule: Array.isArray(validatedInput.schedule) ? validatedInput.schedule : undefined,
+      pricing: Array.isArray(validatedInput.pricing) ? validatedInput.pricing : undefined,
+      ageGroups: Array.isArray(validatedInput.ageGroups) ? validatedInput.ageGroups : undefined,
+      experienceLevels: Array.isArray(validatedInput.experienceLevels)
+        ? validatedInput.experienceLevels
+        : undefined,
+      galleryUrls: Array.isArray(validatedInput.galleryUrls)
+        ? validatedInput.galleryUrls
+        : undefined,
+    };
+
+    // Update club
+    const updatedClub = await updateClub(club.id, user.id, safeUpdates);
+
+    // Revalidate cache
+    revalidatePath(routes.club.profile);
+    revalidatePath(routes.club.dashboard);
+    if (updatedClub.slug) {
+      revalidatePath(`/cluburi/${updatedClub.slug}`);
+      // Revalidate cache tags
+      revalidateTag(`club-${updatedClub.id}`, "max");
+      revalidateTag(`club-slug-${updatedClub.slug}`, "max");
+      revalidateTag("clubs-list", "max");
+      revalidateTag("home-featured-clubs", "max");
+    }
+    // Revalidate user-specific cache
+    revalidateTag(`user-${user.id}`, "max");
+    revalidateTag(`club-dashboard-${user.id}`, "max");
+
+    return { success: true, club: updatedClub };
+  } catch (error) {
+    console.error("Error updating club profile:", error);
+    if (error instanceof Error && error.message.includes("permisiunea")) {
+      return {
+        success: false,
+        error: error.message,
+      };
+    }
+    // Handle Zod validation errors
+    if (error && typeof error === "object" && "issues" in error) {
+      const zodError = error as {
+        issues: Array<{ message: string; path?: Array<string | number> }>;
+      };
+      const firstError = zodError.issues[0];
+      const fieldPath = firstError?.path ? firstError.path.join(".") : "";
+      return {
+        success: false,
+        error: firstError?.message
+          ? `${firstError.message}${fieldPath ? ` (${fieldPath})` : ""}`
+          : "Date invalide",
+      };
+    }
+    return {
+      success: false,
+      error: error instanceof Error ? error.message : "Eroare la actualizarea profilului",
     };
   }
 }

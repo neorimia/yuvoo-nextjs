@@ -29,9 +29,9 @@ export default async function ClubPricingAgesPage() {
     <OnboardingLayout>
       <OnboardingProgress currentStep={4} steps={CLUB_STEPS} className="mb-8" />
 
-      <div className="mx-auto" style={{ maxWidth: "42rem" }}>
+      <div className="bd-onboarding-page mx-auto">
         {/* Header */}
-        <div className="text-center mb-5">
+        <div className="bd-onboarding-page-header">
           <h1 className="display-4 fw-bold text-body mb-4">Prețuri și Grupe de Vârstă 💰</h1>
           <p className="h5 text-body">
             Configurează prețurile, grupele de vârstă și nivelurile de experiență pentru ca părinții
@@ -40,7 +40,9 @@ export default async function ClubPricingAgesPage() {
         </div>
 
         {/* Form */}
-        <ClubPricingAgesForm />
+        <div className="bd-onboarding-page-content">
+          <ClubPricingAgesForm />
+        </div>
       </div>
     </OnboardingLayout>
   );
