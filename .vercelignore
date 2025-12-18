@@ -49,5 +49,6 @@ Thumbs.db
 !README.md
 .prettierrc*
 .eslintrc*
-tsconfig.json
+# Keep tsconfig.json for path alias resolution
+# tsconfig.json
 drizzle.config.ts
