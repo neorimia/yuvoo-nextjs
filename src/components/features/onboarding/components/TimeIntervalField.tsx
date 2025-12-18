@@ -179,8 +179,6 @@ export function TimeIntervalField({
                           mobile: true,
                           cssClass: "yuvoo-timepicker",
                         },
-                        hourMobileLabel: "Oră",
-                        minuteMobileLabel: "Minut",
                       }}
                       id={`${name}-start`}
                     />
@@ -218,8 +216,6 @@ export function TimeIntervalField({
                           mobile: true,
                           cssClass: "yuvoo-timepicker",
                         },
-                        hourMobileLabel: "Oră",
-                        minuteMobileLabel: "Minut",
                       }}
                       id={`${name}-end`}
                     />

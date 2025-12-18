@@ -137,37 +137,43 @@ export function SingleImageUploadField({
   const formatHint = acceptedFormats.map((f) => f.split("/")[1].toUpperCase()).join(", ");
 
   return (
-    <div className={cn("mb-4", className)}>
+    <div className={cn("bd-single-image-upload-field mb-4", className)}>
       {/* Label */}
-      <label className="d-flex align-items-center gap-2 small fw-medium text-body mb-2">
+      <label className="bd-single-image-upload-field-label d-flex align-items-center gap-2 small fw-medium text-body mb-2">
         {label}
         {required && <span className="text-danger">*</span>}
         {helpText && <InfoTooltip content={helpText} size="sm" />}
       </label>
 
       {/* Description */}
-      {description && <p className="small text-secondary mb-3">{description}</p>}
+      {description && (
+        <p className="bd-single-image-upload-field-description small text-secondary mb-3">
+          {description}
+        </p>
+      )}
 
       {/* Image Preview or Upload Area */}
-      {currentValue ? (
-        <ImagePreview
-          src={currentValue}
-          alt={label}
-          onRemove={handleRemove}
-          isUploading={uploading}
-          isLoading={isLoading}
-          size={previewSize}
-          objectFit={objectFit}
-        />
-      ) : (
-        <FileUploadArea
-          label="Apasă pentru a încărca imagine"
-          fileTypeHint={`${formatHint}, maxim ${maxSizeMB}MB`}
-          isUploading={uploading}
-          isLoading={isLoading}
-          onClick={() => inputRef.current?.click()}
-        />
-      )}
+      <div className="bd-single-image-upload-field-content">
+        {currentValue ? (
+          <ImagePreview
+            src={currentValue}
+            alt={label}
+            onRemove={handleRemove}
+            isUploading={uploading}
+            isLoading={isLoading}
+            size={previewSize}
+            objectFit={objectFit}
+          />
+        ) : (
+          <FileUploadArea
+            label="Apasă pentru a încărca imagine"
+            fileTypeHint={`${formatHint}, maxim ${maxSizeMB}MB`}
+            isUploading={uploading}
+            isLoading={isLoading}
+            onClick={() => inputRef.current?.click()}
+          />
+        )}
+      </div>
 
       {/* Hidden File Input */}
       <input
@@ -181,7 +187,7 @@ export function SingleImageUploadField({
 
       {/* Error Message */}
       {error && (
-        <p className="mt-2 small text-danger" role="alert">
+        <p className="bd-single-image-upload-field-error mt-2 small text-danger" role="alert">
           {error.message}
         </p>
       )}

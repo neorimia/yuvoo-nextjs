@@ -51,40 +51,48 @@ export function ClubPhotosForm() {
   const galleryUrls = watch("galleryUrls") || [];
 
   return (
-    <form id="club-photos-form" onSubmit={rhfHandleSubmit(handleSubmit)}>
+    <form
+      id="club-photos-form"
+      onSubmit={rhfHandleSubmit(handleSubmit)}
+      className="bd-onboarding-photos-form"
+    >
       {/* Server error message */}
       <ServerErrorAlert error={serverError} className="mb-4" />
 
-      {/* Logo Upload */}
-      <SingleImageUploadField
-        label="Logo club"
-        name="logoUrl"
-        setValue={setValue}
-        currentValue={logoUrl}
-        error={errors.logoUrl}
-        folder="yuvoo/clubs/logos"
-        required
-        description="Încarcă logo-ul clubului (JPG, PNG sau WebP, maxim 5MB)"
-        isLoading={isLoading}
-        setServerError={setServerError}
-      />
+      {/* Logo Upload Section */}
+      <div className="bd-onboarding-photos-section mb-5">
+        <SingleImageUploadField
+          label="Logo club"
+          name="logoUrl"
+          setValue={setValue}
+          currentValue={logoUrl}
+          error={errors.logoUrl}
+          folder="yuvoo/clubs/logos"
+          required
+          description="Încarcă logo-ul clubului (JPG, PNG sau WebP, maxim 5MB)"
+          isLoading={isLoading}
+          setServerError={setServerError}
+        />
+      </div>
 
-      {/* Gallery Upload */}
-      <GalleryUploadField
-        label="Galerie fotografii"
-        name="galleryUrls"
-        setValue={setValue}
-        currentValues={galleryUrls}
-        error={errors.galleryUrls as FieldError | undefined}
-        folder="yuvoo/clubs/gallery"
-        minImages={3}
-        maxImages={10}
-        required
-        description="Încarcă cel puțin 3 fotografii ale clubului (JPG, PNG sau WebP, maxim 5MB fiecare)"
-        gridCols={{ xs: 6, sm: 4, md: 3 }}
-        isLoading={isLoading}
-        setServerError={setServerError}
-      />
+      {/* Gallery Upload Section */}
+      <div className="bd-onboarding-photos-section mb-5">
+        <GalleryUploadField
+          label="Galerie fotografii"
+          name="galleryUrls"
+          setValue={setValue}
+          currentValues={galleryUrls}
+          error={errors.galleryUrls as FieldError | undefined}
+          folder="yuvoo/clubs/gallery"
+          minImages={3}
+          maxImages={10}
+          required
+          description="Încarcă cel puțin 3 fotografii ale clubului (JPG, PNG sau WebP, maxim 5MB fiecare)"
+          gridCols={{ xs: 6, sm: 4, md: 3 }}
+          isLoading={isLoading}
+          setServerError={setServerError}
+        />
+      </div>
 
       {/* Info box */}
       <InfoBox title="De ce avem nevoie de aceste fotografii?" className="mb-4">
