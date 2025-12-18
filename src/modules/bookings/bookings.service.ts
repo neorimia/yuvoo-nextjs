@@ -150,3 +150,67 @@ export async function cancelBooking(bookingId: string, userId: string): Promise<
 
   return cancelled;
 }
+
+/**
+ * Confirm booking (for club/doctor admins)
+ */
+export async function confirmBooking(bookingId: string, entityId: string): Promise<Booking> {
+  const booking = await bookingsRepository.findById(bookingId);
+  if (!booking || booking.entityId !== entityId) {
+    throw new Error("Booking not found or access denied");
+  }
+
+  if (booking.status !== "pending") {
+    throw new Error("Only pending bookings can be confirmed");
+  }
+
+  const confirmed = await bookingsRepository.updateStatus(bookingId, "confirmed");
+
+  // Send confirmation notification (status change)
+  await bookingsNotifications.sendConfirmation(confirmed);
+
+  return confirmed;
+}
+
+/**
+ * Update booking status (for club/doctor admins)
+ */
+export async function updateBookingStatus(
+  bookingId: string,
+  entityId: string,
+  status: Booking["status"]
+): Promise<Booking> {
+  const booking = await bookingsRepository.findById(bookingId);
+  if (!booking || booking.entityId !== entityId) {
+    throw new Error("Booking not found or access denied");
+  }
+
+  const updated = await bookingsRepository.updateStatus(bookingId, status);
+
+  // Send appropriate notification based on status
+  if (status === "confirmed") {
+    await bookingsNotifications.sendConfirmation(updated);
+  } else if (status === "cancelled") {
+    await bookingsNotifications.sendCancellation(updated);
+  }
+  // Note: "completed" status doesn't trigger email (booking is already done)
+
+  return updated;
+}
+
+/**
+ * Cancel booking by club/doctor admin
+ */
+export async function cancelBookingByEntity(bookingId: string, entityId: string): Promise<Booking> {
+  const booking = await bookingsRepository.findById(bookingId);
+  if (!booking || booking.entityId !== entityId) {
+    throw new Error("Booking not found or access denied");
+  }
+
+  const cancelled = await bookingsRepository.cancel(bookingId);
+
+  // Send cancellation notification
+  await bookingsNotifications.sendCancellation(cancelled);
+
+  return cancelled;
+}

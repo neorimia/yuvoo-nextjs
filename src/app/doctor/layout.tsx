@@ -3,11 +3,13 @@ import { cookies } from "next/headers";
 import { requireAuth } from "@/lib/auth/session";
 import PostHogUserIdentification from "@/components/analytics/PostHogUserIdentification";
 import { SentryUserContext } from "@/components/shared/SentryUserContext";
+import DashboardShell from "@/components/layout/DashboardShell";
 
 /**
  * Doctor Routes Layout
  *
  * Layout for all doctor-protected routes.
+ * Wraps content with DashboardShell for consistent navigation and layout.
  * Automatically identifies users with PostHog for analytics tracking.
  */
 export default async function DoctorLayout({ children }: { children: React.ReactNode }) {
@@ -37,7 +39,7 @@ export default async function DoctorLayout({ children }: { children: React.React
         }
         onboardingCompleted={session.dbUser.onboardingCompleted}
       />
-      {children}
+      <DashboardShell role="doctor">{children}</DashboardShell>
     </>
   );
 }

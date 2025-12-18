@@ -123,6 +123,26 @@ export async function cancel(bookingId: string): Promise<Booking> {
 }
 
 /**
+ * Update booking status
+ */
+export async function updateStatus(bookingId: string, status: Booking["status"]): Promise<Booking> {
+  const [dbBooking] = await db
+    .update(bookings)
+    .set({
+      status,
+      updatedAt: new Date(),
+    })
+    .where(eq(bookings.id, bookingId))
+    .returning();
+
+  if (!dbBooking) {
+    throw new Error("Booking not found");
+  }
+
+  return mapDbBookingToBooking(dbBooking);
+}
+
+/**
  * Find conflicting bookings for a given time slot
  *
  * Checks for bookings that:
@@ -276,6 +296,7 @@ export const bookingsRepository = {
   findByUserId,
   findByClubId,
   cancel,
+  updateStatus,
   findConflictingBookings,
   findChildConflictingBooking,
   getBookingStatsByClubId,

@@ -210,6 +210,7 @@ export async function updateClubAction(
     // Revalidate cache
     revalidatePath(routes.club.profile);
     revalidatePath(routes.club.profileEdit);
+    revalidatePath(routes.club.dashboard);
     if (club.slug) {
       revalidatePath(`/cluburi/${club.slug}`);
       // Revalidate cache tags
@@ -218,6 +219,9 @@ export async function updateClubAction(
       revalidateTag("clubs-list", "max");
       revalidateTag("home-featured-clubs", "max");
     }
+    // Revalidate user-specific cache
+    revalidateTag(`user-${user.id}`, "max");
+    revalidateTag(`club-dashboard-${user.id}`, "max");
 
     return { success: true, club };
   } catch (error) {
@@ -231,6 +235,96 @@ export async function updateClubAction(
     return {
       success: false,
       error: error instanceof Error ? error.message : "Eroare la actualizarea clubului",
+    };
+  }
+}
+
+/**
+ * Update club profile (for club admin - automatically gets club ID)
+ */
+export async function updateClubProfileAction(
+  input: unknown
+): Promise<{ success: boolean; club?: Club; error?: string }> {
+  try {
+    // Require club_admin role
+    const user = await requireRole("club_admin");
+
+    // Get club for this admin
+    const { getClubByAdminUserId } = await import("@/modules/clubs/clubs.service");
+    const club = await getClubByAdminUserId(user.id);
+
+    if (!club) {
+      return {
+        success: false,
+        error: "Clubul nu a fost găsit",
+      };
+    }
+
+    // Validate input with Zod schema
+    const { clubProfileUpdateSchema } = await import("@/lib/validations/club");
+
+    // Debug: Log input before validation
+    if (process.env.NODE_ENV === "development" && input && typeof input === "object") {
+      if ("schedule" in input) {
+        console.log("Schedule in input:", (input as { schedule?: unknown }).schedule);
+      }
+      if ("pricing" in input) {
+        console.log("Pricing in input:", (input as { pricing?: unknown }).pricing);
+      }
+    }
+
+    const validatedInput = clubProfileUpdateSchema.parse(input);
+
+    // Debug: Log validated input
+    if (process.env.NODE_ENV === "development") {
+      if (validatedInput.schedule) {
+        console.log("Schedule after validation:", validatedInput.schedule);
+      }
+      if (validatedInput.pricing) {
+        console.log("Pricing after validation:", validatedInput.pricing);
+      }
+    }
+
+    // Update club
+    const updatedClub = await updateClub(club.id, user.id, validatedInput);
+
+    // Revalidate cache
+    revalidatePath(routes.club.profile);
+    revalidatePath(routes.club.profileEdit);
+    revalidatePath(routes.club.dashboard);
+    if (updatedClub.slug) {
+      revalidatePath(`/cluburi/${updatedClub.slug}`);
+      // Revalidate cache tags
+      revalidateTag(`club-${updatedClub.id}`, "max");
+      revalidateTag(`club-slug-${updatedClub.slug}`, "max");
+      revalidateTag("clubs-list", "max");
+      revalidateTag("home-featured-clubs", "max");
+    }
+    // Revalidate user-specific cache
+    revalidateTag(`user-${user.id}`, "max");
+    revalidateTag(`club-dashboard-${user.id}`, "max");
+
+    return { success: true, club: updatedClub };
+  } catch (error) {
+    console.error("Error updating club profile:", error);
+    if (error instanceof Error && error.message.includes("permisiunea")) {
+      return {
+        success: false,
+        error: error.message,
+      };
+    }
+    // Handle Zod validation errors
+    if (error && typeof error === "object" && "issues" in error) {
+      const zodError = error as { issues: Array<{ message: string }> };
+      const firstError = zodError.issues[0];
+      return {
+        success: false,
+        error: firstError?.message || "Date invalide",
+      };
+    }
+    return {
+      success: false,
+      error: error instanceof Error ? error.message : "Eroare la actualizarea profilului",
     };
   }
 }

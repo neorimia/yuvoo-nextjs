@@ -109,9 +109,101 @@ export const clubVerificationSchema = z.object({
     .max(5, "Maxim 5 documente"),
 });
 
+/**
+ * Club Profile Update Schema (for profile editing)
+ * Combines all fields but makes most optional for partial updates
+ */
+export const clubProfileUpdateSchema = z.object({
+  // Basic info
+  name: z
+    .string(zodRomanianErrors)
+    .min(3, "Numele clubului este prea scurt")
+    .max(200, "Numele clubului este prea lung")
+    .trim()
+    .optional(),
+
+  sportType: z.string(zodRomanianErrors).min(1, "Selectează sportul principal").optional(),
+
+  description: z
+    .string(zodRomanianErrors)
+    .min(50, "Descrierea trebuie să conțină cel puțin 50 caractere")
+    .max(1000, "Descrierea este prea lungă (maxim 1000 caractere)")
+    .trim()
+    .optional(),
+
+  // Location
+  city: z.string(zodRomanianErrors).min(1, "Orașul este obligatoriu").optional(),
+
+  district: z
+    .string()
+    .optional()
+    .transform((val) => (val && val.trim() !== "" ? val.trim() : undefined)),
+
+  address: z
+    .string(zodRomanianErrors)
+    .min(10, "Adresa completă este obligatorie (minim 10 caractere)")
+    .max(300, "Adresa este prea lungă")
+    .trim()
+    .optional(),
+
+  // Contact
+  phone: z
+    .string(zodRomanianErrors)
+    .regex(/^\+40[0-9]{9}$/, "Format telefon invalid (ex: +40721234567)")
+    .optional(),
+
+  email: z
+    .string(zodRomanianErrors)
+    .email("Adresa de email este invalidă")
+    .toLowerCase()
+    .optional(),
+
+  website: z.union([z.string().url("URL-ul website-ului este invalid"), z.literal("")]).optional(),
+
+  // Schedule
+  schedule: z
+    .array(
+      z.object({
+        day: z.string().min(1, "Ziua este obligatorie"),
+        startTime: z.string().min(1, "Ora de început este obligatorie"),
+        endTime: z.string().min(1, "Ora de sfârșit este obligatorie"),
+      })
+    )
+    .optional(),
+
+  // Pricing
+  pricing: z
+    .array(
+      z.object({
+        type: z.enum(["monthly", "per_class", "per_semester"], {
+          errorMap: () => ({ message: "Tip abonament invalid" }),
+        }),
+        amount: z
+          .number({ required_error: "Prețul este obligatoriu" })
+          .min(0, "Prețul trebuie să fie pozitiv")
+          .max(10000, "Prețul este prea mare"),
+      })
+    )
+    .optional(),
+
+  // Age groups and levels
+  ageGroups: z.array(z.number().min(4).max(14)).optional(),
+
+  experienceLevels: z.array(z.enum(["beginner", "intermediate", "advanced"])).optional(),
+
+  // Media
+  logoUrl: z.string(zodRomanianErrors).url("URL logo invalid").optional(),
+
+  galleryUrls: z
+    .array(z.string().url("URL imagine invalid"))
+    .max(10, "Maxim 10 fotografii în galerie")
+    .optional(),
+});
+
 // Combined types
 export type ClubBasicInfoInput = z.infer<typeof clubBasicInfoSchema>;
 export type ClubContactScheduleInput = z.infer<typeof clubContactScheduleSchema>;
 export type ClubPricingAgesInput = z.infer<typeof clubPricingAgesSchema>;
 export type ClubPhotoInput = z.infer<typeof clubPhotoSchema>;
 export type ClubVerificationInput = z.infer<typeof clubVerificationSchema>;
+export type ClubProfileUpdateInput = z.infer<typeof clubProfileUpdateSchema>;

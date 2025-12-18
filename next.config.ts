@@ -63,6 +63,16 @@ const nextConfig: NextConfig = {
   // Cache Components (Next.js 16.0.8 - moved to root level)
   cacheComponents: true,
 
+  // Experimental features
+  experimental: {
+    // Increase body size limit for Server Actions to 10MB
+    // Images are uploaded separately to Cloudinary, but this provides safety margin
+    // @ts-expect-error - serverActions.bodySizeLimit is available in Next.js 16 but types may not be updated
+    serverActions: {
+      bodySizeLimit: "10mb",
+    },
+  },
+
   // PostHog rewrites for analytics ingestion
   async rewrites() {
     return [

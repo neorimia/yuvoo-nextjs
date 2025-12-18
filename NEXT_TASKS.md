@@ -269,21 +269,21 @@
 
 **Features:**
 
-- [ ] Dashboard overview page (`/club/dashboard`)
-  - Profile completeness indicator
-  - Verification status badge
-  - Booking statistics (total, pending, confirmed, completed)
-  - Recent activity feed
-- [ ] Booking management page (`/club/dashboard/bookings`)
-  - List all bookings (filterable by status, date)
-  - Booking detail view
-  - Confirm/cancel booking actions
-  - Email notifications on status change
-- [ ] Profile editing page (`/club/dashboard/profile`)
-  - Edit basic information (name, description, location)
-  - Update sports offered and age ranges
-  - Edit schedule and pricing
-  - Manage gallery images (Cloudinary integration)
+- [x] Dashboard overview page (`/club/dashboard`) ✅ COMPLETE
+  - Profile completeness indicator ✅
+  - Verification status badge ✅
+  - Booking statistics (total, pending, confirmed, completed) ✅
+  - Recent activity feed ✅
+- [x] Booking management page (`/club/bookings`) ✅ COMPLETE
+  - List all bookings (filterable by status, date) ✅
+  - Booking detail view (shown in card) ✅
+  - Confirm/cancel booking actions ✅
+  - Email notifications on status change ✅
+- [x] Profile editing page (`/club/profile/edit`) ✅ COMPLETE
+  - Edit basic information (name, description, location) ✅
+  - Update sports offered and age ranges ✅
+  - Edit schedule and pricing ✅
+  - Manage gallery images (Cloudinary integration) ✅
 - [ ] Settings page (`/club/dashboard/settings`)
   - Email notification preferences
   - Account settings

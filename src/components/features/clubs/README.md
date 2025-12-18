@@ -4,6 +4,8 @@ Components for displaying and managing sports clubs.
 
 ## Components
 
+### Public-Facing Components
+
 - `ClubsMain.tsx` - Club listing page component
 - `ClubDetailsMain.tsx` - Club detail page component (Server Component, used in SSG pages)
 - `ClubSearchFilters.tsx` - Club search and filters component
@@ -18,6 +20,15 @@ Components for displaying and managing sports clubs.
 - `BookingForm.tsx` - Booking form component for club trial sessions (Client Component)
 - `BookingFormSection.tsx` - Booking form section wrapper (Server Component)
 - `VerificationBadge.tsx` - Club verification badge component (supports multiple statuses, variants, and sizes)
+
+### Dashboard Components
+
+- `ClubDashboardHeader.tsx` - Dashboard header with title, welcome message, and verification badge
+- `ClubDashboardContent.tsx` - Main dashboard content component (orchestrates all dashboard sections)
+- `ClubNotFoundState.tsx` - Empty state component when club profile is not found
+- `ProfileCompletenessIndicator.tsx` - Progress indicator showing club profile completeness
+- `BookingStatistics.tsx` - Statistics cards displaying booking counts by status
+- `RecentActivityFeed.tsx` - Feed component displaying recent booking activity
 
 ## Usage
 

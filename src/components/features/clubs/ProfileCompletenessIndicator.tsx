@@ -3,6 +3,7 @@
  *
  * Displays a progress bar showing how complete the club profile is.
  * Shows percentage and missing fields.
+ * Follows Yuvoo design system with proper typography, colors, and spacing.
  */
 
 import React from "react";
@@ -22,34 +23,36 @@ const ProfileCompletenessIndicator: React.FC<ProfileCompletenessIndicatorProps> 
   totalFields,
   missingFields,
 }) => {
-  const getProgressColor = () => {
-    if (percentage >= 100) return "bg-success";
-    if (percentage >= 75) return "bg-info";
-    if (percentage >= 50) return "bg-warning";
-    return "bg-danger";
+  const getProgressColorClass = () => {
+    if (percentage >= 100) return "bd-profile-completeness-progress-complete";
+    if (percentage >= 75) return "bd-profile-completeness-progress-good";
+    if (percentage >= 50) return "bd-profile-completeness-progress-warning";
+    return "bd-profile-completeness-progress-low";
   };
 
-  const getProgressTextColor = () => {
-    if (percentage >= 100) return "text-success";
-    if (percentage >= 75) return "text-info";
-    if (percentage >= 50) return "text-warning";
-    return "text-danger";
+  const getBadgeColorClass = () => {
+    if (percentage >= 100) return "bd-profile-completeness-badge-complete";
+    if (percentage >= 75) return "bd-profile-completeness-badge-good";
+    if (percentage >= 50) return "bd-profile-completeness-badge-warning";
+    return "bd-profile-completeness-badge-low";
   };
 
   return (
-    <div className="card border-0 shadow-sm">
+    <div className="card border-0 shadow-sm bd-profile-completeness-card">
       <div className="card-body">
         <div className="d-flex justify-content-between align-items-center mb-3">
-          <h5 className="card-title mb-0">
-            <i className="bi bi-person-check me-2"></i>
+          <h5 className="bd-profile-completeness-title mb-0">
+            <i className="bi bi-person-check me-2 text-yuvoo-primary"></i>
             Completitudine Profil
           </h5>
-          <span className={`badge ${getProgressTextColor()}`}>{percentage}%</span>
+          <span className={`badge bd-profile-completeness-badge ${getBadgeColorClass()}`}>
+            {percentage}%
+          </span>
         </div>
 
-        <div className="progress mb-3" style={{ height: "1.5rem" }}>
+        <div className="bd-profile-completeness-progress progress mb-3">
           <div
-            className={`progress-bar ${getProgressColor()}`}
+            className={`progress-bar bd-profile-completeness-progress-bar ${getProgressColorClass()}`}
             role="progressbar"
             style={{ width: `${percentage}%` }}
             aria-valuenow={percentage}
@@ -60,28 +63,31 @@ const ProfileCompletenessIndicator: React.FC<ProfileCompletenessIndicatorProps> 
           </div>
         </div>
 
-        <p className="text-muted small mb-2">
+        <p className="bd-profile-completeness-description mb-2">
           {completedFields} din {totalFields} câmpuri completate
         </p>
 
         {missingFields.length > 0 && (
           <div className="mt-3">
-            <p className="small fw-bold mb-2">Câmpuri lipsă:</p>
-            <ul className="list-unstyled small mb-3">
+            <p className="bd-profile-completeness-missing-title mb-2">Câmpuri lipsă:</p>
+            <ul className="list-unstyled bd-profile-completeness-missing-list mb-3">
               {missingFields.slice(0, 5).map((field, index) => (
-                <li key={index} className="text-muted">
+                <li key={index} className="bd-profile-completeness-missing-item">
                   <i className="bi bi-dash-circle me-2"></i>
                   {field}
                 </li>
               ))}
               {missingFields.length > 5 && (
-                <li className="text-muted">
+                <li className="bd-profile-completeness-missing-item">
                   <i className="bi bi-three-dots me-2"></i>
                   și încă {missingFields.length - 5} câmpuri
                 </li>
               )}
             </ul>
-            <Link href={routes.club.profileEdit} className="btn btn-sm btn-outline-primary">
+            <Link
+              href={routes.club.profileEdit}
+              className="btn btn-sm btn-outline-primary bd-profile-completeness-cta-btn"
+            >
               <i className="bi bi-pencil me-2"></i>
               Completează profilul
             </Link>
@@ -89,7 +95,7 @@ const ProfileCompletenessIndicator: React.FC<ProfileCompletenessIndicatorProps> 
         )}
 
         {missingFields.length === 0 && (
-          <div className="alert alert-success small mb-0">
+          <div className="bd-profile-completeness-success-alert alert mb-0">
             <i className="bi bi-check-circle me-2"></i>
             Profilul tău este complet!
           </div>
