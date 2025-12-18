@@ -992,18 +992,28 @@ await deleteImageAction(imageUrl);
 
 ## Caching Strategy
 
-### Next.js 16 Cache Components
+### Next.js 16 Cache Components ✅ COMPLETE
 
-**Cache Strategy for Listings** (January 2025 - ✅ Implemented):
+**Migration Status**: ✅ **COMPLETE** (January 2025 - P0-4)
 
-- **Location**: `modules/clubs/clubs.search.ts`, `modules/doctors/doctors.search.ts`
-- **Pattern**: Use `"use cache"` directive in search functions with `cacheLife()` and `cacheTag()` for granular revalidation
-- **Implementation**:
-  - Added `"use cache"` directive at file level
-  - `cacheLife("hours")` for 1-hour cache duration
-  - `cacheTag()` with granular tags: base list tag + filter-specific tags (sport, city, verified status)
-  - Enables efficient cache revalidation when clubs/doctors are updated via tag-based revalidation
-- **Benefits**: Reduced database load, improved page load performance, efficient cache invalidation
+- **All Legacy Patterns Removed**: All `export const dynamic`, `export const revalidate`, `unstable_noStore()` removed from codebase
+- **Public Cache Pages Migrated**: Home page (`/`), sports listing (`/sporturi`), club detail (`/cluburi/[slug]`), doctor detail (`/doctori/[slug]`)
+  - All use `"use cache"` directive with `cacheLife("hours")` for 1-hour cache
+  - All use `cacheTag()` for tag-based revalidation
+- **Private Cache Pages Migrated**: Parent dashboard (`/parent/dashboard`)
+  - Uses `"use cache: private"` with `cacheLife("minutes")` for 5-minute cache
+  - User-specific cache tags for per-user invalidation
+- **Server Actions Updated**: All Server Actions updated to use `revalidateTag(tag, "max")` for cache invalidation
+  - Clubs actions: Invalidates `club-{id}`, `club-slug-{slug}`, `clubs-list`, `home-featured-clubs`
+  - Doctors actions: Invalidates `doctor-{id}`, `doctor-slug-{slug}`, `doctors-list`, `home-featured-doctors`
+  - Children/Settings/Quiz actions: Invalidates `user-{userId}`, `parent-dashboard-{userId}`
+- **Cache Tags System**: Comprehensive tag system implemented
+  - Entity-specific: `club-{id}`, `doctor-{id}`, `user-{id}`
+  - Slug-based: `club-slug-{slug}`, `doctor-slug-{slug}`
+  - List-based: `clubs-list`, `doctors-list`, `sports-list`
+  - Home page sections: `home-featured-clubs`, `home-featured-doctors`, `home-featured-sports`
+  - User-specific: `user-{userId}`, `parent-dashboard-{userId}`
+- **Documentation**: `docs/CACHING_STRATEGY.md` created with complete caching strategy, patterns, and best practices
 
 **Paradigm Shift**: Dynamic by default, opt-in to caching with `"use cache"`
 
@@ -1011,19 +1021,21 @@ await deleteImageAction(imageUrl);
 
 1. **Public Cache** (`"use cache"`):
    - For content same for all users
-   - Use `cacheLife()` for time-based revalidation
+   - Use `cacheLife()` for time-based revalidation (e.g., `cacheLife("hours")` for 1-hour cache)
    - Use `cacheTag()` for on-demand revalidation
-   - Example: Footer components, static pages
+   - Example: Home page, sports listing, club/doctor detail pages
 
 2. **Private Cache** (`"use cache: private"`):
    - For user-specific prefetchable content
    - Can access cookies/params at runtime
    - Prefetched with actual runtime values
+   - Use `cacheLife("minutes")` for shorter cache duration (e.g., 5 minutes)
+   - Example: Parent dashboard
 
 3. **Dynamic Content** (default):
    - Use `<Suspense>` boundaries for dynamic content
    - Access `cookies()`, `headers()`, `params` for dynamic rendering
-   - Example: Protected pages, user dashboards
+   - Example: Protected pages, pages with searchParams (clubs/doctors listing)
 
 **Route Segment Config** (Removed):
 
@@ -1035,25 +1047,17 @@ await deleteImageAction(imageUrl);
 
 - All dynamic routes MUST have `generateStaticParams()` returning at least one value
 - Required for Cache Components compatibility
+- All 8 dynamic routes have `generateStaticParams()` implemented ✅
 
-**Revalidation Triggers**:
+**Revalidation Strategy**:
 
-- After quiz submission: `revalidatePath()` or `updateTag()`
-- After booking creation/cancellation: `revalidatePath()` or `updateTag()`
-- After profile updates: `revalidatePath()` or `updateTag()`
-- After favorite toggles: `revalidatePath()` or `updateTag()`
-- After club/doctor updates: `revalidateTag("clubs-list")` or `revalidateTag("doctors-list")` plus specific tags (sport, city, verified status)
-
-**Cache Strategy for Listings** (January 2025 - ✅ Implemented):
-
-- **Location**: `modules/clubs/clubs.search.ts`, `modules/doctors/doctors.search.ts`
-- **Pattern**: Use `"use cache"` directive in search functions with `cacheLife()` and `cacheTag()` for granular revalidation
-- **Implementation**:
-  - Added `"use cache"` directive at file level
-  - `cacheLife("hours")` for 1-hour cache duration
-  - `cacheTag()` with granular tags: base list tag + filter-specific tags (sport, city, verified status)
-  - Enables efficient cache revalidation when clubs/doctors are updated via tag-based revalidation
-- **Benefits**: Reduced database load, improved page load performance, efficient cache invalidation
+- **Time-based**: `cacheLife("hours")` for public pages, `cacheLife("minutes")` for private pages
+- **Tag-based**: `revalidateTag(tag, "max")` in Server Actions for on-demand invalidation
+  - After quiz submission: `revalidateTag("user-{userId}", "max")` and `revalidateTag("parent-dashboard-{userId}", "max")`
+  - After booking creation/cancellation: `revalidatePath()` (still supported)
+  - After profile updates: `revalidateTag("user-{userId}", "max")` and `revalidateTag("parent-dashboard-{userId}", "max")`
+  - After favorite toggles: `revalidatePath()` (still supported)
+  - After club/doctor updates: `revalidateTag("club-{id}", "max")`, `revalidateTag("clubs-list", "max")`, `revalidateTag("home-featured-clubs", "max")`
 
 ## Error Handling Pattern
 
