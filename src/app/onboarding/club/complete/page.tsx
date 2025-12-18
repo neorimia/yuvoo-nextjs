@@ -39,8 +39,10 @@ export default async function ClubCompletePage() {
     <OnboardingLayout>
       <OnboardingProgress currentStep={7} steps={CLUB_STEPS} className="mb-8" />
 
-      <div className="mx-auto" style={{ maxWidth: "48rem" }}>
-        <ClubCompletionContent userName={session.dbUser.firstName || session.dbUser.email} />
+      <div className="bd-onboarding-page bd-onboarding-page-wide mx-auto">
+        <div className="bd-onboarding-complete">
+          <ClubCompletionContent userName={session.dbUser.firstName || session.dbUser.email} />
+        </div>
       </div>
     </OnboardingLayout>
   );

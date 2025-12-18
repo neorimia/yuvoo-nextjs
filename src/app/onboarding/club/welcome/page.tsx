@@ -33,48 +33,42 @@ export default async function ClubWelcomePage() {
       <OnboardingProgress currentStep={1} steps={CLUB_STEPS} className="mb-8" />
 
       {/* Main content */}
-      <div className="mx-auto text-center" style={{ maxWidth: "42rem" }}>
-        <h1 className="display-4 fw-bold text-body mb-4">
-          Bună, {session.user.displayName || "Administrator"}! 👋
-        </h1>
-        <p className="h5 text-body mb-5">
-          Bun venit pe platforma Yuvoo pentru administratori de cluburi! În următorii pași vei crea
-          profilul clubului tău.
-        </p>
+      <div className="bd-onboarding-page mx-auto text-center">
+        <div className="bd-onboarding-page-header">
+          <h1 className="display-4 fw-bold text-body mb-4">
+            Bună, {session.user.displayName || "Administrator"}! 👋
+          </h1>
+          <p className="h5 text-body mb-5">
+            Bun venit pe platforma Yuvoo pentru administratori de cluburi! În următorii pași vei
+            crea profilul clubului tău.
+          </p>
+        </div>
 
         {/* Benefits list */}
-        <div className="bg-yuvoo-primary-light rounded-3 p-4 mb-5 text-start">
+        <div className="bd-onboarding-welcome-benefits">
           <h2 className="h4 fw-semibold text-body mb-4">Ce vei face în următorii pași:</h2>
-          <ul className="mb-0" style={{ listStyle: "none", paddingLeft: 0 }}>
+          <ul className="mb-0">
             <li className="d-flex align-items-start gap-3 mb-3">
-              <span className="text-yuvoo-primary" style={{ fontSize: "1.5rem" }}>
-                ✓
-              </span>
+              <span className="check-icon text-yuvoo-primary">✓</span>
               <span className="text-body">Informații despre club</span>
             </li>
             <li className="d-flex align-items-start gap-3 mb-3">
-              <span className="text-yuvoo-primary" style={{ fontSize: "1.5rem" }}>
-                ✓
-              </span>
+              <span className="check-icon text-yuvoo-primary">✓</span>
               <span className="text-body">Program și tarife</span>
             </li>
             <li className="d-flex align-items-start gap-3 mb-3">
-              <span className="text-yuvoo-primary" style={{ fontSize: "1.5rem" }}>
-                ✓
-              </span>
+              <span className="check-icon text-yuvoo-primary">✓</span>
               <span className="text-body">Fotografii și documente</span>
             </li>
             <li className="d-flex align-items-start gap-3">
-              <span className="text-yuvoo-primary" style={{ fontSize: "1.5rem" }}>
-                ✓
-              </span>
+              <span className="check-icon text-yuvoo-primary">✓</span>
               <span className="text-body">Verificare și aprobare</span>
             </li>
           </ul>
         </div>
 
         {/* Estimated time */}
-        <p className="small text-secondary mb-5">⏱️ Durată estimată: 10-15 minute</p>
+        <p className="bd-onboarding-welcome-time">⏱️ Durată estimată: 10-15 minute</p>
       </div>
 
       {/* Navigation */}

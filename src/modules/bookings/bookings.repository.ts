@@ -212,11 +212,71 @@ export async function findChildConflictingBooking(
   return mapDbBookingToBooking(dbBooking);
 }
 
+/**
+ * Find bookings by club ID
+ */
+export async function findByClubId(clubId: string): Promise<Booking[]> {
+  const dbBookings = await db.query.bookings.findMany({
+    where: eq(bookings.clubId, clubId),
+    orderBy: [desc(bookings.scheduledAt), desc(bookings.createdAt)],
+  });
+
+  return dbBookings.map(mapDbBookingToBooking);
+}
+
+/**
+ * Get booking statistics by club ID
+ * Returns counts grouped by status
+ */
+export async function getBookingStatsByClubId(clubId: string): Promise<{
+  total: number;
+  pending: number;
+  confirmed: number;
+  completed: number;
+  cancelled: number;
+}> {
+  const dbBookings = await db.query.bookings.findMany({
+    where: eq(bookings.clubId, clubId),
+    columns: {
+      status: true,
+    },
+  });
+
+  const stats = {
+    total: dbBookings.length,
+    pending: 0,
+    confirmed: 0,
+    completed: 0,
+    cancelled: 0,
+  };
+
+  for (const booking of dbBookings) {
+    switch (booking.status) {
+      case "pending":
+        stats.pending++;
+        break;
+      case "confirmed":
+        stats.confirmed++;
+        break;
+      case "completed":
+        stats.completed++;
+        break;
+      case "cancelled":
+        stats.cancelled++;
+        break;
+    }
+  }
+
+  return stats;
+}
+
 export const bookingsRepository = {
   create,
   findById,
   findByUserId,
+  findByClubId,
   cancel,
   findConflictingBookings,
   findChildConflictingBooking,
+  getBookingStatsByClubId,
 };

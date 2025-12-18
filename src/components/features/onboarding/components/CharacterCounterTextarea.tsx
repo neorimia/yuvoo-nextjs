@@ -30,6 +30,8 @@ interface CharacterCounterTextareaProps {
   register: UseFormRegister<any>;
   /** Validation error */
   error?: FieldError;
+  /** Has field been touched? (for conditional error display) */
+  touched?: boolean;
   /** Minimum character count */
   minChars: number;
   /** Maximum character count */
@@ -57,6 +59,7 @@ export function CharacterCounterTextarea({
   name,
   register,
   error,
+  touched = false,
   minChars,
   maxChars,
   rows = 6,
@@ -71,7 +74,9 @@ export function CharacterCounterTextarea({
   const charCount = currentValue?.length || 0;
   const isUnderMin = charCount < minChars;
   const isOverMax = charCount > maxChars;
-  const hasError = !!error || isUnderMin || isOverMax;
+  // Only show error state if field has been touched or there's a validation error
+  // This prevents showing errors on initial render when field is empty
+  const hasError = !!error || (touched && (isUnderMin || isOverMax));
 
   return (
     <div className={cn("mb-4", className)}>
@@ -110,14 +115,15 @@ export function CharacterCounterTextarea({
             <p id={`${name}-error`} className="small text-danger" role="alert">
               {error.message}
             </p>
-          ) : (
-            <p
-              id={`${name}-help`}
-              className={cn("text-xs", isUnderMin ? "text-danger" : "text-secondary")}
-            >
-              Minim {minChars} caractere, maxim {maxChars} caractere
+          ) : hasError && touched ? (
+            <p id={`${name}-error`} className="small text-danger" role="alert">
+              {isUnderMin
+                ? `Minim ${minChars} caractere necesare (ai ${charCount})`
+                : isOverMax
+                  ? `Maxim ${maxChars} caractere permise (ai ${charCount})`
+                  : `Minim ${minChars} caractere, maxim ${maxChars} caractere`}
             </p>
-          )}
+          ) : null}
         </div>
 
         <p

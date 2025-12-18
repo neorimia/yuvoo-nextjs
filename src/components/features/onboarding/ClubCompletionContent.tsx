@@ -32,7 +32,7 @@ export function ClubCompletionContent({ userName }: ClubCompletionContentProps) 
   return (
     <div className="text-center">
       {/* Success Icon */}
-      <div className="mb-5 d-flex justify-content-center">
+      <div className="bd-onboarding-complete-icon mb-5 d-flex justify-content-center">
         <div className="position-relative">
           <div
             className="position-absolute top-0 start-0 w-100 h-100 bg-yuvoo-primary rounded-circle"
@@ -48,11 +48,13 @@ export function ClubCompletionContent({ userName }: ClubCompletionContentProps) 
       </div>
 
       {/* Success Message */}
-      <h1 className="display-4 fw-bold text-body mb-4">Felicitări! 🎉</h1>
+      <h1 className="bd-onboarding-complete-title">Felicitări! 🎉</h1>
       <p className="h4 text-body mb-2">
         {userName ? `Bună, ${userName}!` : "Clubul tău a fost creat cu succes!"}
       </p>
-      <p className="h5 text-body mb-5">Ai finalizat procesul de onboarding pentru clubul tău.</p>
+      <p className="bd-onboarding-complete-message">
+        Ai finalizat procesul de onboarding pentru clubul tău.
+      </p>
 
       {/* Success Details */}
       <div className="bg-success bg-opacity-10 border border-success rounded p-4 mb-5 text-start">
@@ -119,7 +121,7 @@ export function ClubCompletionContent({ userName }: ClubCompletionContentProps) 
       </InfoBox>
 
       {/* Actions */}
-      <div className="d-flex flex-column flex-sm-row gap-3 justify-content-center align-items-center">
+      <div className="bd-onboarding-complete-actions">
         <Link
           href={routes.club.dashboard}
           className="d-inline-flex align-items-center justify-content-center gap-2 px-4 py-3 bg-yuvoo-primary text-white fw-semibold rounded text-yuvoo-primary-hover focus-yuvoo-primary"

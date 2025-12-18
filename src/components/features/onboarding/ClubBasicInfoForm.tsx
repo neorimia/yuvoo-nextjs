@@ -25,7 +25,6 @@ import { SPORT_TYPES } from "@/lib/utils/constants";
 import { OnboardingNavigation } from "./OnboardingNavigation";
 import { BootstrapAlert, BootstrapInput, BootstrapSelect } from "@/components/UI/bootstrap-index";
 import { CharacterCounterTextarea } from "./components";
-import { cn } from "@/lib/utils";
 import { useOnboardingForm } from "./hooks/useOnboardingForm";
 
 // Romanian cities (major cities)
@@ -67,10 +66,12 @@ export function ClubBasicInfoForm() {
     register,
     handleSubmit: rhfHandleSubmit,
     control,
-    formState: { errors },
+    formState: { errors, touchedFields },
     watch,
   } = useForm<ClubBasicInfoInput>({
     resolver: zodResolver(clubBasicInfoSchema),
+    mode: "onBlur", // Only validate on blur (after user leaves field)
+    reValidateMode: "onChange", // Re-validate on change after first blur
   });
 
   const { handleSubmit, isLoading, serverError } = useOnboardingForm<ClubBasicInfoInput>({
@@ -79,7 +80,11 @@ export function ClubBasicInfoForm() {
   });
 
   return (
-    <form id="club-basic-info-form" onSubmit={rhfHandleSubmit(handleSubmit)} className="mb-4">
+    <form
+      id="club-basic-info-form"
+      onSubmit={rhfHandleSubmit(handleSubmit)}
+      className="bd-onboarding-form"
+    >
       {/* Server error message */}
       {serverError && (
         <BootstrapAlert variant="danger" className="mb-4">
@@ -89,8 +94,8 @@ export function ClubBasicInfoForm() {
       )}
 
       {/* Club Name */}
-      <div className="mb-4">
-        <label htmlFor="name" className="d-block small fw-medium text-body mb-2">
+      <div className="bd-onboarding-form-group">
+        <label htmlFor="name" className="bd-onboarding-form-label">
           Nume club <span className="text-danger">*</span>
         </label>
         <BootstrapInput
@@ -99,22 +104,21 @@ export function ClubBasicInfoForm() {
           {...register("name")}
           disabled={isLoading}
           error={!!errors.name}
-          className={cn("w-100")}
-          style={{ height: "44px" }}
+          className="w-100"
           placeholder="ex. Fotbal Club Junior București"
           aria-invalid={errors.name ? "true" : "false"}
           aria-describedby={errors.name ? "name-error" : undefined}
         />
         {errors.name && (
-          <p id="name-error" className="mt-2 small text-danger">
+          <p id="name-error" className="bd-onboarding-form-error">
             {errors.name.message}
           </p>
         )}
       </div>
 
       {/* Sport Type */}
-      <div className="mb-4">
-        <label htmlFor="sportType" className="d-block small fw-medium text-body mb-2">
+      <div className="bd-onboarding-form-group">
+        <label htmlFor="sportType" className="bd-onboarding-form-label">
           Sport principal <span className="text-danger">*</span>
         </label>
         <Controller
@@ -128,7 +132,6 @@ export function ClubBasicInfoForm() {
               disabled={isLoading}
               error={!!errors.sportType}
               className="w-100"
-              style={{ height: "44px" }}
               options={[
                 { value: "", label: "Selectează sportul principal" },
                 ...SPORT_TYPES.map((sport) => ({
@@ -142,7 +145,7 @@ export function ClubBasicInfoForm() {
           )}
         />
         {errors.sportType && (
-          <p id="sportType-error" className="mt-2 small text-danger">
+          <p id="sportType-error" className="bd-onboarding-form-error">
             {errors.sportType.message}
           </p>
         )}
@@ -154,6 +157,7 @@ export function ClubBasicInfoForm() {
         name="description"
         register={register}
         error={errors.description}
+        touched={!!touchedFields.description}
         minChars={50}
         maxChars={1000}
         rows={6}
@@ -164,8 +168,8 @@ export function ClubBasicInfoForm() {
       />
 
       {/* City */}
-      <div className="mb-4">
-        <label htmlFor="city" className="d-block small fw-medium text-body mb-2">
+      <div className="bd-onboarding-form-group">
+        <label htmlFor="city" className="bd-onboarding-form-label">
           Oraș <span className="text-danger">*</span>
         </label>
         <Controller
@@ -179,7 +183,6 @@ export function ClubBasicInfoForm() {
               disabled={isLoading}
               error={!!errors.city}
               className="w-100"
-              style={{ height: "44px" }}
               options={[
                 { value: "", label: "Selectează orașul" },
                 ...ROMANIAN_CITIES.map((city) => ({
@@ -193,15 +196,15 @@ export function ClubBasicInfoForm() {
           )}
         />
         {errors.city && (
-          <p id="city-error" className="mt-2 small text-danger">
+          <p id="city-error" className="bd-onboarding-form-error">
             {errors.city.message}
           </p>
         )}
       </div>
 
       {/* District (Optional) */}
-      <div className="mb-4">
-        <label htmlFor="district" className="d-block small fw-medium text-body mb-2">
+      <div className="bd-onboarding-form-group">
+        <label htmlFor="district" className="bd-onboarding-form-label">
           District/Sector <span className="text-secondary small">(opțional)</span>
         </label>
         <BootstrapInput
@@ -211,21 +214,20 @@ export function ClubBasicInfoForm() {
           disabled={isLoading}
           error={!!errors.district}
           className="w-100"
-          style={{ height: "44px" }}
           placeholder="ex. Sector 1, Sector 2, etc."
           aria-invalid={errors.district ? "true" : "false"}
           aria-describedby={errors.district ? "district-error" : undefined}
         />
         {errors.district && (
-          <p id="district-error" className="mt-2 small text-danger">
+          <p id="district-error" className="bd-onboarding-form-error">
             {errors.district.message}
           </p>
         )}
       </div>
 
       {/* Address */}
-      <div className="mb-4">
-        <label htmlFor="address" className="d-block small fw-medium text-body mb-2">
+      <div className="bd-onboarding-form-group">
+        <label htmlFor="address" className="bd-onboarding-form-label">
           Adresă completă <span className="text-danger">*</span>
         </label>
         <BootstrapInput
@@ -235,31 +237,29 @@ export function ClubBasicInfoForm() {
           disabled={isLoading}
           error={!!errors.address}
           className="w-100"
-          style={{ height: "44px" }}
           placeholder="ex. Strada Sportului 10, Sector 1"
           aria-invalid={errors.address ? "true" : "false"}
           aria-describedby={errors.address ? "address-error" : undefined}
         />
         {errors.address && (
-          <p id="address-error" className="mt-2 small text-danger">
+          <p id="address-error" className="bd-onboarding-form-error">
             {errors.address.message}
           </p>
         )}
-        <p className="mt-2 text-xs text-secondary">
+        <p className="bd-onboarding-form-text">
           Adaugă adresa completă a clubului pentru ca părinții să te poată găsi ușor.
         </p>
       </div>
 
       {/* Info box */}
-      <div
-        className="bg-yuvoo-primary-light border rounded p-4 mb-4"
-        style={{ borderColor: "rgba(0, 187, 174, 0.2)" }}
-      >
+      <div className="bd-onboarding-form-info">
         <div className="d-flex align-items-start gap-3">
-          <span className="fs-4">ℹ️</span>
+          <span className="bd-onboarding-form-info-icon">ℹ️</span>
           <div>
-            <h3 className="fw-semibold text-body mb-2">De ce avem nevoie de aceste informații?</h3>
-            <p className="small text-body">
+            <h3 className="bd-onboarding-form-info-title">
+              De ce avem nevoie de aceste informații?
+            </h3>
+            <p className="bd-onboarding-form-info-text">
               Aceste informații vor fi afișate în profilul clubului tău și vor ajuta părinții să te
               găsească și să înțeleagă ce oferi. Poți actualiza aceste detalii oricând din
               dashboard-ul tău.
@@ -269,16 +269,14 @@ export function ClubBasicInfoForm() {
       </div>
 
       {/* Navigation */}
-      <div className="mt-4 border-top border-secondary">
-        <OnboardingNavigation
-          backHref={routes.onboarding.club.welcome}
-          nextHref={null} // null means submit button
-          formId="club-basic-info-form"
-          isLoading={isLoading}
-          isNextDisabled={isLoading}
-          nextText="Continuă"
-        />
-      </div>
+      <OnboardingNavigation
+        backHref={routes.onboarding.club.welcome}
+        nextHref={null} // null means submit button
+        formId="club-basic-info-form"
+        isLoading={isLoading}
+        isNextDisabled={isLoading}
+        nextText="Continuă"
+      />
     </form>
   );
 }

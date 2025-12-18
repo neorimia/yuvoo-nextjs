@@ -14,11 +14,11 @@ import type { Club } from "./clubs.types";
  * Map database club record to Club type
  */
 export function mapDbClubToClub(dbClub: typeof clubs.$inferSelect): Club {
-  // Parse schedule from JSONB
+  // Parse schedule from JSONB - handle both old format (time) and new format (startTime/endTime)
   const scheduleData = dbClub.schedule as unknown;
-  const schedule =
+  const schedule: Club["schedule"] =
     Array.isArray(scheduleData) && scheduleData.length > 0
-      ? (scheduleData as { day: string; time: string }[])
+      ? (scheduleData as { day: string; time?: string; startTime?: string; endTime?: string }[])
       : undefined;
 
   // Parse pricing from JSONB (can be array or object)
@@ -195,6 +195,21 @@ export async function getUniqueLocations(): Promise<Array<{ city: string; distri
   return locations;
 }
 
+/**
+ * Get club by admin user ID
+ */
+export async function getClubByAdminUserId(adminUserId: string): Promise<Club | null> {
+  const dbClub = await db.query.clubs.findFirst({
+    where: eq(clubs.adminUserId, adminUserId),
+  });
+
+  if (!dbClub) {
+    return null;
+  }
+
+  return mapDbClubToClub(dbClub);
+}
+
 export const clubsRepository = {
   getClubBySlug,
   getClubById,
@@ -203,5 +218,6 @@ export const clubsRepository = {
   getClubsPendingVerification,
   findBySportType,
   getUniqueLocations,
+  getClubByAdminUserId,
   mapDbClubToClub,
 };

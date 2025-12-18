@@ -27,7 +27,10 @@ export const clubBasicInfoSchema = z.object({
 
   city: z.string(zodRomanianErrors).min(1, "Orașul este obligatoriu"),
 
-  district: z.string().optional(),
+  district: z
+    .string()
+    .optional()
+    .transform((val) => (val && val.trim() !== "" ? val.trim() : undefined)),
 
   address: z
     .string(zodRomanianErrors)
@@ -52,7 +55,8 @@ export const clubContactScheduleSchema = z.object({
     .array(
       z.object({
         day: z.string().min(1, "Ziua este obligatorie"),
-        time: z.string().min(1, "Intervalul orar este obligatoriu"),
+        startTime: z.string().min(1, "Ora de început este obligatorie"),
+        endTime: z.string().min(1, "Ora de sfârșit este obligatorie"),
       })
     )
     .min(1, "Adaugă cel puțin un interval de antrenament"),

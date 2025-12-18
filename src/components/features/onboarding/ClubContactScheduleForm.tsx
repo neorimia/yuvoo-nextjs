@@ -72,7 +72,7 @@ export function ClubContactScheduleForm() {
   });
 
   const addScheduleEntry = () => {
-    append({ day: "", time: "" });
+    append({ day: "", startTime: "", endTime: "" });
   };
 
   const removeScheduleEntry = (index: number) => {
@@ -234,31 +234,57 @@ export function ClubContactScheduleForm() {
                   )}
                 </div>
 
-                {/* Time Input */}
+                {/* Start Time */}
                 <div className="flex-fill">
                   <label
-                    htmlFor={`schedule.${index}.time`}
+                    htmlFor={`schedule.${index}.startTime`}
                     className="d-block text-xs fw-medium text-body mb-2"
                   >
-                    Interval orar
+                    De la <span className="text-danger">*</span>
                   </label>
                   <BootstrapInput
-                    type="text"
-                    {...register(`schedule.${index}.time` as const)}
+                    id={`schedule.${index}.startTime`}
+                    type="time"
+                    {...register(`schedule.${index}.startTime` as const)}
                     disabled={isLoading}
-                    error={!!errors.schedule?.[index]?.time}
+                    error={!!errors.schedule?.[index]?.startTime}
                     className="w-100 small"
-                    placeholder="ex: 17:00-18:30"
-                    aria-invalid={errors.schedule?.[index]?.time ? "true" : "false"}
+                    aria-invalid={errors.schedule?.[index]?.startTime ? "true" : "false"}
                   />
-                  {errors.schedule?.[index]?.time && (
+                  {errors.schedule?.[index]?.startTime && (
                     <p className="mt-1 text-xs text-danger">
-                      {errors.schedule[index]?.time?.message}
+                      {errors.schedule[index]?.startTime?.message}
                     </p>
                   )}
-                  <p className="mt-1 text-xs text-secondary">
-                    Format: HH:MM-HH:MM (ex: 17:00-18:30)
-                  </p>
+                </div>
+
+                {/* Separator */}
+                <div className="d-flex align-items-center" style={{ paddingTop: "1.75rem" }}>
+                  <span className="text-muted fw-bold">-</span>
+                </div>
+
+                {/* End Time */}
+                <div className="flex-fill">
+                  <label
+                    htmlFor={`schedule.${index}.endTime`}
+                    className="d-block text-xs fw-medium text-body mb-2"
+                  >
+                    Până la <span className="text-danger">*</span>
+                  </label>
+                  <BootstrapInput
+                    id={`schedule.${index}.endTime`}
+                    type="time"
+                    {...register(`schedule.${index}.endTime` as const)}
+                    disabled={isLoading}
+                    error={!!errors.schedule?.[index]?.endTime}
+                    className="w-100 small"
+                    aria-invalid={errors.schedule?.[index]?.endTime ? "true" : "false"}
+                  />
+                  {errors.schedule?.[index]?.endTime && (
+                    <p className="mt-1 text-xs text-danger">
+                      {errors.schedule[index]?.endTime?.message}
+                    </p>
+                  )}
                 </div>
 
                 {/* Remove Button */}

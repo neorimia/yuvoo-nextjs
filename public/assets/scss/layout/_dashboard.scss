@@ -1,0 +1,187 @@
+@use "../utils" as *;
+
+// =============== DASHBOARD CSS START HERE ===============
+
+// Parent Dashboard
+.bd-parent-dashboard-area {
+  background-color: var(--bd-common-white);
+  min-height: 100vh;
+
+  .bd-parent-dashboard-content {
+    // Content wrapper styles
+  }
+}
+
+// Club Dashboard
+.bd-club-dashboard-area {
+  background-color: var(--bd-common-white);
+  min-height: 100vh;
+
+  .bd-club-dashboard-content {
+    // Content wrapper styles
+  }
+}
+
+// Profile Completeness Indicator
+.bd-profile-completeness {
+  &-indicator {
+    .progress {
+      border-radius: 8px;
+      overflow: hidden;
+    }
+
+    .progress-bar {
+      transition: width 0.6s ease;
+    }
+
+    .list-unstyled {
+      li {
+        padding: 4px 0;
+        font-size: 14px;
+      }
+    }
+  }
+}
+
+// Booking Statistics
+.bd-booking-statistics {
+  .card {
+    transition:
+      transform 0.2s ease,
+      box-shadow 0.2s ease;
+
+    &:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1) !important;
+    }
+
+    .card-body {
+      border-radius: 8px;
+    }
+  }
+}
+
+// Recent Activity Feed
+.bd-recent-activity-feed {
+  .list-group-item {
+    transition: background-color 0.2s ease;
+
+    &:hover {
+      background-color: rgba(0, 187, 174, 0.03);
+    }
+
+    &:last-child {
+      border-bottom: none !important;
+    }
+  }
+
+  .badge {
+    font-size: 12px;
+    padding: 6px 12px;
+    font-weight: 500;
+  }
+}
+
+// Dashboard Cards General Styles
+.bd-dashboard-card {
+  border-radius: 12px;
+  transition: all 0.3s ease;
+  border: 1px solid #eaeaef;
+
+  &:hover {
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  }
+
+  .card-title {
+    font-size: 18px;
+    font-weight: 600;
+    color: var(--bd-heading-primary);
+    margin-bottom: 0;
+  }
+
+  .card-body {
+    padding: 24px;
+  }
+}
+
+// Dashboard Section Titles
+.bd-dashboard-section-title {
+  font-size: 24px;
+  font-weight: 600;
+  color: var(--bd-heading-primary);
+  margin-bottom: 24px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+
+  i {
+    color: var(--bd-theme-1);
+  }
+}
+
+// Dashboard Stats Cards
+.bd-dashboard-stat-card {
+  text-align: center;
+  padding: 24px;
+  border-radius: 12px;
+  transition: all 0.3s ease;
+
+  i {
+    font-size: 2.5rem;
+    margin-bottom: 16px;
+    display: block;
+  }
+
+  h3 {
+    font-size: 32px;
+    font-weight: 700;
+    margin-bottom: 8px;
+    color: var(--bd-heading-primary);
+  }
+
+  p {
+    font-size: 14px;
+    color: #525258;
+    margin-bottom: 0;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+
+  &:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+  }
+}
+
+// Responsive adjustments
+@media #{$md} {
+  .bd-dashboard-section-title {
+    font-size: 20px;
+  }
+
+  .bd-dashboard-stat-card {
+    padding: 20px;
+
+    h3 {
+      font-size: 28px;
+    }
+  }
+}
+
+@media #{$sm} {
+  .bd-dashboard-section-title {
+    font-size: 18px;
+  }
+
+  .bd-dashboard-stat-card {
+    padding: 16px;
+
+    i {
+      font-size: 2rem;
+    }
+
+    h3 {
+      font-size: 24px;
+    }
+  }
+}
