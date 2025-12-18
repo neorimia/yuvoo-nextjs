@@ -249,15 +249,37 @@ export async function markStepComplete(stepNumber: number): Promise<OnboardingRe
 
 /**
  * Save Step Data (JSONB)
+ *
+ * Security: Validates key to prevent SQL injection.
+ * Only allows alphanumeric characters, underscores, and hyphens.
+ * Uses parameterized queries - Drizzle automatically parameterizes values in sql template literals.
  */
 export async function saveStepData(key: string, value: unknown): Promise<OnboardingResponse> {
   try {
     const user = await requireAuth();
 
+    // Validate key to prevent SQL injection
+    // Only allow alphanumeric characters, underscores, and hyphens
+    if (!/^[a-zA-Z0-9_-]+$/.test(key)) {
+      return {
+        success: false,
+        error:
+          "Cheia de date este invalidă. Doar caractere alfanumerice, liniuțe și underscore sunt permise.",
+      };
+    }
+
+    // Construct JSON path safely (key is validated above)
+    // Drizzle automatically parameterizes variables when using ${variable} in sql template literals
+    // For jsonb_set, the path must be a text array format: '{key}'
+    // Since key is validated (alphanumeric, underscore, hyphen only), constructing path is safe
+    const jsonPath = `{${key}}`;
+    const jsonValue = JSON.stringify(value);
+
+    // Both jsonPath and jsonValue are parameterized by Drizzle when using ${variable}
     await db
       .update(onboardingProgress)
       .set({
-        stepData: sql`jsonb_set(step_data, '{${sql.raw(key)}}', ${JSON.stringify(value)}::jsonb)`,
+        stepData: sql`jsonb_set(step_data, ${jsonPath}::text[], ${jsonValue}::jsonb)`,
         updatedAt: new Date(),
       })
       .where(eq(onboardingProgress.userId, user.id));
