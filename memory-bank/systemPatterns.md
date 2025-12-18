@@ -1440,13 +1440,99 @@ Does component need interactivity?
 ## Security Patterns
 
 1. **Authentication**: Stack Auth handles all auth (server-side only, no client-side provider)
+   - Standardized pattern: Use `requireAuth()` and `requireRole()` from `@/modules/auth/auth.service`
+   - `AuthUser` type includes: `id`, `email`, `name`, `firstName`, `lastName`, `phone`, `role`, `emailVerified`, `createdAt`, `updatedAt`
+   - Optional auth: Use `getSession()` from `@/lib/auth/session` when authentication is optional
+   - Edge cases: Expired tokens return `null` gracefully, concurrent sessions supported, invalid tokens rejected
+   - Token management: Stack Auth handles token lifecycle automatically (creation, validation, expiration, refresh)
+
 2. **Authorization**: Role-based (parent, club_admin, doctor, admin)
+   - All mutation actions require authentication
+   - Role checks via `requireRole(role)` for admin actions
+   - Resource ownership verification in service layer before allowing updates/deletes
+   - Club/Doctor management: Actions require correct role and ownership verification
+
 3. **Input Validation**: Zod schemas for all inputs (server-side validation in Server Actions)
-4. **SQL Injection**: Drizzle ORM parameterized queries
-5. **XSS**: React automatic escaping
-6. **CSRF**: Next.js built-in protection (Server Actions are CSRF-protected)
-7. **File Uploads**: Cloudinary handles storage and CDN
-8. **Server Actions**: All authentication operations are server-side only
+   - Location: `src/lib/validations/`
+   - All error messages in Romanian
+   - Centralized schemas for consistency
+   - All Server Actions use Zod validation
+
+4. **SQL Injection Prevention**: Drizzle ORM parameterized queries
+   - All queries use Drizzle ORM with automatic parameterization
+   - No raw SQL queries or string concatenation
+   - Fixed vulnerability in `saveStepData` function (key validation added)
+   - Audit report: `docs/SQL_INJECTION_PREVENTION_AUDIT.md`
+
+5. **CSRF Protection**: Next.js built-in protection + explicit middleware
+   - Server Actions: Automatic CSRF protection (POST-only, origin validation, SameSite cookies)
+   - All 13 Server Actions have `"use server"` directive
+   - Middleware: HTTP-to-HTTPS redirects in production (`src/proxy.ts`)
+   - API routes: CORS utility created for future cross-origin needs (`src/lib/security/cors.ts`)
+   - Audit report: `docs/CSRF_PROTECTION_AUDIT.md`
+
+6. **Environment Variable Security**: No hardcoded secrets
+   - All API keys, tokens, credentials use environment variables
+   - Proper .gitignore configuration (all `.env*` files excluded)
+   - Cloudinary validation added
+   - Audit report: `docs/ENVIRONMENT_VARIABLE_SECURITY_AUDIT.md`
+
+7. **HTTPS Enforcement**: Vercel automatic + explicit middleware
+   - Vercel automatically enforces HTTPS (SSL certificates, HTTP redirects, HSTS headers)
+   - Middleware: Explicit HTTP-to-HTTPS redirects in production
+   - All external resources use HTTPS (Cloudinary, PostHog, APIs, Database)
+   - HTTP only allowed for localhost development
+   - Audit report: `docs/HTTPS_ENFORCEMENT_AUDIT.md`
+
+8. **CORS Configuration**: Same-origin by default
+   - All API routes are same-origin only (most secure)
+   - CORS utility created for future API routes that need cross-origin access
+   - Proper origin validation, method/header restrictions, preflight handling
+   - Audit report: `docs/CORS_CONFIGURATION_AUDIT.md`
+
+9. **Cookie Security**: Secure by default
+   - Stack Auth cookies: `httpOnly: true`, `secure: true` (production), `sameSite: 'lax'`
+   - Custom consent cookies: Enhanced with `secure` flag for production, `sameSite: 'lax'`
+   - All cookies use `SameSite=Lax` for CSRF protection
+   - Audit report: `docs/COOKIE_SECURITY_AUDIT.md`
+
+10. **XSS Protection**: React automatic escaping
+    - React automatically escapes user input
+    - No manual escaping needed in React components
+
+11. **File Uploads**: Cloudinary handles storage and CDN
+    - Validated file types and sizes
+    - Secure storage and CDN delivery
+
+12. **Server Actions**: All authentication operations are server-side only
+    - Better security (no client-side auth logic)
+    - Smaller client bundle
+
+13. **Rate Limiting**: In-memory rate limiting for abuse prevention
+    - Location: `src/lib/rate-limit.ts`
+    - Applied to: auth actions (sign in, sign up, password reset), uploads, bookings, search actions
+    - Configurable limits per action type (e.g., 5 sign-in attempts per 15 minutes)
+
+14. **Ownership Verification**: Service layer verifies resource ownership
+    - Children: `child.parentId === userId`
+    - Clubs: `club.adminUserId === userId`
+    - Doctors: `doctor.userId === userId`
+    - Uploads: `upload.userId === userId` (via uploads tracking table)
+    - Service functions: `verifyClubOwnership()`, `verifyDoctorOwnership()`, etc.
+
+15. **Audit Logging**: Complete audit trail for admin actions
+    - Table: `audit_logs` tracks all admin verification actions
+    - Tracks: userId, action, entityType, entityId, oldValue, newValue, metadata, IP address, user agent, timestamp
+    - Service: `modules/audit/audit.service.ts` with `logVerificationStatusChange()` and `logAdminAction()`
+    - Non-blocking: Audit logging failures don't affect main operations
+
+16. **Authentication Edge Cases**: Properly handled
+    - Expired tokens: Return `null` gracefully, redirect to login
+    - Concurrent sessions: Supported securely (Stack Auth feature)
+    - Invalid tokens: Rejected properly with appropriate error messages
+    - Token refresh: Automatic (Stack Auth handles)
+    - Comprehensive error handling with Romanian messages
+    - Audit report: `docs/AUTHENTICATION_EDGE_CASES_AUDIT.md`
 
 ## Performance Patterns
 
@@ -1838,6 +1924,15 @@ Club Directory (pre-filtered by sport)
 - **Legal Pages Plan**: `docs/LEGAL_PAGES_DEVELOPMENT_PLAN.md` - Comprehensive legal pages development plan, content templates, SEO guidelines, and implementation checklist
 - **Authentication Integration Plan**: `docs/AUTH_INTEGRATION_PLAN.md` - Complete authentication system integration details, Stack Auth setup, Romanian localization, and implementation checklist
 - **Stack Auth Server Migration**: `docs/STACK_AUTH_SERVER_MIGRATION_PLAN.md` - Migration plan and implementation details for server-side authentication
+- **Security Audit Reports**: Comprehensive security audit covering all security measures:
+  - `docs/SECURITY_AUDIT_REPORT.md` - Main security audit report
+  - `docs/SQL_INJECTION_PREVENTION_AUDIT.md` - SQL injection prevention audit
+  - `docs/CSRF_PROTECTION_AUDIT.md` - CSRF protection audit
+  - `docs/ENVIRONMENT_VARIABLE_SECURITY_AUDIT.md` - Environment variable security audit
+  - `docs/HTTPS_ENFORCEMENT_AUDIT.md` - HTTPS enforcement audit
+  - `docs/CORS_CONFIGURATION_AUDIT.md` - CORS configuration audit
+  - `docs/COOKIE_SECURITY_AUDIT.md` - Cookie security audit
+  - `docs/AUTHENTICATION_EDGE_CASES_AUDIT.md` - Authentication edge cases audit
 - **Tailwind Removal Plan**: `docs/TAILWIND_REMOVAL_PLAN.md` - Comprehensive migration strategy to remove Tailwind CSS and shadcn/ui, keep only Bootstrap 5.3.3 and SCSS
 - **Reusable Components List**: `docs/REUSABLE_COMPONENTS_LIST.md` - Complete inventory of ~80+ reusable Bootstrap components with Bootstrap 5.3 documentation references
 - **System Patterns**: `memory-bank/systemPatterns.md` - This file

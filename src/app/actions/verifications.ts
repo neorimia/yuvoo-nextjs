@@ -7,26 +7,17 @@
  * Handles approval/rejection of club and doctor verification requests.
  */
 
-import { requireRole } from "@/lib/auth/session";
+import { requireRole } from "@/modules/auth/auth.service";
+import { authRepository } from "@/modules/auth/auth.repository";
 import { db } from "@/lib/db";
-import { clubs, doctors, users } from "@/lib/db/schema";
+import { clubs, doctors } from "@/lib/db/schema";
 import { eq } from "drizzle-orm";
 import { sendClubVerificationStatus, sendDoctorVerificationStatus } from "@/lib/integrations/brevo";
 import { revalidatePath } from "next/cache";
 import { routes } from "@/lib/routes";
 import { z } from "zod";
-
-/**
- * Validation schema for verification status update
- */
-const updateVerificationStatusSchema = z.object({
-  type: z.enum(["club", "doctor"]),
-  id: z.string().uuid("ID-ul trebuie să fie un UUID valid"),
-  status: z.enum(["approved", "rejected", "in_review"], {
-    errorMap: () => ({ message: "Statusul trebuie să fie: approved, rejected sau in_review" }),
-  }),
-  reason: z.string().optional(), // Optional rejection reason
-});
+import { updateVerificationStatusSchema } from "@/lib/validations/verification";
+import { logVerificationStatusChange } from "@/modules/audit/audit.service";
 
 /**
  * Update club verification status
@@ -34,7 +25,7 @@ const updateVerificationStatusSchema = z.object({
 export async function updateClubVerificationStatusAction(formData: FormData) {
   try {
     // Require admin role
-    await requireRole("admin");
+    const admin = await requireRole("admin");
 
     // Parse and validate input
     const data = {
@@ -45,6 +36,14 @@ export async function updateClubVerificationStatusAction(formData: FormData) {
     };
 
     const validated = updateVerificationStatusSchema.parse(data);
+
+    // Get current club status for audit log
+    const currentClub = await db.query.clubs.findFirst({
+      where: eq(clubs.id, validated.id),
+      columns: { verificationStatus: true },
+    });
+
+    const oldStatus = currentClub?.verificationStatus || "pending";
 
     // Update club verification status
     const [updatedClub] = await db
@@ -64,25 +63,27 @@ export async function updateClubVerificationStatusAction(formData: FormData) {
       };
     }
 
+    // Log audit trail (non-blocking)
+    logVerificationStatusChange(
+      admin.id,
+      "club",
+      validated.id,
+      oldStatus as "pending" | "in_review" | "approved" | "rejected",
+      validated.status,
+      validated.reason
+    ).catch((error) => {
+      console.error("[Audit] Failed to log club verification change:", error);
+    });
+
     // Get club admin user for email notification
     if (updatedClub.adminUserId) {
-      const adminUser = await db.query.users.findFirst({
-        where: eq(users.id, updatedClub.adminUserId),
-      });
+      const adminUser = await authRepository.getUserById(updatedClub.adminUserId);
       if (adminUser) {
         // Send email notification (non-blocking)
         sendClubVerificationStatus(
           updatedClub.name,
           validated.status,
-          {
-            id: adminUser.id,
-            email: adminUser.email,
-            name: adminUser.firstName || null,
-            role: adminUser.role as "parent" | "club_admin" | "doctor" | "admin",
-            emailVerified: false,
-            createdAt: adminUser.createdAt,
-            updatedAt: adminUser.updatedAt,
-          },
+          adminUser,
           validated.reason
         ).catch((error) => {
           console.error("[Verification] Failed to send email notification:", error);
@@ -101,9 +102,10 @@ export async function updateClubVerificationStatusAction(formData: FormData) {
     console.error("[Verification] Error updating club verification status:", error);
 
     if (error instanceof z.ZodError) {
+      const firstError = error.errors[0];
       return {
         success: false,
-        error: error.errors[0]?.message || "Date invalide",
+        error: firstError?.message || "Date invalide",
       };
     }
 
@@ -127,7 +129,7 @@ export async function updateClubVerificationStatusAction(formData: FormData) {
 export async function updateDoctorVerificationStatusAction(formData: FormData) {
   try {
     // Require admin role
-    await requireRole("admin");
+    const admin = await requireRole("admin");
 
     // Parse and validate input
     const data = {
@@ -138,6 +140,14 @@ export async function updateDoctorVerificationStatusAction(formData: FormData) {
     };
 
     const validated = updateVerificationStatusSchema.parse(data);
+
+    // Get current doctor status for audit log
+    const currentDoctor = await db.query.doctors.findFirst({
+      where: eq(doctors.id, validated.id),
+      columns: { verificationStatus: true },
+    });
+
+    const oldStatus = currentDoctor?.verificationStatus || "pending";
 
     // Update doctor verification status
     const [updatedDoctor] = await db
@@ -157,25 +167,27 @@ export async function updateDoctorVerificationStatusAction(formData: FormData) {
       };
     }
 
+    // Log audit trail (non-blocking)
+    logVerificationStatusChange(
+      admin.id,
+      "doctor",
+      validated.id,
+      oldStatus as "pending" | "in_review" | "approved" | "rejected",
+      validated.status,
+      validated.reason
+    ).catch((error) => {
+      console.error("[Audit] Failed to log doctor verification change:", error);
+    });
+
     // Get doctor user for email notification
     if (updatedDoctor.userId) {
-      const doctorUser = await db.query.users.findFirst({
-        where: eq(users.id, updatedDoctor.userId),
-      });
+      const doctorUser = await authRepository.getUserById(updatedDoctor.userId);
       if (doctorUser) {
         // Send email notification (non-blocking)
         sendDoctorVerificationStatus(
           `${updatedDoctor.firstName} ${updatedDoctor.lastName}`,
           validated.status,
-          {
-            id: doctorUser.id,
-            email: doctorUser.email,
-            name: doctorUser.firstName || null,
-            role: doctorUser.role as "parent" | "club_admin" | "doctor" | "admin",
-            emailVerified: false,
-            createdAt: doctorUser.createdAt,
-            updatedAt: doctorUser.updatedAt,
-          },
+          doctorUser,
           validated.reason
         ).catch((error) => {
           console.error("[Verification] Failed to send email notification:", error);
@@ -194,9 +206,10 @@ export async function updateDoctorVerificationStatusAction(formData: FormData) {
     console.error("[Verification] Error updating doctor verification status:", error);
 
     if (error instanceof z.ZodError) {
+      const firstError = error.errors[0];
       return {
         success: false,
-        error: error.errors[0]?.message || "Date invalide",
+        error: firstError?.message || "Date invalide",
       };
     }
 

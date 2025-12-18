@@ -7,7 +7,7 @@
 
 "use server";
 
-import { requireAuth } from "@/lib/auth/session";
+import { requireAuth } from "@/modules/auth/auth.service";
 import { db } from "@/lib/db";
 import { users, onboardingProgress, children, clubs, doctors } from "@/lib/db/schema";
 import { eq, and, sql } from "drizzle-orm";
@@ -79,7 +79,7 @@ export async function startOnboarding(
   role: OnboardingRole
 ): Promise<OnboardingResponse<OnboardingProgressData>> {
   try {
-    const session = await requireAuth();
+    const user = await requireAuth();
     const validated = startOnboardingSchema.parse({ role });
 
     const totalStepsMap: Record<OnboardingRole, number> = {
@@ -92,7 +92,7 @@ export async function startOnboarding(
     const existing = await db
       .select()
       .from(onboardingProgress)
-      .where(eq(onboardingProgress.userId, session.dbUser.id))
+      .where(eq(onboardingProgress.userId, user.id))
       .limit(1);
 
     if (existing.length > 0) {
@@ -101,7 +101,7 @@ export async function startOnboarding(
         data: {
           id: existing[0].id,
           userId: existing[0].userId,
-          role: existing[0].role,
+          role: existing[0].role as OnboardingRole,
           currentStep: existing[0].currentStep,
           totalSteps: existing[0].totalSteps,
           completedSteps: existing[0].completedSteps.map(Number),
@@ -117,7 +117,7 @@ export async function startOnboarding(
       .insert(onboardingProgress)
       .values({
         id: crypto.randomUUID(),
-        userId: session.dbUser.id,
+        userId: user.id,
         role: validated.role,
         currentStep: 1,
         totalSteps,
@@ -132,7 +132,7 @@ export async function startOnboarding(
       data: {
         id: progress.id,
         userId: progress.userId,
-        role: progress.role,
+        role: progress.role as OnboardingRole,
         currentStep: progress.currentStep,
         totalSteps: progress.totalSteps,
         completedSteps: progress.completedSteps.map(Number),
@@ -156,12 +156,12 @@ export async function startOnboarding(
  */
 export async function getOnboardingProgress(): Promise<OnboardingResponse<OnboardingProgressData>> {
   try {
-    const session = await requireAuth();
+    const user = await requireAuth();
 
     const progress = await db
       .select()
       .from(onboardingProgress)
-      .where(eq(onboardingProgress.userId, session.dbUser.id))
+      .where(eq(onboardingProgress.userId, user.id))
       .limit(1);
 
     if (progress.length === 0) {
@@ -200,7 +200,7 @@ export async function updateOnboardingStep(
   stepData?: Record<string, unknown>
 ): Promise<OnboardingResponse> {
   try {
-    const session = await requireAuth();
+    const user = await requireAuth();
     const validated = updateOnboardingStepSchema.parse({ stepNumber, stepData });
 
     await db
@@ -210,7 +210,7 @@ export async function updateOnboardingStep(
         stepData: validated.stepData ?? {},
         updatedAt: new Date(),
       })
-      .where(eq(onboardingProgress.userId, session.dbUser.id));
+      .where(eq(onboardingProgress.userId, user.id));
 
     return { success: true };
   } catch (error) {
@@ -227,7 +227,7 @@ export async function updateOnboardingStep(
  */
 export async function markStepComplete(stepNumber: number): Promise<OnboardingResponse> {
   try {
-    const session = await requireAuth();
+    const user = await requireAuth();
 
     await db
       .update(onboardingProgress)
@@ -235,7 +235,7 @@ export async function markStepComplete(stepNumber: number): Promise<OnboardingRe
         completedSteps: sql`array_append(completed_steps, ${stepNumber.toString()})`,
         updatedAt: new Date(),
       })
-      .where(eq(onboardingProgress.userId, session.dbUser.id));
+      .where(eq(onboardingProgress.userId, user.id));
 
     return { success: true };
   } catch (error) {
@@ -249,18 +249,40 @@ export async function markStepComplete(stepNumber: number): Promise<OnboardingRe
 
 /**
  * Save Step Data (JSONB)
+ *
+ * Security: Validates key to prevent SQL injection.
+ * Only allows alphanumeric characters, underscores, and hyphens.
+ * Uses parameterized queries - Drizzle automatically parameterizes values in sql template literals.
  */
 export async function saveStepData(key: string, value: unknown): Promise<OnboardingResponse> {
   try {
-    const session = await requireAuth();
+    const user = await requireAuth();
 
+    // Validate key to prevent SQL injection
+    // Only allow alphanumeric characters, underscores, and hyphens
+    if (!/^[a-zA-Z0-9_-]+$/.test(key)) {
+      return {
+        success: false,
+        error:
+          "Cheia de date este invalidă. Doar caractere alfanumerice, liniuțe și underscore sunt permise.",
+      };
+    }
+
+    // Construct JSON path safely (key is validated above)
+    // Drizzle automatically parameterizes variables when using ${variable} in sql template literals
+    // For jsonb_set, the path must be a text array format: '{key}'
+    // Since key is validated (alphanumeric, underscore, hyphen only), constructing path is safe
+    const jsonPath = `{${key}}`;
+    const jsonValue = JSON.stringify(value);
+
+    // Both jsonPath and jsonValue are parameterized by Drizzle when using ${variable}
     await db
       .update(onboardingProgress)
       .set({
-        stepData: sql`jsonb_set(step_data, '{${sql.raw(key)}}', ${JSON.stringify(value)}::jsonb)`,
+        stepData: sql`jsonb_set(step_data, ${jsonPath}::text[], ${jsonValue}::jsonb)`,
         updatedAt: new Date(),
       })
-      .where(eq(onboardingProgress.userId, session.dbUser.id));
+      .where(eq(onboardingProgress.userId, user.id));
 
     return { success: true };
   } catch (error) {
@@ -283,14 +305,14 @@ export async function addChildOnboarding(
   data: CreateChildInput
 ): Promise<OnboardingResponse<{ childId: string }>> {
   try {
-    const session = await requireAuth();
+    const user = await requireAuth();
     const validated = createChildSchema.parse(data);
 
     const [child] = await db
       .insert(children)
       .values({
         id: crypto.randomUUID(),
-        parentId: session.dbUser.id,
+        parentId: user.id,
         firstName: validated.firstName,
         lastName: validated.lastName,
         dateOfBirth: validated.dateOfBirth,
@@ -317,7 +339,7 @@ export async function addChildOnboarding(
  */
 export async function completeParentOnboarding(action: "quiz" | "dashboard"): Promise<never> {
   try {
-    const session = await requireAuth();
+    const user = await requireAuth();
 
     await db
       .update(users)
@@ -326,7 +348,7 @@ export async function completeParentOnboarding(action: "quiz" | "dashboard"): Pr
         profileCompletionPercentage: 100,
         updatedAt: new Date(),
       })
-      .where(eq(users.id, session.dbUser.id));
+      .where(eq(users.id, user.id));
 
     await db
       .update(onboardingProgress)
@@ -335,22 +357,22 @@ export async function completeParentOnboarding(action: "quiz" | "dashboard"): Pr
         isCompleted: true,
         updatedAt: new Date(),
       })
-      .where(eq(onboardingProgress.userId, session.dbUser.id));
+      .where(eq(onboardingProgress.userId, user.id));
 
     await markStepComplete(5);
 
     // Track onboarding completion with person properties
     try {
       await trackEventServer(PostHogEvents.ONBOARDING_COMPLETED, {
-        distinctId: session.user.id,
-        [PostHogProperties.ONBOARDING_ROLE]: session.dbUser.role,
+        distinctId: user.id,
+        [PostHogProperties.ONBOARDING_ROLE]: user.role,
         // Person properties: mark onboarding as complete
         $set: {
           onboardingCompleted: true,
         },
         $set_once: {
           onboardingCompletedDate: new Date().toISOString(),
-          onboardingRole: session.dbUser.role,
+          onboardingRole: user.role,
         },
       });
     } catch (trackingError) {
@@ -382,7 +404,7 @@ export async function createClubOnboarding(
   data: ClubBasicInfoInput
 ): Promise<OnboardingResponse<{ clubId: string }>> {
   try {
-    const session = await requireAuth();
+    const user = await requireAuth();
 
     // Generate SEO-friendly slug from club name
     const slug = generateSlug(data.name);
@@ -391,7 +413,7 @@ export async function createClubOnboarding(
       .insert(clubs)
       .values({
         id: crypto.randomUUID(),
-        adminUserId: session.dbUser.id,
+        adminUserId: user.id,
         name: data.name,
         slug,
         sportType: data.sportType,
@@ -425,7 +447,7 @@ export async function updateClubContactSchedule(
   data: ClubContactScheduleInput
 ): Promise<OnboardingResponse<{ clubId: string }>> {
   try {
-    const session = await requireAuth();
+    const user = await requireAuth();
 
     // Get club ID from onboarding progress
     const progressData = await getOnboardingProgress();
@@ -457,7 +479,7 @@ export async function updateClubContactSchedule(
         schedule: validated.schedule,
         updatedAt: new Date(),
       })
-      .where(and(eq(clubs.id, clubId), eq(clubs.adminUserId, session.dbUser.id)));
+      .where(and(eq(clubs.id, clubId), eq(clubs.adminUserId, user.id)));
 
     await saveStepData("contact_schedule", validated);
     await markStepComplete(3);
@@ -486,7 +508,7 @@ export async function updateClubPricingAges(
   data: ClubPricingAgesInput
 ): Promise<OnboardingResponse<{ clubId: string }>> {
   try {
-    const session = await requireAuth();
+    const user = await requireAuth();
 
     // Get club ID from onboarding progress
     const progressData = await getOnboardingProgress();
@@ -517,7 +539,7 @@ export async function updateClubPricingAges(
         experienceLevels: validated.experienceLevels,
         updatedAt: new Date(),
       })
-      .where(and(eq(clubs.id, clubId), eq(clubs.adminUserId, session.dbUser.id)));
+      .where(and(eq(clubs.id, clubId), eq(clubs.adminUserId, user.id)));
 
     await saveStepData("pricing_ages", validated);
     await markStepComplete(4);
@@ -546,7 +568,7 @@ export async function updateClubPhotos(
   data: ClubPhotoInput
 ): Promise<OnboardingResponse<{ clubId: string }>> {
   try {
-    const session = await requireAuth();
+    const user = await requireAuth();
 
     // Get club ID from onboarding progress
     const progressData = await getOnboardingProgress();
@@ -576,7 +598,7 @@ export async function updateClubPhotos(
         galleryUrls: validated.galleryUrls,
         updatedAt: new Date(),
       })
-      .where(and(eq(clubs.id, clubId), eq(clubs.adminUserId, session.dbUser.id)));
+      .where(and(eq(clubs.id, clubId), eq(clubs.adminUserId, user.id)));
 
     await saveStepData("photos", validated);
     await markStepComplete(5);
@@ -605,7 +627,7 @@ export async function updateClubVerification(
   data: ClubVerificationInput
 ): Promise<OnboardingResponse<{ clubId: string }>> {
   try {
-    const session = await requireAuth();
+    const user = await requireAuth();
 
     // Get club ID from onboarding progress
     const progressData = await getOnboardingProgress();
@@ -634,7 +656,7 @@ export async function updateClubVerification(
         verificationDocuments: validated.verificationDocuments,
         updatedAt: new Date(),
       })
-      .where(and(eq(clubs.id, clubId), eq(clubs.adminUserId, session.dbUser.id)));
+      .where(and(eq(clubs.id, clubId), eq(clubs.adminUserId, user.id)));
 
     await saveStepData("verification", validated);
     await markStepComplete(6);
@@ -664,7 +686,7 @@ export async function submitClubForVerification(
   documents: string[]
 ): Promise<OnboardingResponse> {
   try {
-    const session = await requireAuth();
+    const user = await requireAuth();
 
     await db
       .update(clubs)
@@ -673,7 +695,7 @@ export async function submitClubForVerification(
         verificationStatus: "in_review",
         updatedAt: new Date(),
       })
-      .where(and(eq(clubs.id, clubId), eq(clubs.adminUserId, session.dbUser.id)));
+      .where(and(eq(clubs.id, clubId), eq(clubs.adminUserId, user.id)));
 
     return { success: true };
   } catch (error) {
@@ -692,7 +714,7 @@ export async function submitClubForVerification(
  */
 export async function completeClubOnboarding(): Promise<{ success: boolean; error?: string }> {
   try {
-    const session = await requireAuth();
+    const user = await requireAuth();
 
     // Update user onboarding status
     await db
@@ -702,7 +724,7 @@ export async function completeClubOnboarding(): Promise<{ success: boolean; erro
         profileCompletionPercentage: 100,
         updatedAt: new Date(),
       })
-      .where(eq(users.id, session.dbUser.id));
+      .where(eq(users.id, user.id));
 
     // Update onboarding progress
     await db
@@ -712,7 +734,7 @@ export async function completeClubOnboarding(): Promise<{ success: boolean; erro
         isCompleted: true,
         updatedAt: new Date(),
       })
-      .where(eq(onboardingProgress.userId, session.dbUser.id));
+      .where(eq(onboardingProgress.userId, user.id));
 
     // Mark club profile as complete
     const progressData = await getOnboardingProgress();
@@ -726,15 +748,15 @@ export async function completeClubOnboarding(): Promise<{ success: boolean; erro
     // Track onboarding completion with person properties
     try {
       await trackEventServer(PostHogEvents.ONBOARDING_COMPLETED, {
-        distinctId: session.user.id,
-        [PostHogProperties.ONBOARDING_ROLE]: session.dbUser.role,
+        distinctId: user.id,
+        [PostHogProperties.ONBOARDING_ROLE]: user.role,
         // Person properties: mark onboarding as complete
         $set: {
           onboardingCompleted: true,
         },
         $set_once: {
           onboardingCompletedDate: new Date().toISOString(),
-          onboardingRole: session.dbUser.role,
+          onboardingRole: user.role,
         },
       });
     } catch (trackingError) {
@@ -765,7 +787,7 @@ export async function createDoctorOnboarding(
   data: DoctorBasicInfoInput
 ): Promise<OnboardingResponse<{ doctorId: string }>> {
   try {
-    const session = await requireAuth();
+    const user = await requireAuth();
 
     // Validate the input
     const validated = doctorBasicInfoSchema.parse(data);
@@ -774,7 +796,7 @@ export async function createDoctorOnboarding(
       .insert(doctors)
       .values({
         id: crypto.randomUUID(),
-        userId: session.dbUser.id,
+        userId: user.id,
         firstName: validated.firstName,
         lastName: validated.lastName,
         title: validated.title || null,
@@ -814,7 +836,7 @@ export async function updateDoctorBioExperience(
   data: DoctorBioExperienceInput
 ): Promise<OnboardingResponse<{ doctorId: string }>> {
   try {
-    const session = await requireAuth();
+    const user = await requireAuth();
 
     // Get doctor ID from onboarding progress
     const progressData = await getOnboardingProgress();
@@ -846,7 +868,7 @@ export async function updateDoctorBioExperience(
         languages: validated.languages,
         updatedAt: new Date(),
       })
-      .where(and(eq(doctors.id, doctorId), eq(doctors.userId, session.dbUser.id)));
+      .where(and(eq(doctors.id, doctorId), eq(doctors.userId, user.id)));
 
     await saveStepData("bio_experience", validated);
     await markStepComplete(3);
@@ -875,7 +897,7 @@ export async function updateDoctorLocationContact(
   data: DoctorLocationContactInput
 ): Promise<OnboardingResponse<{ doctorId: string }>> {
   try {
-    const session = await requireAuth();
+    const user = await requireAuth();
 
     // Get doctor ID from onboarding progress
     const progressData = await getOnboardingProgress();
@@ -912,7 +934,7 @@ export async function updateDoctorLocationContact(
         website: validated.website || null,
         updatedAt: new Date(),
       })
-      .where(and(eq(doctors.id, doctorId), eq(doctors.userId, session.dbUser.id)));
+      .where(and(eq(doctors.id, doctorId), eq(doctors.userId, user.id)));
 
     await saveStepData("location_contact", validated);
     await markStepComplete(4);
@@ -941,7 +963,7 @@ export async function updateDoctorPhoto(
   data: DoctorPhotoInput
 ): Promise<OnboardingResponse<{ doctorId: string }>> {
   try {
-    const session = await requireAuth();
+    const user = await requireAuth();
 
     // Get doctor ID from onboarding progress
     const progressData = await getOnboardingProgress();
@@ -970,7 +992,7 @@ export async function updateDoctorPhoto(
         photoUrl: validated.photoUrl || null,
         updatedAt: new Date(),
       })
-      .where(and(eq(doctors.id, doctorId), eq(doctors.userId, session.dbUser.id)));
+      .where(and(eq(doctors.id, doctorId), eq(doctors.userId, user.id)));
 
     await saveStepData("photo", validated);
     await markStepComplete(5);
@@ -999,7 +1021,7 @@ export async function updateDoctorVerification(
   data: DoctorVerificationInput
 ): Promise<OnboardingResponse<{ doctorId: string }>> {
   try {
-    const session = await requireAuth();
+    const user = await requireAuth();
 
     // Get doctor ID from onboarding progress
     const progressData = await getOnboardingProgress();
@@ -1029,7 +1051,7 @@ export async function updateDoctorVerification(
         verificationStatus: "in_review",
         updatedAt: new Date(),
       })
-      .where(and(eq(doctors.id, doctorId), eq(doctors.userId, session.dbUser.id)));
+      .where(and(eq(doctors.id, doctorId), eq(doctors.userId, user.id)));
 
     await saveStepData("verification", validated);
     await markStepComplete(6);
@@ -1058,7 +1080,7 @@ export async function updateDoctorAvailability(
   data: DoctorAvailabilityInput
 ): Promise<OnboardingResponse<{ doctorId: string }>> {
   try {
-    const session = await requireAuth();
+    const user = await requireAuth();
 
     // Get doctor ID from onboarding progress
     const progressData = await getOnboardingProgress();
@@ -1089,7 +1111,7 @@ export async function updateDoctorAvailability(
         schedule: validated.schedule && validated.schedule.length > 0 ? validated.schedule : [],
         updatedAt: new Date(),
       })
-      .where(and(eq(doctors.id, doctorId), eq(doctors.userId, session.dbUser.id)));
+      .where(and(eq(doctors.id, doctorId), eq(doctors.userId, user.id)));
 
     await saveStepData("availability", validated);
     await markStepComplete(7);
@@ -1119,7 +1141,7 @@ export async function submitDoctorForVerification(
   documents: string[]
 ): Promise<OnboardingResponse> {
   try {
-    const session = await requireAuth();
+    const user = await requireAuth();
 
     await db
       .update(doctors)
@@ -1128,7 +1150,7 @@ export async function submitDoctorForVerification(
         verificationStatus: "in_review",
         updatedAt: new Date(),
       })
-      .where(and(eq(doctors.id, doctorId), eq(doctors.userId, session.dbUser.id)));
+      .where(and(eq(doctors.id, doctorId), eq(doctors.userId, user.id)));
 
     return { success: true };
   } catch (error) {
@@ -1145,7 +1167,7 @@ export async function submitDoctorForVerification(
  */
 export async function completeDoctorOnboarding(): Promise<{ success: boolean; error?: string }> {
   try {
-    const session = await requireAuth();
+    const user = await requireAuth();
 
     // Update user onboarding status
     await db
@@ -1155,7 +1177,7 @@ export async function completeDoctorOnboarding(): Promise<{ success: boolean; er
         profileCompletionPercentage: 100,
         updatedAt: new Date(),
       })
-      .where(eq(users.id, session.dbUser.id));
+      .where(eq(users.id, user.id));
 
     // Update onboarding progress
     await db
@@ -1165,7 +1187,7 @@ export async function completeDoctorOnboarding(): Promise<{ success: boolean; er
         isCompleted: true,
         updatedAt: new Date(),
       })
-      .where(eq(onboardingProgress.userId, session.dbUser.id));
+      .where(eq(onboardingProgress.userId, user.id));
 
     // Mark doctor profile as complete
     const progressData = await getOnboardingProgress();
@@ -1179,15 +1201,15 @@ export async function completeDoctorOnboarding(): Promise<{ success: boolean; er
     // Track onboarding completion with person properties
     try {
       await trackEventServer(PostHogEvents.ONBOARDING_COMPLETED, {
-        distinctId: session.user.id,
-        [PostHogProperties.ONBOARDING_ROLE]: session.dbUser.role,
+        distinctId: user.id,
+        [PostHogProperties.ONBOARDING_ROLE]: user.role,
         // Person properties: mark onboarding as complete
         $set: {
           onboardingCompleted: true,
         },
         $set_once: {
           onboardingCompletedDate: new Date().toISOString(),
-          onboardingRole: session.dbUser.role,
+          onboardingRole: user.role,
         },
       });
     } catch (trackingError) {

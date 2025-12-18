@@ -14,7 +14,8 @@
 
 import { revalidatePath } from "next/cache";
 import { headers } from "next/headers";
-import { getSession, requireAuth } from "@/lib/auth/session";
+import { getSession } from "@/lib/auth/session";
+import { requireAuth, getCurrentUser } from "@/modules/auth/auth.service";
 import { getChildById } from "@/modules/children/children.service";
 import {
   submitQuiz,
@@ -57,7 +58,9 @@ export async function submitQuizAction(
       headers: headersList as HeadersInit,
     });
 
-    const identifier = getClientIdentifier(session?.dbUser.id, mockRequest);
+    // Get user ID for rate limiting (if authenticated)
+    const userId = session ? (await getCurrentUser())?.id : undefined;
+    const identifier = getClientIdentifier(userId, mockRequest);
 
     const rateLimitResult = await rateLimit(identifier, {
       maxAttempts: 3,
@@ -109,7 +112,14 @@ export async function submitQuizAction(
     if (needsTemporaryChild) {
       if (session) {
         // Authenticated user but no child selected
-        childId = await createTemporaryChildForQuiz(answersValidation.data, session.dbUser.id);
+        const user = await getCurrentUser();
+        if (!user) {
+          return {
+            success: false,
+            error: "Eroare la obținerea informațiilor utilizatorului.",
+          };
+        }
+        childId = await createTemporaryChildForQuiz(answersValidation.data, user.id);
       } else {
         // Unauthenticated user - create temporary child with anonymous parent
         childId = await createTemporaryChildForQuiz(answersValidation.data, null);
@@ -126,7 +136,14 @@ export async function submitQuizAction(
 
       // Verify child belongs to authenticated user (if authenticated)
       if (session) {
-        const child = await getChildById(childId, session.dbUser.id);
+        const user = await getCurrentUser();
+        if (!user) {
+          return {
+            success: false,
+            error: "Eroare la obținerea informațiilor utilizatorului.",
+          };
+        }
+        const child = await getChildById(childId, user.id);
         if (!child) {
           return {
             success: false,
@@ -149,21 +166,13 @@ export async function submitQuizAction(
     let emailToSend: string | null = null;
     let authUser: AuthUser | undefined = undefined;
 
-    if (session?.user?.primaryEmail) {
-      // Authenticated user - use their email
-      emailToSend = session.user.primaryEmail;
-      authUser = {
-        id: session.dbUser.id,
-        email: session.user.primaryEmail,
-        name:
-          session.dbUser.firstName && session.dbUser.lastName
-            ? `${session.dbUser.firstName} ${session.dbUser.lastName}`
-            : session.user.displayName || null,
-        role: session.dbUser.role as "parent" | "club_admin" | "doctor" | "admin",
-        emailVerified: session.user.primaryEmailVerified || false,
-        createdAt: session.dbUser.createdAt,
-        updatedAt: session.dbUser.updatedAt,
-      };
+    if (session) {
+      // Authenticated user - get AuthUser and use their email
+      const user = await getCurrentUser();
+      if (user) {
+        emailToSend = user.email;
+        authUser = user;
+      }
     } else if (input.email && input.email.trim() !== "") {
       // Unauthenticated user - use provided email
       emailToSend = input.email.trim();
@@ -181,21 +190,25 @@ export async function submitQuizAction(
     // Step 8: Track quiz completion event
     try {
       let childAge = answersValidation.data.age;
-      if (session?.dbUser?.id) {
-        try {
-          const child = await getChildById(childId, session.dbUser.id);
-          if (child) {
-            childAge = child.age;
-          }
-        } catch (childError) {
-          // Child fetch failed, use age from answers
-          if (process.env.NODE_ENV === "development") {
-            console.error("[PostHog] Error fetching child for tracking:", childError);
+      if (session) {
+        const user = await getCurrentUser();
+        if (user) {
+          try {
+            const child = await getChildById(childId, user.id);
+            if (child) {
+              childAge = child.age;
+            }
+          } catch (childError) {
+            // Child fetch failed, use age from answers
+            if (process.env.NODE_ENV === "development") {
+              console.error("[PostHog] Error fetching child for tracking:", childError);
+            }
           }
         }
       }
+      const user = session ? await getCurrentUser() : null;
       await trackEventServer(PostHogEvents.QUIZ_COMPLETED, {
-        distinctId: session?.user.id || "anonymous",
+        distinctId: user?.id || "anonymous",
         [PostHogProperties.QUIZ_ID]: result.id,
         [PostHogProperties.CHILD_ID]: childId,
         [PostHogProperties.CHILD_AGE]: childAge,
@@ -274,7 +287,7 @@ export async function getQuizResultAction(quizId: string): Promise<QuizResult | 
 export async function getQuizHistoryAction(childId: string): Promise<QuizResult[]> {
   try {
     // Step 1: Authentication check
-    const session = await requireAuth();
+    const user = await requireAuth();
 
     // Step 2: Validate childId format
     if (!childId || typeof childId !== "string" || childId.length !== 36) {
@@ -283,9 +296,9 @@ export async function getQuizHistoryAction(childId: string): Promise<QuizResult[
     }
 
     // Step 3: Verify child belongs to user
-    const child = await getChildById(childId, session.dbUser.id);
+    const child = await getChildById(childId, user.id);
     if (!child) {
-      console.error(`Child ${childId} not found or access denied for user ${session.dbUser.id}`);
+      console.error(`Child ${childId} not found or access denied for user ${user.id}`);
       return [];
     }
 

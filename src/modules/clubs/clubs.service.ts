@@ -5,6 +5,9 @@
  * Handles club discovery, search, filtering, and details.
  */
 
+import { db } from "@/lib/db";
+import { clubs } from "@/lib/db/schema";
+import { eq, and } from "drizzle-orm";
 import { clubsRepository } from "./clubs.repository";
 import { clubsSearch } from "./clubs.search";
 import type { Club, ClubSearchFilters, ClubSearchResult } from "./clubs.types";
@@ -78,4 +81,82 @@ export async function searchNearbyClubs(
     radiusKm,
     sortBy: "distance", // Always sort by distance for nearby search
   });
+}
+
+/**
+ * Verify club ownership
+ * Throws error if club doesn't exist or user doesn't own it
+ */
+export async function verifyClubOwnership(clubId: string, userId: string): Promise<Club> {
+  const club = await clubsRepository.getClubById(clubId);
+  if (!club) {
+    throw new Error("Club-ul nu a fost găsit");
+  }
+
+  // Check ownership via adminUserId
+  const dbClub = await db.query.clubs.findFirst({
+    where: eq(clubs.id, clubId),
+    columns: { adminUserId: true },
+  });
+
+  if (!dbClub || dbClub.adminUserId !== userId) {
+    throw new Error("Nu ai permisiunea de a gestiona acest club");
+  }
+
+  return club;
+}
+
+/**
+ * Update club (with ownership verification)
+ */
+export async function updateClub(
+  clubId: string,
+  userId: string,
+  updates: Partial<{
+    name: string;
+    description: string;
+    sportType: string;
+    city: string;
+    district: string | null;
+    address: string;
+    phone: string | null;
+    email: string | null;
+    website: string | null;
+    schedule: unknown;
+    pricing: unknown;
+    ageGroups: number[];
+    experienceLevels: string[];
+    logoUrl: string | null;
+    galleryUrls: string[];
+  }>
+): Promise<Club> {
+  // Verify ownership first
+  await verifyClubOwnership(clubId, userId);
+
+  // Update club
+  const [updatedClub] = await db
+    .update(clubs)
+    .set({
+      ...updates,
+      updatedAt: new Date(),
+    })
+    .where(and(eq(clubs.id, clubId), eq(clubs.adminUserId, userId)))
+    .returning();
+
+  if (!updatedClub) {
+    throw new Error("Eroare la actualizarea clubului");
+  }
+
+  return clubsRepository.mapDbClubToClub(updatedClub);
+}
+
+/**
+ * Delete club (with ownership verification)
+ */
+export async function deleteClub(clubId: string, userId: string): Promise<void> {
+  // Verify ownership first
+  await verifyClubOwnership(clubId, userId);
+
+  // Delete club
+  await db.delete(clubs).where(and(eq(clubs.id, clubId), eq(clubs.adminUserId, userId)));
 }

@@ -107,6 +107,50 @@ const DEFAULT_QUIZ_CONFIG: RateLimitConfig = {
 };
 
 /**
+ * Predefined rate limit configurations for different actions
+ */
+export const RATE_LIMIT_CONFIGS = {
+  // Authentication
+  SIGN_IN: {
+    maxAttempts: 5, // 5 login attempts
+    windowMs: 15 * 60 * 1000, // per 15 minutes (prevent brute force)
+  },
+  SIGN_UP: {
+    maxAttempts: 3, // 3 registrations
+    windowMs: 60 * 60 * 1000, // per hour (prevent spam)
+  },
+  FORGOT_PASSWORD: {
+    maxAttempts: 3, // 3 password reset requests
+    windowMs: 60 * 60 * 1000, // per hour (prevent email spam)
+  },
+  RESET_PASSWORD: {
+    maxAttempts: 5, // 5 password reset attempts
+    windowMs: 60 * 60 * 1000, // per hour
+  },
+  // Uploads
+  UPLOAD_IMAGE: {
+    maxAttempts: 10, // 10 image uploads
+    windowMs: 60 * 60 * 1000, // per hour (prevent storage abuse)
+  },
+  UPLOAD_DOCUMENT: {
+    maxAttempts: 5, // 5 document uploads
+    windowMs: 60 * 60 * 1000, // per hour (prevent storage abuse)
+  },
+  // Bookings
+  CREATE_BOOKING: {
+    maxAttempts: 10, // 10 bookings
+    windowMs: 60 * 60 * 1000, // per hour (prevent spam bookings)
+  },
+  // Search (public endpoints)
+  SEARCH: {
+    maxAttempts: 30, // 30 searches
+    windowMs: 60 * 1000, // per minute (prevent abuse)
+  },
+  // Quiz (already defined, but exported for consistency)
+  QUIZ: DEFAULT_QUIZ_CONFIG,
+} as const;
+
+/**
  * Check rate limit for an identifier
  *
  * @param identifier - Unique identifier (user ID or IP address)
@@ -156,6 +200,51 @@ export async function rateLimit(
     remaining: config.maxAttempts - entry.count,
     resetAt: entry.resetAt,
   };
+}
+
+/**
+ * Get client identifier for rate limiting from headers
+ *
+ * Helper function for Server Actions that don't have direct Request access.
+ * Extracts IP from Next.js headers() API.
+ *
+ * @param userId - Optional user ID from session
+ * @param headers - Headers object from Next.js headers()
+ * @returns Identifier string for rate limiting
+ */
+export function getClientIdentifierFromHeaders(userId?: string, headers?: Headers): string {
+  // Prefer user ID for authenticated users
+  if (userId) {
+    return `user:${userId}`;
+  }
+
+  // Fallback to IP address for anonymous users
+  if (headers) {
+    // Check common proxy headers (in order of preference)
+    const forwarded = headers.get("x-forwarded-for");
+    const realIp = headers.get("x-real-ip");
+    const cfConnectingIp = headers.get("cf-connecting-ip"); // Cloudflare
+
+    // Extract IP address
+    let ip: string;
+
+    if (forwarded) {
+      // X-Forwarded-For can contain multiple IPs (client, proxy1, proxy2)
+      // Take the first one (original client IP)
+      ip = forwarded.split(",")[0].trim();
+    } else if (cfConnectingIp) {
+      ip = cfConnectingIp;
+    } else if (realIp) {
+      ip = realIp;
+    } else {
+      ip = "unknown";
+    }
+
+    return `ip:${ip}`;
+  }
+
+  // Last resort fallback
+  return "unknown";
 }
 
 /**

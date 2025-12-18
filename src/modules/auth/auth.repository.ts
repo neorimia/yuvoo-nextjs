@@ -21,6 +21,9 @@ function mapDbUserToAuthUser(dbUser: typeof users.$inferSelect): AuthUser {
       dbUser.firstName && dbUser.lastName
         ? `${dbUser.firstName} ${dbUser.lastName}`
         : dbUser.firstName || dbUser.lastName || null,
+    firstName: dbUser.firstName || null,
+    lastName: dbUser.lastName || null,
+    phone: dbUser.phone || null,
     role: dbUser.role as AuthUser["role"],
     emailVerified: true, // Stack Auth handles email verification
     createdAt: dbUser.createdAt,

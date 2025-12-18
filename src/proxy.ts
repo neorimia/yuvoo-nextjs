@@ -208,6 +208,20 @@ function getRequiredRole(pathname: string): "parent" | "club_admin" | "doctor" |
 }
 
 export async function proxy(request: NextRequest) {
+  // HTTPS enforcement (production only)
+  // Vercel automatically enforces HTTPS, but this provides explicit redirect
+  if (process.env.NODE_ENV === "production") {
+    const protocol = request.headers.get("x-forwarded-proto") || request.nextUrl.protocol;
+
+    // Check if request is HTTP (not HTTPS)
+    if (protocol === "http:" || protocol === "http") {
+      // Redirect to HTTPS
+      const httpsUrl = new URL(request.url);
+      httpsUrl.protocol = "https:";
+      return NextResponse.redirect(httpsUrl, 301); // Permanent redirect
+    }
+  }
+
   const { pathname } = request.nextUrl;
 
   // Allow public routes

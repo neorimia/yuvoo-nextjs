@@ -7,6 +7,7 @@
 
 "use server";
 
+import { headers } from "next/headers";
 import { stackServerApp } from "@/lib/auth/stack";
 import { getCurrentUser, requireAuth, requireRole } from "@/modules/auth/auth.service";
 import { getSession } from "@/lib/auth/session";
@@ -15,6 +16,14 @@ import { routes } from "@/lib/routes";
 import { getErrorMessage } from "@/lib/auth/errors";
 import { trackEventServer } from "@/lib/analytics/tracking-server";
 import { PostHogEvents, PostHogProperties } from "@/lib/analytics/events";
+import { rateLimit, getClientIdentifierFromHeaders, RATE_LIMIT_CONFIGS } from "@/lib/rate-limit";
+import {
+  signInSchema,
+  signUpSchema,
+  forgotPasswordSchema,
+  resetPasswordSchema,
+  verifyEmailSchema,
+} from "@/lib/validations/auth";
 
 /**
  * Get current authenticated user
@@ -57,14 +66,37 @@ export async function requireRoleAction(role: UserRole): Promise<AuthUser> {
  * @param redirectUrl - Optional URL to redirect to after successful login
  */
 export async function signInAction(formData: FormData, redirectUrl?: string) {
-  const email = formData.get("email") as string;
-  const password = formData.get("password") as string;
+  // Validate input with Zod schema
+  const validationResult = signInSchema.safeParse({
+    email: formData.get("email"),
+    password: formData.get("password"),
+  });
 
-  if (!email || !password) {
+  if (!validationResult.success) {
+    const firstError = validationResult.error.errors[0];
     return {
       success: false,
-      error: "Email și parola sunt obligatorii",
+      error: firstError?.message || "Date invalide. Te rugăm să verifici email-ul și parola.",
     };
+  }
+
+  const { email, password } = validationResult.data;
+
+  // Rate limiting: prevent brute force attacks
+  try {
+    const headersList = await headers();
+    const identifier = getClientIdentifierFromHeaders(undefined, headersList);
+    const rateLimitResult = await rateLimit(`signin:${identifier}`, RATE_LIMIT_CONFIGS.SIGN_IN);
+
+    if (!rateLimitResult.success) {
+      return {
+        success: false,
+        error: `Prea multe încercări de autentificare. Te rugăm să încerci din nou după ${rateLimitResult.resetTime}.`,
+      };
+    }
+  } catch (rateLimitError) {
+    // Don't block login if rate limiting fails (log and continue)
+    console.error("[RateLimit] Error checking rate limit for sign in:", rateLimitError);
   }
 
   try {
@@ -148,39 +180,39 @@ export async function signInAction(formData: FormData, redirectUrl?: string) {
  * - If onboarding completed, redirects to dashboard
  */
 export async function signUpAction(formData: FormData) {
-  const email = formData.get("email") as string;
-  const password = formData.get("password") as string;
-  const passwordConfirmation = formData.get("passwordConfirmation") as string;
-  const role = formData.get("role") as string;
+  // Validate input with Zod schema
+  const validationResult = signUpSchema.safeParse({
+    email: formData.get("email"),
+    password: formData.get("password"),
+    passwordConfirmation: formData.get("passwordConfirmation"),
+    role: formData.get("role"),
+  });
 
-  if (!email || !password || !passwordConfirmation || !role) {
+  if (!validationResult.success) {
+    const firstError = validationResult.error.errors[0];
     return {
       success: false,
-      error: "Toate câmpurile sunt obligatorii",
+      error: firstError?.message || "Date invalide. Te rugăm să verifici toate câmpurile.",
     };
   }
 
-  // Validate role
-  const validRoles = ["parent", "club_admin", "doctor"];
-  if (!validRoles.includes(role)) {
-    return {
-      success: false,
-      error: "Tipul de cont selectat nu este valid",
-    };
-  }
+  const { email, password, role } = validationResult.data;
 
-  if (password !== passwordConfirmation) {
-    return {
-      success: false,
-      error: "Parolele nu se potrivesc",
-    };
-  }
+  // Rate limiting: prevent spam registrations
+  try {
+    const headersList = await headers();
+    const identifier = getClientIdentifierFromHeaders(undefined, headersList);
+    const rateLimitResult = await rateLimit(`signup:${identifier}`, RATE_LIMIT_CONFIGS.SIGN_UP);
 
-  if (password.length < 6) {
-    return {
-      success: false,
-      error: "Parola trebuie să aibă cel puțin 6 caractere",
-    };
+    if (!rateLimitResult.success) {
+      return {
+        success: false,
+        error: `Prea multe încercări de înregistrare. Te rugăm să încerci din nou după ${rateLimitResult.resetTime}.`,
+      };
+    }
+  } catch (rateLimitError) {
+    // Don't block signup if rate limiting fails (log and continue)
+    console.error("[RateLimit] Error checking rate limit for sign up:", rateLimitError);
   }
 
   try {
@@ -303,13 +335,39 @@ function getOnboardingUrl(role: string): string {
  * Send forgot password email
  */
 export async function forgotPasswordAction(formData: FormData) {
-  const email = formData.get("email") as string;
+  // Validate input with Zod schema
+  const validationResult = forgotPasswordSchema.safeParse({
+    email: formData.get("email"),
+  });
 
-  if (!email) {
+  if (!validationResult.success) {
+    const firstError = validationResult.error.errors[0];
     return {
       success: false,
-      error: "Adresa de email este obligatorie",
+      error: firstError?.message || "Adresa de email este obligatorie",
     };
+  }
+
+  const { email } = validationResult.data;
+
+  // Rate limiting: prevent email spam
+  try {
+    const headersList = await headers();
+    const identifier = getClientIdentifierFromHeaders(undefined, headersList);
+    const rateLimitResult = await rateLimit(
+      `forgot-password:${identifier}`,
+      RATE_LIMIT_CONFIGS.FORGOT_PASSWORD
+    );
+
+    if (!rateLimitResult.success) {
+      return {
+        success: false,
+        error: `Prea multe solicitări de resetare a parolei. Te rugăm să încerci din nou după ${rateLimitResult.resetTime}.`,
+      };
+    }
+  } catch (rateLimitError) {
+    // Don't block if rate limiting fails (log and continue)
+    console.error("[RateLimit] Error checking rate limit for forgot password:", rateLimitError);
   }
 
   try {
@@ -345,36 +403,41 @@ export async function forgotPasswordAction(formData: FormData) {
  * Reset password with token
  */
 export async function resetPasswordAction(formData: FormData) {
-  const token = formData.get("token") as string;
-  const password = formData.get("password") as string;
-  const passwordConfirmation = formData.get("passwordConfirmation") as string;
+  // Validate input with Zod schema
+  const validationResult = resetPasswordSchema.safeParse({
+    token: formData.get("token"),
+    password: formData.get("password"),
+    passwordConfirmation: formData.get("passwordConfirmation"),
+  });
 
-  if (!token) {
+  if (!validationResult.success) {
+    const firstError = validationResult.error.errors[0];
     return {
       success: false,
-      error: "Link-ul de resetare este invalid sau a expirat",
+      error: firstError?.message || "Date invalide. Te rugăm să verifici toate câmpurile.",
     };
   }
 
-  if (!password || !passwordConfirmation) {
-    return {
-      success: false,
-      error: "Parola și confirmarea parolei sunt obligatorii",
-    };
-  }
+  const { token, password } = validationResult.data;
 
-  if (password !== passwordConfirmation) {
-    return {
-      success: false,
-      error: "Parolele nu se potrivesc",
-    };
-  }
+  // Rate limiting: prevent brute force on password reset
+  try {
+    const headersList = await headers();
+    const identifier = getClientIdentifierFromHeaders(undefined, headersList);
+    const rateLimitResult = await rateLimit(
+      `reset-password:${identifier}`,
+      RATE_LIMIT_CONFIGS.RESET_PASSWORD
+    );
 
-  if (password.length < 6) {
-    return {
-      success: false,
-      error: "Parola trebuie să aibă cel puțin 6 caractere",
-    };
+    if (!rateLimitResult.success) {
+      return {
+        success: false,
+        error: `Prea multe încercări de resetare a parolei. Te rugăm să încerci din nou după ${rateLimitResult.resetTime}.`,
+      };
+    }
+  } catch (rateLimitError) {
+    // Don't block if rate limiting fails (log and continue)
+    console.error("[RateLimit] Error checking rate limit for reset password:", rateLimitError);
   }
 
   try {
@@ -418,15 +481,21 @@ export async function resetPasswordAction(formData: FormData) {
  * Verify email with token
  */
 export async function verifyEmailAction(token: string) {
-  if (!token) {
+  // Validate input with Zod schema
+  const validationResult = verifyEmailSchema.safeParse({ token });
+
+  if (!validationResult.success) {
+    const firstError = validationResult.error.errors[0];
     return {
       success: false,
-      error: "Link-ul de verificare este invalid sau lipsește",
+      error: firstError?.message || "Link-ul de verificare este invalid sau lipsește",
     };
   }
 
+  const { token: validatedToken } = validationResult.data;
+
   try {
-    const result = await stackServerApp.verifyEmail(token);
+    const result = await stackServerApp.verifyEmail(validatedToken);
 
     if ("status" in result && result.status === "ok") {
       // Try to get user session for tracking

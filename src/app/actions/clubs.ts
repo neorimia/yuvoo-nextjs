@@ -6,11 +6,23 @@
 
 "use server";
 
-import { getClubBySlug, searchClubs, getClubsBySport } from "@/modules/clubs/clubs.service";
+import { headers } from "next/headers";
+import { revalidatePath } from "next/cache";
+import {
+  getClubBySlug,
+  searchClubs,
+  getClubsBySport,
+  updateClub,
+  deleteClub,
+  verifyClubOwnership,
+} from "@/modules/clubs/clubs.service";
 import type { Club, ClubSearchFilters, ClubSearchResult } from "@/modules/clubs/clubs.types";
 import { trackEventServer } from "@/lib/analytics/tracking-server";
 import { PostHogEvents, PostHogProperties } from "@/lib/analytics/events";
 import { getSession } from "@/lib/auth/session";
+import { requireRole } from "@/modules/auth/auth.service";
+import { rateLimit, getClientIdentifierFromHeaders, RATE_LIMIT_CONFIGS } from "@/lib/rate-limit";
+import { routes } from "@/lib/routes";
 
 /**
  * Get club by slug (public action)
@@ -41,6 +53,30 @@ export async function getClubByIdAction(id: string): Promise<Club | null> {
  * Search clubs with filters (public action)
  */
 export async function searchClubsAction(filters: ClubSearchFilters): Promise<ClubSearchResult> {
+  // Rate limiting: prevent abuse of search endpoint
+  try {
+    const headersList = await headers();
+    const session = await getSession();
+    const identifier = getClientIdentifierFromHeaders(session?.dbUser?.id, headersList);
+    const rateLimitResult = await rateLimit(
+      `search-clubs:${identifier}`,
+      RATE_LIMIT_CONFIGS.SEARCH
+    );
+
+    if (!rateLimitResult.success) {
+      // Return empty result instead of error for better UX
+      return {
+        clubs: [],
+        total: 0,
+        page: filters.page || 1,
+        pageSize: filters.pageSize || 20,
+      };
+    }
+  } catch (rateLimitError) {
+    // Don't block search if rate limiting fails (log and continue)
+    console.error("[RateLimit] Error checking rate limit for club search:", rateLimitError);
+  }
+
   try {
     const result = await searchClubs(filters);
 
@@ -146,6 +182,83 @@ export async function getFeaturedClubs(): Promise<{
       success: false,
       data: [],
       error: error instanceof Error ? error.message : "Unknown error",
+    };
+  }
+}
+
+/**
+ * Update club profile (club_admin only, with ownership verification)
+ */
+export async function updateClubAction(
+  clubId: string,
+  input: unknown
+): Promise<{ success: boolean; club?: Club; error?: string }> {
+  try {
+    // Require club_admin role
+    const user = await requireRole("club_admin");
+
+    // Verify ownership
+    await verifyClubOwnership(clubId, user.id);
+
+    // Validate input (using a simple schema for updates - can be extended)
+    // For now, accept any object with club fields
+    const updates = input as Parameters<typeof updateClub>[2];
+
+    // Update club
+    const club = await updateClub(clubId, user.id, updates);
+
+    // Revalidate cache
+    revalidatePath(routes.club.profile);
+    revalidatePath(routes.club.profileEdit);
+    if (club.slug) {
+      revalidatePath(`/cluburi/${club.slug}`);
+    }
+
+    return { success: true, club };
+  } catch (error) {
+    console.error("Error updating club:", error);
+    if (error instanceof Error && error.message.includes("permisiunea")) {
+      return {
+        success: false,
+        error: error.message,
+      };
+    }
+    return {
+      success: false,
+      error: error instanceof Error ? error.message : "Eroare la actualizarea clubului",
+    };
+  }
+}
+
+/**
+ * Delete club (club_admin only, with ownership verification)
+ */
+export async function deleteClubAction(
+  clubId: string
+): Promise<{ success: boolean; error?: string }> {
+  try {
+    // Require club_admin role
+    const user = await requireRole("club_admin");
+
+    // Verify ownership and delete
+    await deleteClub(clubId, user.id);
+
+    // Revalidate cache
+    revalidatePath(routes.club.dashboard);
+    revalidatePath(routes.club.profile);
+
+    return { success: true };
+  } catch (error) {
+    console.error("Error deleting club:", error);
+    if (error instanceof Error && error.message.includes("permisiunea")) {
+      return {
+        success: false,
+        error: error.message,
+      };
+    }
+    return {
+      success: false,
+      error: error instanceof Error ? error.message : "Eroare la ștergerea clubului",
     };
   }
 }

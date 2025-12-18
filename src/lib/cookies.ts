@@ -37,7 +37,9 @@ export function setCookieConsent(consented: boolean): void {
   const expires = new Date();
   expires.setFullYear(expires.getFullYear() + 1); // 1 year expiration
 
-  document.cookie = `${COOKIE_CONSENT_KEY}=${consented}; expires=${expires.toUTCString()}; path=/; SameSite=Lax`;
+  // Add Secure flag in production (HTTPS only)
+  const secureFlag = process.env.NODE_ENV === "production" ? "; Secure" : "";
+  document.cookie = `${COOKIE_CONSENT_KEY}=${consented}; expires=${expires.toUTCString()}; path=/; SameSite=Lax${secureFlag}`;
 }
 
 /**
@@ -68,7 +70,9 @@ export function setCookiePreferences(preferences: CookiePreferences): void {
   const expires = new Date();
   expires.setFullYear(expires.getFullYear() + 1); // 1 year expiration
 
-  document.cookie = `${COOKIE_PREFERENCES_KEY}=${encodeURIComponent(JSON.stringify(preferences))}; expires=${expires.toUTCString()}; path=/; SameSite=Lax`;
+  // Add Secure flag in production (HTTPS only)
+  const secureFlag = process.env.NODE_ENV === "production" ? "; Secure" : "";
+  document.cookie = `${COOKIE_PREFERENCES_KEY}=${encodeURIComponent(JSON.stringify(preferences))}; expires=${expires.toUTCString()}; path=/; SameSite=Lax${secureFlag}`;
 }
 
 /**

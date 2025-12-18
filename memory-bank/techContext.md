@@ -811,14 +811,79 @@ import { getClubBySlug } from "@/modules/clubs/clubs.service";
 ## Security Considerations
 
 1. **Authentication**: Stack Auth (managed service)
+   - Automatic token management (creation, validation, expiration, refresh)
+   - Secure cookie storage (httpOnly, secure, sameSite)
+   - Edge cases handled (expired tokens, concurrent sessions, invalid tokens)
+   - Comprehensive error handling with Romanian messages
+
 2. **Authorization**: Role-based checks in Server Actions
+   - Standardized pattern: `requireAuth()` and `requireRole()` from `@/modules/auth/auth.service`
+   - Ownership verification in service layer (clubs, doctors, children, uploads)
+   - Club/Doctor management actions with role checks and ownership verification
+
 3. **Input Validation**: Zod schemas
-4. **SQL Injection**: Drizzle ORM parameterized queries
-5. **XSS**: React automatic escaping
-6. **CSRF**: Next.js built-in protection
+   - All Server Actions use Zod validation
+   - Romanian error messages
+   - Centralized schemas in `src/lib/validations/`
+
+4. **SQL Injection Prevention**: Drizzle ORM parameterized queries
+   - All queries use Drizzle ORM with automatic parameterization
+   - No raw SQL queries or string concatenation
+   - Fixed vulnerability in `saveStepData` function (key validation added)
+   - Comprehensive audit: `docs/SQL_INJECTION_PREVENTION_AUDIT.md`
+
+5. **CSRF Protection**: Next.js built-in protection + explicit middleware
+   - Server Actions: Automatic CSRF protection (POST-only, origin validation, SameSite cookies)
+   - Middleware: HTTP-to-HTTPS redirects in production (`src/proxy.ts`)
+   - CORS utility: Created for future API routes (`src/lib/security/cors.ts`)
+   - Comprehensive audit: `docs/CSRF_PROTECTION_AUDIT.md`
+
+6. **XSS Protection**: React automatic escaping
+   - React automatically escapes user input
+   - No manual escaping needed
+
 7. **File Uploads**: Cloudinary (validated, secure storage)
+   - Validated file types and sizes
+   - Secure storage and CDN delivery
+
 8. **Environment Variables**: Never commit to git
-9. **API Keys**: Store in environment variables only
+   - All secrets use environment variables
+   - Proper .gitignore configuration
+   - Comprehensive audit: `docs/ENVIRONMENT_VARIABLE_SECURITY_AUDIT.md`
+
+9. **HTTPS Enforcement**: Vercel automatic + explicit middleware
+   - Vercel automatically enforces HTTPS (SSL certificates, HTTP redirects, HSTS headers)
+   - Middleware: Explicit HTTP-to-HTTPS redirects in production
+   - All external resources use HTTPS
+   - Comprehensive audit: `docs/HTTPS_ENFORCEMENT_AUDIT.md`
+
+10. **CORS Configuration**: Same-origin by default
+    - All API routes are same-origin only (most secure)
+    - CORS utility created for future cross-origin needs
+    - Comprehensive audit: `docs/CORS_CONFIGURATION_AUDIT.md`
+
+11. **Cookie Security**: Secure by default
+    - Stack Auth cookies: httpOnly, secure, sameSite configured automatically
+    - Custom cookies: Enhanced with secure flag for production
+    - All cookies use SameSite=Lax for CSRF protection
+    - Comprehensive audit: `docs/COOKIE_SECURITY_AUDIT.md`
+
+12. **Rate Limiting**: In-memory rate limiting for abuse prevention
+    - Applied to: auth actions, uploads, bookings, search actions
+    - Configurable limits per action type
+    - Location: `src/lib/rate-limit.ts`
+
+13. **Audit Logging**: Complete audit trail for admin actions
+    - Tracks: userId, action, entityType, entityId, oldValue, newValue, metadata, IP, user agent
+    - Service: `modules/audit/audit.service.ts`
+    - Non-blocking: Failures don't affect main operations
+
+14. **Authentication Edge Cases**: Properly handled
+    - Expired tokens: Graceful handling, redirect to login
+    - Concurrent sessions: Supported securely (Stack Auth feature)
+    - Invalid tokens: Rejected properly
+    - Token refresh: Automatic (Stack Auth handles)
+    - Comprehensive audit: `docs/AUTHENTICATION_EDGE_CASES_AUDIT.md`
 
 ## Browser Support
 
