@@ -1,5 +1,3 @@
-"use cache";
-
 import React from "react";
 import { notFound } from "next/navigation";
 import type { Metadata } from "next";
@@ -8,7 +6,6 @@ import SportDetailsMain from "@/components/features/sports/SportDetailsMain";
 import { getSportBySlug } from "@/modules/sports/sports.service";
 import { SPORTS_DATA } from "@/lib/db/seed-data/sports";
 import { routes } from "@/lib/routes";
-import { cacheTag } from "next/cache";
 import { generateSportMetadata as generateEnhancedMetadata } from "@/lib/seo/sport-metadata";
 import ArticleSchema from "@/components/SEO/ArticleSchema";
 import { getExpandedContentBySportId } from "@/data/sport-expanded-content";
@@ -34,42 +31,63 @@ export async function generateStaticParams() {
  * Sport Detail Page (SSG)
  *
  * Public page displaying details for a specific sport.
- * Uses Next.js 16 Cache Components with "use cache" directive.
+ * Sports data is static (from SPORTS_DATA), no caching needed.
  * SEO-friendly route: /sporturi/[slug]
  */
 export default async function SportDetailPage({ params }: SportDetailPageProps) {
   const { slug } = await params;
+  const isProductionBuild = process.env.NEXT_PHASE === "phase-production-build";
 
-  // Fetch sport data
-  const sport = await getSportBySlug(slug);
+  // During production builds, use static sport data without database queries
+  const sport = isProductionBuild
+    ? SPORTS_DATA.find((s) => s.slug === slug) || null
+    : await getSportBySlug(slug);
 
-  // If sport not found, return 404
-  if (!sport) {
+  // If sport not found, return 404 (only at runtime)
+  if (!isProductionBuild && !sport) {
     notFound();
   }
 
-  // Cache tag for revalidation
-  cacheTag(`sport-${sport.id}`);
-  cacheTag(`sport-slug-${slug}`);
+  // During build, render placeholder for unknown slugs
+  if (isProductionBuild && !sport) {
+    return (
+      <>
+        <BreadcrumbOne
+          title="Sport Placeholder"
+          subTitle="Sporturi"
+          items={[
+            { name: "Yuvoo", url: routes.home },
+            { name: "Sporturi", url: routes.sports.list },
+            { name: "Sport Placeholder", url: routes.sports.detail(slug) },
+          ]}
+        />
+        <section className="bd-sport-details-area pt-120 pb-70">
+          <div className="container">
+            <h1>Sport Placeholder</h1>
+            <p>Build placeholder</p>
+          </div>
+        </section>
+      </>
+    );
+  }
 
   // Get expanded content for Article schema
-  const expandedContent = getExpandedContentBySportId(sport.id);
-
+  const expandedContent = getExpandedContentBySportId(sport!.id);
   const baseUrl = process.env.NEXT_PUBLIC_APP_URL || "https://yuvoo.ro";
 
   return (
     <>
-      <ArticleSchema sport={sport} expandedContent={expandedContent} baseUrl={baseUrl} />
+      <ArticleSchema sport={sport!} expandedContent={expandedContent} baseUrl={baseUrl} />
       <BreadcrumbOne
-        title={sport.name}
+        title={sport!.name}
         subTitle="Sporturi"
         items={[
           { name: "Yuvoo", url: routes.home },
           { name: "Sporturi", url: routes.sports.list },
-          { name: sport.name, url: routes.sports.detail(slug) }, // Current page
+          { name: sport!.name, url: routes.sports.detail(slug) },
         ]}
       />
-      <SportDetailsMain sport={sport} />
+      <SportDetailsMain sport={sport!} />
     </>
   );
 }
@@ -80,9 +98,12 @@ export default async function SportDetailPage({ params }: SportDetailPageProps) 
  */
 export async function generateMetadata({ params }: SportDetailPageProps): Promise<Metadata> {
   const { slug } = await params;
+  const isProductionBuild = process.env.NEXT_PHASE === "phase-production-build";
 
-  // Fetch sport for metadata
-  const sport = await getSportBySlug(slug);
+  // During build, use static sport data without database queries
+  const sport = isProductionBuild
+    ? SPORTS_DATA.find((s) => s.slug === slug) || null
+    : await getSportBySlug(slug);
 
   if (!sport) {
     return {

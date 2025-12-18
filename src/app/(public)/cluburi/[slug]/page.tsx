@@ -52,50 +52,77 @@ export async function generateStaticParams() {
 export default async function ClubDetailPage({ params }: ClubDetailPageProps) {
   const { slug } = await params;
 
-  // Fetch club data
-  const club: Club | null = await getClubBySlug(slug);
+  // Check if we're in production build phase
+  const isProductionBuild = process.env.NEXT_PHASE === "phase-production-build";
 
-  // If club not found, return 404
-  if (!club) {
+  // During production builds, skip database queries and use mock club
+  // At runtime, ISR will fetch actual club
+  const club: Club | null = isProductionBuild ? null : await getClubBySlug(slug);
+
+  // If club not found, return 404 (only at runtime)
+  if (!isProductionBuild && !club) {
     notFound();
   }
 
-  // Cache tag for revalidation
-  cacheTag(`club-${club.id}`);
+  // During build, render placeholder
+  if (isProductionBuild) {
+    return (
+      <>
+        <BreadcrumbOne
+          title="Club Placeholder"
+          subTitle="Cluburi"
+          items={[
+            { name: "Yuvoo", url: routes.home },
+            { name: "Cluburi", url: routes.clubs.list },
+            { name: "Club Placeholder", url: routes.clubs.detail(slug) },
+          ]}
+        />
+        <section className="bd-club-details-area pt-120 pb-70">
+          <div className="container">
+            <h1>Club Placeholder</h1>
+            <p>Build placeholder</p>
+          </div>
+        </section>
+      </>
+    );
+  }
+
+  // Cache tag for revalidation (only at runtime)
+  cacheTag(`club-${club!.id}`);
   cacheTag(`club-slug-${slug}`);
 
   // Generate expanded content for SEO (600-900 words)
-  const expandedContent = generateClubExpandedContent(club);
+  const expandedContent = generateClubExpandedContent(club!);
 
   return (
     <>
       <PostHogViewTracking
         eventName={PostHogEvents.CLUB_VIEWED}
-        entityId={club.id}
+        entityId={club!.id}
         entityType="club"
         entitySlug={slug}
       />
-      <LocalBusinessSchema club={club} />
+      <LocalBusinessSchema club={club!} />
       <BreadcrumbOne
-        title={club.name}
+        title={club!.name}
         subTitle="Cluburi"
         items={[
           { name: "Yuvoo", url: routes.home },
           { name: "Cluburi", url: routes.clubs.list },
-          { name: club.name, url: routes.clubs.detail(slug) }, // Current page
+          { name: club!.name, url: routes.clubs.detail(slug) }, // Current page
         ]}
       />
-      <ClubDetailsMain club={club} />
-      {club.images && club.images.length > 0 && (
-        <ClubGallery images={club.images} clubName={club.name} />
+      <ClubDetailsMain club={club!} />
+      {club!.images && club!.images.length > 0 && (
+        <ClubGallery images={club!.images} clubName={club!.name} />
       )}
-      <ClubMap club={club} />
-      <ClubDetailsWidget club={club} />
-      <ClubSchedule club={club} />
-      <ClubDetailsWidgetTwo club={club} />
+      <ClubMap club={club!} />
+      <ClubDetailsWidget club={club!} />
+      <ClubSchedule club={club!} />
+      <ClubDetailsWidgetTwo club={club!} />
       {/* Expanded Content Section for SEO (600-900 words) */}
       <ClubContentExpanded content={expandedContent} />
-      <BookingFormSection club={club} />
+      <BookingFormSection club={club!} />
     </>
   );
 }
@@ -106,7 +133,19 @@ export default async function ClubDetailPage({ params }: ClubDetailPageProps) {
 export async function generateMetadata({ params }: ClubDetailPageProps): Promise<Metadata> {
   const { slug } = await params;
 
-  // Fetch club for metadata
+  // Check if we're in production build phase
+  const isProductionBuild = process.env.NEXT_PHASE === "phase-production-build";
+
+  // During build, return generic metadata
+  if (isProductionBuild) {
+    return {
+      title: "Club Sportiv pentru Copii - Yuvoo",
+      description:
+        "Cluburi sportive verificate pentru copii. Găsește activități sportive potrivite.",
+    };
+  }
+
+  // Fetch club for metadata (only at runtime)
   const club = await getClubBySlug(slug);
 
   if (!club) {

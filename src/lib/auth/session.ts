@@ -90,6 +90,13 @@ async function syncUserWithDatabase(stackUser: {
  * @returns User session with Stack Auth user and local database user, or null if not authenticated
  */
 export async function getSession() {
+  // During production builds, return null to skip auth checks
+  // This prevents "cookies() rejects during prerender" errors
+  const isProductionBuild = process.env.NEXT_PHASE === "phase-production-build";
+  if (isProductionBuild) {
+    return null;
+  }
+
   try {
     const stackUser = await stackServerApp.getUser();
     if (!stackUser) return null;
@@ -109,10 +116,37 @@ export async function getSession() {
 
 /**
  * Require authentication - throws if user is not authenticated
+ * During production builds, returns mock session to prevent build failures
  * @returns User session with Stack Auth user and local database user
- * @throws Error if not authenticated
+ * @throws Error if not authenticated (runtime only)
  */
 export async function requireAuth() {
+  // During production builds, return mock session
+  const isProductionBuild = process.env.NEXT_PHASE === "phase-production-build";
+  if (isProductionBuild) {
+    // Use static date to avoid "new Date() used before Request data" error
+    const staticDate = new Date("2024-01-01T00:00:00Z");
+    return {
+      user: { id: "build-mock", primaryEmail: "build@mock.com" } as {
+        id: string;
+        primaryEmail: string | null;
+      },
+      dbUser: {
+        id: "build-mock",
+        stackUserId: "build-mock",
+        email: "build@mock.com",
+        role: "parent" as const,
+        firstName: null,
+        lastName: null,
+        phone: null,
+        onboardingCompleted: false,
+        profileCompletionPercentage: null,
+        createdAt: staticDate,
+        updatedAt: staticDate,
+      },
+    };
+  }
+
   const session = await getSession();
   if (!session) {
     throw new Error("Authentication required");
@@ -122,10 +156,17 @@ export async function requireAuth() {
 
 /**
  * Check if user has a specific role
+ * During production builds, returns false
  * @param role - Role to check (parent, club_admin, doctor, admin)
  * @returns true if user has the role, false otherwise
  */
 export async function hasRole(role: "parent" | "club_admin" | "doctor" | "admin") {
+  // During production builds, return false
+  const isProductionBuild = process.env.NEXT_PHASE === "phase-production-build";
+  if (isProductionBuild) {
+    return false;
+  }
+
   const session = await getSession();
   if (!session?.dbUser) return false;
   return session.dbUser.role === role;
@@ -133,11 +174,38 @@ export async function hasRole(role: "parent" | "club_admin" | "doctor" | "admin"
 
 /**
  * Require a specific role - throws if user doesn't have the role
+ * During production builds, returns mock session with requested role
  * @param role - Required role
  * @returns User session
- * @throws Error if not authenticated or doesn't have required role
+ * @throws Error if not authenticated or doesn't have required role (runtime only)
  */
 export async function requireRole(role: "parent" | "club_admin" | "doctor" | "admin") {
+  // During production builds, return mock session with requested role
+  const isProductionBuild = process.env.NEXT_PHASE === "phase-production-build";
+  if (isProductionBuild) {
+    // Use static date to avoid "new Date() used before Request data" error
+    const staticDate = new Date("2024-01-01T00:00:00Z");
+    return {
+      user: { id: "build-mock", primaryEmail: "build@mock.com" } as {
+        id: string;
+        primaryEmail: string | null;
+      },
+      dbUser: {
+        id: "build-mock",
+        stackUserId: "build-mock",
+        email: "build@mock.com",
+        role,
+        firstName: null,
+        lastName: null,
+        phone: null,
+        onboardingCompleted: false,
+        profileCompletionPercentage: null,
+        createdAt: staticDate,
+        updatedAt: staticDate,
+      },
+    };
+  }
+
   const session = await requireAuth();
   if (session.dbUser.role !== role) {
     throw new Error(`Role '${role}' required`);

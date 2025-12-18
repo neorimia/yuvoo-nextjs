@@ -49,45 +49,72 @@ export async function generateStaticParams() {
 export default async function DoctorDetailPage({ params }: DoctorDetailPageProps) {
   const { slug } = await params;
 
-  // Fetch doctor data
-  const doctor: Doctor | null = await getDoctorBySlug(slug);
+  // Check if we're in production build phase
+  const isProductionBuild = process.env.NEXT_PHASE === "phase-production-build";
 
-  // If doctor not found, return 404
-  if (!doctor) {
+  // During production builds, skip database queries and use mock doctor
+  // At runtime, ISR will fetch actual doctor
+  const doctor: Doctor | null = isProductionBuild ? null : await getDoctorBySlug(slug);
+
+  // If doctor not found, return 404 (only at runtime)
+  if (!isProductionBuild && !doctor) {
     notFound();
   }
 
-  // Cache tag for revalidation
-  cacheTag(`doctor-${doctor.id}`);
+  // During build, render placeholder
+  if (isProductionBuild) {
+    return (
+      <>
+        <BreadcrumbOne
+          title="Doctor Placeholder"
+          subTitle="Doctori"
+          items={[
+            { name: "Yuvoo", url: routes.home },
+            { name: "Doctori", url: routes.doctors.list },
+            { name: "Doctor Placeholder", url: routes.doctors.detail(slug) },
+          ]}
+        />
+        <section className="bd-doctor-details-area pt-120 pb-70">
+          <div className="container">
+            <h1>Doctor Placeholder</h1>
+            <p>Build placeholder</p>
+          </div>
+        </section>
+      </>
+    );
+  }
+
+  // Cache tag for revalidation (only at runtime)
+  cacheTag(`doctor-${doctor!.id}`);
   cacheTag(`doctor-slug-${slug}`);
 
   // Generate expanded content for SEO (600-900 words)
-  const expandedContent = generateDoctorExpandedContent(doctor);
+  const expandedContent = generateDoctorExpandedContent(doctor!);
 
   return (
     <>
       <PostHogViewTracking
         eventName={PostHogEvents.DOCTOR_VIEWED}
-        entityId={doctor.id}
+        entityId={doctor!.id}
         entityType="doctor"
         entitySlug={slug}
       />
-      <MedicalBusinessSchema doctor={doctor} />
-      <PersonSchema doctor={doctor} />
+      <MedicalBusinessSchema doctor={doctor!} />
+      <PersonSchema doctor={doctor!} />
       <BreadcrumbOne
-        title={doctor.name}
+        title={doctor!.name}
         subTitle="Doctori"
         items={[
           { name: "Yuvoo", url: routes.home },
           { name: "Doctori", url: routes.doctors.list },
-          { name: doctor.name, url: routes.doctors.detail(slug) }, // Current page
+          { name: doctor!.name, url: routes.doctors.detail(slug) }, // Current page
         ]}
       />
-      <DoctorDetailsMain doctor={doctor} />
-      <DoctorAvailability doctor={doctor} />
+      <DoctorDetailsMain doctor={doctor!} />
+      <DoctorAvailability doctor={doctor!} />
       {/* Expanded Content Section for SEO (600-900 words) */}
       <DoctorContentExpanded content={expandedContent} />
-      <DoctorAppointmentFormSection doctor={doctor} />
+      <DoctorAppointmentFormSection doctor={doctor!} />
     </>
   );
 }
@@ -98,7 +125,18 @@ export default async function DoctorDetailPage({ params }: DoctorDetailPageProps
 export async function generateMetadata({ params }: DoctorDetailPageProps): Promise<Metadata> {
   const { slug } = await params;
 
-  // Fetch doctor for metadata
+  // Check if we're in production build phase
+  const isProductionBuild = process.env.NEXT_PHASE === "phase-production-build";
+
+  // During build, return generic metadata
+  if (isProductionBuild) {
+    return {
+      title: "Specialist Pediatric - Yuvoo",
+      description: "Specialist pediatric cu experiență în sport pentru copii.",
+    };
+  }
+
+  // Fetch doctor for metadata (only at runtime)
   const doctor = await getDoctorBySlug(slug);
 
   if (!doctor) {

@@ -1,5 +1,4 @@
 import React from "react";
-import { headers } from "next/headers";
 import Link from "next/link";
 import type { Metadata } from "next";
 import BreadcrumbOne from "@/components/Breadcrumb/BreadcrumbOne";
@@ -48,10 +47,10 @@ interface ClubsPageProps {
  * Public page displaying all sports clubs.
  * Supports filtering by sport (from quiz recommendations) and quiz context.
  * SEO-friendly route: /cluburi
+ * Dynamic route due to searchParams
  */
 export default async function ClubsPage({ searchParams }: ClubsPageProps) {
-  // Make page dynamic to avoid Sentry crypto.randomUUID() issue during build
-  await headers();
+  // Page is dynamic due to searchParams usage
   const params = await searchParams;
   const {
     sport: sportId,

@@ -48,13 +48,6 @@ export default async function ParentTourPage() {
                 background: "linear-gradient(to bottom right, var(--bd-theme-1-light), white)",
                 transition: "box-shadow 0.3s ease-in-out",
               }}
-              onMouseEnter={(e) => {
-                e.currentTarget.style.boxShadow =
-                  "0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06)";
-              }}
-              onMouseLeave={(e) => {
-                e.currentTarget.style.boxShadow = "";
-              }}
             >
               <div className="d-flex align-items-start gap-4">
                 {/* Step Number Circle */}
@@ -104,13 +97,6 @@ export default async function ParentTourPage() {
                 background: "linear-gradient(to bottom right, var(--bd-theme-1-light), white)",
                 transition: "box-shadow 0.3s ease-in-out",
               }}
-              onMouseEnter={(e) => {
-                e.currentTarget.style.boxShadow =
-                  "0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06)";
-              }}
-              onMouseLeave={(e) => {
-                e.currentTarget.style.boxShadow = "";
-              }}
             >
               <div className="d-flex align-items-start gap-4">
                 {/* Step Number Circle */}
@@ -158,13 +144,6 @@ export default async function ParentTourPage() {
             style={{
               background: "linear-gradient(to bottom right, var(--bd-theme-1-light), white)",
               transition: "box-shadow 0.3s ease-in-out",
-            }}
-            onMouseEnter={(e) => {
-              e.currentTarget.style.boxShadow =
-                "0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06)";
-            }}
-            onMouseLeave={(e) => {
-              e.currentTarget.style.boxShadow = "";
             }}
           >
             <div className="d-flex align-items-start gap-4">

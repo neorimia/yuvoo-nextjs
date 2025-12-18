@@ -28,23 +28,29 @@ const PARENT_STEPS: OnboardingStep[] = [
 export default async function ParentQuizIntroPage() {
   const session = await requireRole("parent");
 
-  // Get child name from onboarding progress
-  const progress = await db.query.onboardingProgress.findFirst({
-    where: eq(onboardingProgress.userId, session.dbUser.id),
-  });
+  // During production builds, skip database queries
+  const isProductionBuild = process.env.NEXT_PHASE === "phase-production-build";
 
   let childName = "copilul tău";
-  if (
-    progress?.stepData &&
-    typeof progress.stepData === "object" &&
-    "child_id" in progress.stepData
-  ) {
-    const childId = progress.stepData.child_id as string;
-    const child = await db.query.children.findFirst({
-      where: eq(children.id, childId),
+
+  if (!isProductionBuild) {
+    // Get child name from onboarding progress (runtime only)
+    const progress = await db.query.onboardingProgress.findFirst({
+      where: eq(onboardingProgress.userId, session.dbUser.id),
     });
-    if (child) {
-      childName = child.firstName;
+
+    if (
+      progress?.stepData &&
+      typeof progress.stepData === "object" &&
+      "child_id" in progress.stepData
+    ) {
+      const childId = progress.stepData.child_id as string;
+      const child = await db.query.children.findFirst({
+        where: eq(children.id, childId),
+      });
+      if (child) {
+        childName = child.firstName;
+      }
     }
   }
 
@@ -132,18 +138,7 @@ export default async function ParentQuizIntroPage() {
           <form action={completeParentOnboarding.bind(null, "quiz")} className="mb-3">
             <button
               type="submit"
-              className="w-100 d-inline-flex align-items-center justify-content-center gap-3 px-5 py-4 h6 fw-semibold text-white bg-yuvoo-primary rounded-3 text-yuvoo-primary-hover focus-yuvoo-primary shadow text-yuvoo-primary-hover"
-              style={{
-                transition: "all 0.2s ease-in-out",
-              }}
-              onMouseEnter={(e) => {
-                e.currentTarget.style.backgroundColor = "var(--bd-theme-1-hover)";
-                e.currentTarget.style.boxShadow = "0 10px 15px -3px rgba(0, 187, 174, 0.2)";
-              }}
-              onMouseLeave={(e) => {
-                e.currentTarget.style.backgroundColor = "var(--bd-theme-1)";
-                e.currentTarget.style.boxShadow = "";
-              }}
+              className="w-100 d-inline-flex align-items-center justify-content-center gap-3 px-5 py-4 h6 fw-semibold text-white bg-yuvoo-primary rounded-3 text-yuvoo-primary-hover focus-yuvoo-primary shadow"
             >
               <Target className="w-5 h-5" />
               <span>Începe Chestionarul Acum</span>
@@ -155,17 +150,6 @@ export default async function ParentQuizIntroPage() {
             <button
               type="submit"
               className="w-100 d-inline-flex align-items-center justify-content-center gap-2 px-4 py-3 small fw-medium text-body bg-white border border-secondary rounded-3 text-yuvoo-primary-hover border-yuvoo-primary-hover focus-yuvoo-primary"
-              style={{
-                transition: "all 0.2s ease-in-out",
-              }}
-              onMouseEnter={(e) => {
-                e.currentTarget.style.backgroundColor = "var(--bs-gray-50)";
-                e.currentTarget.style.borderColor = "var(--bs-gray-400)";
-              }}
-              onMouseLeave={(e) => {
-                e.currentTarget.style.backgroundColor = "white";
-                e.currentTarget.style.borderColor = "var(--bs-gray-300)";
-              }}
             >
               <span>Mai târziu, mergi la dashboard</span>
             </button>

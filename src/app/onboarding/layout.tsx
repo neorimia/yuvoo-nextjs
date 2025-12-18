@@ -11,46 +11,45 @@ import { cookies } from "next/headers";
 import type { ReactNode } from "react";
 
 export default async function OnboardingLayout({ children }: { children: ReactNode }) {
-  // Access cookies to make this route dynamic (required for authentication)
+  // During production builds, skip authentication checks entirely
+  // This prevents "cookies() rejects during prerender" errors
+  const isProductionBuild = process.env.NEXT_PHASE === "phase-production-build";
+
+  if (isProductionBuild) {
+    // Return minimal layout for build-time prerendering
+    return (
+      <div className="onboarding-container">
+        <main className="onboarding-main">{children}</main>
+      </div>
+    );
+  }
+
+  // At runtime, access cookies to make this route dynamic (required for authentication)
   // In Next.js 16 Cache Components mode, using cookies() automatically makes the route dynamic
-  // Handle prerender case gracefully - during build, cookies() will reject
-  let isPrerendering = false;
   let cookiesResult: Awaited<ReturnType<typeof cookies>> | null = null;
 
   try {
     cookiesResult = await cookies();
   } catch (error: unknown) {
-    // During build/prerender, cookies() rejects with HANGING_PROMISE_REJECTION
-    // Check for the specific error digest that indicates prerendering
-    const errorObj = error as { digest?: string; message?: string; name?: string };
+    // During unexpected prerender cases at runtime, handle gracefully
+    const errorObj = error as { digest?: string; message?: string };
     const errorMessage = errorObj?.message || "";
-    const errorDigest = errorObj?.digest || "";
 
-    // Check for any indication this is a prerender error
-    if (
-      errorDigest === "HANGING_PROMISE_REJECTION" ||
-      errorMessage.includes("prerender") ||
-      errorMessage.includes("prerender is complete") ||
-      errorMessage.includes("During prerendering")
-    ) {
-      isPrerendering = true;
-    } else {
-      // During production builds, assume all cookies() errors are prerender-related
-      // This is safer than re-throwing and breaking the build
-      if (
-        process.env.NODE_ENV === "production" ||
-        process.env.NEXT_PHASE === "phase-production-build"
-      ) {
-        isPrerendering = true;
-      } else {
-        // Only re-throw in development if it's clearly not a prerender error
-        throw error;
-      }
+    // Only log in development to help debugging
+    if (process.env.NODE_ENV === "development") {
+      console.warn("Onboarding layout: cookies() access failed during prerender", errorMessage);
     }
+
+    // Return layout without auth check
+    return (
+      <div className="onboarding-container">
+        <main className="onboarding-main">{children}</main>
+      </div>
+    );
   }
 
-  // During prerender, skip auth check and return layout without auth
-  if (isPrerendering || !cookiesResult) {
+  // If cookies access failed, skip auth check
+  if (!cookiesResult) {
     return (
       <div className="onboarding-container">
         <main className="onboarding-main">{children}</main>
