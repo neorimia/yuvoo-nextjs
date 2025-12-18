@@ -62,6 +62,9 @@ export const users = pgTable(
     onboardingCompleted: boolean("onboarding_completed").notNull().default(false),
     profileCompletionPercentage: integer("profile_completion_percentage").default(0),
 
+    // Email notification preferences (JSONB for flexibility)
+    emailNotificationPreferences: jsonb("email_notification_preferences"),
+
     createdAt: timestamp("created_at").defaultNow().notNull(),
     updatedAt: timestamp("updated_at").defaultNow().notNull(),
   },

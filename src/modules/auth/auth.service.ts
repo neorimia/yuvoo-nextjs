@@ -31,6 +31,10 @@ export async function getCurrentUser(): Promise<AuthUser | null> {
     phone: session.dbUser.phone || null,
     role: session.dbUser.role as AuthUser["role"],
     emailVerified: session.user.primaryEmailVerified || false,
+    emailNotificationPreferences:
+      (session.dbUser.emailNotificationPreferences as
+        | AuthUser["emailNotificationPreferences"]
+        | null) || null,
     createdAt: session.dbUser.createdAt,
     updatedAt: session.dbUser.updatedAt,
   };

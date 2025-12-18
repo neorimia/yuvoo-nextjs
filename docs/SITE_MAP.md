@@ -236,15 +236,14 @@ app/
 
 ### Club Portal (Phase 2+)
 
-| Route                | Description         | Component                    | Auth Required    |
-| -------------------- | ------------------- | ---------------------------- | ---------------- |
-| `/club/dashboard`    | Club dashboard      | `club/dashboard/page.tsx`    | Yes (Club Admin) |
-| `/club/profile`      | Club profile        | `club/profile/page.tsx`      | Yes (Club Admin) |
-| `/club/profile/edit` | Edit profile        | `club/profile/edit/page.tsx` | Yes (Club Admin) |
-| `/club/classes`      | Classes list        | `club/classes/page.tsx`      | Yes (Club Admin) |
-| `/club/classes/add`  | Add class           | `club/classes/add/page.tsx`  | Yes (Club Admin) |
-| `/club/bookings`     | Bookings management | `club/bookings/page.tsx`     | Yes (Club Admin) |
-| `/club/settings`     | Settings            | `club/settings/page.tsx`     | Yes (Club Admin) |
+| Route               | Description         | Component                   | Auth Required    |
+| ------------------- | ------------------- | --------------------------- | ---------------- |
+| `/club/dashboard`   | Club dashboard      | `club/dashboard/page.tsx`   | Yes (Club Admin) |
+| `/club/profile`     | Edit profile        | `club/profile/page.tsx`     | Yes (Club Admin) |
+| `/club/classes`     | Classes list        | `club/classes/page.tsx`     | Yes (Club Admin) |
+| `/club/classes/add` | Add class           | `club/classes/add/page.tsx` | Yes (Club Admin) |
+| `/club/bookings`    | Bookings management | `club/bookings/page.tsx`    | Yes (Club Admin) |
+| `/club/settings`    | Settings            | `club/settings/page.tsx`    | Yes (Club Admin) |
 
 ### Doctor Portal (Phase 2+)
 

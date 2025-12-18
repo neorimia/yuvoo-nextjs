@@ -42,7 +42,7 @@ export interface Club {
     type: "monthly" | "per_class" | "per_semester";
     amount: number;
     currency: "RON";
-  };
+  }[];
   verificationStatus?: "pending" | "in_review" | "approved" | "rejected";
   verificationDocuments?: string[];
   createdAt: Date;

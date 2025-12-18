@@ -32,7 +32,6 @@ export const dashboardNavigation: NavigationConfig = {
   club_admin: [
     { label: "Dashboard", href: routes.club.dashboard, icon: "bi-house" },
     { label: "Profil", href: routes.club.profile, icon: "bi-person" },
-    { label: "Clase", href: routes.club.classes.list, icon: "bi-book" },
     { label: "Rezervări", href: routes.club.bookings, icon: "bi-calendar-check" },
     { label: "Setări", href: routes.club.settings, icon: "bi-gear" },
   ],

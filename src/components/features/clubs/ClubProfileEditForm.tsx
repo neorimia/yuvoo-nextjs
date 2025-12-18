@@ -8,7 +8,7 @@
 
 "use client";
 
-import React, { useState, useTransition } from "react";
+import React, { useState, useTransition, useRef } from "react";
 import { useForm, useFieldArray } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useRouter } from "next/navigation";
@@ -104,6 +104,8 @@ const ClubProfileEditForm: React.FC<ClubProfileEditFormProps> = ({ club }) => {
   const [isPending, startTransition] = useTransition();
   const [serverError, setServerError] = useState<string | null>(null);
   const [successMessage, setSuccessMessage] = useState<string | null>(null);
+  const successMessageRef = useRef<HTMLDivElement>(null);
+  const errorMessageRef = useRef<HTMLDivElement>(null);
 
   // Initialize form with club data
   const {
@@ -117,7 +119,7 @@ const ClubProfileEditForm: React.FC<ClubProfileEditFormProps> = ({ club }) => {
     resolver: zodResolver(clubProfileUpdateSchema),
     defaultValues: {
       name: club.name,
-      sportType: club.sportId || club.sportName, // Use sportId or sportName
+      sportType: club.sportId || club.sportName,
       description: club.description,
       city: club.location.city,
       district: club.location.district,
@@ -126,14 +128,17 @@ const ClubProfileEditForm: React.FC<ClubProfileEditFormProps> = ({ club }) => {
       email: club.contact.email,
       website: club.contact.website,
       schedule: club.schedule || [],
-      pricing: club.pricing ? (Array.isArray(club.pricing) ? club.pricing : [club.pricing]) : [],
+      pricing:
+        club.pricing && Array.isArray(club.pricing) && club.pricing.length > 0
+          ? club.pricing.map((p) => ({ type: p.type, amount: p.amount }))
+          : [],
       ageGroups: club.ageGroups || [],
       experienceLevels: (club.levels || []) as ("beginner" | "intermediate" | "advanced")[],
-      logoUrl: club.images?.[0] || "", // First image is typically logo
-      galleryUrls: club.images?.slice(1) || [], // Rest are gallery images
+      logoUrl: club.images?.[0] || "",
+      galleryUrls: club.images?.slice(1) || [],
     },
     mode: "onBlur",
-    reValidateMode: "onChange",
+    reValidateMode: "onChange", // Validate on blur
   });
 
   const {
@@ -182,12 +187,13 @@ const ClubProfileEditForm: React.FC<ClubProfileEditFormProps> = ({ club }) => {
               return {};
             }
             const validSchedule = data.schedule
-              .filter((entry) => entry.day && entry.startTime && entry.endTime)
+              .filter((entry) => entry && entry.day && entry.startTime && entry.endTime)
               .map((entry) => ({
-                day: entry.day.trim(),
-                startTime: entry.startTime.trim(),
-                endTime: entry.endTime.trim(),
-              }));
+                day: entry.day?.trim() || "",
+                startTime: entry.startTime?.trim() || "",
+                endTime: entry.endTime?.trim() || "",
+              }))
+              .filter((entry) => entry.day && entry.startTime && entry.endTime);
             return validSchedule.length > 0 ? { schedule: validSchedule } : {};
           })(),
           // Filter pricing to only include complete entries (type and amount filled)
@@ -197,11 +203,14 @@ const ClubProfileEditForm: React.FC<ClubProfileEditFormProps> = ({ club }) => {
               return {};
             }
             const validPricing = data.pricing
-              .filter((entry) => entry.type && entry.amount !== undefined && entry.amount > 0)
+              .filter(
+                (entry) => entry && entry.type && entry.amount !== undefined && entry.amount > 0
+              )
               .map((entry) => ({
                 type: entry.type,
                 amount: Number(entry.amount),
-              }));
+              }))
+              .filter((entry) => entry.type && entry.amount > 0);
             return validPricing.length > 0 ? { pricing: validPricing } : {};
           })(),
           ...(data.ageGroups &&
@@ -217,9 +226,9 @@ const ClubProfileEditForm: React.FC<ClubProfileEditFormProps> = ({ club }) => {
           ...(data.galleryUrls &&
             Array.isArray(data.galleryUrls) &&
             data.galleryUrls.length > 0 && {
-              galleryUrls: data.galleryUrls.filter(
-                (url): url is string => typeof url === "string" && url.startsWith("http")
-              ),
+              galleryUrls: data.galleryUrls
+                .filter((url): url is string => typeof url === "string" && url.startsWith("http"))
+                .slice(0, 10), // Ensure max 10 images
             }),
         };
 
@@ -231,17 +240,42 @@ const ClubProfileEditForm: React.FC<ClubProfileEditFormProps> = ({ club }) => {
           console.log("Pricing being sent:", transformedData.pricing);
         }
 
-        const result = await updateClubProfileAction(transformedData);
+        // Ensure all array fields are properly defined before sending
+        const safeTransformedData: ClubProfileUpdateInput = {
+          ...transformedData,
+          // Ensure arrays are always arrays (not undefined)
+          schedule: transformedData.schedule || undefined,
+          pricing: transformedData.pricing || undefined,
+          ageGroups: transformedData.ageGroups || undefined,
+          experienceLevels: transformedData.experienceLevels || undefined,
+          galleryUrls: transformedData.galleryUrls || undefined,
+        };
+
+        const result = await updateClubProfileAction(safeTransformedData);
 
         if (result.success) {
           setSuccessMessage("Profilul clubului a fost actualizat cu succes!");
+          setServerError(null);
           // Refresh router to show updated data
           router.refresh();
-          // Scroll to top to show success message
-          window.scrollTo({ top: 0, behavior: "smooth" });
+          // Scroll to success message after state update
+          setTimeout(() => {
+            successMessageRef.current?.scrollIntoView({
+              behavior: "smooth",
+              block: "start",
+            });
+          }, 100);
         } else {
           console.error("Update failed:", result.error);
           setServerError(result.error || "Eroare la actualizarea profilului");
+          setSuccessMessage(null);
+          // Scroll to error message after state update
+          setTimeout(() => {
+            errorMessageRef.current?.scrollIntoView({
+              behavior: "smooth",
+              block: "start",
+            });
+          }, 100);
         }
       } catch (error) {
         console.error("Error updating club profile:", error);
@@ -262,28 +296,32 @@ const ClubProfileEditForm: React.FC<ClubProfileEditFormProps> = ({ club }) => {
     <form onSubmit={handleSubmit(onSubmit)} className="bd-club-profile-edit-form">
       {/* Success Message */}
       {successMessage && (
-        <BootstrapAlert
-          variant="success"
-          className="mb-4"
-          dismissible
-          onDismiss={() => setSuccessMessage(null)}
-        >
-          <i className="bi bi-check-circle me-2"></i>
-          {successMessage}
-        </BootstrapAlert>
+        <div ref={successMessageRef}>
+          <BootstrapAlert
+            variant="success"
+            className="mb-4"
+            dismissible
+            onDismiss={() => setSuccessMessage(null)}
+          >
+            <i className="bi bi-check-circle me-2"></i>
+            {successMessage}
+          </BootstrapAlert>
+        </div>
       )}
 
       {/* Server Error Message */}
       {serverError && (
-        <BootstrapAlert
-          variant="danger"
-          className="mb-4"
-          dismissible
-          onDismiss={() => setServerError(null)}
-        >
-          <AlertCircle className="h-4 w-4 me-2" />
-          {serverError}
-        </BootstrapAlert>
+        <div ref={errorMessageRef}>
+          <BootstrapAlert
+            variant="danger"
+            className="mb-4"
+            dismissible
+            onDismiss={() => setServerError(null)}
+          >
+            <AlertCircle className="h-4 w-4 me-2" />
+            {serverError}
+          </BootstrapAlert>
+        </div>
       )}
 
       {/* Basic Information Section */}
@@ -332,10 +370,7 @@ const ClubProfileEditForm: React.FC<ClubProfileEditFormProps> = ({ club }) => {
               )}
             </div>
 
-            <div className="col-12">
-              <label htmlFor="description" className="form-label">
-                Descriere <span className="text-danger">*</span>
-              </label>
+            <div className="col-12 ">
               <CharacterCounterTextarea
                 label="Descriere"
                 name="description"
@@ -489,11 +524,9 @@ const ClubProfileEditForm: React.FC<ClubProfileEditFormProps> = ({ club }) => {
             </h5>
             <BootstrapButton
               type="button"
-              variant="outline"
               size="sm"
               onClick={addScheduleEntry}
               disabled={isPending}
-              className="btn-outline-primary"
             >
               <Plus className="h-4 w-4 me-1" />
               Adaugă interval
@@ -559,14 +592,13 @@ const ClubProfileEditForm: React.FC<ClubProfileEditFormProps> = ({ club }) => {
                             </div>
                           )}
                         </div>
-                        <div className="col-md-2 d-flex align-items-end">
+                        <div className="col-md-1 d-flex align-items-end">
                           <BootstrapButton
                             type="button"
-                            variant="outline"
+                            variant="danger"
                             size="sm"
                             onClick={() => removeSchedule(index)}
                             disabled={isPending}
-                            className="w-100 btn-outline-danger"
                           >
                             <X className="h-4 w-4" />
                           </BootstrapButton>
@@ -596,11 +628,9 @@ const ClubProfileEditForm: React.FC<ClubProfileEditFormProps> = ({ club }) => {
             </h5>
             <BootstrapButton
               type="button"
-              variant="outline"
               size="sm"
               onClick={addPricingOption}
               disabled={isPending}
-              className="btn-outline-primary"
             >
               <Plus className="h-4 w-4 me-1" />
               Adaugă preț
@@ -653,11 +683,11 @@ const ClubProfileEditForm: React.FC<ClubProfileEditFormProps> = ({ club }) => {
                         <div className="col-md-2 d-flex align-items-end">
                           <BootstrapButton
                             type="button"
-                            variant="outline"
+                            variant="danger"
                             size="sm"
                             onClick={() => removePricing(index)}
                             disabled={isPending}
-                            className="w-100 btn-outline-danger"
+                            className=""
                           >
                             <X className="h-4 w-4" />
                           </BootstrapButton>
@@ -695,7 +725,7 @@ const ClubProfileEditForm: React.FC<ClubProfileEditFormProps> = ({ club }) => {
                 }))}
                 error={errors.ageGroups as FieldError | undefined}
                 isLoading={isPending}
-                gridCols={{ xs: 6, sm: 4, md: 3 }}
+                gridCols={{ xs: 2, sm: 2, md: 3 }}
               />
             </div>
 
@@ -710,7 +740,7 @@ const ClubProfileEditForm: React.FC<ClubProfileEditFormProps> = ({ club }) => {
                 }))}
                 error={errors.experienceLevels as FieldError | undefined}
                 isLoading={isPending}
-                gridCols={{ xs: 12, sm: 6, md: 4 }}
+                gridCols={{ xs: 1, sm: 2, md: 4 }}
               />
             </div>
           </div>
@@ -753,7 +783,7 @@ const ClubProfileEditForm: React.FC<ClubProfileEditFormProps> = ({ club }) => {
                 maxImages={10}
                 required={false}
                 description="Încarcă fotografii ale clubului (JPG, PNG sau WebP, maxim 5MB fiecare, maxim 10 fotografii)"
-                gridCols={{ xs: 6, sm: 4, md: 3 }}
+                gridCols={{ xs: 1, sm: 1, md: 3 }}
                 isLoading={isPending}
                 setServerError={setServerError}
               />
@@ -766,11 +796,11 @@ const ClubProfileEditForm: React.FC<ClubProfileEditFormProps> = ({ club }) => {
       <div className="d-flex gap-3 justify-content-end mb-4">
         <BootstrapButton
           type="button"
-          variant="outline"
+          variant="danger"
           onClick={() => router.push(routes.club.dashboard)}
           disabled={isPending}
-          className="btn-outline-secondary"
         >
+          <i className="bi bi-x-circle me-2"></i>
           Anulează
         </BootstrapButton>
         <BootstrapButton type="submit" variant="primary" disabled={isPending}>

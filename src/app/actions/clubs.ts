@@ -17,6 +17,7 @@ import {
   verifyClubOwnership,
 } from "@/modules/clubs/clubs.service";
 import type { Club, ClubSearchFilters, ClubSearchResult } from "@/modules/clubs/clubs.types";
+import type { ClubProfileUpdateInput } from "@/lib/validations/club";
 import { trackEventServer } from "@/lib/analytics/tracking-server";
 import { PostHogEvents, PostHogProperties } from "@/lib/analytics/events";
 import { getSession } from "@/lib/auth/session";
@@ -209,7 +210,6 @@ export async function updateClubAction(
 
     // Revalidate cache
     revalidatePath(routes.club.profile);
-    revalidatePath(routes.club.profileEdit);
     revalidatePath(routes.club.dashboard);
     if (club.slug) {
       revalidatePath(`/cluburi/${club.slug}`);
@@ -273,7 +273,25 @@ export async function updateClubProfileAction(
       }
     }
 
-    const validatedInput = clubProfileUpdateSchema.parse(input);
+    // Safely parse input - handle potential undefined arrays
+    let validatedInput: ClubProfileUpdateInput;
+    try {
+      validatedInput = clubProfileUpdateSchema.parse(input);
+    } catch (parseError) {
+      // Log detailed error for debugging
+      console.error("Validation error:", parseError);
+      if (parseError && typeof parseError === "object" && "issues" in parseError) {
+        const zodError = parseError as {
+          issues: Array<{ message: string; path?: Array<string | number> }>;
+        };
+        const firstError = zodError.issues[0];
+        const fieldPath = firstError?.path ? firstError.path.join(".") : "";
+        throw new Error(
+          `${firstError?.message || "Date invalide"}${fieldPath ? ` (${fieldPath})` : ""}`
+        );
+      }
+      throw parseError;
+    }
 
     // Debug: Log validated input
     if (process.env.NODE_ENV === "development") {
@@ -285,12 +303,26 @@ export async function updateClubProfileAction(
       }
     }
 
+    // Ensure arrays are properly formatted before update
+    const safeUpdates: Parameters<typeof updateClub>[2] = {
+      ...validatedInput,
+      // Ensure arrays are arrays or undefined (not null)
+      schedule: Array.isArray(validatedInput.schedule) ? validatedInput.schedule : undefined,
+      pricing: Array.isArray(validatedInput.pricing) ? validatedInput.pricing : undefined,
+      ageGroups: Array.isArray(validatedInput.ageGroups) ? validatedInput.ageGroups : undefined,
+      experienceLevels: Array.isArray(validatedInput.experienceLevels)
+        ? validatedInput.experienceLevels
+        : undefined,
+      galleryUrls: Array.isArray(validatedInput.galleryUrls)
+        ? validatedInput.galleryUrls
+        : undefined,
+    };
+
     // Update club
-    const updatedClub = await updateClub(club.id, user.id, validatedInput);
+    const updatedClub = await updateClub(club.id, user.id, safeUpdates);
 
     // Revalidate cache
     revalidatePath(routes.club.profile);
-    revalidatePath(routes.club.profileEdit);
     revalidatePath(routes.club.dashboard);
     if (updatedClub.slug) {
       revalidatePath(`/cluburi/${updatedClub.slug}`);
@@ -315,11 +347,16 @@ export async function updateClubProfileAction(
     }
     // Handle Zod validation errors
     if (error && typeof error === "object" && "issues" in error) {
-      const zodError = error as { issues: Array<{ message: string }> };
+      const zodError = error as {
+        issues: Array<{ message: string; path?: Array<string | number> }>;
+      };
       const firstError = zodError.issues[0];
+      const fieldPath = firstError?.path ? firstError.path.join(".") : "";
       return {
         success: false,
-        error: firstError?.message || "Date invalide",
+        error: firstError?.message
+          ? `${firstError.message}${fieldPath ? ` (${fieldPath})` : ""}`
+          : "Date invalide",
       };
     }
     return {

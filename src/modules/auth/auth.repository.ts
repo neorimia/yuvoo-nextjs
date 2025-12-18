@@ -28,6 +28,9 @@ function mapDbUserToAuthUser(dbUser: typeof users.$inferSelect): AuthUser {
     emailVerified: true, // Stack Auth handles email verification
     createdAt: dbUser.createdAt,
     updatedAt: dbUser.updatedAt,
+    emailNotificationPreferences:
+      (dbUser.emailNotificationPreferences as AuthUser["emailNotificationPreferences"] | null) ||
+      null,
   };
 }
 
@@ -86,6 +89,7 @@ export async function update(
     lastName: string;
     phone: string;
     role: AuthUser["role"];
+    emailNotificationPreferences: AuthUser["emailNotificationPreferences"];
   }>
 ): Promise<AuthUser> {
   const updateData: Partial<typeof users.$inferInsert> = {
@@ -103,6 +107,9 @@ export async function update(
   }
   if (updates.role !== undefined) {
     updateData.role = updates.role;
+  }
+  if (updates.emailNotificationPreferences !== undefined) {
+    updateData.emailNotificationPreferences = updates.emailNotificationPreferences as unknown;
   }
 
   const [dbUser] = await db.update(users).set(updateData).where(eq(users.id, userId)).returning();

@@ -30,6 +30,8 @@
 ✅ **Club Dashboard Components Complete**: Club dashboard page refactored with extracted components (ClubDashboardHeader, ProfileCompletenessIndicator, BookingStatistics, RecentActivityFeed) all styled according to Yuvoo design system
 ✅ **Club Portal Dashboard Complete**: Dashboard overview page with profile completeness, verification status, booking statistics, and recent activity feed - all complete
 ✅ **Club Booking Management Complete**: Booking management page (`/club/bookings`) with filtering (status, date), booking detail modal, confirm/cancel/complete actions, email notifications, and comprehensive styling
+✅ **Club Profile Editing Complete**: Profile editing page (`/club/profile/edit`) with comprehensive form (basic info, location, contact, schedule, pricing, age groups, gallery), Cloudinary integration, validation, error handling, and styling - all complete
+✅ **Club Settings Complete**: Settings page (`/club/settings`) with account settings (firstName, lastName, phone, email) and email notification preferences (5 checkboxes), database schema updated, validation, error handling, and styling matching ClubProfileEditForm - all complete
 ✅ **Quiz UI Complete**: Quiz flow component, all 6 question components, progress indicator, navigation, context management, and localStorage persistence all implemented
 ✅ **Quiz Backend Complete**: Server actions (submit, get result, get history, save), validation schemas (all questions, complete quiz, recommendations), service layer (orchestration, AI integration), repository (CRUD operations), and supporting services (AI analyzer, email, risk detection, specialist/club mapping) all implemented
 ✅ **SEO Analysis Complete**: Comprehensive SEO analysis and improvement plan created for all 16 public pages, critical issues identified, implementation roadmap ready
@@ -726,7 +728,7 @@
     - [x] `(public)/` - Public app pages (✅ created: layout.tsx)
     - [x] `(auth)/` - Authentication pages (✅ created: layout.tsx)
     - [x] `(marketing)/` - Public marketing pages (✅ created: layout.tsx)
-    - [x] `(club-portal)/` - Club admin portal routes (✅ COMPLETE - Dashboard overview and booking management implemented)
+    - [x] `(club-portal)/` - Club admin portal routes (✅ COMPLETE - Dashboard overview, booking management, and profile editing implemented)
     - [ ] `(doctor-portal)/` - Doctor portal routes (⏳ pending - not in MVP Phase 1)
   - [x] Create public pages (✅ completed)
     - [x] `/sporturi` - Sports listing page (✅ created)

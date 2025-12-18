@@ -6,6 +6,14 @@
 
 export type UserRole = "parent" | "club_admin" | "doctor" | "admin";
 
+export interface EmailNotificationPreferences {
+  bookingCreated: boolean;
+  bookingConfirmed: boolean;
+  bookingCancelled: boolean;
+  bookingCompleted: boolean;
+  bookingReminder: boolean;
+}
+
 export interface AuthUser {
   id: string;
   email: string;
@@ -15,6 +23,7 @@ export interface AuthUser {
   phone: string | null;
   role: UserRole;
   emailVerified: boolean;
+  emailNotificationPreferences: EmailNotificationPreferences | null;
   createdAt: Date;
   updatedAt: Date;
 }

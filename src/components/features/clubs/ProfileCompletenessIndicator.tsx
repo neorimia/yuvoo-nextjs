@@ -43,7 +43,7 @@ const ProfileCompletenessIndicator: React.FC<ProfileCompletenessIndicatorProps> 
         <div className="d-flex justify-content-between align-items-center mb-3">
           <h5 className="bd-profile-completeness-title mb-0">
             <i className="bi bi-person-check me-2 text-yuvoo-primary"></i>
-            Completitudine Profil
+            Completarea profilului
           </h5>
           <span className={`badge bd-profile-completeness-badge ${getBadgeColorClass()}`}>
             {percentage}%
@@ -85,7 +85,7 @@ const ProfileCompletenessIndicator: React.FC<ProfileCompletenessIndicatorProps> 
               )}
             </ul>
             <Link
-              href={routes.club.profileEdit}
+              href={routes.club.profile}
               className="btn btn-sm btn-outline-primary bd-profile-completeness-cta-btn"
             >
               <i className="bi bi-pencil me-2"></i>

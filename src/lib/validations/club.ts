@@ -197,7 +197,8 @@ export const clubProfileUpdateSchema = z.object({
   galleryUrls: z
     .array(z.string().url("URL imagine invalid"))
     .max(10, "Maxim 10 fotografii în galerie")
-    .optional(),
+    .optional()
+    .or(z.undefined()),
 });
 
 // Combined types

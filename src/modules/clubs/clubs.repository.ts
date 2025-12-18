@@ -22,15 +22,22 @@ export function mapDbClubToClub(dbClub: typeof clubs.$inferSelect): Club {
       : undefined;
 
   // Parse pricing from JSONB (can be array or object)
+  // Always return as array for consistency
   const pricingData = dbClub.pricing as unknown;
   let pricing: Club["pricing"] = undefined;
   if (pricingData) {
     if (Array.isArray(pricingData) && pricingData.length > 0) {
-      // If array, take first pricing option
-      pricing = pricingData[0] as Club["pricing"];
-    } else if (typeof pricingData === "object" && pricingData !== null) {
-      // If object, use directly
+      // If array, use directly
       pricing = pricingData as Club["pricing"];
+    } else if (typeof pricingData === "object" && pricingData !== null) {
+      // If single object, wrap in array for backward compatibility
+      pricing = [
+        pricingData as {
+          type: "monthly" | "per_class" | "per_semester";
+          amount: number;
+          currency: "RON";
+        },
+      ];
     }
   }
 

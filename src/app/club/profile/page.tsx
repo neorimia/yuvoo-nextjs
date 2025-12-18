@@ -24,7 +24,7 @@ export const metadata: Metadata = {
  * Protected page for club admin to edit club profile.
  * Shows comprehensive form for editing all club information.
  * Uses Next.js 16 Cache Components with "use cache: private" directive.
- * Route: /club/profile/edit
+ * Route: /club/profile
  */
 export default async function ClubProfileEditPage() {
   // Require authentication
