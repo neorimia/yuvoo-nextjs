@@ -214,15 +214,25 @@ export function generateClubExpandedContent(club: Club): ClubExpandedContent {
     ? `${club.location.city}, ${club.location.district}`
     : club.location.city;
 
-  const pricingText = club.pricing
-    ? `${club.pricing.amount} ${club.pricing.currency}/${
-        club.pricing.type === "monthly"
-          ? "lună"
-          : club.pricing.type === "per_class"
-            ? "ședință"
-            : "semestru"
-      }`
-    : "Contactează clubul pentru detalii despre prețuri";
+  const pricingText =
+    club.pricing && club.pricing.length > 0
+      ? club.pricing.length === 1
+        ? `${club.pricing[0].amount} ${club.pricing[0].currency || "RON"}/${
+            club.pricing[0].type === "monthly"
+              ? "lună"
+              : club.pricing[0].type === "per_class"
+                ? "ședință"
+                : "semestru"
+          }`
+        : club.pricing
+            .map(
+              (p) =>
+                `${p.amount} ${p.currency || "RON"}/${
+                  p.type === "monthly" ? "lună" : p.type === "per_class" ? "ședință" : "semestru"
+                }`
+            )
+            .join(", ")
+      : "Contactează clubul pentru detalii despre prețuri";
 
   const introduction = `${club.name} este un club sportiv ${club.verified ? "verificat" : ""} dedicat dezvoltării copiilor prin ${club.sportName.toLowerCase()}, situat în ${locationText}. ${club.description || `Clubul oferă programe de calitate pentru copii cu vârste între ${ageRange}, adaptate diferitelor niveluri de experiență și aptitudini.`}
 

@@ -60,8 +60,12 @@ function buildClubListItem(club: Club, position: number, baseUrl: string) {
   }
 
   // Add pricing information
-  if (club.pricing) {
-    itemData.priceRange = getPriceRange(club.pricing.amount);
+  if (club.pricing && club.pricing.length > 0) {
+    // Use the first pricing option, or calculate average if multiple
+    const firstPricing = club.pricing[0];
+    if (firstPricing && firstPricing.amount) {
+      itemData.priceRange = getPriceRange(firstPricing.amount);
+    }
   }
 
   return listItem;
