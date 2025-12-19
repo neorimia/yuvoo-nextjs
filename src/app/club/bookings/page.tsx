@@ -7,6 +7,7 @@ import { routes } from "@/lib/routes";
 import { redirect } from "next/navigation";
 import { cacheLife, cacheTag } from "next/cache";
 import ClubBookingList from "@/components/features/clubs/ClubBookingList";
+import DashboardPageLayout from "@/components/shared/DashboardPageLayout";
 import { UserRoleEnum } from "@/modules/auth/auth.types";
 
 // MIGRATED: Using "use cache: private" for user-specific prefetchable cache
@@ -42,24 +43,14 @@ export default async function ClubBookingsPage() {
   cacheTag(`club-bookings-${session.dbUser.id}`);
 
   return (
-    <div className="bd-club-dashboard-content">
-      {/* Page Header */}
-      <div className="mb-5">
-        <div className="bd-club-dashboard-header">
-          <h1 className="bd-club-dashboard-header-title mb-2">
-            <i className="bi bi-calendar-check me-2 text-yuvoo-primary"></i>
-            Rezervări
-          </h1>
-          <p className="bd-club-dashboard-header-subtitle mb-0">
-            Gestionează toate rezervările pentru clubul tău
-          </p>
-        </div>
-      </div>
-
-      {/* Bookings List */}
-      <div className="bd-club-bookings-content">
-        <ClubBookingList />
-      </div>
-    </div>
+    <DashboardPageLayout
+      icon="bi-calendar-check"
+      title="Rezervări"
+      subtitle="Gestionează toate rezervările pentru clubul tău"
+      variant="club"
+      contentClassName="bd-club-bookings-content"
+    >
+      <ClubBookingList />
+    </DashboardPageLayout>
   );
 }

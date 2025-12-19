@@ -9,9 +9,10 @@ import React from "react";
 import type { Club } from "@/modules/clubs/clubs.types";
 import type { Booking } from "@/modules/bookings/bookings.types";
 import ClubDashboardHeader from "./ClubDashboardHeader";
-import ProfileCompletenessIndicator from "./ProfileCompletenessIndicator";
+import ProfileCompletenessIndicator from "@/components/shared/ProfileCompletenessIndicator";
 import BookingStatistics from "./BookingStatistics";
 import RecentActivityFeed from "./RecentActivityFeed";
+import { routes } from "@/lib/routes";
 
 interface ProfileCompleteness {
   percentage: number;
@@ -55,6 +56,8 @@ const ClubDashboardContent: React.FC<ClubDashboardContentProps> = ({
           completedFields={profileCompleteness.completedFields}
           totalFields={profileCompleteness.totalFields}
           missingFields={profileCompleteness.missingFields}
+          profileType="club"
+          editRoute={routes.club.profile}
         />
       </div>
 

@@ -152,6 +152,42 @@ yuvoo-nextjs/
   - Used in: FAQ sections, help pages, sports FAQ sections
   - Features: Bootstrap accordion integration, customizable open state, supports React.ReactNode for answers (enables internal linking)
 
+**Dashboard Portal Components** (Created January 2025 - Phase 1 Complete):
+
+- `DashboardHeader.tsx` - Reusable dashboard header component with title, subtitle, entity name, and verification badge
+  - Used in: Club dashboard, doctor dashboard (planned)
+  - Features: Variant support (club/doctor), configurable title/subtitle, verification badge integration
+  - Wrapper: `ClubDashboardHeader.tsx` uses shared component
+- `ProfileCompletenessIndicator.tsx` - Reusable profile completeness display component
+  - Used in: Club dashboard, doctor dashboard (planned)
+  - Features: Progress bar, missing fields list, configurable edit route, profile type support (club/doctor)
+  - Moved from `src/components/features/clubs/` to shared location
+- `StatisticsCards.tsx` - Generic statistics cards component
+  - Used in: Club dashboard (booking statistics), doctor dashboard (consultation statistics - planned)
+  - Features: Generic stats array, optional "View All" button, customizable CSS class prefix
+  - Wrapper: `BookingStatistics.tsx` uses shared component
+- `BookingCard.tsx` - Reusable booking/consultation card component
+  - Used in: Club bookings list, doctor consultations list (planned)
+  - Features: Supports both `club_trial` and `doctor_consultation` types, action buttons (confirm, cancel, complete, view details), status badges, date formatting
+  - Wrapper: `ClubBookingCard.tsx` uses shared component
+- `BookingDetailModal.tsx` - Reusable booking/consultation detail modal component
+  - Used in: Club bookings list, doctor consultations list (planned)
+  - Features: Bootstrap modal integration, optional child/parent information, action buttons, comprehensive booking details display
+  - Wrapper: `ClubBookingDetailModal.tsx` uses shared component
+- `DashboardPageLayout.tsx` - Reusable dashboard page layout wrapper
+  - Used in: All club dashboard pages (profile, bookings, settings), all doctor dashboard pages (planned)
+  - Features: Consistent header structure (icon, title, subtitle), content wrapper, variant-specific CSS classes
+  - Updated all club dashboard pages to use shared layout
+
+**Component Extraction Pattern**: When implementing similar features across different portals (club vs doctor), extract shared components to:
+
+- Avoid code duplication
+- Ensure UI/UX consistency
+- Reduce maintenance burden
+- Enable faster feature development
+
+**Phase 1 Status**: ✅ Complete (6 of 6 components extracted and ready for doctor portal)
+
 ### Onboarding Form Components
 
 **Location**: `src/components/features/onboarding/components/`

@@ -1,12 +1,12 @@
 /**
  * Booking Statistics Component
  *
- * Displays booking statistics cards with counts for different statuses.
- * Follows Yuvoo design system with proper typography, colors, and spacing.
+ * Wrapper component for club booking statistics.
+ * Uses the shared StatisticsCards component with booking-specific configuration.
  */
 
 import React from "react";
-import Link from "next/link";
+import StatisticsCards, { type StatItem } from "@/components/shared/StatisticsCards";
 import { routes } from "@/lib/routes";
 
 interface BookingStatisticsProps {
@@ -24,7 +24,7 @@ const BookingStatistics: React.FC<BookingStatisticsProps> = ({
   completed,
   cancelled,
 }) => {
-  const stats = [
+  const stats: StatItem[] = [
     {
       label: "Total",
       value: total,
@@ -58,30 +58,11 @@ const BookingStatistics: React.FC<BookingStatisticsProps> = ({
   ];
 
   return (
-    <div className="row g-4">
-      {stats.map((stat, index) => (
-        <div key={index} className="col-md-6 col-lg-4">
-          <div className="bd-booking-stat-card card border-0 shadow-sm h-100">
-            <div
-              className={`card-body bd-booking-stat-card-body bd-booking-stat-${stat.variant} text-center`}
-            >
-              <i className={`bi ${stat.icon} bd-booking-stat-icon`}></i>
-              <h3 className="bd-booking-stat-value mt-3 mb-0">{stat.value}</h3>
-              <p className="bd-booking-stat-label mb-0">{stat.label}</p>
-            </div>
-          </div>
-        </div>
-      ))}
-      <div className="col-12 mt-3">
-        <Link
-          href={routes.club.bookings}
-          className="btn btn-outline-primary bd-booking-statistics-cta-btn w-100"
-        >
-          <i className="bi bi-list-ul me-2"></i>
-          Vezi toate rezervările
-        </Link>
-      </div>
-    </div>
+    <StatisticsCards
+      stats={stats}
+      viewAllRoute={routes.club.bookings}
+      viewAllLabel="Vezi toate rezervările"
+    />
   );
 };
 

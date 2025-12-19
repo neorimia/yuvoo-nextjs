@@ -8,6 +8,7 @@ import { redirect } from "next/navigation";
 import { routes } from "@/lib/routes";
 import { getClubSettingsAction } from "@/app/actions/club-settings";
 import ClubSettingsForm from "@/components/features/clubs/ClubSettingsForm";
+import DashboardPageLayout from "@/components/shared/DashboardPageLayout";
 import { cacheLife, cacheTag } from "next/cache";
 import { UserRoleEnum } from "@/modules/auth/auth.types";
 
@@ -50,21 +51,14 @@ export default async function ClubSettingsPage() {
       : undefined;
 
   return (
-    <div className="bd-club-dashboard-content">
-      <div className="mb-5">
-        <div className="bd-club-dashboard-header">
-          <h1 className="bd-club-dashboard-header-title mb-2">
-            <i className="bi bi-gear me-2 text-yuvoo-primary"></i>
-            Setări
-          </h1>
-          <p className="bd-club-dashboard-header-subtitle mb-0">
-            Gestionează setările contului și preferințele de notificare
-          </p>
-        </div>
-      </div>
-      <div className="bd-club-settings-content">
-        <ClubSettingsForm initialData={initialData} />
-      </div>
-    </div>
+    <DashboardPageLayout
+      icon="bi-gear"
+      title="Setări"
+      subtitle="Gestionează setările contului și preferințele de notificare"
+      variant="club"
+      contentClassName="bd-club-settings-content"
+    >
+      <ClubSettingsForm initialData={initialData} />
+    </DashboardPageLayout>
   );
 }

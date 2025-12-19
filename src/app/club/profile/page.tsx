@@ -9,6 +9,7 @@ import { cacheLife, cacheTag } from "next/cache";
 import { getClubByAdminUserId } from "@/modules/clubs/clubs.service";
 import ClubProfileEditForm from "@/components/features/clubs/ClubProfileEditForm";
 import ClubNotFoundState from "@/components/features/clubs/ClubNotFoundState";
+import DashboardPageLayout from "@/components/shared/DashboardPageLayout";
 import { UserRoleEnum } from "@/modules/auth/auth.types";
 
 // MIGRATED: Using "use cache: private" for user-specific prefetchable cache
@@ -52,24 +53,14 @@ export default async function ClubProfileEditPage() {
   }
 
   return (
-    <div className="bd-club-dashboard-content">
-      {/* Page Header */}
-      <div className="mb-5">
-        <div className="bd-club-dashboard-header">
-          <h1 className="bd-club-dashboard-header-title mb-2">
-            <i className="bi bi-pencil-square me-2 text-yuvoo-primary"></i>
-            Editează Profilul Clubului
-          </h1>
-          <p className="bd-club-dashboard-header-subtitle mb-0">
-            Actualizează informațiile despre clubul tău
-          </p>
-        </div>
-      </div>
-
-      {/* Profile Edit Form */}
-      <div className="bd-club-profile-edit-content">
-        <ClubProfileEditForm club={club} />
-      </div>
-    </div>
+    <DashboardPageLayout
+      icon="bi-pencil-square"
+      title="Editează Profilul Clubului"
+      subtitle="Actualizează informațiile despre clubul tău"
+      variant="club"
+      contentClassName="bd-club-profile-edit-content"
+    >
+      <ClubProfileEditForm club={club} />
+    </DashboardPageLayout>
   );
 }
