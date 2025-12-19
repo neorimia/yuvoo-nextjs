@@ -490,6 +490,21 @@ requireAuth() → throws if not authenticated
 
 **Status**: ✅ Foundation Complete, ✅ Parent Onboarding Complete, ✅ Club Admin Onboarding Complete, ✅ Doctor Onboarding Complete (All 8 steps complete, pattern-aligned with club onboarding)
 
+**localStorage Progress Saving** ✅ (January 2025):
+
+- **Status**: ✅ **COMPLETE** - localStorage-based progress saving implemented for all onboarding flows
+- **Implementation**:
+  - ✅ `useOnboardingLocalStorage` hook created with save/get/clear functions
+  - ✅ `useOnboardingForm` hook updated to accept role/stepNumber and clear localStorage on success
+  - ✅ All 13 onboarding form components updated with localStorage integration
+    - Doctor forms (7 steps): BasicInfo, BioExperience, LocationContact, Photo, Verification, Availability
+    - Club admin forms (5 steps): BasicInfo, ContactSchedule, PricingAges, Photos, Verification
+    - Parent forms (1 step): AddChild
+  - ✅ Features: Debounced saves (500ms), automatic restore on mount, automatic clear on submission
+  - ✅ Error handling: Graceful degradation (works even if localStorage disabled)
+  - ✅ Storage key format: `yuvoo_onboarding_{role}_{stepNumber}`
+- **Benefits**: Users can now refresh pages during onboarding without losing form data
+
 **Location**:
 
 - Server Actions: `app/actions/onboarding.ts`
@@ -503,6 +518,20 @@ requireAuth() → throws if not authenticated
 3. **Progress Tracking**: Step-by-step progress with `completedSteps` array and `stepData` JSONB field
 4. **Resume Functionality**: Automatic progress retrieval on page load
 5. **Server Actions**: All onboarding operations via Server Actions with proper TypeScript types
+
+**Onboarding Hooks**:
+
+- `useOnboardingLocalStorage` (`src/components/features/onboarding/hooks/useOnboardingLocalStorage.ts`)
+  - `saveFormData(role, stepNumber, data)` - Save form data to localStorage (debounced in components)
+  - `getFormData<T>(role, stepNumber)` - Retrieve typed form data from localStorage
+  - `clearFormData(role, stepNumber)` - Clear form data for a specific step
+  - `clearAllOnboardingData(role)` - Clear all onboarding data for a role
+  - Features: Error handling, browser compatibility checks, type-safe with TypeScript generics
+- `useOnboardingForm<T>` (`src/components/features/onboarding/hooks/useOnboardingForm.ts`)
+  - Shared hook for form submission logic
+  - Accepts `role` and `stepNumber` parameters for localStorage integration
+  - Automatically clears localStorage on successful submission
+  - Returns: `handleSubmit`, `isLoading`, `serverError`, `setServerError`
 
 **Key Server Actions**:
 
@@ -553,6 +582,12 @@ onboarding_progress {
     - ✅ Upload pages use `bd-onboarding-page-wide` for wider layout
     - ✅ Complete page uses `bd-onboarding-complete` wrapper
     - ✅ Layout includes production build check to prevent prerender errors
+- ✅ localStorage Progress Saving Complete (January 2025)
+  - ✅ All onboarding forms persist user input across page refreshes
+  - ✅ Automatic save on form changes (debounced 500ms)
+  - ✅ Automatic restore on component mount
+  - ✅ Automatic clear on successful submission
+  - ✅ Error handling with graceful degradation
 
 ## AI Integration Pattern
 

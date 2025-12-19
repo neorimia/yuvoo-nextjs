@@ -17,6 +17,7 @@
 
 "use client";
 
+import { useEffect } from "react";
 import { useForm, useFieldArray } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { updateClubContactSchedule } from "@/app/actions/onboarding";
@@ -29,6 +30,7 @@ import { InfoBox } from "./components/InfoBox";
 import { BootstrapInput, BootstrapSelect, BootstrapButton } from "@/components/UI/bootstrap-index";
 import { X, Plus } from "lucide-react";
 import { useOnboardingForm } from "./hooks/useOnboardingForm";
+import { saveFormData, getFormData } from "./hooks/useOnboardingLocalStorage";
 
 // Days of the week in Romanian
 const DAYS_OF_WEEK = [
@@ -47,6 +49,8 @@ export function ClubContactScheduleForm() {
     handleSubmit: rhfHandleSubmit,
     control,
     formState: { errors },
+    setValue,
+    watch,
   } = useForm<ClubContactScheduleInput>({
     resolver: zodResolver(clubContactScheduleSchema),
     defaultValues: {
@@ -57,18 +61,53 @@ export function ClubContactScheduleForm() {
     },
   });
 
+  const role = "club_admin";
+  const stepNumber = 3;
+
+  const { fields, append, remove, replace } = useFieldArray({
+    control,
+    name: "schedule",
+  });
+
+  // Restore form data from localStorage on mount
+  useEffect(() => {
+    const saved = getFormData<ClubContactScheduleInput>(role, stepNumber);
+    if (saved) {
+      // Restore all fields from saved data
+      Object.keys(saved).forEach((key) => {
+        const fieldKey = key as keyof ClubContactScheduleInput;
+        const value = saved[fieldKey];
+        if (value !== undefined && value !== null) {
+          // Use replace for array fields (useFieldArray)
+          if (fieldKey === "schedule" && Array.isArray(value)) {
+            replace(value);
+          } else {
+            setValue(fieldKey, value, { shouldValidate: false });
+          }
+        }
+      });
+    }
+  }, [setValue, replace]);
+
+  // Save form data to localStorage on changes (debounced)
+  const formValues = watch();
+  useEffect(() => {
+    const timeoutId = setTimeout(() => {
+      saveFormData(role, stepNumber, formValues);
+    }, 500);
+
+    return () => clearTimeout(timeoutId);
+  }, [formValues]);
+
   const { handleSubmit, isLoading, serverError } = useOnboardingForm<ClubContactScheduleInput>({
     onSubmitAction: updateClubContactSchedule,
     onSuccessRoute: routes.onboarding.club.pricingAges,
+    role,
+    stepNumber,
     transformData: (data) => ({
       ...data,
       phone: normalizePhoneNumber(data.phone),
     }),
-  });
-
-  const { fields, append, remove } = useFieldArray({
-    control,
-    name: "schedule",
   });
 
   const addScheduleEntry = () => {

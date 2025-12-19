@@ -16,6 +16,7 @@
 
 "use client";
 
+import { useEffect } from "react";
 import { useForm, FieldError } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { updateClubPhotos } from "@/app/actions/onboarding";
@@ -26,6 +27,7 @@ import { ServerErrorAlert } from "./components/ServerErrorAlert";
 import { InfoBox } from "./components/InfoBox";
 import { SingleImageUploadField, GalleryUploadField } from "./components";
 import { useOnboardingForm } from "./hooks/useOnboardingForm";
+import { saveFormData, getFormData } from "./hooks/useOnboardingLocalStorage";
 
 export function ClubPhotosForm() {
   const {
@@ -41,10 +43,40 @@ export function ClubPhotosForm() {
     },
   });
 
+  const role = "club_admin";
+  const stepNumber = 5;
+
+  // Restore form data from localStorage on mount
+  useEffect(() => {
+    const saved = getFormData<ClubPhotoInput>(role, stepNumber);
+    if (saved) {
+      // Restore all fields from saved data
+      Object.keys(saved).forEach((key) => {
+        const fieldKey = key as keyof ClubPhotoInput;
+        const value = saved[fieldKey];
+        if (value !== undefined && value !== null) {
+          setValue(fieldKey, value, { shouldValidate: false });
+        }
+      });
+    }
+  }, [setValue]);
+
+  // Save form data to localStorage on changes (debounced)
+  const formValues = watch();
+  useEffect(() => {
+    const timeoutId = setTimeout(() => {
+      saveFormData(role, stepNumber, formValues);
+    }, 500);
+
+    return () => clearTimeout(timeoutId);
+  }, [formValues]);
+
   const { handleSubmit, isLoading, serverError, setServerError } =
     useOnboardingForm<ClubPhotoInput>({
       onSubmitAction: updateClubPhotos,
       onSuccessRoute: routes.onboarding.club.verification,
+      role,
+      stepNumber,
     });
 
   const logoUrl = watch("logoUrl");

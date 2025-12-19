@@ -16,7 +16,7 @@
 
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { UseFormSetValue, FieldError } from "react-hook-form";
 import { BootstrapInput, BootstrapButton } from "@/components/UI/bootstrap-index";
 import { InfoTooltip } from "@/components/shared/InfoTooltip";
@@ -31,6 +31,8 @@ interface TagInputFieldProps {
   /** React Hook Form setValue function */
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   setValue: UseFormSetValue<any>;
+  /** Current field value (from watch() or form state) */
+  currentValue?: string[];
   /** Validation error */
   error?: FieldError;
   /** Is field required? */
@@ -55,6 +57,7 @@ export function TagInputField({
   label,
   name,
   setValue,
+  currentValue,
   error,
   required = false,
   helpText,
@@ -65,8 +68,23 @@ export function TagInputField({
   isLoading = false,
   className = "",
 }: TagInputFieldProps) {
-  const [tags, setTags] = useState<string[]>([]);
+  const [tags, setTags] = useState<string[]>(currentValue || []);
   const [inputValue, setInputValue] = useState("");
+  const prevCurrentValueRef = useRef<string[] | undefined>(currentValue);
+
+  // Sync internal tags state with currentValue prop (for form restoration)
+  useEffect(() => {
+    // Only update if currentValue actually changed from outside
+    if (currentValue !== undefined) {
+      const prevValueStr = JSON.stringify(prevCurrentValueRef.current || []);
+      const currentValueStr = JSON.stringify(currentValue || []);
+
+      if (currentValueStr !== prevValueStr) {
+        setTags(currentValue || []);
+        prevCurrentValueRef.current = currentValue;
+      }
+    }
+  }, [currentValue]);
 
   // Sync tags with form state
   useEffect(() => {

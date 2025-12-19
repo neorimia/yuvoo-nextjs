@@ -16,6 +16,7 @@
 
 "use client";
 
+import { useEffect } from "react";
 import { useForm, useFieldArray, FieldError } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { updateClubPricingAges } from "@/app/actions/onboarding";
@@ -28,6 +29,7 @@ import { MultiSelectCheckboxField } from "./components";
 import { BootstrapInput, BootstrapSelect, BootstrapButton } from "@/components/UI/bootstrap-index";
 import { X, Plus } from "lucide-react";
 import { useOnboardingForm } from "./hooks/useOnboardingForm";
+import { saveFormData, getFormData } from "./hooks/useOnboardingLocalStorage";
 
 // Age groups (4-14 years)
 const AGE_GROUPS = Array.from({ length: 11 }, (_, i) => i + 4); // [4, 5, 6, ..., 14]
@@ -52,6 +54,8 @@ export function ClubPricingAgesForm() {
     handleSubmit: rhfHandleSubmit,
     control,
     formState: { errors },
+    setValue,
+    watch,
   } = useForm<ClubPricingAgesInput>({
     resolver: zodResolver(clubPricingAgesSchema),
     defaultValues: {
@@ -61,23 +65,58 @@ export function ClubPricingAgesForm() {
     },
   });
 
-  const { handleSubmit, isLoading, serverError } = useOnboardingForm<ClubPricingAgesInput>({
-    onSubmitAction: updateClubPricingAges,
-    onSuccessRoute: routes.onboarding.club.photos,
-    transformData: (data) => ({
-      ...data,
-      ageGroups: Array.isArray(data.ageGroups) ? data.ageGroups : [],
-      experienceLevels: Array.isArray(data.experienceLevels) ? data.experienceLevels : [],
-    }),
-  });
+  const role = "club_admin";
+  const stepNumber = 4;
 
   const {
     fields: pricingFields,
     append: appendPricing,
     remove: removePricing,
+    replace: replacePricing,
   } = useFieldArray({
     control,
     name: "pricing",
+  });
+
+  // Restore form data from localStorage on mount
+  useEffect(() => {
+    const saved = getFormData<ClubPricingAgesInput>(role, stepNumber);
+    if (saved) {
+      // Handle pricing array separately (useFieldArray requires replace)
+      if (saved.pricing && Array.isArray(saved.pricing)) {
+        replacePricing(saved.pricing);
+      }
+
+      // Restore other fields
+      if (saved.ageGroups !== undefined && saved.ageGroups !== null) {
+        setValue("ageGroups", saved.ageGroups, { shouldValidate: false });
+      }
+      if (saved.experienceLevels !== undefined && saved.experienceLevels !== null) {
+        setValue("experienceLevels", saved.experienceLevels, { shouldValidate: false });
+      }
+    }
+  }, [setValue, replacePricing]);
+
+  // Save form data to localStorage on changes (debounced)
+  const formValues = watch();
+  useEffect(() => {
+    const timeoutId = setTimeout(() => {
+      saveFormData(role, stepNumber, formValues);
+    }, 500);
+
+    return () => clearTimeout(timeoutId);
+  }, [formValues]);
+
+  const { handleSubmit, isLoading, serverError } = useOnboardingForm<ClubPricingAgesInput>({
+    onSubmitAction: updateClubPricingAges,
+    onSuccessRoute: routes.onboarding.club.photos,
+    role,
+    stepNumber,
+    transformData: (data) => ({
+      ...data,
+      ageGroups: Array.isArray(data.ageGroups) ? data.ageGroups : [],
+      experienceLevels: Array.isArray(data.experienceLevels) ? data.experienceLevels : [],
+    }),
   });
 
   const addPricingOption = () => {

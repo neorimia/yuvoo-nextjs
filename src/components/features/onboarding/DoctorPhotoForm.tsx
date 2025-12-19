@@ -16,7 +16,8 @@
 
 "use client";
 
-import { useForm } from "react-hook-form";
+import { useEffect } from "react";
+import { useForm, useWatch } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { updateDoctorPhoto } from "@/app/actions/onboarding";
 import { doctorPhotoSchema, type DoctorPhotoInput } from "@/lib/validations/doctor";
@@ -24,12 +25,14 @@ import { routes } from "@/lib/routes";
 import { OnboardingNavigation } from "./OnboardingNavigation";
 import { ServerErrorAlert, InfoBox, SingleImageUploadField } from "./components";
 import { useOnboardingForm } from "./hooks/useOnboardingForm";
+import { saveFormData, getFormData } from "./hooks/useOnboardingLocalStorage";
 
 export function DoctorPhotoForm() {
   const {
     handleSubmit: rhfHandleSubmit,
     setValue,
     watch,
+    control,
     formState: { errors },
   } = useForm<DoctorPhotoInput>({
     resolver: zodResolver(doctorPhotoSchema),
@@ -38,13 +41,44 @@ export function DoctorPhotoForm() {
     },
   });
 
+  const role = "doctor";
+  const stepNumber = 5;
+
+  // Restore form data from localStorage on mount
+  useEffect(() => {
+    const saved = getFormData<DoctorPhotoInput>(role, stepNumber);
+    if (saved) {
+      // Restore all fields from saved data
+      Object.keys(saved).forEach((key) => {
+        const fieldKey = key as keyof DoctorPhotoInput;
+        const value = saved[fieldKey];
+        if (value !== undefined && value !== null) {
+          setValue(fieldKey, value, { shouldValidate: false });
+        }
+      });
+    }
+  }, [setValue]);
+
+  // Save form data to localStorage on changes (debounced)
+  const formValues = watch();
+  useEffect(() => {
+    const timeoutId = setTimeout(() => {
+      saveFormData(role, stepNumber, formValues);
+    }, 500);
+
+    return () => clearTimeout(timeoutId);
+  }, [formValues]);
+
   const { handleSubmit, isLoading, serverError, setServerError } =
     useOnboardingForm<DoctorPhotoInput>({
       onSubmitAction: updateDoctorPhoto,
       onSuccessRoute: routes.onboarding.doctor.verification,
+      role,
+      stepNumber,
     });
 
-  const photoUrl = watch("photoUrl");
+  // Use useWatch for reactive updates
+  const photoUrl = useWatch({ control, name: "photoUrl" });
 
   const handleSkip = async () => {
     // Submit empty photo URL to proceed

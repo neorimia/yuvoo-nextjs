@@ -29,6 +29,8 @@ export const doctorBasicInfoSchema = z.object({
     errorMap: () => ({ message: "Selectează specializarea" }),
   }),
 
+  secondarySpecialties: z.array(z.string().min(1).max(200)).optional().default([]),
+
   credentials: z
     .array(z.string().min(1).max(200))
     .min(1, "Adaugă cel puțin o credențială (ex: MD, Specialist, etc.)"),
@@ -52,8 +54,6 @@ export const doctorBioExperienceSchema = z.object({
     .int("Trebuie să fie un număr întreg (ex: 5, 10, 15)")
     .min(1, "Minim 1 an de experiență este necesar")
     .max(50, "Valoarea introdusă este prea mare. Te rugăm să verifici numărul introdus."),
-
-  secondarySpecialties: z.array(z.string()).optional(),
 
   languages: z.array(z.string()).min(1, "Selectează cel puțin o limbă vorbită"),
 });

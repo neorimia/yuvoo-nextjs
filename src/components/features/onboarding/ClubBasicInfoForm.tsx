@@ -15,6 +15,7 @@
 
 "use client";
 
+import { useEffect } from "react";
 import { useForm, Controller } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { AlertCircle } from "lucide-react";
@@ -26,6 +27,7 @@ import { OnboardingNavigation } from "./OnboardingNavigation";
 import { BootstrapAlert, BootstrapInput, BootstrapSelect } from "@/components/UI/bootstrap-index";
 import { CharacterCounterTextarea } from "./components";
 import { useOnboardingForm } from "./hooks/useOnboardingForm";
+import { saveFormData, getFormData } from "./hooks/useOnboardingLocalStorage";
 
 // Romanian cities (major cities)
 const ROMANIAN_CITIES = [
@@ -68,15 +70,46 @@ export function ClubBasicInfoForm() {
     control,
     formState: { errors, touchedFields },
     watch,
+    setValue,
   } = useForm<ClubBasicInfoInput>({
     resolver: zodResolver(clubBasicInfoSchema),
     mode: "onBlur", // Only validate on blur (after user leaves field)
     reValidateMode: "onChange", // Re-validate on change after first blur
   });
 
+  const role = "club_admin";
+  const stepNumber = 2;
+
+  // Restore form data from localStorage on mount
+  useEffect(() => {
+    const saved = getFormData<ClubBasicInfoInput>(role, stepNumber);
+    if (saved) {
+      // Restore all fields from saved data
+      Object.keys(saved).forEach((key) => {
+        const fieldKey = key as keyof ClubBasicInfoInput;
+        const value = saved[fieldKey];
+        if (value !== undefined && value !== null) {
+          setValue(fieldKey, value, { shouldValidate: false });
+        }
+      });
+    }
+  }, [setValue]);
+
+  // Save form data to localStorage on changes (debounced)
+  const formValues = watch();
+  useEffect(() => {
+    const timeoutId = setTimeout(() => {
+      saveFormData(role, stepNumber, formValues);
+    }, 500);
+
+    return () => clearTimeout(timeoutId);
+  }, [formValues]);
+
   const { handleSubmit, isLoading, serverError } = useOnboardingForm<ClubBasicInfoInput>({
     onSubmitAction: createClubOnboarding,
     onSuccessRoute: routes.onboarding.club.contactSchedule,
+    role,
+    stepNumber,
   });
 
   return (

@@ -133,7 +133,7 @@ export const RATE_LIMIT_CONFIGS = {
     windowMs: 60 * 60 * 1000, // per hour (prevent storage abuse)
   },
   UPLOAD_DOCUMENT: {
-    maxAttempts: 5, // 5 document uploads
+    maxAttempts: 20, // 20 document uploads (allows for onboarding: 4-10 required + retries)
     windowMs: 60 * 60 * 1000, // per hour (prevent storage abuse)
   },
   // Bookings

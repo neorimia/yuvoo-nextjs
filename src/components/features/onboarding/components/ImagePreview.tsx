@@ -56,7 +56,13 @@ export function ImagePreview({
           "position-relative border-2 border-secondary rounded overflow-hidden bg-light",
           objectFit === "cover" && "ratio ratio-1x1"
         )}
-        style={objectFit === "contain" ? { width: size, height: size } : undefined}
+        style={
+          objectFit === "contain"
+            ? { width: size, height: size }
+            : objectFit === "cover"
+              ? { width: size }
+              : undefined
+        }
       >
         <Image src={src} alt={alt} fill className={`object-${objectFit}`} sizes={sizes} />
         {isUploading && (

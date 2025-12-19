@@ -14,6 +14,7 @@
 
 "use client";
 
+import { useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { addChildOnboarding } from "@/app/actions/onboarding";
@@ -24,6 +25,7 @@ import { ServerErrorAlert } from "./components/ServerErrorAlert";
 import { DatePickerWithAgeField, RadioButtonGroupField } from "./components";
 import { BootstrapInput } from "@/components/UI/bootstrap-index";
 import { useOnboardingForm } from "./hooks/useOnboardingForm";
+import { saveFormData, getFormData } from "./hooks/useOnboardingLocalStorage";
 
 export function AddChildForm() {
   const {
@@ -36,10 +38,40 @@ export function AddChildForm() {
     resolver: zodResolver(createChildSchema),
   });
 
+  const role = "parent";
+  const stepNumber = 2;
+
+  // Restore form data from localStorage on mount
+  useEffect(() => {
+    const saved = getFormData<CreateChildInput>(role, stepNumber);
+    if (saved) {
+      // Restore all fields from saved data
+      Object.keys(saved).forEach((key) => {
+        const fieldKey = key as keyof CreateChildInput;
+        const value = saved[fieldKey];
+        if (value !== undefined && value !== null) {
+          setValue(fieldKey, value, { shouldValidate: false });
+        }
+      });
+    }
+  }, [setValue]);
+
+  // Save form data to localStorage on changes (debounced)
+  const formValues = watch();
+  useEffect(() => {
+    const timeoutId = setTimeout(() => {
+      saveFormData(role, stepNumber, formValues);
+    }, 500);
+
+    return () => clearTimeout(timeoutId);
+  }, [formValues]);
+
   // Use onboarding form hook for submission logic
   const { handleSubmit, isLoading, serverError } = useOnboardingForm<CreateChildInput>({
     onSubmitAction: addChildOnboarding,
     onSuccessRoute: routes.onboarding.parent.tour,
+    role,
+    stepNumber,
   });
 
   return (

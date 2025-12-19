@@ -1,5 +1,8 @@
 import React from "react";
 import type { Metadata } from "next";
+import { redirect } from "next/navigation";
+import { getSession } from "@/lib/auth/session";
+import { getRoleBasedRedirect } from "@/lib/auth/redirects";
 import BreadcrumbOne from "@/components/Breadcrumb/BreadcrumbOne";
 import RegisterMain from "@/components/Auth/RegisterMain";
 
@@ -41,7 +44,18 @@ export const metadata: Metadata = {
  * Authentication page for user registration.
  * Route: /auth/register
  */
-export default function RegisterPage() {
+export default async function RegisterPage() {
+  // Check if user is already authenticated
+  // If yes, redirect to their dashboard or onboarding
+  const session = await getSession();
+  if (session?.dbUser) {
+    const redirectUrl = getRoleBasedRedirect(
+      session.dbUser.role,
+      session.dbUser.onboardingCompleted
+    );
+    redirect(redirectUrl);
+  }
+
   return (
     <>
       <BreadcrumbOne title="Înregistrare" subTitle="Înregistrare" />

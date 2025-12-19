@@ -15,7 +15,7 @@
 
 "use client";
 
-import { useState, useRef } from "react";
+import { useState, useRef, useCallback } from "react";
 import { UseFormSetValue, FieldError } from "react-hook-form";
 import { uploadDocumentAction, deleteDocumentAction } from "@/app/actions/uploads";
 import { FileUploadArea } from "./FileUploadArea";
@@ -86,61 +86,77 @@ export function DocumentUploadField({
 }: DocumentUploadFieldProps) {
   const [uploadingIndex, setUploadingIndex] = useState<number | null>(null);
   const inputRef = useRef<HTMLInputElement>(null);
+  const currentValuesRef = useRef<string[]>(currentValues);
 
-  const handleUpload = async (event: React.ChangeEvent<HTMLInputElement>) => {
-    const files = Array.from(event.target.files || []);
-    if (files.length === 0) return;
+  // Keep ref in sync with prop
+  if (currentValuesRef.current !== currentValues) {
+    currentValuesRef.current = currentValues;
+  }
 
-    if (setServerError) setServerError(null);
+  const handleUpload = useCallback(
+    async (event: React.ChangeEvent<HTMLInputElement>) => {
+      const files = Array.from(event.target.files || []);
+      if (files.length === 0) return;
 
-    // Upload files sequentially
-    for (let i = 0; i < files.length; i++) {
-      const file = files[i];
-      setUploadingIndex(i);
+      if (setServerError) setServerError(null);
 
-      try {
-        const formData = new FormData();
-        formData.append("file", file);
-        formData.append("folder", folder);
+      // Upload files sequentially
+      for (let i = 0; i < files.length; i++) {
+        const file = files[i];
+        setUploadingIndex(i);
 
-        const result = await uploadDocumentAction(formData);
+        try {
+          const formData = new FormData();
+          formData.append("file", file);
+          formData.append("folder", folder);
 
-        if (result.success && result.url) {
-          const newUrls = [...currentValues, result.url];
-          setValue(name, newUrls, { shouldValidate: true });
-        } else {
-          if (setServerError) {
-            setServerError(result.error || `Eroare la încărcarea documentului ${i + 1}`);
+          const result = await uploadDocumentAction(formData);
+
+          if (result.success && result.url) {
+            // Use ref to get latest values, avoiding stale closure
+            const latestValues = currentValuesRef.current;
+            const newUrls = [...latestValues, result.url];
+            setValue(name, newUrls, { shouldValidate: true });
+          } else {
+            if (setServerError) {
+              setServerError(result.error || `Eroare la încărcarea documentului ${i + 1}`);
+            }
           }
+        } catch (error) {
+          console.error(`Error uploading document ${i + 1}:`, error);
+          if (setServerError) {
+            setServerError(`Eroare la încărcarea documentului ${i + 1}`);
+          }
+        } finally {
+          setUploadingIndex(null);
         }
-      } catch (error) {
-        console.error(`Error uploading document ${i + 1}:`, error);
-        if (setServerError) {
-          setServerError(`Eroare la încărcarea documentului ${i + 1}`);
+      }
+
+      if (inputRef.current) {
+        inputRef.current.value = "";
+      }
+    },
+    [setValue, name, folder, setServerError]
+  );
+
+  const handleRemove = useCallback(
+    async (index: number) => {
+      // Use ref to get latest values, avoiding stale closure
+      const latestValues = currentValuesRef.current;
+      const urlToRemove = latestValues[index];
+      const newUrls = latestValues.filter((_, i) => i !== index);
+      setValue(name, newUrls, { shouldValidate: true });
+
+      if (urlToRemove) {
+        try {
+          await deleteDocumentAction(urlToRemove);
+        } catch (error) {
+          console.error("Error deleting document:", error);
         }
-      } finally {
-        setUploadingIndex(null);
       }
-    }
-
-    if (inputRef.current) {
-      inputRef.current.value = "";
-    }
-  };
-
-  const handleRemove = async (index: number) => {
-    const urlToRemove = currentValues[index];
-    const newUrls = currentValues.filter((_, i) => i !== index);
-    setValue(name, newUrls, { shouldValidate: true });
-
-    if (urlToRemove) {
-      try {
-        await deleteDocumentAction(urlToRemove);
-      } catch (error) {
-        console.error("Error deleting document:", error);
-      }
-    }
-  };
+    },
+    [setValue, name]
+  );
 
   const formatHint = acceptedFormats
     .map((f) => {

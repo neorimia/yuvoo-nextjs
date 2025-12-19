@@ -16,7 +16,8 @@
 
 "use client";
 
-import { useForm, FieldError } from "react-hook-form";
+import { useEffect, useRef, useMemo } from "react";
+import { useForm, useWatch, FieldError } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { updateDoctorVerification } from "@/app/actions/onboarding";
 import { doctorVerificationSchema, type DoctorVerificationInput } from "@/lib/validations/doctor";
@@ -25,12 +26,13 @@ import { OnboardingNavigation } from "./OnboardingNavigation";
 import { ServerErrorAlert } from "./components/ServerErrorAlert";
 import { InfoBox, DocumentUploadField } from "./components";
 import { useOnboardingForm } from "./hooks/useOnboardingForm";
+import { saveFormData, getFormData } from "./hooks/useOnboardingLocalStorage";
 
 export function DoctorVerificationForm() {
   const {
     handleSubmit: rhfHandleSubmit,
     setValue,
-    watch,
+    control,
     formState: { errors },
   } = useForm<DoctorVerificationInput>({
     resolver: zodResolver(doctorVerificationSchema),
@@ -39,13 +41,52 @@ export function DoctorVerificationForm() {
     },
   });
 
+  const role = "doctor";
+  const stepNumber = 6;
+
+  // Restore form data from localStorage on mount
+  useEffect(() => {
+    const saved = getFormData<DoctorVerificationInput>(role, stepNumber);
+    if (saved) {
+      // Restore all fields from saved data
+      Object.keys(saved).forEach((key) => {
+        const fieldKey = key as keyof DoctorVerificationInput;
+        const value = saved[fieldKey];
+        if (value !== undefined && value !== null) {
+          setValue(fieldKey, value, { shouldValidate: false });
+        }
+      });
+    }
+  }, [setValue]);
+
+  // Use useWatch for reactive document URLs
+  // Wrap in useMemo to ensure stable array reference (prevents infinite loops)
+  const watchedDocuments = useWatch({ control, name: "verificationDocuments" });
+  const documentUrls = useMemo(() => watchedDocuments || [], [watchedDocuments]);
+
+  // Save form data to localStorage on changes (debounced)
+  // Use ref to track previous value and prevent infinite loops
+  const prevDocumentUrlsRef = useRef<string>("");
+  useEffect(() => {
+    const currentString = JSON.stringify(documentUrls);
+    // Only save if the value actually changed
+    if (currentString !== prevDocumentUrlsRef.current) {
+      prevDocumentUrlsRef.current = currentString;
+      const timeoutId = setTimeout(() => {
+        saveFormData(role, stepNumber, { verificationDocuments: documentUrls });
+      }, 500);
+
+      return () => clearTimeout(timeoutId);
+    }
+  }, [documentUrls, role, stepNumber]);
+
   const { handleSubmit, isLoading, serverError, setServerError } =
     useOnboardingForm<DoctorVerificationInput>({
       onSubmitAction: updateDoctorVerification,
       onSuccessRoute: routes.onboarding.doctor.availability,
+      role,
+      stepNumber,
     });
-
-  const documentUrls = watch("verificationDocuments") || [];
 
   const handleSkip = async () => {
     // Skip verification - navigate to next step without submitting
