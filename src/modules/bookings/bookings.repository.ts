@@ -290,14 +290,75 @@ export async function getBookingStatsByClubId(clubId: string): Promise<{
   return stats;
 }
 
+/**
+ * Find bookings by doctor ID
+ */
+export async function findByDoctorId(doctorId: string, limit?: number): Promise<Booking[]> {
+  const dbBookings = await db.query.bookings.findMany({
+    where: eq(bookings.doctorId, doctorId),
+    orderBy: [desc(bookings.scheduledAt), desc(bookings.createdAt)],
+    limit,
+  });
+
+  return dbBookings.map(mapDbBookingToBooking);
+}
+
+/**
+ * Get consultation statistics by doctor ID
+ * Returns counts grouped by status
+ */
+export async function getConsultationStatsByDoctorId(doctorId: string): Promise<{
+  total: number;
+  pending: number;
+  confirmed: number;
+  completed: number;
+  cancelled: number;
+}> {
+  const dbBookings = await db.query.bookings.findMany({
+    where: eq(bookings.doctorId, doctorId),
+    columns: {
+      status: true,
+    },
+  });
+
+  const stats = {
+    total: dbBookings.length,
+    pending: 0,
+    confirmed: 0,
+    completed: 0,
+    cancelled: 0,
+  };
+
+  for (const booking of dbBookings) {
+    switch (booking.status) {
+      case "pending":
+        stats.pending++;
+        break;
+      case "confirmed":
+        stats.confirmed++;
+        break;
+      case "completed":
+        stats.completed++;
+        break;
+      case "cancelled":
+        stats.cancelled++;
+        break;
+    }
+  }
+
+  return stats;
+}
+
 export const bookingsRepository = {
   create,
   findById,
   findByUserId,
   findByClubId,
+  findByDoctorId,
   cancel,
   updateStatus,
   findConflictingBookings,
   findChildConflictingBooking,
   getBookingStatsByClubId,
+  getConsultationStatsByDoctorId,
 };

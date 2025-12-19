@@ -152,7 +152,9 @@ yuvoo-nextjs/
   - Used in: FAQ sections, help pages, sports FAQ sections
   - Features: Bootstrap accordion integration, customizable open state, supports React.ReactNode for answers (enables internal linking)
 
-**Dashboard Portal Components** (Created January 2025 - Phase 1 Complete):
+**Dashboard Portal Components** (Created January 2025 - Phase 1, 2 & 3 Complete):
+
+**Phase 1 Components** (High Priority):
 
 - `DashboardHeader.tsx` - Reusable dashboard header component with title, subtitle, entity name, and verification badge
   - Used in: Club dashboard, doctor dashboard (planned)
@@ -179,6 +181,32 @@ yuvoo-nextjs/
   - Features: Consistent header structure (icon, title, subtitle), content wrapper, variant-specific CSS classes
   - Updated all club dashboard pages to use shared layout
 
+**Phase 2 Components & Patterns** (Medium Priority):
+
+- `RecentActivityFeed.tsx` - Generic activity feed component with render props pattern
+  - Used in: Club dashboard (recent bookings), doctor dashboard (recent consultations - planned)
+  - Features: Custom item rendering via renderItem prop, automatic date sorting, empty states, optional "View All" button
+  - Moved from `src/components/features/clubs/` to shared location
+- `AccountSettingsForm.tsx` - Generic form component for account settings and email notifications
+  - Used in: Club settings, doctor settings (planned)
+  - Features: Configurable notification preferences via props, custom update handlers, loading callbacks, React Hook Form integration
+  - `ClubSettingsForm` uses shared component as wrapper
+- `useEntityFilters` hook (`src/hooks/useEntityFilters.ts`) - Generic filtering hook
+  - Used in: Club booking list, doctor consultation list (planned)
+  - Features: Status and date filtering, status counts for filter UI, optimized with useMemo
+  - Updated `ClubBookingList` to use the hook
+
+**Phase 3 Utilities** (Low Priority):
+
+- `status-badges.ts` (`src/lib/utils/status-badges.ts`) - Status badge configuration utility
+  - Used in: All booking/consultation components
+  - Features: Centralized badge config (label, class, icon), supports Bootstrap and custom styles, Romanian labels
+  - Functions: `getStatusBadgeConfig(status, style)` returns badge configuration
+- `date-formatting.ts` (`src/lib/utils/date-formatting.ts`) - Date formatting utilities
+  - Used in: All components displaying dates/times
+  - Features: Romanian locale formatting, multiple format options (date, time, datetime, activity feed, date only)
+  - Functions: `formatDate()`, `formatTime()`, `formatDateTime()`, `formatDateForActivityFeed()`, `formatDateOnly()`
+
 **Component Extraction Pattern**: When implementing similar features across different portals (club vs doctor), extract shared components to:
 
 - Avoid code duplication
@@ -186,7 +214,7 @@ yuvoo-nextjs/
 - Reduce maintenance burden
 - Enable faster feature development
 
-**Phase 1 Status**: ✅ Complete (6 of 6 components extracted and ready for doctor portal)
+**Status**: ✅ Phase 1 Complete (6 of 6 components), ✅ Phase 2 Complete (3 components/hooks), ✅ Phase 3.1 Complete (2 utilities) - All ready for doctor portal implementation
 
 ### Onboarding Form Components
 

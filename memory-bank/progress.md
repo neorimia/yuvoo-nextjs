@@ -29,6 +29,7 @@
 ✅ **Dashboard Shell System Complete**: Multi-role dashboard shell with responsive sidebar, header, and navigation for all user roles (parent, club_admin, doctor, admin)
 ✅ **Club Dashboard Components Complete**: Club dashboard page refactored with extracted components (ClubDashboardHeader, ProfileCompletenessIndicator, BookingStatistics, RecentActivityFeed) all styled according to Yuvoo design system
 ✅ **Phase 1 Reusable Components Complete**: Extracted 6 shared components from club dashboard for doctor portal reuse (DashboardHeader, ProfileCompletenessIndicator, StatisticsCards, BookingCard, BookingDetailModal, DashboardPageLayout) - all complete and ready for doctor portal implementation
+✅ **Phase 2 & 3 Reusable Components & Utilities Complete**: Extracted 3 additional shared components/hooks (RecentActivityFeed, AccountSettingsForm, useEntityFilters hook) and 2 utilities (status-badges, date-formatting) - all complete and ready for doctor portal implementation
 ✅ **Club Portal Dashboard Complete**: Dashboard overview page with profile completeness, verification status, booking statistics, and recent activity feed - all complete
 ✅ **Club Booking Management Complete**: Booking management page (`/club/bookings`) with filtering (status, date), booking detail modal, confirm/cancel/complete actions, email notifications, and comprehensive styling
 ✅ **Club Profile Editing Complete**: Profile editing page (`/club/profile/edit`) with comprehensive form (basic info, location, contact, schedule, pricing, age groups, gallery), Cloudinary integration, validation, error handling, and styling - all complete
@@ -63,6 +64,8 @@
 - ✅ **User Settings**: 100% complete - Profile editing with validation
 - ✅ **Favorites System**: 100% complete - Add, remove, list favorites for clubs and doctors
 - ✅ **Phase 1 Reusable Components**: 100% complete - 6 shared components extracted from club dashboard (DashboardHeader, ProfileCompletenessIndicator, StatisticsCards, BookingCard, BookingDetailModal, DashboardPageLayout) - all complete, club dashboard updated, ready for doctor portal implementation
+- ✅ **Phase 2 Reusable Components & Patterns**: 100% complete - 3 shared components/hooks extracted (RecentActivityFeed, AccountSettingsForm, useEntityFilters hook) - all complete, club dashboard updated, ready for doctor portal implementation
+- ✅ **Phase 3 Utilities**: 100% complete - 2 utilities extracted (status-badges, date-formatting) - all complete, all components updated to use centralized utilities, consistent Romanian formatting across app
 - ✅ **Security Audit**: 100% complete - All security measures implemented and verified:
   - Rate limiting (auth, uploads, bookings, search)
   - Input validation (Zod schemas across all Server Actions)
@@ -2494,7 +2497,50 @@ The quiz system is production-ready with full functionality, security, optimizat
   - ✅ All components maintain existing Bootstrap styling and functionality
   - ✅ All user-facing text in Romanian
   - ✅ Backward compatible (club dashboard continues to work through wrapper components)
-  - ✅ Ready for doctor portal implementation (Phase 2 components pending)
+  - ✅ Ready for doctor portal implementation
+- ✅ **Phase 2 & 3 Reusable Components & Utilities Complete**: 100% complete - Extracted 3 shared components/hooks and 2 utilities from club dashboard for doctor portal reuse (January 2025)
+  - ✅ **Phase 2.1: RecentActivityFeed Component** (`src/components/shared/RecentActivityFeed.tsx`)
+    - Generic activity feed component with render props pattern
+    - Supports custom item rendering via `renderItem` prop
+    - Automatic date sorting (most recent first)
+    - Empty states with customizable messages
+    - Optional "View All" button with configurable route
+    - Moved from `src/components/features/clubs/` to shared location
+    - Updated `ClubDashboardContent` to use shared component
+  - ✅ **Phase 2.2: useEntityFilters Hook** (`src/hooks/useEntityFilters.ts`)
+    - Generic hook for filtering entities by status and date
+    - Supports status filter (all, pending, confirmed, completed, cancelled)
+    - Supports date filter (all, upcoming, past)
+    - Calculates status counts for filter UI
+    - Optimized with useMemo for performance
+    - Updated `ClubBookingList` to use the hook
+  - ✅ **Phase 2.3: AccountSettingsForm Component** (`src/components/shared/AccountSettingsForm.tsx`)
+    - Generic form component for account settings and email notifications
+    - Account settings section (email read-only, firstName, lastName, phone)
+    - Email notification preferences section with configurable notification types
+    - Dynamic Zod schema generation based on notification preferences config
+    - React Hook Form integration with validation
+    - Loading states, success/error messages with auto-scroll
+    - Optional `onLoadSettings` callback for lazy loading
+    - `ClubSettingsForm` now uses shared component as wrapper
+  - ✅ **Phase 2.4: Status Badge Utility** (`src/lib/utils/status-badges.ts`)
+    - Centralized status badge configuration (pending, confirmed, completed, cancelled)
+    - Supports both Bootstrap style (bg-warning, bg-success, etc.) and custom Yuvoo style (bd-activity-status-\*)
+    - Romanian labels: "În așteptare", "Confirmată", "Finalizată", "Anulată"
+    - Optional Bootstrap Icons for each status
+    - Type-safe with TypeScript types
+    - Updated `BookingCard`, `BookingDetailModal`, and `ClubDashboardContent` to use utility
+  - ✅ **Phase 3.1: Date Formatting Utilities** (`src/lib/utils/date-formatting.ts`)
+    - Created date-formatting.ts with Romanian locale formatting
+    - Functions: `formatDate()` (full date with weekday), `formatTime()` (time only), `formatDateTime()` (date + time), `formatDateForActivityFeed()` (compact format), `formatDateOnly()` (date without weekday)
+    - All functions use Romanian locale ("ro-RO")
+    - All components now use centralized date formatting
+    - Consistent Romanian date/time display across app
+  - ✅ All components and utilities are type-safe with TypeScript interfaces and JSDoc comments
+  - ✅ All components maintain existing Bootstrap styling and functionality
+  - ✅ All user-facing text in Romanian
+  - ✅ Backward compatible (club dashboard continues to work)
+  - ✅ Ready for doctor portal implementation
 - ✅ **Club Portal Dashboard Complete**: 100% complete - Dashboard overview page (`/club/dashboard`) and booking management page (`/club/bookings`) fully implemented
   - ✅ Dashboard overview page with profile completeness indicator, verification status badge, booking statistics, and recent activity feed
   - ✅ Booking management page with filtering (status, date), booking detail modal, confirm/cancel/complete actions
