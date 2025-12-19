@@ -88,22 +88,6 @@ const nextConfig: NextConfig = {
 
   // This is required to support PostHog trailing slash API requests
   skipTrailingSlashRedirect: true,
-
-  // Transpile packages that have strict exports
-  transpilePackages: ["timepicker-ui-react"],
-
-  // Webpack configuration to handle packages with strict exports
-  webpack: (config, { isServer }) => {
-    if (!isServer) {
-      // Fix for timepicker-ui-react package exports issue
-      // Allow CommonJS require to bypass exports field
-      config.resolve.extensionAlias = {
-        ...config.resolve.extensionAlias,
-        ".js": [".js", ".ts", ".tsx"],
-      };
-    }
-    return config;
-  },
 };
 
 // Conditionally apply Sentry config - skip entirely during build to avoid crypto.randomUUID() issues

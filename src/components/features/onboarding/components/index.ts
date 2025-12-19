@@ -19,4 +19,3 @@ export { GalleryUploadField } from "./GalleryUploadField";
 export { DocumentUploadField } from "./DocumentUploadField";
 export { RadioButtonGroupField } from "./RadioButtonGroupField";
 export { DatePickerWithAgeField } from "./DatePickerWithAgeField";
-export { TimeIntervalField } from "./TimeIntervalField";
