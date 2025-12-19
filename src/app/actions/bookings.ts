@@ -25,6 +25,7 @@ import type { AuthUser } from "@/modules/auth/auth.types";
 import { trackEventServer } from "@/lib/analytics/tracking-server";
 import { PostHogEvents, PostHogProperties } from "@/lib/analytics/events";
 import { rateLimit, getClientIdentifierFromHeaders, RATE_LIMIT_CONFIGS } from "@/lib/rate-limit";
+import { UserRoleEnum } from "@/modules/auth/auth.types";
 
 /**
  * Create new booking
@@ -190,7 +191,7 @@ export async function getParentUserAction(userId: string): Promise<AuthUser | nu
   try {
     const user = await requireAuth();
 
-    if (user.role !== "club_admin") {
+    if (user.role !== UserRoleEnum.CLUB_ADMIN) {
       return null;
     }
 
@@ -209,7 +210,7 @@ export async function getClubBookingsAction(): Promise<Booking[]> {
   try {
     const user = await requireAuth();
 
-    if (user.role !== "club_admin") {
+    if (user.role !== UserRoleEnum.CLUB_ADMIN) {
       throw new Error("Access denied");
     }
 
@@ -237,7 +238,7 @@ export async function confirmBookingAction(
   try {
     const user = await requireAuth();
 
-    if (user.role !== "club_admin") {
+    if (user.role !== UserRoleEnum.CLUB_ADMIN) {
       return {
         success: false,
         error: "Access denied",
@@ -290,7 +291,7 @@ export async function cancelBookingByClubAction(
   try {
     const user = await requireAuth();
 
-    if (user.role !== "club_admin") {
+    if (user.role !== UserRoleEnum.CLUB_ADMIN) {
       return {
         success: false,
         error: "Access denied",
@@ -344,7 +345,7 @@ export async function updateBookingStatusAction(
   try {
     const user = await requireAuth();
 
-    if (user.role !== "club_admin") {
+    if (user.role !== UserRoleEnum.CLUB_ADMIN) {
       return {
         success: false,
         error: "Access denied",

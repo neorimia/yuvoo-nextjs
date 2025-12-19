@@ -11,6 +11,7 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useStackApp } from "@stackframe/stack";
 import type { UserRole } from "@/modules/auth/auth.types";
+import { UserRoleEnum } from "@/modules/auth/auth.types";
 import { routes } from "@/lib/routes";
 import Image from "next/image";
 
@@ -92,13 +93,13 @@ export function DashboardHeader({
    */
   const getProfileRoute = (): string => {
     switch (user.role) {
-      case "parent":
+      case UserRoleEnum.PARENT:
         return routes.parent.profile;
-      case "club_admin":
+      case UserRoleEnum.CLUB_ADMIN:
         return routes.club.profile;
-      case "doctor":
+      case UserRoleEnum.DOCTOR:
         return routes.doctor.profile;
-      case "admin":
+      case UserRoleEnum.ADMIN:
         return routes.parent.profile; // Admin uses parent profile route for now
       default:
         return routes.parent.profile;
@@ -110,13 +111,13 @@ export function DashboardHeader({
    */
   const getSettingsRoute = (): string => {
     switch (user.role) {
-      case "parent":
+      case UserRoleEnum.PARENT:
         return routes.parent.settings;
-      case "club_admin":
+      case UserRoleEnum.CLUB_ADMIN:
         return routes.club.settings;
-      case "doctor":
+      case UserRoleEnum.DOCTOR:
         return routes.doctor.settings;
-      case "admin":
+      case UserRoleEnum.ADMIN:
         return routes.parent.settings; // Admin uses parent settings route for now
       default:
         return routes.parent.settings;

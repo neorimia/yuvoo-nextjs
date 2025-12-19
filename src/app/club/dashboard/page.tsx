@@ -10,6 +10,7 @@ import ClubDashboardContent from "@/components/features/clubs/ClubDashboardConte
 import { routes } from "@/lib/routes";
 import { cacheLife, cacheTag } from "next/cache";
 import { redirect } from "next/navigation";
+import { UserRoleEnum } from "@/modules/auth/auth.types";
 
 // MIGRATED: Using "use cache: private" for user-specific prefetchable cache
 // Private cache allows per-user caching while maintaining prefetching capabilities
@@ -32,7 +33,7 @@ export default async function ClubDashboardPage() {
   const session = await requireAuth();
 
   // Verify user is a club admin
-  if (session.dbUser.role !== "club_admin") {
+  if (session.dbUser.role !== UserRoleEnum.CLUB_ADMIN) {
     redirect(routes.parent.dashboard);
   }
 

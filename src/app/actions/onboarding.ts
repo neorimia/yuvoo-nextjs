@@ -17,6 +17,7 @@ import { generateSlug, normalizePhoneNumber } from "@/lib/utils";
 import { z } from "zod";
 import { startOnboardingSchema, updateOnboardingStepSchema } from "@/lib/validations/onboarding";
 import { createChildSchema } from "@/lib/validations/child";
+import { UserRoleEnum } from "@/modules/auth/auth.types";
 import {
   clubBasicInfoSchema,
   clubContactScheduleSchema,
@@ -174,7 +175,11 @@ export async function getOnboardingProgress(): Promise<OnboardingResponse<Onboar
 
     // Determine onboarding role from user role
     const onboardingRole: OnboardingRole =
-      dbUser.role === "club_admin" ? "club_admin" : dbUser.role === "doctor" ? "doctor" : "parent";
+      dbUser.role === UserRoleEnum.CLUB_ADMIN
+        ? "club_admin"
+        : dbUser.role === UserRoleEnum.DOCTOR
+          ? "doctor"
+          : "parent";
 
     // Check if progress exists
     const progress = await db
@@ -495,7 +500,7 @@ export async function createClubOnboarding(
     // Verify user is authenticated and has club_admin role
     const user = await requireAuth();
 
-    if (user.role !== "club_admin") {
+    if (user.role !== UserRoleEnum.CLUB_ADMIN) {
       return {
         success: false,
         error: "Doar administratorii de cluburi pot crea profiluri de club.",

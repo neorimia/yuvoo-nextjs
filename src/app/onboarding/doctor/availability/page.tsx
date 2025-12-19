@@ -30,9 +30,9 @@ export default async function DoctorAvailabilityPage() {
     <OnboardingLayout>
       <OnboardingProgress currentStep={7} steps={DOCTOR_STEPS} className="mb-8" />
 
-      <div className="mx-auto" style={{ maxWidth: "42rem" }}>
+      <div className="bd-onboarding-page mx-auto">
         {/* Header */}
-        <div className="text-center mb-5">
+        <div className="bd-onboarding-page-header">
           <h1 className="display-4 fw-bold text-body mb-4">Disponibilitate consultații 📅</h1>
           <p className="h5 text-body">
             Configurează disponibilitatea ta pentru consultații și programul de lucru (opțional)
@@ -40,7 +40,9 @@ export default async function DoctorAvailabilityPage() {
         </div>
 
         {/* Form */}
-        <DoctorAvailabilityForm />
+        <div className="bd-onboarding-page-content">
+          <DoctorAvailabilityForm />
+        </div>
       </div>
     </OnboardingLayout>
   );

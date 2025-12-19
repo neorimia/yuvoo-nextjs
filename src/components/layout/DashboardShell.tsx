@@ -9,6 +9,7 @@ import React from "react";
 import { requireAuth } from "@/lib/auth/session";
 import { redirect } from "next/navigation";
 import type { UserRole } from "@/modules/auth/auth.types";
+import { UserRoleEnum } from "@/modules/auth/auth.types";
 import { DashboardShellClient } from "./DashboardShellClient";
 import { routes } from "@/lib/routes";
 
@@ -34,13 +35,13 @@ export default async function DashboardShell({ children, role }: DashboardShellP
   if (session.dbUser.role !== role) {
     // Redirect to appropriate dashboard based on user's actual role
     switch (session.dbUser.role) {
-      case "parent":
+      case UserRoleEnum.PARENT:
         redirect(routes.parent.dashboard);
-      case "club_admin":
+      case UserRoleEnum.CLUB_ADMIN:
         redirect(routes.club.dashboard);
-      case "doctor":
+      case UserRoleEnum.DOCTOR:
         redirect(routes.doctor.dashboard);
-      case "admin":
+      case UserRoleEnum.ADMIN:
         redirect(routes.admin.dashboard);
       default:
         redirect(routes.login);

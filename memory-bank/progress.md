@@ -14,7 +14,7 @@
 ✅ **Core Features Complete**: Quiz System, Club Directory, Doctor Directory, Bookings, Onboarding
 ✅ **Admin Features**: Verification system implemented with admin dashboard
 ✅ **Integrations**: Stack Auth, OpenAI, Cloudinary, Brevo (email), PostHog (Phase 1 & 2 Complete, Person Properties Complete), Sentry (Error Tracking Complete), Performance Monitoring (Web Vitals + API Performance Complete) - All integrated and working
-✅ **Onboarding**: Parent (5 steps), Club Admin (7 steps), Doctor (8 steps) - All complete
+✅ **Onboarding**: Parent (5 steps), Club Admin (7 steps), Doctor (8 steps) - All complete, all pages aligned with consistent structural pattern
 ✅ **Email System**: All templates created, booking/quiz/verification emails integrated
 ✅ **Performance**: Database indexes, query optimization, component memoization, AI response caching
 ✅ **High Priority TODOs Complete**: All repositories, validation schemas, and UI components implemented
@@ -39,6 +39,10 @@
 ✅ **SEO Week 11-12 Performance & Advanced SEO Complete**: Cache optimization for listings (clubs/doctors), ItemList schema for listing pages, location-specific landing pages all implemented
 ✅ **Next.js 16 Cache Components Migration Complete**: All legacy patterns removed, public/private cache pages migrated, Server Actions updated with revalidateTag(), comprehensive cache tag system implemented, documentation created
 ✅ **Production Deployment Preparation Complete**: Environment variables verified, custom domain & SSL configured, database backups verified, CDN settings configured, deployment checklist created, rollback procedure set up, gradual rollout configured
+✅ **Doctor Onboarding Pattern Alignment Complete**: All 8 doctor onboarding pages updated to match club onboarding structural pattern, consistent CSS classes, Bootstrap utilities, layout pattern alignment
+✅ **Email Verification Handler Complete**: Created `/handler/email-verification` route for Stack Auth email verification callbacks, proper error handling and redirects
+✅ **Role-Based Login Redirects Complete**: Created authentication redirect proxy (`/auth/redirect`), updated sign-in action with role-based redirect logic, fixed parent layout error handling, all users now redirect to correct dashboard/onboarding based on role
+✅ **UserRoleEnum Implementation Complete**: Created `UserRoleEnum` as single source of truth for roles, updated all role usages throughout codebase (comparisons, switch statements, assignments), type-safe enum values, better IDE support
 🚧 **In Progress**: Comprehensive E2E testing, final polish, launch announcement content
 📋 **Remaining**: Final user acceptance testing, medium/low priority TODOs
 
@@ -876,6 +880,13 @@
       - [x] Auto-redirect to dashboard after 5 seconds ✅
       - [x] Completion server action (`completeClubOnboarding`) ✅
   - [x] **Doctor Onboarding (Phase 4)**: ✅ **COMPLETE**
+    - [x] **Pattern Alignment** ✅ (January 2025)
+      - [x] All 8 doctor onboarding pages updated to match club onboarding structural pattern ✅
+      - [x] Replaced inline styles with Bootstrap utility classes (`bd-onboarding-page`, `bd-onboarding-page-header`, `bd-onboarding-page-content`) ✅
+      - [x] Welcome page uses `bd-onboarding-welcome-benefits` and `bd-onboarding-welcome-time` classes ✅
+      - [x] Upload pages (photo, verification) use `bd-onboarding-page-wide` for wider layout ✅
+      - [x] Complete page uses `bd-onboarding-complete` wrapper ✅
+      - [x] Layout updated with production build check to prevent prerender errors ✅
     - [x] Welcome page (`/onboarding/doctor/welcome`) ✅
       - [x] Personalized greeting with doctor name ✅
       - [x] 8-step progress indicator ✅
@@ -1680,6 +1691,13 @@ The quiz system is production-ready with full functionality, security, optimizat
   - ✅ Email confirmation page (`/auth/email-confirmation`) ✅
   - ✅ EmailConfirmationForm component ✅
   - ✅ Server action `verifyEmailAction` ✅
+  - ✅ Email verification handler route (`/handler/email-verification`) ✅ (January 2025)
+    - ✅ Handles Stack Auth email verification callbacks ✅
+    - ✅ Extracts verification code from query parameters ✅
+    - ✅ Verifies email using Stack Auth's `verifyEmail()` method ✅
+    - ✅ Redirects to login with success message on success ✅
+    - ✅ Redirects to email confirmation page with error on failure ✅
+    - ✅ Proper error handling for missing code, verification failures, and unexpected errors ✅
   - ✅ Romanian localization ✅
   - ✅ Auto-redirect after verification ✅
 - ✅ Session management ✅
@@ -1695,8 +1713,26 @@ The quiz system is production-ready with full functionality, security, optimizat
   - ✅ Protected routes configuration (parent, club, doctor, admin) ✅
   - ✅ Authentication redirects with URL preservation ✅
   - ✅ Role-based route patterns ✅
+  - ✅ Role-based login redirects ✅ (January 2025)
+    - ✅ Authentication redirect proxy (`/auth/redirect`) created ✅
+    - ✅ Redirects users to appropriate dashboard or onboarding based on role and onboarding status ✅
+    - ✅ Updated `signInAction` with `getRoleBasedRedirect()` helper function ✅
+    - ✅ Updated Stack Auth `afterSignIn` configuration to use redirect proxy ✅
+    - ✅ Updated parent layout to use `getSession()` instead of `requireAuth()` for graceful error handling ✅
+    - ✅ Added role-based protection: redirects non-parent users to their appropriate dashboard/onboarding ✅
+    - ✅ All roles properly handled: parent, club_admin, doctor, admin ✅
   - ✅ Onboarding flow integration ✅
   - ✅ Security note: Data layer authorization (requireAuth/requireRole) is primary security ✅
+- ✅ UserRoleEnum Implementation ✅ (January 2025)
+  - ✅ Created `UserRoleEnum` in `src/modules/auth/auth.types.ts` as single source of truth ✅
+    - ✅ Enum values: `PARENT`, `CLUB_ADMIN`, `DOCTOR`, `ADMIN` ✅
+    - ✅ Maintains backward compatibility with `UserRole` type ✅
+  - ✅ Updated all role usages throughout codebase ✅
+    - ✅ All role comparisons (`===`, `!==`) now use `UserRoleEnum` ✅
+    - ✅ All switch statements now use `UserRoleEnum` values ✅
+    - ✅ All role assignments use `UserRoleEnum` where applicable ✅
+    - ✅ Files updated: auth actions, layouts, onboarding, bookings, proxy, session management ✅
+  - ✅ Benefits: Type safety, single source of truth, better IDE support, backward compatible ✅
 
 ### Booking System (Basic)
 

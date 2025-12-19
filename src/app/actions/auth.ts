@@ -12,6 +12,7 @@ import { stackServerApp } from "@/lib/auth/stack";
 import { getCurrentUser, requireAuth, requireRole } from "@/modules/auth/auth.service";
 import { getSession } from "@/lib/auth/session";
 import type { AuthUser, UserRole } from "@/modules/auth/auth.types";
+import { UserRoleEnum } from "@/modules/auth/auth.types";
 import { routes } from "@/lib/routes";
 import { getErrorMessage } from "@/lib/auth/errors";
 import { trackEventServer } from "@/lib/analytics/tracking-server";
@@ -24,6 +25,43 @@ import {
   resetPasswordSchema,
   verifyEmailSchema,
 } from "@/lib/validations/auth";
+
+/**
+ * Get role-based redirect URL
+ * Returns onboarding URL if onboarding is incomplete, otherwise returns dashboard URL
+ */
+async function getRoleBasedRedirect(role: UserRole, onboardingCompleted: boolean): Promise<string> {
+  // If onboarding is not completed, redirect to onboarding
+  if (!onboardingCompleted) {
+    switch (role) {
+      case UserRoleEnum.PARENT:
+        return routes.onboarding.parent.welcome;
+      case UserRoleEnum.CLUB_ADMIN:
+        return routes.onboarding.club.welcome;
+      case UserRoleEnum.DOCTOR:
+        return routes.onboarding.doctor.welcome;
+      case UserRoleEnum.ADMIN:
+        // Admins don't need onboarding
+        return routes.admin.dashboard;
+      default:
+        return routes.onboarding.parent.welcome;
+    }
+  }
+
+  // Onboarding completed - redirect to dashboard
+  switch (role) {
+    case UserRoleEnum.PARENT:
+      return routes.parent.dashboard;
+    case UserRoleEnum.CLUB_ADMIN:
+      return routes.club.dashboard;
+    case UserRoleEnum.DOCTOR:
+      return routes.doctor.dashboard;
+    case UserRoleEnum.ADMIN:
+      return routes.admin.dashboard;
+    default:
+      return routes.parent.dashboard;
+  }
+}
 
 /**
  * Get current authenticated user
@@ -111,9 +149,10 @@ export async function signInAction(formData: FormData, redirectUrl?: string) {
       await logCookieDebug("signInAction - After login");
     }
 
-    // Get user session for tracking
+    // Get user session for tracking and role-based redirect
+    let session = null;
     try {
-      const session = await getSession();
+      session = await getSession();
       if (session?.user) {
         // Track login event server-side with person properties
         await trackEventServer(PostHogEvents.USER_LOGGED_IN, {
@@ -133,9 +172,9 @@ export async function signInAction(formData: FormData, redirectUrl?: string) {
       }
     }
 
-    // Use redirectUrl if provided, otherwise default to dashboard
+    // Use redirectUrl if provided, otherwise use role-based redirect
     // Validate redirectUrl to prevent open redirect vulnerabilities
-    let safeRedirectUrl = routes.parent.dashboard;
+    let safeRedirectUrl: string;
 
     if (redirectUrl) {
       try {
@@ -147,11 +186,40 @@ export async function signInAction(formData: FormData, redirectUrl?: string) {
 
         // Validate it's a relative path (security: prevent open redirect)
         if (decodedUrl.startsWith("/") && !decodedUrl.startsWith("//")) {
-          safeRedirectUrl = decodedUrl as typeof routes.parent.dashboard;
+          safeRedirectUrl = decodedUrl;
+        } else {
+          // Invalid redirect URL - use role-based redirect
+          if (session?.dbUser) {
+            safeRedirectUrl = await getRoleBasedRedirect(
+              session.dbUser.role,
+              session.dbUser.onboardingCompleted
+            );
+          } else {
+            safeRedirectUrl = routes.parent.dashboard; // Fallback
+          }
         }
       } catch (error) {
-        // If decoding fails, use default dashboard
+        // If decoding fails, use role-based redirect
         console.error("Error decoding redirectUrl:", error);
+        if (session?.dbUser) {
+          safeRedirectUrl = await getRoleBasedRedirect(
+            session.dbUser.role,
+            session.dbUser.onboardingCompleted
+          );
+        } else {
+          safeRedirectUrl = routes.parent.dashboard; // Fallback
+        }
+      }
+    } else {
+      // No redirectUrl provided - use role-based redirect
+      if (session?.dbUser) {
+        safeRedirectUrl = await getRoleBasedRedirect(
+          session.dbUser.role,
+          session.dbUser.onboardingCompleted
+        );
+      } else {
+        // Session not available yet - this shouldn't happen, but use fallback
+        safeRedirectUrl = routes.parent.dashboard;
       }
     }
 
@@ -323,13 +391,13 @@ export async function signUpAction(formData: FormData) {
  */
 function getOnboardingUrl(role: string): string {
   switch (role) {
-    case "parent":
+    case UserRoleEnum.PARENT:
       return routes.onboarding.parent.welcome;
-    case "club_admin":
+    case UserRoleEnum.CLUB_ADMIN:
       return routes.onboarding.club.welcome;
-    case "doctor":
+    case UserRoleEnum.DOCTOR:
       return routes.onboarding.doctor.welcome;
-    case "admin":
+    case UserRoleEnum.ADMIN:
       // Admins don't need onboarding
       return routes.admin.dashboard;
     default:

@@ -9,6 +9,7 @@ import { cacheLife, cacheTag } from "next/cache";
 import { getClubByAdminUserId } from "@/modules/clubs/clubs.service";
 import ClubProfileEditForm from "@/components/features/clubs/ClubProfileEditForm";
 import ClubNotFoundState from "@/components/features/clubs/ClubNotFoundState";
+import { UserRoleEnum } from "@/modules/auth/auth.types";
 
 // MIGRATED: Using "use cache: private" for user-specific prefetchable cache
 // Private cache allows per-user caching while maintaining prefetching capabilities
@@ -31,7 +32,7 @@ export default async function ClubProfileEditPage() {
   const session = await requireAuth();
 
   // Verify user is a club admin
-  if (session.dbUser.role !== "club_admin") {
+  if (session.dbUser.role !== UserRoleEnum.CLUB_ADMIN) {
     redirect(routes.parent.dashboard);
   }
 

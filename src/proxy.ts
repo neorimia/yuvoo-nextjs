@@ -26,6 +26,7 @@
 import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
 import { stackServerApp } from "@/lib/auth/stack";
+import { UserRoleEnum } from "@/modules/auth/auth.types";
 
 // Route patterns
 const AUTH_ROUTES = [
@@ -136,9 +137,9 @@ function isAuthRoute(pathname: string): boolean {
  * Check if user is on their role's onboarding flow
  */
 function isOnCorrectOnboardingFlow(pathname: string, role: string): boolean {
-  if (role === "parent" && pathname.startsWith("/onboarding/parent")) return true;
-  if (role === "club_admin" && pathname.startsWith("/onboarding/club")) return true;
-  if (role === "doctor" && pathname.startsWith("/onboarding/doctor")) return true;
+  if (role === UserRoleEnum.PARENT && pathname.startsWith("/onboarding/parent")) return true;
+  if (role === UserRoleEnum.CLUB_ADMIN && pathname.startsWith("/onboarding/club")) return true;
+  if (role === UserRoleEnum.DOCTOR && pathname.startsWith("/onboarding/doctor")) return true;
   return false;
 }
 
@@ -166,13 +167,13 @@ async function getUserFromDatabase(stackUserId: string) {
  */
 function getDashboardUrl(role: string): string {
   switch (role) {
-    case "parent":
+    case UserRoleEnum.PARENT:
       return "/parent/dashboard";
-    case "club_admin":
+    case UserRoleEnum.CLUB_ADMIN:
       return "/club/dashboard";
-    case "doctor":
+    case UserRoleEnum.DOCTOR:
       return "/doctor/dashboard";
-    case "admin":
+    case UserRoleEnum.ADMIN:
       return "/admin/dashboard";
     default:
       return "/parent/dashboard";
@@ -323,19 +324,19 @@ export async function proxy(request: NextRequest) {
     // Note: Check exact matches or /prefix/ to avoid matching public routes
     // e.g., /club matches /club/* but NOT /cluburi/*
     // e.g., /doctor matches /doctor/* but NOT /doctori/*
-    if (pathname.startsWith("/parent/") && dbUser.role !== "parent") {
+    if (pathname.startsWith("/parent/") && dbUser.role !== UserRoleEnum.PARENT) {
       return NextResponse.redirect(new URL("/auth/login", request.url));
     }
 
-    if (pathname.startsWith("/club/") && dbUser.role !== "club_admin") {
+    if (pathname.startsWith("/club/") && dbUser.role !== UserRoleEnum.CLUB_ADMIN) {
       return NextResponse.redirect(new URL("/auth/login", request.url));
     }
 
-    if (pathname.startsWith("/doctor/") && dbUser.role !== "doctor") {
+    if (pathname.startsWith("/doctor/") && dbUser.role !== UserRoleEnum.DOCTOR) {
       return NextResponse.redirect(new URL("/auth/login", request.url));
     }
 
-    if (pathname.startsWith("/admin") && dbUser.role !== "admin") {
+    if (pathname.startsWith("/admin") && dbUser.role !== UserRoleEnum.ADMIN) {
       return NextResponse.redirect(new URL("/auth/login", request.url));
     }
 

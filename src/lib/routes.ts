@@ -63,6 +63,7 @@ export const routes = {
   emailConfirmation: "/email-confirmation",
   verificationPending: "/verification-pending",
   chooseRole: "/choose-role",
+  authRedirect: "/auth/redirect",
 
   // Public Information Pages - SEO-friendly Romanian paths
   about: "/despre-noi",
@@ -277,10 +278,10 @@ export const routes = {
  */
 export const externalLinks = {
   // Social Media (to be updated with Yuvoo accounts)
-  facebook: "https://facebook.com/yuvoo",
-  instagram: "https://instagram.com/yuvoo",
-  twitter: "https://twitter.com/yuvoo",
-  linkedin: "https://linkedin.com/company/yuvoo",
+  facebook: "https://facebook.com/yuvooro",
+  instagram: "https://instagram.com/yuvooro",
+  twitter: "https://twitter.com/yuvooro",
+  linkedin: "https://linkedin.com/company/yuvooro",
 
   // Legal & Support - SEO-friendly Romanian paths
   terms: "/termeni",

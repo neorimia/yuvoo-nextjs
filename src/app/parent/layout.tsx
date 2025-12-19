@@ -1,6 +1,9 @@
 import React from "react";
 import { cookies } from "next/headers";
-import { requireAuth } from "@/lib/auth/session";
+import { redirect } from "next/navigation";
+import { getSession } from "@/lib/auth/session";
+import { routes } from "@/lib/routes";
+import { UserRoleEnum } from "@/modules/auth/auth.types";
 import PostHogUserIdentification from "@/components/analytics/PostHogUserIdentification";
 import { SentryUserContext } from "@/components/shared/SentryUserContext";
 import DashboardShell from "@/components/layout/DashboardShell";
@@ -15,8 +18,44 @@ import DashboardShell from "@/components/layout/DashboardShell";
 export default async function ParentLayout({ children }: { children: React.ReactNode }) {
   // Explicitly access cookies to ensure route is dynamic
   await cookies();
-  // Require authentication
-  const session = await requireAuth();
+
+  // Get session (don't throw if not authenticated - handle gracefully)
+  const session = await getSession();
+
+  // If not authenticated, redirect to login
+  if (!session) {
+    redirect(routes.login);
+  }
+
+  // Role-based protection: redirect non-parent users to their appropriate dashboard
+  if (session.dbUser.role !== UserRoleEnum.PARENT) {
+    // Redirect based on role and onboarding status
+    if (!session.dbUser.onboardingCompleted) {
+      // Redirect to appropriate onboarding
+      switch (session.dbUser.role) {
+        case UserRoleEnum.CLUB_ADMIN:
+          redirect(routes.onboarding.club.welcome);
+        case UserRoleEnum.DOCTOR:
+          redirect(routes.onboarding.doctor.welcome);
+        case UserRoleEnum.ADMIN:
+          redirect(routes.admin.dashboard);
+        default:
+          redirect(routes.onboarding.parent.welcome);
+      }
+    } else {
+      // Redirect to appropriate dashboard
+      switch (session.dbUser.role) {
+        case UserRoleEnum.CLUB_ADMIN:
+          redirect(routes.club.dashboard);
+        case UserRoleEnum.DOCTOR:
+          redirect(routes.doctor.dashboard);
+        case UserRoleEnum.ADMIN:
+          redirect(routes.admin.dashboard);
+        default:
+          redirect(routes.parent.dashboard);
+      }
+    }
+  }
 
   return (
     <>

@@ -438,6 +438,8 @@ requireAuth() → throws if not authenticated
 - `/auth/forgot-password` - Password reset request
 - `/auth/reset-password` - Password reset with token
 - `/auth/email-confirmation` - Email verification
+- `/auth/redirect` - Authentication redirect proxy (role-based redirects) ✅ (January 2025)
+- `/handler/email-verification` - Email verification handler route (Stack Auth callbacks) ✅ (January 2025)
 
 **Error Handling**:
 
@@ -453,10 +455,19 @@ requireAuth() → throws if not authenticated
 
 **Redirects** (handled by Server Actions and form components):
 
-- Successful login → `/parent/dashboard`
-- Successful signup → `/parent/dashboard`
+- **Role-Based Login Redirects** ✅ (January 2025)
+  - Authentication redirect proxy (`/auth/redirect`) handles post-authentication redirects
+  - `signInAction` uses `getRoleBasedRedirect()` helper function
+  - Redirects based on user role and onboarding status:
+    - Parent users → `/parent/dashboard` (or `/onboarding/parent/welcome` if incomplete)
+    - Club admins → `/club/dashboard` (or `/onboarding/club/welcome` if incomplete)
+    - Doctor users → `/doctor/dashboard` (or `/onboarding/doctor/welcome` if incomplete)
+    - Admin users → `/admin/dashboard` (no onboarding required)
+  - Stack Auth `afterSignIn` configured to use `/auth/redirect` proxy
+  - Parent layout includes role-based protection (redirects non-parent users)
+- Successful signup → Role-based redirect (via redirect proxy)
 - Successful password reset → `/auth/login`
-- Successful email verification → `/auth/login`
+- Successful email verification → `/auth/login` (via email verification handler at `/handler/email-verification`)
 
 **Benefits of Server-Side Architecture**:
 
@@ -470,7 +481,7 @@ requireAuth() → throws if not authenticated
 
 ### Onboarding System Architecture
 
-**Status**: ✅ Foundation Complete, ✅ Parent Onboarding Complete, ✅ Club Admin Onboarding Complete, 🚧 Doctor Onboarding In Progress
+**Status**: ✅ Foundation Complete, ✅ Parent Onboarding Complete, ✅ Club Admin Onboarding Complete, ✅ Doctor Onboarding Complete (All 8 steps complete, pattern-aligned with club onboarding)
 
 **Location**:
 
@@ -528,6 +539,13 @@ onboarding_progress {
   - ✅ Welcome, Basic Info, Contact & Schedule, Pricing & Ages, Photo Upload, Verification, Completion
 - ✅ Doctor onboarding UI - Complete
   - ✅ Welcome, Basic Info, Bio & Experience, Location & Contact, Photo Upload, Verification, Availability, Completion (All 8 steps complete)
+  - ✅ Pattern Alignment Complete (January 2025): All pages updated to match club onboarding structural pattern
+    - ✅ Consistent CSS classes (`bd-onboarding-page`, `bd-onboarding-page-header`, `bd-onboarding-page-content`)
+    - ✅ Bootstrap utility classes instead of inline styles
+    - ✅ Welcome page uses `bd-onboarding-welcome-benefits` and `bd-onboarding-welcome-time` classes
+    - ✅ Upload pages use `bd-onboarding-page-wide` for wider layout
+    - ✅ Complete page uses `bd-onboarding-complete` wrapper
+    - ✅ Layout includes production build check to prevent prerender errors
 
 ## AI Integration Pattern
 
@@ -1460,6 +1478,10 @@ Does component need interactivity?
    - Token management: Stack Auth handles token lifecycle automatically (creation, validation, expiration, refresh)
 
 2. **Authorization**: Role-based (parent, club_admin, doctor, admin)
+   - **UserRoleEnum**: Single source of truth for all user roles (`src/modules/auth/auth.types.ts`) ✅ (January 2025)
+     - Enum values: `PARENT`, `CLUB_ADMIN`, `DOCTOR`, `ADMIN`
+     - All role comparisons and switch statements use `UserRoleEnum` for type safety
+     - Backward compatible with `UserRole` type
    - All mutation actions require authentication
    - Role checks via `requireRole(role)` for admin actions
    - Resource ownership verification in service layer before allowing updates/deletes

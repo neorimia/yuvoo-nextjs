@@ -1,6 +1,5 @@
 import React from "react";
 import type { Metadata } from "next";
-import BreadcrumbOne from "@/components/Breadcrumb/BreadcrumbOne";
 import EmailConfirmationMain from "@/components/Auth/EmailConfirmationMain";
 
 export const metadata: Metadata = {
@@ -42,19 +41,20 @@ export const metadata: Metadata = {
 export default async function EmailConfirmationPage({
   searchParams,
 }: {
-  searchParams: Promise<{ code?: string; token?: string }>;
+  searchParams: Promise<{ code?: string; token?: string; verified?: string; error?: string }>;
 }) {
   const params = await searchParams;
   // Stack Auth uses 'code' in email links, but we also support 'token' for backwards compatibility
   const token = params.code || params.token || null;
+  const verified = params.verified === "true";
+  const error = params.error || null;
 
   // Note: EmailConfirmationMain contains EmailConfirmationForm which may call redirect()
   // We cannot wrap it in Suspense because redirect() throws NEXT_REDIRECT error
   // which needs to propagate to Next.js router without being caught by Suspense
   return (
     <>
-      <BreadcrumbOne title="Verificare Email" subTitle="Verificare Email" />
-      <EmailConfirmationMain token={token} />
+      <EmailConfirmationMain token={token} verified={verified} error={error} />
     </>
   );
 }

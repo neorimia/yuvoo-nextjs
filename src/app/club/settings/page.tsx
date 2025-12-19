@@ -9,6 +9,7 @@ import { routes } from "@/lib/routes";
 import { getClubSettingsAction } from "@/app/actions/club-settings";
 import ClubSettingsForm from "@/components/features/clubs/ClubSettingsForm";
 import { cacheLife, cacheTag } from "next/cache";
+import { UserRoleEnum } from "@/modules/auth/auth.types";
 
 export const metadata: Metadata = {
   title: "Setări - Yuvoo",
@@ -27,7 +28,7 @@ export default async function ClubSettingsPage() {
   const session = await requireAuth();
 
   // Require club_admin role
-  if (session.dbUser.role !== "club_admin") {
+  if (session.dbUser.role !== UserRoleEnum.CLUB_ADMIN) {
     redirect(routes.parent.dashboard);
   }
 

@@ -278,9 +278,10 @@ export default defineConfig({
 **Configuration Files**:
 
 - `lib/auth/stack.ts` - Server-side Stack Auth configuration
-- `src/providers/StackAuthProvider.tsx` - Client-side provider wrapper
+- `src/providers/StackAuthProvider.tsx` - Client-side provider wrapper (removed - server-side only)
 - `lib/auth/errors.ts` - Error message mappings (Romanian)
 - `lib/auth/session.ts` - Session management helpers
+- `modules/auth/auth.types.ts` - UserRoleEnum (single source of truth for roles) ✅ (January 2025)
 
 **Setup Steps** (Completed):
 
@@ -319,6 +320,8 @@ export default defineConfig({
 - `/auth/forgot-password` - Password reset request (✅ Stack Auth integrated, Romanian localized)
 - `/auth/reset-password` - Password reset with token (✅ Stack Auth integrated, Romanian localized)
 - `/auth/email-confirmation` - Email verification (✅ Stack Auth integrated, Romanian localized)
+- `/auth/redirect` - Authentication redirect proxy (✅ Role-based redirects, January 2025)
+- `/handler/email-verification` - Email verification handler (✅ Stack Auth callbacks, January 2025)
 
 **Error Handling**:
 

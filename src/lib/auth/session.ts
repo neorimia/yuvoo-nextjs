@@ -9,6 +9,7 @@ import { stackServerApp } from "./stack";
 import { db } from "@/lib/db";
 import { users } from "@/lib/db/schema";
 import { eq } from "drizzle-orm";
+import { UserRoleEnum } from "@/modules/auth/auth.types";
 
 /**
  * Sync Stack Auth user with local database
@@ -26,14 +27,21 @@ async function syncUserWithDatabase(stackUser: {
       throw new Error("User must have a primary email address");
     }
 
-    let role: "parent" | "club_admin" | "doctor" | "admin" = "parent"; // Default role
+    let role: "parent" | "club_admin" | "doctor" | "admin" = UserRoleEnum.PARENT; // Default role
 
     // Extract role from Stack Auth clientMetadata if available
     if (stackUser.clientMetadata && typeof stackUser.clientMetadata === "object") {
       const metadata = stackUser.clientMetadata;
       if (metadata.role && typeof metadata.role === "string") {
-        const roleValue = metadata.role as string;
-        if (["parent", "club_admin", "doctor", "admin"].includes(roleValue)) {
+        const roleValue = metadata.role as unknown as UserRoleEnum;
+        if (
+          [
+            UserRoleEnum.PARENT,
+            UserRoleEnum.CLUB_ADMIN,
+            UserRoleEnum.DOCTOR,
+            UserRoleEnum.ADMIN,
+          ].includes(roleValue)
+        ) {
           role = roleValue as typeof role;
         }
       }
@@ -54,7 +62,7 @@ async function syncUserWithDatabase(stackUser: {
       };
 
       // Only update role if we got it from metadata and it's different
-      if (role !== existingUser[0].role && role !== "parent") {
+      if (role !== existingUser[0].role && role !== UserRoleEnum.PARENT) {
         updateData.role = role;
       }
 
@@ -142,7 +150,7 @@ export async function requireAuth() {
         id: "build-mock",
         stackUserId: "build-mock",
         email: "build@mock.com",
-        role: "parent" as const,
+        role: UserRoleEnum.PARENT as const,
         firstName: null,
         lastName: null,
         phone: null,

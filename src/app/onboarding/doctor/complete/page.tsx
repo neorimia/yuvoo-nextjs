@@ -75,8 +75,10 @@ export default async function DoctorCompletePage() {
     <OnboardingLayout>
       <OnboardingProgress currentStep={8} steps={DOCTOR_STEPS} className="mb-8" />
 
-      <div className="mx-auto" style={{ maxWidth: "48rem" }}>
-        <DoctorCompletionContent doctorName={doctorName} doctorTitle={doctorTitle} />
+      <div className="bd-onboarding-page bd-onboarding-page-wide mx-auto">
+        <div className="bd-onboarding-complete">
+          <DoctorCompletionContent doctorName={doctorName} doctorTitle={doctorTitle} />
+        </div>
       </div>
     </OnboardingLayout>
   );
