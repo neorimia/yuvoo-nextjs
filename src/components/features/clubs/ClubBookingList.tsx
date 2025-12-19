@@ -11,6 +11,7 @@ import React, { useState, useEffect, useTransition } from "react";
 import { useRouter } from "next/navigation";
 import ClubBookingCard from "./ClubBookingCard";
 import ClubBookingDetailModal from "./ClubBookingDetailModal";
+import { useEntityFilters, type StatusFilter, type DateFilter } from "@/hooks/useEntityFilters";
 import {
   getClubBookingsAction,
   confirmBookingAction,
@@ -27,21 +28,29 @@ interface BookingWithDetails extends Booking {
   child?: Child;
 }
 
-type StatusFilter = "all" | "pending" | "confirmed" | "completed" | "cancelled";
-type DateFilter = "all" | "upcoming" | "past";
-
 const ClubBookingList: React.FC = () => {
   const [bookings, setBookings] = useState<BookingWithDetails[]>([]);
-  const [filteredBookings, setFilteredBookings] = useState<BookingWithDetails[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [processingId, setProcessingId] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
-  const [statusFilter, setStatusFilter] = useState<StatusFilter>("all");
-  const [dateFilter, setDateFilter] = useState<DateFilter>("all");
   const [selectedBooking, setSelectedBooking] = useState<Booking | null>(null);
   const [selectedParent, setSelectedParent] = useState<AuthUser | null>(null);
   const router = useRouter();
   const [_isPending, startTransition] = useTransition();
+
+  // Use entity filters hook
+  const {
+    statusFilter,
+    dateFilter,
+    filteredItems: filteredBookings,
+    setStatusFilter,
+    setDateFilter,
+    statusCounts,
+  } = useEntityFilters({
+    items: bookings,
+    getStatus: (booking) => booking.status,
+    getDate: (booking) => booking.scheduledAt,
+  });
 
   // Fetch bookings and related data
   useEffect(() => {
@@ -84,25 +93,6 @@ const ClubBookingList: React.FC = () => {
 
     fetchBookings();
   }, []);
-
-  // Apply filters
-  useEffect(() => {
-    let filtered = [...bookings];
-
-    // Apply status filter
-    if (statusFilter !== "all") {
-      filtered = filtered.filter((b) => b.status === statusFilter);
-    }
-
-    // Apply date filter
-    if (dateFilter === "upcoming") {
-      filtered = filtered.filter((b) => new Date(b.scheduledAt) >= new Date());
-    } else if (dateFilter === "past") {
-      filtered = filtered.filter((b) => new Date(b.scheduledAt) < new Date());
-    }
-
-    setFilteredBookings(filtered);
-  }, [bookings, statusFilter, dateFilter]);
 
   const handleConfirm = (bookingId: string) => {
     if (!confirm("Ești sigur că vrei să confirmi această rezervare?")) {
@@ -242,19 +232,11 @@ const ClubBookingList: React.FC = () => {
                 value={statusFilter}
                 onChange={(e) => setStatusFilter(e.target.value as StatusFilter)}
               >
-                <option value="all">Toate ({bookings.length})</option>
-                <option value="pending">
-                  În așteptare ({bookings.filter((b) => b.status === "pending").length})
-                </option>
-                <option value="confirmed">
-                  Confirmate ({bookings.filter((b) => b.status === "confirmed").length})
-                </option>
-                <option value="completed">
-                  Finalizate ({bookings.filter((b) => b.status === "completed").length})
-                </option>
-                <option value="cancelled">
-                  Anulate ({bookings.filter((b) => b.status === "cancelled").length})
-                </option>
+                <option value="all">Toate ({statusCounts.all})</option>
+                <option value="pending">În așteptare ({statusCounts.pending})</option>
+                <option value="confirmed">Confirmate ({statusCounts.confirmed})</option>
+                <option value="completed">Finalizate ({statusCounts.completed})</option>
+                <option value="cancelled">Anulate ({statusCounts.cancelled})</option>
               </select>
             </div>
             <div className="col-md-6">

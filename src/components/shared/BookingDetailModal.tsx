@@ -10,6 +10,8 @@
 
 import React, { useEffect, useRef } from "react";
 import type { BookingStatus, BookingType } from "./BookingCard";
+import { getStatusBadgeConfig } from "@/lib/utils/status-badges";
+import { formatDate, formatTime, formatDateTime } from "@/lib/utils/date-formatting";
 
 export interface BookingDetailModalParent {
   email: string;
@@ -163,44 +165,11 @@ const BookingDetailModal: React.FC<BookingDetailModalProps> = ({
 
   if (!booking) return null;
 
-  // Date formatting functions (will be extracted to utility in Phase 3)
-  const formatDate = (date: Date) => {
-    return new Date(date).toLocaleDateString("ro-RO", {
-      weekday: "long",
-      year: "numeric",
-      month: "long",
-      day: "numeric",
-    });
-  };
+  // Date formatting using utility
 
-  const formatTime = (date: Date) => {
-    return new Date(date).toLocaleTimeString("ro-RO", {
-      hour: "2-digit",
-      minute: "2-digit",
-    });
-  };
-
-  const formatDateTime = (date: Date) => {
-    return new Date(date).toLocaleString("ro-RO", {
-      year: "numeric",
-      month: "long",
-      day: "numeric",
-      hour: "2-digit",
-      minute: "2-digit",
-    });
-  };
-
-  // Status badge configuration (will use utility from Phase 2)
+  // Status badge configuration using utility
   const getStatusBadge = (status: BookingStatus) => {
-    const statusConfig = {
-      pending: { label: "În așteptare", class: "bg-warning text-dark" },
-      confirmed: { label: "Confirmată", class: "bg-success text-white" },
-      cancelled: { label: "Anulată", class: "bg-secondary text-white" },
-      completed: { label: "Finalizată", class: "bg-info text-white" },
-    };
-
-    const config = statusConfig[status] || statusConfig.pending;
-
+    const config = getStatusBadgeConfig(status, "bootstrap");
     return <span className={`badge ${config.class}`}>{config.label}</span>;
   };
 

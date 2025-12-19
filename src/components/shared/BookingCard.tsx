@@ -9,6 +9,8 @@
 "use client";
 
 import React from "react";
+import { getStatusBadgeConfig } from "@/lib/utils/status-badges";
+import { formatDate, formatTime, formatDateOnly } from "@/lib/utils/date-formatting";
 
 export type BookingStatus = "pending" | "confirmed" | "completed" | "cancelled";
 export type BookingType = "club_trial" | "doctor_consultation";
@@ -118,34 +120,11 @@ const BookingCard: React.FC<BookingCardProps> = ({
   isProcessing = false,
   className = "",
 }) => {
-  // Date formatting functions (will be extracted to utility in Phase 3)
-  const formatDate = (date: Date) => {
-    return new Date(date).toLocaleDateString("ro-RO", {
-      weekday: "long",
-      year: "numeric",
-      month: "long",
-      day: "numeric",
-    });
-  };
+  // Date formatting using utility
 
-  const formatTime = (date: Date) => {
-    return new Date(date).toLocaleTimeString("ro-RO", {
-      hour: "2-digit",
-      minute: "2-digit",
-    });
-  };
-
-  // Status badge configuration (will use utility from Phase 2)
+  // Status badge configuration using utility
   const getStatusBadge = (status: BookingStatus) => {
-    const statusConfig = {
-      pending: { label: "În așteptare", class: "bg-warning text-dark" },
-      confirmed: { label: "Confirmată", class: "bg-success text-white" },
-      cancelled: { label: "Anulată", class: "bg-secondary text-white" },
-      completed: { label: "Finalizată", class: "bg-info text-white" },
-    };
-
-    const config = statusConfig[status] || statusConfig.pending;
-
+    const config = getStatusBadgeConfig(status, "bootstrap");
     return <span className={`badge ${config.class} ms-2`}>{config.label}</span>;
   };
 
@@ -299,11 +278,9 @@ const BookingCard: React.FC<BookingCardProps> = ({
 
         <div className="mt-3 pt-3 border-top">
           <small className="text-muted">
-            Creată: {new Date(createdAt).toLocaleDateString("ro-RO")}
+            Creată: {formatDateOnly(createdAt)}
             {updatedAt.getTime() !== createdAt.getTime() && (
-              <span className="ms-2">
-                • Actualizată: {new Date(updatedAt).toLocaleDateString("ro-RO")}
-              </span>
+              <span className="ms-2">• Actualizată: {formatDateOnly(updatedAt)}</span>
             )}
           </small>
         </div>

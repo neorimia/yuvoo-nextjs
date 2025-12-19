@@ -298,15 +298,15 @@ interface DashboardPageLayoutProps {
 
 **Tasks**:
 
-- [ ] Move component to `src/components/shared/`
-- [ ] Make component generic with TypeScript generics
-- [ ] Add `renderItem` prop for custom item rendering
-- [ ] Add `getItemId` and `getItemDate` props for item access
-- [ ] Add optional `title` and `emptyMessage` props
-- [ ] Add optional `viewAllRoute` and `viewAllLabel` props
-- [ ] Update `ClubDashboardContent.tsx` to use shared component
-- [ ] Add TypeScript interface with JSDoc comments
-- [ ] Test with club dashboard
+- [x] Move component to `src/components/shared/`
+- [x] Make component generic with TypeScript generics
+- [x] Add `renderItem` prop for custom item rendering
+- [x] Add `getItemId` and `getItemDate` props for item access
+- [x] Add optional `title` and `emptyMessage` props
+- [x] Add optional `viewAllRoute` and `viewAllLabel` props
+- [x] Update `ClubDashboardContent.tsx` to use shared component
+- [x] Add TypeScript interface with JSDoc comments
+- [x] Test with club dashboard
 
 **Props Interface**:
 
@@ -342,15 +342,15 @@ interface RecentActivityFeedProps<T> {
 
 **Tasks**:
 
-- [ ] Create `src/hooks/useEntityFilters.ts`
-- [ ] Extract status filter state management
-- [ ] Extract date filter state management
-- [ ] Extract filtering logic (status + date)
-- [ ] Add TypeScript generics for entity type
-- [ ] Add `getStatus` and `getDate` accessor functions
-- [ ] Update `ClubBookingList.tsx` to use hook
-- [ ] Add JSDoc comments
-- [ ] Test with club bookings list
+- [x] Create `src/hooks/useEntityFilters.ts`
+- [x] Extract status filter state management
+- [x] Extract date filter state management
+- [x] Extract filtering logic (status + date)
+- [x] Add TypeScript generics for entity type
+- [x] Add `getStatus` and `getDate` accessor functions
+- [x] Update `ClubBookingList.tsx` to use hook
+- [x] Add JSDoc comments
+- [x] Test with club bookings list
 
 **Hook Interface**:
 
@@ -387,14 +387,14 @@ function useEntityFilters<T>(
 
 **Tasks**:
 
-- [ ] Create `src/components/shared/AccountSettingsForm.tsx`
-- [ ] Abstract account settings section (email, firstName, lastName, phone)
-- [ ] Abstract email notification preferences section
-- [ ] Add `notificationPreferencesConfig` prop for configurable notification types
-- [ ] Add `onUpdate` prop for custom update handler
-- [ ] Create `ClubSettingsForm.tsx` wrapper that uses `AccountSettingsForm`
-- [ ] Add TypeScript interface with JSDoc comments
-- [ ] Test with club settings page
+- [x] Create `src/components/shared/AccountSettingsForm.tsx`
+- [x] Abstract account settings section (email, firstName, lastName, phone)
+- [x] Abstract email notification preferences section
+- [x] Add `notificationPreferencesConfig` prop for configurable notification types
+- [x] Add `onUpdate` prop for custom update handler
+- [x] Create `ClubSettingsForm.tsx` wrapper that uses `AccountSettingsForm`
+- [x] Add TypeScript interface with JSDoc comments
+- [x] Test with club settings page
 
 **Props Interface**:
 
@@ -436,13 +436,13 @@ interface AccountSettingsFormProps {
 
 **Tasks**:
 
-- [ ] Create `src/lib/utils/status-badges.ts`
-- [ ] Extract status badge configuration function
-- [ ] Return badge config: `{ label: string; class: string; icon?: string }`
-- [ ] Support all statuses: `pending`, `confirmed`, `completed`, `cancelled`
-- [ ] Update all components to use utility
-- [ ] Add JSDoc comments
-- [ ] Test with club components
+- [x] Create `src/lib/utils/status-badges.ts`
+- [x] Extract status badge configuration function
+- [x] Return badge config: `{ label: string; class: string; icon?: string }`
+- [x] Support all statuses: `pending`, `confirmed`, `completed`, `cancelled`
+- [x] Update all components to use utility
+- [x] Add JSDoc comments
+- [x] Test with club components
 
 **Utility Interface**:
 
@@ -477,13 +477,13 @@ export function getStatusBadgeConfig(status: "pending" | "confirmed" | "complete
 
 **Tasks**:
 
-- [ ] Create `src/lib/utils/date-formatting.ts`
-- [ ] Extract `formatDate` function (Romanian locale, full date)
-- [ ] Extract `formatTime` function (Romanian locale, time only)
-- [ ] Extract `formatDateTime` function (Romanian locale, date + time)
-- [ ] Update all components to use utilities
-- [ ] Add JSDoc comments
-- [ ] Test with club components
+- [x] Create `src/lib/utils/date-formatting.ts`
+- [x] Extract `formatDate` function (Romanian locale, full date)
+- [x] Extract `formatTime` function (Romanian locale, time only)
+- [x] Extract `formatDateTime` function (Romanian locale, date + time)
+- [x] Update all components to use utilities
+- [x] Add JSDoc comments
+- [x] Test with club components
 
 **Utility Interface**:
 
