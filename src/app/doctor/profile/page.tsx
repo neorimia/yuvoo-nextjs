@@ -1,19 +1,28 @@
+"use cache: private";
+
 import React from "react";
 import type { Metadata } from "next";
 import { requireAuth } from "@/lib/auth/session";
-import { UserRoleEnum } from "@/modules/auth/auth.types";
-import { redirect } from "next/navigation";
 import { routes } from "@/lib/routes";
+import { redirect } from "next/navigation";
+import { cacheLife, cacheTag } from "next/cache";
+import { getDoctorByUserId } from "@/modules/doctors/doctors.service";
+import DoctorProfileEditForm from "@/components/features/doctors/DoctorProfileEditForm";
+import DoctorNotFoundState from "@/components/features/doctors/DoctorNotFoundState";
+import DashboardPageLayout from "@/components/shared/DashboardPageLayout";
+import { UserRoleEnum } from "@/modules/auth/auth.types";
 
 export const metadata: Metadata = {
-  title: "Profil Doctor - Yuvoo",
-  description: "Gestionează profilul tău de doctor pe Yuvoo.",
+  title: "Editează Profil Doctor - Yuvoo",
+  description: "Actualizează informațiile despre profilul tău de doctor pe Yuvoo.",
 };
 
 /**
- * Doctor Profile Page
+ * Doctor Profile Edit Page
  *
- * Protected page for doctor profile management.
+ * Protected page for doctor to edit doctor profile.
+ * Shows comprehensive form for editing all doctor information.
+ * Uses Next.js 16 Cache Components with "use cache: private" directive.
  * Route: /doctor/profile
  */
 export default async function DoctorProfilePage() {
@@ -25,18 +34,30 @@ export default async function DoctorProfilePage() {
     redirect(routes.parent.dashboard);
   }
 
+  // Cache configuration for private cache
+  // Cache for 2 minutes - profile data changes infrequently
+  cacheLife("minutes");
+  // Cache tag for user-specific revalidation
+  cacheTag(`user-${session.dbUser.id}`);
+  cacheTag(`doctor-profile-${session.dbUser.id}`);
+
+  // Fetch doctor for this user
+  const doctor = await getDoctorByUserId(session.dbUser.id);
+
+  // Show not found state if doctor doesn't exist
+  if (!doctor) {
+    return <DoctorNotFoundState />;
+  }
+
   return (
-    <section className="bd-doctor-profile-area pt-120 pb-70">
-      <div className="container">
-        <div className="row">
-          <div className="col-12">
-            <div className="bd-doctor-profile-content">
-              <h1 className="bd-section-title mb-30">Profil Doctor</h1>
-              <p className="mb-40">Pagină în curs de dezvoltare...</p>
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
+    <DashboardPageLayout
+      icon="bi-pencil-square"
+      title="Editează Profilul Doctorului"
+      subtitle="Actualizează informațiile despre profilul tău de doctor"
+      variant="doctor"
+      contentClassName="bd-doctor-profile-edit-content"
+    >
+      <DoctorProfileEditForm doctor={doctor} />
+    </DashboardPageLayout>
   );
 }

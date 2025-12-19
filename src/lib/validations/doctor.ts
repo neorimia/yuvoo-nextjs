@@ -126,6 +126,110 @@ export const doctorAvailabilitySchema = z.object({
     .optional(),
 });
 
+/**
+ * Doctor Profile Update Schema (for profile editing)
+ * Combines all fields but makes most optional for partial updates
+ */
+export const doctorProfileUpdateSchema = z.object({
+  // Basic info
+  firstName: z
+    .string(zodRomanianErrors)
+    .min(1, "Prenumele este obligatoriu")
+    .max(100, "Prenumele este prea lung")
+    .trim()
+    .optional(),
+
+  lastName: z
+    .string(zodRomanianErrors)
+    .min(1, "Numele este obligatoriu")
+    .max(100, "Numele este prea lung")
+    .trim()
+    .optional(),
+
+  title: z.string().max(50, "Titlul este prea lung").optional().or(z.literal("")),
+
+  specialty: z
+    .enum(["orthopedist", "nutritionist", "psychologist", "sports_medicine"], {
+      errorMap: () => ({ message: "Selectează specializarea" }),
+    })
+    .optional(),
+
+  secondarySpecialties: z.array(z.string().min(1).max(200)).optional(),
+
+  credentials: z.array(z.string().min(1).max(200)).optional(),
+
+  // Bio & Experience
+  bio: z
+    .string(zodRomanianErrors)
+    .min(100, "Bio-ul trebuie să conțină cel puțin 100 caractere")
+    .max(2000, "Bio-ul este prea lung (maxim 2000 caractere)")
+    .trim()
+    .optional(),
+
+  yearsOfExperience: z
+    .number()
+    .int("Trebuie să fie un număr întreg")
+    .min(1, "Minim 1 an de experiență")
+    .max(50, "Valoarea introdusă este prea mare")
+    .optional(),
+
+  languages: z.array(z.string()).optional(),
+
+  // Location
+  city: z.string(zodRomanianErrors).min(1, "Orașul este obligatoriu").optional(),
+
+  district: z
+    .string()
+    .optional()
+    .transform((val) => (val && val.trim() !== "" ? val.trim() : undefined)),
+
+  address: z
+    .string(zodRomanianErrors)
+    .min(10, "Adresa completă este obligatorie (minim 10 caractere)")
+    .max(300, "Adresa este prea lungă")
+    .trim()
+    .optional(),
+
+  // Contact
+  phone: z
+    .string(zodRomanianErrors)
+    .regex(/^\+40[0-9]{9}$/, "Format telefon invalid (ex: +40721234567)")
+    .optional(),
+
+  email: z
+    .string(zodRomanianErrors)
+    .email("Adresa de email este invalidă")
+    .toLowerCase()
+    .optional(),
+
+  website: z.string().url("URL-ul website-ului este invalid").optional().or(z.literal("")),
+
+  // Availability
+  acceptingNewPatients: z.boolean().optional(),
+
+  onlineConsultations: z.boolean().optional(),
+
+  schedule: z
+    .array(
+      z.object({
+        day: z.string().min(1, "Ziua este obligatorie"),
+        startTime: z.string().regex(/^([01]\d|2[0-3]):([0-5]\d)$/, "Format orar invalid (HH:MM)"),
+        endTime: z.string().regex(/^([01]\d|2[0-3]):([0-5]\d)$/, "Format orar invalid (HH:MM)"),
+      })
+    )
+    .optional(),
+
+  // Media
+  photoUrl: z.string(zodRomanianErrors).url("URL fotografie invalid").optional().or(z.literal("")),
+
+  // Consultation fee (optional, for future use)
+  consultationFee: z
+    .number()
+    .min(0, "Tariful trebuie să fie pozitiv")
+    .max(10000, "Tariful este prea mare")
+    .optional(),
+});
+
 // Combined types
 export type DoctorBasicInfoInput = z.infer<typeof doctorBasicInfoSchema>;
 export type DoctorBioExperienceInput = z.infer<typeof doctorBioExperienceSchema>;
@@ -133,3 +237,4 @@ export type DoctorLocationContactInput = z.infer<typeof doctorLocationContactSch
 export type DoctorPhotoInput = z.infer<typeof doctorPhotoSchema>;
 export type DoctorVerificationInput = z.infer<typeof doctorVerificationSchema>;
 export type DoctorAvailabilityInput = z.infer<typeof doctorAvailabilitySchema>;
+export type DoctorProfileUpdateInput = z.infer<typeof doctorProfileUpdateSchema>;

@@ -1,42 +1,64 @@
+"use cache: private";
+
 import React from "react";
 import type { Metadata } from "next";
+import { cookies } from "next/headers";
 import { requireAuth } from "@/lib/auth/session";
-import { UserRoleEnum } from "@/modules/auth/auth.types";
 import { redirect } from "next/navigation";
 import { routes } from "@/lib/routes";
+import { getDoctorSettingsAction } from "@/app/actions/doctor-settings";
+import DoctorSettingsForm from "@/components/features/doctors/DoctorSettingsForm";
+import DashboardPageLayout from "@/components/shared/DashboardPageLayout";
+import { cacheLife, cacheTag } from "next/cache";
+import { UserRoleEnum } from "@/modules/auth/auth.types";
 
 export const metadata: Metadata = {
   title: "Setări - Yuvoo",
-  description: "Gestionează setările contului tău de doctor pe Yuvoo.",
+  description: "Gestionează setările contului și preferințele de notificare.",
 };
 
 /**
  * Doctor Settings Page
  *
- * Protected page for doctor account settings.
+ * Protected page for doctor account settings and email notification preferences.
  * Route: /doctor/settings
  */
 export default async function DoctorSettingsPage() {
-  // Require authentication
+  // Explicitly access cookies to ensure route is dynamic
+  await cookies();
   const session = await requireAuth();
 
-  // Verify user is a doctor
+  // Require doctor role
   if (session.dbUser.role !== UserRoleEnum.DOCTOR) {
     redirect(routes.parent.dashboard);
   }
 
+  cacheLife("minutes");
+  cacheTag(`user-${session.dbUser.id}`);
+  cacheTag(`doctor-settings-${session.dbUser.id}`);
+
+  // Fetch settings data
+  const settingsResult = await getDoctorSettingsAction();
+  const initialData =
+    settingsResult.success && settingsResult.settings
+      ? {
+          email: settingsResult.settings.email,
+          firstName: settingsResult.settings.firstName,
+          lastName: settingsResult.settings.lastName,
+          phone: settingsResult.settings.phone,
+          emailNotificationPreferences: settingsResult.settings.emailNotificationPreferences,
+        }
+      : undefined;
+
   return (
-    <section className="bd-doctor-settings-area pt-120 pb-70">
-      <div className="container">
-        <div className="row">
-          <div className="col-12">
-            <div className="bd-doctor-settings-content">
-              <h1 className="bd-section-title mb-30">Setări</h1>
-              <p className="mb-40">Pagină în curs de dezvoltare...</p>
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
+    <DashboardPageLayout
+      icon="bi-gear"
+      title="Setări"
+      subtitle="Gestionează setările contului și preferințele de notificare"
+      variant="doctor"
+      contentClassName="bd-doctor-settings-content"
+    >
+      <DoctorSettingsForm initialData={initialData} />
+    </DashboardPageLayout>
   );
 }

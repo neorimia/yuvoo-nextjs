@@ -156,6 +156,7 @@ export const routes = {
     dashboard: "/doctor/dashboard",
     profile: "/doctor/profile",
     bookings: "/doctor/bookings",
+    availability: "/doctor/availability",
     settings: "/doctor/settings",
   },
 
