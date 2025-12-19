@@ -1,9 +1,14 @@
+"use cache: private";
+
 import React from "react";
 import type { Metadata } from "next";
 import { requireAuth } from "@/lib/auth/session";
-import { UserRoleEnum } from "@/modules/auth/auth.types";
-import { redirect } from "next/navigation";
 import { routes } from "@/lib/routes";
+import { redirect } from "next/navigation";
+import { cacheLife, cacheTag } from "next/cache";
+import DoctorConsultationList from "@/components/features/doctors/DoctorConsultationList";
+import DashboardPageLayout from "@/components/shared/DashboardPageLayout";
+import { UserRoleEnum } from "@/modules/auth/auth.types";
 
 export const metadata: Metadata = {
   title: "Consultații - Yuvoo",
@@ -13,7 +18,9 @@ export const metadata: Metadata = {
 /**
  * Doctor Bookings Page
  *
- * Protected page for doctor bookings/consultations management.
+ * Protected page for doctor to manage consultations.
+ * Shows all consultations for the doctor with filtering and management actions.
+ * Uses Next.js 16 Cache Components with "use cache: private" directive.
  * Route: /doctor/bookings
  */
 export default async function DoctorBookingsPage() {
@@ -25,18 +32,22 @@ export default async function DoctorBookingsPage() {
     redirect(routes.parent.dashboard);
   }
 
+  // Cache configuration for private cache
+  // Cache for 2 minutes - consultation data changes frequently
+  cacheLife("minutes");
+  // Cache tag for user-specific revalidation
+  cacheTag(`user-${session.dbUser.id}`);
+  cacheTag(`doctor-bookings-${session.dbUser.id}`);
+
   return (
-    <section className="bd-doctor-bookings-area pt-120 pb-70">
-      <div className="container">
-        <div className="row">
-          <div className="col-12">
-            <div className="bd-doctor-bookings-content">
-              <h1 className="bd-section-title mb-30">Consultații</h1>
-              <p className="mb-40">Pagină în curs de dezvoltare...</p>
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
+    <DashboardPageLayout
+      icon="bi-calendar-check"
+      title="Consultații"
+      subtitle="Gestionează toate consultațiile tale"
+      variant="doctor"
+      contentClassName="bd-doctor-consultations-content"
+    >
+      <DoctorConsultationList />
+    </DashboardPageLayout>
   );
 }

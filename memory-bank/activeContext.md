@@ -170,6 +170,51 @@
     - ✅ Consistent UI/UX with club portal
   - **Status**: ✅ Complete - Phase 1 (Dashboard Overview Page) complete, ready for Phase 2 (Consultation Management)
 
+- **Doctor Portal Consultation Management Phase 2 Complete** ✅ (January 2025)
+  - **Problem Solved**: Doctor portal needs a consultation management page with filtering, detail modal, and actions (confirm, cancel, complete)
+  - **Solution Implemented**: Implemented Phase 2 of doctor portal using shared BookingCard and BookingDetailModal components
+  - **Implementation Details**:
+    - ✅ **Created Consultation Actions** (`src/app/actions/consultations.ts`)
+      - `getDoctorConsultationsAction()` - Get all consultations for doctor
+      - `confirmConsultationAction(id)` - Confirm consultation
+      - `cancelConsultationAction(id, reason?)` - Cancel consultation
+      - `completeConsultationAction(id)` - Mark consultation as completed
+      - `getParentUserForConsultationAction(userId)` - Get parent info for consultation details
+      - All actions include PostHog tracking and cache revalidation
+    - ✅ **Created DoctorConsultationList Component** (`src/components/features/doctors/DoctorConsultationList.tsx`)
+      - Uses `useEntityFilters` hook for status and date filtering
+      - Uses shared `BookingCard` component with `type="doctor_consultation"`
+      - Uses shared `BookingDetailModal` component for consultation details
+      - Fetches child and parent information for each consultation
+      - Handles confirm, cancel, and complete actions with loading states
+      - All text in Romanian
+    - ✅ **Updated Doctor Bookings Page** (`src/app/doctor/bookings/page.tsx`)
+      - Uses `DashboardPageLayout` for consistent layout
+      - Uses `DoctorConsultationList` component
+      - Uses Next.js 16 Cache Components with private cache
+      - Role-based access control
+    - ✅ **Added PostHog Event** (`src/lib/analytics/events.ts`)
+      - Added `DOCTOR_CONSULTATION_COMPLETED` event for tracking
+  - **Files Created**:
+    - `src/app/actions/consultations.ts`
+    - `src/components/features/doctors/DoctorConsultationList.tsx`
+  - **Files Updated**:
+    - `src/app/doctor/bookings/page.tsx` (complete rewrite using shared components)
+    - `src/lib/analytics/events.ts` (added DOCTOR_CONSULTATION_COMPLETED event)
+  - **Features**:
+    - ✅ Consultation list displays all consultations
+    - ✅ Status filter works correctly (all, pending, confirmed, completed, cancelled)
+    - ✅ Date filter works correctly (all, upcoming, past)
+    - ✅ Consultation detail modal opens with correct data
+    - ✅ Confirm action updates status and sends email
+    - ✅ Cancel action updates status and sends email
+    - ✅ Complete action updates status
+    - ✅ All actions show loading states
+    - ✅ All text is in Romanian
+    - ✅ Uses shared BookingCard and BookingDetailModal components
+    - ✅ Consistent UI/UX with club portal
+  - **Status**: ✅ Complete - Phase 2 (Consultation Management Page) complete, ready for Phase 3 (Profile Editing)
+
 - **Onboarding localStorage Implementation Complete** ✅ (January 2025)
   - **Problem Solved**: Users no longer lose form data when refreshing during onboarding
   - **Solution Implemented**: localStorage-based progress saving mechanism for all onboarding flows
