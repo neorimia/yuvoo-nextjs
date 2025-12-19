@@ -166,10 +166,17 @@ const BookingCard: React.FC<BookingCardProps> = ({
         )}
 
         <div className="d-flex gap-2">
+          <Link
+            href={routes.parent.bookingsDetails(booking.id)}
+            className="btn btn-outline-primary btn-sm"
+          >
+            <i className="bi bi-info-circle me-1"></i>
+            Detalii
+          </Link>
           {entity && (
-            <Link href={getEntityLink() || "#"} className="btn btn-outline-primary btn-sm">
+            <Link href={getEntityLink() || "#"} className="btn btn-outline-secondary btn-sm">
               <i className="bi bi-eye me-1"></i>
-              Vezi detalii
+              Vezi {getEntityTypeLabel().toLowerCase()}
             </Link>
           )}
           {booking.status !== "cancelled" && booking.status !== "completed" && onCancel && (

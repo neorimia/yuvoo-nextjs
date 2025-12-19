@@ -621,13 +621,311 @@ For complex, multi-step tasks:
 
 ---
 
+## Universal Feature Implementation Prompt Template
+
+This template provides a systematic approach to implementing any feature in the Yuvoo codebase. Use this template when creating implementation plans for new features or major enhancements.
+
+### When to Use This Template
+
+- Implementing a new feature (e.g., "Parent Dashboard", "Doctor Portal", "Club Booking System")
+- Major feature enhancements (e.g., "Add payment processing to bookings")
+- Multi-page feature implementations (e.g., "Complete onboarding flow")
+- Portal implementations (e.g., "Club Admin Portal", "Parent Portal")
+
+### Template Structure
+
+```
+━━━━━━━━━━━━━━━━━━━━
+FEATURE IMPLEMENTATION PLAN
+━━━━━━━━━━━━━━━━━━━━
+
+**Feature Name**: [Feature Name]
+**Created**: [Date]
+**Based on**: [Source: requirements, user story, design, etc.]
+**Following**: Yuvoo Prompting Standard (`memory-bank/promptingSystem.md`)
+
+━━━━━━━━━━━━━━━━━━━━
+TASK RESTATEMENT
+━━━━━━━━━━━━━━━━━━━━
+
+**Task**: [Clear, specific description of what needs to be implemented]
+
+**Scope**:
+- [List of features/pages/components included]
+- [User flows covered]
+- [Integration points]
+
+**Constraints**:
+- All user-facing content MUST be in Romanian
+- Use Next.js 16 Cache Components pattern
+- Follow existing Bootstrap 5.3.3 + SCSS styling patterns
+- Use shared components where possible
+- Maintain consistency with existing codebase patterns
+- All Server Actions must use Zod validation
+- All pages must have proper role-based access control
+- [Add feature-specific constraints]
+
+**Output Format**: Step-by-step implementation plan with:
+- Current state analysis
+- Gap identification
+- Implementation phases
+- Detailed tasks per phase
+- Acceptance criteria
+- Dependencies and prerequisites
+
+━━━━━━━━━━━━━━━━━━━━
+CURRENT STATE ANALYSIS
+━━━━━━━━━━━━━━━━━━━━
+
+### ✅ What Exists (Complete)
+[List all existing components, pages, services that are complete and functional]
+
+### ⚠️ What Exists (Partial/Needs Enhancement)
+[List all existing components, pages, services that exist but need work]
+
+### ❌ What's Missing
+[List all missing components, pages, services that need to be created]
+
+━━━━━━━━━━━━━━━━━━━━
+IMPLEMENTATION PLAN
+━━━━━━━━━━━━━━━━━━━━
+
+### Phase 1: [Phase Name] ([X] days)
+
+**Goal**: [Clear goal statement]
+
+**Tasks**:
+- [ ] [Specific task 1]
+- [ ] [Specific task 2]
+- [ ] [Specific task 3]
+
+**Deliverable**: [What will be completed in this phase]
+
+---
+
+### Phase 2: [Phase Name] ([X] days)
+
+[Repeat structure for each phase]
+
+━━━━━━━━━━━━━━━━━━━━
+IMPLEMENTATION PRIORITIES
+━━━━━━━━━━━━━━━━━━━━
+
+### Priority 1 (Critical - Must Have)
+[List critical phases/tasks]
+
+### Priority 2 (High - Should Have)
+[List high-priority phases/tasks]
+
+### Priority 3 (Medium - Nice to Have)
+[List medium-priority phases/tasks]
+
+━━━━━━━━━━━━━━━━━━━━
+DEPENDENCIES & PREREQUISITES
+━━━━━━━━━━━━━━━━━━━━
+
+### Technical Dependencies
+- [List technical requirements: Next.js version, libraries, services]
+
+### Code Dependencies
+- [List code dependencies: shared components, services, utilities]
+
+### Prerequisites
+- [List what must be completed before starting]
+
+━━━━━━━━━━━━━━━━━━━━
+ACCEPTANCE CRITERIA (Overall)
+━━━━━━━━━━━━━━━━━━━━
+
+### Functional Requirements
+- [List functional requirements]
+
+### Non-Functional Requirements
+- [List non-functional requirements: performance, accessibility, etc.]
+
+### Quality Requirements
+- [List quality requirements: code standards, testing, documentation]
+
+━━━━━━━━━━━━━━━━━━━━
+ESTIMATED EFFORT
+━━━━━━━━━━━━━━━━━━━━
+
+- **Phase 1**: [X] days ([Y] hours)
+- **Phase 2**: [X] days ([Y] hours)
+- **Total**: [X] days ([Y] hours)
+
+━━━━━━━━━━━━━━━━━━━━
+NEXT STEPS
+━━━━━━━━━━━━━━━━━━━━
+
+1. [First action item]
+2. [Second action item]
+3. [Third action item]
+
+━━━━━━━━━━━━━━━━━━━━
+NOTES
+━━━━━━━━━━━━━━━━━━━━
+
+[Any additional context, considerations, or important notes]
+
+---
+
+**Last Updated**: [Date]
+**Status**: [Ready for Implementation / In Progress / Complete]
+**Next Action**: [What to do next]
+```
+
+### Detailed Phase Template
+
+For each phase, use this detailed structure:
+
+````
+### Phase X: [Phase Name] ([X] days)
+
+**Goal**: [One-sentence goal]
+
+**Route(s)**: [List all routes/pages in this phase]
+**File(s)**: [List key files to create/modify]
+
+#### Current State
+- ✅ [What already exists]
+- ⚠️ [What exists but needs work]
+- ❌ [What's missing]
+
+#### Implementation Tasks
+
+1. **[Task Group Name]** ([X] hours)
+   - [ ] **Create/Update [Component/Page/Service]**
+     - [Specific implementation details]
+     - [Technical requirements]
+     - [Integration points]
+   - [ ] **Create [Supporting Component/Service]**
+     - [Details]
+
+2. **[Task Group Name]** ([X] hours)
+   [Repeat structure]
+
+#### Code Example
+
+```typescript
+// Example code snippet showing key pattern
+[Relevant code example]
+````
+
+#### Acceptance Criteria
+
+- ✅ [Specific, testable criterion 1]
+- ✅ [Specific, testable criterion 2]
+- ✅ [Specific, testable criterion 3]
+
+**Deliverable**: [What will be completed]
+
+```
+
+### Quick Reference: Common Patterns
+
+#### Pattern 1: New Portal/Feature with Multiple Pages
+
+```
+
+Phase 1: Audit & Verification
+Phase 2: Core Pages (List, Detail, Create)
+Phase 3: Enhanced Features (Edit, Settings, Profile)
+Phase 4: Integration & Navigation
+Phase 5: Polish & Testing
+
+```
+
+#### Pattern 2: Single Feature Enhancement
+
+```
+
+Phase 1: Analysis & Planning
+Phase 2: Backend Implementation (Service, Repository, Actions)
+Phase 3: Frontend Implementation (Components, Pages)
+Phase 4: Integration & Testing
+
+```
+
+#### Pattern 3: Reusable Component Extraction
+
+```
+
+Phase 1: Identify Shared Patterns
+Phase 2: Extract Shared Components
+Phase 3: Update Existing Implementations
+Phase 4: Document & Test
+
+```
+
+### Usage Instructions
+
+1. **Copy the template** above
+2. **Fill in feature-specific details**:
+   - Replace `[Feature Name]` with actual feature name
+   - Replace `[Date]` with current date
+   - Replace all `[Placeholders]` with actual content
+3. **Follow Yuvoo Prompting Standard**:
+   - Be explicit about constraints
+   - Define clear acceptance criteria
+   - Specify output formats
+   - Include code examples
+4. **Review before implementation**:
+   - Verify all phases are necessary
+   - Check dependencies are listed
+   - Ensure acceptance criteria are testable
+5. **Update as you work**:
+   - Mark completed tasks with `[x]`
+   - Update status at bottom
+   - Document any deviations or learnings
+
+### Example: Using the Template
+
+**Scenario**: Implementing "Parent Saved Items Feature"
+
+1. **Start with template**: Copy universal template
+2. **Fill in details**:
+   - Feature Name: "Parent Saved Items Feature"
+   - Task: "Implement saved items page for parents to view and manage saved clubs and doctors"
+   - Scope: Saved items list page, remove functionality, filtering
+3. **Analyze current state**:
+   - ✅ Routes defined in `lib/routes.ts`
+   - ❌ Page not implemented
+   - ❌ Actions not created
+4. **Create phases**:
+   - Phase 1: Create Saved Items Page (1 day)
+   - Phase 2: Add Remove Functionality (0.5 days)
+   - Phase 3: Add Filtering (0.5 days)
+5. **Define acceptance criteria**: Testable, specific criteria
+6. **Estimate effort**: Realistic time estimates
+
+### Integration with Yuvoo Standards
+
+This template ensures all feature implementations:
+
+- ✅ Follow Next.js 16 Cache Components pattern
+- ✅ Use Bootstrap 5.3.3 + SCSS styling
+- ✅ Include Romanian language content
+- ✅ Use shared components where possible
+- ✅ Follow service layer pattern
+- ✅ Include proper validation (Zod)
+- ✅ Have role-based access control
+- ✅ Include PostHog tracking
+- ✅ Follow existing code patterns
+
+---
+
 ## Related Documentation
 
 - **Code Generation Rules**: `docs/ PROMPTING_RULES_FOR_CODEGEN.md` - Code-specific guidelines
 - **System Patterns**: `memory-bank/systemPatterns.md` - Architecture patterns
 - **Technical Context**: `memory-bank/techContext.md` - Technology stack details
+- **Example Plans**:
+  - `prompts/parent-feature-implementation-plan.md` - Parent feature example
+  - `prompts/doctor-portal-implementation-plan.md` - Doctor portal example
 
 ---
 
-**Last Updated**: January 2025  
+**Last Updated**: January 2025
 **Status**: Active Standard - All prompts should follow this system
+```
