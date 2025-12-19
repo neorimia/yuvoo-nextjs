@@ -16,6 +16,7 @@ import { getClubByIdAction } from "@/app/actions/clubs";
 import { getDoctorByIdAction } from "@/app/actions/doctors";
 import { getChildAction } from "@/app/actions/children";
 import ParentBookingDetail from "@/components/features/bookings/ParentBookingDetail";
+import DashboardBreadcrumb from "@/components/shared/DashboardBreadcrumb";
 import { routes } from "@/lib/routes";
 
 // Explicitly accessing cookies() to ensure route is dynamic during build
@@ -79,6 +80,12 @@ export default async function ParentBookingDetailPage({ params }: BookingDetailP
         <div className="row">
           <div className="col-12">
             <div className="bd-booking-detail-content">
+              <DashboardBreadcrumb
+                items={[
+                  { label: "Rezervări", href: routes.parent.bookings },
+                  { label: "Detalii Rezervare" },
+                ]}
+              />
               <h1 className="bd-section-title mb-30">Detalii Rezervare</h1>
               <ParentBookingDetail
                 booking={booking}

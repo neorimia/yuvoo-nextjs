@@ -57,6 +57,9 @@ export default async function ParentLayout({ children }: { children: React.React
     }
   }
 
+  // Note: Parent onboarding completion is handled by the onboarding complete page
+  // which redirects to dashboard. The onboarding flow itself handles access control.
+
   return (
     <>
       <SentryUserContext

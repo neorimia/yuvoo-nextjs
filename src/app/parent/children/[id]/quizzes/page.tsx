@@ -6,7 +6,7 @@ import { requireAuth } from "@/lib/auth/session";
 import { getChildById } from "@/modules/children/children.service";
 import { getQuizHistoryAction } from "@/app/actions/quiz";
 import QuizHistory from "@/components/features/quiz/QuizHistory";
-import BreadcrumbOne from "@/components/Breadcrumb/BreadcrumbOne";
+import DashboardBreadcrumb from "@/components/shared/DashboardBreadcrumb";
 import { routes } from "@/lib/routes";
 
 interface ChildQuizzesPageProps {
@@ -53,12 +53,18 @@ export default async function ChildQuizzesPage({ params }: ChildQuizzesPageProps
   // During production builds, skip database queries and render with mock data
   if (isProductionBuild) {
     return (
-      <>
-        <BreadcrumbOne title="Chestionare - Mock Child" subTitle="Istoric Chestionare" />
-        <section className="bd-child-quizzes-area pt-120 pb-70">
-          <div className="container">
-            <div className="row">
-              <div className="col-12">
+      <section className="bd-child-quizzes-area pt-120 pb-70">
+        <div className="container">
+          <div className="row">
+            <div className="col-12">
+              <div className="bd-child-quizzes-content">
+                <DashboardBreadcrumb
+                  items={[
+                    { label: "Copiii Mei", href: routes.parent.children.list },
+                    { label: "Mock Child" },
+                    { label: "Chestionare" },
+                  ]}
+                />
                 <div className="mb-4">
                   <div className="d-flex justify-content-between align-items-center mb-3">
                     <h1 className="h3 mb-0">
@@ -79,8 +85,8 @@ export default async function ChildQuizzesPage({ params }: ChildQuizzesPageProps
               </div>
             </div>
           </div>
-        </section>
-      </>
+        </div>
+      </section>
     );
   }
 
@@ -96,12 +102,18 @@ export default async function ChildQuizzesPage({ params }: ChildQuizzesPageProps
   const childName = `${child.firstName} ${child.lastName}`;
 
   return (
-    <>
-      <BreadcrumbOne title={`Chestionare - ${childName}`} subTitle="Istoric Chestionare" />
-      <section className="bd-child-quizzes-area pt-120 pb-70">
-        <div className="container">
-          <div className="row">
-            <div className="col-12">
+    <section className="bd-child-quizzes-area pt-120 pb-70">
+      <div className="container">
+        <div className="row">
+          <div className="col-12">
+            <div className="bd-child-quizzes-content">
+              <DashboardBreadcrumb
+                items={[
+                  { label: "Copiii Mei", href: routes.parent.children.list },
+                  { label: childName, href: routes.parent.children.detail(id) },
+                  { label: "Chestionare" },
+                ]}
+              />
               <div className="mb-4">
                 <div className="d-flex justify-content-between align-items-center mb-3">
                   <h1 className="h3 mb-0">
@@ -123,7 +135,7 @@ export default async function ChildQuizzesPage({ params }: ChildQuizzesPageProps
             </div>
           </div>
         </div>
-      </section>
-    </>
+      </div>
+    </section>
   );
 }
