@@ -181,6 +181,10 @@ async function getUserById(userId: string): Promise<AuthUser | null> {
         phone: dbUser.phone || null,
         role: dbUser.role as AuthUser["role"],
         emailVerified: false,
+        emailNotificationPreferences:
+          (dbUser.emailNotificationPreferences as
+            | AuthUser["emailNotificationPreferences"]
+            | null) || null,
         createdAt: dbUser.createdAt,
         updatedAt: dbUser.updatedAt,
       };

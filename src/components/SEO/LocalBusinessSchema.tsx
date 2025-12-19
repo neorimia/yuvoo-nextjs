@@ -183,20 +183,27 @@ export default function LocalBusinessSchema({ club }: LocalBusinessSchemaProps) 
   }
 
   // Add pricing information (RECOMMENDED)
-  if (club.pricing) {
-    const priceRange = getPriceRange(club.pricing.amount);
-    if (priceRange) {
-      clubSchema.priceRange = priceRange;
+  if (club.pricing && club.pricing.length > 0) {
+    // Use the first pricing option for price range
+    const firstPricing = club.pricing[0];
+    if (firstPricing && firstPricing.amount) {
+      const priceRange = getPriceRange(firstPricing.amount);
+      if (priceRange) {
+        clubSchema.priceRange = priceRange;
+      }
     }
 
     // Add offers if pricing is available
-    clubSchema.offers = {
-      "@type": "Offer",
-      priceCurrency: club.pricing.currency || "RON",
-      price: club.pricing.amount.toString(),
-      availability: "https://schema.org/InStock",
-      validFrom: new Date().toISOString().split("T")[0], // Today's date
-    };
+    const firstOffer = club.pricing[0];
+    if (firstOffer) {
+      clubSchema.offers = {
+        "@type": "Offer",
+        priceCurrency: firstOffer.currency || "RON",
+        price: firstOffer.amount.toString(),
+        availability: "https://schema.org/InStock",
+        validFrom: new Date().toISOString().split("T")[0], // Today's date
+      };
+    }
   }
 
   // Add opening hours (RECOMMENDED)

@@ -42,10 +42,17 @@ import dynamic from "next/dynamic";
 import { useState, useEffect } from "react";
 
 // Dynamically import Timepicker to avoid SSR issues
-const Timepicker = dynamic(() => import("timepicker-ui-react").then((mod) => mod.Timepicker), {
-  ssr: false,
-  loading: () => <div className="form-control" style={{ height: "38px" }} />,
-});
+// Using wrapper to bypass strict exports field
+const Timepicker = dynamic(
+  async () => {
+    const mod = await import("@/lib/timepicker-wrapper");
+    return { default: mod.Timepicker };
+  },
+  {
+    ssr: false,
+    loading: () => <div className="form-control" style={{ height: "38px" }} />,
+  }
+);
 
 interface TimeIntervalFieldProps {
   /** Field name (for React Hook Form) */
