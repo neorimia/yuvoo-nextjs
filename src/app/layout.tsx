@@ -9,7 +9,6 @@ import { Toaster } from "sonner";
 import "swiper/css/bundle";
 import "react-photo-view/dist/react-photo-view.css";
 import "prismjs/themes/prism-tomorrow.css";
-import "timepicker-ui/main.css";
 import ReduxProvider from "@/redux/provider";
 import { PostHogProviderWrapper } from "@/lib/analytics/posthog";
 import { Suspense } from "react";
