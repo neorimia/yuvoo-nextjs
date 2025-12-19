@@ -1,6 +1,7 @@
 import React from "react";
 import type { Metadata } from "next";
 import EmailConfirmationMain from "@/components/Auth/EmailConfirmationMain";
+import BreadcrumbOne from "@/components/Breadcrumb/BreadcrumbOne";
 
 export const metadata: Metadata = {
   title: "Verificare Email | Yuvoo",
@@ -54,6 +55,7 @@ export default async function EmailConfirmationPage({
   // which needs to propagate to Next.js router without being caught by Suspense
   return (
     <>
+      <BreadcrumbOne title="Verificare Email" subTitle="Verificare Email" />
       <EmailConfirmationMain token={token} verified={verified} error={error} />
     </>
   );

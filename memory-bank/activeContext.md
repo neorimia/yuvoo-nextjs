@@ -942,6 +942,39 @@
 
 ## Recent Changes
 
+### Authentication Improvements ✅ (January 2025)
+
+- **DashboardHeader SignOut Fix** ✅
+  - Fixed TypeError: "Cannot use 'in' operator to search for 'accessToken' in undefined"
+  - Added `useUser()` hook check before calling `stackApp.signOut()`
+  - Prevents error when session data is undefined or expired
+  - Improved error handling with graceful fallback to login redirect
+  - Location: `src/components/layout/DashboardHeader.tsx`
+
+- **Role-Based Redirect Helper Extraction** ✅
+  - Extracted `getRoleBasedRedirect()` function to shared helper file
+  - Created `src/lib/auth/redirects.ts` as centralized location for redirect logic
+  - Updated all usages:
+    - `src/app/auth/redirect/route.ts` - Now imports from helper
+    - `src/app/actions/auth.ts` - Now imports from helper (removed `await` since function is synchronous)
+    - `src/app/api/auth/signin/route.ts` - Removed unused local function
+  - Function is now reusable across the codebase
+  - Better maintainability and consistency
+
+- **Sign-In Flow Improvements** ✅
+  - Fixed sign-in route handler to properly handle NEXT_REDIRECT errors
+  - Updated SignInForm to use API route (`/api/auth/signin`) instead of client-side Stack Auth
+  - Properly handles 303/307 redirects and 200 responses
+  - Ensures users are redirected to `/auth/redirect` which then routes to correct dashboard/onboarding
+  - Fixed JSON parsing errors when response body is empty
+  - Location: `src/components/Form/SignInForm.tsx`, `src/app/api/auth/signin/route.ts`
+
+- **Password Reset Flow Fixes** ✅
+  - Fixed forgot password to include `callbackUrl` parameter (required by Stack Auth in server-side)
+  - Updated reset password form to accept both `code` (Stack Auth format) and `token` (backwards compatibility)
+  - Improved error handling for Stack Auth error codes (EMAIL_PASSWORD_MISMATCH)
+  - Location: `src/app/actions/auth.ts`, `src/components/Form/ResetPasswordForm.tsx`, `src/lib/auth/errors.ts`
+
 ### Quiz UI Implementation ✅ (January 2025 - Complete Quiz UI)
 
 ### Quiz Backend Implementation ✅ (January 2025 - Complete Quiz Backend)

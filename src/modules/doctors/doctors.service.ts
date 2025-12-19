@@ -42,6 +42,13 @@ export async function getAllDoctors(): Promise<Doctor[]> {
 }
 
 /**
+ * Get doctor by user ID
+ */
+export async function getDoctorByUserId(userId: string): Promise<Doctor | null> {
+  return doctorsRepository.findByUserId(userId);
+}
+
+/**
  * Verify doctor ownership
  * Throws error if doctor doesn't exist or user doesn't own it
  */

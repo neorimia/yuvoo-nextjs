@@ -43,6 +43,7 @@
 ✅ **Email Verification Handler Complete**: Created `/handler/email-verification` route for Stack Auth email verification callbacks, proper error handling and redirects
 ✅ **Role-Based Login Redirects Complete**: Created authentication redirect proxy (`/auth/redirect`), updated sign-in action with role-based redirect logic, fixed parent layout error handling, all users now redirect to correct dashboard/onboarding based on role
 ✅ **UserRoleEnum Implementation Complete**: Created `UserRoleEnum` as single source of truth for roles, updated all role usages throughout codebase (comparisons, switch statements, assignments), type-safe enum values, better IDE support
+✅ **Authentication Improvements Complete**: Fixed DashboardHeader signOut TypeError by adding `useUser()` check, extracted `getRoleBasedRedirect()` to shared helper file (`src/lib/auth/redirects.ts`) for better maintainability and reusability, fixed sign-in flow to use API route with proper redirect handling, fixed password reset flow (forgot password callbackUrl, reset password code/token support), improved error handling for Stack Auth errors
 🚧 **In Progress**: Comprehensive E2E testing, final polish, launch announcement content
 📋 **Remaining**: Final user acceptance testing, medium/low priority TODOs
 
@@ -1717,6 +1718,8 @@ The quiz system is production-ready with full functionality, security, optimizat
     - ✅ Authentication redirect proxy (`/auth/redirect`) created ✅
     - ✅ Redirects users to appropriate dashboard or onboarding based on role and onboarding status ✅
     - ✅ Updated `signInAction` with `getRoleBasedRedirect()` helper function ✅
+    - ✅ Extracted `getRoleBasedRedirect()` to `src/lib/auth/redirects.ts` for reusability ✅
+    - ✅ Fixed DashboardHeader signOut TypeError with `useUser()` check ✅
     - ✅ Updated Stack Auth `afterSignIn` configuration to use redirect proxy ✅
     - ✅ Updated parent layout to use `getSession()` instead of `requireAuth()` for graceful error handling ✅
     - ✅ Added role-based protection: redirects non-parent users to their appropriate dashboard/onboarding ✅

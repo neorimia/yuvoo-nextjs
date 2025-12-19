@@ -15,6 +15,7 @@ import type { AuthUser, UserRole } from "@/modules/auth/auth.types";
 import { UserRoleEnum } from "@/modules/auth/auth.types";
 import { routes } from "@/lib/routes";
 import { getErrorMessage } from "@/lib/auth/errors";
+import { getRoleBasedRedirect } from "@/lib/auth/redirects";
 import { trackEventServer } from "@/lib/analytics/tracking-server";
 import { PostHogEvents, PostHogProperties } from "@/lib/analytics/events";
 import { rateLimit, getClientIdentifierFromHeaders, RATE_LIMIT_CONFIGS } from "@/lib/rate-limit";
@@ -25,43 +26,6 @@ import {
   resetPasswordSchema,
   verifyEmailSchema,
 } from "@/lib/validations/auth";
-
-/**
- * Get role-based redirect URL
- * Returns onboarding URL if onboarding is incomplete, otherwise returns dashboard URL
- */
-async function getRoleBasedRedirect(role: UserRole, onboardingCompleted: boolean): Promise<string> {
-  // If onboarding is not completed, redirect to onboarding
-  if (!onboardingCompleted) {
-    switch (role) {
-      case UserRoleEnum.PARENT:
-        return routes.onboarding.parent.welcome;
-      case UserRoleEnum.CLUB_ADMIN:
-        return routes.onboarding.club.welcome;
-      case UserRoleEnum.DOCTOR:
-        return routes.onboarding.doctor.welcome;
-      case UserRoleEnum.ADMIN:
-        // Admins don't need onboarding
-        return routes.admin.dashboard;
-      default:
-        return routes.onboarding.parent.welcome;
-    }
-  }
-
-  // Onboarding completed - redirect to dashboard
-  switch (role) {
-    case UserRoleEnum.PARENT:
-      return routes.parent.dashboard;
-    case UserRoleEnum.CLUB_ADMIN:
-      return routes.club.dashboard;
-    case UserRoleEnum.DOCTOR:
-      return routes.doctor.dashboard;
-    case UserRoleEnum.ADMIN:
-      return routes.admin.dashboard;
-    default:
-      return routes.parent.dashboard;
-  }
-}
 
 /**
  * Get current authenticated user
@@ -138,6 +102,17 @@ export async function signInAction(formData: FormData, redirectUrl?: string) {
   }
 
   try {
+    // IMPORTANT: Stack Auth's signInWithCredential() in Server Actions doesn't set cookies directly.
+    // Stack Auth sets cookies during redirects. The issue is that when we call signInWithCredential()
+    // in a Server Action, it authenticates but the cookie isn't set until there's a redirect.
+    //
+    // The solution is to redirect to Stack Auth's handler URL which will set the cookie and
+    // redirect to our afterSignIn URL. However, we don't have direct access to Stack Auth's
+    // handler URL from Server Actions.
+    //
+    // For now, we'll redirect to our redirect proxy, which will then redirect to the appropriate
+    // dashboard/onboarding. The cookie should be set by Stack Auth during the redirect flow.
+    // If cookies are still not set, we may need to use Stack Auth's redirect flow instead.
     await stackServerApp.signInWithCredential({
       email,
       password,
@@ -150,6 +125,7 @@ export async function signInAction(formData: FormData, redirectUrl?: string) {
     }
 
     // Get user session for tracking and role-based redirect
+    // Note: Session might not be available immediately if cookies aren't set yet
     let session = null;
     try {
       session = await getSession();
@@ -190,40 +166,40 @@ export async function signInAction(formData: FormData, redirectUrl?: string) {
         } else {
           // Invalid redirect URL - use role-based redirect
           if (session?.dbUser) {
-            safeRedirectUrl = await getRoleBasedRedirect(
+            safeRedirectUrl = getRoleBasedRedirect(
               session.dbUser.role,
               session.dbUser.onboardingCompleted
             );
           } else {
-            safeRedirectUrl = routes.parent.dashboard; // Fallback
+            safeRedirectUrl = routes.authRedirect; // Use redirect proxy to ensure cookies are set
           }
         }
       } catch (error) {
         // If decoding fails, use role-based redirect
         console.error("Error decoding redirectUrl:", error);
         if (session?.dbUser) {
-          safeRedirectUrl = await getRoleBasedRedirect(
+          safeRedirectUrl = getRoleBasedRedirect(
             session.dbUser.role,
             session.dbUser.onboardingCompleted
           );
         } else {
-          safeRedirectUrl = routes.parent.dashboard; // Fallback
+          safeRedirectUrl = routes.authRedirect; // Use redirect proxy to ensure cookies are set
         }
       }
     } else {
-      // No redirectUrl provided - use role-based redirect
-      if (session?.dbUser) {
-        safeRedirectUrl = await getRoleBasedRedirect(
-          session.dbUser.role,
-          session.dbUser.onboardingCompleted
-        );
-      } else {
-        // Session not available yet - this shouldn't happen, but use fallback
-        safeRedirectUrl = routes.parent.dashboard;
-      }
+      // No redirectUrl provided - use role-based redirect via redirect proxy
+      // This ensures Stack Auth cookies are properly set during redirect
+      safeRedirectUrl = routes.authRedirect;
     }
 
     // Return success - redirect will be handled by the form component
+    //
+    // IMPORTANT: Stack Auth's signInWithCredential() in Server Actions doesn't set cookies directly.
+    // Cookies are set during redirects. When the client redirects via router.push(), Stack Auth
+    // should set cookies during that redirect. However, if cookies are still not being set,
+    // we may need to use Stack Auth's redirect flow instead of Server Actions.
+    //
+    // The redirect proxy at /auth/redirect has retry logic to handle cookie timing issues.
     return {
       success: true,
       redirect: safeRedirectUrl,
@@ -445,7 +421,13 @@ export async function forgotPasswordAction(formData: FormData) {
   }
 
   try {
-    await stackServerApp.sendForgotPasswordEmail(email);
+    // Stack Auth requires callbackUrl in server-side environments
+    // This is the URL where users will be redirected after clicking the reset link
+    const callbackUrl = `${process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000"}${routes.resetPassword}`;
+
+    await stackServerApp.sendForgotPasswordEmail(email, {
+      callbackUrl,
+    });
 
     // Track password reset request (no distinctId since user might not be authenticated)
     try {

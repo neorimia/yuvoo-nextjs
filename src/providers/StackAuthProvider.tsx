@@ -10,8 +10,8 @@
 
 "use client";
 
-import { StackProvider, type StackClientApp } from "@stackframe/stack";
-import { stackClientApp } from "@/lib/auth/stack";
+import { StackProvider, StackClientApp } from "@stackframe/stack";
+import { useMemo } from "react";
 import type { ReactNode } from "react";
 
 interface StackAuthProviderProps {
@@ -27,11 +27,26 @@ interface StackAuthProviderProps {
  * - Client-side redirect handling
  */
 export function StackAuthProvider({ children }: StackAuthProviderProps) {
-  // Type assertion needed: StackProvider accepts StackClientApp but TypeScript
-  // type system requires explicit casting due to generic type constraints
-  // The client app is properly typed, but StackProvider's generic constraints
-  // require this assertion to satisfy the type checker
-  return (
-    <StackProvider app={stackClientApp as StackClientApp<true, string>}>{children}</StackProvider>
-  );
+  // Create client app with public environment variables
+  // useMemo ensures the app is only created once
+  const stackClientApp = useMemo(() => {
+    const projectId = process.env.NEXT_PUBLIC_STACK_PROJECT_ID;
+    const publishableClientKey = process.env.NEXT_PUBLIC_STACK_PUBLISHABLE_CLIENT_KEY;
+
+    if (!projectId || !publishableClientKey) {
+      throw new Error(
+        "Missing Stack Auth environment variables. " +
+          "Please ensure NEXT_PUBLIC_STACK_PROJECT_ID and NEXT_PUBLIC_STACK_PUBLISHABLE_CLIENT_KEY are set."
+      );
+    }
+
+    return new StackClientApp({
+      projectId,
+      publishableClientKey,
+      // @ts-expect-error - Stack Auth accepts these parameters despite TypeScript types
+      tokenStore: "cookie",
+    });
+  }, []);
+
+  return <StackProvider app={stackClientApp}>{children}</StackProvider>;
 }

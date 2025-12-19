@@ -158,9 +158,25 @@ export async function getDoctorsPendingVerification(): Promise<Doctor[]> {
   return results.map(mapDbDoctorToDoctor);
 }
 
+/**
+ * Find doctor by user ID
+ */
+export async function findByUserId(userId: string): Promise<Doctor | null> {
+  const doctor = await db.query.doctors.findFirst({
+    where: eq(doctors.userId, userId),
+  });
+
+  if (!doctor) {
+    return null;
+  }
+
+  return mapDbDoctorToDoctor(doctor);
+}
+
 export const doctorsRepository = {
   findBySlug,
   getDoctorById,
+  findByUserId,
   findBySpecialty,
   findAll,
   getDoctorsByVerificationStatus,

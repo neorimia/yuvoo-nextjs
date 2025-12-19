@@ -3,12 +3,11 @@
 import Link from "next/link";
 import React, { useState, useTransition } from "react";
 import { useForm } from "react-hook-form";
-import { useRouter } from "next/navigation";
-import { signInAction } from "@/app/actions/auth";
 import ErrorMsg from "./ErrorMassage";
 import { EmailSvgIcon, EyeCutSvgIcon, LockSvgIcon } from "../SVG";
 import { routes } from "@/lib/routes";
 import { trackEvent, PostHogEvents } from "@/lib/analytics/tracking";
+import { getErrorMessage } from "@/lib/auth/errors";
 
 type SignInFormData = {
   email: string;
@@ -23,7 +22,6 @@ const SignInForm: React.FC<SignInFormProps> = ({ redirectUrl }) => {
   const [showPass, setShowPass] = useState(false);
   const [isPending, startTransition] = useTransition();
   const [authError, setAuthError] = useState<string | null>(null);
-  const router = useRouter();
   const {
     register,
     handleSubmit,
@@ -34,23 +32,64 @@ const SignInForm: React.FC<SignInFormProps> = ({ redirectUrl }) => {
     setAuthError(null);
 
     startTransition(async () => {
-      const formData = new FormData();
-      formData.append("email", data.email);
-      formData.append("password", data.password);
+      try {
+        // Use API route for sign-in to ensure server-side redirect configuration is used
+        // This ensures proper cookie handling and redirect to /auth/redirect proxy
+        const response = await fetch("/api/auth/signin", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            email: data.email,
+            password: data.password,
+            redirectUrl: redirectUrl, // Pass custom redirect if provided
+          }),
+        });
 
-      const result = await signInAction(formData, redirectUrl);
+        // Check response status
+        // If it's a redirect (303, 307, 302), the browser will follow it automatically
+        // If it's 200 (success), we manually navigate to the redirect proxy
+        // If it's an error (400, 401, 500), we parse the error message
+        if (response.status === 303 || response.status === 307 || response.status === 302) {
+          // Redirect response - browser will follow it automatically
+          // Track event and let browser handle navigation
+          trackEvent(PostHogEvents.USER_LOGGED_IN);
+          return;
+        }
 
-      if (result.success && result.redirect) {
-        // Track login event client-side and identify user
-        trackEvent(PostHogEvents.USER_LOGGED_IN);
+        if (response.ok) {
+          // Success response (200) - navigate to redirect proxy manually
+          // This handles the case where NEXT_REDIRECT doesn't result in a proper redirect response
+          trackEvent(PostHogEvents.USER_LOGGED_IN);
+          window.location.href = routes.authRedirect;
+          return;
+        }
 
-        // Note: User identification will happen after redirect when session is available
-        // We identify in a useEffect after successful login redirect
-
-        router.push(result.redirect);
-        router.refresh();
-      } else {
-        setAuthError(result.error || "Eroare la autentificare");
+        // Error response - parse JSON to get error message
+        // Check if response has content before parsing
+        const contentType = response.headers.get("content-type");
+        if (contentType && contentType.includes("application/json")) {
+          try {
+            const text = await response.text();
+            if (text) {
+              const result = JSON.parse(text);
+              setAuthError(result.error || "Eroare la autentificare");
+            } else {
+              setAuthError("Eroare la autentificare. Te rugăm să încerci din nou.");
+            }
+          } catch (parseError) {
+            console.error("Error parsing JSON response:", parseError);
+            setAuthError("Eroare la autentificare. Te rugăm să încerci din nou.");
+          }
+        } else {
+          // Response is not JSON, use status text or default error
+          const statusText = response.statusText || "Eroare la autentificare";
+          setAuthError(`${statusText}. Te rugăm să încerci din nou.`);
+        }
+      } catch (error) {
+        console.error("Sign in error:", error);
+        setAuthError(getErrorMessage(error));
       }
     });
   };

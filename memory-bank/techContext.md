@@ -281,6 +281,7 @@ export default defineConfig({
 - `src/providers/StackAuthProvider.tsx` - Client-side provider wrapper (removed - server-side only)
 - `lib/auth/errors.ts` - Error message mappings (Romanian)
 - `lib/auth/session.ts` - Session management helpers
+- `lib/auth/redirects.ts` - Role-based redirect helper functions ✅ (January 2025)
 - `modules/auth/auth.types.ts` - UserRoleEnum (single source of truth for roles) ✅ (January 2025)
 
 **Setup Steps** (Completed):

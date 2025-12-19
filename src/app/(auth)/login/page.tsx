@@ -1,6 +1,7 @@
 import React from "react";
 import type { Metadata } from "next";
 import LoginMain from "@/components/Auth/LoginMain";
+import BreadcrumbOne from "@/components/Breadcrumb/BreadcrumbOne";
 
 export const metadata: Metadata = {
   title: "Autentificare | Yuvoo",
@@ -70,6 +71,7 @@ export default async function LoginPage({ searchParams }: LoginPageProps) {
 
   return (
     <>
+      <BreadcrumbOne title="Autentificare" subTitle="Autentificare" />
       <LoginMain redirectUrl={redirectUrl} />
     </>
   );

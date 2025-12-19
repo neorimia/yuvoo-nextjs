@@ -1,6 +1,5 @@
 import React from "react";
 import type { Metadata } from "next";
-import HomeNewsletter from "@/components/Newsletter/HomeNewsletter";
 import BreadcrumbOne from "@/components/Breadcrumb/BreadcrumbOne";
 import RegisterMain from "@/components/Auth/RegisterMain";
 
@@ -47,7 +46,6 @@ export default function RegisterPage() {
     <>
       <BreadcrumbOne title="Înregistrare" subTitle="Înregistrare" />
       <RegisterMain />
-      <HomeNewsletter />
     </>
   );
 }

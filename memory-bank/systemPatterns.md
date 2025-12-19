@@ -341,6 +341,8 @@ import { routes } from "@/lib/routes";
   - `DashboardShellClient.tsx` - Client component managing mobile menu state and interactivity
   - `DashboardSidebar.tsx` - Responsive sidebar navigation with role-specific items
   - `DashboardHeader.tsx` - Header with user profile dropdown and mobile hamburger button
+    - Uses `useUser()` hook to check session before signOut (prevents TypeError)
+    - Graceful error handling for sign out operations
   - `lib/dashboard-navigation.ts` - Centralized navigation configuration for all roles
   - Responsive design: Mobile menu with overlay, desktop sidebar, proper overflow control
   - All dashboard layouts (parent, club, doctor, admin) use DashboardShell
@@ -457,7 +459,12 @@ requireAuth() → throws if not authenticated
 
 - **Role-Based Login Redirects** ✅ (January 2025)
   - Authentication redirect proxy (`/auth/redirect`) handles post-authentication redirects
-  - `signInAction` uses `getRoleBasedRedirect()` helper function
+  - **Helper Function**: `getRoleBasedRedirect()` in `src/lib/auth/redirects.ts` (centralized, reusable)
+  - `signInAction` and redirect proxy use `getRoleBasedRedirect()` helper function
+  - **Sign-In Flow**: Uses API route (`/api/auth/signin`) instead of client-side Stack Auth
+    - Properly handles NEXT_REDIRECT errors (re-throws to let Next.js handle)
+    - Returns 303 redirect to `/auth/redirect` on success
+    - SignInForm detects redirects and navigates accordingly
   - Redirects based on user role and onboarding status:
     - Parent users → `/parent/dashboard` (or `/onboarding/parent/welcome` if incomplete)
     - Club admins → `/club/dashboard` (or `/onboarding/club/welcome` if incomplete)

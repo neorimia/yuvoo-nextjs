@@ -9,7 +9,7 @@
 import React, { useState, useEffect } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { useStackApp } from "@stackframe/stack";
+import { useStackApp, useUser } from "@stackframe/stack";
 import type { UserRole } from "@/modules/auth/auth.types";
 import { UserRoleEnum } from "@/modules/auth/auth.types";
 import { routes } from "@/lib/routes";
@@ -41,6 +41,7 @@ export function DashboardHeader({
 }: DashboardHeaderProps) {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const stackApp = useStackApp();
+  const stackUser = useUser();
   const router = useRouter();
 
   // Close dropdown when clicking outside
@@ -66,13 +67,20 @@ export function DashboardHeader({
    */
   const handleLogout = async () => {
     try {
-      await stackApp.signOut();
+      // Check if Stack Auth user exists before attempting sign out
+      // This prevents the "Cannot use 'in' operator to search for 'accessToken' in undefined" error
+      // when session data is undefined or has expired
+      if (stackUser) {
+        await stackApp.signOut();
+      }
+      // Always redirect to login, even if signOut fails or user is already logged out
       router.push(routes.login);
       router.refresh();
     } catch (error) {
       console.error("Error signing out:", error);
-      // Still redirect on error - user session may have expired
+      // Still redirect on error - user session may have expired or doesn't exist
       router.push(routes.login);
+      router.refresh();
     }
   };
 
