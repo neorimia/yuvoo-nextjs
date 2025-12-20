@@ -11,6 +11,7 @@ export interface Doctor {
   name: string;
   slug: string;
   specialty: DoctorSpecialty;
+  secondarySpecialties?: DoctorSpecialty[];
   description: string;
   credentials: string[]; // e.g., ["MD", "Pediatric Orthopedist"]
   location: {

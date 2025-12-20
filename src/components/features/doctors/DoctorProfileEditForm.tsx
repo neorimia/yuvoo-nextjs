@@ -116,7 +116,8 @@ const DoctorProfileEditForm: React.FC<DoctorProfileEditFormProps> = ({ doctor })
       lastName,
       title: doctor.name.includes("Dr.") ? "Dr." : "",
       specialty: doctor.specialty === "general" ? "sports_medicine" : doctor.specialty,
-      secondarySpecialties: [],
+      secondarySpecialties:
+        (doctor as unknown as { secondarySpecialties?: string[] }).secondarySpecialties || [],
       credentials: doctor.credentials || [],
       bio: doctor.description,
       yearsOfExperience: undefined,
@@ -129,7 +130,21 @@ const DoctorProfileEditForm: React.FC<DoctorProfileEditFormProps> = ({ doctor })
       website: doctor.contact.website,
       acceptingNewPatients: doctor.acceptingNewPatients ?? true,
       onlineConsultations: doctor.onlineConsultations || false,
-      schedule: (doctor as unknown as { schedule?: unknown[] }).schedule || [],
+      schedule: (() => {
+        const doctorWithSchedule = doctor as unknown as {
+          schedule?: Array<{ day?: string; startTime?: string; endTime?: string }>;
+        };
+        const rawSchedule = doctorWithSchedule.schedule || [];
+        return rawSchedule.filter(
+          (entry): entry is { day: string; startTime: string; endTime: string } =>
+            entry !== null &&
+            entry !== undefined &&
+            typeof entry === "object" &&
+            typeof entry.day === "string" &&
+            typeof entry.startTime === "string" &&
+            typeof entry.endTime === "string"
+        );
+      })(),
       photoUrl: doctor.image || "",
     },
     mode: "onBlur",
