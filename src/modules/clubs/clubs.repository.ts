@@ -81,7 +81,9 @@ export function mapDbClubToClub(dbClub: typeof clubs.$inferSelect): Club {
     levels: dbClub.experienceLevels || [], // Schema: text array, default '{}'
     verified: dbClub.verified || false, // Schema: boolean, default false, notNull
     featured: dbClub.featured || false, // Schema: boolean, default false, notNull
-    images,
+    logoUrl: dbClub.logoUrl || "", // Schema: logo_url (optional text) - default to empty string for interface requirement
+    galleryUrls: dbClub.galleryUrls || [], // Schema: gallery_urls (text array, default '{}')
+    images, // Computed from logoUrl + galleryUrls for backward compatibility
     contact: {
       phone: dbClub.phone || undefined, // Schema: optional
       email: dbClub.email || undefined, // Schema: optional

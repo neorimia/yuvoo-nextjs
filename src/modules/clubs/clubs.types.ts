@@ -24,6 +24,8 @@ export interface Club {
   levels: string[]; // e.g., ["beginner", "intermediate", "advanced"]
   verified: boolean;
   featured: boolean;
+  logoUrl: string;
+  galleryUrls: string[];
   images: string[];
   contact: {
     phone?: string;
