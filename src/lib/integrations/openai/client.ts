@@ -13,8 +13,8 @@ if (!process.env.OPENAI_API_KEY) {
 
 export const openai = new OpenAI({
   apiKey: process.env.OPENAI_API_KEY,
-  timeout: 30000, // 30 seconds timeout
-  maxRetries: 3, // Retry up to 3 times on failure
+  timeout: 45000, // 45 seconds timeout (increased for production reliability)
+  maxRetries: 2, // Reduced retries to fail faster and use fallback
 });
 
 // Model configuration for quiz recommendations
