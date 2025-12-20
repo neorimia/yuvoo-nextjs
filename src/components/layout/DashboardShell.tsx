@@ -56,8 +56,7 @@ export default async function DashboardShell({ children, role }: DashboardShellP
     name:
       session.dbUser.firstName && session.dbUser.lastName
         ? `${session.dbUser.firstName} ${session.dbUser.lastName}`
-        : session.user.displayName || null,
-    displayName: session.user.displayName,
+        : null,
     firstName: session.dbUser.firstName,
     lastName: session.dbUser.lastName,
     role: session.dbUser.role as UserRole,
