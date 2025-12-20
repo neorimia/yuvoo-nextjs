@@ -94,9 +94,9 @@ function mapDbDoctorToDoctor(dbDoctor: typeof doctors.$inferSelect): Doctor {
     acceptingNewPatients: dbDoctor.acceptingNewPatients ?? true,
     onlineConsultations: dbDoctor.onlineConsultations || false,
     schedule,
-    verificationStatus: dbDoctor.verificationStatus,
+    verificationStatus: dbDoctor.verificationStatus || "pending",
     verificationDocuments: dbDoctor.verificationDocuments || [],
-    profileComplete: dbDoctor.profileComplete || undefined,
+    profileComplete: dbDoctor.profileComplete ?? false,
     createdAt: dbDoctor.createdAt,
     updatedAt: dbDoctor.updatedAt,
   };

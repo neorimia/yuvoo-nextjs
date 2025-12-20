@@ -32,12 +32,12 @@ export interface Doctor {
   };
   image?: string;
   verified: boolean;
-  acceptingNewPatients?: boolean; // Whether doctor is accepting new patients
-  onlineConsultations?: boolean; // Whether doctor offers online consultations
+  acceptingNewPatients: boolean; // Whether doctor is accepting new patients (notNull in schema, default true)
+  onlineConsultations: boolean; // Whether doctor offers online consultations (notNull in schema, default false)
   schedule?: Array<{ day: string; startTime: string; endTime: string }>; // Weekly schedule
-  verificationStatus?: "pending" | "in_review" | "approved" | "rejected";
+  verificationStatus: "pending" | "in_review" | "approved" | "rejected"; // notNull in schema, default "pending"
   verificationDocuments?: string[];
-  profileComplete?: boolean; // Whether profile is complete
+  profileComplete: boolean; // Whether profile is complete (notNull in schema, default false)
   createdAt: Date;
   updatedAt: Date;
 }
