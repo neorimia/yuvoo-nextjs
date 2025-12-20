@@ -12,8 +12,7 @@ import { requireAuth } from "@/lib/auth/session";
 import { getProfileAction } from "@/app/actions/settings";
 import SettingsForm from "@/components/features/settings/SettingsForm";
 
-// Explicitly accessing cookies() to ensure route is dynamic during build
-export const dynamic = "force-dynamic";
+// MIGRATED: Removed export const dynamic = 'force-dynamic' (incompatible with Cache Components)
 
 export const metadata: Metadata = {
   title: "Profil - Yuvoo",

@@ -19,8 +19,7 @@ import ParentBookingDetail from "@/components/features/bookings/ParentBookingDet
 import DashboardBreadcrumb from "@/components/shared/DashboardBreadcrumb";
 import { routes } from "@/lib/routes";
 
-// Explicitly accessing cookies() to ensure route is dynamic during build
-export const dynamic = "force-dynamic";
+// MIGRATED: Removed export const dynamic = 'force-dynamic' (incompatible with Cache Components)
 
 export const metadata: Metadata = {
   title: "Detalii Rezervare - Yuvoo",

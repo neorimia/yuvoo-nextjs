@@ -11,8 +11,7 @@ import { cookies } from "next/headers";
 import { requireAuth } from "@/lib/auth/session";
 import FavoritesList from "@/components/features/favorites/FavoritesList";
 
-// Explicitly accessing cookies() to ensure route is dynamic during build
-export const dynamic = "force-dynamic";
+// MIGRATED: Removed export const dynamic = 'force-dynamic' (incompatible with Cache Components)
 
 export const metadata: Metadata = {
   title: "Salvate - Yuvoo",
