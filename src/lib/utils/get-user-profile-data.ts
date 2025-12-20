@@ -44,7 +44,7 @@ export async function getUserProfileData(
         if (!club) return null;
 
         // Club images are in galleryUrls array, use first image as logo if available
-        const clubImage = club.images && club.images.length > 0 ? club.images[0] : null;
+        const clubImage = club?.logoUrl && club.images.length > 0 ? club.images[0] : null;
 
         return {
           image: clubImage || null,

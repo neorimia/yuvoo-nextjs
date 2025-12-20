@@ -35,6 +35,7 @@ export interface Doctor {
   };
   image?: string; // From schema: photo_url (mapped to image, optional)
   verified: boolean; // From schema: verified (notNull, default false)
+  rating: number; // From schema: rating (integer, default 0)
   acceptingNewPatients: boolean; // From schema: accepting_new_patients (notNull, default true)
   onlineConsultations: boolean; // From schema: online_consultations (notNull, default false)
   schedule?: Array<{ day: string; startTime: string; endTime: string }>; // From schema: schedule (JSONB, default '[]')
