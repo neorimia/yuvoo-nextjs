@@ -12,9 +12,11 @@ import type { Club } from "./clubs.types";
 
 /**
  * Map database club record to Club type
+ * Maps all fields from schema to Club interface, handling optional fields and defaults.
  */
 export function mapDbClubToClub(dbClub: typeof clubs.$inferSelect): Club {
   // Parse schedule from JSONB - handle both old format (time) and new format (startTime/endTime)
+  // Schema: schedule jsonb default '[]'
   const scheduleData = dbClub.schedule as unknown;
   const schedule: Club["schedule"] =
     Array.isArray(scheduleData) && scheduleData.length > 0
@@ -22,6 +24,7 @@ export function mapDbClubToClub(dbClub: typeof clubs.$inferSelect): Club {
       : undefined;
 
   // Parse pricing from JSONB (can be array or object)
+  // Schema: pricing jsonb default '[]'
   // Always return as array for consistency
   const pricingData = dbClub.pricing as unknown;
   let pricing: Club["pricing"] = undefined;
@@ -42,10 +45,11 @@ export function mapDbClubToClub(dbClub: typeof clubs.$inferSelect): Club {
   }
 
   // Build location with coordinates
+  // Schema: city (notNull), district (optional), address (optional), latitude/longitude (optional)
   const location: Club["location"] = {
-    city: dbClub.city,
-    district: dbClub.district || undefined,
-    address: dbClub.address || "",
+    city: dbClub.city, // Schema: notNull
+    district: dbClub.district || undefined, // Schema: optional
+    address: dbClub.address || "", // Schema: optional, but interface requires string
     coordinates:
       dbClub.latitude && dbClub.longitude
         ? {
@@ -55,7 +59,8 @@ export function mapDbClubToClub(dbClub: typeof clubs.$inferSelect): Club {
         : undefined,
   };
 
-  // Map images
+  // Map images from logoUrl and galleryUrls
+  // Schema: logoUrl (optional), galleryUrls (text array, default '{}')
   const images: string[] = [];
   if (dbClub.logoUrl) {
     images.push(dbClub.logoUrl);
@@ -65,31 +70,31 @@ export function mapDbClubToClub(dbClub: typeof clubs.$inferSelect): Club {
   }
 
   return {
-    id: dbClub.id,
-    name: dbClub.name,
-    slug: dbClub.slug || "",
-    description: dbClub.description || "",
-    sportId: dbClub.sportType, // Map sportType to sportId
-    sportName: dbClub.sportType, // TODO: Map to sport name from sports table
+    id: dbClub.id, // Schema: primaryKey
+    name: dbClub.name, // Schema: notNull
+    slug: dbClub.slug || "", // Schema: unique, optional (but interface requires string)
+    description: dbClub.description || "", // Schema: optional (but interface requires string)
+    sportId: dbClub.sportType, // Schema: sport_type (notNull) - mapped to sportId
+    sportName: dbClub.sportType, // Schema: sport_type (notNull) - TODO: Map to sport name from sports table
     location,
-    ageGroups: dbClub.ageGroups || [],
-    levels: dbClub.experienceLevels || [],
-    verified: dbClub.verified,
-    featured: dbClub.featured,
+    ageGroups: dbClub.ageGroups || [], // Schema: integer array, default '{}'
+    levels: dbClub.experienceLevels || [], // Schema: text array, default '{}'
+    verified: dbClub.verified || false, // Schema: boolean, default false, notNull
+    featured: dbClub.featured || false, // Schema: boolean, default false, notNull
     images,
     contact: {
-      phone: dbClub.phone || undefined,
-      email: dbClub.email || undefined,
-      website: dbClub.website || undefined,
+      phone: dbClub.phone || undefined, // Schema: optional
+      email: dbClub.email || undefined, // Schema: optional
+      website: dbClub.website || undefined, // Schema: optional
     },
     schedule,
     pricing,
-    verificationStatus: dbClub.verificationStatus || "pending",
-    verificationDocuments: dbClub.verificationDocuments || [],
-    profileComplete: dbClub.profileComplete ?? false,
-    rating: dbClub.rating || 0,
-    createdAt: dbClub.createdAt,
-    updatedAt: dbClub.updatedAt,
+    verificationStatus: dbClub.verificationStatus || "pending", // Schema: notNull, default "pending"
+    verificationDocuments: dbClub.verificationDocuments || [], // Schema: text array, default '{}'
+    profileComplete: dbClub.profileComplete ?? false, // Schema: notNull, default false
+    rating: dbClub.rating || 0, // Schema: integer, default 0
+    createdAt: dbClub.createdAt, // Schema: notNull, defaultNow
+    updatedAt: dbClub.updatedAt, // Schema: notNull, defaultNow
   };
 }
 
