@@ -87,7 +87,7 @@ const DoctorDashboardContent: React.FC<DoctorDashboardContentProps> = ({
           title="Dashboard Doctor"
           subtitle={`Bun venit, ${doctor.name}!`}
           entityName={doctor.name}
-          verificationStatus={doctor.verificationStatus || "pending"}
+          verificationStatus={doctor.verificationStatus}
           variant="doctor"
         />
       </div>

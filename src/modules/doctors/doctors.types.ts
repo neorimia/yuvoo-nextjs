@@ -8,7 +8,9 @@ export type DoctorSpecialty = "orthopedist" | "nutritionist" | "psychologist" | 
 
 export interface Doctor {
   id: string;
-  name: string;
+  firstName: string;
+  lastName: string;
+  title?: string; // Optional title like "Dr.", "Prof."
   slug: string;
   specialty: DoctorSpecialty;
   secondarySpecialties?: string[]; // Array of secondary specialty strings (not enum)
