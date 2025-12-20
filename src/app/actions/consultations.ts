@@ -90,8 +90,8 @@ export async function confirmConsultationAction(
     // Revalidate cache
     revalidatePath("/doctor/bookings");
     revalidatePath("/doctor/dashboard");
-    revalidateTag(`doctor-dashboard-${user.id}`);
-    revalidateTag(`user-${user.id}`);
+    revalidateTag(`doctor-dashboard-${user.id}`, "max");
+    revalidateTag(`user-${user.id}`, "max");
 
     return { success: true };
   } catch (error) {
@@ -147,8 +147,8 @@ export async function cancelConsultationAction(
     // Revalidate cache
     revalidatePath("/doctor/bookings");
     revalidatePath("/doctor/dashboard");
-    revalidateTag(`doctor-dashboard-${user.id}`);
-    revalidateTag(`user-${user.id}`);
+    revalidateTag(`doctor-dashboard-${user.id}`, "max");
+    revalidateTag(`user-${user.id}`, "max");
 
     return { success: true };
   } catch (error) {
@@ -203,8 +203,8 @@ export async function completeConsultationAction(
     // Revalidate cache
     revalidatePath("/doctor/bookings");
     revalidatePath("/doctor/dashboard");
-    revalidateTag(`doctor-dashboard-${user.id}`);
-    revalidateTag(`user-${user.id}`);
+    revalidateTag(`doctor-dashboard-${user.id}`, "max");
+    revalidateTag(`user-${user.id}`, "max");
 
     return { success: true };
   } catch (error) {
