@@ -12,6 +12,7 @@ import type { UserRole } from "@/modules/auth/auth.types";
 import { UserRoleEnum } from "@/modules/auth/auth.types";
 import { DashboardShellClient } from "./DashboardShellClient";
 import { routes } from "@/lib/routes";
+import { getUserProfileData } from "@/lib/utils/get-user-profile-data";
 
 interface DashboardShellProps {
   children: React.ReactNode;
@@ -62,8 +63,11 @@ export default async function DashboardShell({ children, role }: DashboardShellP
     role: session.dbUser.role as UserRole,
   };
 
+  // Fetch profile data from database (doctor photo, club logo, etc.)
+  const profileData = await getUserProfileData(session.dbUser.id, session.dbUser.role as UserRole);
+
   return (
-    <DashboardShellClient role={role} user={userData}>
+    <DashboardShellClient role={role} user={userData} profileData={profileData || undefined}>
       {children}
     </DashboardShellClient>
   );
