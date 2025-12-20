@@ -116,12 +116,11 @@ const DoctorProfileEditForm: React.FC<DoctorProfileEditFormProps> = ({ doctor })
       lastName,
       title: doctor.name.includes("Dr.") ? "Dr." : "",
       specialty: doctor.specialty === "general" ? "sports_medicine" : doctor.specialty,
-      secondarySpecialties:
-        (doctor as unknown as { secondarySpecialties?: string[] }).secondarySpecialties || [],
+      secondarySpecialties: doctor.secondarySpecialties || [],
       credentials: doctor.credentials || [],
       bio: doctor.description,
-      yearsOfExperience: (doctor as unknown as { yearsOfExperience?: number }).yearsOfExperience,
-      languages: (doctor as unknown as { languages?: string[] }).languages || [],
+      yearsOfExperience: doctor.yearsOfExperience,
+      languages: doctor.languages || [],
       city: doctor.location.city,
       district: doctor.location.district,
       address: doctor.location.address,
@@ -130,21 +129,7 @@ const DoctorProfileEditForm: React.FC<DoctorProfileEditFormProps> = ({ doctor })
       website: doctor.contact.website,
       acceptingNewPatients: doctor.acceptingNewPatients ?? true,
       onlineConsultations: doctor.onlineConsultations || false,
-      schedule: (() => {
-        const doctorWithSchedule = doctor as unknown as {
-          schedule?: Array<{ day?: string; startTime?: string; endTime?: string }>;
-        };
-        const rawSchedule = doctorWithSchedule.schedule || [];
-        return rawSchedule.filter(
-          (entry): entry is { day: string; startTime: string; endTime: string } =>
-            entry !== null &&
-            entry !== undefined &&
-            typeof entry === "object" &&
-            typeof entry.day === "string" &&
-            typeof entry.startTime === "string" &&
-            typeof entry.endTime === "string"
-        );
-      })(),
+      schedule: doctor.schedule || [],
       photoUrl: doctor.image || "",
     },
     mode: "onBlur",

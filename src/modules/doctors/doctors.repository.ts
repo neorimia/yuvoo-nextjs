@@ -59,21 +59,44 @@ function mapDbDoctorToDoctor(dbDoctor: typeof doctors.$inferSelect): Doctor {
   const specialty =
     specialtyMap[dbDoctor.specialty.toLowerCase()] || ("general" as Doctor["specialty"]);
 
+  // Parse schedule from JSONB
+  let schedule: Array<{ day: string; startTime: string; endTime: string }> | undefined;
+  if (
+    dbDoctor.schedule &&
+    typeof dbDoctor.schedule === "object" &&
+    Array.isArray(dbDoctor.schedule)
+  ) {
+    schedule = dbDoctor.schedule.filter(
+      (entry): entry is { day: string; startTime: string; endTime: string } =>
+        entry !== null &&
+        entry !== undefined &&
+        typeof entry === "object" &&
+        typeof entry.day === "string" &&
+        typeof entry.startTime === "string" &&
+        typeof entry.endTime === "string"
+    );
+  }
+
   return {
     id: dbDoctor.id,
     name,
     slug,
     specialty,
+    secondarySpecialties: dbDoctor.secondarySpecialties || undefined,
     description: dbDoctor.bio || "",
     credentials: dbDoctor.credentials || [],
+    yearsOfExperience: dbDoctor.yearsOfExperience || undefined,
+    languages: dbDoctor.languages && dbDoctor.languages.length > 0 ? dbDoctor.languages : undefined,
     location,
     contact,
     image: dbDoctor.photoUrl || undefined,
     verified: dbDoctor.verified || false,
     acceptingNewPatients: dbDoctor.acceptingNewPatients ?? true,
     onlineConsultations: dbDoctor.onlineConsultations || false,
+    schedule,
     verificationStatus: dbDoctor.verificationStatus,
     verificationDocuments: dbDoctor.verificationDocuments || [],
+    profileComplete: dbDoctor.profileComplete || undefined,
     createdAt: dbDoctor.createdAt,
     updatedAt: dbDoctor.updatedAt,
   };
