@@ -120,8 +120,8 @@ const DoctorProfileEditForm: React.FC<DoctorProfileEditFormProps> = ({ doctor })
         (doctor as unknown as { secondarySpecialties?: string[] }).secondarySpecialties || [],
       credentials: doctor.credentials || [],
       bio: doctor.description,
-      yearsOfExperience: undefined,
-      languages: [],
+      yearsOfExperience: (doctor as unknown as { yearsOfExperience?: number }).yearsOfExperience,
+      languages: (doctor as unknown as { languages?: string[] }).languages || [],
       city: doctor.location.city,
       district: doctor.location.district,
       address: doctor.location.address,
@@ -162,6 +162,8 @@ const DoctorProfileEditForm: React.FC<DoctorProfileEditFormProps> = ({ doctor })
 
   const photoUrl = watch("photoUrl");
   const credentials = watch("credentials") || [];
+  const secondarySpecialties = watch("secondarySpecialties") || [];
+  const languages = watch("languages") || [];
 
   const onSubmit = async (data: DoctorProfileUpdateInput) => {
     startTransition(async () => {
@@ -367,6 +369,28 @@ const DoctorProfileEditForm: React.FC<DoctorProfileEditFormProps> = ({ doctor })
             </div>
 
             <div className="col-12">
+              <TagInputField
+                label="Specializări secundare"
+                name="secondarySpecialties"
+                setValue={setValue}
+                currentValue={secondarySpecialties}
+                error={errors.secondarySpecialties as FieldError | undefined}
+                quickAddOptions={[
+                  "Traumatologie sportivă pediatrică",
+                  "Corecție postură",
+                  "Cardiologie pediatrică",
+                  "Fizioterapie pediatrică",
+                  "Nutriție sportivă",
+                  "Psihologie sportivă",
+                  "Medicină sportivă pediatrică",
+                ]}
+                placeholder="Adaugă specializare secundară personalizată"
+                isLoading={isPending}
+                required={false}
+              />
+            </div>
+
+            <div className="col-12">
               <CharacterCounterTextarea
                 label="Descriere profesională"
                 name="bio"
@@ -378,6 +402,59 @@ const DoctorProfileEditForm: React.FC<DoctorProfileEditFormProps> = ({ doctor })
                 isLoading={isPending}
                 error={errors.bio}
                 currentValue={watch("bio")}
+                required={false}
+              />
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* Experience & Languages Section */}
+      <div className="card border-0 shadow-sm mb-4">
+        <div className="card-body">
+          <h5 className="bd-dashboard-section-title mb-4">
+            <i className="bi bi-briefcase me-2"></i>
+            Experiență și Limbi
+          </h5>
+
+          <div className="row g-3">
+            <div className="col-md-6">
+              <label htmlFor="yearsOfExperience" className="form-label">
+                Ani de experiență
+              </label>
+              <BootstrapInput
+                id="yearsOfExperience"
+                type="number"
+                min="1"
+                max="50"
+                {...register("yearsOfExperience", { valueAsNumber: true })}
+                disabled={isPending}
+                error={!!errors.yearsOfExperience}
+                placeholder="Ex: 5"
+              />
+              {errors.yearsOfExperience && (
+                <div className="text-danger small mt-1">{errors.yearsOfExperience.message}</div>
+              )}
+            </div>
+
+            <div className="col-md-6">
+              <TagInputField
+                label="Limbi vorbite"
+                name="languages"
+                setValue={setValue}
+                currentValue={languages}
+                error={errors.languages as FieldError | undefined}
+                quickAddOptions={[
+                  "Română",
+                  "Engleză",
+                  "Maghiară",
+                  "Germană",
+                  "Franceză",
+                  "Italiană",
+                  "Spaniolă",
+                ]}
+                placeholder="Adaugă altă limbă"
+                isLoading={isPending}
                 required={false}
               />
             </div>
