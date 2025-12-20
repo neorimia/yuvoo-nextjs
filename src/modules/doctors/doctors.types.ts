@@ -8,40 +8,41 @@ export type DoctorSpecialty = "orthopedist" | "nutritionist" | "psychologist" | 
 
 export interface Doctor {
   id: string;
-  firstName: string;
-  lastName: string;
-  title?: string; // Optional title like "Dr.", "Prof."
-  slug: string;
-  specialty: DoctorSpecialty;
-  secondarySpecialties?: string[]; // Array of secondary specialty strings (not enum)
-  description: string;
-  credentials: string[]; // e.g., ["MD", "Pediatric Orthopedist"]
-  yearsOfExperience?: number; // Years of professional experience
-  languages?: string[]; // Languages spoken, e.g., ["Română", "Engleză"]
+  name: string; // Computed from firstName + lastName + title (for backward compatibility)
+  firstName: string; // From schema: first_name (notNull)
+  lastName: string; // From schema: last_name (notNull)
+  title?: string; // From schema: title (optional)
+  slug: string; // From schema: slug (unique)
+  specialty: DoctorSpecialty; // From schema: specialty (notNull)
+  secondarySpecialties?: string[]; // From schema: secondary_specialties (text array, default '{}')
+  description: string; // From schema: bio (mapped to description)
+  credentials: string[]; // From schema: credentials (text array, default '{}')
+  yearsOfExperience?: number; // From schema: years_of_experience (integer, optional)
+  languages?: string[]; // From schema: languages (text array, default '{}')
   location: {
-    city: string;
-    district?: string;
-    address?: string; // Optional in schema (text field, no .notNull())
+    city: string; // From schema: city (notNull)
+    district?: string; // From schema: district (optional)
+    address?: string; // From schema: address (optional)
     coordinates?: {
       lat: number;
       lng: number;
     };
   };
   contact: {
-    phone?: string;
-    email?: string;
-    website?: string;
+    phone?: string; // From schema: phone (optional)
+    email?: string; // From schema: email (optional)
+    website?: string; // From schema: website (optional)
   };
-  image?: string;
-  verified: boolean;
-  acceptingNewPatients: boolean; // Whether doctor is accepting new patients (notNull in schema, default true)
-  onlineConsultations: boolean; // Whether doctor offers online consultations (notNull in schema, default false)
-  schedule?: Array<{ day: string; startTime: string; endTime: string }>; // Weekly schedule
-  verificationStatus: "pending" | "in_review" | "approved" | "rejected"; // notNull in schema, default "pending"
-  verificationDocuments?: string[];
-  profileComplete: boolean; // Whether profile is complete (notNull in schema, default false)
-  createdAt: Date;
-  updatedAt: Date;
+  image?: string; // From schema: photo_url (mapped to image, optional)
+  verified: boolean; // From schema: verified (notNull, default false)
+  acceptingNewPatients: boolean; // From schema: accepting_new_patients (notNull, default true)
+  onlineConsultations: boolean; // From schema: online_consultations (notNull, default false)
+  schedule?: Array<{ day: string; startTime: string; endTime: string }>; // From schema: schedule (JSONB, default '[]')
+  verificationStatus: "pending" | "in_review" | "approved" | "rejected"; // From schema: verification_status (notNull, default "pending")
+  verificationDocuments?: string[]; // From schema: verification_documents (text array, default '{}')
+  profileComplete: boolean; // From schema: profile_complete (notNull, default false)
+  createdAt: Date; // From schema: created_at (notNull, defaultNow)
+  updatedAt: Date; // From schema: updated_at (notNull, defaultNow)
 }
 
 export interface DoctorSearchFilters {

@@ -27,9 +27,6 @@ function generateSlug(firstName: string, lastName: string): string {
  * Map database doctor record to Doctor type
  */
 function mapDbDoctorToDoctor(dbDoctor: typeof doctors.$inferSelect): Doctor {
-  // Build name from firstName, lastName, and title
-  const name = [dbDoctor.title, dbDoctor.firstName, dbDoctor.lastName].filter(Boolean).join(" ");
-
   // Use slug from database, or generate it if not present (backward compatibility)
   const slug = dbDoctor.slug || generateSlug(dbDoctor.firstName, dbDoctor.lastName);
 
@@ -77,9 +74,15 @@ function mapDbDoctorToDoctor(dbDoctor: typeof doctors.$inferSelect): Doctor {
     );
   }
 
+  // Build name from firstName, lastName, and title (for backward compatibility)
+  const name = [dbDoctor.title, dbDoctor.firstName, dbDoctor.lastName].filter(Boolean).join(" ");
+
   return {
     id: dbDoctor.id,
-    name,
+    name, // Computed for backward compatibility
+    firstName: dbDoctor.firstName,
+    lastName: dbDoctor.lastName,
+    title: dbDoctor.title || undefined,
     slug,
     specialty,
     secondarySpecialties: dbDoctor.secondarySpecialties || undefined,
