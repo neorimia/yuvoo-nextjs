@@ -397,9 +397,8 @@ const DoctorProfileEditForm: React.FC<DoctorProfileEditFormProps> = ({ doctor })
               <TagInputField
                 label="Credențiale"
                 name="credentials"
-                control={control}
                 setValue={setValue}
-                currentValues={credentials}
+                currentValue={credentials}
                 error={errors.credentials as FieldError | undefined}
                 quickAddOptions={["MD", "Specialist", "Conf. Dr.", "Dr.", "PhD"]}
                 placeholder="Adaugă credențială (ex: MD, Specialist)"
