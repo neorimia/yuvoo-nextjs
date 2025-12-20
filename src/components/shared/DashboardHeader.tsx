@@ -70,19 +70,19 @@ const DashboardHeader: React.FC<DashboardHeaderProps> = ({
 
   return (
     <div
-      className={`${headerClasses} d-flex flex-column flex-md-row justify-content-between align-items-start align-items-md-center gap-3 mb-5 ${className}`}
+      className={`${headerClasses} d-flex flex-column flex-md-row justify-content-between align-items-start align-items-md-center gap-3 gap-md-4 mb-4 mb-md-5 ${className}`}
     >
-      <div className="flex-grow-1">
-        <h1 className={`${headerClasses}-title mb-2`}>{title}</h1>
+      <div className="flex-grow-1 w-100 w-md-auto">
+        <h1 className={`${headerClasses}-title mb-2 mb-md-2`}>{title}</h1>
         {subtitle ? (
           <p className={`${headerClasses}-subtitle mb-0`}>{subtitle}</p>
         ) : (
           <p className={`${headerClasses}-subtitle mb-0`}>
-            Bun venit, <strong className="text-yuvoo-primary">{entityName}</strong>!
+            Bun venit, <strong className="text-yuvoo-primary text-break">{entityName}</strong>!
           </p>
         )}
       </div>
-      <div className="d-flex align-items-center gap-3 flex-shrink-0">
+      <div className="d-flex align-items-center gap-2 gap-md-3 flex-shrink-0 w-100 w-md-auto justify-content-start justify-content-md-end">
         <VerificationBadge verified={verificationStatus} variant="default" size="md" />
       </div>
     </div>
