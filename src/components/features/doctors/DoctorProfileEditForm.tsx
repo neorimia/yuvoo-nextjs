@@ -185,7 +185,7 @@ const DoctorProfileEditForm: React.FC<DoctorProfileEditFormProps> = ({ doctor })
             Array.isArray(data.credentials) && {
               credentials: data.credentials,
             }),
-          ...(data.bio && { bio: data.bio }),
+          ...(data.bio !== undefined && { bio: data.bio }),
           ...(data.yearsOfExperience !== undefined && {
             yearsOfExperience: data.yearsOfExperience,
           }),
@@ -193,11 +193,13 @@ const DoctorProfileEditForm: React.FC<DoctorProfileEditFormProps> = ({ doctor })
             Array.isArray(data.languages) && {
               languages: data.languages,
             }),
-          ...(data.city && { city: data.city }),
-          ...(data.district && { district: data.district }),
-          ...(data.address && { address: data.address }),
-          ...(data.phone && { phone: normalizePhoneNumber(data.phone) }),
-          ...(data.email && { email: data.email }),
+          ...(data.city !== undefined && { city: data.city }),
+          ...(data.district !== undefined && { district: data.district }),
+          ...(data.address !== undefined && { address: data.address }),
+          ...(data.phone !== undefined && {
+            phone: data.phone ? normalizePhoneNumber(data.phone) : null,
+          }),
+          ...(data.email !== undefined && { email: data.email }),
           ...(data.website !== undefined && { website: data.website }),
           ...(data.acceptingNewPatients !== undefined && {
             acceptingNewPatients: data.acceptingNewPatients,
