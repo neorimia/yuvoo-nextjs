@@ -215,7 +215,28 @@ export async function submitQuizAction(
       answers: answersValidation.data,
       // Note: email is not passed to submitQuiz, it's only used for email sending
     };
-    const result = await submitQuiz(quizInput);
+
+    console.log("[Quiz Action] Starting quiz submission...", {
+      childId,
+      hasAnswers: !!quizInput.answers,
+      timestamp: new Date().toISOString(),
+    });
+
+    let result: QuizResult;
+    try {
+      result = await submitQuiz(quizInput);
+      console.log("[Quiz Action] Quiz submission successful", {
+        quizId: result.id,
+        recommendationsCount: result.recommendations?.length || 0,
+      });
+    } catch (submitError) {
+      console.error("[Quiz Action] Error in submitQuiz service:", {
+        error: submitError instanceof Error ? submitError.message : String(submitError),
+        name: submitError instanceof Error ? submitError.name : "Unknown",
+        stack: submitError instanceof Error ? submitError.stack : undefined,
+      });
+      throw submitError; // Re-throw to be caught by outer catch
+    }
 
     // Step 7: Send quiz results email (non-blocking)
     // Determine email address and user info
@@ -292,7 +313,14 @@ export async function submitQuizAction(
 
     return { success: true, result };
   } catch (error) {
-    console.error("Error submitting quiz:", error);
+    // Enhanced error logging for debugging
+    const errorDetails = {
+      message: error instanceof Error ? error.message : String(error),
+      name: error instanceof Error ? error.name : "Unknown",
+      stack: error instanceof Error ? error.stack : undefined,
+      timestamp: new Date().toISOString(),
+    };
+    console.error("[Quiz Action] Error submitting quiz:", errorDetails);
 
     // Handle authentication errors
     if (error instanceof Error && error.message.includes("Unauthorized")) {
@@ -302,14 +330,45 @@ export async function submitQuizAction(
       };
     }
 
-    // Handle connection/timeout errors
+    // Handle OpenAI API errors
+    if (error instanceof Error && error.message.includes("OpenAI")) {
+      console.error("[Quiz Action] OpenAI API error:", error);
+      return {
+        success: false,
+        error:
+          "Eroare la generarea recomandărilor AI. Te rugăm să încerci din nou în câteva momente.",
+      };
+    }
+
+    // Handle timeout errors (more specific detection)
+    if (
+      error instanceof Error &&
+      (error.message.includes("timeout") ||
+        error.message.includes("TIMEOUT") ||
+        error.message.includes("ETIMEDOUT") ||
+        error.name === "TimeoutError" ||
+        error.message.includes("Request timed out"))
+    ) {
+      console.error("[Quiz Action] Timeout error:", error);
+      return {
+        success: false,
+        error:
+          "Procesarea durează mai mult decât de obicei. Te rugăm să încerci din nou. Dacă problema persistă, contactează-ne.",
+      };
+    }
+
+    // Handle connection errors (more specific detection)
     if (
       error instanceof Error &&
       (error.message.includes("Connection terminated") ||
-        error.message.includes("timeout") ||
         error.message.includes("ECONNRESET") ||
-        error.message.includes("fetch failed"))
+        error.message.includes("ECONNREFUSED") ||
+        error.message.includes("ENOTFOUND") ||
+        error.message.includes("fetch failed") ||
+        error.message.includes("NetworkError") ||
+        error.message.includes("Failed to fetch"))
     ) {
+      console.error("[Quiz Action] Connection error:", error);
       return {
         success: false,
         error:
@@ -317,22 +376,31 @@ export async function submitQuizAction(
       };
     }
 
-    // Handle network errors
-    if (error instanceof Error && error.name === "TypeError" && error.message.includes("fetch")) {
+    // Handle database errors
+    if (
+      error instanceof Error &&
+      (error.message.includes("database") || error.message.includes("Database"))
+    ) {
+      console.error("[Quiz Action] Database error:", error);
       return {
         success: false,
-        error:
-          "Eroare de conexiune. Te rugăm să verifici conexiunea la internet și să încerci din nou.",
+        error: "Eroare la salvarea datelor. Te rugăm să încerci din nou.",
       };
     }
 
     // Return error message (already in Romanian from service layer)
+    // If error message is already in Romanian, use it; otherwise provide generic message
+    const errorMessage = error instanceof Error ? error.message : "Eroare necunoscută";
+    const isRomanianError =
+      errorMessage.includes("Eroare") ||
+      errorMessage.includes("Nu") ||
+      errorMessage.includes("Te rugăm");
+
     return {
       success: false,
-      error:
-        error instanceof Error
-          ? error.message
-          : "Eroare la trimiterea chestionarului. Te rugăm să încerci din nou.",
+      error: isRomanianError
+        ? errorMessage
+        : "Eroare la trimiterea chestionarului. Te rugăm să încerci din nou. Dacă problema persistă, contactează-ne.",
     };
   }
 }
