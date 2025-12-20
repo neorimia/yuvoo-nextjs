@@ -83,7 +83,7 @@ const DashboardPageLayout: React.FC<DashboardPageLayoutProps> = ({
   return (
     <div className={`${dashboardContentClass} ${className}`}>
       {/* Page Header */}
-      <div className="mb-5">
+      <div className="mb-4">
         <div className={dashboardHeaderClass}>
           <h1 className={`${headerTitleClass} mb-2`}>
             {icon && <i className={`bi ${icon} me-2 text-yuvoo-primary`}></i>}

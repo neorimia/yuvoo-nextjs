@@ -21,6 +21,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { createDoctorOnboarding } from "@/app/actions/onboarding";
 import { doctorBasicInfoSchema, type DoctorBasicInfoInput } from "@/lib/validations/doctor";
 import { routes } from "@/lib/routes";
+import { COMMON_DOCTOR_CREDENTIALS } from "@/lib/utils/constants";
 import { OnboardingNavigation } from "./OnboardingNavigation";
 import { InfoTooltip } from "@/components/shared/InfoTooltip";
 import { ServerErrorAlert } from "./components/ServerErrorAlert";
@@ -46,21 +47,6 @@ const SECONDARY_SPECIALTIES_OPTIONS = [
   "Nutriție sportivă",
   "Psihologie sportivă",
   "Medicină sportivă pediatrică",
-] as const;
-
-// Common credentials
-const COMMON_CREDENTIALS = [
-  "Dr.",
-  "Dr. med.",
-  "Conf. Dr.",
-  "Prof. Dr.",
-  "Medic specialist",
-  "Medic primar",
-  "Specialist",
-  "Primar",
-  "Asistent universitar",
-  "Lector universitar",
-  "CMR",
 ] as const;
 
 export function DoctorBasicInfoForm() {
@@ -225,7 +211,7 @@ export function DoctorBasicInfoForm() {
         setValue={setValue}
         currentValue={watch("credentials")}
         error={errors.credentials as FieldError | undefined}
-        quickAddOptions={COMMON_CREDENTIALS}
+        quickAddOptions={COMMON_DOCTOR_CREDENTIALS}
         placeholder="Adaugă credențială personalizată"
         required
         helpText="Adaugă credențialele tale profesionale (ex: Dr. med., Specialist, Primar, CMR). Acestea vor crește încrederea părinților în competența ta."

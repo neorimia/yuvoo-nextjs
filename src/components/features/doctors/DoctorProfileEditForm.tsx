@@ -16,6 +16,7 @@ import { updateDoctorProfileAction } from "@/app/actions/doctor-profile";
 import { doctorProfileUpdateSchema, type DoctorProfileUpdateInput } from "@/lib/validations/doctor";
 import { routes } from "@/lib/routes";
 import { normalizePhoneNumber } from "@/lib/utils";
+import { COMMON_DOCTOR_CREDENTIALS } from "@/lib/utils/constants";
 import type { Doctor } from "@/modules/doctors/doctors.types";
 import {
   SingleImageUploadField,
@@ -280,7 +281,7 @@ const DoctorProfileEditForm: React.FC<DoctorProfileEditFormProps> = ({ doctor })
           </h5>
 
           <div className="row g-3">
-            <div className="col-md-4">
+            <div className="col-md-6">
               <label htmlFor="firstName" className="form-label">
                 Prenume <span className="text-danger">*</span>
               </label>
@@ -297,7 +298,7 @@ const DoctorProfileEditForm: React.FC<DoctorProfileEditFormProps> = ({ doctor })
               )}
             </div>
 
-            <div className="col-md-4">
+            <div className="col-md-6">
               <label htmlFor="lastName" className="form-label">
                 Nume <span className="text-danger">*</span>
               </label>
@@ -314,7 +315,7 @@ const DoctorProfileEditForm: React.FC<DoctorProfileEditFormProps> = ({ doctor })
               )}
             </div>
 
-            <div className="col-md-4">
+            <div className="col-md-6">
               <label htmlFor="title" className="form-label">
                 Titlu
               </label>
@@ -401,7 +402,7 @@ const DoctorProfileEditForm: React.FC<DoctorProfileEditFormProps> = ({ doctor })
           </h5>
 
           <div className="row g-3">
-            <div className="col-md-6">
+            <div className="col-md-12">
               <label htmlFor="yearsOfExperience" className="form-label">
                 Ani de experiență
               </label>
@@ -420,7 +421,7 @@ const DoctorProfileEditForm: React.FC<DoctorProfileEditFormProps> = ({ doctor })
               )}
             </div>
 
-            <div className="col-md-6">
+            <div className="col-md-12">
               <TagInputField
                 label="Limbi vorbite"
                 name="languages"
@@ -461,7 +462,7 @@ const DoctorProfileEditForm: React.FC<DoctorProfileEditFormProps> = ({ doctor })
                 setValue={setValue}
                 currentValue={credentials}
                 error={errors.credentials as FieldError | undefined}
-                quickAddOptions={["MD", "Specialist", "Conf. Dr.", "Dr.", "PhD"]}
+                quickAddOptions={COMMON_DOCTOR_CREDENTIALS}
                 placeholder="Adaugă credențială (ex: MD, Specialist)"
                 isLoading={isPending}
                 required={false}
