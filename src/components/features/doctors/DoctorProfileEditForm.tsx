@@ -195,28 +195,28 @@ const DoctorProfileEditForm: React.FC<DoctorProfileEditFormProps> = ({ doctor })
           ...(data.address && { address: data.address }),
           ...(data.phone && { phone: normalizePhoneNumber(data.phone) }),
           ...(data.email && { email: data.email }),
-          ...(data.website && { website: data.website }),
+          ...(data.website !== undefined && { website: data.website }),
           ...(data.acceptingNewPatients !== undefined && {
             acceptingNewPatients: data.acceptingNewPatients,
           }),
           ...(data.onlineConsultations !== undefined && {
             onlineConsultations: data.onlineConsultations,
           }),
-          ...(data.schedule &&
-            Array.isArray(data.schedule) &&
-            data.schedule.length > 0 && {
-              schedule: data.schedule
-                .filter((entry) => entry && entry.day && entry.startTime && entry.endTime)
-                .map((entry) => ({
-                  day: entry.day?.trim() || "",
-                  startTime: entry.startTime?.trim() || "",
-                  endTime: entry.endTime?.trim() || "",
-                }))
-                .filter((entry) => entry.day && entry.startTime && entry.endTime),
+          ...(data.schedule !== undefined &&
+            Array.isArray(data.schedule) && {
+              schedule:
+                data.schedule.length > 0
+                  ? data.schedule
+                      .filter((entry) => entry && entry.day && entry.startTime && entry.endTime)
+                      .map((entry) => ({
+                        day: entry.day?.trim() || "",
+                        startTime: entry.startTime?.trim() || "",
+                        endTime: entry.endTime?.trim() || "",
+                      }))
+                      .filter((entry) => entry.day && entry.startTime && entry.endTime)
+                  : [],
             }),
-          ...(data.photoUrl &&
-            typeof data.photoUrl === "string" &&
-            data.photoUrl.startsWith("http") && { photoUrl: data.photoUrl }),
+          ...(data.photoUrl !== undefined && { photoUrl: data.photoUrl }),
         };
 
         const result = await updateDoctorProfileAction(transformedData);
