@@ -96,11 +96,6 @@ const DoctorProfileEditForm: React.FC<DoctorProfileEditFormProps> = ({ doctor })
   const successMessageRef = useRef<HTMLDivElement>(null);
   const errorMessageRef = useRef<HTMLDivElement>(null);
 
-  // Parse doctor name into firstName and lastName
-  const nameParts = doctor.name.split(" ");
-  const firstName = nameParts[0] || "";
-  const lastName = nameParts.slice(1).join(" ") || "";
-
   // Initialize form with doctor data
   const {
     register,
@@ -112,9 +107,9 @@ const DoctorProfileEditForm: React.FC<DoctorProfileEditFormProps> = ({ doctor })
   } = useForm<DoctorProfileUpdateInput>({
     resolver: zodResolver(doctorProfileUpdateSchema),
     defaultValues: {
-      firstName,
-      lastName,
-      title: doctor.name.includes("Dr.") ? "Dr." : "",
+      firstName: doctor.firstName,
+      lastName: doctor.lastName,
+      title: doctor.title || "",
       specialty: doctor.specialty === "general" ? "sports_medicine" : doctor.specialty,
       secondarySpecialties: doctor.secondarySpecialties || [],
       credentials: doctor.credentials || [],
