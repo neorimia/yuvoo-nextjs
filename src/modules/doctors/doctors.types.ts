@@ -19,7 +19,7 @@ export interface Doctor {
   location: {
     city: string;
     district?: string;
-    address: string;
+    address?: string; // Optional in schema (text field, no .notNull())
     coordinates?: {
       lat: number;
       lng: number;

@@ -123,7 +123,7 @@ const DoctorProfileEditForm: React.FC<DoctorProfileEditFormProps> = ({ doctor })
       languages: doctor.languages || [],
       city: doctor.location.city,
       district: doctor.location.district,
-      address: doctor.location.address,
+      address: doctor.location.address || "",
       phone: doctor.contact.phone,
       email: doctor.contact.email,
       website: doctor.contact.website,

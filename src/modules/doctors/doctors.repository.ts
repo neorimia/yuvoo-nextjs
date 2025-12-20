@@ -37,7 +37,7 @@ function mapDbDoctorToDoctor(dbDoctor: typeof doctors.$inferSelect): Doctor {
   const location: Doctor["location"] = {
     city: dbDoctor.city,
     district: dbDoctor.district || undefined,
-    address: dbDoctor.address || "",
+    address: dbDoctor.address || undefined, // Optional in schema
     // TODO: Add coordinates when latitude/longitude fields are added to schema
     coordinates: undefined,
   };
