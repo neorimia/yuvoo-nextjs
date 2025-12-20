@@ -196,9 +196,10 @@ const DoctorProfileEditForm: React.FC<DoctorProfileEditFormProps> = ({ doctor })
           ...(data.city !== undefined && { city: data.city }),
           ...(data.district !== undefined && { district: data.district }),
           ...(data.address !== undefined && { address: data.address }),
-          ...(data.phone !== undefined && {
-            phone: data.phone ? normalizePhoneNumber(data.phone) : null,
-          }),
+          ...(data.phone !== undefined &&
+            data.phone && {
+              phone: normalizePhoneNumber(data.phone),
+            }),
           ...(data.email !== undefined && { email: data.email }),
           ...(data.website !== undefined && { website: data.website }),
           ...(data.acceptingNewPatients !== undefined && {
