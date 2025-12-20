@@ -14,7 +14,7 @@ interface ClubDashboardHeaderProps {
 }
 
 const ClubDashboardHeader: React.FC<ClubDashboardHeaderProps> = ({ club }) => {
-  const verificationStatus = club.verificationStatus || (club.verified ? "approved" : "pending");
+  const verificationStatus = club.verificationStatus;
 
   return (
     <DashboardHeader
