@@ -10,7 +10,15 @@ import { redirect } from "next/navigation";
 import type { ReactNode } from "react";
 
 export default async function DoctorOnboardingLayout({ children }: { children: ReactNode }) {
-  // Require doctor role
+  // During production builds, skip authentication checks entirely
+  // This prevents "cookies() rejects during prerender" errors
+  const isProductionBuild = process.env.NEXT_PHASE === "phase-production-build";
+
+  if (isProductionBuild) {
+    return <div className="doctor-onboarding">{children}</div>;
+  }
+
+  // At runtime, require doctor role
   try {
     await requireRole("doctor");
   } catch (_error) {

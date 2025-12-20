@@ -4,16 +4,22 @@
  *
  * Shared hook for onboarding form submission logic.
  * Reduces code duplication across all onboarding forms.
+ * Integrates with localStorage to clear saved form data on successful submission.
  */
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
+import { clearFormData } from "./useOnboardingLocalStorage";
 
 interface UseOnboardingFormOptions<T> {
   /** Server action to call on submit */
   onSubmitAction: (data: T) => Promise<{ success: boolean; error?: string; data?: unknown }>;
   /** Route to navigate to on success */
   onSuccessRoute: string;
+  /** User role for localStorage key (e.g., "doctor", "club_admin", "parent") */
+  role: string;
+  /** Onboarding step number (1-based) for localStorage key */
+  stepNumber: number;
   /** Optional data transformer before submission */
   transformData?: (data: T) => T;
   /** Optional callback on success */
@@ -25,6 +31,8 @@ interface UseOnboardingFormOptions<T> {
 export function useOnboardingForm<T>({
   onSubmitAction,
   onSuccessRoute,
+  role,
+  stepNumber,
   transformData,
   onSuccess,
   onError,
@@ -44,6 +52,9 @@ export function useOnboardingForm<T>({
       const result = await onSubmitAction(formData);
 
       if (result.success) {
+        // Clear localStorage on successful submission
+        clearFormData(role, stepNumber);
+
         // Call success callback if provided
         if (onSuccess) {
           onSuccess(result);

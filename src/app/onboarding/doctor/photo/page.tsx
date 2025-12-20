@@ -30,9 +30,9 @@ export default async function DoctorPhotoPage() {
     <OnboardingLayout>
       <OnboardingProgress currentStep={5} steps={DOCTOR_STEPS} className="mb-8" />
 
-      <div className="mx-auto" style={{ maxWidth: "42rem" }}>
+      <div className="bd-onboarding-page bd-onboarding-page-wide mx-auto">
         {/* Header */}
-        <div className="text-center mb-5">
+        <div className="bd-onboarding-page-header">
           <h1 className="display-4 fw-bold text-body mb-4">Fotografie profesională 📸</h1>
           <p className="h5 text-body">
             Încarcă o fotografie profesională pentru profilul tău (opțional - poți adăuga mai
@@ -41,7 +41,9 @@ export default async function DoctorPhotoPage() {
         </div>
 
         {/* Form */}
-        <DoctorPhotoForm />
+        <div className="bd-onboarding-page-content">
+          <DoctorPhotoForm />
+        </div>
       </div>
     </OnboardingLayout>
   );

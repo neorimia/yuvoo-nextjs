@@ -1,6 +1,10 @@
 import React from "react";
 import type { Metadata } from "next";
+import { redirect } from "next/navigation";
+import { getSession } from "@/lib/auth/session";
+import { getRoleBasedRedirect } from "@/lib/auth/redirects";
 import LoginMain from "@/components/Auth/LoginMain";
+import BreadcrumbOne from "@/components/Breadcrumb/BreadcrumbOne";
 
 export const metadata: Metadata = {
   title: "Autentificare | Yuvoo",
@@ -46,6 +50,17 @@ interface LoginPageProps {
  * Route: /auth/login
  */
 export default async function LoginPage({ searchParams }: LoginPageProps) {
+  // Check if user is already authenticated
+  // If yes, redirect to their dashboard or onboarding
+  const session = await getSession();
+  if (session?.dbUser) {
+    const redirectUrl = getRoleBasedRedirect(
+      session.dbUser.role,
+      session.dbUser.onboardingCompleted
+    );
+    redirect(redirectUrl);
+  }
+
   const params = await searchParams;
   // Support both 'redirect' and 'returnUrl' query parameters
   // Next.js automatically decodes query parameters, but we need to ensure it's a valid path
@@ -70,6 +85,7 @@ export default async function LoginPage({ searchParams }: LoginPageProps) {
 
   return (
     <>
+      <BreadcrumbOne title="Autentificare" subTitle="Autentificare" />
       <LoginMain redirectUrl={redirectUrl} />
     </>
   );

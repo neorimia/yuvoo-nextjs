@@ -30,9 +30,9 @@ export default async function DoctorLocationContactPage() {
     <OnboardingLayout>
       <OnboardingProgress currentStep={4} steps={DOCTOR_STEPS} className="mb-8" />
 
-      <div className="mx-auto" style={{ maxWidth: "42rem" }}>
+      <div className="bd-onboarding-page mx-auto">
         {/* Header */}
-        <div className="text-center mb-5">
+        <div className="bd-onboarding-page-header">
           <h1 className="display-4 fw-bold text-body mb-4">Cabinet și contact 📍</h1>
           <p className="h5 text-body">
             Adaugă adresa cabinetului și informațiile de contact pentru ca părinții să te poată
@@ -41,7 +41,9 @@ export default async function DoctorLocationContactPage() {
         </div>
 
         {/* Form */}
-        <DoctorLocationContactForm />
+        <div className="bd-onboarding-page-content">
+          <DoctorLocationContactForm />
+        </div>
       </div>
     </OnboardingLayout>
   );

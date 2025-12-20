@@ -3,9 +3,11 @@ import EmailConfirmationForm from "../Form/EmailConfirmationForm";
 
 interface EmailConfirmationMainProps {
   token: string | null;
+  verified?: boolean;
+  error?: string | null;
 }
 
-const EmailConfirmationMain = ({ token }: EmailConfirmationMainProps) => {
+const EmailConfirmationMain = ({ token, verified, error }: EmailConfirmationMainProps) => {
   return (
     <section className="login__area pt-110 pb-110">
       <div className="container">
@@ -18,7 +20,7 @@ const EmailConfirmationMain = ({ token }: EmailConfirmationMainProps) => {
                   <p>Verificăm adresa ta de email...</p>
                 </div>
                 <div className="login__form">
-                  <EmailConfirmationForm token={token} />
+                  <EmailConfirmationForm token={token} verified={verified} error={error} />
                 </div>
               </div>
             </div>

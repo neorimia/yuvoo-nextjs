@@ -9,8 +9,10 @@ import React from "react";
 import { requireAuth } from "@/lib/auth/session";
 import { redirect } from "next/navigation";
 import type { UserRole } from "@/modules/auth/auth.types";
+import { UserRoleEnum } from "@/modules/auth/auth.types";
 import { DashboardShellClient } from "./DashboardShellClient";
 import { routes } from "@/lib/routes";
+import { getUserProfileData } from "@/lib/utils/get-user-profile-data";
 
 interface DashboardShellProps {
   children: React.ReactNode;
@@ -34,13 +36,13 @@ export default async function DashboardShell({ children, role }: DashboardShellP
   if (session.dbUser.role !== role) {
     // Redirect to appropriate dashboard based on user's actual role
     switch (session.dbUser.role) {
-      case "parent":
+      case UserRoleEnum.PARENT:
         redirect(routes.parent.dashboard);
-      case "club_admin":
+      case UserRoleEnum.CLUB_ADMIN:
         redirect(routes.club.dashboard);
-      case "doctor":
+      case UserRoleEnum.DOCTOR:
         redirect(routes.doctor.dashboard);
-      case "admin":
+      case UserRoleEnum.ADMIN:
         redirect(routes.admin.dashboard);
       default:
         redirect(routes.login);
@@ -54,15 +56,17 @@ export default async function DashboardShell({ children, role }: DashboardShellP
     name:
       session.dbUser.firstName && session.dbUser.lastName
         ? `${session.dbUser.firstName} ${session.dbUser.lastName}`
-        : session.user.displayName || null,
-    displayName: session.user.displayName,
+        : null,
     firstName: session.dbUser.firstName,
     lastName: session.dbUser.lastName,
     role: session.dbUser.role as UserRole,
   };
 
+  // Fetch profile data from database (doctor photo, club logo, etc.)
+  const profileData = await getUserProfileData(session.dbUser.id, session.dbUser.role as UserRole);
+
   return (
-    <DashboardShellClient role={role} user={userData}>
+    <DashboardShellClient role={role} user={userData} profileData={profileData || undefined}>
       {children}
     </DashboardShellClient>
   );

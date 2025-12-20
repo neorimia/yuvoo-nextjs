@@ -24,6 +24,11 @@ interface DashboardShellClientProps {
     lastName?: string | null;
     role: UserRole;
   };
+  profileData?: {
+    image?: string | null;
+    name?: string;
+    email?: string;
+  };
 }
 
 /**
@@ -31,7 +36,12 @@ interface DashboardShellClientProps {
  *
  * Manages mobile menu state and wraps dashboard content with sidebar and header.
  */
-export function DashboardShellClient({ children, role, user }: DashboardShellClientProps) {
+export function DashboardShellClient({
+  children,
+  role,
+  user,
+  profileData,
+}: DashboardShellClientProps) {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
   const handleMobileMenuToggle = () => {
@@ -52,6 +62,7 @@ export function DashboardShellClient({ children, role, user }: DashboardShellCli
         {/* Header */}
         <DashboardHeader
           user={user}
+          profileData={profileData}
           isMobileMenuOpen={isMobileMenuOpen}
           onMobileMenuToggle={handleMobileMenuToggle}
         />

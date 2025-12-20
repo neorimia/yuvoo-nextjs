@@ -4,6 +4,22 @@
  * TypeScript types for authentication domain.
  */
 
+/**
+ * User Role Enum
+ * Single source of truth for all user roles in the application.
+ */
+export enum UserRoleEnum {
+  PARENT = "parent",
+  CLUB_ADMIN = "club_admin",
+  DOCTOR = "doctor",
+  ADMIN = "admin",
+}
+
+/**
+ * User Role Type
+ * Union type for backward compatibility with existing code.
+ * Prefer using UserRoleEnum for new code.
+ */
 export type UserRole = "parent" | "club_admin" | "doctor" | "admin";
 
 export interface EmailNotificationPreferences {

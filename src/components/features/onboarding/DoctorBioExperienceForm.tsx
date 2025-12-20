@@ -8,7 +8,6 @@
  * - Romanian labels and error messages
  * - Bio textarea with character counter (100-2000 characters)
  * - Years of experience input (1-50)
- * - Secondary specialties multi-select (optional)
  * - Languages multi-select (required, minimum 1)
  * - Server action integration
  * - Loading states and error handling
@@ -17,6 +16,7 @@
 
 "use client";
 
+import { useEffect } from "react";
 import { useForm, FieldError } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { updateDoctorBioExperience } from "@/app/actions/onboarding";
@@ -25,9 +25,10 @@ import { routes } from "@/lib/routes";
 import { OnboardingNavigation } from "./OnboardingNavigation";
 import { InfoTooltip } from "@/components/shared/InfoTooltip";
 import { ServerErrorAlert } from "./components/ServerErrorAlert";
-import { CharacterCounterTextarea, MultiSelectCheckboxField, TagInputField } from "./components";
+import { CharacterCounterTextarea, TagInputField } from "./components";
 import { BootstrapInput } from "@/components/UI/bootstrap-index";
 import { useOnboardingForm } from "./hooks/useOnboardingForm";
+import { saveFormData, getFormData } from "./hooks/useOnboardingLocalStorage";
 
 // Common languages in Romania
 const COMMON_LANGUAGES = [
@@ -40,21 +41,10 @@ const COMMON_LANGUAGES = [
   "Spaniolă",
 ] as const;
 
-// Secondary specialties (same as primary specialties for now, can be expanded)
-const SECONDARY_SPECIALTIES = [
-  { value: "orthopedist", label: "Ortopedie pediatrică" },
-  { value: "nutritionist", label: "Nutriție pediatrică" },
-  { value: "psychologist", label: "Psihologie sportivă" },
-  { value: "sports_medicine", label: "Medicină sportivă pediatrică" },
-  { value: "cardiology", label: "Cardiologie pediatrică" },
-  { value: "physiotherapy", label: "Fizioterapie pediatrică" },
-] as const;
-
 export function DoctorBioExperienceForm() {
   const {
     register,
     handleSubmit: rhfHandleSubmit,
-    control,
     formState: { errors },
     setValue,
     watch,
@@ -62,13 +52,42 @@ export function DoctorBioExperienceForm() {
     resolver: zodResolver(doctorBioExperienceSchema),
     defaultValues: {
       languages: [],
-      secondarySpecialties: [],
     },
   });
+
+  const role = "doctor";
+  const stepNumber = 3;
+
+  // Restore form data from localStorage on mount
+  useEffect(() => {
+    const saved = getFormData<DoctorBioExperienceInput>(role, stepNumber);
+    if (saved) {
+      // Restore all fields from saved data
+      Object.keys(saved).forEach((key) => {
+        const fieldKey = key as keyof DoctorBioExperienceInput;
+        const value = saved[fieldKey];
+        if (value !== undefined && value !== null) {
+          setValue(fieldKey, value, { shouldValidate: false });
+        }
+      });
+    }
+  }, [setValue]);
+
+  // Save form data to localStorage on changes (debounced)
+  const formValues = watch();
+  useEffect(() => {
+    const timeoutId = setTimeout(() => {
+      saveFormData(role, stepNumber, formValues);
+    }, 500);
+
+    return () => clearTimeout(timeoutId);
+  }, [formValues]);
 
   const { handleSubmit, isLoading, serverError } = useOnboardingForm<DoctorBioExperienceInput>({
     onSubmitAction: updateDoctorBioExperience,
     onSuccessRoute: routes.onboarding.doctor.locationContact,
+    role,
+    stepNumber,
   });
 
   return (
@@ -120,26 +139,12 @@ export function DoctorBioExperienceForm() {
         )}
       </div>
 
-      {/* Secondary Specialties (Optional) */}
-      <MultiSelectCheckboxField
-        label="Specializări secundare"
-        name="secondarySpecialties"
-        control={control}
-        error={errors.secondarySpecialties as FieldError | undefined}
-        options={SECONDARY_SPECIALTIES.map((specialty) => ({
-          value: specialty.value,
-          label: specialty.label,
-        }))}
-        gridCols={{ xs: 12, sm: 6, md: 4 }}
-        description="Selectează specializări suplimentare dacă ai experiență în alte domenii (opțional)"
-        isLoading={isLoading}
-      />
-
       {/* Languages */}
       <TagInputField
         label="Limbi vorbite"
         name="languages"
         setValue={setValue}
+        currentValue={watch("languages")}
         error={errors.languages as FieldError | undefined}
         quickAddOptions={COMMON_LANGUAGES}
         placeholder="Adaugă altă limbă"

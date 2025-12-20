@@ -42,6 +42,13 @@ export async function getAllDoctors(): Promise<Doctor[]> {
 }
 
 /**
+ * Get doctor by user ID
+ */
+export async function getDoctorByUserId(userId: string): Promise<Doctor | null> {
+  return doctorsRepository.findByUserId(userId);
+}
+
+/**
  * Verify doctor ownership
  * Throws error if doctor doesn't exist or user doesn't own it
  */
@@ -121,4 +128,83 @@ export async function deleteDoctor(doctorId: string, userId: string): Promise<vo
 
   // Delete doctor
   await db.delete(doctors).where(and(eq(doctors.id, doctorId), eq(doctors.userId, userId)));
+}
+
+/**
+ * Calculate profile completeness for a doctor
+ * Returns percentage, completed fields count, total fields, and missing fields list
+ */
+export function calculateProfileCompleteness(doctor: Doctor): {
+  percentage: number;
+  completedFields: number;
+  totalFields: number;
+  missingFields: string[];
+} {
+  const requiredFields = [
+    { key: "name", label: "Nume" },
+    { key: "specialty", label: "Specialitate" },
+    { key: "description", label: "Descriere" },
+    { key: "credentials", label: "Calificări" },
+    { key: "location.city", label: "Oraș" },
+    { key: "location.address", label: "Adresă" },
+    { key: "contact.phone", label: "Telefon" },
+    { key: "contact.email", label: "Email" },
+    { key: "image", label: "Fotografie profil" },
+  ];
+
+  let completedFields = 0;
+  const missingFields: string[] = [];
+
+  for (const field of requiredFields) {
+    let isComplete = false;
+
+    switch (field.key) {
+      case "name":
+        isComplete = !!doctor.name && doctor.name.trim().length > 0;
+        break;
+      case "specialty":
+        isComplete = !!doctor.specialty && doctor.specialty.trim().length > 0;
+        break;
+      case "description":
+        isComplete = !!doctor.description && doctor.description.trim().length > 0;
+        break;
+      case "credentials":
+        isComplete =
+          !!doctor.credentials &&
+          Array.isArray(doctor.credentials) &&
+          doctor.credentials.length > 0;
+        break;
+      case "location.city":
+        isComplete = !!doctor.location?.city && doctor.location.city.trim().length > 0;
+        break;
+      case "location.address":
+        isComplete = !!doctor.location?.address && doctor.location.address.trim().length > 0;
+        break;
+      case "contact.phone":
+        isComplete = !!doctor.contact?.phone && doctor.contact.phone.trim().length > 0;
+        break;
+      case "contact.email":
+        isComplete = !!doctor.contact?.email && doctor.contact.email.trim().length > 0;
+        break;
+      case "image":
+        isComplete = !!doctor.image && doctor.image.trim().length > 0;
+        break;
+    }
+
+    if (isComplete) {
+      completedFields++;
+    } else {
+      missingFields.push(field.label);
+    }
+  }
+
+  const totalFields = requiredFields.length;
+  const percentage = Math.round((completedFields / totalFields) * 100);
+
+  return {
+    percentage,
+    completedFields,
+    totalFields,
+    missingFields,
+  };
 }

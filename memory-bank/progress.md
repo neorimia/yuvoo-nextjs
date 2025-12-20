@@ -14,7 +14,7 @@
 ✅ **Core Features Complete**: Quiz System, Club Directory, Doctor Directory, Bookings, Onboarding
 ✅ **Admin Features**: Verification system implemented with admin dashboard
 ✅ **Integrations**: Stack Auth, OpenAI, Cloudinary, Brevo (email), PostHog (Phase 1 & 2 Complete, Person Properties Complete), Sentry (Error Tracking Complete), Performance Monitoring (Web Vitals + API Performance Complete) - All integrated and working
-✅ **Onboarding**: Parent (5 steps), Club Admin (7 steps), Doctor (8 steps) - All complete
+✅ **Onboarding**: Parent (5 steps), Club Admin (7 steps), Doctor (8 steps) - All complete, all pages aligned with consistent structural pattern
 ✅ **Email System**: All templates created, booking/quiz/verification emails integrated
 ✅ **Performance**: Database indexes, query optimization, component memoization, AI response caching
 ✅ **High Priority TODOs Complete**: All repositories, validation schemas, and UI components implemented
@@ -28,6 +28,8 @@
 ✅ **Dashboard Complete**: Parent dashboard fully implemented with overview stats (children, quizzes, recommendations), recent quiz activity, and quick action buttons
 ✅ **Dashboard Shell System Complete**: Multi-role dashboard shell with responsive sidebar, header, and navigation for all user roles (parent, club_admin, doctor, admin)
 ✅ **Club Dashboard Components Complete**: Club dashboard page refactored with extracted components (ClubDashboardHeader, ProfileCompletenessIndicator, BookingStatistics, RecentActivityFeed) all styled according to Yuvoo design system
+✅ **Phase 1 Reusable Components Complete**: Extracted 6 shared components from club dashboard for doctor portal reuse (DashboardHeader, ProfileCompletenessIndicator, StatisticsCards, BookingCard, BookingDetailModal, DashboardPageLayout) - all complete and ready for doctor portal implementation
+✅ **Phase 2 & 3 Reusable Components & Utilities Complete**: Extracted 3 additional shared components/hooks (RecentActivityFeed, AccountSettingsForm, useEntityFilters hook) and 2 utilities (status-badges, date-formatting) - all complete and ready for doctor portal implementation
 ✅ **Club Portal Dashboard Complete**: Dashboard overview page with profile completeness, verification status, booking statistics, and recent activity feed - all complete
 ✅ **Club Booking Management Complete**: Booking management page (`/club/bookings`) with filtering (status, date), booking detail modal, confirm/cancel/complete actions, email notifications, and comprehensive styling
 ✅ **Club Profile Editing Complete**: Profile editing page (`/club/profile/edit`) with comprehensive form (basic info, location, contact, schedule, pricing, age groups, gallery), Cloudinary integration, validation, error handling, and styling - all complete
@@ -39,6 +41,11 @@
 ✅ **SEO Week 11-12 Performance & Advanced SEO Complete**: Cache optimization for listings (clubs/doctors), ItemList schema for listing pages, location-specific landing pages all implemented
 ✅ **Next.js 16 Cache Components Migration Complete**: All legacy patterns removed, public/private cache pages migrated, Server Actions updated with revalidateTag(), comprehensive cache tag system implemented, documentation created
 ✅ **Production Deployment Preparation Complete**: Environment variables verified, custom domain & SSL configured, database backups verified, CDN settings configured, deployment checklist created, rollback procedure set up, gradual rollout configured
+✅ **Doctor Onboarding Pattern Alignment Complete**: All 8 doctor onboarding pages updated to match club onboarding structural pattern, consistent CSS classes, Bootstrap utilities, layout pattern alignment
+✅ **Email Verification Handler Complete**: Created `/handler/email-verification` route for Stack Auth email verification callbacks, proper error handling and redirects
+✅ **Role-Based Login Redirects Complete**: Created authentication redirect proxy (`/auth/redirect`), updated sign-in action with role-based redirect logic, fixed parent layout error handling, all users now redirect to correct dashboard/onboarding based on role
+✅ **UserRoleEnum Implementation Complete**: Created `UserRoleEnum` as single source of truth for roles, updated all role usages throughout codebase (comparisons, switch statements, assignments), type-safe enum values, better IDE support
+✅ **Authentication Improvements Complete**: Fixed DashboardHeader signOut TypeError by adding `useUser()` check, extracted `getRoleBasedRedirect()` to shared helper file (`src/lib/auth/redirects.ts`) for better maintainability and reusability, fixed sign-in flow to use API route with proper redirect handling, fixed password reset flow (forgot password callbackUrl, reset password code/token support), improved error handling for Stack Auth errors
 🚧 **In Progress**: Comprehensive E2E testing, final polish, launch announcement content
 📋 **Remaining**: Final user acceptance testing, medium/low priority TODOs
 
@@ -49,12 +56,17 @@
 - ✅ **Doctor Directory**: 100% complete - Search, filters, appointments, verification
 - ✅ **Booking System**: 100% complete - Club trials, doctor consultations, email notifications
 - ✅ **Onboarding**: 100% complete - All 3 user types, all steps implemented
+- ✅ **Onboarding localStorage Enhancement**: Complete - localStorage mechanism implemented for all onboarding forms, prevents data loss on refresh
 - ✅ **Authentication**: 100% complete - Stack Auth, all flows working
 - ✅ **Admin Panel**: 100% complete - Verification dashboard, approve/reject actions
 - ✅ **Email System**: 100% complete - All templates, all integrations
 - ✅ **Child Management**: 100% complete - Full CRUD operations (Create, Read, Update, Delete) with list, detail, edit pages
 - ✅ **User Settings**: 100% complete - Profile editing with validation
 - ✅ **Favorites System**: 100% complete - Add, remove, list favorites for clubs and doctors
+- ✅ **Phase 1 Reusable Components**: 100% complete - 6 shared components extracted from club dashboard (DashboardHeader, ProfileCompletenessIndicator, StatisticsCards, BookingCard, BookingDetailModal, DashboardPageLayout) - all complete, club dashboard updated, ready for doctor portal implementation
+- ✅ **Phase 2 Reusable Components & Patterns**: 100% complete - 3 shared components/hooks extracted (RecentActivityFeed, AccountSettingsForm, useEntityFilters hook) - all complete, club dashboard updated, ready for doctor portal implementation
+- ✅ **Phase 3 Utilities**: 100% complete - 2 utilities extracted (status-badges, date-formatting) - all complete, all components updated to use centralized utilities, consistent Romanian formatting across app
+- ✅ **Doctor Portal Complete**: 100% complete - All 5 phases implemented (Dashboard Overview, Consultation Management, Profile Editing, Availability Calendar, Settings) - all pages use shared components, consistent UI/UX with club portal, all text in Romanian, Next.js 16 Cache Components pattern, production ready
 - ✅ **Security Audit**: 100% complete - All security measures implemented and verified:
   - Rate limiting (auth, uploads, bookings, search)
   - Input validation (Zod schemas across all Server Actions)
@@ -876,6 +888,13 @@
       - [x] Auto-redirect to dashboard after 5 seconds ✅
       - [x] Completion server action (`completeClubOnboarding`) ✅
   - [x] **Doctor Onboarding (Phase 4)**: ✅ **COMPLETE**
+    - [x] **Pattern Alignment** ✅ (January 2025)
+      - [x] All 8 doctor onboarding pages updated to match club onboarding structural pattern ✅
+      - [x] Replaced inline styles with Bootstrap utility classes (`bd-onboarding-page`, `bd-onboarding-page-header`, `bd-onboarding-page-content`) ✅
+      - [x] Welcome page uses `bd-onboarding-welcome-benefits` and `bd-onboarding-welcome-time` classes ✅
+      - [x] Upload pages (photo, verification) use `bd-onboarding-page-wide` for wider layout ✅
+      - [x] Complete page uses `bd-onboarding-complete` wrapper ✅
+      - [x] Layout updated with production build check to prevent prerender errors ✅
     - [x] Welcome page (`/onboarding/doctor/welcome`) ✅
       - [x] Personalized greeting with doctor name ✅
       - [x] 8-step progress indicator ✅
@@ -1680,6 +1699,13 @@ The quiz system is production-ready with full functionality, security, optimizat
   - ✅ Email confirmation page (`/auth/email-confirmation`) ✅
   - ✅ EmailConfirmationForm component ✅
   - ✅ Server action `verifyEmailAction` ✅
+  - ✅ Email verification handler route (`/handler/email-verification`) ✅ (January 2025)
+    - ✅ Handles Stack Auth email verification callbacks ✅
+    - ✅ Extracts verification code from query parameters ✅
+    - ✅ Verifies email using Stack Auth's `verifyEmail()` method ✅
+    - ✅ Redirects to login with success message on success ✅
+    - ✅ Redirects to email confirmation page with error on failure ✅
+    - ✅ Proper error handling for missing code, verification failures, and unexpected errors ✅
   - ✅ Romanian localization ✅
   - ✅ Auto-redirect after verification ✅
 - ✅ Session management ✅
@@ -1695,8 +1721,28 @@ The quiz system is production-ready with full functionality, security, optimizat
   - ✅ Protected routes configuration (parent, club, doctor, admin) ✅
   - ✅ Authentication redirects with URL preservation ✅
   - ✅ Role-based route patterns ✅
+  - ✅ Role-based login redirects ✅ (January 2025)
+    - ✅ Authentication redirect proxy (`/auth/redirect`) created ✅
+    - ✅ Redirects users to appropriate dashboard or onboarding based on role and onboarding status ✅
+    - ✅ Updated `signInAction` with `getRoleBasedRedirect()` helper function ✅
+    - ✅ Extracted `getRoleBasedRedirect()` to `src/lib/auth/redirects.ts` for reusability ✅
+    - ✅ Fixed DashboardHeader signOut TypeError with `useUser()` check ✅
+    - ✅ Updated Stack Auth `afterSignIn` configuration to use redirect proxy ✅
+    - ✅ Updated parent layout to use `getSession()` instead of `requireAuth()` for graceful error handling ✅
+    - ✅ Added role-based protection: redirects non-parent users to their appropriate dashboard/onboarding ✅
+    - ✅ All roles properly handled: parent, club_admin, doctor, admin ✅
   - ✅ Onboarding flow integration ✅
   - ✅ Security note: Data layer authorization (requireAuth/requireRole) is primary security ✅
+- ✅ UserRoleEnum Implementation ✅ (January 2025)
+  - ✅ Created `UserRoleEnum` in `src/modules/auth/auth.types.ts` as single source of truth ✅
+    - ✅ Enum values: `PARENT`, `CLUB_ADMIN`, `DOCTOR`, `ADMIN` ✅
+    - ✅ Maintains backward compatibility with `UserRole` type ✅
+  - ✅ Updated all role usages throughout codebase ✅
+    - ✅ All role comparisons (`===`, `!==`) now use `UserRoleEnum` ✅
+    - ✅ All switch statements now use `UserRoleEnum` values ✅
+    - ✅ All role assignments use `UserRoleEnum` where applicable ✅
+    - ✅ Files updated: auth actions, layouts, onboarding, bookings, proxy, session management ✅
+  - ✅ Benefits: Type safety, single source of truth, better IDE support, backward compatible ✅
 
 ### Booking System (Basic)
 
@@ -2346,6 +2392,16 @@ The quiz system is production-ready with full functionality, security, optimizat
    - ✅ Verification system complete
 
 6. **Onboarding Complete** ✅ (Week 14) - **COMPLETE**
+   - ✅ All onboarding flows implemented (parent, club_admin, doctor)
+   - ✅ All steps complete with consistent patterns
+   - ✅ **Onboarding localStorage Enhancement** (January 2025) - **COMPLETE**
+     - ✅ `useOnboardingLocalStorage` hook created with save/get/clear functions
+     - ✅ `useOnboardingForm` hook updated to accept role/stepNumber and clear localStorage on success
+     - ✅ All 13 onboarding form components updated with localStorage integration
+     - ✅ Features: Debounced saves (500ms), automatic restore on mount, automatic clear on submission
+     - ✅ Error handling: Graceful degradation (works even if localStorage disabled)
+     - ✅ Storage key format: `yuvoo_onboarding_{role}_{stepNumber}`
+     - ✅ Users can now refresh pages during onboarding without losing form data
    - ✅ Parent onboarding (5 steps)
    - ✅ Club admin onboarding (7 steps)
    - ✅ Doctor onboarding (8 steps)
@@ -2414,6 +2470,78 @@ The quiz system is production-ready with full functionality, security, optimizat
     - `docs/CORS_CONFIGURATION_AUDIT.md` - CORS configuration audit
     - `docs/COOKIE_SECURITY_AUDIT.md` - Cookie security audit
     - `docs/AUTHENTICATION_EDGE_CASES_AUDIT.md` - Authentication edge cases audit
+- ✅ **Phase 1 Reusable Components Complete**: 100% complete - Extracted 6 shared components from club dashboard for doctor portal reuse (January 2025)
+  - ✅ `DashboardHeader` - Reusable dashboard header with title, subtitle, entity name, and verification badge
+    - Supports `variant?: "club" | "doctor"` for entity-specific styling
+    - `ClubDashboardHeader` wrapper uses shared component
+  - ✅ `ProfileCompletenessIndicator` - Reusable profile completeness display
+    - Moved from `src/components/features/clubs/` to `src/components/shared/`
+    - Added `profileType?: "club" | "doctor"` and `editRoute: string` props
+    - Updated `ClubDashboardContent` to use shared component
+  - ✅ `StatisticsCards` - Generic statistics cards component
+    - Accepts generic stats array with label, value, icon, variant
+    - Optional "View All" button with configurable route and label
+    - `BookingStatistics` wrapper uses shared component
+  - ✅ `BookingCard` - Reusable booking/consultation card
+    - Supports both `club_trial` and `doctor_consultation` types
+    - Action buttons (confirm, cancel, complete, view details) with loading states
+    - `ClubBookingCard` wrapper uses shared component
+  - ✅ `BookingDetailModal` - Reusable booking/consultation detail modal
+    - Bootstrap modal integration with proper initialization and cleanup
+    - Optional child and parent information display
+    - `ClubBookingDetailModal` wrapper uses shared component
+  - ✅ `DashboardPageLayout` - Reusable dashboard page layout wrapper
+    - Consistent header structure (icon, title, subtitle) and content wrapper
+    - Supports `variant?: "club" | "doctor"` for entity-specific CSS classes
+    - Updated all club dashboard pages (profile, bookings, settings) to use shared layout
+  - ✅ All components are type-safe with TypeScript interfaces and JSDoc comments
+  - ✅ All components maintain existing Bootstrap styling and functionality
+  - ✅ All user-facing text in Romanian
+  - ✅ Backward compatible (club dashboard continues to work through wrapper components)
+  - ✅ Ready for doctor portal implementation
+- ✅ **Phase 2 & 3 Reusable Components & Utilities Complete**: 100% complete - Extracted 3 shared components/hooks and 2 utilities from club dashboard for doctor portal reuse (January 2025)
+  - ✅ **Phase 2.1: RecentActivityFeed Component** (`src/components/shared/RecentActivityFeed.tsx`)
+    - Generic activity feed component with render props pattern
+    - Supports custom item rendering via `renderItem` prop
+    - Automatic date sorting (most recent first)
+    - Empty states with customizable messages
+    - Optional "View All" button with configurable route
+    - Moved from `src/components/features/clubs/` to shared location
+    - Updated `ClubDashboardContent` to use shared component
+  - ✅ **Phase 2.2: useEntityFilters Hook** (`src/hooks/useEntityFilters.ts`)
+    - Generic hook for filtering entities by status and date
+    - Supports status filter (all, pending, confirmed, completed, cancelled)
+    - Supports date filter (all, upcoming, past)
+    - Calculates status counts for filter UI
+    - Optimized with useMemo for performance
+    - Updated `ClubBookingList` to use the hook
+  - ✅ **Phase 2.3: AccountSettingsForm Component** (`src/components/shared/AccountSettingsForm.tsx`)
+    - Generic form component for account settings and email notifications
+    - Account settings section (email read-only, firstName, lastName, phone)
+    - Email notification preferences section with configurable notification types
+    - Dynamic Zod schema generation based on notification preferences config
+    - React Hook Form integration with validation
+    - Loading states, success/error messages with auto-scroll
+    - Optional `onLoadSettings` callback for lazy loading
+    - `ClubSettingsForm` now uses shared component as wrapper
+  - ✅ **Phase 2.4: Status Badge Utility** (`src/lib/utils/status-badges.ts`)
+    - Centralized status badge configuration (pending, confirmed, completed, cancelled)
+    - Supports both Bootstrap style (bg-warning, bg-success, etc.) and custom Yuvoo style (bd-activity-status-\*)
+    - Romanian labels: "În așteptare", "Confirmată", "Finalizată", "Anulată"
+    - Optional Bootstrap Icons for each status
+    - Type-safe with TypeScript types
+    - Updated `BookingCard`, `BookingDetailModal`, and `ClubDashboardContent` to use utility
+  - ✅ **Phase 3.1: Date Formatting Utilities** (`src/lib/utils/date-formatting.ts`)
+    - Created date-formatting.ts with Romanian locale formatting
+    - Functions: `formatDate()` (full date with weekday), `formatTime()` (time only), `formatDateTime()` (date + time), `formatDateForActivityFeed()` (compact format), `formatDateOnly()` (date without weekday)
+    - All functions use Romanian locale ("ro-RO")
+    - All components now use centralized date formatting
+    - Consistent Romanian date/time display across app
+  - ✅ All components and utilities are type-safe with TypeScript interfaces and JSDoc comments
+  - ✅ All components maintain existing Bootstrap styling and functionality
+  - ✅ All user-facing text in Romanian
+  - ✅ Backward compatible (club dashboard continues to work)
+  - ✅ Ready for doctor portal implementation
 - ✅ **Club Portal Dashboard Complete**: 100% complete - Dashboard overview page (`/club/dashboard`) and booking management page (`/club/bookings`) fully implemented
   - ✅ Dashboard overview page with profile completeness indicator, verification status badge, booking statistics, and recent activity feed
   - ✅ Booking management page with filtering (status, date), booking detail modal, confirm/cancel/complete actions
@@ -2422,6 +2550,6 @@ The quiz system is production-ready with full functionality, security, optimizat
   - ✅ Server actions for club booking management (getClubBookings, confirmBooking, cancelBookingByClub, updateBookingStatus, getParentUser)
   - ✅ Service layer functions (confirmBooking, updateBookingStatus, cancelBookingByEntity)
   - ✅ Repository layer (updateStatus function added)
-  - ✅ Components: ClubBookingList, ClubBookingCard, ClubBookingDetailModal
+  - ✅ Components: ClubBookingList, ClubBookingCard, ClubBookingDetailModal (now use shared components)
   - ✅ All using Next.js 16 Cache Components with private cache
   - ✅ Role-based access control (club_admin only)

@@ -30,9 +30,9 @@ export default async function DoctorBasicInfoPage() {
     <OnboardingLayout>
       <OnboardingProgress currentStep={2} steps={DOCTOR_STEPS} className="mb-8" />
 
-      <div className="mx-auto" style={{ maxWidth: "42rem" }}>
+      <div className="bd-onboarding-page mx-auto">
         {/* Header */}
-        <div className="text-center mb-5">
+        <div className="bd-onboarding-page-header">
           <h1 className="display-4 fw-bold text-body mb-4">Informații profesionale 👨‍⚕️</h1>
           <p className="h5 text-body">
             Spune-ne despre tine și specialitatea ta pentru a crea un profil complet și profesional.
@@ -40,7 +40,9 @@ export default async function DoctorBasicInfoPage() {
         </div>
 
         {/* Form */}
-        <DoctorBasicInfoForm />
+        <div className="bd-onboarding-page-content">
+          <DoctorBasicInfoForm />
+        </div>
       </div>
     </OnboardingLayout>
   );

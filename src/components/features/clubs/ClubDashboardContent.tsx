@@ -6,12 +6,16 @@
  */
 
 import React from "react";
+import Link from "next/link";
 import type { Club } from "@/modules/clubs/clubs.types";
 import type { Booking } from "@/modules/bookings/bookings.types";
 import ClubDashboardHeader from "./ClubDashboardHeader";
-import ProfileCompletenessIndicator from "./ProfileCompletenessIndicator";
+import ProfileCompletenessIndicator from "@/components/shared/ProfileCompletenessIndicator";
 import BookingStatistics from "./BookingStatistics";
-import RecentActivityFeed from "./RecentActivityFeed";
+import RecentActivityFeed from "@/components/shared/RecentActivityFeed";
+import { routes } from "@/lib/routes";
+import { getStatusBadgeConfig } from "@/lib/utils/status-badges";
+import { formatDateForActivityFeed } from "@/lib/utils/date-formatting";
 
 interface ProfileCompleteness {
   percentage: number;
@@ -55,6 +59,8 @@ const ClubDashboardContent: React.FC<ClubDashboardContentProps> = ({
           completedFields={profileCompleteness.completedFields}
           totalFields={profileCompleteness.totalFields}
           missingFields={profileCompleteness.missingFields}
+          profileType="club"
+          editRoute={routes.club.profile}
         />
       </div>
 
@@ -75,7 +81,52 @@ const ClubDashboardContent: React.FC<ClubDashboardContentProps> = ({
 
       {/* Recent Activity */}
       <div className="mb-4">
-        <RecentActivityFeed bookings={recentBookings} />
+        <RecentActivityFeed
+          items={recentBookings}
+          title="Activitate Recentă"
+          viewAllRoute={routes.club.bookings}
+          viewAllLabel="Vezi toate"
+          renderItem={(booking) => {
+            // Status badge configuration using utility
+            const getStatusBadge = (status: Booking["status"]) => {
+              const config = getStatusBadgeConfig(status, "custom");
+              return <span className={config.class}>{config.label}</span>;
+            };
+
+            // Date formatting using utility
+
+            return (
+              <div className="d-flex justify-content-between align-items-start">
+                <div className="flex-grow-1">
+                  <div className="d-flex align-items-center mb-2">
+                    <h6 className="bd-activity-feed-booking-title mb-0 me-2">
+                      Rezervare #{booking.id.slice(0, 8)}
+                    </h6>
+                    {getStatusBadge(booking.status)}
+                  </div>
+                  <p className="bd-activity-feed-date mb-1">
+                    <i className="bi bi-calendar-event me-2"></i>
+                    {formatDateForActivityFeed(booking.scheduledAt)}
+                  </p>
+                  {booking.notes && (
+                    <p className="bd-activity-feed-notes mb-0">
+                      <i className="bi bi-chat-left-text me-2"></i>
+                      {booking.notes}
+                    </p>
+                  )}
+                </div>
+                <Link
+                  href={`${routes.club.bookings}?id=${booking.id}`}
+                  className="btn btn-sm btn-outline-secondary bd-activity-feed-detail-btn"
+                >
+                  <i className="bi bi-arrow-right"></i>
+                </Link>
+              </div>
+            );
+          }}
+          getItemId={(booking) => booking.id}
+          getItemDate={(booking) => booking.scheduledAt}
+        />
       </div>
     </div>
   );

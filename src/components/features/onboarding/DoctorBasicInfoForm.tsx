@@ -15,17 +15,20 @@
 
 "use client";
 
+import { useEffect } from "react";
 import { useForm, FieldError } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { createDoctorOnboarding } from "@/app/actions/onboarding";
 import { doctorBasicInfoSchema, type DoctorBasicInfoInput } from "@/lib/validations/doctor";
 import { routes } from "@/lib/routes";
+import { COMMON_DOCTOR_CREDENTIALS } from "@/lib/utils/constants";
 import { OnboardingNavigation } from "./OnboardingNavigation";
 import { InfoTooltip } from "@/components/shared/InfoTooltip";
 import { ServerErrorAlert } from "./components/ServerErrorAlert";
 import { TagInputField } from "./components";
 import { BootstrapInput, BootstrapSelect } from "@/components/UI/bootstrap-index";
 import { useOnboardingForm } from "./hooks/useOnboardingForm";
+import { saveFormData, getFormData } from "./hooks/useOnboardingLocalStorage";
 
 // Doctor specialties (matching validation enum)
 const DOCTOR_SPECIALTIES = [
@@ -35,16 +38,15 @@ const DOCTOR_SPECIALTIES = [
   { value: "sports_medicine", label: "Medicină sportivă pediatrică" },
 ] as const;
 
-// Common credentials
-const COMMON_CREDENTIALS = [
-  "MD",
-  "Dr.",
-  "Conf. Dr.",
-  "Prof. Dr.",
-  "Specialist",
-  "Primar",
-  "Board Certified",
-  "CMR",
+// Secondary specialties (common options for quick-add)
+const SECONDARY_SPECIALTIES_OPTIONS = [
+  "Traumatologie sportivă pediatrică",
+  "Corecție postură",
+  "Cardiologie pediatrică",
+  "Fizioterapie pediatrică",
+  "Nutriție sportivă",
+  "Psihologie sportivă",
+  "Medicină sportivă pediatrică",
 ] as const;
 
 export function DoctorBasicInfoForm() {
@@ -53,16 +55,48 @@ export function DoctorBasicInfoForm() {
     handleSubmit: rhfHandleSubmit,
     formState: { errors },
     setValue,
+    watch,
   } = useForm<DoctorBasicInfoInput>({
     resolver: zodResolver(doctorBasicInfoSchema),
     defaultValues: {
       credentials: [],
+      secondarySpecialties: [],
     },
   });
+
+  const role = "doctor";
+  const stepNumber = 2;
+
+  // Restore form data from localStorage on mount
+  useEffect(() => {
+    const saved = getFormData<DoctorBasicInfoInput>(role, stepNumber);
+    if (saved) {
+      // Restore all fields from saved data
+      Object.keys(saved).forEach((key) => {
+        const fieldKey = key as keyof DoctorBasicInfoInput;
+        const value = saved[fieldKey];
+        if (value !== undefined && value !== null) {
+          setValue(fieldKey, value, { shouldValidate: false });
+        }
+      });
+    }
+  }, [setValue]);
+
+  // Save form data to localStorage on changes (debounced)
+  const formValues = watch();
+  useEffect(() => {
+    const timeoutId = setTimeout(() => {
+      saveFormData(role, stepNumber, formValues);
+    }, 500);
+
+    return () => clearTimeout(timeoutId);
+  }, [formValues]);
 
   const { handleSubmit, isLoading, serverError } = useOnboardingForm<DoctorBasicInfoInput>({
     onSubmitAction: createDoctorOnboarding,
     onSuccessRoute: routes.onboarding.doctor.bioExperience,
+    role,
+    stepNumber,
   });
 
   return (
@@ -156,17 +190,32 @@ export function DoctorBasicInfoForm() {
         {errors.specialty && <p className="mt-1 small text-danger">{errors.specialty.message}</p>}
       </div>
 
+      {/* Secondary Specialties (Optional) */}
+      <TagInputField
+        label="Specializări secundare"
+        name="secondarySpecialties"
+        setValue={setValue}
+        currentValue={watch("secondarySpecialties")}
+        error={errors.secondarySpecialties as FieldError | undefined}
+        quickAddOptions={SECONDARY_SPECIALTIES_OPTIONS}
+        placeholder="Adaugă specializare secundară personalizată"
+        helpText="Adaugă specializări suplimentare dacă ai experiență în alte domenii (opțional). Acestea vor apărea în profilul tău și vor ajuta părinții să te găsească pentru nevoi specifice."
+        description="Adaugă specializări suplimentare dacă ai experiență în alte domenii (opțional)"
+        isLoading={isLoading}
+      />
+
       {/* Credentials */}
       <TagInputField
         label="Credențiale"
         name="credentials"
         setValue={setValue}
+        currentValue={watch("credentials")}
         error={errors.credentials as FieldError | undefined}
-        quickAddOptions={COMMON_CREDENTIALS}
+        quickAddOptions={COMMON_DOCTOR_CREDENTIALS}
         placeholder="Adaugă credențială personalizată"
         required
-        helpText="Adaugă credențialele tale profesionale (ex: MD, Specialist, Primar, Board Certified, CMR). Acestea vor crește încrederea părinților în competența ta."
-        description="Adaugă cel puțin o credențială (ex: MD, Specialist, etc.)"
+        helpText="Adaugă credențialele tale profesionale (ex: Dr. med., Specialist, Primar, CMR). Acestea vor crește încrederea părinților în competența ta."
+        description="Adaugă cel puțin o credențială (ex: Dr. med., Specialist, etc.)"
         isLoading={isLoading}
       />
 

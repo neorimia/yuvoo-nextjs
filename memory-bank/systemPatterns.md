@@ -152,6 +152,70 @@ yuvoo-nextjs/
   - Used in: FAQ sections, help pages, sports FAQ sections
   - Features: Bootstrap accordion integration, customizable open state, supports React.ReactNode for answers (enables internal linking)
 
+**Dashboard Portal Components** (Created January 2025 - Phase 1, 2 & 3 Complete):
+
+**Phase 1 Components** (High Priority):
+
+- `DashboardHeader.tsx` - Reusable dashboard header component with title, subtitle, entity name, and verification badge
+  - Used in: Club dashboard, doctor dashboard (planned)
+  - Features: Variant support (club/doctor), configurable title/subtitle, verification badge integration
+  - Wrapper: `ClubDashboardHeader.tsx` uses shared component
+- `ProfileCompletenessIndicator.tsx` - Reusable profile completeness display component
+  - Used in: Club dashboard, doctor dashboard (planned)
+  - Features: Progress bar, missing fields list, configurable edit route, profile type support (club/doctor)
+  - Moved from `src/components/features/clubs/` to shared location
+- `StatisticsCards.tsx` - Generic statistics cards component
+  - Used in: Club dashboard (booking statistics), doctor dashboard (consultation statistics - planned)
+  - Features: Generic stats array, optional "View All" button, customizable CSS class prefix
+  - Wrapper: `BookingStatistics.tsx` uses shared component
+- `BookingCard.tsx` - Reusable booking/consultation card component
+  - Used in: Club bookings list, doctor consultations list (planned)
+  - Features: Supports both `club_trial` and `doctor_consultation` types, action buttons (confirm, cancel, complete, view details), status badges, date formatting
+  - Wrapper: `ClubBookingCard.tsx` uses shared component
+- `BookingDetailModal.tsx` - Reusable booking/consultation detail modal component
+  - Used in: Club bookings list, doctor consultations list (planned)
+  - Features: Bootstrap modal integration, optional child/parent information, action buttons, comprehensive booking details display
+  - Wrapper: `ClubBookingDetailModal.tsx` uses shared component
+- `DashboardPageLayout.tsx` - Reusable dashboard page layout wrapper
+  - Used in: All club dashboard pages (profile, bookings, settings), all doctor dashboard pages (planned)
+  - Features: Consistent header structure (icon, title, subtitle), content wrapper, variant-specific CSS classes
+  - Updated all club dashboard pages to use shared layout
+
+**Phase 2 Components & Patterns** (Medium Priority):
+
+- `RecentActivityFeed.tsx` - Generic activity feed component with render props pattern
+  - Used in: Club dashboard (recent bookings), doctor dashboard (recent consultations - planned)
+  - Features: Custom item rendering via renderItem prop, automatic date sorting, empty states, optional "View All" button
+  - Moved from `src/components/features/clubs/` to shared location
+- `AccountSettingsForm.tsx` - Generic form component for account settings and email notifications
+  - Used in: Club settings, doctor settings (planned)
+  - Features: Configurable notification preferences via props, custom update handlers, loading callbacks, React Hook Form integration
+  - `ClubSettingsForm` uses shared component as wrapper
+- `useEntityFilters` hook (`src/hooks/useEntityFilters.ts`) - Generic filtering hook
+  - Used in: Club booking list, doctor consultation list (planned)
+  - Features: Status and date filtering, status counts for filter UI, optimized with useMemo
+  - Updated `ClubBookingList` to use the hook
+
+**Phase 3 Utilities** (Low Priority):
+
+- `status-badges.ts` (`src/lib/utils/status-badges.ts`) - Status badge configuration utility
+  - Used in: All booking/consultation components
+  - Features: Centralized badge config (label, class, icon), supports Bootstrap and custom styles, Romanian labels
+  - Functions: `getStatusBadgeConfig(status, style)` returns badge configuration
+- `date-formatting.ts` (`src/lib/utils/date-formatting.ts`) - Date formatting utilities
+  - Used in: All components displaying dates/times
+  - Features: Romanian locale formatting, multiple format options (date, time, datetime, activity feed, date only)
+  - Functions: `formatDate()`, `formatTime()`, `formatDateTime()`, `formatDateForActivityFeed()`, `formatDateOnly()`
+
+**Component Extraction Pattern**: When implementing similar features across different portals (club vs doctor), extract shared components to:
+
+- Avoid code duplication
+- Ensure UI/UX consistency
+- Reduce maintenance burden
+- Enable faster feature development
+
+**Status**: ✅ Phase 1 Complete (6 of 6 components), ✅ Phase 2 Complete (3 components/hooks), ✅ Phase 3.1 Complete (2 utilities) - All ready for doctor portal implementation
+
 ### Onboarding Form Components
 
 **Location**: `src/components/features/onboarding/components/`
@@ -341,6 +405,8 @@ import { routes } from "@/lib/routes";
   - `DashboardShellClient.tsx` - Client component managing mobile menu state and interactivity
   - `DashboardSidebar.tsx` - Responsive sidebar navigation with role-specific items
   - `DashboardHeader.tsx` - Header with user profile dropdown and mobile hamburger button
+    - Uses `useUser()` hook to check session before signOut (prevents TypeError)
+    - Graceful error handling for sign out operations
   - `lib/dashboard-navigation.ts` - Centralized navigation configuration for all roles
   - Responsive design: Mobile menu with overlay, desktop sidebar, proper overflow control
   - All dashboard layouts (parent, club, doctor, admin) use DashboardShell
@@ -438,6 +504,8 @@ requireAuth() → throws if not authenticated
 - `/auth/forgot-password` - Password reset request
 - `/auth/reset-password` - Password reset with token
 - `/auth/email-confirmation` - Email verification
+- `/auth/redirect` - Authentication redirect proxy (role-based redirects) ✅ (January 2025)
+- `/handler/email-verification` - Email verification handler route (Stack Auth callbacks) ✅ (January 2025)
 
 **Error Handling**:
 
@@ -453,10 +521,24 @@ requireAuth() → throws if not authenticated
 
 **Redirects** (handled by Server Actions and form components):
 
-- Successful login → `/parent/dashboard`
-- Successful signup → `/parent/dashboard`
+- **Role-Based Login Redirects** ✅ (January 2025)
+  - Authentication redirect proxy (`/auth/redirect`) handles post-authentication redirects
+  - **Helper Function**: `getRoleBasedRedirect()` in `src/lib/auth/redirects.ts` (centralized, reusable)
+  - `signInAction` and redirect proxy use `getRoleBasedRedirect()` helper function
+  - **Sign-In Flow**: Uses API route (`/api/auth/signin`) instead of client-side Stack Auth
+    - Properly handles NEXT_REDIRECT errors (re-throws to let Next.js handle)
+    - Returns 303 redirect to `/auth/redirect` on success
+    - SignInForm detects redirects and navigates accordingly
+  - Redirects based on user role and onboarding status:
+    - Parent users → `/parent/dashboard` (or `/onboarding/parent/welcome` if incomplete)
+    - Club admins → `/club/dashboard` (or `/onboarding/club/welcome` if incomplete)
+    - Doctor users → `/doctor/dashboard` (or `/onboarding/doctor/welcome` if incomplete)
+    - Admin users → `/admin/dashboard` (no onboarding required)
+  - Stack Auth `afterSignIn` configured to use `/auth/redirect` proxy
+  - Parent layout includes role-based protection (redirects non-parent users)
+- Successful signup → Role-based redirect (via redirect proxy)
 - Successful password reset → `/auth/login`
-- Successful email verification → `/auth/login`
+- Successful email verification → `/auth/login` (via email verification handler at `/handler/email-verification`)
 
 **Benefits of Server-Side Architecture**:
 
@@ -470,7 +552,22 @@ requireAuth() → throws if not authenticated
 
 ### Onboarding System Architecture
 
-**Status**: ✅ Foundation Complete, ✅ Parent Onboarding Complete, ✅ Club Admin Onboarding Complete, 🚧 Doctor Onboarding In Progress
+**Status**: ✅ Foundation Complete, ✅ Parent Onboarding Complete, ✅ Club Admin Onboarding Complete, ✅ Doctor Onboarding Complete (All 8 steps complete, pattern-aligned with club onboarding)
+
+**localStorage Progress Saving** ✅ (January 2025):
+
+- **Status**: ✅ **COMPLETE** - localStorage-based progress saving implemented for all onboarding flows
+- **Implementation**:
+  - ✅ `useOnboardingLocalStorage` hook created with save/get/clear functions
+  - ✅ `useOnboardingForm` hook updated to accept role/stepNumber and clear localStorage on success
+  - ✅ All 13 onboarding form components updated with localStorage integration
+    - Doctor forms (7 steps): BasicInfo, BioExperience, LocationContact, Photo, Verification, Availability
+    - Club admin forms (5 steps): BasicInfo, ContactSchedule, PricingAges, Photos, Verification
+    - Parent forms (1 step): AddChild
+  - ✅ Features: Debounced saves (500ms), automatic restore on mount, automatic clear on submission
+  - ✅ Error handling: Graceful degradation (works even if localStorage disabled)
+  - ✅ Storage key format: `yuvoo_onboarding_{role}_{stepNumber}`
+- **Benefits**: Users can now refresh pages during onboarding without losing form data
 
 **Location**:
 
@@ -485,6 +582,20 @@ requireAuth() → throws if not authenticated
 3. **Progress Tracking**: Step-by-step progress with `completedSteps` array and `stepData` JSONB field
 4. **Resume Functionality**: Automatic progress retrieval on page load
 5. **Server Actions**: All onboarding operations via Server Actions with proper TypeScript types
+
+**Onboarding Hooks**:
+
+- `useOnboardingLocalStorage` (`src/components/features/onboarding/hooks/useOnboardingLocalStorage.ts`)
+  - `saveFormData(role, stepNumber, data)` - Save form data to localStorage (debounced in components)
+  - `getFormData<T>(role, stepNumber)` - Retrieve typed form data from localStorage
+  - `clearFormData(role, stepNumber)` - Clear form data for a specific step
+  - `clearAllOnboardingData(role)` - Clear all onboarding data for a role
+  - Features: Error handling, browser compatibility checks, type-safe with TypeScript generics
+- `useOnboardingForm<T>` (`src/components/features/onboarding/hooks/useOnboardingForm.ts`)
+  - Shared hook for form submission logic
+  - Accepts `role` and `stepNumber` parameters for localStorage integration
+  - Automatically clears localStorage on successful submission
+  - Returns: `handleSubmit`, `isLoading`, `serverError`, `setServerError`
 
 **Key Server Actions**:
 
@@ -528,6 +639,19 @@ onboarding_progress {
   - ✅ Welcome, Basic Info, Contact & Schedule, Pricing & Ages, Photo Upload, Verification, Completion
 - ✅ Doctor onboarding UI - Complete
   - ✅ Welcome, Basic Info, Bio & Experience, Location & Contact, Photo Upload, Verification, Availability, Completion (All 8 steps complete)
+  - ✅ Pattern Alignment Complete (January 2025): All pages updated to match club onboarding structural pattern
+    - ✅ Consistent CSS classes (`bd-onboarding-page`, `bd-onboarding-page-header`, `bd-onboarding-page-content`)
+    - ✅ Bootstrap utility classes instead of inline styles
+    - ✅ Welcome page uses `bd-onboarding-welcome-benefits` and `bd-onboarding-welcome-time` classes
+    - ✅ Upload pages use `bd-onboarding-page-wide` for wider layout
+    - ✅ Complete page uses `bd-onboarding-complete` wrapper
+    - ✅ Layout includes production build check to prevent prerender errors
+- ✅ localStorage Progress Saving Complete (January 2025)
+  - ✅ All onboarding forms persist user input across page refreshes
+  - ✅ Automatic save on form changes (debounced 500ms)
+  - ✅ Automatic restore on component mount
+  - ✅ Automatic clear on successful submission
+  - ✅ Error handling with graceful degradation
 
 ## AI Integration Pattern
 
@@ -1460,6 +1584,10 @@ Does component need interactivity?
    - Token management: Stack Auth handles token lifecycle automatically (creation, validation, expiration, refresh)
 
 2. **Authorization**: Role-based (parent, club_admin, doctor, admin)
+   - **UserRoleEnum**: Single source of truth for all user roles (`src/modules/auth/auth.types.ts`) ✅ (January 2025)
+     - Enum values: `PARENT`, `CLUB_ADMIN`, `DOCTOR`, `ADMIN`
+     - All role comparisons and switch statements use `UserRoleEnum` for type safety
+     - Backward compatible with `UserRole` type
    - All mutation actions require authentication
    - Role checks via `requireRole(role)` for admin actions
    - Resource ownership verification in service layer before allowing updates/deletes

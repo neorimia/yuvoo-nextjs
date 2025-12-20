@@ -1,0 +1,160 @@
+@use "../utils" as *;
+
+// =============== PROFILE COMPLETENESS INDICATOR CSS START HERE ===============
+//
+// Styles for ProfileCompletenessIndicator component
+// Used in club dashboard, doctor dashboard, and other areas
+
+.bd-profile-completeness {
+  &-card {
+    margin: 2rem 0;
+    border-radius: 12px;
+    transition: box-shadow 0.3s ease;
+
+    &:hover {
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08) !important;
+    }
+  }
+
+  &-title {
+    font-size: 20px;
+    font-weight: 600;
+    color: var(--bd-heading-primary);
+    line-height: 1.5;
+    font-family: var(--bd-ff-heading);
+
+    @media #{$sm} {
+      font-size: 18px;
+    }
+
+    i {
+      color: var(--bd-theme-1);
+    }
+  }
+
+  &-badge {
+    font-size: 14px;
+    font-weight: 600;
+    padding: 0.375rem 0.75rem;
+    border-radius: 6px;
+
+    &-complete {
+      background-color: var(--bd-theme-1);
+      color: var(--bd-common-white);
+    }
+
+    &-good {
+      background-color: var(--bd-theme-10);
+      color: var(--bd-common-white);
+    }
+
+    &-warning {
+      background-color: var(--bd-theme-2);
+      color: var(--bd-common-white);
+    }
+
+    &-low {
+      background-color: var(--bd-theme-3);
+      color: var(--bd-common-white);
+    }
+  }
+
+  &-progress {
+    height: 1.5rem;
+    border-radius: 8px;
+    overflow: hidden;
+    background-color: var(--bd-grey-1);
+
+    &-bar {
+      transition: width 0.6s ease;
+      font-size: 14px;
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--bd-common-white);
+
+      &-complete {
+        background-color: var(--bd-theme-1);
+      }
+
+      &-good {
+        background-color: var(--bd-theme-10);
+      }
+
+      &-warning {
+        background-color: var(--bd-theme-2);
+      }
+
+      &-low {
+        background-color: var(--bd-theme-3);
+      }
+    }
+  }
+
+  &-description {
+    font-size: 14px;
+    color: var(--bd-text-body);
+    line-height: 1.5;
+    font-family: var(--bd-ff-body);
+    margin-bottom: 0;
+  }
+
+  &-missing-title {
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--bd-heading-primary);
+    font-family: var(--bd-ff-heading);
+    margin-bottom: 0.5rem;
+  }
+
+  &-missing-list {
+    li {
+      padding: 4px 0;
+      font-size: 14px;
+      line-height: 1.5;
+      font-family: var(--bd-ff-body);
+    }
+  }
+
+  &-missing-item {
+    color: var(--bd-text-body);
+
+    i {
+      color: var(--bd-theme-1);
+      font-size: 12px;
+    }
+  }
+
+  &-success-alert {
+    background-color: rgba(0, 187, 174, 0.1);
+    border: 1px solid var(--bd-theme-1);
+    border-radius: 8px;
+    color: var(--bd-theme-1);
+    font-size: 14px;
+    font-family: var(--bd-ff-body);
+    padding: 0.75rem 1rem;
+
+    i {
+      color: var(--bd-theme-1);
+    }
+  }
+
+  &-cta-btn {
+    border-color: var(--bd-theme-1);
+    color: var(--bd-theme-1);
+    transition: all 0.3s ease;
+
+    &:hover {
+      background-color: var(--bd-theme-1);
+      border-color: var(--bd-theme-1);
+      color: var(--bd-common-white);
+    }
+
+    i {
+      color: inherit;
+    }
+  }
+}
+
+// =============== PROFILE COMPLETENESS INDICATOR CSS END HERE ===============

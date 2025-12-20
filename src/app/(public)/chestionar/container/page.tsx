@@ -2,6 +2,10 @@ import React from "react";
 import type { Metadata } from "next";
 import QuizContainer from "@/components/features/quiz/QuizContainer";
 
+// Increase timeout for quiz submission (AI processing can take up to 60 seconds)
+// This is especially important for production where network latency may be higher
+export const maxDuration = 60; // 60 seconds (Vercel Pro plan limit)
+
 export const metadata: Metadata = {
   title: "Completează Chestionarul | Yuvoo",
   description:

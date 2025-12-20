@@ -17,6 +17,7 @@ import { generateSlug, normalizePhoneNumber } from "@/lib/utils";
 import { z } from "zod";
 import { startOnboardingSchema, updateOnboardingStepSchema } from "@/lib/validations/onboarding";
 import { createChildSchema } from "@/lib/validations/child";
+import { UserRoleEnum } from "@/modules/auth/auth.types";
 import {
   clubBasicInfoSchema,
   clubContactScheduleSchema,
@@ -174,7 +175,11 @@ export async function getOnboardingProgress(): Promise<OnboardingResponse<Onboar
 
     // Determine onboarding role from user role
     const onboardingRole: OnboardingRole =
-      dbUser.role === "club_admin" ? "club_admin" : dbUser.role === "doctor" ? "doctor" : "parent";
+      dbUser.role === UserRoleEnum.CLUB_ADMIN
+        ? "club_admin"
+        : dbUser.role === UserRoleEnum.DOCTOR
+          ? "doctor"
+          : "parent";
 
     // Check if progress exists
     const progress = await db
@@ -495,7 +500,7 @@ export async function createClubOnboarding(
     // Verify user is authenticated and has club_admin role
     const user = await requireAuth();
 
-    if (user.role !== "club_admin") {
+    if (user.role !== UserRoleEnum.CLUB_ADMIN) {
       return {
         success: false,
         error: "Doar administratorii de cluburi pot crea profiluri de club.",
@@ -980,6 +985,7 @@ export async function createDoctorOnboarding(
         lastName: validated.lastName,
         title: validated.title || null,
         specialty: validated.specialty,
+        secondarySpecialties: validated.secondarySpecialties || [],
         credentials: validated.credentials,
         city: "", // Will be filled in step 4
         profileComplete: false,
@@ -1009,6 +1015,39 @@ export async function createDoctorOnboarding(
 }
 
 /**
+ * Get doctor ID for current user with fallback logic
+ * First tries to get from onboarding progress stepData
+ * If not found, queries database by userId
+ * Saves doctor_id to stepData if found via fallback
+ */
+async function getDoctorIdForUser(): Promise<string | null> {
+  const user = await requireAuth();
+
+  // Try to get from onboarding progress
+  const progressData = await getOnboardingProgress();
+  if (progressData.success && progressData.data) {
+    const doctorId = progressData.data.stepData?.doctor_id as string | undefined;
+    if (doctorId) {
+      return doctorId;
+    }
+  }
+
+  // Fallback: query database by userId
+  const userDoctor = await db.query.doctors.findFirst({
+    where: eq(doctors.userId, user.id),
+    columns: { id: true },
+  });
+
+  if (userDoctor) {
+    // Save doctor_id to stepData for future steps
+    await saveStepData("doctor_id", userDoctor.id);
+    return userDoctor.id;
+  }
+
+  return null;
+}
+
+/**
  * Update Doctor Bio & Experience During Onboarding (Doctor - Step 3)
  */
 export async function updateDoctorBioExperience(
@@ -1017,16 +1056,8 @@ export async function updateDoctorBioExperience(
   try {
     const user = await requireAuth();
 
-    // Get doctor ID from onboarding progress
-    const progressData = await getOnboardingProgress();
-    if (!progressData.success || !progressData.data) {
-      return {
-        success: false,
-        error: "Nu s-a găsit progresul onboarding-ului. Te rugăm să începi din nou.",
-      };
-    }
-
-    const doctorId = progressData.data.stepData?.doctor_id as string | undefined;
+    // Get doctor ID with fallback
+    const doctorId = await getDoctorIdForUser();
     if (!doctorId) {
       return {
         success: false,
@@ -1043,7 +1074,6 @@ export async function updateDoctorBioExperience(
       .set({
         bio: validated.bio,
         yearsOfExperience: validated.yearsOfExperience,
-        secondarySpecialties: validated.secondarySpecialties || [],
         languages: validated.languages,
         updatedAt: new Date(),
       })
@@ -1078,16 +1108,8 @@ export async function updateDoctorLocationContact(
   try {
     const user = await requireAuth();
 
-    // Get doctor ID from onboarding progress
-    const progressData = await getOnboardingProgress();
-    if (!progressData.success || !progressData.data) {
-      return {
-        success: false,
-        error: "Nu s-a găsit progresul onboarding-ului. Te rugăm să începi din nou.",
-      };
-    }
-
-    const doctorId = progressData.data.stepData?.doctor_id as string | undefined;
+    // Get doctor ID with fallback
+    const doctorId = await getDoctorIdForUser();
     if (!doctorId) {
       return {
         success: false,
@@ -1144,16 +1166,8 @@ export async function updateDoctorPhoto(
   try {
     const user = await requireAuth();
 
-    // Get doctor ID from onboarding progress
-    const progressData = await getOnboardingProgress();
-    if (!progressData.success || !progressData.data) {
-      return {
-        success: false,
-        error: "Nu s-a găsit progresul onboarding-ului. Te rugăm să începi din nou.",
-      };
-    }
-
-    const doctorId = progressData.data.stepData?.doctor_id as string | undefined;
+    // Get doctor ID with fallback
+    const doctorId = await getDoctorIdForUser();
     if (!doctorId) {
       return {
         success: false,
@@ -1202,16 +1216,8 @@ export async function updateDoctorVerification(
   try {
     const user = await requireAuth();
 
-    // Get doctor ID from onboarding progress
-    const progressData = await getOnboardingProgress();
-    if (!progressData.success || !progressData.data) {
-      return {
-        success: false,
-        error: "Nu s-a găsit progresul onboarding-ului. Te rugăm să începi din nou.",
-      };
-    }
-
-    const doctorId = progressData.data.stepData?.doctor_id as string | undefined;
+    // Get doctor ID with fallback
+    const doctorId = await getDoctorIdForUser();
     if (!doctorId) {
       return {
         success: false,
@@ -1261,16 +1267,8 @@ export async function updateDoctorAvailability(
   try {
     const user = await requireAuth();
 
-    // Get doctor ID from onboarding progress
-    const progressData = await getOnboardingProgress();
-    if (!progressData.success || !progressData.data) {
-      return {
-        success: false,
-        error: "Nu s-a găsit progresul onboarding-ului. Te rugăm să începi din nou.",
-      };
-    }
-
-    const doctorId = progressData.data.stepData?.doctor_id as string | undefined;
+    // Get doctor ID with fallback
+    const doctorId = await getDoctorIdForUser();
     if (!doctorId) {
       return {
         success: false,

@@ -26,30 +26,35 @@ function generateSlug(firstName: string, lastName: string): string {
 /**
  * Map database doctor record to Doctor type
  */
+/**
+ * Map database doctor record to Doctor type
+ * Maps all fields from schema to Doctor interface, handling optional fields and defaults.
+ */
 function mapDbDoctorToDoctor(dbDoctor: typeof doctors.$inferSelect): Doctor {
-  // Build name from firstName, lastName, and title
-  const name = [dbDoctor.title, dbDoctor.firstName, dbDoctor.lastName].filter(Boolean).join(" ");
-
   // Use slug from database, or generate it if not present (backward compatibility)
+  // Schema: slug (unique, optional)
   const slug = dbDoctor.slug || generateSlug(dbDoctor.firstName, dbDoctor.lastName);
 
   // Build location with coordinates (if available in future)
+  // Schema: city (notNull), district (optional), address (optional)
   const location: Doctor["location"] = {
-    city: dbDoctor.city,
-    district: dbDoctor.district || undefined,
-    address: dbDoctor.address || "",
+    city: dbDoctor.city, // Schema: notNull
+    district: dbDoctor.district || undefined, // Schema: optional
+    address: dbDoctor.address || undefined, // Schema: optional
     // TODO: Add coordinates when latitude/longitude fields are added to schema
     coordinates: undefined,
   };
 
   // Build contact info
+  // Schema: phone (optional), email (optional), website (optional)
   const contact: Doctor["contact"] = {
-    phone: dbDoctor.phone || undefined,
-    email: dbDoctor.email || undefined,
-    website: dbDoctor.website || undefined,
+    phone: dbDoctor.phone || undefined, // Schema: optional
+    email: dbDoctor.email || undefined, // Schema: optional
+    website: dbDoctor.website || undefined, // Schema: optional
   };
 
   // Map specialty (validate against DoctorSpecialty type)
+  // Schema: specialty (notNull)
   const specialtyMap: Record<string, Doctor["specialty"]> = {
     orthopedist: "orthopedist",
     nutritionist: "nutritionist",
@@ -59,23 +64,55 @@ function mapDbDoctorToDoctor(dbDoctor: typeof doctors.$inferSelect): Doctor {
   const specialty =
     specialtyMap[dbDoctor.specialty.toLowerCase()] || ("general" as Doctor["specialty"]);
 
+  // Parse schedule from JSONB
+  // Schema: schedule (JSONB, default '[]')
+  let schedule: Array<{ day: string; startTime: string; endTime: string }> | undefined;
+  if (
+    dbDoctor.schedule &&
+    typeof dbDoctor.schedule === "object" &&
+    Array.isArray(dbDoctor.schedule)
+  ) {
+    schedule = dbDoctor.schedule.filter(
+      (entry): entry is { day: string; startTime: string; endTime: string } =>
+        entry !== null &&
+        entry !== undefined &&
+        typeof entry === "object" &&
+        typeof entry.day === "string" &&
+        typeof entry.startTime === "string" &&
+        typeof entry.endTime === "string"
+    );
+  }
+
+  // Build name from firstName, lastName, and "Dr." prefix (for backward compatibility)
+  // Schema: firstName (notNull), lastName (notNull), title (optional)
+  const name = ["Dr.", dbDoctor.firstName, dbDoctor.lastName].filter(Boolean).join(" ");
+
   return {
-    id: dbDoctor.id,
-    name,
+    id: dbDoctor.id, // Schema: primaryKey
+    name, // Computed for backward compatibility
+    firstName: dbDoctor.firstName, // Schema: first_name (notNull)
+    lastName: dbDoctor.lastName, // Schema: last_name (notNull)
+    title: dbDoctor.title || undefined, // Schema: title (optional)
     slug,
-    specialty,
-    description: dbDoctor.bio || "",
-    credentials: dbDoctor.credentials || [],
+    specialty, // Schema: specialty (notNull)
+    secondarySpecialties: dbDoctor.secondarySpecialties || undefined, // Schema: text array, default '{}'
+    description: dbDoctor.bio || "", // Schema: bio (optional, mapped to description)
+    credentials: dbDoctor.credentials || [], // Schema: text array, default '{}'
+    yearsOfExperience: dbDoctor.yearsOfExperience || undefined, // Schema: integer (optional)
+    languages: dbDoctor.languages && dbDoctor.languages.length > 0 ? dbDoctor.languages : undefined, // Schema: text array, default '{}'
     location,
     contact,
-    image: dbDoctor.photoUrl || undefined,
-    verified: dbDoctor.verified || false,
-    acceptingNewPatients: dbDoctor.acceptingNewPatients ?? true,
-    onlineConsultations: dbDoctor.onlineConsultations || false,
-    verificationStatus: dbDoctor.verificationStatus,
-    verificationDocuments: dbDoctor.verificationDocuments || [],
-    createdAt: dbDoctor.createdAt,
-    updatedAt: dbDoctor.updatedAt,
+    image: dbDoctor.photoUrl || undefined, // Schema: photo_url (optional, mapped to image)
+    verified: dbDoctor.verified || false, // Schema: boolean, default false, notNull
+    rating: dbDoctor.rating || 0, // Schema: integer, default 0
+    acceptingNewPatients: dbDoctor.acceptingNewPatients ?? true, // Schema: boolean, default true, notNull
+    onlineConsultations: dbDoctor.onlineConsultations || false, // Schema: boolean, default false, notNull
+    schedule, // Schema: JSONB, default '[]'
+    verificationStatus: dbDoctor.verificationStatus || "pending", // Schema: notNull, default "pending"
+    verificationDocuments: dbDoctor.verificationDocuments || [], // Schema: text array, default '{}'
+    profileComplete: dbDoctor.profileComplete ?? false, // Schema: notNull, default false
+    createdAt: dbDoctor.createdAt, // Schema: notNull, defaultNow
+    updatedAt: dbDoctor.updatedAt, // Schema: notNull, defaultNow
   };
 }
 
@@ -158,9 +195,25 @@ export async function getDoctorsPendingVerification(): Promise<Doctor[]> {
   return results.map(mapDbDoctorToDoctor);
 }
 
+/**
+ * Find doctor by user ID
+ */
+export async function findByUserId(userId: string): Promise<Doctor | null> {
+  const doctor = await db.query.doctors.findFirst({
+    where: eq(doctors.userId, userId),
+  });
+
+  if (!doctor) {
+    return null;
+  }
+
+  return mapDbDoctorToDoctor(doctor);
+}
+
 export const doctorsRepository = {
   findBySlug,
   getDoctorById,
+  findByUserId,
   findBySpecialty,
   findAll,
   getDoctorsByVerificationStatus,

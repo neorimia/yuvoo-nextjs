@@ -48,15 +48,17 @@ function QuizContent({ childId }: { childId: string }) {
   const [submitError, setSubmitError] = useState<string | null>(null);
   const [isTransitioning, setIsTransitioning] = useState(false);
   const [showLoadingOverlay, setShowLoadingOverlay] = useState(false);
+  const hasTrackedStart = React.useRef(false);
 
   // Track quiz started on mount (first step)
   useEffect(() => {
-    if (currentStep === 1) {
+    if (currentStep === 1 && !hasTrackedStart.current) {
+      hasTrackedStart.current = true;
       trackEvent(PostHogEvents.QUIZ_STARTED, {
         [PostHogProperties.TOTAL_STEPS]: TOTAL_STEPS,
       });
     }
-  }, []); // Only run once on mount
+  }, [currentStep]); // Include currentStep in dependencies
 
   // Wrapper for nextStep with loading state and tracking
   const handleNextStep = React.useCallback(() => {

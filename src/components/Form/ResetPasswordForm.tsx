@@ -27,7 +27,8 @@ const ResetPasswordForm = () => {
     watch,
   } = useForm<ResetPasswordFormData>();
   const searchParams = useSearchParams();
-  const token = searchParams.get("token");
+  // Stack Auth uses 'code' parameter, but we also support 'token' for backwards compatibility
+  const token = searchParams.get("code") || searchParams.get("token");
   const router = useRouter();
   const password = watch("password");
 

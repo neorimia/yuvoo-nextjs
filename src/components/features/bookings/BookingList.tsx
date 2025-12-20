@@ -19,6 +19,7 @@ import type { Booking } from "@/modules/bookings/bookings.types";
 import type { Club } from "@/modules/clubs/clubs.types";
 import type { Doctor } from "@/modules/doctors/doctors.types";
 import type { Child } from "@/modules/children/children.types";
+import { routes } from "@/lib/routes";
 
 interface BookingWithDetails extends Booking {
   entity?: Club | Doctor;
@@ -137,11 +138,11 @@ const BookingList: React.FC = () => {
         <p className="text-muted mb-4">
           Încearcă să rezervi o ședință de probă la un club sau o consultație la un doctor.
         </p>
-        <Link href="/cluburi" className="btn btn-primary me-2">
+        <Link href={routes.clubs.list} className="btn btn-yuvoo-primary me-2">
           <i className="bi bi-search me-2"></i>
           Caută cluburi
         </Link>
-        <Link href="/doctori" className="btn btn-outline-primary">
+        <Link href={routes.doctors.list} className="btn btn-outline-yuvoo-primary">
           <i className="bi bi-search me-2"></i>
           Caută doctori
         </Link>

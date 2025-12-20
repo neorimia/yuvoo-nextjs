@@ -82,13 +82,13 @@ export function OnboardingLayout({
 
       {/* Header - Minimal branding only */}
       <header
-        className="w-100 top-0 z-99 bg-white border-bottom border-yuvoo-primary shadow-sm"
+        className="w-100 bg-white border-bottom border-yuvoo-primary shadow-sm"
         style={{
           backgroundColor: "rgba(255, 255, 255, 0.95)",
           backdropFilter: "blur(4px)",
         }}
       >
-        <div className="container mx-auto px-3 py-3 px-md-4 py-md-4 px-lg-5">
+        <div className="container mx-auto py-3">
           <div className="d-flex align-items-center justify-content-between gap-3">
             {/* Logo */}
             <Link
@@ -97,7 +97,7 @@ export function OnboardingLayout({
               style={{ flexShrink: 0 }}
               aria-label="Înapoi la pagina principală Yuvoo"
             >
-              <Image src="/assets/img/logo/logo.svg" alt="Yuvoo" width={100} height={100} />
+              <Image src="/assets/img/logo/logo.svg" alt="Yuvoo" width={100} height={30} />
             </Link>
 
             {/* Optional header content (e.g., progress) */}

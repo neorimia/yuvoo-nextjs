@@ -36,7 +36,8 @@ export const metadata: Metadata = {
  * Reset Password Page
  *
  * Authentication page for password reset.
- * Route: /auth/reset-password?token=<reset-token>
+ * Route: /auth/reset-password?code=<reset-code> or /auth/reset-password?token=<reset-token>
+ * Note: Stack Auth uses 'code' parameter, but we also support 'token' for backwards compatibility
  */
 export default function ResetPasswordPage() {
   return (

@@ -2,6 +2,9 @@ import React from "react";
 import type { Metadata } from "next";
 import BreadcrumbOne from "@/components/Breadcrumb/BreadcrumbOne";
 import ForgotPasswordMain from "@/components/Auth/ForgotPasswordMain";
+import { redirect } from "next/navigation";
+import { getRoleBasedRedirect } from "@/lib/auth/redirects";
+import { getSession } from "@/lib/auth/session";
 
 export const metadata: Metadata = {
   title: "Recuperare Parolă | Yuvoo",
@@ -38,7 +41,17 @@ export const metadata: Metadata = {
  * Authentication page for password recovery.
  * Route: /auth/forgot-password
  */
-export default function ForgotPasswordPage() {
+export default async function ForgotPasswordPage() {
+  // Check if user is already authenticated
+  // If yes, redirect to their dashboard or onboarding
+  const session = await getSession();
+  if (session?.dbUser) {
+    const redirectUrl = getRoleBasedRedirect(
+      session.dbUser.role,
+      session.dbUser.onboardingCompleted
+    );
+    redirect(redirectUrl);
+  }
   return (
     <>
       <BreadcrumbOne title="Recuperare Parolă" subTitle="Recuperare Parolă" />

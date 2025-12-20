@@ -6,6 +6,8 @@
 
 export const errorMessages: Record<string, string> = {
   "invalid-credentials": "Email sau parolă incorectă. Te rugăm să încerci din nou.",
+  "email-password-mismatch": "Email sau parolă incorectă. Te rugăm să încerci din nou.",
+  EMAIL_PASSWORD_MISMATCH: "Email sau parolă incorectă. Te rugăm să încerci din nou.",
   "email-already-exists": "Acest email este deja înregistrat. Te rugăm să te autentifici.",
   "weak-password":
     "Parola este prea slabă. Folosește cel puțin 8 caractere, incluzând litere și cifre.",
@@ -29,26 +31,54 @@ export function getErrorMessage(error: unknown): string {
     return errorMessages[error] || error || errorMessages["unknown-error"];
   }
 
-  // Check if error has a message property
-  if (error && typeof error === "object" && "message" in error) {
-    const message = String(error.message);
-    // Try to match error message to known error codes
-    for (const [key, value] of Object.entries(errorMessages)) {
-      if (message.toLowerCase().includes(key.toLowerCase())) {
-        return value;
+  // Check if error is a Stack Auth error object with a code property
+  if (error && typeof error === "object") {
+    // Stack Auth errors may have a 'code' property (e.g., EMAIL_PASSWORD_MISMATCH)
+    if ("code" in error && typeof error.code === "string") {
+      const code = error.code;
+      if (errorMessages[code]) {
+        return errorMessages[code];
+      }
+      // Try case-insensitive match
+      const codeLower = code.toLowerCase();
+      for (const [key, value] of Object.entries(errorMessages)) {
+        if (key.toLowerCase() === codeLower) {
+          return value;
+        }
       }
     }
-    // Check for common error patterns
-    if (message.toLowerCase().includes("invalid") && message.toLowerCase().includes("credential")) {
-      return errorMessages["invalid-credentials"];
+
+    // Check if error has a message property
+    if ("message" in error) {
+      const message = String(error.message);
+      // Try to match error message to known error codes
+      for (const [key, value] of Object.entries(errorMessages)) {
+        if (message.toLowerCase().includes(key.toLowerCase())) {
+          return value;
+        }
+      }
+      // Check for common error patterns
+      if (
+        message.toLowerCase().includes("invalid") &&
+        message.toLowerCase().includes("credential")
+      ) {
+        return errorMessages["invalid-credentials"];
+      }
+      if (message.toLowerCase().includes("email") && message.toLowerCase().includes("exist")) {
+        return errorMessages["email-already-exists"];
+      }
+      if (message.toLowerCase().includes("weak") || message.toLowerCase().includes("password")) {
+        return errorMessages["weak-password"];
+      }
+      // Check for Stack Auth error message format
+      if (
+        message.toLowerCase().includes("wrong") &&
+        (message.toLowerCase().includes("email") || message.toLowerCase().includes("password"))
+      ) {
+        return errorMessages["EMAIL_PASSWORD_MISMATCH"];
+      }
+      return message || errorMessages["unknown-error"];
     }
-    if (message.toLowerCase().includes("email") && message.toLowerCase().includes("exist")) {
-      return errorMessages["email-already-exists"];
-    }
-    if (message.toLowerCase().includes("weak") || message.toLowerCase().includes("password")) {
-      return errorMessages["weak-password"];
-    }
-    return message || errorMessages["unknown-error"];
   }
 
   return errorMessages["unknown-error"];

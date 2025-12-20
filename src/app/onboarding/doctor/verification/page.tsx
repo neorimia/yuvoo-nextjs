@@ -30,9 +30,9 @@ export default async function DoctorVerificationPage() {
     <OnboardingLayout>
       <OnboardingProgress currentStep={6} steps={DOCTOR_STEPS} className="mb-8" />
 
-      <div className="mx-auto" style={{ maxWidth: "42rem" }}>
+      <div className="bd-onboarding-page bd-onboarding-page-wide mx-auto">
         {/* Header */}
-        <div className="text-center mb-5">
+        <div className="bd-onboarding-page-header">
           <h1 className="display-4 fw-bold text-body mb-4">Documente de verificare 📄</h1>
           <p className="h5 text-body">
             Încarcă documentele profesionale pentru a obține badge-ul de &apos;Verificat&apos; și a
@@ -41,7 +41,9 @@ export default async function DoctorVerificationPage() {
         </div>
 
         {/* Form */}
-        <DoctorVerificationForm />
+        <div className="bd-onboarding-page-content">
+          <DoctorVerificationForm />
+        </div>
       </div>
     </OnboardingLayout>
   );

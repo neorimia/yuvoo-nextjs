@@ -12,8 +12,10 @@ import { stackServerApp } from "@/lib/auth/stack";
 import { getCurrentUser, requireAuth, requireRole } from "@/modules/auth/auth.service";
 import { getSession } from "@/lib/auth/session";
 import type { AuthUser, UserRole } from "@/modules/auth/auth.types";
+import { UserRoleEnum } from "@/modules/auth/auth.types";
 import { routes } from "@/lib/routes";
 import { getErrorMessage } from "@/lib/auth/errors";
+import { getRoleBasedRedirect } from "@/lib/auth/redirects";
 import { trackEventServer } from "@/lib/analytics/tracking-server";
 import { PostHogEvents, PostHogProperties } from "@/lib/analytics/events";
 import { rateLimit, getClientIdentifierFromHeaders, RATE_LIMIT_CONFIGS } from "@/lib/rate-limit";
@@ -100,6 +102,17 @@ export async function signInAction(formData: FormData, redirectUrl?: string) {
   }
 
   try {
+    // IMPORTANT: Stack Auth's signInWithCredential() in Server Actions doesn't set cookies directly.
+    // Stack Auth sets cookies during redirects. The issue is that when we call signInWithCredential()
+    // in a Server Action, it authenticates but the cookie isn't set until there's a redirect.
+    //
+    // The solution is to redirect to Stack Auth's handler URL which will set the cookie and
+    // redirect to our afterSignIn URL. However, we don't have direct access to Stack Auth's
+    // handler URL from Server Actions.
+    //
+    // For now, we'll redirect to our redirect proxy, which will then redirect to the appropriate
+    // dashboard/onboarding. The cookie should be set by Stack Auth during the redirect flow.
+    // If cookies are still not set, we may need to use Stack Auth's redirect flow instead.
     await stackServerApp.signInWithCredential({
       email,
       password,
@@ -111,9 +124,11 @@ export async function signInAction(formData: FormData, redirectUrl?: string) {
       await logCookieDebug("signInAction - After login");
     }
 
-    // Get user session for tracking
+    // Get user session for tracking and role-based redirect
+    // Note: Session might not be available immediately if cookies aren't set yet
+    let session = null;
     try {
-      const session = await getSession();
+      session = await getSession();
       if (session?.user) {
         // Track login event server-side with person properties
         await trackEventServer(PostHogEvents.USER_LOGGED_IN, {
@@ -133,9 +148,9 @@ export async function signInAction(formData: FormData, redirectUrl?: string) {
       }
     }
 
-    // Use redirectUrl if provided, otherwise default to dashboard
+    // Use redirectUrl if provided, otherwise use role-based redirect
     // Validate redirectUrl to prevent open redirect vulnerabilities
-    let safeRedirectUrl = routes.parent.dashboard;
+    let safeRedirectUrl: string;
 
     if (redirectUrl) {
       try {
@@ -147,15 +162,44 @@ export async function signInAction(formData: FormData, redirectUrl?: string) {
 
         // Validate it's a relative path (security: prevent open redirect)
         if (decodedUrl.startsWith("/") && !decodedUrl.startsWith("//")) {
-          safeRedirectUrl = decodedUrl as typeof routes.parent.dashboard;
+          safeRedirectUrl = decodedUrl;
+        } else {
+          // Invalid redirect URL - use role-based redirect
+          if (session?.dbUser) {
+            safeRedirectUrl = getRoleBasedRedirect(
+              session.dbUser.role,
+              session.dbUser.onboardingCompleted
+            );
+          } else {
+            safeRedirectUrl = routes.authRedirect; // Use redirect proxy to ensure cookies are set
+          }
         }
       } catch (error) {
-        // If decoding fails, use default dashboard
+        // If decoding fails, use role-based redirect
         console.error("Error decoding redirectUrl:", error);
+        if (session?.dbUser) {
+          safeRedirectUrl = getRoleBasedRedirect(
+            session.dbUser.role,
+            session.dbUser.onboardingCompleted
+          );
+        } else {
+          safeRedirectUrl = routes.authRedirect; // Use redirect proxy to ensure cookies are set
+        }
       }
+    } else {
+      // No redirectUrl provided - use role-based redirect via redirect proxy
+      // This ensures Stack Auth cookies are properly set during redirect
+      safeRedirectUrl = routes.authRedirect;
     }
 
     // Return success - redirect will be handled by the form component
+    //
+    // IMPORTANT: Stack Auth's signInWithCredential() in Server Actions doesn't set cookies directly.
+    // Cookies are set during redirects. When the client redirects via router.push(), Stack Auth
+    // should set cookies during that redirect. However, if cookies are still not being set,
+    // we may need to use Stack Auth's redirect flow instead of Server Actions.
+    //
+    // The redirect proxy at /auth/redirect has retry logic to handle cookie timing issues.
     return {
       success: true,
       redirect: safeRedirectUrl,
@@ -323,13 +367,13 @@ export async function signUpAction(formData: FormData) {
  */
 function getOnboardingUrl(role: string): string {
   switch (role) {
-    case "parent":
+    case UserRoleEnum.PARENT:
       return routes.onboarding.parent.welcome;
-    case "club_admin":
+    case UserRoleEnum.CLUB_ADMIN:
       return routes.onboarding.club.welcome;
-    case "doctor":
+    case UserRoleEnum.DOCTOR:
       return routes.onboarding.doctor.welcome;
-    case "admin":
+    case UserRoleEnum.ADMIN:
       // Admins don't need onboarding
       return routes.admin.dashboard;
     default:
@@ -377,7 +421,13 @@ export async function forgotPasswordAction(formData: FormData) {
   }
 
   try {
-    await stackServerApp.sendForgotPasswordEmail(email);
+    // Stack Auth requires callbackUrl in server-side environments
+    // This is the URL where users will be redirected after clicking the reset link
+    const callbackUrl = `${process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000"}${routes.resetPassword}`;
+
+    await stackServerApp.sendForgotPasswordEmail(email, {
+      callbackUrl,
+    });
 
     // Track password reset request (no distinctId since user might not be authenticated)
     try {

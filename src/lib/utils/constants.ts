@@ -28,6 +28,20 @@ export const DOCTOR_SPECIALTIES = [
   "psiholog",
 ] as const;
 
+// Common doctor credentials
+export const COMMON_DOCTOR_CREDENTIALS = [
+  "Dr.",
+  "Dr. med.",
+  "Conf. Dr.",
+  "Prof. Dr.",
+  "Medic specialist",
+  "Medic primar",
+  "Specialist",
+  "Primar",
+  "MD",
+  "PhD",
+] as const;
+
 // Booking types
 export const BOOKING_TYPES = {
   CLUB_TRIAL: "club_trial",

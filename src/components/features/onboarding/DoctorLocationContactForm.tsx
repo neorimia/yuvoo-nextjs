@@ -19,6 +19,7 @@
 
 "use client";
 
+import { useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { updateDoctorLocationContact } from "@/app/actions/onboarding";
@@ -33,6 +34,7 @@ import { InfoTooltip } from "@/components/shared/InfoTooltip";
 import { ServerErrorAlert } from "./components/ServerErrorAlert";
 import { BootstrapInput, BootstrapSelect } from "@/components/UI/bootstrap-index";
 import { useOnboardingForm } from "./hooks/useOnboardingForm";
+import { saveFormData, getFormData } from "./hooks/useOnboardingLocalStorage";
 
 // Romanian cities (major cities)
 const ROMANIAN_CITIES = [
@@ -73,6 +75,8 @@ export function DoctorLocationContactForm() {
     register,
     handleSubmit: rhfHandleSubmit,
     formState: { errors },
+    setValue,
+    watch,
   } = useForm<DoctorLocationContactInput>({
     resolver: zodResolver(doctorLocationContactSchema),
     defaultValues: {
@@ -85,9 +89,39 @@ export function DoctorLocationContactForm() {
     },
   });
 
+  const role = "doctor";
+  const stepNumber = 4;
+
+  // Restore form data from localStorage on mount
+  useEffect(() => {
+    const saved = getFormData<DoctorLocationContactInput>(role, stepNumber);
+    if (saved) {
+      // Restore all fields from saved data
+      Object.keys(saved).forEach((key) => {
+        const fieldKey = key as keyof DoctorLocationContactInput;
+        const value = saved[fieldKey];
+        if (value !== undefined && value !== null) {
+          setValue(fieldKey, value, { shouldValidate: false });
+        }
+      });
+    }
+  }, [setValue]);
+
+  // Save form data to localStorage on changes (debounced)
+  const formValues = watch();
+  useEffect(() => {
+    const timeoutId = setTimeout(() => {
+      saveFormData(role, stepNumber, formValues);
+    }, 500);
+
+    return () => clearTimeout(timeoutId);
+  }, [formValues]);
+
   const { handleSubmit, isLoading, serverError } = useOnboardingForm<DoctorLocationContactInput>({
     onSubmitAction: updateDoctorLocationContact,
     onSuccessRoute: routes.onboarding.doctor.photo,
+    role,
+    stepNumber,
     transformData: (data) => ({
       ...data,
       phone: normalizePhoneNumber(data.phone),

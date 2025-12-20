@@ -2,11 +2,547 @@
 
 ## Current Status
 
-**Phase**: Foundation Setup & Onboarding Development + Bootstrap Migration + Component Extraction + Quiz System Implementation + Brevo Email Integration + Performance Optimization + Admin Verification System + Quiz Referral Flows + Deployment Setup + High Priority TODOs Complete + Child Management Complete + Development Setup Guide Complete + Database Setup Complete + Authentication Setup Complete + Layout Setup Complete + Landing Page Complete + Authentication Pages Complete + Dashboard Complete + Quiz UI Complete + Quiz Backend Complete + SEO Week 1-3 Complete + Contact & Help Pages Complete + Systematic Internal Linking Complete + SEO Week 11-12 Complete (Cache Optimization, ItemList Schema, Location Landing Pages) + PostHog Analytics Complete (Phase 1 & 2) + PostHog Person Properties Complete + Sentry Error Tracking Complete + Performance Monitoring Complete + Form Styling Enhancements Complete + Security Audit Complete + Next.js 16 Cache Components Migration Complete + Production Deployment Preparation Complete + Club Portal Dashboard Complete + Club Profile Editing Complete + Club Settings Complete
+**Phase**: Foundation Setup & Onboarding Development + Bootstrap Migration + Component Extraction + Quiz System Implementation + Brevo Email Integration + Performance Optimization + Admin Verification System + Quiz Referral Flows + Deployment Setup + High Priority TODOs Complete + Child Management Complete + Development Setup Guide Complete + Database Setup Complete + Authentication Setup Complete + Layout Setup Complete + Landing Page Complete + Authentication Pages Complete + Dashboard Complete + Quiz UI Complete + Quiz Backend Complete + SEO Week 1-3 Complete + Contact & Help Pages Complete + Systematic Internal Linking Complete + SEO Week 11-12 Complete (Cache Optimization, ItemList Schema, Location Landing Pages) + PostHog Analytics Complete (Phase 1 & 2) + PostHog Person Properties Complete + Sentry Error Tracking Complete + Performance Monitoring Complete + Form Styling Enhancements Complete + Security Audit Complete + Next.js 16 Cache Components Migration Complete + Production Deployment Preparation Complete + Club Portal Dashboard Complete + Club Profile Editing Complete + Club Settings Complete + Doctor Onboarding Pattern Alignment Complete + Email Verification Handler Complete + Role-Based Redirects Complete + UserRoleEnum Implementation Complete + Onboarding localStorage Implementation Complete + Phase 1 Reusable Components Complete + Phase 2 Reusable Components Complete + Phase 3 Utilities Complete + Doctor Portal Complete (All 5 Phases) + Parent Feature Implementation Complete (All 5 Phases)
 **Date**: January 2025
-**Focus**: Club Settings Complete ✅ | Club Profile Editing Complete ✅ | Club Portal Dashboard Complete ✅ | Booking Management Complete ✅ | Booking Detail Modal Complete ✅ | Dashboard Styling Complete ✅ | Next.js 16 Cache Components Migration Complete ✅ | Production Deployment Preparation Complete ✅ | Security Audit Complete ✅ | All Security Measures Complete ✅ | SQL Injection Prevention Complete ✅ | CSRF Protection Complete ✅ | Environment Variable Security Complete ✅ | HTTPS Enforcement Complete ✅ | CORS Configuration Complete ✅ | Cookie Security Complete ✅ | Authentication Edge Cases Complete ✅ | Rate Limiting Complete ✅ | Input Validation Complete ✅ | Role-Based Authorization Complete ✅ | Ownership Verification Complete ✅ | Audit Logging Complete ✅ | Authentication Helper Standardization Complete ✅ | Club/Doctor Management Actions Complete ✅ | Sentry Error Tracking Complete ✅ | PostHog Person Properties Complete ✅ | PostHog Analytics Complete (Phase 1 & 2) ✅ | User Identification Complete ✅ | Properties Cleanup Complete ✅ | Event Tracking Complete ✅ | SEO Week 11-12 Complete ✅ | Cache Optimization Complete ✅ | ItemList Schema Complete ✅ | Location Landing Pages Complete ✅ | Contact & Help Pages Complete ✅ | Contact Form with Email Notifications Complete ✅ | SEO About Page & FAQ Expansion Complete ✅ | SEO Club & Doctor Content Expansion Complete ✅ | Internal Linking Complete ✅ | SEO Week 1-3 Complete ✅ | High Priority TODOs Complete ✅ | All Repositories Implemented ✅ | All Validation Schemas Created ✅ | All UI Components Implemented ✅ | Child Management Complete ✅ | Development Setup Automation Complete ✅ | Database Setup Complete ✅ | Authentication Setup Complete ✅ | Layout Setup Complete ✅ | Landing Page Complete ✅ | Authentication Pages Complete ✅ | Dashboard Complete ✅ | Quiz UI Complete ✅ | Quiz Backend Complete ✅
+**Focus**: Parent Feature Implementation Complete (All 5 Phases) ✅ | Doctor Portal Complete (All 5 Phases) ✅ | Doctor Portal Settings Phase 5 Complete ✅ | Doctor Portal Availability Calendar Phase 4 Complete ✅ | Doctor Portal Profile Editing Phase 3 Complete ✅ | Doctor Portal Consultation Management Phase 2 Complete ✅ | Doctor Portal Dashboard Phase 1 Complete ✅ | Phase 2 & 3 Reusable Components & Utilities Complete ✅ | Phase 1 Reusable Components Complete ✅ | Onboarding localStorage Implementation Complete ✅ | UserRoleEnum Implementation Complete ✅ | Role-Based Redirects Complete ✅ | Email Verification Handler Complete ✅ | Doctor Onboarding Pattern Alignment Complete ✅ | Club Settings Complete ✅ | Club Profile Editing Complete ✅ | Club Portal Dashboard Complete ✅ | Booking Management Complete ✅ | Booking Detail Modal Complete ✅ | Dashboard Styling Complete ✅ | Next.js 16 Cache Components Migration Complete ✅ | Production Deployment Preparation Complete ✅ | Security Audit Complete ✅ | All Security Measures Complete ✅ | SQL Injection Prevention Complete ✅ | CSRF Protection Complete ✅ | Environment Variable Security Complete ✅ | HTTPS Enforcement Complete ✅ | CORS Configuration Complete ✅ | Cookie Security Complete ✅ | Authentication Edge Cases Complete ✅ | Rate Limiting Complete ✅ | Input Validation Complete ✅ | Role-Based Authorization Complete ✅ | Ownership Verification Complete ✅ | Audit Logging Complete ✅ | Authentication Helper Standardization Complete ✅ | Club/Doctor Management Actions Complete ✅ | Sentry Error Tracking Complete ✅ | PostHog Person Properties Complete ✅ | PostHog Analytics Complete (Phase 1 & 2) ✅ | User Identification Complete ✅ | Properties Cleanup Complete ✅ | Event Tracking Complete ✅ | SEO Week 11-12 Complete ✅ | Cache Optimization Complete ✅ | ItemList Schema Complete ✅ | Location Landing Pages Complete ✅ | Contact & Help Pages Complete ✅ | Contact Form with Email Notifications Complete ✅ | SEO About Page & FAQ Expansion Complete ✅ | SEO Club & Doctor Content Expansion Complete ✅ | Internal Linking Complete ✅ | SEO Week 1-3 Complete ✅ | High Priority TODOs Complete ✅ | All Repositories Implemented ✅ | All Validation Schemas Created ✅ | All UI Components Implemented ✅ | Child Management Complete ✅ | Development Setup Automation Complete ✅ | Database Setup Complete ✅ | Authentication Setup Complete ✅ | Layout Setup Complete ✅ | Landing Page Complete ✅ | Authentication Pages Complete ✅ | Dashboard Complete ✅ | Quiz UI Complete ✅ | Quiz Backend Complete ✅
 
 ## Current Work Focus
+
+### Recent Completions (January 2025)
+
+- **Parent Feature Implementation Phase 1 Complete** ✅ (January 2025)
+  - **Problem Solved**: Need to audit and verify current state of parent feature from onboarding to dashboard to identify gaps and create implementation plan
+  - **Solution Implemented**: Completed comprehensive audit of all parent pages, onboarding flow, dashboard, children management, bookings, saved items, settings, and profile pages
+  - **Implementation Details**:
+    - ✅ **Created Comprehensive Audit Document** (`docs/PARENT_FEATURE_AUDIT.md`)
+      - Documented all existing pages (onboarding 5 steps, dashboard, children management, bookings list, settings, favorites)
+      - Identified missing pages (booking detail, profile page, saved items page route mismatch)
+      - Identified incomplete/enhancement needs (dashboard enhancements, navigation improvements, onboarding integration)
+      - Created priority ranking (Priority 1-3) for implementation phases
+      - Documented all available Server Actions and repository methods
+    - ✅ **Verified Onboarding Flow**
+      - All 5 onboarding steps exist and are functional
+      - Onboarding completion redirects to dashboard correctly
+      - Onboarding components (OnboardingLayout, OnboardingProgress, OnboardingNavigation) all exist
+    - ✅ **Verified Parent Dashboard**
+      - Basic dashboard exists with stats (children count, quizzes completed, recommendations)
+      - Recent quiz activity display working
+      - Uses Next.js 16 Cache Components with private cache
+      - Identified missing enhancements (recent bookings, quick actions, profile completeness, getting started checklist)
+    - ✅ **Verified Children Management**
+      - All pages exist (list, edit, detail, quizzes)
+      - Add child page missing (route defined but page doesn't exist)
+      - All pages functional with role-based access control
+    - ✅ **Verified Bookings Management**
+      - Bookings list page exists and functional
+      - Booking detail page missing (`/parent/bookings/[id]`)
+      - Server Actions available (`getBookingAction`, `cancelBookingAction`)
+    - ✅ **Verified Saved Items / Favorites**
+      - Favorites page exists at `/parent/favorites`
+      - Route mismatch: route definition says `/parent/saved` but page is at `/parent/favorites`
+      - Action required: Create `/parent/saved` page or update route
+    - ✅ **Verified Settings Page**
+      - Settings page exists and functional
+      - Uses SettingsForm component
+      - Profile data fetching working
+    - ✅ **Verified Profile Page**
+      - Profile page missing (`/parent/profile`)
+      - Route defined but page doesn't exist
+      - Server Actions available (`getProfileAction`, `updateProfileAction`)
+    - ✅ **Verified Parent Layout & Navigation**
+      - Parent layout exists with role-based redirects
+      - Onboarding status check implemented
+      - PostHog and Sentry integration working
+      - Uses DashboardShell for navigation
+  - **Gap Analysis Summary**:
+    - ❌ Missing Pages (3): Booking Detail, Profile, Saved Items (route mismatch)
+    - ⚠️ Incomplete/Needs Enhancement: Dashboard enhancements, navigation improvements, onboarding integration verification
+  - **Priority Ranking**:
+    - Priority 1 (Critical): Booking Detail Page, Dashboard Enhancements, Onboarding Integration
+    - Priority 2 (High): Profile Page, Saved Items Page, Navigation Improvements
+    - Priority 3 (Medium): Enhanced Statistics, Activity Feed, Polish & Testing
+  - **Next Steps**: Phase 2 - Implement missing pages (Booking Detail, Profile, Saved Items)
+  - **Status**: ✅ Complete - Phase 1 audit complete, ready for Phase 2 implementation
+
+- **Parent Feature Implementation Phase 2 Complete** ✅ (January 2025)
+  - **Problem Solved**: Missing parent pages needed to be implemented (Booking Detail, Profile, Saved Items)
+  - **Solution Implemented**: Created all missing parent pages with full functionality
+  - **Implementation Details**:
+    - ✅ **Booking Detail Page** (`/parent/bookings/[id]`)
+      - Created comprehensive booking detail page
+      - Created `ParentBookingDetail` component with full booking information
+      - Displays booking details, entity (club/doctor) info, child info, status history
+      - Added cancellation functionality with confirmation dialog
+      - Updated `BookingCard` component to link to detail page
+      - All text in Romanian, proper error handling
+      - Uses Next.js 16 Cache Components pattern (dynamic route)
+    - ✅ **Profile Page** (`/parent/profile`)
+      - Created profile page for viewing and editing parent profile
+      - Reuses `SettingsForm` component for editing
+      - Displays email (read-only) and editable profile fields (firstName, lastName, phone)
+      - Proper layout and styling consistent with other parent pages
+      - Uses `getProfileAction` and `updateProfileAction` from settings actions
+    - ✅ **Saved Items Page** (`/parent/saved`)
+      - Created saved items page to fix route mismatch
+      - Uses same `FavoritesList` component as `/parent/favorites`
+      - Route now matches route definition in `lib/routes.ts`
+      - All text in Romanian
+  - **Files Created**:
+    - `src/app/parent/bookings/[id]/page.tsx`
+    - `src/components/features/bookings/ParentBookingDetail.tsx`
+    - `src/app/parent/profile/page.tsx`
+    - `src/app/parent/saved/page.tsx`
+  - **Files Updated**:
+    - `src/components/features/bookings/BookingCard.tsx` (added link to detail page)
+  - **Features**:
+    - ✅ All pages use Next.js 16 Cache Components pattern (dynamic routes)
+    - ✅ Role-based access control via `requireAuth()`
+    - ✅ Proper error handling and loading states
+    - ✅ All user-facing text in Romanian
+    - ✅ Responsive design with Bootstrap 5.3.3
+    - ✅ Consistent styling with existing parent pages
+  - **Next Steps**: Phase 3 - Enhance Dashboard (recent bookings, quick actions, profile completeness, getting started checklist)
+  - **Status**: ✅ Complete - Phase 2 implementation complete, ready for Phase 3
+
+- **Parent Feature Implementation Phase 3 Complete** ✅ (January 2025)
+  - **Problem Solved**: Dashboard needs enhancements for better UX and more features
+  - **Solution Implemented**: Enhanced dashboard with comprehensive sections and features
+  - **Implementation Details**:
+    - ✅ **Created ParentDashboardContent Component** (`src/components/features/parent/ParentDashboardContent.tsx`)
+      - Orchestrates all dashboard sections
+      - Recent bookings section (last 5 with status badges)
+      - Quick actions section (4 action buttons)
+      - Profile completeness indicator (percentage, missing fields, link to profile)
+      - Getting started checklist (for new parents - 4 items)
+      - Upcoming events section (bookings in next 7 days)
+      - Enhanced statistics cards (4 cards: children, quizzes, bookings, saved items)
+      - Enhanced statistics section (upcoming, completed, recommendations, saved)
+    - ✅ **Created Profile Completeness Utility** (`src/lib/utils/profile-completeness.ts`)
+      - `calculateParentProfileCompleteness()` function
+      - Checks firstName, lastName, phone, email
+      - Returns percentage, completed fields, missing fields
+    - ✅ **Updated Dashboard Page** (`src/app/parent/dashboard/page.tsx`)
+      - Fetches bookings and favorites data
+      - Calculates profile completeness
+      - Passes all data to ParentDashboardContent component
+      - Maintains recent quiz activity section
+  - **Features**:
+    - ✅ All sections properly styled with Bootstrap 5.3.3
+    - ✅ All text in Romanian
+    - ✅ Responsive design
+    - ✅ Proper empty states for all sections
+    - ✅ Consistent with club/doctor dashboard patterns
+  - **Next Steps**: Phase 4 - Integration & Navigation (onboarding flow, breadcrumbs, empty states)
+  - **Status**: ✅ Complete - Phase 3 implementation complete, ready for Phase 4
+
+- **Parent Feature Implementation Phase 4 Complete** ✅ (January 2025)
+  - **Problem Solved**: Need to ensure smooth integration between onboarding and dashboard, and improve navigation
+  - **Solution Implemented**: Added breadcrumbs, verified onboarding flow, verified empty states
+  - **Implementation Details**:
+    - ✅ **Created DashboardBreadcrumb Component** (`src/components/shared/DashboardBreadcrumb.tsx`)
+      - Simple breadcrumb component for dashboard pages
+      - Shows: Dashboard > Parent Section > Current Page
+      - Uses Bootstrap breadcrumb component
+      - All text in Romanian
+    - ✅ **Added Breadcrumbs to Nested Pages**:
+      - Child detail page (`/parent/children/[id]`)
+      - Child edit page (`/parent/children/[id]/edit`)
+      - Child quizzes page (`/parent/children/[id]/quizzes`)
+      - Booking detail page (`/parent/bookings/[id]`)
+    - ✅ **Verified Onboarding Flow**:
+      - `completeParentOnboarding("dashboard")` redirects correctly
+      - Onboarding status is set correctly in database
+      - Parent layout handles role-based redirects
+    - ✅ **Verified Empty States**:
+      - ChildrenList has empty state with CTA
+      - BookingList has empty state with CTAs
+      - FavoritesList has empty state with CTAs
+  - **Features**:
+    - ✅ All breadcrumbs use DashboardBreadcrumb component
+    - ✅ Consistent breadcrumb styling
+    - ✅ All empty states have helpful CTAs
+    - ✅ All text in Romanian
+  - **Next Steps**: Phase 5 - Polish & Testing (styling consistency, loading states, comprehensive testing)
+  - **Status**: ✅ Complete - Phase 4 implementation complete, ready for Phase 5
+
+- **Parent Feature Implementation Phase 5 Complete** ✅ (January 2025)
+  - **Problem Solved**: Final polish and comprehensive testing needed
+  - **Solution Implemented**: Verified styling consistency, loading states, success/error messages, and completed testing
+  - **Implementation Details**:
+    - ✅ **Styling Consistency Verified**:
+      - All pages use consistent Bootstrap 5.3.3 classes
+      - SCSS styling matches design system
+      - Responsive design works on all pages
+      - Consistent spacing and typography
+    - ✅ **Loading States Verified**:
+      - ChildrenList has loading spinner
+      - BookingList has loading spinner
+      - FavoritesList has loading spinner
+      - All loading states show Romanian text
+    - ✅ **Success/Error Messages Verified**:
+      - SettingsForm shows success messages
+      - SettingsForm shows error messages
+      - All forms use BootstrapAlert component
+      - All messages in Romanian
+    - ✅ **Testing Completed**:
+      - Onboarding flow tested
+      - Dashboard access tested
+      - All pages tested
+      - Navigation tested
+      - Empty states tested
+      - Error handling tested
+      - Responsive design tested
+  - **Files Created**:
+    - `docs/PARENT_FEATURE_IMPLEMENTATION_SUMMARY.md` - Comprehensive summary document
+  - **Status**: ✅ Complete - All 5 phases complete, parent feature fully implemented and production-ready
+
+- **Phase 1 Reusable Components Complete** ✅ (January 2025)
+
+- **Phase 1 Reusable Components Complete** ✅ (January 2025)
+  - **Problem Solved**: Doctor portal needs to reuse club dashboard components to avoid duplication and ensure consistency
+  - **Solution Implemented**: Extracted 6 high-priority shared components from club dashboard for reuse in doctor portal
+  - **Implementation Details**:
+    - ✅ Created `DashboardHeader` component (`src/components/shared/DashboardHeader.tsx`)
+      - Reusable header with title, subtitle, entity name, and verification badge
+      - Supports `variant?: "club" | "doctor"` for entity-specific styling
+      - Updated `ClubDashboardHeader` to use shared component as wrapper
+    - ✅ Created `ProfileCompletenessIndicator` component (`src/components/shared/ProfileCompletenessIndicator.tsx`)
+      - Moved from `src/components/features/clubs/` to shared location
+      - Added `profileType?: "club" | "doctor"` prop for context-specific text
+      - Added `editRoute: string` prop for configurable edit route
+      - Updated `ClubDashboardContent` to use shared component
+    - ✅ Created `StatisticsCards` component (`src/components/shared/StatisticsCards.tsx`)
+      - Generic statistics cards component accepting stats array
+      - Supports optional "View All" button with configurable route and label
+      - Created `BookingStatistics` wrapper that uses shared component
+    - ✅ Created `BookingCard` component (`src/components/shared/BookingCard.tsx`)
+      - Reusable booking/consultation card component
+      - Supports both `club_trial` and `doctor_consultation` types
+      - Action buttons (confirm, cancel, complete, view details) with loading states
+      - Created `ClubBookingCard` wrapper that uses shared component
+    - ✅ Created `BookingDetailModal` component (`src/components/shared/BookingDetailModal.tsx`)
+      - Reusable booking/consultation detail modal component
+      - Bootstrap modal integration with proper initialization and cleanup
+      - Supports optional child and parent information
+      - Created `ClubBookingDetailModal` wrapper that uses shared component
+    - ✅ Created `DashboardPageLayout` component (`src/components/shared/DashboardPageLayout.tsx`)
+      - Reusable layout wrapper for dashboard pages
+      - Consistent header structure (icon, title, subtitle) and content wrapper
+      - Supports `variant?: "club" | "doctor"` for entity-specific CSS classes
+      - Updated all club dashboard pages (profile, bookings, settings) to use shared layout
+  - **Files Created**:
+    - `src/components/shared/DashboardHeader.tsx`
+    - `src/components/shared/ProfileCompletenessIndicator.tsx`
+    - `src/components/shared/StatisticsCards.tsx`
+    - `src/components/shared/BookingCard.tsx`
+    - `src/components/shared/BookingDetailModal.tsx`
+    - `src/components/shared/DashboardPageLayout.tsx`
+  - **Files Updated**:
+    - `src/components/features/clubs/ClubDashboardHeader.tsx` (wrapper)
+    - `src/components/features/clubs/ClubDashboardContent.tsx` (uses shared components)
+    - `src/components/features/clubs/BookingStatistics.tsx` (wrapper)
+    - `src/components/features/clubs/ClubBookingCard.tsx` (wrapper)
+    - `src/components/features/clubs/ClubBookingDetailModal.tsx` (wrapper)
+    - `src/app/club/profile/page.tsx` (uses shared layout)
+    - `src/app/club/bookings/page.tsx` (uses shared layout)
+    - `src/app/club/settings/page.tsx` (uses shared layout)
+  - **Files Deleted**:
+    - `src/components/features/clubs/ProfileCompletenessIndicator.tsx` (moved to shared)
+  - **Features**:
+    - ✅ All components are reusable for both club and doctor portals
+    - ✅ Type-safe with TypeScript interfaces and JSDoc comments
+    - ✅ Maintains existing Bootstrap styling and functionality
+    - ✅ All user-facing text in Romanian
+    - ✅ Backward compatible (club dashboard continues to work)
+    - ✅ Consistent UI/UX patterns across portals
+  - **Status**: ✅ Complete - Phase 1 (6 of 6 components) complete, ready for doctor portal implementation
+
+- **Phase 2 & 3 Reusable Components & Utilities Complete** ✅ (January 2025)
+  - **Problem Solved**: Additional patterns and utilities needed for doctor portal reuse and consistency
+  - **Solution Implemented**: Extracted medium-priority components, hooks, and utilities from club dashboard
+  - **Implementation Details**:
+    - ✅ **Phase 2.1: RecentActivityFeed Component** (`src/components/shared/RecentActivityFeed.tsx`)
+      - Generic activity feed component with render props pattern
+      - Supports custom item rendering, sorting by date, empty states
+      - Moved from `src/components/features/clubs/` to shared location
+      - Updated `ClubDashboardContent` to use shared component
+    - ✅ **Phase 2.2: useEntityFilters Hook** (`src/hooks/useEntityFilters.ts`)
+      - Generic hook for filtering entities by status and date
+      - Supports status counts for filter UI
+      - Optimized with useMemo for performance
+      - Updated `ClubBookingList` to use the hook
+    - ✅ **Phase 2.3: AccountSettingsForm Component** (`src/components/shared/AccountSettingsForm.tsx`)
+      - Generic form component for account settings and email notifications
+      - Configurable notification preferences via props
+      - Supports custom update handlers and loading callbacks
+      - `ClubSettingsForm` now uses shared component as wrapper
+    - ✅ **Phase 2.4: Status Badge Utility** (`src/lib/utils/status-badges.ts`)
+      - Centralized status badge configuration (pending, confirmed, completed, cancelled)
+      - Supports both Bootstrap and custom Yuvoo styles
+      - Romanian labels with optional icons
+      - Updated `BookingCard`, `BookingDetailModal`, and `ClubDashboardContent` to use utility
+    - ✅ **Phase 3.1: Date Formatting Utilities** (`src/lib/utils/date-formatting.ts`)
+      - Created date-formatting.ts with Romanian locale formatting
+      - Functions: `formatDate`, `formatTime`, `formatDateTime`, `formatDateForActivityFeed`, `formatDateOnly`
+      - All components now use centralized date formatting
+      - Consistent Romanian date/time display across app
+  - **Files Created**:
+    - `src/components/shared/RecentActivityFeed.tsx`
+    - `src/components/shared/AccountSettingsForm.tsx`
+    - `src/hooks/useEntityFilters.ts`
+    - `src/lib/utils/status-badges.ts`
+    - `src/lib/utils/date-formatting.ts`
+  - **Files Updated**:
+    - `src/components/features/clubs/ClubDashboardContent.tsx` (uses shared RecentActivityFeed)
+    - `src/components/features/clubs/ClubBookingList.tsx` (uses useEntityFilters hook)
+    - `src/components/features/clubs/ClubSettingsForm.tsx` (wrapper using AccountSettingsForm)
+    - `src/components/shared/BookingCard.tsx` (uses status badge and date formatting utilities)
+    - `src/components/shared/BookingDetailModal.tsx` (uses status badge and date formatting utilities)
+  - **Files Deleted**:
+    - `src/components/features/clubs/RecentActivityFeed.tsx` (moved to shared)
+  - **Features**:
+    - ✅ All components and utilities are reusable for both club and doctor portals
+    - ✅ Type-safe with TypeScript interfaces and JSDoc comments
+    - ✅ Maintains existing Bootstrap styling and functionality
+    - ✅ All user-facing text in Romanian
+    - ✅ Backward compatible (club dashboard continues to work)
+    - ✅ Consistent UI/UX patterns across portals
+    - ✅ Centralized utilities reduce code duplication
+  - **Status**: ✅ Complete - Phase 2 (4 of 4 components/hooks/utilities) and Phase 3.1 (date formatting utilities) complete, ready for doctor portal implementation
+  - **Next Steps**: Doctor portal implementation using all shared components and utilities
+
+- **Doctor Portal Dashboard Phase 1 Complete** ✅ (January 2025)
+  - **Problem Solved**: Doctor portal needs a complete dashboard overview page with profile completeness, verification status, consultation statistics, and recent activity
+  - **Solution Implemented**: Implemented Phase 1 of doctor portal dashboard using all shared components from club portal
+  - **Implementation Details**:
+    - ✅ **Updated Doctor Dashboard Page** (`src/app/doctor/dashboard/page.tsx`)
+      - Replaced custom layout with shared components pattern
+      - Added authentication and role check
+      - Fetches doctor profile, consultation statistics, and recent consultations
+      - Uses Next.js 16 Cache Components with private cache
+    - ✅ **Created DoctorDashboardContent Component** (`src/components/features/doctors/DoctorDashboardContent.tsx`)
+      - Orchestrates all dashboard sections using shared components
+      - Uses `DashboardHeader` with `variant="doctor"`
+      - Uses `ProfileCompletenessIndicator` with `profileType="doctor"`
+      - Uses `StatisticsCards` for consultation statistics
+      - Uses `RecentActivityFeed` for recent consultations
+      - All text in Romanian
+    - ✅ **Created DoctorNotFoundState Component** (`src/components/features/doctors/DoctorNotFoundState.tsx`)
+      - Empty state when doctor profile doesn't exist
+      - Links to onboarding flow
+      - Matches ClubNotFoundState pattern
+    - ✅ **Added Consultation Statistics Functions** (`src/modules/bookings/bookings.repository.ts`)
+      - `findByDoctorId(doctorId: string, limit?: number)` - Find consultations by doctor ID
+      - `getConsultationStatsByDoctorId(doctorId: string)` - Get consultation statistics grouped by status
+      - Matches pattern from `getBookingStatsByClubId`
+    - ✅ **Added Profile Completeness Calculation** (`src/modules/doctors/doctors.service.ts`)
+      - `calculateProfileCompleteness(doctor: Doctor)` - Calculate profile completeness percentage
+      - Returns percentage, completed fields, total fields, and missing fields list
+      - Matches pattern from club profile completeness calculation
+      - Checks 9 required fields: name, specialty, description, credentials, city, address, phone, email, image
+  - **Files Created**:
+    - `src/components/features/doctors/DoctorDashboardContent.tsx`
+    - `src/components/features/doctors/DoctorNotFoundState.tsx`
+  - **Files Updated**:
+    - `src/app/doctor/dashboard/page.tsx` (complete rewrite using shared components)
+    - `src/modules/bookings/bookings.repository.ts` (added consultation statistics functions)
+    - `src/modules/doctors/doctors.service.ts` (added profile completeness calculation)
+  - **Features**:
+    - ✅ Dashboard displays profile completeness indicator
+    - ✅ Verification status badge shows correct status
+    - ✅ Consultation statistics display correctly (total, pending, confirmed, completed, cancelled)
+    - ✅ Recent activity feed shows last 5 consultations
+    - ✅ All components use shared components
+    - ✅ All text is in Romanian
+    - ✅ Page uses Next.js 16 Cache Components pattern
+    - ✅ Consistent UI/UX with club portal
+  - **Status**: ✅ Complete - Phase 1 (Dashboard Overview Page) complete, ready for Phase 2 (Consultation Management)
+
+- **Doctor Portal Consultation Management Phase 2 Complete** ✅ (January 2025)
+  - **Problem Solved**: Doctor portal needs a consultation management page with filtering, detail modal, and actions (confirm, cancel, complete)
+  - **Solution Implemented**: Implemented Phase 2 of doctor portal using shared BookingCard and BookingDetailModal components
+  - **Implementation Details**:
+    - ✅ **Created Consultation Actions** (`src/app/actions/consultations.ts`)
+      - `getDoctorConsultationsAction()` - Get all consultations for doctor
+      - `confirmConsultationAction(id)` - Confirm consultation
+      - `cancelConsultationAction(id, reason?)` - Cancel consultation
+      - `completeConsultationAction(id)` - Mark consultation as completed
+      - `getParentUserForConsultationAction(userId)` - Get parent info for consultation details
+      - All actions include PostHog tracking and cache revalidation
+    - ✅ **Created DoctorConsultationList Component** (`src/components/features/doctors/DoctorConsultationList.tsx`)
+      - Uses `useEntityFilters` hook for status and date filtering
+      - Uses shared `BookingCard` component with `type="doctor_consultation"`
+      - Uses shared `BookingDetailModal` component for consultation details
+      - Fetches child and parent information for each consultation
+      - Handles confirm, cancel, and complete actions with loading states
+      - All text in Romanian
+    - ✅ **Updated Doctor Bookings Page** (`src/app/doctor/bookings/page.tsx`)
+      - Uses `DashboardPageLayout` for consistent layout
+      - Uses `DoctorConsultationList` component
+      - Uses Next.js 16 Cache Components with private cache
+      - Role-based access control
+    - ✅ **Added PostHog Event** (`src/lib/analytics/events.ts`)
+      - Added `DOCTOR_CONSULTATION_COMPLETED` event for tracking
+  - **Files Created**:
+    - `src/app/actions/consultations.ts`
+    - `src/components/features/doctors/DoctorConsultationList.tsx`
+  - **Files Updated**:
+    - `src/app/doctor/bookings/page.tsx` (complete rewrite using shared components)
+    - `src/lib/analytics/events.ts` (added DOCTOR_CONSULTATION_COMPLETED event)
+  - **Features**:
+    - ✅ Consultation list displays all consultations
+    - ✅ Status filter works correctly (all, pending, confirmed, completed, cancelled)
+    - ✅ Date filter works correctly (all, upcoming, past)
+    - ✅ Consultation detail modal opens with correct data
+    - ✅ Confirm action updates status and sends email
+    - ✅ Cancel action updates status and sends email
+    - ✅ Complete action updates status
+    - ✅ All actions show loading states
+    - ✅ All text is in Romanian
+    - ✅ Uses shared BookingCard and BookingDetailModal components
+    - ✅ Consistent UI/UX with club portal
+  - **Status**: ✅ Complete - Phase 2 (Consultation Management Page) complete, ready for Phase 3 (Profile Editing)
+
+- **Doctor Portal Profile Editing Phase 3 Complete** ✅ (January 2025)
+  - **Problem Solved**: Doctor portal needs a profile editing page with comprehensive form, photo upload, and validation
+  - **Solution Implemented**: Implemented Phase 3 of doctor portal with profile edit form using shared components
+  - **Implementation Details**:
+    - ✅ **Created Doctor Profile Update Schema** (`src/lib/validations/doctor.ts`)
+      - Added `doctorProfileUpdateSchema` with all doctor profile fields (optional for partial updates)
+      - Supports firstName, lastName, title, specialty, credentials, bio, location, contact, availability, schedule, photo
+    - ✅ **Created Doctor Profile Actions** (`src/app/actions/doctor-profile.ts`)
+      - `updateDoctorProfileAction(input)` - Update doctor profile with validation
+      - `uploadDoctorPhotoAction(photoUrl)` - Upload doctor photo to Cloudinary
+      - All actions include cache revalidation
+    - ✅ **Created DoctorProfileEditForm Component** (`src/components/features/doctors/DoctorProfileEditForm.tsx`)
+      - Comprehensive form with all sections: basic info, credentials, location, contact, availability, schedule, photo
+      - Uses shared form components: `SingleImageUploadField`, `TagInputField`, `CharacterCounterTextarea`
+      - Uses Bootstrap form components: `BootstrapInput`, `BootstrapSelect`, `BootstrapButton`, `BootstrapAlert`
+      - React Hook Form with Zod validation
+      - Cloudinary integration for photo upload
+      - All text in Romanian
+    - ✅ **Updated Doctor Profile Page** (`src/app/doctor/profile/page.tsx`)
+      - Uses `DashboardPageLayout` for consistent layout
+      - Uses `DoctorProfileEditForm` component
+      - Uses Next.js 16 Cache Components with private cache
+      - Role-based access control
+  - **Files Created**:
+    - `src/app/actions/doctor-profile.ts`
+    - `src/components/features/doctors/DoctorProfileEditForm.tsx`
+  - **Files Updated**:
+    - `src/lib/validations/doctor.ts` (added doctorProfileUpdateSchema)
+    - `src/app/doctor/profile/page.tsx` (complete rewrite using shared components)
+  - **Features**:
+    - ✅ Profile edit form displays all fields
+    - ✅ Form validation works correctly
+    - ✅ Profile photo upload works with Cloudinary
+    - ✅ Credentials can be added/removed using TagInputField
+    - ✅ Schedule can be managed (basic weekly schedule)
+    - ✅ All changes save correctly
+    - ✅ All text is in Romanian
+    - ✅ Uses shared form components for consistency
+  - **Status**: ✅ Complete - Phase 3 (Profile Editing Page) complete, ready for Phase 4 (Availability Calendar)
+
+- **Doctor Portal Availability Calendar Phase 4 Complete** ✅ (January 2025)
+  - **Problem Solved**: Doctor portal needs a dedicated availability calendar page for managing weekly schedule and recurring patterns
+  - **Solution Implemented**: Implemented Phase 4 of doctor portal with availability calendar component
+  - **Implementation Details**:
+    - ✅ **Created Availability Calendar Page** (`src/app/doctor/availability/page.tsx`)
+      - Uses `DashboardPageLayout` for consistent layout
+      - Fetches doctor profile and current availability
+      - Uses Next.js 16 Cache Components with private cache
+      - Role-based access control
+    - ✅ **Created DoctorAvailabilityCalendar Component** (`src/components/features/doctors/DoctorAvailabilityCalendar.tsx`)
+      - Weekly schedule editor with add/remove time slots
+      - Availability options (accepting new patients, online consultations)
+      - React Hook Form with Zod validation
+      - All text in Romanian
+    - ✅ **Created Availability Actions** (`src/app/actions/doctor-availability.ts`)
+      - `updateAvailabilityAction(input)` - Update doctor availability schedule
+      - Validates schedule data with Zod schema
+      - Revalidates all relevant cache tags and paths
+    - ✅ **Updated Routes** (`src/lib/routes.ts`)
+      - Added `availability: "/doctor/availability"` route
+  - **Files Created**:
+    - `src/app/doctor/availability/page.tsx`
+    - `src/components/features/doctors/DoctorAvailabilityCalendar.tsx`
+    - `src/app/actions/doctor-availability.ts`
+  - **Files Updated**:
+    - `src/lib/routes.ts` (added doctor.availability route)
+  - **Features**:
+    - ✅ Weekly schedule editor works correctly
+    - ✅ Time slots can be added/removed
+    - ✅ Availability options (accepting new patients, online consultations) can be toggled
+    - ✅ Schedule saves correctly
+    - ✅ All text is in Romanian
+    - ✅ Uses DashboardPageLayout for consistency
+  - **Status**: ✅ Complete - Phase 4 (Availability Calendar Page) complete, ready for Phase 5 (Settings)
+
+- **Doctor Portal Settings Phase 5 Complete** ✅ (January 2025)
+  - **Problem Solved**: Doctor portal needs a settings page with account settings and email notification preferences
+  - **Solution Implemented**: Implemented Phase 5 of doctor portal using shared AccountSettingsForm component
+  - **Implementation Details**:
+    - ✅ **Created Doctor Settings Validation Schema** (`src/lib/validations/doctor-settings.ts`)
+      - `doctorEmailNotificationPreferencesSchema` - Email notification preferences for doctors
+      - `updateDoctorSettingsSchema` - Settings update validation
+      - 4 notification types: consultationCreated, consultationConfirmed, consultationCancelled, consultationReminder
+    - ✅ **Created Doctor Settings Actions** (`src/app/actions/doctor-settings.ts`)
+      - `getDoctorSettingsAction()` - Get current doctor settings
+      - `updateDoctorSettingsAction(input)` - Update settings with validation
+      - All actions include cache revalidation
+    - ✅ **Created DoctorSettingsForm Component** (`src/components/features/doctors/DoctorSettingsForm.tsx`)
+      - Wrapper component using shared `AccountSettingsForm`
+      - Configures doctor-specific notification preferences
+      - All text in Romanian
+    - ✅ **Updated Doctor Settings Page** (`src/app/doctor/settings/page.tsx`)
+      - Uses `DashboardPageLayout` for consistent layout
+      - Uses `DoctorSettingsForm` component
+      - Uses Next.js 16 Cache Components with private cache
+      - Role-based access control
+  - **Files Created**:
+    - `src/lib/validations/doctor-settings.ts`
+    - `src/app/actions/doctor-settings.ts`
+    - `src/components/features/doctors/DoctorSettingsForm.tsx`
+  - **Files Updated**:
+    - `src/app/doctor/settings/page.tsx` (complete rewrite using shared components)
+  - **Features**:
+    - ✅ Account settings form displays correctly
+    - ✅ Email notification preferences are configurable (4 types)
+    - ✅ Settings save correctly
+    - ✅ All text is in Romanian
+    - ✅ Uses shared AccountSettingsForm for consistency
+  - **Status**: ✅ Complete - Phase 5 (Settings Page) complete, all phases done!
+
+- **Onboarding localStorage Implementation Complete** ✅ (January 2025)
+  - **Problem Solved**: Users no longer lose form data when refreshing during onboarding
+  - **Solution Implemented**: localStorage-based progress saving mechanism for all onboarding flows
+  - **Implementation Details**:
+    - ✅ Created `useOnboardingLocalStorage` hook (`src/components/features/onboarding/hooks/useOnboardingLocalStorage.ts`)
+      - Functions: `saveFormData()`, `getFormData<T>()`, `clearFormData()`, `clearAllOnboardingData()`
+      - Error handling with graceful degradation (works even if localStorage disabled)
+      - Browser compatibility checks
+      - Type-safe with TypeScript generics
+    - ✅ Updated `useOnboardingForm` hook
+      - Added `role` and `stepNumber` parameters
+      - Automatically clears localStorage on successful submission
+      - Maintains backward compatibility
+    - ✅ Updated all onboarding form components (13 forms total)
+      - Doctor forms (7): BasicInfo, BioExperience, LocationContact, Photo, Verification, Availability
+      - Club admin forms (5): BasicInfo, ContactSchedule, PricingAges, Photos, Verification
+      - Parent forms (1): AddChild
+      - All forms now include:
+        - Automatic save on form changes (500ms debounce)
+        - Automatic restore on component mount
+        - Automatic clear on successful submission
+  - **Features**:
+    - ✅ Debounced saves (500ms) to reduce localStorage writes
+    - ✅ Type-safe with existing form input types
+    - ✅ Error handling (forms work even if localStorage is disabled)
+    - ✅ Browser compatibility checks
+    - ✅ No breaking changes to existing functionality
+    - ✅ Follows existing code patterns and style
+  - **Storage Key Format**: `yuvoo_onboarding_{role}_{stepNumber}` (e.g., `yuvoo_onboarding_doctor_2`)
+  - **Status**: ✅ Complete - All forms now persist user input across page refreshes
 
 ### Recent Completions (January 2025)
 
@@ -941,6 +1477,39 @@
    - Ensuring SEO optimization
 
 ## Recent Changes
+
+### Authentication Improvements ✅ (January 2025)
+
+- **DashboardHeader SignOut Fix** ✅
+  - Fixed TypeError: "Cannot use 'in' operator to search for 'accessToken' in undefined"
+  - Added `useUser()` hook check before calling `stackApp.signOut()`
+  - Prevents error when session data is undefined or expired
+  - Improved error handling with graceful fallback to login redirect
+  - Location: `src/components/layout/DashboardHeader.tsx`
+
+- **Role-Based Redirect Helper Extraction** ✅
+  - Extracted `getRoleBasedRedirect()` function to shared helper file
+  - Created `src/lib/auth/redirects.ts` as centralized location for redirect logic
+  - Updated all usages:
+    - `src/app/auth/redirect/route.ts` - Now imports from helper
+    - `src/app/actions/auth.ts` - Now imports from helper (removed `await` since function is synchronous)
+    - `src/app/api/auth/signin/route.ts` - Removed unused local function
+  - Function is now reusable across the codebase
+  - Better maintainability and consistency
+
+- **Sign-In Flow Improvements** ✅
+  - Fixed sign-in route handler to properly handle NEXT_REDIRECT errors
+  - Updated SignInForm to use API route (`/api/auth/signin`) instead of client-side Stack Auth
+  - Properly handles 303/307 redirects and 200 responses
+  - Ensures users are redirected to `/auth/redirect` which then routes to correct dashboard/onboarding
+  - Fixed JSON parsing errors when response body is empty
+  - Location: `src/components/Form/SignInForm.tsx`, `src/app/api/auth/signin/route.ts`
+
+- **Password Reset Flow Fixes** ✅
+  - Fixed forgot password to include `callbackUrl` parameter (required by Stack Auth in server-side)
+  - Updated reset password form to accept both `code` (Stack Auth format) and `token` (backwards compatibility)
+  - Improved error handling for Stack Auth error codes (EMAIL_PASSWORD_MISMATCH)
+  - Location: `src/app/actions/auth.ts`, `src/components/Form/ResetPasswordForm.tsx`, `src/lib/auth/errors.ts`
 
 ### Quiz UI Implementation ✅ (January 2025 - Complete Quiz UI)
 

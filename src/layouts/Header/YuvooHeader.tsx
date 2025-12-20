@@ -53,15 +53,15 @@ const YuvooHeader = () => {
                     </div>
                   </div>
                   <div className="bd-header-bottom-right d-flex justify-content-end align-items-center">
-                    <div className="bd-header-btn d-none d-xl-block">
-                      <Link href={routes.quiz.intro} className="bd-btn">
+                    <div className="bd-header-btn d-none d-lg-block">
+                      <Link href={routes.authRedirect} className="bd-btn">
                         <span className="bd-btn-inner">
-                          <span className="bd-btn-normal">Începe Chestionarul</span>
-                          <span className="bd-btn-hover">Începe Chestionarul</span>
+                          <span className="bd-btn-normal">Autentificare</span>
+                          <span className="bd-btn-hover">Autentificare</span>
                         </span>
                       </Link>
                     </div>
-                    <div className="header-hamburger">
+                    <div className="header-hamburger d-lg-none">
                       <button
                         type="button"
                         className="hamburger-btn offcanvas-open-btn"

@@ -43,6 +43,7 @@ export const PostHogEvents = {
   DOCTOR_CONSULTATION_CREATED: "doctor_consultation_created",
   DOCTOR_CONSULTATION_CONFIRMED: "doctor_consultation_confirmed",
   DOCTOR_CONSULTATION_CANCELLED: "doctor_consultation_cancelled",
+  DOCTOR_CONSULTATION_COMPLETED: "doctor_consultation_completed",
 
   // Onboarding Events
   ONBOARDING_STARTED: "onboarding_started",

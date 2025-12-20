@@ -15,6 +15,7 @@
 
 "use client";
 
+import { useEffect } from "react";
 import { FieldError, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { updateClubVerification } from "@/app/actions/onboarding";
@@ -25,6 +26,7 @@ import { ServerErrorAlert } from "./components/ServerErrorAlert";
 import { InfoBox } from "./components/InfoBox";
 import { DocumentUploadField } from "./components";
 import { useOnboardingForm } from "./hooks/useOnboardingForm";
+import { saveFormData, getFormData } from "./hooks/useOnboardingLocalStorage";
 
 export function ClubVerificationForm() {
   const {
@@ -39,10 +41,40 @@ export function ClubVerificationForm() {
     },
   });
 
+  const role = "club_admin";
+  const stepNumber = 6;
+
+  // Restore form data from localStorage on mount
+  useEffect(() => {
+    const saved = getFormData<ClubVerificationInput>(role, stepNumber);
+    if (saved) {
+      // Restore all fields from saved data
+      Object.keys(saved).forEach((key) => {
+        const fieldKey = key as keyof ClubVerificationInput;
+        const value = saved[fieldKey];
+        if (value !== undefined && value !== null) {
+          setValue(fieldKey, value, { shouldValidate: false });
+        }
+      });
+    }
+  }, [setValue]);
+
+  // Save form data to localStorage on changes (debounced)
+  const formValues = watch();
+  useEffect(() => {
+    const timeoutId = setTimeout(() => {
+      saveFormData(role, stepNumber, formValues);
+    }, 500);
+
+    return () => clearTimeout(timeoutId);
+  }, [formValues]);
+
   const { handleSubmit, isLoading, serverError, setServerError } =
     useOnboardingForm<ClubVerificationInput>({
       onSubmitAction: updateClubVerification,
       onSuccessRoute: routes.onboarding.club.complete,
+      role,
+      stepNumber,
     });
 
   const documentUrls = watch("verificationDocuments") || [];

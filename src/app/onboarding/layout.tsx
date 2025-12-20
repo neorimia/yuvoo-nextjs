@@ -9,6 +9,7 @@ import { requireAuth } from "@/lib/auth/session";
 import { redirect } from "next/navigation";
 import { cookies } from "next/headers";
 import type { ReactNode } from "react";
+import { UserRoleEnum } from "@/modules/auth/auth.types";
 
 export default async function OnboardingLayout({ children }: { children: ReactNode }) {
   // During production builds, skip authentication checks entirely
@@ -80,13 +81,13 @@ export default async function OnboardingLayout({ children }: { children: ReactNo
  */
 function getDashboardUrl(role: string): string {
   switch (role) {
-    case "parent":
+    case UserRoleEnum.PARENT:
       return "/parent/dashboard";
-    case "club_admin":
+    case UserRoleEnum.CLUB_ADMIN:
       return "/club/dashboard";
-    case "doctor":
+    case UserRoleEnum.DOCTOR:
       return "/doctor/dashboard";
-    case "admin":
+    case UserRoleEnum.ADMIN:
       return "/admin/dashboard";
     default:
       return "/parent/dashboard";

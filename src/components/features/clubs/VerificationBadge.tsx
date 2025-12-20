@@ -87,8 +87,8 @@ const VerificationBadge: React.FC<VerificationBadgeProps> = ({
         return {
           label: "În așteptare",
           icon: "flaticon-clock",
-          bgClass: "bg-secondary",
-          textClass: "text-white",
+          bgClass: "bg-warning",
+          textClass: "text-dark",
           title: "Verificare în așteptare",
         };
       case "rejected":

@@ -100,7 +100,7 @@ function getStackServerApp(): StackServerApp {
         signUp: routes.register,
         passwordReset: routes.resetPassword, // Password reset page
         emailVerification: routes.emailConfirmation, // Email verification page
-        afterSignIn: routes.parent.dashboard, // Protected route - redirect after login (proxy will handle onboarding redirect)
+        afterSignIn: routes.authRedirect, // Role-based redirect proxy (handles onboarding and dashboard redirects)
         // Note: afterSignUp is not set here because we handle redirects manually in signUpAction
         // Setting it would cause Stack Auth to redirect automatically, conflicting with our custom redirect logic
       },

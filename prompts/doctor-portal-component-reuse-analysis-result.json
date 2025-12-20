@@ -1,0 +1,328 @@
+{
+  "summary": {
+    "totalComponentsAnalyzed": 16,
+    "directlyReusable": 2,
+    "abstractableToShared": 8,
+    "patternsExtractable": 4,
+    "estimatedEffortSavings": "high"
+  },
+  "directlyReusable": [
+    {
+      "componentName": "VerificationBadge",
+      "filePath": "src/components/features/clubs/VerificationBadge.tsx",
+      "reuseType": "exact",
+      "doctorPortalUsage": "Display doctor verification status badge in dashboard header and profile",
+      "requiredChanges": null,
+      "effort": "low"
+    },
+    {
+      "componentName": "ClubNotFoundState",
+      "filePath": "src/components/features/clubs/ClubNotFoundState.tsx",
+      "reuseType": "minimal-changes",
+      "doctorPortalUsage": "Display message when doctor profile is not found (change text from 'club' to 'doctor')",
+      "requiredChanges": [
+        "Update text: 'Club-ul' → 'Profilul doctorului'",
+        "Update onboarding route reference to doctor onboarding"
+      ],
+      "effort": "low"
+    }
+  ],
+  "abstractableToShared": [
+    {
+      "componentName": "ProfileCompletenessIndicator",
+      "filePath": "src/components/features/clubs/ProfileCompletenessIndicator.tsx",
+      "abstractionStrategy": "props-based",
+      "sharedComponentName": "ProfileCompletenessIndicator",
+      "suggestedLocation": "src/components/shared/ProfileCompletenessIndicator.tsx",
+      "propsInterface": "interface ProfileCompletenessIndicatorProps { percentage: number; completedFields: number; totalFields: number; missingFields: string[]; profileType?: 'club' | 'doctor'; editRoute: string; }",
+      "doctorPortalUsage": "Display doctor profile completeness percentage with missing fields and link to profile edit page",
+      "effort": "low",
+      "priority": "high"
+    },
+    {
+      "componentName": "BookingStatistics",
+      "filePath": "src/components/features/clubs/BookingStatistics.tsx",
+      "abstractionStrategy": "props-based",
+      "sharedComponentName": "StatisticsCards",
+      "suggestedLocation": "src/components/shared/StatisticsCards.tsx",
+      "propsInterface": "interface StatisticsCardsProps { stats: Array<{ label: string; value: number; icon: string; variant: string }>; viewAllRoute?: string; viewAllLabel?: string; }",
+      "doctorPortalUsage": "Display consultation statistics (total, pending, confirmed, completed) with same card layout and styling",
+      "effort": "medium",
+      "priority": "high"
+    },
+    {
+      "componentName": "RecentActivityFeed",
+      "filePath": "src/components/features/clubs/RecentActivityFeed.tsx",
+      "abstractionStrategy": "props-based",
+      "sharedComponentName": "RecentActivityFeed",
+      "suggestedLocation": "src/components/shared/RecentActivityFeed.tsx",
+      "propsInterface": "interface RecentActivityFeedProps<T> { items: T[]; title?: string; emptyMessage?: string; viewAllRoute?: string; viewAllLabel?: string; renderItem: (item: T) => React.ReactNode; getItemId: (item: T) => string; getItemDate: (item: T) => Date; }",
+      "doctorPortalUsage": "Display recent consultations with same feed layout, status badges, and date formatting",
+      "effort": "medium",
+      "priority": "high"
+    },
+    {
+      "componentName": "ClubDashboardHeader",
+      "filePath": "src/components/features/clubs/ClubDashboardHeader.tsx",
+      "abstractionStrategy": "props-based",
+      "sharedComponentName": "DashboardHeader",
+      "suggestedLocation": "src/components/shared/DashboardHeader.tsx",
+      "propsInterface": "interface DashboardHeaderProps { title: string; subtitle?: string; entityName: string; verificationStatus: 'pending' | 'in_review' | 'approved' | 'rejected'; variant?: 'club' | 'doctor'; }",
+      "doctorPortalUsage": "All doctor dashboard pages need consistent header with title, welcome message, and verification badge",
+      "effort": "low",
+      "priority": "high"
+    },
+    {
+      "componentName": "ClubBookingList",
+      "filePath": "src/components/features/clubs/ClubBookingList.tsx",
+      "abstractionStrategy": "composition",
+      "sharedComponentName": "EntityListWithFilters",
+      "suggestedLocation": "src/components/shared/EntityListWithFilters.tsx",
+      "propsInterface": "interface EntityListWithFiltersProps<T> { items: T[]; isLoading: boolean; error: string | null; statusFilter: string; dateFilter: string; onStatusFilterChange: (filter: string) => void; onDateFilterChange: (filter: string) => void; renderItem: (item: T) => React.ReactNode; emptyState: React.ReactNode; }",
+      "doctorPortalUsage": "Consultation list with same filtering pattern (status: all/pending/confirmed/completed/cancelled, date: all/upcoming/past)",
+      "effort": "high",
+      "priority": "medium"
+    },
+    {
+      "componentName": "ClubBookingCard",
+      "filePath": "src/components/features/clubs/ClubBookingCard.tsx",
+      "abstractionStrategy": "props-based",
+      "sharedComponentName": "BookingCard",
+      "suggestedLocation": "src/components/shared/BookingCard.tsx",
+      "propsInterface": "interface BookingCardProps { id: string; scheduledAt: Date; status: 'pending' | 'confirmed' | 'completed' | 'cancelled'; type: 'club_trial' | 'consultation'; notes?: string; child?: { firstName: string; lastName: string; age: number }; onConfirm?: (id: string) => void; onCancel?: (id: string) => void; onComplete?: (id: string) => void; onViewDetails?: (id: string) => void; isProcessing?: boolean; }",
+      "doctorPortalUsage": "Display consultation card with same layout, status badges, date formatting, and action buttons",
+      "effort": "medium",
+      "priority": "high"
+    },
+    {
+      "componentName": "ClubBookingDetailModal",
+      "filePath": "src/components/features/clubs/ClubBookingDetailModal.tsx",
+      "abstractionStrategy": "props-based",
+      "sharedComponentName": "BookingDetailModal",
+      "suggestedLocation": "src/components/shared/BookingDetailModal.tsx",
+      "propsInterface": "interface BookingDetailModalProps { booking: Booking | null; child?: Child; parent?: AuthUser | null; onConfirm?: (id: string) => void; onCancel?: (id: string) => void; onComplete?: (id: string) => void; isProcessing?: boolean; type: 'club_trial' | 'consultation'; }",
+      "doctorPortalUsage": "Display consultation detail modal with same structure (booking info, child info, parent contact, actions)",
+      "effort": "medium",
+      "priority": "high"
+    },
+    {
+      "componentName": "ClubSettingsForm",
+      "filePath": "src/components/features/clubs/ClubSettingsForm.tsx",
+      "abstractionStrategy": "composition",
+      "sharedComponentName": "AccountSettingsForm",
+      "suggestedLocation": "src/components/shared/AccountSettingsForm.tsx",
+      "propsInterface": "interface AccountSettingsFormProps { initialData?: { email: string; firstName: string; lastName: string; phone: string; emailNotificationPreferences: EmailNotificationPreferences }; notificationPreferencesConfig: { [key: string]: { label: string; description: string } }; onUpdate: (data: UpdateSettingsInput) => Promise<{ success: boolean; error?: string }>; }",
+      "doctorPortalUsage": "Settings form with same structure (account info, email notification preferences) but different notification types",
+      "effort": "medium",
+      "priority": "medium"
+    }
+  ],
+  "patternsExtractable": [
+    {
+      "patternName": "Dashboard Page Layout Pattern",
+      "patternType": "layout",
+      "currentLocation": "src/app/club/dashboard/page.tsx, src/app/club/profile/page.tsx, src/app/club/bookings/page.tsx, src/app/club/settings/page.tsx",
+      "suggestedLocation": "src/components/shared/DashboardPageLayout.tsx",
+      "description": "Reusable layout wrapper for dashboard pages with consistent header structure, content wrapper, and Bootstrap classes. Pattern: header section with icon + title + subtitle, followed by content section.",
+      "doctorPortalUsage": "All doctor dashboard pages need consistent layout structure (header + content wrapper)",
+      "effort": "low",
+      "priority": "high"
+    },
+    {
+      "patternName": "Status Badge Utility",
+      "patternType": "utility",
+      "currentLocation": "src/components/features/clubs/ClubBookingCard.tsx, src/components/features/clubs/ClubBookingDetailModal.tsx, src/components/features/clubs/RecentActivityFeed.tsx",
+      "suggestedLocation": "src/lib/utils/status-badges.ts",
+      "description": "Extract status badge configuration and rendering logic (pending, confirmed, completed, cancelled) into utility function. Returns badge config (label, class, icon) for consistent styling across components.",
+      "doctorPortalUsage": "Consultation status badges need same styling and labels as booking status badges",
+      "effort": "low",
+      "priority": "medium"
+    },
+    {
+      "patternName": "Date Formatting Utilities",
+      "patternType": "utility",
+      "currentLocation": "src/components/features/clubs/ClubBookingCard.tsx, src/components/features/clubs/ClubBookingDetailModal.tsx, src/components/features/clubs/RecentActivityFeed.tsx",
+      "suggestedLocation": "src/lib/utils/date-formatting.ts",
+      "description": "Extract date formatting functions (formatDate, formatTime, formatDateTime) using Romanian locale into shared utility. Used consistently across booking/consultation components.",
+      "doctorPortalUsage": "Consultation components need same Romanian date formatting (formatDate, formatTime, formatDateTime)",
+      "effort": "low",
+      "priority": "low"
+    },
+    {
+      "patternName": "Filter State Management Hook",
+      "patternType": "hook",
+      "currentLocation": "src/components/features/clubs/ClubBookingList.tsx",
+      "suggestedLocation": "src/hooks/useEntityFilters.ts",
+      "description": "Extract filter state management (status filter, date filter) and filtering logic into reusable hook. Handles filter state, applies filters to items array, returns filtered results.",
+      "doctorPortalUsage": "Consultation list needs same filtering pattern (status: all/pending/confirmed/completed/cancelled, date: all/upcoming/past)",
+      "effort": "medium",
+      "priority": "medium"
+    }
+  ],
+  "featureMapping": {
+    "dashboardOverview": {
+      "clubComponents": [
+        "ClubDashboardContent",
+        "ClubDashboardHeader",
+        "ProfileCompletenessIndicator",
+        "BookingStatistics",
+        "RecentActivityFeed"
+      ],
+      "doctorRequirements": [
+        "Profile completeness indicator",
+        "Verification status badge",
+        "Consultation statistics (total, pending, confirmed, completed)",
+        "Recent activity feed"
+      ],
+      "reuseStrategy": "Extract DashboardHeader, ProfileCompletenessIndicator, StatisticsCards, and RecentActivityFeed as shared components. Reuse VerificationBadge directly. Create DoctorDashboardContent orchestrator similar to ClubDashboardContent.",
+      "sharedComponentsNeeded": [
+        "DashboardHeader",
+        "ProfileCompletenessIndicator (shared)",
+        "StatisticsCards",
+        "RecentActivityFeed (shared)"
+      ]
+    },
+    "consultationManagement": {
+      "clubComponents": ["ClubBookingList", "ClubBookingCard", "ClubBookingDetailModal"],
+      "doctorRequirements": [
+        "List all consultations (filterable by status, date)",
+        "Consultation detail view with child profile info",
+        "Confirm/cancel consultation actions",
+        "Email notifications on status change"
+      ],
+      "reuseStrategy": "Abstract BookingCard and BookingDetailModal as shared components. Extract filter pattern into useEntityFilters hook. Create DoctorConsultationList similar to ClubBookingList but using shared components.",
+      "sharedComponentsNeeded": ["BookingCard", "BookingDetailModal", "useEntityFilters hook"]
+    },
+    "profileEditing": {
+      "clubComponents": ["ClubProfileEditForm"],
+      "doctorRequirements": [
+        "Edit basic information (name, bio, specialties)",
+        "Update credentials and certifications",
+        "Edit availability and consultation fees",
+        "Manage profile photo (Cloudinary integration)"
+      ],
+      "reuseStrategy": "ClubProfileEditForm is too domain-specific (sports, schedule, pricing, age groups). Doctor profile needs different fields (specialties, credentials, availability, fees). Create separate DoctorProfileEditForm but reuse form patterns (React Hook Form, Zod validation, Cloudinary uploads, Bootstrap components).",
+      "sharedComponentsNeeded": [
+        "Form patterns (already exist: SingleImageUploadField, GalleryUploadField, CharacterCounterTextarea, BootstrapInput, BootstrapSelect)"
+      ]
+    },
+    "settings": {
+      "clubComponents": ["ClubSettingsForm"],
+      "doctorRequirements": ["Email notification preferences", "Account settings"],
+      "reuseStrategy": "Abstract AccountSettingsForm with configurable notification preferences. Club and doctor have different notification types (club: bookingCreated, bookingConfirmed, etc. vs doctor: consultationCreated, consultationConfirmed, etc.) but same structure.",
+      "sharedComponentsNeeded": ["AccountSettingsForm (configurable notification preferences)"]
+    }
+  },
+  "recommendations": {
+    "highPriority": [
+      {
+        "action": "Extract DashboardHeader as shared component",
+        "component": "ClubDashboardHeader",
+        "reason": "All doctor dashboard pages need consistent header styling. Low effort, high reuse value.",
+        "estimatedEffort": "1-2 hours"
+      },
+      {
+        "action": "Extract ProfileCompletenessIndicator as shared component",
+        "component": "ProfileCompletenessIndicator",
+        "reason": "Doctor dashboard needs same profile completeness display. Only requires adding profileType prop and editRoute prop.",
+        "estimatedEffort": "1-2 hours"
+      },
+      {
+        "action": "Abstract BookingStatistics into StatisticsCards",
+        "component": "BookingStatistics",
+        "reason": "Consultation statistics need same card layout. High reuse value for statistics display across portals.",
+        "estimatedEffort": "2-3 hours"
+      },
+      {
+        "action": "Abstract BookingCard as shared component",
+        "component": "ClubBookingCard",
+        "reason": "Consultation cards need same layout and actions. High reuse value for booking/consultation display.",
+        "estimatedEffort": "2-3 hours"
+      },
+      {
+        "action": "Abstract BookingDetailModal as shared component",
+        "component": "ClubBookingDetailModal",
+        "reason": "Consultation detail modal needs same structure. High reuse value for booking/consultation details.",
+        "estimatedEffort": "2-3 hours"
+      },
+      {
+        "action": "Extract Dashboard Page Layout pattern",
+        "component": "All club dashboard pages",
+        "reason": "All doctor dashboard pages need consistent layout structure. Low effort, high consistency value.",
+        "estimatedEffort": "1-2 hours"
+      }
+    ],
+    "mediumPriority": [
+      {
+        "action": "Abstract RecentActivityFeed as shared component",
+        "component": "RecentActivityFeed",
+        "reason": "Doctor dashboard needs recent consultations feed. Medium effort due to generic typing requirements.",
+        "estimatedEffort": "3-4 hours"
+      },
+      {
+        "action": "Extract useEntityFilters hook",
+        "component": "ClubBookingList filtering logic",
+        "reason": "Consultation list needs same filtering pattern. Medium effort, reusable for other entity lists.",
+        "estimatedEffort": "2-3 hours"
+      },
+      {
+        "action": "Abstract AccountSettingsForm",
+        "component": "ClubSettingsForm",
+        "reason": "Doctor settings need same structure but different notification types. Medium effort due to configuration requirements.",
+        "estimatedEffort": "3-4 hours"
+      },
+      {
+        "action": "Extract status badge utility",
+        "component": "Status badge logic in multiple components",
+        "reason": "Consultation status badges need same styling. Low effort, improves consistency.",
+        "estimatedEffort": "1 hour"
+      }
+    ],
+    "lowPriority": [
+      {
+        "action": "Extract date formatting utilities",
+        "component": "Date formatting in booking components",
+        "reason": "Consultation components need same Romanian date formatting. Low effort, nice-to-have for consistency.",
+        "estimatedEffort": "1 hour"
+      },
+      {
+        "action": "Abstract EntityListWithFilters component",
+        "component": "ClubBookingList",
+        "reason": "Consultation list could use generic list component, but abstraction complexity may not be worth it. Consider after initial implementation.",
+        "estimatedEffort": "4-6 hours"
+      }
+    ]
+  },
+  "implementationPlan": {
+    "phase1": {
+      "description": "Extract high-priority shared components that provide immediate reuse value",
+      "components": [
+        "DashboardHeader",
+        "ProfileCompletenessIndicator (shared)",
+        "StatisticsCards",
+        "BookingCard",
+        "BookingDetailModal",
+        "DashboardPageLayout"
+      ],
+      "estimatedDays": 2
+    },
+    "phase2": {
+      "description": "Extract medium-priority shared components and patterns for enhanced reusability",
+      "components": [
+        "RecentActivityFeed (shared)",
+        "useEntityFilters hook",
+        "AccountSettingsForm",
+        "Status badge utility"
+      ],
+      "estimatedDays": 2
+    },
+    "phase3": {
+      "description": "Extract low-priority utilities and optimizations",
+      "components": [
+        "Date formatting utilities",
+        "EntityListWithFilters (if needed after initial implementation)"
+      ],
+      "estimatedDays": 1
+    }
+  }
+}
