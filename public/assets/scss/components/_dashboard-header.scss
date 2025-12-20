@@ -1,0 +1,118 @@
+@use "../utils" as *;
+
+// =============== DASHBOARD HEADER CSS START HERE ===============
+//
+// Styles for DashboardHeader component
+// Used in club dashboard, doctor dashboard, and other areas
+
+// Club Dashboard Header
+.bd-club-dashboard-header {
+  // Mobile-first responsive layout
+  @media #{$xs} {
+    gap: 1rem !important;
+    margin-bottom: 1.5rem !important;
+  }
+
+  &-title {
+    font-size: 32px;
+    font-weight: 600;
+    color: var(--bd-heading-primary);
+    line-height: 1.25;
+    font-family: var(--bd-ff-heading);
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+
+    @media #{$md} {
+      font-size: 28px;
+    }
+
+    @media #{$sm} {
+      font-size: 24px;
+    }
+
+    @media #{$xs} {
+      font-size: 20px;
+      line-height: 1.3;
+    }
+  }
+
+  &-subtitle {
+    font-size: 18px;
+    color: var(--bd-text-body);
+    line-height: 1.67;
+    font-family: var(--bd-ff-body);
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+
+    @media #{$sm} {
+      font-size: 16px;
+    }
+
+    @media #{$xs} {
+      font-size: 14px;
+      line-height: 1.5;
+    }
+
+    strong {
+      word-break: break-word;
+      overflow-wrap: break-word;
+    }
+  }
+}
+
+// Doctor Dashboard Header (shares same styles)
+.bd-doctor-dashboard-header {
+  // Mobile-first responsive layout
+  @media #{$xs} {
+    gap: 1rem !important;
+    margin-bottom: 1.5rem !important;
+  }
+
+  &-title {
+    font-size: 32px;
+    font-weight: 600;
+    color: var(--bd-heading-primary);
+    line-height: 1.25;
+    font-family: var(--bd-ff-heading);
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+
+    @media #{$md} {
+      font-size: 28px;
+    }
+
+    @media #{$sm} {
+      font-size: 24px;
+    }
+
+    @media #{$xs} {
+      font-size: 20px;
+      line-height: 1.3;
+    }
+  }
+
+  &-subtitle {
+    font-size: 18px;
+    color: var(--bd-text-body);
+    line-height: 1.67;
+    font-family: var(--bd-ff-body);
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+
+    @media #{$sm} {
+      font-size: 16px;
+    }
+
+    @media #{$xs} {
+      font-size: 14px;
+      line-height: 1.5;
+    }
+
+    strong {
+      word-break: break-word;
+      overflow-wrap: break-word;
+    }
+  }
+}
+
+// =============== DASHBOARD HEADER CSS END HERE ===============

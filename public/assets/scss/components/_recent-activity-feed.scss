@@ -1,0 +1,172 @@
+@use "../utils" as *;
+
+// =============== RECENT ACTIVITY FEED CSS START HERE ===============
+//
+// Styles for RecentActivityFeed component
+// Used in club dashboard, doctor dashboard, and other areas
+
+.bd-activity-feed-card {
+  border-radius: 12px;
+  transition: box-shadow 0.3s ease;
+
+  &:hover {
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08) !important;
+  }
+}
+
+.bd-activity-feed-title {
+  font-size: 20px;
+  font-weight: 600;
+  color: var(--bd-heading-primary);
+  line-height: 1.5;
+  font-family: var(--bd-ff-heading);
+
+  @media #{$md} {
+    font-size: 18px;
+  }
+
+  i {
+    color: var(--bd-theme-1);
+  }
+}
+
+.bd-activity-feed-view-all-btn {
+  border-color: var(--bd-theme-1);
+  color: var(--bd-theme-1);
+  transition: all 0.3s ease;
+  font-family: var(--bd-ff-body);
+  font-weight: 500;
+
+  &:hover {
+    background-color: var(--bd-theme-1);
+    border-color: var(--bd-theme-1);
+    color: var(--bd-common-white);
+  }
+}
+
+.bd-recent-activity-feed {
+  .list-group-item {
+    transition: background-color 0.2s ease;
+
+    &:hover {
+      background-color: rgba(0, 187, 174, 0.03);
+    }
+
+    &:last-child {
+      border-bottom: none !important;
+    }
+  }
+}
+
+.bd-activity-feed-item {
+  border-bottom: 1px solid var(--bd-grey-1) !important;
+  transition: background-color 0.2s ease;
+
+  &:hover {
+    background-color: rgba(0, 187, 174, 0.03);
+  }
+
+  &:last-child {
+    border-bottom: none !important;
+  }
+}
+
+.bd-activity-feed-booking-title {
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--bd-heading-primary);
+  line-height: 1.5;
+  font-family: var(--bd-ff-heading);
+}
+
+.bd-activity-status-badge {
+  font-size: 12px;
+  padding: 6px 12px;
+  font-weight: 500;
+  border-radius: 6px;
+  font-family: var(--bd-ff-body);
+
+  &-pending {
+    background-color: var(--bd-theme-2); // Orange
+    color: var(--bd-common-white);
+  }
+
+  &-confirmed {
+    background-color: var(--bd-theme-10); // Violet
+    color: var(--bd-common-white);
+  }
+
+  &-completed {
+    background-color: var(--bd-theme-1); // Turquoise
+    color: var(--bd-common-white);
+  }
+
+  &-cancelled {
+    background-color: var(--bd-theme-3); // Pink
+    color: var(--bd-common-white);
+  }
+}
+
+.bd-activity-feed-date {
+  font-size: 14px;
+  color: var(--bd-text-body);
+  line-height: 1.5;
+  font-family: var(--bd-ff-body);
+  margin-bottom: 0.5rem;
+
+  i {
+    color: var(--bd-theme-1);
+    opacity: 0.8;
+  }
+}
+
+.bd-activity-feed-notes {
+  font-size: 14px;
+  color: var(--bd-text-body);
+  line-height: 1.5;
+  font-family: var(--bd-ff-body);
+  margin-bottom: 0;
+
+  i {
+    color: var(--bd-theme-1);
+    opacity: 0.8;
+  }
+}
+
+.bd-activity-feed-detail-btn {
+  border-color: var(--bd-grey-1);
+  color: var(--bd-text-body);
+  transition: all 0.3s ease;
+  font-family: var(--bd-ff-body);
+
+  &:hover {
+    background-color: var(--bd-theme-1);
+    border-color: var(--bd-theme-1);
+    color: var(--bd-common-white);
+
+    i {
+      color: var(--bd-common-white);
+    }
+  }
+
+  i {
+    color: inherit;
+  }
+}
+
+.bd-activity-feed-empty {
+  &-icon {
+    font-size: 3rem;
+    color: var(--bd-grey-1);
+    display: block;
+    margin-bottom: 0.5rem;
+  }
+
+  &-text {
+    font-size: 16px;
+    color: var(--bd-text-body);
+    font-family: var(--bd-ff-body);
+  }
+}
+
+// =============== RECENT ACTIVITY FEED CSS END HERE ===============
