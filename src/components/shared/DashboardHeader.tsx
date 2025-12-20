@@ -69,9 +69,7 @@ const DashboardHeader: React.FC<DashboardHeaderProps> = ({
     variant === "doctor" ? "bd-doctor-dashboard-header" : "bd-club-dashboard-header";
 
   return (
-    <div
-      className={`${headerClasses} d-flex flex-column flex-md-row justify-content-between align-items-start align-items-md-center gap-3 gap-md-4 mb-4 mb-md-5 ${className}`}
-    >
+    <div className={`${headerClasses} w-100  mb-4 mb-md-5 ${className}`}>
       <div className="flex-grow-1 w-100 w-md-auto">
         <h1 className={`${headerClasses}-title mb-2 mb-md-2`}>{title}</h1>
         {subtitle ? (
