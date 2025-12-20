@@ -84,8 +84,10 @@ export function mapDbClubToClub(dbClub: typeof clubs.$inferSelect): Club {
     },
     schedule,
     pricing,
-    verificationStatus: dbClub.verificationStatus,
+    verificationStatus: dbClub.verificationStatus || "pending",
     verificationDocuments: dbClub.verificationDocuments || [],
+    profileComplete: dbClub.profileComplete ?? false,
+    rating: dbClub.rating || 0,
     createdAt: dbClub.createdAt,
     updatedAt: dbClub.updatedAt,
   };

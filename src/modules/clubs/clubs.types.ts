@@ -43,10 +43,12 @@ export interface Club {
     amount: number;
     currency: "RON";
   }[];
-  verificationStatus?: "pending" | "in_review" | "approved" | "rejected";
-  verificationDocuments?: string[];
-  createdAt: Date;
-  updatedAt: Date;
+  verificationStatus: "pending" | "in_review" | "approved" | "rejected"; // From schema: verification_status (notNull, default "pending")
+  verificationDocuments?: string[]; // From schema: verification_documents (text array, default '{}')
+  profileComplete: boolean; // From schema: profile_complete (notNull, default false)
+  rating: number; // From schema: rating (integer, default 0)
+  createdAt: Date; // From schema: created_at (notNull, defaultNow)
+  updatedAt: Date; // From schema: updated_at (notNull, defaultNow)
 }
 
 export interface ClubSearchFilters {
