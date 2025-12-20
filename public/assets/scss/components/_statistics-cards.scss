@@ -1,0 +1,249 @@
+@use "../utils" as *;
+
+// =============== STATISTICS CARDS CSS START HERE ===============
+//
+// Shared styles for StatisticsCards component
+// Supports both booking statistics (bd-booking-stat-*) and consultation statistics (bd-consultation-stat-*)
+// Used in club dashboard, doctor dashboard, and other areas
+
+// Booking Statistics
+.bd-booking-statistics {
+  .card {
+    transition:
+      transform 0.2s ease,
+      box-shadow 0.2s ease;
+
+    &:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1) !important;
+    }
+
+    .card-body {
+      border-radius: 8px;
+    }
+  }
+}
+
+.bd-booking-stat-card {
+  border-radius: 12px;
+  transition:
+    transform 0.3s ease,
+    box-shadow 0.3s ease;
+  overflow: hidden;
+
+  &:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.12) !important;
+  }
+
+  &-body {
+    padding: 1.5rem;
+    border-radius: 12px;
+    min-height: 160px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+  }
+
+  // Variant styles using Yuvoo color palette
+  &-body.bd-booking-stat-total {
+    background-color: var(--bd-theme-1); // Turquoise - Primary
+    color: var(--bd-common-white);
+  }
+
+  &-body.bd-booking-stat-pending {
+    background-color: var(--bd-theme-2); // Orange - Secondary/Warning
+    color: var(--bd-common-white);
+  }
+
+  &-body.bd-booking-stat-confirmed {
+    background-color: var(--bd-theme-10); // Violet - Accent
+    color: var(--bd-common-white);
+  }
+
+  &-body.bd-booking-stat-completed {
+    background-color: var(--bd-theme-1); // Turquoise - Primary/Success
+    color: var(--bd-common-white);
+  }
+
+  &-body.bd-booking-stat-cancelled {
+    background-color: var(--bd-theme-3); // Pink - Alert/Error
+    color: var(--bd-common-white);
+  }
+}
+
+.bd-booking-stat-icon {
+  font-size: 2.5rem;
+  display: block;
+  margin-bottom: 0.5rem;
+  opacity: 0.95;
+}
+
+.bd-booking-stat-value {
+  font-size: 32px;
+  font-weight: 700;
+  line-height: 1.25;
+  font-family: var(--bd-ff-heading);
+  margin-top: 0.75rem;
+  margin-bottom: 0.5rem;
+
+  @media #{$md} {
+    font-size: 28px;
+  }
+
+  @media #{$sm} {
+    font-size: 24px;
+  }
+}
+
+.bd-booking-stat-label {
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 1.5;
+  font-family: var(--bd-ff-body);
+  opacity: 0.95;
+  margin-bottom: 0;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.bd-booking-statistics-cta-btn {
+  border-color: var(--bd-theme-1);
+  color: var(--bd-theme-1);
+  transition: all 0.3s ease;
+  font-family: var(--bd-ff-body);
+  font-weight: 500;
+
+  &:hover {
+    background-color: var(--bd-theme-1);
+    border-color: var(--bd-theme-1);
+    color: var(--bd-common-white);
+  }
+
+  i {
+    color: inherit;
+  }
+}
+
+// Consultation Statistics (same styles as booking statistics, different prefix)
+.bd-consultation-statistics {
+  .card {
+    transition:
+      transform 0.2s ease,
+      box-shadow 0.2s ease;
+
+    &:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1) !important;
+    }
+
+    .card-body {
+      border-radius: 8px;
+    }
+  }
+}
+
+.bd-consultation-stat-card {
+  border-radius: 12px;
+  transition:
+    transform 0.3s ease,
+    box-shadow 0.3s ease;
+  overflow: hidden;
+
+  &:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.12) !important;
+  }
+
+  &-body {
+    padding: 1.5rem;
+    border-radius: 12px;
+    min-height: 160px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+  }
+
+  // Variant styles using Yuvoo color palette (same as booking stats)
+  &-body.bd-consultation-stat-total {
+    background-color: var(--bd-theme-1); // Turquoise - Primary
+    color: var(--bd-common-white);
+  }
+
+  &-body.bd-consultation-stat-pending {
+    background-color: var(--bd-theme-2); // Orange - Secondary/Warning
+    color: var(--bd-common-white);
+  }
+
+  &-body.bd-consultation-stat-confirmed {
+    background-color: var(--bd-theme-10); // Violet - Accent
+    color: var(--bd-common-white);
+  }
+
+  &-body.bd-consultation-stat-completed {
+    background-color: var(--bd-theme-1); // Turquoise - Primary/Success
+    color: var(--bd-common-white);
+  }
+
+  &-body.bd-consultation-stat-cancelled {
+    background-color: var(--bd-theme-3); // Pink - Alert/Error
+    color: var(--bd-common-white);
+  }
+}
+
+.bd-consultation-stat-icon {
+  font-size: 2.5rem;
+  display: block;
+  margin-bottom: 0.5rem;
+  opacity: 0.95;
+}
+
+.bd-consultation-stat-value {
+  font-size: 32px;
+  font-weight: 700;
+  line-height: 1.25;
+  font-family: var(--bd-ff-heading);
+  margin-top: 0.75rem;
+  margin-bottom: 0.5rem;
+
+  @media #{$md} {
+    font-size: 28px;
+  }
+
+  @media #{$sm} {
+    font-size: 24px;
+  }
+}
+
+.bd-consultation-stat-label {
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 1.5;
+  font-family: var(--bd-ff-body);
+  opacity: 0.95;
+  margin-bottom: 0;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.bd-consultation-statistics-cta-btn {
+  border-color: var(--bd-theme-1);
+  color: var(--bd-theme-1);
+  transition: all 0.3s ease;
+  font-family: var(--bd-ff-body);
+  font-weight: 500;
+
+  &:hover {
+    background-color: var(--bd-theme-1);
+    border-color: var(--bd-theme-1);
+    color: var(--bd-common-white);
+  }
+
+  i {
+    color: inherit;
+  }
+}
+
+// =============== STATISTICS CARDS CSS END HERE ===============
