@@ -43,7 +43,6 @@ export function StackAuthProvider({ children }: StackAuthProviderProps) {
     return new StackClientApp({
       projectId,
       publishableClientKey,
-      // @ts-expect-error - Stack Auth accepts these parameters despite TypeScript types
       tokenStore: "cookie",
     });
   }, []);

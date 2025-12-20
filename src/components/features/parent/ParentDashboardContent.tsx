@@ -284,7 +284,7 @@ const ParentDashboardContent: React.FC<ParentDashboardContentProps> = ({
                               <strong>
                                 {booking.type === "club_trial" ? "Ședință de probă" : "Consultație"}
                               </strong>
-                              <span className={`badge ${statusBadge.className} ms-2`}>
+                              <span className={`badge ${statusBadge.class} ms-2`}>
                                 {statusBadge.icon && <i className={`${statusBadge.icon} me-1`}></i>}
                                 {statusBadge.label}
                               </span>

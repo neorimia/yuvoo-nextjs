@@ -32,6 +32,50 @@ import { trackEventServer } from "@/lib/analytics/tracking-server";
 import { PostHogEvents, PostHogProperties } from "@/lib/analytics/events";
 
 /**
+ * Clean quiz input by removing $undefined values and handling array input
+ */
+function cleanQuizInput(input: unknown): CreateQuizInput {
+  // Handle array input (unwrap if needed)
+  let cleanedInput: unknown = input;
+  if (Array.isArray(input) && input.length > 0) {
+    cleanedInput = input[0];
+  }
+
+  // Recursively clean $undefined values and convert to proper undefined
+  function cleanObject(obj: unknown): unknown {
+    if (obj === null || obj === undefined) {
+      return obj;
+    }
+
+    if (Array.isArray(obj)) {
+      return obj.map(cleanObject);
+    }
+
+    if (typeof obj === "object") {
+      const cleaned: Record<string, unknown> = {};
+      for (const [key, value] of Object.entries(obj)) {
+        // Skip $undefined values
+        if (value === "$undefined" || value === null) {
+          continue; // Omit the property
+        }
+        // Recursively clean nested objects
+        cleaned[key] = cleanObject(value);
+      }
+      return cleaned;
+    }
+
+    // Skip $undefined strings
+    if (obj === "$undefined") {
+      return undefined;
+    }
+
+    return obj;
+  }
+
+  return cleanObject(cleanedInput) as CreateQuizInput;
+}
+
+/**
  * Submit quiz and get AI recommendations
  *
  * Validates input and orchestrates quiz submission.
@@ -43,12 +87,24 @@ import { PostHogEvents, PostHogProperties } from "@/lib/analytics/events";
  * @param input - Quiz submission with child ID (or placeholder), answers, and optional email
  *   - For authenticated users: email is optional (uses account email)
  *   - For unauthenticated users: email is optional but recommended to receive results
+ *   - Can accept array input (will unwrap automatically)
  * @returns Success response with quiz result or error response
  */
 export async function submitQuizAction(
-  input: CreateQuizInput
+  input: CreateQuizInput | CreateQuizInput[] | unknown
 ): Promise<{ success: boolean; result?: QuizResult; error?: string }> {
   try {
+    // Step 0: Clean and normalize input (handle array, $undefined values)
+    const cleanedInput = cleanQuizInput(input);
+
+    // Validate cleaned input structure
+    if (!cleanedInput || typeof cleanedInput !== "object") {
+      return {
+        success: false,
+        error: "Formatul datelor este invalid. Te rugăm să reîncărci pagina și să încerci din nou.",
+      };
+    }
+
     // Step 1: Check authentication (optional)
     const session = await getSession();
 
@@ -76,7 +132,7 @@ export async function submitQuizAction(
 
     // Step 3: Handle placeholder child ID BEFORE validation
     // If using placeholder, create temporary child first
-    let childId = input.childId;
+    let childId = cleanedInput.childId;
     let needsTemporaryChild = false;
 
     if (!childId || childId === "placeholder-child-id") {
@@ -86,7 +142,7 @@ export async function submitQuizAction(
     }
 
     // Step 4: Validate answers and optional email (separate from childId validation)
-    const answersValidation = quizAnswersSchema.safeParse(input.answers);
+    const answersValidation = quizAnswersSchema.safeParse(cleanedInput.answers);
 
     if (!answersValidation.success) {
       // Extract first validation error message (in Romanian)
@@ -98,9 +154,9 @@ export async function submitQuizAction(
     }
 
     // Validate email if provided (for unauthenticated users)
-    if (input.email && input.email.trim() !== "") {
+    if (cleanedInput.email && cleanedInput.email.trim() !== "") {
       const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-      if (!emailRegex.test(input.email.trim())) {
+      if (!emailRegex.test(cleanedInput.email.trim())) {
         return {
           success: false,
           error: "Email-ul introdus nu este valid.",
@@ -173,9 +229,9 @@ export async function submitQuizAction(
         emailToSend = user.email;
         authUser = user;
       }
-    } else if (input.email && input.email.trim() !== "") {
+    } else if (cleanedInput.email && cleanedInput.email.trim() !== "") {
       // Unauthenticated user - use provided email
-      emailToSend = input.email.trim();
+      emailToSend = cleanedInput.email.trim();
       // No authUser for unauthenticated users (will be undefined)
     }
 
@@ -246,10 +302,37 @@ export async function submitQuizAction(
       };
     }
 
+    // Handle connection/timeout errors
+    if (
+      error instanceof Error &&
+      (error.message.includes("Connection terminated") ||
+        error.message.includes("timeout") ||
+        error.message.includes("ECONNRESET") ||
+        error.message.includes("fetch failed"))
+    ) {
+      return {
+        success: false,
+        error:
+          "Conexiunea a fost întreruptă. Te rugăm să verifici conexiunea la internet și să încerci din nou. Dacă problema persistă, contactează-ne.",
+      };
+    }
+
+    // Handle network errors
+    if (error instanceof Error && error.name === "TypeError" && error.message.includes("fetch")) {
+      return {
+        success: false,
+        error:
+          "Eroare de conexiune. Te rugăm să verifici conexiunea la internet și să încerci din nou.",
+      };
+    }
+
     // Return error message (already in Romanian from service layer)
     return {
       success: false,
-      error: error instanceof Error ? error.message : "Eroare la trimiterea chestionarului",
+      error:
+        error instanceof Error
+          ? error.message
+          : "Eroare la trimiterea chestionarului. Te rugăm să încerci din nou.",
     };
   }
 }

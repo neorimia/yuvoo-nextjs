@@ -109,7 +109,7 @@ const ParentBookingDetail: React.FC<ParentBookingDetailProps> = ({ booking, enti
                 <div>
                   <small className="text-muted d-block">Status</small>
                   <span
-                    className={`badge ${statusBadge.className} ${statusBadge.icon ? "d-inline-flex align-items-center" : ""}`}
+                    className={`badge ${statusBadge.class} ${statusBadge.icon ? "d-inline-flex align-items-center" : ""}`}
                   >
                     {statusBadge.icon && <i className={`${statusBadge.icon} me-1`}></i>}
                     {statusBadge.label}
