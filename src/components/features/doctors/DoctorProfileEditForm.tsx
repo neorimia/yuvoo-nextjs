@@ -175,21 +175,22 @@ const DoctorProfileEditForm: React.FC<DoctorProfileEditFormProps> = ({ doctor })
           ...(data.lastName && { lastName: data.lastName }),
           ...(data.title !== undefined && { title: data.title }),
           ...(data.specialty && { specialty: data.specialty }),
-          ...(data.secondarySpecialties &&
-            Array.isArray(data.secondarySpecialties) &&
-            data.secondarySpecialties.length > 0 && {
+          ...(data.secondarySpecialties !== undefined &&
+            Array.isArray(data.secondarySpecialties) && {
               secondarySpecialties: data.secondarySpecialties,
             }),
-          ...(data.credentials &&
-            Array.isArray(data.credentials) &&
-            data.credentials.length > 0 && { credentials: data.credentials }),
+          ...(data.credentials !== undefined &&
+            Array.isArray(data.credentials) && {
+              credentials: data.credentials,
+            }),
           ...(data.bio && { bio: data.bio }),
           ...(data.yearsOfExperience !== undefined && {
             yearsOfExperience: data.yearsOfExperience,
           }),
-          ...(data.languages &&
-            Array.isArray(data.languages) &&
-            data.languages.length > 0 && { languages: data.languages }),
+          ...(data.languages !== undefined &&
+            Array.isArray(data.languages) && {
+              languages: data.languages,
+            }),
           ...(data.city && { city: data.city }),
           ...(data.district && { district: data.district }),
           ...(data.address && { address: data.address }),
