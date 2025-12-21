@@ -10,10 +10,7 @@
 import React, { useState } from "react";
 import Link from "next/link";
 import { routes } from "@/lib/routes";
-import {
-  getSpecialtyDisplayName,
-  getPriorityDisplayName,
-} from "@/modules/quiz/doctor-specialist-mapping.service";
+import { getSpecialtyDisplayName, getPriorityDisplayName } from "@/lib/utils/specialist-display";
 import { getRecommendedDoctorsAction } from "@/app/actions/doctors";
 import DoctorCard from "@/components/features/doctors/DoctorCard";
 import type { SpecialistRecommendation } from "@/modules/quiz/quiz.types";

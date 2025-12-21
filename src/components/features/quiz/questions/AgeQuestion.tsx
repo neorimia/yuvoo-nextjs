@@ -9,37 +9,10 @@
 import React, { memo } from "react";
 import { useQuiz } from "../QuizContext";
 import QuestionWrapper from "../QuestionWrapper";
+import RangeInput from "@/components/shared/RangeInput";
 
 const AgeQuestion = memo(function AgeQuestion() {
-  const { answers, setAnswer, setAnswers, errors } = useQuiz();
-
-  const handleAgeChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const inputValue = e.target.value;
-
-    // Allow empty input (for clearing)
-    if (inputValue === "") {
-      // Clear the age - use setAnswers to remove the field
-      // TypeScript: PartialQuizAnswers allows undefined for age
-      setAnswers({ age: undefined });
-      return;
-    }
-
-    // Parse and validate
-    const value = parseInt(inputValue, 10);
-    if (!isNaN(value) && value >= 4 && value <= 14) {
-      setAnswer("age", value);
-    }
-    // If invalid, don't update (prevents invalid values)
-  };
-
-  const handleAgeBlur = (e: React.FocusEvent<HTMLInputElement>) => {
-    const value = parseInt(e.target.value, 10);
-    // Clear invalid values on blur
-    if (isNaN(value) || value < 4 || value > 14) {
-      // TypeScript: PartialQuizAnswers allows undefined for age
-      setAnswers({ age: undefined });
-    }
-  };
+  const { answers, setAnswer, errors } = useQuiz();
 
   const handleGenderChange = (gender: "male" | "female" | "other") => {
     setAnswer("gender", gender);
@@ -52,38 +25,23 @@ const AgeQuestion = memo(function AgeQuestion() {
       helpText="Acceptăm copii cu vârste între 4 și 14 ani."
       error={errors.age}
     >
-      {/* Age input */}
-      <div className="mb-4">
-        <label htmlFor="age" className="form-label fw-semibold">
-          Vârsta <span className="text-danger">*</span>
-        </label>
-        <input
-          type="number"
-          className={`form-control form-control-lg ${errors.age ? "is-invalid border-danger" : ""}`}
-          id="age"
-          name="age"
-          min={4}
-          max={14}
-          step={1}
-          value={answers.age || ""}
-          onChange={handleAgeChange}
-          onBlur={handleAgeBlur}
-          placeholder="Introdu vârsta (4-14 ani)"
-          required
-          aria-describedby={errors.age ? "age-error age-help" : "age-help"}
-          aria-invalid={errors.age ? "true" : "false"}
-        />
-        {errors.age && (
-          <div id="age-error" className="invalid-feedback d-block">
-            <i className="bi bi-exclamation-circle me-1"></i>
-            {errors.age}
-          </div>
-        )}
-        <div id="age-help" className={`form-text ${errors.age ? "text-danger" : ""}`}>
-          <i className="bi bi-info-circle me-1"></i>
-          Introdu vârsta în ani (minimum 4, maximum 14).
-        </div>
-      </div>
+      {/* Age input - Range slider */}
+      <RangeInput
+        id="age"
+        name="age"
+        label="Vârsta"
+        min={4}
+        max={14}
+        step={1}
+        value={answers.age || 4}
+        onChange={(value) => setAnswer("age", value)}
+        required
+        error={errors.age}
+        helpText="Glisează pentru a selecta vârsta (4-14 ani)."
+        valueSuffix="ani"
+        minLabel="4 ani"
+        maxLabel="14 ani"
+      />
 
       {/* Gender selection (optional) */}
       <div className="mb-3">
