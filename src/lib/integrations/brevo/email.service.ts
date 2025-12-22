@@ -361,8 +361,8 @@ export async function sendQuizResults(
 
     // Render React Email component - child is guaranteed to be valid at this point
     const React = await import("react");
-    const { QuizResultsEmail } = await import("@/emails/quiz-results-email");
-    const { renderEmail } = await import("@/emails/utils/render-email");
+    const { QuizResultsEmail } = await import("../../../../emails/quiz-results-email");
+    const { renderEmail } = await import("../../../../emails/utils/render-email");
 
     // Double-check child is still valid before creating component
     if (!child || !child.firstName || !child.lastName) {
