@@ -10,7 +10,7 @@ import {
   bookingConfirmationTemplate,
   bookingCancellationTemplate,
   bookingReminderTemplate,
-  quizResultsTemplate,
+  // quizResultsTemplate, // Legacy template - kept for backward compatibility, now using React Email
   welcomeEmailTemplate,
   clubVerificationStatusTemplate,
   doctorVerificationStatusTemplate,
@@ -306,8 +306,48 @@ export async function sendQuizResults(
       return;
     }
 
-    // Generate email template
-    const { html, text } = quizResultsTemplate(quizResult, child, user || undefined);
+    // Generate unsubscribe token for one-click unsubscribe
+    const { generateEmailToken } = await import("@/lib/utils/email-tokens");
+    const unsubscribeToken = generateEmailToken(userEmail);
+
+    // Fetch clubs for recommended sports (top 3)
+    const topRecommendations = [...quizResult.recommendations]
+      .sort((a, b) => b.matchScore - a.matchScore)
+      .slice(0, 3);
+
+    const { getClubsBySport } = await import("@/modules/clubs/clubs.service");
+    const clubsBySport = new Map<string, (typeof import("@/modules/clubs/clubs.types").Club)[]>();
+
+    // Fetch clubs for each recommended sport (limit to verified clubs, max 3 per sport)
+    for (const rec of topRecommendations) {
+      try {
+        const clubs = await getClubsBySport(rec.sportId);
+        // Filter for verified clubs and limit to 3
+        const verifiedClubs = clubs.filter((club) => club.verified).slice(0, 3);
+        if (verifiedClubs.length > 0) {
+          clubsBySport.set(rec.sportId, verifiedClubs);
+        }
+      } catch (error) {
+        // Log but don't fail - clubs are optional
+        console.error(`[Email Service] Error fetching clubs for sport ${rec.sportId}:`, error);
+      }
+    }
+
+    // Render React Email component
+    const React = await import("react");
+    const { QuizResultsEmail } = await import("@/emails/quiz-results-email");
+    const { renderEmail } = await import("@/emails/utils/render-email");
+
+    const emailComponent = React.createElement(QuizResultsEmail, {
+      quizResult,
+      child,
+      userEmail,
+      user,
+      unsubscribeToken,
+      clubsBySport,
+    });
+
+    const { html, text } = await renderEmail(emailComponent);
 
     // Send email
     const result = await sendEmail({

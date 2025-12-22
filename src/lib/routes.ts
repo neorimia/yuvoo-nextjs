@@ -79,6 +79,7 @@ export const routes = {
   terms: "/termeni",
   cookies: "/cookies",
   gdpr: "/gdpr-parinti",
+  unsubscribe: "/dezabonare",
 
   // Legacy Kindedo Routes (to be migrated/removed or redirected)
   // These routes should redirect to new SEO-friendly routes
@@ -133,6 +134,7 @@ export const routes = {
     },
     savedItems: "/parent/saved",
     settings: "/parent/settings",
+    emailPreferences: "/parent/email-preferences",
     profile: "/parent/profile",
     bookings: "/parent/bookings",
     bookingsDetails: (id: string) => `/parent/bookings/${id}`,

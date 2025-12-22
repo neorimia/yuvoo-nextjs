@@ -55,6 +55,11 @@ export const PostHogEvents = {
   REVIEW_SUBMITTED: "review_submitted",
   REVIEW_APPROVED: "review_approved",
   REVIEW_REJECTED: "review_rejected",
+
+  // Email Events
+  EMAIL_UNSUBSCRIBED: "email_unsubscribed",
+  EMAIL_PREFERENCES_UPDATED: "email_preferences_updated",
+  EMAIL_RESUBSCRIBED: "email_resubscribed",
 } as const;
 
 /**
@@ -96,6 +101,10 @@ export const PostHogProperties = {
   ONBOARDING_ROLE: "onboardingRole",
   ONBOARDING_STEP: "onboardingStep",
   ONBOARDING_TOTAL_STEPS: "onboardingTotalSteps",
+
+  // Email Properties
+  UNSUBSCRIBE_METHOD: "unsubscribeMethod", // "form" or "token"
+  EMAIL_PREFERENCES: "emailPreferences",
 
   // Search/Filter Properties
   SEARCH_QUERY: "searchQuery",
