@@ -55,13 +55,16 @@ export const QuizResultsEmail = ({
   const appUrl = process.env.NEXT_PUBLIC_APP_URL || "https://yuvoo.ro";
   const userName = user?.firstName || user?.name?.split(" ")[0] || "Utilizator";
 
-  // Safety checks for child data
-  if (!child || !child.firstName || !child.lastName) {
-    throw new Error("Child data is required and must include firstName and lastName");
+  // Safety checks for child data - provide fallbacks for missing data
+  if (!child) {
+    throw new Error("Child data is required");
   }
 
-  const childName = `${child.firstName} ${child.lastName}`;
-  const childAge = child.age;
+  // Handle null/undefined firstName and lastName with fallbacks
+  const childFirstName = child.firstName || "Copil";
+  const childLastName = child.lastName || "";
+  const childName = childLastName ? `${childFirstName} ${childLastName}` : childFirstName;
+  const childAge = child.age || 0;
   const childGender =
     child.gender === "male" ? "băiat" : child.gender === "female" ? "fată" : "copil";
 

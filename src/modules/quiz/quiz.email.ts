@@ -17,6 +17,11 @@ import type { AuthUser } from "@/modules/auth/auth.types";
  * Map database child to Child type
  */
 function mapDbChildToChild(dbChild: typeof children.$inferSelect): Child {
+  // Validate required fields
+  if (!dbChild.firstName || !dbChild.lastName) {
+    throw new Error(`Invalid child data: missing firstName or lastName for child ${dbChild.id}`);
+  }
+
   // Calculate age from dateOfBirth
   const today = new Date();
   const birthDate = new Date(dbChild.dateOfBirth);
