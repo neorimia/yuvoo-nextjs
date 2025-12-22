@@ -2,9 +2,9 @@ import React from "react";
 import type { Metadata } from "next";
 import QuizContainer from "@/components/features/quiz/QuizContainer";
 
-// Increase timeout for quiz submission (AI processing can take up to 60 seconds)
-// This is especially important for production where network latency may be higher
-export const maxDuration = 60; // 60 seconds (Vercel Pro plan limit)
+// Optimized timeout for quiz submission with GPT-3.5-turbo (typically 2-8 seconds)
+// Set to 30 seconds to allow for network latency and potential retries
+export const maxDuration = 30; // 30 seconds (optimized for GPT-3.5-turbo)
 
 export const metadata: Metadata = {
   title: "Completează Chestionarul | Yuvoo",
