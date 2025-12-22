@@ -9,10 +9,13 @@
  */
 
 import { NextRequest, NextResponse } from "next/server";
+import { cookies } from "next/headers";
 import { stackServerApp } from "@/lib/auth/stack";
 import { routes } from "@/lib/routes";
 
 export async function GET(request: NextRequest) {
+  // Make route dynamic - this route uses searchParams and cannot be prerendered
+  await cookies();
   try {
     // Extract verification code from query parameters
     const searchParams = request.nextUrl.searchParams;

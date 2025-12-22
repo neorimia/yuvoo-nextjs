@@ -43,7 +43,7 @@ export function StackAuthProvider({ children }: StackAuthProviderProps) {
     return new StackClientApp({
       projectId,
       publishableClientKey,
-      tokenStore: "cookie",
+      tokenStore: "nextjs-cookie",
     });
   }, []);
 
