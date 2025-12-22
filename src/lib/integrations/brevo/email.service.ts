@@ -306,6 +306,16 @@ export async function sendQuizResults(
       return;
     }
 
+    // Validate child data
+    if (!child || !child.firstName || !child.lastName) {
+      console.error("[Email Service] Invalid child data for quiz results:", {
+        childId: child?.id,
+        hasFirstName: !!child?.firstName,
+        hasLastName: !!child?.lastName,
+      });
+      return;
+    }
+
     // Generate unsubscribe token for one-click unsubscribe
     const { generateEmailToken } = await import("@/lib/utils/email-tokens");
     const unsubscribeToken = generateEmailToken(userEmail);
