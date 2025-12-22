@@ -341,7 +341,8 @@ export async function sendQuizResults(
       .slice(0, 3);
 
     const { getClubsBySport } = await import("@/modules/clubs/clubs.service");
-    const clubsBySport = new Map<string, (typeof import("@/modules/clubs/clubs.types").Club)[]>();
+    // Type will be inferred from getClubsBySport return type (Club[])
+    const clubsBySport = new Map<string, Awaited<ReturnType<typeof getClubsBySport>>>();
 
     // Fetch clubs for each recommended sport (limit to verified clubs, max 3 per sport)
     for (const rec of topRecommendations) {
