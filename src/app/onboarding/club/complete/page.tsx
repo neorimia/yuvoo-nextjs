@@ -4,6 +4,7 @@
  * Final step - show success message and redirect to dashboard.
  */
 
+import { cookies } from "next/headers";
 import { requireRole } from "@/lib/auth/session";
 import { completeClubOnboarding } from "@/app/actions/onboarding";
 import {
@@ -24,15 +25,23 @@ const CLUB_STEPS: OnboardingStep[] = [
 ];
 
 export default async function ClubCompletePage() {
+  // Make page dynamic - this page requires authentication
+  await cookies();
+
   const session = await requireRole("club_admin");
 
-  // Mark onboarding as complete
-  const result = await completeClubOnboarding();
+  // During production builds, skip Server Actions
+  const isProductionBuild = process.env.NEXT_PHASE === "phase-production-build";
 
-  // If completion failed, we should handle it
-  // For now, we'll still show the page (component will handle redirect)
-  if (!result.success) {
-    console.error("Error completing onboarding:", result.error);
+  if (!isProductionBuild) {
+    // Mark onboarding as complete (runtime only)
+    const result = await completeClubOnboarding();
+
+    // If completion failed, we should handle it
+    // For now, we'll still show the page (component will handle redirect)
+    if (!result.success) {
+      console.error("Error completing onboarding:", result.error);
+    }
   }
 
   return (
