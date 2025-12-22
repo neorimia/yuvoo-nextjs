@@ -13,11 +13,11 @@ if (!process.env.OPENAI_API_KEY) {
 
 export const openai = new OpenAI({
   apiKey: process.env.OPENAI_API_KEY,
-  timeout: 45000, // 45 seconds timeout (increased for production reliability)
-  maxRetries: 2, // Reduced retries to fail faster and use fallback
+  timeout: 25000, // 25 seconds timeout (optimized for Vercel Hobby tier + GPT-3.5)
+  maxRetries: 1, // Single retry to fail faster and use fallback
 });
 
 // Model configuration for quiz recommendations
-export const AI_MODEL = "gpt-4-turbo-preview"; // GPT-4 Turbo for best quality
-export const AI_TEMPERATURE = 0.7; // Balanced creativity and consistency
+export const AI_MODEL = "gpt-3.5-turbo"; // GPT-3.5 Turbo for speed (2-8s response vs 10-45s for GPT-4)
+export const AI_TEMPERATURE = 0.8; // Slightly higher for creative recommendations with GPT-3.5
 export const AI_MAX_TOKENS = 2000; // Maximum tokens for response
