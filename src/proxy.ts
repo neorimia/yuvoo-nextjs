@@ -242,7 +242,18 @@ export async function proxy(request: NextRequest) {
 
   try {
     // Get Stack Auth user
-    const stackUser = await stackServerApp.getUser();
+    // Type assertion needed due to Stack Auth version compatibility
+    const stackUser = await (
+      stackServerApp as unknown as {
+        getUser: () => Promise<{
+          id: string;
+          primaryEmail: string | null;
+          primaryEmailVerified?: boolean;
+          displayName?: string | null;
+          clientMetadata?: Record<string, unknown> | null;
+        } | null>;
+      }
+    ).getUser();
 
     // --- Unauthenticated Users ---
     if (!stackUser) {

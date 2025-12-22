@@ -147,11 +147,13 @@ function getStackClientApp(): StackClientApp {
     const isServer = isServerSide();
 
     if (isServer) {
-      // On server side: inherit from server app for consistency
-      // This ensures both use the same project configuration
+      // On server side: use the same configuration as server app
+      // Note: inheritsFrom was removed in Stack Auth v2.4.8, so we initialize independently
       const serverApp = getStackServerApp();
       _stackClientApp = new StackClientApp({
-        inheritsFrom: serverApp as unknown as StackServerApp, // Type assertion needed due to Stack Auth's type system
+        projectId: serverApp.projectId,
+        publishableClientKey: process.env.NEXT_PUBLIC_STACK_PUBLISHABLE_CLIENT_KEY!,
+        tokenStore: "nextjs-cookie",
       });
     } else {
       // On client side: initialize independently using public keys

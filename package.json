@@ -27,6 +27,7 @@
   },
   "dependencies": {
     "@getbrevo/brevo": "^3.0.1",
+    "@hookform/resolvers": "^5.2.2",
     "@neondatabase/serverless": "^0.10.3",
     "@react-email/components": "^1.0.2",
     "@react-email/render": "^1.4.0",

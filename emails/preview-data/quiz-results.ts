@@ -106,6 +106,7 @@ export const mockQuizResult: QuizResult = {
   specialistRecommendation: {
     specialty: "orthopedist",
     needed: false,
+    reason: "Nu este necesară consultarea unui specialist în acest moment.",
   },
   createdAt: new Date(),
 };
@@ -134,8 +135,16 @@ export const mockUser: AuthUser = {
   name: "Ion Popescu",
   firstName: "Ion",
   lastName: "Popescu",
+  phone: "+40 700 000 000",
   role: "parent",
   emailVerified: true,
+  emailNotificationPreferences: {
+    bookingCreated: true,
+    bookingConfirmed: true,
+    bookingCancelled: true,
+    bookingCompleted: true,
+    bookingReminder: true,
+  },
   createdAt: new Date("2024-01-01"),
   updatedAt: new Date("2024-01-01"),
 };

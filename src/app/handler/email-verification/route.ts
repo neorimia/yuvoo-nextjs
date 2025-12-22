@@ -30,7 +30,7 @@ export async function GET(request: NextRequest) {
     try {
       const result = await stackServerApp.verifyEmail(code);
 
-      if ("status" in result && result.status === "ok") {
+      if (result && "status" in result && result.status === "ok") {
         // Email verified successfully - redirect to email confirmation page with success message
         // Use absolute URL construction to ensure correct base URL
         const baseUrl = request.nextUrl.origin;
