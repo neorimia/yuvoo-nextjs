@@ -306,12 +306,27 @@ export async function sendQuizResults(
       return;
     }
 
-    // Validate child data
-    if (!child || !child.firstName || !child.lastName) {
+    // Validate child data - strict validation before proceeding
+    if (!child) {
+      console.error("[Email Service] Child is null or undefined for quiz results");
+      return;
+    }
+
+    if (!child.firstName || !child.lastName) {
       console.error("[Email Service] Invalid child data for quiz results:", {
-        childId: child?.id,
-        hasFirstName: !!child?.firstName,
-        hasLastName: !!child?.lastName,
+        childId: child.id,
+        hasFirstName: !!child.firstName,
+        hasLastName: !!child.lastName,
+        firstName: child.firstName,
+        lastName: child.lastName,
+      });
+      return;
+    }
+
+    // Validate quiz result has recommendations
+    if (!quizResult.recommendations || quizResult.recommendations.length === 0) {
+      console.error("[Email Service] Quiz result has no recommendations:", {
+        quizResultId: quizResult.id,
       });
       return;
     }
@@ -343,10 +358,16 @@ export async function sendQuizResults(
       }
     }
 
-    // Render React Email component
+    // Render React Email component - child is guaranteed to be valid at this point
     const React = await import("react");
     const { QuizResultsEmail } = await import("@/emails/quiz-results-email");
     const { renderEmail } = await import("@/emails/utils/render-email");
+
+    // Double-check child is still valid before creating component
+    if (!child || !child.firstName || !child.lastName) {
+      console.error("[Email Service] Child data became invalid before rendering");
+      return;
+    }
 
     const emailComponent = React.createElement(QuizResultsEmail, {
       quizResult,
