@@ -10,7 +10,7 @@ import {
   bookingConfirmationTemplate,
   bookingCancellationTemplate,
   bookingReminderTemplate,
-  quizResultsTemplate,
+  // quizResultsTemplate, // Legacy template - kept for backward compatibility, now using React Email
   welcomeEmailTemplate,
   clubVerificationStatusTemplate,
   doctorVerificationStatusTemplate,
@@ -306,8 +306,110 @@ export async function sendQuizResults(
       return;
     }
 
-    // Generate email template
-    const { html, text } = quizResultsTemplate(quizResult, child, user || undefined);
+    // Validate child data - strict validation before proceeding
+    if (!child) {
+      console.error("[Email Service] Child is null or undefined for quiz results");
+      return;
+    }
+
+    if (!child.firstName || !child.lastName) {
+      console.error("[Email Service] Invalid child data for quiz results:", {
+        childId: child.id,
+        hasFirstName: !!child.firstName,
+        hasLastName: !!child.lastName,
+        firstName: child.firstName,
+        lastName: child.lastName,
+      });
+      return;
+    }
+
+    // Validate quiz result has recommendations
+    if (!quizResult.recommendations || quizResult.recommendations.length === 0) {
+      console.error("[Email Service] Quiz result has no recommendations:", {
+        quizResultId: quizResult.id,
+      });
+      return;
+    }
+
+    // Generate unsubscribe token for one-click unsubscribe
+    const { generateEmailToken } = await import("@/lib/utils/email-tokens");
+    const unsubscribeToken = generateEmailToken(userEmail);
+
+    // Fetch clubs for recommended sports (top 3)
+    const topRecommendations = [...quizResult.recommendations]
+      .sort((a, b) => b.matchScore - a.matchScore)
+      .slice(0, 3);
+
+    const { getClubsBySport } = await import("@/modules/clubs/clubs.service");
+    // Type will be inferred from getClubsBySport return type (Club[])
+    const clubsBySport = new Map<string, Awaited<ReturnType<typeof getClubsBySport>>>();
+
+    // Fetch clubs for each recommended sport (limit to verified clubs, max 3 per sport)
+    for (const rec of topRecommendations) {
+      try {
+        const clubs = await getClubsBySport(rec.sportId);
+        // Filter for verified clubs and limit to 3
+        const verifiedClubs = clubs.filter((club) => club.verified).slice(0, 3);
+        if (verifiedClubs.length > 0) {
+          clubsBySport.set(rec.sportId, verifiedClubs);
+        }
+      } catch (error) {
+        // Log but don't fail - clubs are optional
+        console.error(`[Email Service] Error fetching clubs for sport ${rec.sportId}:`, error);
+      }
+    }
+
+    // Render React Email component - child is guaranteed to be valid at this point
+    const React = await import("react");
+    const { QuizResultsEmail } = await import("../../../../emails/quiz-results-email");
+    const { renderEmail } = await import("../../../../emails/utils/render-email");
+
+    // Double-check child is still valid before creating component
+    if (!child || !child.firstName || !child.lastName) {
+      console.error("[Email Service] Child data became invalid before rendering");
+      return;
+    }
+
+    // Final validation - ensure child is still valid before rendering
+    if (!child || !child.firstName || !child.lastName) {
+      console.error("[Email Service] Child data invalid at render time:", {
+        childId: child?.id,
+        hasFirstName: !!child?.firstName,
+        hasLastName: !!child?.lastName,
+      });
+      return;
+    }
+
+    const emailComponent = React.createElement(QuizResultsEmail, {
+      quizResult,
+      child,
+      userEmail,
+      user,
+      unsubscribeToken,
+      clubsBySport,
+    });
+
+    // Render email with error handling
+    let html: string;
+    let text: string;
+    try {
+      const rendered = await renderEmail(emailComponent);
+      html = rendered.html;
+      text = rendered.text;
+    } catch (renderError) {
+      // If rendering fails due to invalid data, log and return early
+      console.error("[Email Service] Error rendering email component:", renderError);
+      if (
+        renderError instanceof Error &&
+        (renderError.message.includes("Child data is required") ||
+          renderError.message.includes("must have at least one recommendation"))
+      ) {
+        console.error("[Email Service] Email rendering failed due to invalid data - skipping send");
+        return;
+      }
+      // Re-throw other errors to be caught by outer try-catch
+      throw renderError;
+    }
 
     // Send email
     const result = await sendEmail({

@@ -1123,6 +1123,58 @@ await deleteImageAction(imageUrl);
 - Welcome emails: Ready for `signUpAction` integration
 - Verification emails: Ready for admin verification workflow
 
+### React Email Integration (Phase 1 Complete - January 2025)
+
+**Location**: `emails/` directory
+
+**Status**: ✅ Phase 1 Complete - Infrastructure ready, base components created, unsubscribe system implemented
+
+**Purpose**: Component-based email templates using React Email library for better maintainability and developer experience.
+
+**Architecture**:
+
+1. **Base Email Components** (`emails/components/`):
+   - `EmailLayout.tsx` - Base email wrapper with Yuvoo branding
+   - `EmailHeader.tsx` - Yuvoo-branded header (primary color #00BBAE)
+   - `EmailFooter.tsx` - Footer with GDPR info, unsubscribe links (token-based)
+   - `EmailSection.tsx` - Reusable section wrapper
+   - All components follow Yuvoo brand guidelines (colors, typography)
+   - All content in Romanian
+
+2. **Email Utilities** (`emails/utils/`):
+   - `render-email.ts` - Functions to render React Email components to HTML/text strings
+   - `email-types.ts` - TypeScript types and brand color constants
+   - Ready for integration with Brevo service
+
+3. **Email Unsubscription System**:
+   - Unsubscribe page (`/dezabonare`) with form-based unsubscription
+   - Token-based unsubscription (secure, one-click from emails)
+   - Email token utilities (`src/lib/utils/email-tokens.ts`)
+   - PostHog tracking for unsubscribe events
+
+4. **Email Preferences Management**:
+   - Preferences page (`/parent/email-preferences`)
+   - Granular control over email types (quiz results, club updates, newsletter, etc.)
+   - PostHog tracking for preference updates
+
+**Preview Server**:
+
+- Configured on port 3001
+- Command: `npm run email:dev`
+- Enables live preview of email templates during development
+
+**Integration Pattern**:
+
+- React Email components render to HTML strings
+- HTML strings passed to Brevo service for sending
+- Maintains existing Brevo integration (no breaking changes)
+
+**Next Steps**:
+
+- Phase 2: Create quiz results email template
+- Phase 3: Integrate React Email with Brevo service
+- Phase 4: Create reusable email components (SportCard, ClubPreview, etc.)
+
 ## Caching Strategy
 
 ### Next.js 16 Cache Components ✅ COMPLETE

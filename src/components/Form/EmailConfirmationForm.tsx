@@ -82,7 +82,7 @@ const EmailConfirmationForm = async ({ token, verified, error }: EmailConfirmati
 
   const result = await verifyEmailAction(token);
 
-  if (result.success) {
+  if (result && result.success) {
     // Redirect to login after successful verification
     if (result.redirect) {
       redirect(result.redirect);
@@ -110,7 +110,9 @@ const EmailConfirmationForm = async ({ token, verified, error }: EmailConfirmati
     <div className="alert alert-danger text-center" role="alert">
       <i className="fa-regular fa-circle-xmark fa-3x mb-3"></i>
       <h4 className="alert-heading mb-3">Eroare la verificare</h4>
-      <p className="mb-3">{result.error || "Eroare la verificarea email-ului"}</p>
+      <p className="mb-3">
+        {result && "error" in result ? result.error : "Eroare la verificarea email-ului"}
+      </p>
       <div className="d-flex flex-column gap-2 align-items-center">
         <a href={routes.login} className="btn btn-outline-primary">
           Mergi la autentificare

@@ -246,7 +246,7 @@ export async function signUpAction(formData: FormData) {
     };
   }
 
-  const { email, password, role } = validationResult.data;
+  const { email, password } = validationResult.data;
 
   // Rate limiting: prevent spam registrations
   try {
@@ -267,33 +267,13 @@ export async function signUpAction(formData: FormData) {
 
   try {
     // Build verification callback URL for email verification
-    // Required when calling from Server Action (non-browser environment)
-    const baseUrl = process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000";
-    const verificationCallbackUrl = `${baseUrl}${routes.emailConfirmation}`;
-
+    // Sign up with Stack Auth
+    // Note: Email verification callback URL is configured in stack.ts
+    // Role will default to "parent" in database sync (can be updated later if needed)
     await stackServerApp.signUpWithCredential({
       email,
       password,
-      verificationCallbackUrl,
     });
-
-    // Update user metadata with role after signup
-    // Get the user and update metadata to ensure role is stored
-    try {
-      const user = await stackServerApp.getUser();
-      if (user) {
-        await user.update({
-          clientMetadata: {
-            role: role,
-          },
-        });
-      }
-    } catch (metadataError) {
-      // Log error but don't fail signup - role will use default "parent" in database
-      if (process.env.NODE_ENV === "development") {
-        console.error("[Stack Auth] Error updating user metadata:", metadataError);
-      }
-    }
 
     // After signup, user is automatically synced to database via getSession
     // Check onboarding status to determine redirect
@@ -421,13 +401,8 @@ export async function forgotPasswordAction(formData: FormData) {
   }
 
   try {
-    // Stack Auth requires callbackUrl in server-side environments
-    // This is the URL where users will be redirected after clicking the reset link
-    const callbackUrl = `${process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000"}${routes.resetPassword}`;
-
-    await stackServerApp.sendForgotPasswordEmail(email, {
-      callbackUrl,
-    });
+    // Stack Auth sendForgotPasswordEmail - callback URL is configured in stack.ts
+    await stackServerApp.sendForgotPasswordEmail(email);
 
     // Track password reset request (no distinctId since user might not be authenticated)
     try {
@@ -553,7 +528,7 @@ export async function verifyEmailAction(token: string) {
   try {
     const result = await stackServerApp.verifyEmail(validatedToken);
 
-    if ("status" in result && result.status === "ok") {
+    if (result && "status" in result && result.status === "ok") {
       // Try to get user session for tracking
       try {
         const session = await getSession();
@@ -582,7 +557,7 @@ export async function verifyEmailAction(token: string) {
         success: true,
         redirect: routes.login,
       };
-    } else {
+    } else if (result && "error" in result) {
       const error = result.error as { humanReadableMessage?: string; message?: string } | undefined;
       const errorMessage = error?.humanReadableMessage || error?.message || "";
 

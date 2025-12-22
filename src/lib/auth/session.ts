@@ -106,7 +106,19 @@ export async function getSession() {
   }
 
   try {
-    const stackUser = await stackServerApp.getUser();
+    // Type assertion needed due to Stack Auth version compatibility
+    // getUser() exists at runtime but TypeScript types may not reflect it
+    const stackUser = await (
+      stackServerApp as unknown as {
+        getUser: () => Promise<{
+          id: string;
+          primaryEmail: string | null;
+          primaryEmailVerified?: boolean;
+          displayName?: string | null;
+          clientMetadata?: Record<string, unknown> | null;
+        } | null>;
+      }
+    ).getUser();
     if (!stackUser) return null;
 
     // Sync with local database

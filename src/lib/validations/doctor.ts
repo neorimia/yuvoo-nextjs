@@ -29,7 +29,7 @@ export const doctorBasicInfoSchema = z.object({
     errorMap: () => ({ message: "Selectează specializarea" }),
   }),
 
-  secondarySpecialties: z.array(z.string().min(1).max(200)).optional().default([]),
+  secondarySpecialties: z.array(z.string().min(1).max(200)),
 
   credentials: z
     .array(z.string().min(1).max(200))
@@ -111,9 +111,9 @@ export const doctorVerificationSchema = z.object({
  * Doctor Availability Schema (Doctor Onboarding - Step 7)
  */
 export const doctorAvailabilitySchema = z.object({
-  acceptingNewPatients: z.boolean().default(true),
+  acceptingNewPatients: z.boolean(),
 
-  onlineConsultations: z.boolean().default(false),
+  onlineConsultations: z.boolean(),
 
   schedule: z
     .array(

@@ -142,7 +142,10 @@ const finalConfig = isBuildPhase
       automaticVercelMonitors: true,
 
       // Tree-shaking options for reducing bundle size
-      hideSourceMaps: false, // Keep source maps for better debugging
+      sourcemaps: {
+        assets: "./.next/**/*",
+        deleteSourcemapsAfterUpload: false, // Keep source maps for better debugging
+      },
       disableLogger: false, // Keep logger for production debugging
     });
 

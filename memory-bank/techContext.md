@@ -88,6 +88,11 @@
 - **Brevo** (formerly Sendinblue): `@getbrevo/brevo ^2.2.0` - Email service
   - Transactional emails
   - Email templates
+- **React Email**: `@react-email/components ^1.0.2`, `react-email` (dev), `@react-email/render ^2.0.0` - Email template library
+  - Component-based email templates
+  - Preview server for development (`npm run email:dev` on port 3001)
+  - Type-safe email components
+  - Renders to HTML strings for Brevo integration
 - **PostHog**: `posthog-js@^1.309.1`, `posthog-node@^5.17.4` - Analytics & product analytics
   - User analytics and event tracking
   - Session recordings (privacy-first configuration)
@@ -512,6 +517,24 @@ await deleteImageAction(imageUrl);
 - ✅ Type definitions (`src/lib/integrations/brevo/types.ts`) for email parameters and results ✅
 - ✅ Test script (`src/lib/integrations/brevo/test-brevo.ts`) for configuration verification ✅
 - ✅ Comprehensive documentation (`src/lib/integrations/brevo/README.md`) ✅
+
+**React Email Integration** (Phase 1 Complete - January 2025):
+
+- ✅ React Email infrastructure (`emails/` directory) ✅
+  - Base components: `EmailLayout`, `EmailHeader`, `EmailFooter`, `EmailSection`
+  - Utilities: `render-email.ts`, `email-types.ts`
+  - Preview server configured (port 3001)
+- ✅ Email unsubscription system ✅
+  - Unsubscribe page (`/dezabonare`)
+  - Token-based unsubscription (secure, one-click from emails)
+  - Form-based unsubscription (manual email entry)
+  - Email token utilities (`src/lib/utils/email-tokens.ts`)
+- ✅ Email preferences management ✅
+  - Preferences page (`/parent/email-preferences`)
+  - Granular control over email types
+  - PostHog tracking for unsubscribe and preference updates
+- [ ] Phase 2: Quiz results email template (pending)
+- [ ] Phase 3: Brevo integration with React Email (pending)
 
 **Email Templates** (All Complete):
 

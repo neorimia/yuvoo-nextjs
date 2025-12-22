@@ -9,7 +9,7 @@
 import React from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { useStackApp, useUser } from "@stackframe/stack";
+import { useUser } from "@stackframe/stack";
 import type { UserRole } from "@/modules/auth/auth.types";
 import { routes } from "@/lib/routes";
 import Image from "next/image";
@@ -45,7 +45,6 @@ export function DashboardHeader({
   isMobileMenuOpen,
   onMobileMenuToggle,
 }: DashboardHeaderProps) {
-  const stackApp = useStackApp();
   const stackUser = useUser();
   const router = useRouter();
 
@@ -54,11 +53,9 @@ export function DashboardHeader({
    */
   const handleLogout = async () => {
     try {
-      // Check if Stack Auth user exists before attempting sign out
-      // This prevents the "Cannot use 'in' operator to search for 'accessToken' in undefined" error
-      // when session data is undefined or has expired
+      // Stack Auth: signOut is a method on the User object, not on StackClientApp
       if (stackUser) {
-        await stackApp.signOut();
+        await stackUser.signOut();
       }
       // Always redirect to login, even if signOut fails or user is already logged out
       router.push(routes.login);

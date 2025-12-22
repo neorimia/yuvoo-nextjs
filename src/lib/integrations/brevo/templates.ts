@@ -16,9 +16,15 @@ import type { AuthUser } from "@/modules/auth/auth.types";
 /**
  * Base email template wrapper
  */
-function baseEmailTemplate(content: string, title: string): { html: string; text: string } {
+function baseEmailTemplate(
+  content: string,
+  title: string,
+  unsubscribeUrl?: string
+): { html: string; text: string } {
   const appUrl = process.env.NEXT_PUBLIC_APP_URL || "https://yuvoo.ro";
   const senderEmail = process.env.BREVO_SENDER_EMAIL || "noreply@yuvoo.ro";
+  const finalUnsubscribeUrl = unsubscribeUrl || `${appUrl}/dezabonare`;
+  const privacyUrl = `${appUrl}/confidentialitate`;
 
   const html = `
 <!DOCTYPE html>
@@ -152,8 +158,15 @@ function baseEmailTemplate(content: string, title: string): { html: string; text
         <a href="${appUrl}">${appUrl}</a>
       </p>
       <p style="margin-top: 10px; font-size: 11px; color: #999;">
+        <a href="${privacyUrl}" style="color: #667eea; text-decoration: none;">Politica de confidențialitate</a>
+        | <a href="${finalUnsubscribeUrl}" style="color: #667eea; text-decoration: none;">Dezabonare</a>
+      </p>
+      <p style="margin-top: 10px; font-size: 11px; color: #999;">
         Acest email a fost trimis automat. Te rugăm să nu răspunzi la acest email.<br>
         Pentru întrebări, contactează-ne la <a href="mailto:${senderEmail}">${senderEmail}</a>
+      </p>
+      <p style="margin-top: 10px; font-size: 10px; color: #999;">
+        © ${new Date().getFullYear()} Yuvoo. Toate drepturile rezervate.
       </p>
     </div>
   </div>
@@ -653,7 +666,8 @@ export function bookingReminderTemplate(
 export function quizResultsTemplate(
   quizResult: QuizResult,
   child: Child,
-  user?: AuthUser
+  user?: AuthUser,
+  unsubscribeUrl?: string
 ): { html: string; text: string } {
   const appUrl = process.env.NEXT_PUBLIC_APP_URL || "https://yuvoo.ro";
   const userName = user ? getUserFirstName(user) : "Utilizator";
@@ -724,7 +738,7 @@ export function quizResultsTemplate(
     <p>Dacă ai întrebări sau dorești să completezi chestionarul din nou, poți face acest lucru oricând din contul tău.</p>
   `;
 
-  return baseEmailTemplate(content, "Rezultatele Chestionarului AI - Yuvoo");
+  return baseEmailTemplate(content, "Rezultatele Chestionarului AI - Yuvoo", unsubscribeUrl);
 }
 
 /**
