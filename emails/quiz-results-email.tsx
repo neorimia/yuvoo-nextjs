@@ -55,6 +55,37 @@ export const QuizResultsEmail = ({
   const appUrl = process.env.NEXT_PUBLIC_APP_URL || "https://yuvoo.ro";
   const userName = user?.firstName || user?.name?.split(" ")[0] || "Utilizator";
 
+  // Safety check for quizResult first - must be valid before accessing properties
+  if (!quizResult || !quizResult.id) {
+    // Return a minimal error email if quizResult is invalid
+    return (
+      <Html lang="ro">
+        <Head>
+          <title>Eroare - Yuvoo</title>
+        </Head>
+        <Preview>Eroare la generarea emailului</Preview>
+        <Body style={main}>
+          <Container style={container}>
+            <EmailHeader />
+            <EmailSection>
+              <Heading style={heading}>Eroare</Heading>
+              <Text style={body}>
+                Ne pare rău, dar a apărut o eroare la generarea emailului cu rezultatele
+                chestionarului. Te rugăm să accesezi site-ul pentru a vedea rezultatele.
+              </Text>
+              <Text style={body}>
+                <Link href={`${appUrl}${routes.quiz}`} style={linkStyle}>
+                  Accesează site-ul Yuvoo
+                </Link>
+              </Text>
+            </EmailSection>
+            <EmailFooter unsubscribeToken={unsubscribeToken} />
+          </Container>
+        </Body>
+      </Html>
+    );
+  }
+
   // Safety checks for child data - handle gracefully instead of throwing
   // This should never happen due to validation upstream, but handle defensively
   if (!child || !child.firstName || !child.lastName) {
@@ -87,6 +118,7 @@ export const QuizResultsEmail = ({
     );
   }
 
+  // Child is guaranteed to be valid at this point
   const childName = `${child.firstName} ${child.lastName}`;
   const childAge = child.age || 0;
   const childGender =
