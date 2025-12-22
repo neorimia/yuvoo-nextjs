@@ -370,6 +370,16 @@ export async function sendQuizResults(
       return;
     }
 
+    // Final validation - ensure child is still valid before rendering
+    if (!child || !child.firstName || !child.lastName) {
+      console.error("[Email Service] Child data invalid at render time:", {
+        childId: child?.id,
+        hasFirstName: !!child?.firstName,
+        hasLastName: !!child?.lastName,
+      });
+      return;
+    }
+
     const emailComponent = React.createElement(QuizResultsEmail, {
       quizResult,
       child,
@@ -379,7 +389,27 @@ export async function sendQuizResults(
       clubsBySport,
     });
 
-    const { html, text } = await renderEmail(emailComponent);
+    // Render email with error handling
+    let html: string;
+    let text: string;
+    try {
+      const rendered = await renderEmail(emailComponent);
+      html = rendered.html;
+      text = rendered.text;
+    } catch (renderError) {
+      // If rendering fails due to invalid data, log and return early
+      console.error("[Email Service] Error rendering email component:", renderError);
+      if (
+        renderError instanceof Error &&
+        (renderError.message.includes("Child data is required") ||
+          renderError.message.includes("must have at least one recommendation"))
+      ) {
+        console.error("[Email Service] Email rendering failed due to invalid data - skipping send");
+        return;
+      }
+      // Re-throw other errors to be caught by outer try-catch
+      throw renderError;
+    }
 
     // Send email
     const result = await sendEmail({
