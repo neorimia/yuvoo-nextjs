@@ -55,15 +55,39 @@ export const QuizResultsEmail = ({
   const appUrl = process.env.NEXT_PUBLIC_APP_URL || "https://yuvoo.ro";
   const userName = user?.firstName || user?.name?.split(" ")[0] || "Utilizator";
 
-  // Safety checks for child data - provide fallbacks for missing data
-  if (!child) {
-    throw new Error("Child data is required");
+  // Safety checks for child data - handle gracefully instead of throwing
+  // This should never happen due to validation upstream, but handle defensively
+  if (!child || !child.firstName || !child.lastName) {
+    // Return a minimal error email instead of throwing
+    return (
+      <Html lang="ro">
+        <Head>
+          <title>Eroare - Yuvoo</title>
+        </Head>
+        <Preview>Eroare la generarea emailului</Preview>
+        <Body style={main}>
+          <Container style={container}>
+            <EmailHeader />
+            <EmailSection>
+              <Heading style={heading}>Eroare</Heading>
+              <Text style={body}>
+                Ne pare rău, dar a apărut o eroare la generarea emailului cu rezultatele
+                chestionarului. Te rugăm să accesezi rezultatele direct pe site.
+              </Text>
+              <Text style={body}>
+                <Link href={`${appUrl}${routes.quiz.results(quizResult.id)}`} style={linkStyle}>
+                  Vezi rezultatele aici
+                </Link>
+              </Text>
+            </EmailSection>
+            <EmailFooter unsubscribeToken={unsubscribeToken} />
+          </Container>
+        </Body>
+      </Html>
+    );
   }
 
-  // Handle null/undefined firstName and lastName with fallbacks
-  const childFirstName = child.firstName || "Copil";
-  const childLastName = child.lastName || "";
-  const childName = childLastName ? `${childFirstName} ${childLastName}` : childFirstName;
+  const childName = `${child.firstName} ${child.lastName}`;
   const childAge = child.age || 0;
   const childGender =
     child.gender === "male" ? "băiat" : child.gender === "female" ? "fată" : "copil";
@@ -76,9 +100,39 @@ export const QuizResultsEmail = ({
   // Primary recommendation (highest score) - safety check
   const primaryRecommendation = topRecommendations[0];
 
-  // Safety check: ensure we have at least one recommendation
-  if (!primaryRecommendation) {
-    throw new Error("Quiz result must have at least one recommendation");
+  // Safety check: handle missing recommendations gracefully
+  if (
+    !primaryRecommendation ||
+    !quizResult.recommendations ||
+    quizResult.recommendations.length === 0
+  ) {
+    // Return a minimal error email instead of throwing
+    return (
+      <Html lang="ro">
+        <Head>
+          <title>Eroare - Yuvoo</title>
+        </Head>
+        <Preview>Eroare la generarea recomandărilor</Preview>
+        <Body style={main}>
+          <Container style={container}>
+            <EmailHeader />
+            <EmailSection>
+              <Heading style={heading}>Eroare</Heading>
+              <Text style={body}>
+                Ne pare rău, dar nu am putut genera recomandările pentru {childName}. Te rugăm să
+                accesezi rezultatele direct pe site.
+              </Text>
+              <Text style={body}>
+                <Link href={`${appUrl}${routes.quiz.results(quizResult.id)}`} style={linkStyle}>
+                  Vezi rezultatele aici
+                </Link>
+              </Text>
+            </EmailSection>
+            <EmailFooter unsubscribeToken={unsubscribeToken} />
+          </Container>
+        </Body>
+      </Html>
+    );
   }
 
   // Less suitable sports (scores below 70)
