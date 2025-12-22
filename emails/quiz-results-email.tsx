@@ -54,18 +54,29 @@ export const QuizResultsEmail = ({
 }: QuizResultsEmailProps) => {
   const appUrl = process.env.NEXT_PUBLIC_APP_URL || "https://yuvoo.ro";
   const userName = user?.firstName || user?.name?.split(" ")[0] || "Utilizator";
+
+  // Safety checks for child data
+  if (!child || !child.firstName || !child.lastName) {
+    throw new Error("Child data is required and must include firstName and lastName");
+  }
+
   const childName = `${child.firstName} ${child.lastName}`;
   const childAge = child.age;
   const childGender =
     child.gender === "male" ? "băiat" : child.gender === "female" ? "fată" : "copil";
 
   // Get top 3 recommendations (sorted by match score)
-  const topRecommendations = [...quizResult.recommendations]
+  const topRecommendations = [...(quizResult.recommendations || [])]
     .sort((a, b) => b.matchScore - a.matchScore)
     .slice(0, 3);
 
-  // Primary recommendation (highest score)
+  // Primary recommendation (highest score) - safety check
   const primaryRecommendation = topRecommendations[0];
+
+  // Safety check: ensure we have at least one recommendation
+  if (!primaryRecommendation) {
+    throw new Error("Quiz result must have at least one recommendation");
+  }
 
   // Less suitable sports (scores below 70)
   const lessSuitableSports = quizResult.recommendations
@@ -78,8 +89,10 @@ export const QuizResultsEmail = ({
   const clubsUrl = `${appUrl}${routes.clubs.list}`;
   const registerUrl = `${appUrl}${routes.register}`;
 
-  // Preview text
-  const previewText = `Rezultatele chestionarului pentru ${childName}: ${primaryRecommendation.sportName} este recomandarea noastră principală!`;
+  // Preview text - safety check for primaryRecommendation
+  const previewText = primaryRecommendation
+    ? `Rezultatele chestionarului pentru ${childName}: ${primaryRecommendation.sportName} este recomandarea noastră principală!`
+    : `Rezultatele chestionarului pentru ${childName} sunt gata!`;
 
   return (
     <Html lang="ro">
@@ -165,41 +178,43 @@ export const QuizResultsEmail = ({
           <Hr style={divider} />
 
           {/* Top 3 Sports List */}
-          <EmailSection>
-            <Heading as="h2" style={sectionHeading}>
-              Top 3 sporturi potrivite
-            </Heading>
-            <Text style={body}>
-              Iată cele mai potrivite sporturi pentru {childName}, bazate pe profilul completat:
-            </Text>
-            {topRecommendations.map((rec, index) => (
-              <Section key={rec.sportId} style={recommendationCard}>
-                <Text style={sportRank}>#{index + 1}</Text>
-                <Text style={matchScore}>{rec.matchScore}% potrivire</Text>
-                <Heading as="h3" style={sportName}>
-                  {rec.sportName}
-                </Heading>
-                <Text style={body}>
-                  <strong>De ce este potrivit:</strong>
-                </Text>
-                <Text style={body}>{rec.reasoning}</Text>
-                {rec.benefits.length > 0 && (
-                  <>
-                    <Text style={body}>
-                      <strong>Beneficii principale:</strong>
-                    </Text>
-                    <ul style={listStyle}>
-                      {rec.benefits.slice(0, 3).map((benefit, idx) => (
-                        <li key={idx} style={listItem}>
-                          {benefit}
-                        </li>
-                      ))}
-                    </ul>
-                  </>
-                )}
-              </Section>
-            ))}
-          </EmailSection>
+          {topRecommendations.length > 0 && (
+            <EmailSection>
+              <Heading as="h2" style={sectionHeading}>
+                Top 3 sporturi potrivite
+              </Heading>
+              <Text style={body}>
+                Iată cele mai potrivite sporturi pentru {childName}, bazate pe profilul completat:
+              </Text>
+              {topRecommendations.map((rec, index) => (
+                <Section key={rec.sportId} style={recommendationCard}>
+                  <Text style={sportRank}>#{index + 1}</Text>
+                  <Text style={matchScore}>{rec.matchScore}% potrivire</Text>
+                  <Heading as="h3" style={sportName}>
+                    {rec.sportName}
+                  </Heading>
+                  <Text style={body}>
+                    <strong>De ce este potrivit:</strong>
+                  </Text>
+                  <Text style={body}>{rec.reasoning}</Text>
+                  {rec.benefits.length > 0 && (
+                    <>
+                      <Text style={body}>
+                        <strong>Beneficii principale:</strong>
+                      </Text>
+                      <ul style={listStyle}>
+                        {rec.benefits.slice(0, 3).map((benefit, idx) => (
+                          <li key={idx} style={listItem}>
+                            {benefit}
+                          </li>
+                        ))}
+                      </ul>
+                    </>
+                  )}
+                </Section>
+              ))}
+            </EmailSection>
+          )}
 
           {/* Less Suitable Sports (if any) */}
           {lessSuitableSports.length > 0 && (
