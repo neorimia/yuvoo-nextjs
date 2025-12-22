@@ -72,6 +72,21 @@ const nextConfig: NextConfig = {
     },
   },
 
+  // Webpack configuration to fix WebSocket bundling in production
+  webpack: (config, { isServer }) => {
+    if (isServer) {
+      // Externalize ws and other native modules to prevent bundling errors in production
+      // This fixes the "b.mask is not a function" error in Vercel serverless functions
+      config.externals = config.externals || [];
+      config.externals.push({
+        ws: "commonjs ws",
+        bufferutil: "commonjs bufferutil",
+        "utf-8-validate": "commonjs utf-8-validate",
+      });
+    }
+    return config;
+  },
+
   // PostHog rewrites for analytics ingestion
   async rewrites() {
     return [
@@ -122,19 +137,13 @@ const finalConfig = isBuildPhase
       // side errors will fail.
       tunnelRoute: "/monitoring",
 
-      webpack: {
-        // Enables automatic instrumentation of Vercel Cron Monitors. (Does not yet work with App Router route handlers.)
-        // See the following for more information:
-        // https://docs.sentry.io/product/crons/
-        // https://vercel.com/docs/cron-jobs
-        automaticVercelMonitors: true,
+      // Note: Sentry's webpack config is a plugin config, not a full webpack function
+      // The webpack externals for ws are handled in nextConfig.webpack above
+      automaticVercelMonitors: true,
 
-        // Tree-shaking options for reducing bundle size
-        treeshake: {
-          // Automatically tree-shake Sentry logger statements to reduce bundle size
-          removeDebugLogging: true,
-        },
-      },
+      // Tree-shaking options for reducing bundle size
+      hideSourceMaps: false, // Keep source maps for better debugging
+      disableLogger: false, // Keep logger for production debugging
     });
 
 export default finalConfig;
