@@ -171,12 +171,11 @@ function getStackClientApp(): StackClientApp {
         );
       }
 
-      // Type assertion needed: Stack Auth's type system requires either inheritsFrom
-      // or specific tokenStore configuration, but runtime accepts projectId + publishableClientKey
-      // @ts-expect-error - Stack Auth type system limitation, runtime behavior is correct
+      // On client side: use same configuration as server-side for consistency
       _stackClientApp = new StackClientApp({
         projectId,
         publishableClientKey,
+        tokenStore: "nextjs-cookie",
       });
     }
   }
