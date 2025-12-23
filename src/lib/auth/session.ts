@@ -106,6 +106,7 @@ export async function getSession() {
   }
 
   try {
+    // Stack Auth 2.8.56+ handles Next.js 16's async cookies() API properly
     // Type assertion needed due to Stack Auth version compatibility
     // getUser() exists at runtime but TypeScript types may not reflect it
     const stackUser = await (
@@ -129,7 +130,10 @@ export async function getSession() {
       dbUser,
     };
   } catch (error) {
-    console.error("Error getting session:", error);
+    // Don't log during production builds to avoid noise
+    if (process.env.NEXT_PHASE !== "phase-production-build") {
+      console.error("Error getting session:", error);
+    }
     return null;
   }
 }

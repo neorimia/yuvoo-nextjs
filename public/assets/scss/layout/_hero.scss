@@ -347,15 +347,10 @@
     }
 
     span {
-      font-size: 23px;
-      font-weight: var(--bd-fw-sbold);
-      color: var(--bd-theme-1);
+      font-weight: var(--bd-fw-normal);
+      color: var(--bd-common-white);
       margin-bottom: 10px;
       display: inline-block;
-
-      @media #{$sm,$xs} {
-        font-size: 18px;
-      }
     }
 
     &.is-white {

@@ -169,7 +169,7 @@ export const faqCategories: FAQCategory[] = [
       {
         question: "Cum verificați cluburile sportive?",
         answer:
-          "Echipa noastră analizează documentele cluburilor (licențe, certificate, asigurări), vizitează locațiile, discută cu antrenorii și verifică recenziile părinților. Doar cluburile care îndeplinesc standardele noastre de siguranță și calitate primesc badge-ul de verificat. Procesul de verificare este riguros și continuu.",
+          "Echipa noastră analizează documentele cluburilor (licențe, certificate, asigurări), discută cu antrenorii și verifică recenziile părinților. Doar cluburile care îndeplinesc standardele noastre de siguranță și calitate primesc badge-ul de verificat. Procesul de verificare este riguros și continuu.",
         category: "Cluburi Sportive",
       },
       {
@@ -353,18 +353,33 @@ export const faqCategories: FAQCategory[] = [
     items: [
       {
         question: "Cluburile plătesc să fie pe Yuvoo?",
-        answer:
-          "Cluburile verificate pot avea abonamente opționale pentru funcții avansate (promovare, statistici, funcții premium), dar lista de bază pe Yuvoo este gratuită pentru cluburi verificate. Prioritatea noastră este să oferim părinților o listă credibilă și verificată de opțiuni sportive, nu să monetizăm prin listări obligatorii.",
+        answer: (
+          <>
+            În perioada{" "}
+            <Link href={routes.clubs.landing} className="text-primary">
+              programului Founding Club
+            </Link>
+            , primele 15 cluburi din fiecare oraș primesc profil complet gratuit pentru 6 luni
+            (valoare €180). După aceea, dacă Yuvoo îți aduce părinți potriviți, vei putea continua
+            cu un abonament clar și transparent (începând de la €29/lună). Dacă nu funcționează → nu
+            plătești nimic. Nu există obligații sau contracte pe termen lung.
+          </>
+        ),
         category: "Parteneri și Verificare",
       },
       {
         question: "Cum pot deveni partener (club sau doctor)?",
         answer: (
           <>
-            Cluburile și doctorii pot aplica pentru verificare prin platformă. Procesul include
-            verificarea documentelor, vizita la locație (pentru cluburi) și interviu. După aprobare,
-            vei primi badge-ul de verificat și vei apărea în rezultatele de căutare relevante.
-            Pentru mai multe informații, poți{" "}
+            Cluburile pot aplica pentru{" "}
+            <Link href={routes.clubs.landing} className="text-primary">
+              programul Founding Club gratuit
+            </Link>
+            . Procesul include un call de 15 minute pentru configurarea profilului, verificarea
+            documentelor (identitate legală, calificări antrenori, protocoluri de siguranță) și
+            verificarea finală care durează 1-2 săptămâni. După aprobare, vei primi badge-ul de
+            verificat și vei apărea în rezultatele de căutare relevante. Pentru mai multe
+            informații, poți{" "}
             <Link href={routes.contact} className="text-primary">
               contacta echipa noastră prin formularul de contact
             </Link>
@@ -376,7 +391,48 @@ export const faqCategories: FAQCategory[] = [
       {
         question: "Cât durează procesul de verificare?",
         answer:
-          "Procesul de verificare pentru cluburi și doctori durează de obicei 1-2 săptămâni, în funcție de complexitatea documentației și disponibilitatea pentru verificare fizică. Echipă noastră te va ține la curent cu progresul verificării prin email. În cazul în care sunt necesare informații suplimentare, te vom contacta direct.",
+          "Procesul de verificare pentru cluburi include un call inițial de 15 minute pentru configurarea profilului, urmat de verificarea documentelor și a protocolurilor de siguranță. Verificarea finală durează de obicei 1-2 săptămâni, în funcție de complexitatea documentației și disponibilitatea pentru verificare fizică. Echipă noastră te va ține la curent cu progresul verificării prin email. În cazul în care sunt necesare informații suplimentare, te vom contacta direct.",
+        category: "Parteneri și Verificare",
+      },
+      {
+        question: "Ce beneficii primesc ca Founding Club?",
+        answer: (
+          <>
+            Ca{" "}
+            <Link href={routes.clubs.landing} className="text-primary">
+              Founding Club
+            </Link>
+            , primești: profil complet gratuit 6 luni (valoare €180), badge &quot;Verified Founding
+            Club&quot; pentru încredere instant, pagină publică optimizată SEO (poți folosi ca site
+            web propriu), prioritate în rezultate la lansarea oficială, părinți pre-calificați (nu
+            lead-uri random), analiză și statistici despre vizitatori, și suport dedicat de la
+            echipa Yuvoo.
+          </>
+        ),
+        category: "Parteneri și Verificare",
+      },
+      {
+        question: "Ce se întâmplă dacă nu primesc lead-uri?",
+        answer:
+          "Dacă după cele 6 luni gratuite nu primești lead-uri potrivite, nu plătești nimic. Nu există obligații sau contracte. Programul este complet fără risc pentru tine. Analizăm împreună ce s-a întâmplat și ajustăm strategia dacă este necesar. Poți anula oricând, fără penalități.",
+        category: "Parteneri și Verificare",
+      },
+      {
+        question: "Trebuie să intru zilnic pe platformă?",
+        answer:
+          "Nu. Primești notificări prin email când un părinte te contactează. Yuvoo este un canal suplimentar, nu o obligație. Poți gestiona mesajele și cererile când ai timp, direct din email sau din platformă. Nu trebuie să verifici zilnic platforma.",
+        category: "Parteneri și Verificare",
+      },
+      {
+        question: "Pot actualiza profilul meu după ce este creat?",
+        answer:
+          "Da, poți actualiza oricând informațiile din profil: programe, prețuri, fotografiile, descrierile. Profilul tău este complet personalizabil și poți face modificări oricând ai nevoie, fără costuri suplimentare. Pagina ta publică optimizată SEO se actualizează automat.",
+        category: "Parteneri și Verificare",
+      },
+      {
+        question: "De ce este diferit de Google/Facebook?",
+        answer:
+          "Google & Facebook aduc căutări. Yuvoo aduce potrivire. Părinții care te contactează prin Yuvoo au deja completat un quiz AI și știu că sportul tău este potrivit pentru copilul lor. Nu mai primești mesaje de la părinți care „nu sunt siguri” sau care nu se potrivesc cu vârsta și nivelul copilului. Mai puține mesaje inutile. Mai multe înscrieri reale.",
         category: "Parteneri și Verificare",
       },
     ],
