@@ -25,21 +25,30 @@ interface StackAuthProviderProps {
  * - Client-side authentication hooks (useStackApp, useUser, etc.)
  * - Automatic session management
  * - Client-side redirect handling
+ *
+ * Creates a StackClientApp instance with the exact same configuration as stack.ts
+ * to ensure consistency and prevent StackAssertionError.
  */
 export function StackAuthProvider({ children }: StackAuthProviderProps) {
-  // Create client app with public environment variables
-  // useMemo ensures the app is only created once
+  // Create client app with the exact same configuration as stack.ts
+  // This ensures consistency and prevents StackAssertionError
+  // useMemo ensures the app is only created once per component lifecycle
   const stackClientApp = useMemo(() => {
     const projectId = process.env.NEXT_PUBLIC_STACK_PROJECT_ID;
     const publishableClientKey = process.env.NEXT_PUBLIC_STACK_PUBLISHABLE_CLIENT_KEY;
 
-    if (!projectId || !publishableClientKey) {
+    if (!projectId) {
+      throw new Error("NEXT_PUBLIC_STACK_PROJECT_ID is required. Please set it in .env.local");
+    }
+
+    if (!publishableClientKey) {
       throw new Error(
-        "Missing Stack Auth environment variables. " +
-          "Please ensure NEXT_PUBLIC_STACK_PROJECT_ID and NEXT_PUBLIC_STACK_PUBLISHABLE_CLIENT_KEY are set."
+        "NEXT_PUBLIC_STACK_PUBLISHABLE_CLIENT_KEY is required. Please set it in .env.local"
       );
     }
 
+    // Use the exact same configuration as stack.ts client-side initialization
+    // This ensures both instances are identical and prevents StackAssertionError
     return new StackClientApp({
       projectId,
       publishableClientKey,
