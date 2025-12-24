@@ -54,16 +54,21 @@ const footerData: IFooterData = {
       },
       {
         id: 4,
+        menu: "Pentru Cluburi",
+        path: "/pentru-cluburi",
+      },
+      {
+        id: 5,
         menu: "Doctori",
         path: "/doctori",
       },
       {
-        id: 5,
+        id: 6,
         menu: "Chestionar",
         path: "/chestionar",
       },
       {
-        id: 6,
+        id: 7,
         menu: "Contact",
         path: "/contact",
       },
@@ -121,16 +126,21 @@ const footerData: IFooterData = {
       },
       {
         id: 3,
+        menu: "Pentru Cluburi",
+        path: "/pentru-cluburi",
+      },
+      {
+        id: 4,
         menu: "Specialiști pediatri",
         path: "/doctori",
       },
       {
-        id: 4,
+        id: 5,
         menu: "Întrebări frecvente",
         path: "/intrebari-frecvente",
       },
       {
-        id: 5,
+        id: 6,
         menu: "Ajutor",
         path: "/ajutor",
       },

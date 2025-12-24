@@ -137,61 +137,68 @@ export const stackServerApp = new Proxy({} as StackServerApp, {
  * Stack Client App for client-side components
  * Used by StackProvider for client-side hooks (useStackApp, useUser, etc.)
  *
- * The client app can either inherit from the server app (server-side) or
- * be initialized independently (client-side) using public keys.
+ * IMPORTANT: This must be a single shared instance to prevent StackAssertionError.
+ * The client app should ONLY be initialized on the client side to avoid
+ * server/client instance conflicts.
  */
-let _stackClientApp: StackClientApp | undefined;
 
-function getStackClientApp(): StackClientApp {
-  if (!_stackClientApp) {
-    const isServer = isServerSide();
+// Singleton instance holder
+let _stackClientAppInstance: StackClientApp<true> | undefined;
 
-    if (isServer) {
-      // On server side: use the same configuration as server app
-      // Note: inheritsFrom was removed in Stack Auth v2.4.8, so we initialize independently
-      const serverApp = getStackServerApp();
-      _stackClientApp = new StackClientApp({
-        projectId: serverApp.projectId,
-        publishableClientKey: process.env.NEXT_PUBLIC_STACK_PUBLISHABLE_CLIENT_KEY!,
-        tokenStore: "nextjs-cookie",
-      });
-    } else {
-      // On client side: initialize independently using public keys
-      // This avoids requiring server app initialization on client
-      const projectId = process.env.NEXT_PUBLIC_STACK_PROJECT_ID;
-      const publishableClientKey = process.env.NEXT_PUBLIC_STACK_PUBLISHABLE_CLIENT_KEY;
-
-      if (!projectId) {
-        throw new Error("NEXT_PUBLIC_STACK_PROJECT_ID is required. Please set it in .env.local");
-      }
-
-      if (!publishableClientKey) {
-        throw new Error(
-          "NEXT_PUBLIC_STACK_PUBLISHABLE_CLIENT_KEY is required. Please set it in .env.local"
-        );
-      }
-
-      // On client side: use same configuration as server-side for consistency
-      _stackClientApp = new StackClientApp({
-        projectId,
-        publishableClientKey,
-        tokenStore: "nextjs-cookie",
-      });
-    }
+/**
+ * Get or create the shared StackClientApp instance
+ *
+ * This function ensures:
+ * 1. Only ONE instance is created (singleton pattern)
+ * 2. Instance is ONLY created on the client side (never during SSR)
+ * 3. Environment variables are validated before initialization
+ *
+ * IMPORTANT: This function should only be called from client components.
+ * During SSR, it will throw an error to prevent server/client instance conflicts.
+ *
+ * @returns The shared StackClientApp instance
+ */
+export function getStackClientApp(): StackClientApp<true> {
+  // CRITICAL: Never create instance during SSR
+  // This prevents the StackAssertionError caused by configuration mismatch
+  // between server-rendered and client-rendered instances
+  if (typeof window === "undefined") {
+    throw new Error(
+      "getStackClientApp() must only be called on the client side. " +
+        "This function should only be used in client components (components with 'use client' directive). " +
+        "For server-side Stack Auth operations, use stackServerApp or getStackServerAppInstance() instead."
+    );
   }
-  return _stackClientApp;
-}
 
-// Export client app instance
-// This is safe to use in client components as it only uses public keys
-export const stackClientApp = new Proxy({} as StackClientApp, {
-  get(_target, prop, receiver) {
-    const app = getStackClientApp();
-    const value = Reflect.get(app, prop, receiver);
-    // If it's a method, bind it to the app instance
-    if (typeof value === "function") {
-      return value.bind(app);
+  // Client-side: create instance if it doesn't exist
+  if (!_stackClientAppInstance) {
+    const projectId = process.env.NEXT_PUBLIC_STACK_PROJECT_ID;
+    const publishableClientKey = process.env.NEXT_PUBLIC_STACK_PUBLISHABLE_CLIENT_KEY;
+
+    if (!projectId) {
+      throw new Error(
+        "NEXT_PUBLIC_STACK_PROJECT_ID is required. Please set it in .env.local\n" +
+          "⚠️ IMPORTANT: Restart your dev server after adding/changing .env.local variables"
+      );
     }
-    return value;
-  },
-});
+
+    if (!publishableClientKey) {
+      throw new Error(
+        "NEXT_PUBLIC_STACK_PUBLISHABLE_CLIENT_KEY is required. Please set it in .env.local\n" +
+          "⚠️ IMPORTANT: Restart your dev server after adding/changing .env.local variables"
+      );
+    }
+
+    // IMPORTANT: We don't specify tokenStore here for the client app
+    // Stack Auth manages the token store internally and setting it here
+    // can cause StackAssertionError due to configuration mismatch
+    _stackClientAppInstance = new StackClientApp({
+      projectId,
+      publishableClientKey,
+      // tokenStore is intentionally omitted for client app
+      // Stack Auth will use the server app's tokenStore configuration
+    }) as StackClientApp<true>;
+  }
+
+  return _stackClientAppInstance;
+}

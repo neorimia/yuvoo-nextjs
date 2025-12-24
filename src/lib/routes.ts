@@ -32,6 +32,8 @@ export const routes = {
   // Clubs (Cluburi)
   clubs: {
     list: "/cluburi",
+    landing: "/pentru-cluburi", // Landing page for clubs to join as Founding Clubs
+    pricing: "/preturi-cluburi", // Pricing page for clubs TODO: CREATE THIS PAGE
     detail: (slug: string) => `/cluburi/${slug}`,
     category: (category: string) => `/cluburi/categorie/${category}`,
     reviews: (slug: string) => `/cluburi/${slug}/recenzii`,
@@ -389,6 +391,7 @@ export function isPublicSeoRoute(path: string): boolean {
   const publicSeoPaths = [
     routes.sports.list,
     routes.clubs.list,
+    routes.clubs.landing,
     routes.doctors.list,
     routes.quiz.intro,
     routes.about,

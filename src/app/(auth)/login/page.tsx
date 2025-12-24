@@ -1,8 +1,5 @@
 import React from "react";
 import type { Metadata } from "next";
-import { redirect } from "next/navigation";
-import { getSession } from "@/lib/auth/session";
-import { getRoleBasedRedirect } from "@/lib/auth/redirects";
 import LoginMain from "@/components/Auth/LoginMain";
 import BreadcrumbOne from "@/components/Breadcrumb/BreadcrumbOne";
 
@@ -47,20 +44,12 @@ interface LoginPageProps {
  *
  * Authentication page for user login.
  * Supports redirect parameter for post-login navigation.
- * Route: /auth/login
+ * Route: /login
+ *
+ * Note: We don't check session server-side to avoid prerendering issues.
+ * Stack Auth handles client-side redirects for authenticated users automatically.
  */
 export default async function LoginPage({ searchParams }: LoginPageProps) {
-  // Check if user is already authenticated
-  // If yes, redirect to their dashboard or onboarding
-  const session = await getSession();
-  if (session?.dbUser) {
-    const redirectUrl = getRoleBasedRedirect(
-      session.dbUser.role,
-      session.dbUser.onboardingCompleted
-    );
-    redirect(redirectUrl);
-  }
-
   const params = await searchParams;
   // Support both 'redirect' and 'returnUrl' query parameters
   // Next.js automatically decodes query parameters, but we need to ensure it's a valid path

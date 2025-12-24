@@ -33,6 +33,7 @@ export const PostHogEvents = {
   CLUB_BOOKING_CREATED: "club_booking_created",
   CLUB_BOOKING_CONFIRMED: "club_booking_confirmed",
   CLUB_BOOKING_CANCELLED: "club_booking_cancelled",
+  CLUBS_LANDING_CTA_CLICKED: "clubs_landing_cta_clicked",
 
   // Doctor Events
   DOCTOR_VIEWED: "doctor_viewed",

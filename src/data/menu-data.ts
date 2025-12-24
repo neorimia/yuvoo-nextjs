@@ -32,9 +32,13 @@ const menuData: MenuItem[] = [
   },
   {
     id: 3,
-    hasDropdown: false,
+    hasDropdown: true,
     title: "Cluburi",
     link: routes.clubs.list,
+    submenus: [
+      { title: "Toate cluburile", link: routes.clubs.list },
+      { title: "Pentru Cluburi", link: routes.clubs.landing },
+    ],
   },
   {
     id: 4,

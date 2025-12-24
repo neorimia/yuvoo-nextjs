@@ -1,7 +1,7 @@
 import React from "react";
-import Link from "next/link";
 import { routes } from "@/lib/routes";
 import SectionTitle from "@/components/shared/SectionTitle";
+import StepCard from "@/components/shared/StepCard";
 
 /**
  * HowItWorks Component
@@ -60,49 +60,17 @@ const HowItWorks = () => {
           </div>
         </div>
         <div className="row bd-how-it-works-cards-row">
-          {steps.map((step) => {
-            const content = (
-              <>
-                <div className="bd-how-it-works-icon">
-                  <i className={step.icon}></i>
-                </div>
-                <div className="bd-how-it-works-content">
-                  <h4 className="bd-how-it-works-title">{step.title}</h4>
-                  <p className="bd-how-it-works-text">{step.microcopy}</p>
-                </div>
-              </>
-            );
-
-            const animationDelay = `${0.1 * step.id}s`;
-
-            if (step.link) {
-              return (
-                <div className="col-lg-4 col-md-6 col-sm-10 bd-how-it-works-card-col" key={step.id}>
-                  <Link href={step.link} className="bd-how-it-works-link">
-                    <div
-                      className="bd-how-it-works-card bd-how-it-works-card-link wow fadeInUp"
-                      data-wow-duration="1s"
-                      data-wow-delay={animationDelay}
-                    >
-                      {content}
-                    </div>
-                  </Link>
-                </div>
-              );
-            }
-
-            return (
-              <div className="col-lg-4 col-md-6 col-sm-10 bd-how-it-works-card-col" key={step.id}>
-                <div
-                  className="bd-how-it-works-card wow fadeInUp"
-                  data-wow-duration="1s"
-                  data-wow-delay={animationDelay}
-                >
-                  {content}
-                </div>
-              </div>
-            );
-          })}
+          {steps.map((step) => (
+            <StepCard
+              key={step.id}
+              icon={step.icon}
+              title={step.title}
+              description={step.microcopy}
+              link={step.link}
+              animationDelay={`${0.1 * step.id}s`}
+              variant="how-it-works"
+            />
+          ))}
         </div>
       </div>
     </section>

@@ -1,6 +1,6 @@
 import React from "react";
 import { routes } from "@/lib/routes";
-import Link from "next/link";
+import TrustCard, { TrustCardProps } from "@/components/shared/TrustCard";
 
 /**
  * HomeTrustSignals Component
@@ -9,15 +9,7 @@ import Link from "next/link";
  * Builds credibility through verification badges, GDPR compliance, and security indicators.
  */
 
-interface TrustSignal {
-  id: number;
-  icon: string;
-  title: string;
-  description: string;
-  link?: string;
-}
-
-const trustSignals: TrustSignal[] = [
+const trustSignals: TrustCardProps[] = [
   {
     id: 1,
     icon: "fa-solid fa-certificate",
@@ -80,41 +72,19 @@ const HomeTrustSignals = () => {
             </div>
           </div>
         </div>
-        <div className="row bd-trust-cards-row">
-          {trustSignals.map((signal, index) => {
-            const content = (
-              <div
-                key={`trust-content-${signal.id}`}
-                className="bd-trust-item wow fadeInUp"
-                data-wow-duration="1s"
-                data-wow-delay={`${0.1 * (index + 1)}s`}
-              >
-                <div className="bd-trust-icon">
-                  <i className={signal.icon}></i>
-                </div>
-                <div className="bd-trust-content">
-                  <h4 className="bd-trust-title">{signal.title}</h4>
-                  <p className="bd-trust-text">{signal.description}</p>
-                </div>
-              </div>
-            );
-
-            if (signal.link) {
-              return (
-                <div className="col-lg-4 col-md-6 col-sm-10 bd-trust-card-col" key={signal.id}>
-                  <Link href={signal.link} className="bd-trust-link">
-                    <div className="bd-trust-card bd-trust-card-link">{content}</div>
-                  </Link>
-                </div>
-              );
-            }
-
-            return (
-              <div className="col-lg-4 col-md-6 col-sm-10 bd-trust-card-col" key={signal.id}>
-                <div className="bd-trust-card">{content}</div>
-              </div>
-            );
-          })}
+        <div
+          className="row bd-trust-cards-row wow fadeInUp"
+          data-wow-duration="1s"
+          data-wow-delay=".4s"
+        >
+          {trustSignals.map((signal) => (
+            <TrustCard
+              key={signal.id}
+              {...signal}
+              columnClasses="col-lg-6 col-md-6 col-sm-10"
+              animationDelay={`${0.4 + (signal.id - 1) * 0.1}s`}
+            />
+          ))}
         </div>
       </div>
     </section>

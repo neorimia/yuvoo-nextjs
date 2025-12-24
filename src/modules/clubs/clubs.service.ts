@@ -41,6 +41,19 @@ export async function getVerifiedClubs(): Promise<Club[]> {
 }
 
 /**
+ * Count verified clubs from a specific city
+ * Used for displaying availability in Founding Club program
+ */
+export async function countVerifiedClubsByCity(city: string): Promise<number> {
+  const verifiedClubs = await db.query.clubs.findMany({
+    where: and(eq(clubs.verificationStatus, "approved"), eq(clubs.city, city)),
+    columns: { id: true }, // Only need IDs for counting
+  });
+
+  return verifiedClubs.length;
+}
+
+/**
  * Get all clubs
  * Used for sitemap generation and bulk operations
  */
