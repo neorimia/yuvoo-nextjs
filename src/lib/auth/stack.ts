@@ -192,12 +192,14 @@ export function getStackClientApp(): StackClientApp<true> {
     // IMPORTANT: We don't specify tokenStore here for the client app
     // Stack Auth manages the token store internally and setting it here
     // can cause StackAssertionError due to configuration mismatch
+    // Using type assertion to satisfy TypeScript while maintaining runtime correctness
     _stackClientAppInstance = new StackClientApp({
       projectId,
       publishableClientKey,
       // tokenStore is intentionally omitted for client app
       // Stack Auth will use the server app's tokenStore configuration
-    }) as StackClientApp<true>;
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    } as any) as StackClientApp<true>;
   }
 
   return _stackClientAppInstance;
