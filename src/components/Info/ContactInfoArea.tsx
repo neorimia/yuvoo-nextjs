@@ -15,12 +15,12 @@ const ContactInfoArea = () => {
               <div className="bd-contact-info">
                 <div className="bd-contact-info-content">
                   <div className="bd-contact-info-icon cat-1">
-                    <a href="tel:+40700000000">
+                    <a href="tel:+40746385038">
                       <i className="fa-solid fa-phone"></i>
                     </a>
                   </div>
                   <h6>
-                    <a href="tel:+40700000000">+40 700 000 000</a>
+                    <a href="tel:+40746385038">+40 746 385 038</a>
                   </h6>
                 </div>
               </div>

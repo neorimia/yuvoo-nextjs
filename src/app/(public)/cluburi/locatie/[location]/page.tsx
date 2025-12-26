@@ -18,6 +18,8 @@ import {
   getLocationDisplayName,
 } from "@/lib/utils/location";
 import { cacheTag } from "next/cache";
+import { PRE_LAUNCH_RESTRICTIONS_ENABLED } from "@/lib/config/pre-launch";
+import PreLaunchPage from "@/components/features/early-access/PreLaunchPage";
 
 interface LocationPageProps {
   params: Promise<{
@@ -121,6 +123,10 @@ export async function generateMetadata({ params }: LocationPageProps): Promise<M
  * - /cluburi/locatie/bucuresti-sector-1 (clubs in Sector 1, Bucharest)
  */
 export default async function LocationClubsPage({ params }: LocationPageProps) {
+  if (PRE_LAUNCH_RESTRICTIONS_ENABLED) {
+    return <PreLaunchPage routeType="club-portal" />;
+  }
+
   const { location } = await params;
   const { city, district } = parseLocationSlug(location);
 

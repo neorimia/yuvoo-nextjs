@@ -1,12 +1,10 @@
+"use cache";
+
 import React from "react";
-import { headers } from "next/headers";
 import type { Metadata } from "next";
 import BreadcrumbOne from "@/components/Breadcrumb/BreadcrumbOne";
 import AboutMain from "@/components/features/about/AboutMain";
-import AboutTeam from "@/components/features/about/AboutTeam";
-import AboutPartners from "@/components/features/about/AboutPartners";
 import HomeTrustSignals from "@/components/features/home/HomeTrustSignals";
-import HomeStats from "@/components/features/home/HomeStats";
 import { routes } from "@/lib/routes";
 
 // Generate metadata for about page
@@ -53,10 +51,6 @@ export async function generateMetadata(): Promise<Metadata> {
  * SEO-friendly route: /despre-noi
  */
 export default async function AboutPage() {
-  // Make page dynamic by accessing headers() BEFORE Sentry can wrap it
-  // This prevents crypto.randomUUID() errors during prerendering
-  await headers();
-
   return (
     <>
       <BreadcrumbOne
@@ -71,11 +65,11 @@ export default async function AboutPage() {
       {/* Trust Signals Section */}
       <HomeTrustSignals />
       {/* Statistics Section */}
-      <HomeStats />
+      {/* <HomeStats /> */}
       {/* Team Section */}
-      <AboutTeam />
+      {/* <AboutTeam /> */}
       {/* Partners Section */}
-      <AboutPartners />
+      {/* <AboutPartners /> */}
     </>
   );
 }

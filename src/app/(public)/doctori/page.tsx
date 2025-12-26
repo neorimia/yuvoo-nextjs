@@ -12,6 +12,8 @@ import type {
   DoctorSearchFilters as DoctorSearchFiltersType,
 } from "@/modules/doctors/doctors.types";
 import ItemListSchema from "@/components/SEO/ItemListSchema";
+import { PRE_LAUNCH_RESTRICTIONS_ENABLED } from "@/lib/config/pre-launch";
+import PreLaunchPage from "@/components/features/early-access/PreLaunchPage";
 
 /**
  * Generate metadata for doctors listing page
@@ -50,6 +52,10 @@ interface DoctorsPageProps {
  * SEO-friendly route: /doctori
  */
 export default async function DoctorsPage({ searchParams }: DoctorsPageProps) {
+  if (PRE_LAUNCH_RESTRICTIONS_ENABLED) {
+    return <PreLaunchPage routeType="doctor-portal" />;
+  }
+
   const params = await searchParams;
   const { specialty, city, district, verified, acceptingNewPatients, onlineConsultations, sortBy } =
     params;

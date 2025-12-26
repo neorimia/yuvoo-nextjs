@@ -8,6 +8,13 @@
       "when": 1765497279676,
       "tag": "0000_clever_tyger_tiger",
       "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "7",
+      "when": 1766696683721,
+      "tag": "0001_shiny_moonstone",
+      "breakpoints": true
     }
   ]
 }

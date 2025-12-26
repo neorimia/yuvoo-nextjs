@@ -236,6 +236,128 @@ Yuvoo provides a unified platform that:
 - Reliable verification process
 - Smooth user experience
 
+## Business Model & Commercial Positioning
+
+### Commercial Platform Definition
+
+**Yuvoo is a commercial platform** - legally and economically, it is:
+
+- A privately operated digital platform
+- Run by a commercial company
+- With direct or indirect monetization objectives
+
+However, Yuvoo is **NOT** an aggressive commercial platform or a classic marketplace. It is positioned as:
+
+- ✅ **Service-based platform** (not product-based)
+- ✅ **Wellbeing-oriented** (not profit-first)
+- ✅ **Value-added intermediation** (guidance, validation, connection)
+- ✅ **Commercially sustainable, not commercially aggressive**
+
+### What Yuvoo Is NOT
+
+Yuvoo is explicitly NOT:
+
+- ❌ E-commerce platform
+- ❌ Marketplace of the OLX type
+- ❌ Direct sales platform
+- ❌ Aggressive advertising site
+- ❌ Platform that "sells children to clubs" (critical distinction)
+
+### Platform Type
+
+Yuvoo is a **Service-Based Digital Platform** that provides:
+
+- **Recommendations** - AI-powered sport guidance
+- **Guidance** - Informed decision-making support
+- **Connection** - Linking parents with verified clubs and specialists
+- **Validation** - Verification processes for trust and safety
+
+**Core Value**: The value is not the product sold, but the **informed decision** enabled.
+
+### Monetization Model
+
+**B2C + B2B2C Hybrid Model**:
+
+- **Parents (B2C)**: Free to use (no direct cost)
+- **Clubs & Specialists (B2B)**: May pay for:
+  - Visibility (verified profiles, premium listings)
+  - Booking services
+  - Access to qualified, relevant audience
+
+### Contextual Positioning Strategy
+
+**Critical**: Yuvoo must be positioned differently depending on the audience and context.
+
+#### 1. Public/Social Media Positioning
+
+❌ **DO NOT say**: "platformă comercială"  
+✅ **DO say**: "platformă digitală" / "platformă de wellbeing pentru copii"
+
+**Correct Example**:
+
+> "Yuvoo este o platformă digitală care ajută părinții să aleagă activitățile potrivite pentru copii."
+
+**Rationale**: Parents should perceive Yuvoo as a trustworthy guidance service, not a commercial marketplace.
+
+#### 2. Legal/GDPR Documentation
+
+✅ **DO say**: "platformă comercială"
+
+**Correct Formulations**:
+
+- "Operator comercial"
+- "Societate comercială"
+- "Servicii oferite contra cost către parteneri"
+
+**Rationale**: Legal documents must accurately reflect the commercial nature of the entity.
+
+#### 3. B2B Partner Communication (Clubs & Doctors)
+
+✅ **DO say**: "platformă comercială PARTENERIALĂ"
+
+**Ideal Formulation**:
+
+> "Yuvoo este o platformă care conectează familiile cu profesioniști, oferind vizibilitate relevantă și cerere calificată."
+
+**Rationale**: Business partners need to understand the commercial value proposition clearly.
+
+#### 4. Investor Communication
+
+✅ **DO say**: "commercial platform" / "SaaS-enabled marketplace"
+
+**Include Clearly**:
+
+- Monetization strategy
+- Scalability model
+- Revenue streams
+- Market opportunity
+
+**Rationale**: Investors require clear commercial viability and growth potential.
+
+### Key Positioning Phrase
+
+**Use this phrase when in doubt about positioning**:
+
+> "Yuvoo este o platformă digitală independentă, operată comercial, care are ca scop ghidarea părinților către alegeri sigure și potrivite pentru copii."
+
+This phrase:
+
+- Acknowledges commercial operation (transparent)
+- Emphasizes independence (trust)
+- Focuses on guidance and safety (wellbeing-first)
+- Positions as a service (not a marketplace)
+
+### Strategic Summary
+
+| Context                 | Positioning                               | Rationale                                       |
+| ----------------------- | ----------------------------------------- | ----------------------------------------------- |
+| **Public/Social Media** | Digital platform / Wellbeing platform     | Trust, accessibility, non-commercial perception |
+| **Legal/GDPR**          | Commercial platform / Commercial operator | Legal accuracy, compliance                      |
+| **B2B Partners**        | Commercial partnership platform           | Clear value proposition, business model         |
+| **Investors**           | Commercial platform / SaaS marketplace    | Commercial viability, scalability               |
+
+**Core Principle**: Yuvoo is commercially sustainable while remaining wellbeing-oriented and parent-trust-focused.
+
 ## Future Vision (Post-Phase 1)
 
 - Payment-enabled bookings

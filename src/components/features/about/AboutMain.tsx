@@ -19,19 +19,16 @@ const AboutMain: React.FC = () => {
         <div className="container">
           <div className="row">
             <div className="col-12">
-              <div className="bd-about-content text-center mb-50">
-                <h1
-                  className="bd-section-title mb-30 wow fadeInUp"
-                  data-wow-duration="1s"
-                  data-wow-delay=".2s"
-                >
-                  Despre Yuvoo
-                </h1>
-                <p className="lead mb-40 wow fadeInUp" data-wow-duration="1s" data-wow-delay=".3s">
+              <SectionTitle
+                title="Despre Yuvoo"
+                subtitle="
                   Platforma AI care transformă modul în care părinții din România găsesc
-                  activitățile sportive perfecte pentru copiii lor.
-                </p>
-              </div>
+                  activitățile sportive perfecte pentru copiii lor. Combinăm recomandări AI personalizate,
+                  cluburi sportive verificate și rețeaua de specialiști pediatri pentru a oferi o ghidare
+                  completă și sigură în alegerile sportive pentru copiii între 4-14 ani."
+                className="mb-60"
+                animationDelay=".2s"
+              />
             </div>
           </div>
         </div>
@@ -68,7 +65,10 @@ const AboutMain: React.FC = () => {
                   </Link>
                 </h3>
                 <p className="bd-about-value-text">
-                  <Link href={routes.quiz.intro} className="text-primary text-decoration-underline">
+                  <Link
+                    href={routes.quiz.intro}
+                    className="text-yuvoo-primary text-decoration-underline"
+                  >
                     Recomandări personalizate de sporturi
                   </Link>{" "}
                   bazate pe profilul unic al copilului tău, generate cu inteligență artificială.
@@ -90,7 +90,10 @@ const AboutMain: React.FC = () => {
                   </Link>
                 </h3>
                 <p className="bd-about-value-text">
-                  <Link href={routes.clubs.list} className="text-primary text-decoration-underline">
+                  <Link
+                    href={routes.clubs.list}
+                    className="text-yuvoo-primary text-decoration-underline"
+                  >
                     Listă curată de cluburi sportive verificate
                   </Link>
                   , cu informații complete despre programe, prețuri și locații.
@@ -114,7 +117,7 @@ const AboutMain: React.FC = () => {
                 <p className="bd-about-value-text">
                   <Link
                     href={routes.doctors.list}
-                    className="text-primary text-decoration-underline"
+                    className="text-yuvoo-primary text-decoration-underline"
                   >
                     Acces la specialiști pediatri relevanți pentru sport
                   </Link>
@@ -157,7 +160,7 @@ const AboutMain: React.FC = () => {
                       </h4>
                       <p className="bd-about-step-text">
                         Răspunde la întrebări simple despre copilul tău.{" "}
-                        <Link href={routes.quiz.intro} className="text-primary">
+                        <Link href={routes.quiz.intro} className="text-yuvoo-primary">
                           AI-ul nostru analizează răspunsurile și generează recomandări
                           personalizate
                         </Link>
@@ -184,7 +187,7 @@ const AboutMain: React.FC = () => {
                         </Link>
                       </h4>
                       <p className="bd-about-step-text">
-                        <Link href={routes.clubs.list} className="text-primary">
+                        <Link href={routes.clubs.list} className="text-yuvoo-primary">
                           Explorează cluburile sportive verificate
                         </Link>{" "}
                         care oferă sporturile recomandate. Filtrează după locație, vârstă și nivel.

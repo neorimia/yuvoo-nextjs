@@ -1,6 +1,6 @@
 import React from "react";
 import Image from "next/image";
-import problem from "../../../../public/assets/img/promotion/1.png";
+import problem from "../../../../public/assets/img/clubs/problem.jpg";
 import line from "../../../../public/assets/img/shape/tripple-line.png";
 
 /**

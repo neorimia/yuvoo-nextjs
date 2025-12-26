@@ -2,7 +2,7 @@ import Link from "next/link";
 import React from "react";
 import Image from "next/image";
 import BreadcrumbSchema from "@/components/SEO/BreadcrumbSchema";
-import bg from "../../../public/assets/img/bg/breadcrumb-bg.jpg";
+import bg from "../../../public/assets/img/bg/cover-yuvoo-breadcrumbs.jpg";
 import line_1 from "../../../public/assets/img/shape/white-curved-line.png";
 import line_2 from "../../../public/assets/img/shape/curved-line-2.png";
 

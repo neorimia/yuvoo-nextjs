@@ -18,6 +18,8 @@ import { generateDoctorExpandedContent } from "@/lib/content/doctor-expanded-con
 import { generateDoctorMetadata } from "@/lib/seo/doctor-metadata";
 import PostHogViewTracking from "@/components/analytics/PostHogViewTracking";
 import { PostHogEvents } from "@/lib/analytics/events";
+import { PRE_LAUNCH_RESTRICTIONS_ENABLED } from "@/lib/config/pre-launch";
+import PreLaunchPage from "@/components/features/early-access/PreLaunchPage";
 
 interface DoctorDetailPageProps {
   params: Promise<{
@@ -47,6 +49,10 @@ export async function generateStaticParams() {
  * SEO-friendly route: /doctori/[slug]
  */
 export default async function DoctorDetailPage({ params }: DoctorDetailPageProps) {
+  if (PRE_LAUNCH_RESTRICTIONS_ENABLED) {
+    return <PreLaunchPage routeType="doctor-portal" />;
+  }
+
   const { slug } = await params;
 
   // Check if we're in production build phase

@@ -50,7 +50,6 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    padding: 30px;
     overflow: hidden;
 
     @media #{$lg} {
@@ -117,7 +116,6 @@
 
     // Category-specific colors
     &.bd-sport-category-echipa {
-      background-color: rgba(33, 150, 243, 0.1);
       color: #2196f3;
 
       i {
@@ -126,7 +124,6 @@
     }
 
     &.bd-sport-category-individual {
-      background-color: rgba(76, 175, 80, 0.1);
       color: #4caf50;
 
       i {
@@ -135,7 +132,6 @@
     }
 
     &.bd-sport-category-combat {
-      background-color: rgba(244, 67, 54, 0.1);
       color: #f44336;
 
       i {
@@ -144,7 +140,6 @@
     }
 
     &.bd-sport-category-artistic {
-      background-color: rgba(156, 39, 176, 0.1);
       color: #9c27b0;
 
       i {
@@ -153,7 +148,6 @@
     }
 
     &.bd-sport-category-altul {
-      background-color: rgba(255, 152, 0, 0.1);
       color: #ff9800;
 
       i {
