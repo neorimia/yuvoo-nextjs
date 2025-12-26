@@ -358,6 +358,34 @@ This phrase:
 
 **Core Principle**: Yuvoo is commercially sustainable while remaining wellbeing-oriented and parent-trust-focused.
 
+### Legal Company Information
+
+**Yuvoo is a project operated by Neorimia SRL, a legal commercial company registered in Romania.**
+
+**Company Details (Neorimia SRL):**
+
+- **Company Name**: Neorimia SRL
+- **CUI (Tax ID)**: 51196719
+- **Registration Number**: J2025005816003 / ROONRC.J2025005816003
+- **CAEN Code**: 6210 - Activitati de realizare a soft-ului la comanda (software orientat client)
+- **Date of Incorporation**: 30 ianuarie 2025
+- **Legal Address**: Jud. Vrancea, Mun. Focsani, Bld. Dimitrie Cantemir, Nr.3, Bl.p, Sc.1, Ap.b16
+
+**Contact Information:**
+
+- **Phone**: +40 746 385 038
+- **Location**: București, România
+- **Email (General)**: contact@yuvoo.ro
+- **Email (GDPR)**: gdpr@yuvoo.ro
+
+This contact information is displayed in:
+
+- Contact information components (`src/components/Info/ContactInfoArea.tsx`)
+- All legal pages (Privacy Policy, Terms & Conditions, Cookie Policy, GDPR)
+- Footer components
+
+**Note**: All legal pages must include complete company information including Neorimia SRL registration details (CUI, Reg. Comerțului) and contact information for GDPR compliance and legal transparency. Yuvoo is operated as a project under Neorimia SRL.
+
 ## Future Vision (Post-Phase 1)
 
 - Payment-enabled bookings
