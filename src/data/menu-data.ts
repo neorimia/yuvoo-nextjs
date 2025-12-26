@@ -42,9 +42,13 @@ const menuData: MenuItem[] = [
   },
   {
     id: 4,
-    hasDropdown: false,
+    hasDropdown: true,
     title: "Doctori",
     link: routes.doctors.list,
+    submenus: [
+      { title: "Toți doctorii", link: routes.doctors.list },
+      { title: "Pentru Doctori", link: routes.doctors.landing },
+    ],
   },
   {
     id: 5,

@@ -14,8 +14,6 @@ export interface StepCardProps {
   stepNumber?: number;
   /** Flaticon class name (e.g., "flaticon-reading") */
   icon?: string;
-  /** Emoji character (alternative to icon) */
-  emoji?: string;
   /** Card title */
   title: string;
   /** Card description/text */
@@ -35,7 +33,6 @@ export interface StepCardProps {
 const StepCard: React.FC<StepCardProps> = ({
   stepNumber,
   icon,
-  emoji,
   title,
   description,
   link,
@@ -55,7 +52,7 @@ const StepCard: React.FC<StepCardProps> = ({
     }
 
     if (variant === "custom") {
-      if (emoji) {
+      if (icon) {
         return (
           <div
             style={{
@@ -88,9 +85,11 @@ const StepCard: React.FC<StepCardProps> = ({
               style={{
                 fontSize: "40px",
                 lineHeight: 1,
+                color: "var(--bd-theme-2)",
+                fontWeight: 700,
               }}
             >
-              {emoji}
+              <i className={icon}></i>
             </div>
           </div>
         );

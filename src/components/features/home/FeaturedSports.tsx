@@ -3,7 +3,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { routes } from "@/lib/routes";
 import SectionTitle from "@/components/shared/SectionTitle";
-import ViewAllLink from "@/components/shared/ViewAllLink";
+import { getFeaturedSports, SportData } from "@/lib/db/seed-data/sports";
 
 /**
  * FeaturedSports Component
@@ -13,7 +13,7 @@ import ViewAllLink from "@/components/shared/ViewAllLink";
  */
 
 interface IFeaturedSport {
-  id: number;
+  id: string;
   slug: string;
   title: string;
   clubCount: number;
@@ -22,68 +22,20 @@ interface IFeaturedSport {
   icon: string;
 }
 
-const featuredSports: IFeaturedSport[] = [
-  {
-    id: 1,
-    slug: "inot",
-    title: "Înot",
-    clubCount: 120,
-    microcopy:
-      "Dezvoltă coordonarea, rezistența și siguranța în apă. Perfect pentru copiii de toate vârstele.",
-    image: "/assets/img/program/home-program-1.jpg",
-    icon: "flaticon-sports",
-  },
-  {
-    id: 2,
-    slug: "gimnastica",
-    title: "Gimnastică",
-    clubCount: 85,
-    microcopy:
-      "Dezvoltă flexibilitatea, forța, coordonarea și disciplina. Ideal pentru copiii activi și energici.",
-    image: "/assets/img/program/home-program-2.jpg",
-    icon: "flaticon-sports",
-  },
-  {
-    id: 3,
-    slug: "fotbal",
-    title: "Fotbal",
-    clubCount: 200,
-    microcopy:
-      "Cel mai popular sport de echipă. Dezvoltă spiritul de echipă, strategia și coordonarea.",
-    image: "/assets/img/program/home-program-3.jpg",
-    icon: "flaticon-sports",
-  },
-  {
-    id: 4,
-    slug: "karate",
-    title: "Karate",
-    clubCount: 65,
-    microcopy:
-      "Dezvoltă respectul, disciplina, autocontrolul și încrederea în sine. Excelent pentru concentrare.",
-    image: "/assets/img/program/home-program-4.jpg",
-    icon: "flaticon-sports",
-  },
-  {
-    id: 5,
-    slug: "dans",
-    title: "Dans",
-    clubCount: 95,
-    microcopy:
-      "Exprimare artistică, creativitate și dezvoltare a coordonării. Perfect pentru copiii creativi.",
-    image: "/assets/img/program/home-program-5.jpg",
-    icon: "flaticon-color-palette",
-  },
-  {
-    id: 6,
-    slug: "baschet",
-    title: "Baschet",
-    clubCount: 110,
-    microcopy:
-      "Dezvoltă coordonarea, strategia, spiritul de echipă și agilitatea. Sport dinamic și captivant.",
-    image: "/assets/img/program/home-program-5.jpg",
-    icon: "flaticon-sports",
-  },
-];
+const featuredSports: IFeaturedSport[] = getFeaturedSports()
+  .slice(0, 6)
+  .map(
+    (sport: SportData) =>
+      ({
+        id: sport.id,
+        slug: sport.slug,
+        title: sport.name,
+        clubCount: 0,
+        microcopy: sport.description,
+        image: sport.image || "",
+        icon: sport.icon || "",
+      }) as IFeaturedSport
+  );
 
 const FeaturedSports = () => {
   return (
@@ -98,16 +50,22 @@ const FeaturedSports = () => {
                   Descoperă cele mai populare sporturi pentru copiii tăi. Explorează{" "}
                   <Link
                     href={routes.sports.list}
-                    className="text-primary text-decoration-underline"
+                    className="text-yuvoo-primary text-decoration-underline"
                   >
                     toate sporturile disponibile
                   </Link>{" "}
                   și{" "}
-                  <Link href={routes.clubs.list} className="text-primary text-decoration-underline">
+                  <Link
+                    href={routes.clubs.list}
+                    className="text-yuvoo-primary text-decoration-underline"
+                  >
                     găsește cluburi verificate
                   </Link>{" "}
                   în apropierea ta. Sau începe cu{" "}
-                  <Link href={routes.quiz.intro} className="text-primary text-decoration-underline">
+                  <Link
+                    href={routes.quiz.intro}
+                    className="text-yuvoo-primary text-decoration-underline"
+                  >
                     chestionarul AI
                   </Link>{" "}
                   pentru recomandări personalizate.
@@ -121,7 +79,7 @@ const FeaturedSports = () => {
         </div>
         <div className="row bd-featured-sports-cards-row">
           {featuredSports.map((sport) => {
-            const animationDelay = `${0.1 * sport.id}s`;
+            const animationDelay = `${0.1 * Number(sport.id)}s`;
 
             return (
               <div
@@ -144,11 +102,12 @@ const FeaturedSports = () => {
                           className="bd-featured-sports-image"
                         />
                       </div>
-                      <div className="bd-featured-sports-chip">
+                      {/* TODO: Add club count */}
+                      {/* <div className="bd-featured-sports-chip">
                         <span className="bd-featured-sports-chip-text">
                           {sport.clubCount} cluburi
                         </span>
-                      </div>
+                      </div> */}
                       <div className="bd-featured-sports-icon">
                         <i className={sport.icon}></i>
                       </div>
@@ -157,7 +116,7 @@ const FeaturedSports = () => {
                       <h4 className="bd-featured-sports-title">{sport.title}</h4>
                       <p className="bd-featured-sports-microcopy">{sport.microcopy}</p>
                       <div className="bd-featured-sports-link-text">
-                        <span>Vezi cluburile</span>
+                        <span>Vezi detalii</span>
                         <i className="fal fa-arrow-right"></i>
                       </div>
                     </div>
@@ -166,9 +125,6 @@ const FeaturedSports = () => {
               </div>
             );
           })}
-        </div>
-        <div className="row justify-content-end bd-featured-sports-view-all-row">
-          <ViewAllLink href={routes.sports.list} text="Vezi toate sporturile" />
         </div>
       </div>
     </section>

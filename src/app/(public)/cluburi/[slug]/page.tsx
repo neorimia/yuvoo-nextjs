@@ -21,6 +21,8 @@ import { generateClubExpandedContent } from "@/lib/content/club-expanded-content
 import { generateClubMetadata } from "@/lib/seo/club-metadata";
 import PostHogViewTracking from "@/components/analytics/PostHogViewTracking";
 import { PostHogEvents } from "@/lib/analytics/events";
+import { PRE_LAUNCH_RESTRICTIONS_ENABLED } from "@/lib/config/pre-launch";
+import PreLaunchPage from "@/components/features/early-access/PreLaunchPage";
 
 interface ClubDetailPageProps {
   params: Promise<{
@@ -50,6 +52,10 @@ export async function generateStaticParams() {
  * SEO-friendly route: /cluburi/[slug]
  */
 export default async function ClubDetailPage({ params }: ClubDetailPageProps) {
+  if (PRE_LAUNCH_RESTRICTIONS_ENABLED) {
+    return <PreLaunchPage routeType="club-portal" />;
+  }
+
   const { slug } = await params;
 
   // Check if we're in production build phase

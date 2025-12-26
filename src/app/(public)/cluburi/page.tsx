@@ -9,6 +9,8 @@ import { routes } from "@/lib/routes";
 import SectionTitle from "@/components/shared/SectionTitle";
 import type { Club, ClubSearchFilters as ClubSearchFiltersType } from "@/modules/clubs/clubs.types";
 import ItemListSchema from "@/components/SEO/ItemListSchema";
+import { PRE_LAUNCH_RESTRICTIONS_ENABLED } from "@/lib/config/pre-launch";
+import PreLaunchPage from "@/components/features/early-access/PreLaunchPage";
 
 /**
  * Generate metadata for clubs listing page
@@ -50,6 +52,10 @@ interface ClubsPageProps {
  * Dynamic route due to searchParams
  */
 export default async function ClubsPage({ searchParams }: ClubsPageProps) {
+  if (PRE_LAUNCH_RESTRICTIONS_ENABLED) {
+    return <PreLaunchPage routeType="club-portal" />;
+  }
+
   // Page is dynamic due to searchParams usage
   const params = await searchParams;
   const {

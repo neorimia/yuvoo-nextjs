@@ -423,7 +423,7 @@ export function contactFormConfirmationTemplate(data: { firstName: string; subje
         <p>Dacă ai întrebări urgente, poți ne contacta direct la:</p>
         <ul>
           <li>Email: <a href="mailto:${senderEmail}">${senderEmail}</a></li>
-          <li>Telefon: +40 700 000 000</li>
+          <li>Telefon: +40 746 385 038</li>
         </ul>
 
         <p style="margin-top: 30px;">
@@ -452,7 +452,7 @@ Vom răspunde la mesajul tău în cel mai scurt timp posibil, de obicei în term
 
 Dacă ai întrebări urgente, poți ne contacta direct la:
 - Email: ${senderEmail}
-- Telefon: +40 700 000 000
+- Telefon: +40 746 385 038
 
 Mulțumim că ai ales Yuvoo!
 Echipa Yuvoo

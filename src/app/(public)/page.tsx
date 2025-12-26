@@ -6,12 +6,8 @@ import React from "react";
 import HomePromotionArea from "@/components/features/home/HomePromotionArea";
 import HowItWorks from "@/components/features/home/HowItWorks";
 import FeaturedSports from "@/components/features/home/FeaturedSports";
-import FeaturedClubs from "@/components/features/home/FeaturedClubs";
-import HomeTestimonial from "@/components/features/home/HomeTestimonial";
-import FeaturedDoctors from "@/components/features/home/FeaturedDoctors";
 import HomeFaq from "@/components/features/home/HomeFaq";
 import HomeTrustSignals from "@/components/features/home/HomeTrustSignals";
-import HomeStats from "@/components/features/home/HomeStats";
 import { cacheLife, cacheTag } from "next/cache";
 
 export const metadata: Metadata = {
@@ -84,11 +80,11 @@ const Home = async () => {
       <HowItWorks />
       <HomePromotionArea promo_space="pt-120 pb-60" />
       <HomeTrustSignals />
-      <HomeStats />
+      {/* <HomeStats /> */}
       <FeaturedSports />
-      <FeaturedClubs />
-      <FeaturedDoctors />
-      <HomeTestimonial />
+      {/* <FeaturedClubs /> */}
+      {/* <FeaturedDoctors /> */}
+      {/* <HomeTestimonial /> */}
       <HomeFaq />
     </>
   );

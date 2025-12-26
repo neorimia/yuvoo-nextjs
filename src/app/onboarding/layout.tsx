@@ -10,8 +10,13 @@ import { redirect } from "next/navigation";
 import { cookies } from "next/headers";
 import type { ReactNode } from "react";
 import { UserRoleEnum } from "@/modules/auth/auth.types";
+import { PRE_LAUNCH_RESTRICTIONS_ENABLED } from "@/lib/config/pre-launch";
+import PreLaunchPage from "@/components/features/early-access/PreLaunchPage";
 
 export default async function OnboardingLayout({ children }: { children: ReactNode }) {
+  if (PRE_LAUNCH_RESTRICTIONS_ENABLED) {
+    return <PreLaunchPage routeType="onboarding" />;
+  }
   // During production builds, skip authentication checks entirely
   // This prevents "cookies() rejects during prerender" errors
   const isProductionBuild = process.env.NEXT_PHASE === "phase-production-build";

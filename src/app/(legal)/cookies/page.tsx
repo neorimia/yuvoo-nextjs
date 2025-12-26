@@ -65,6 +65,10 @@ export default function CookiePolicyPage() {
                       astfel încât să nu trebuiască să le reintroduci de fiecare dată când revii pe
                       site sau navighezi de la o pagină la alta.
                     </p>
+                    <p className="mb-20">
+                      Această politică de cookie-uri este aplicată de <strong>Neorimia SRL</strong>{" "}
+                      (CUI: 51196719, Reg. Comerțului: J2025005816003), operatorul platformei Yuvoo.
+                    </p>
                   </div>
 
                   <div className="bd-legal-section mb-40">
@@ -213,6 +217,10 @@ export default function CookiePolicyPage() {
                     <p className="mb-15">
                       Pentru întrebări despre utilizarea cookie-urilor, contactează-ne:
                     </p>
+                    <p className="mb-15">
+                      <strong>Operator servicii:</strong> Neorimia SRL (CUI: 51196719, Reg.
+                      Comerțului: J2025005816003)
+                    </p>
                     <ul className="mb-0">
                       <li>
                         <strong>Email:</strong>{" "}
@@ -221,7 +229,17 @@ export default function CookiePolicyPage() {
                         </a>
                       </li>
                       <li>
+                        <strong>Telefon:</strong>{" "}
+                        <a href="tel:+40746385038" className="text-primary">
+                          +40 746 385 038
+                        </a>
+                      </li>
+                      <li>
                         <strong>Adresă:</strong> București, România
+                      </li>
+                      <li>
+                        <strong>Adresă legală (sediu social):</strong> Jud. Vrancea, Mun. Focsani,
+                        Bld. Dimitrie Cantemir, Nr.3, Bl.p, Sc.1, Ap.b16
                       </li>
                     </ul>
                   </div>

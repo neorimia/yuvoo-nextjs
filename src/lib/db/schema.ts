@@ -443,3 +443,25 @@ export const auditLogs = pgTable(
     userActionIdx: index("idx_audit_logs_user_action").on(table.userId, table.action),
   })
 );
+
+// Waitlist emails table - stores early access signup emails
+export const waitlistEmails = pgTable(
+  "waitlist_emails",
+  {
+    id: text("id")
+      .primaryKey()
+      .default(sql`gen_random_uuid()`),
+    email: text("email").notNull(),
+    name: text("name"), // Optional name field
+    userType: text("user_type"), // "parent", "club", "doctor", or null
+    source: text("source"), // Route path where signup occurred (e.g., "/chestionar", "/parent/dashboard")
+    createdAt: timestamp("created_at").defaultNow().notNull(),
+  },
+  (table) => ({
+    // Performance indexes
+    emailIdx: index("idx_waitlist_emails_email").on(table.email),
+    userTypeIdx: index("idx_waitlist_emails_user_type").on(table.userType),
+    sourceIdx: index("idx_waitlist_emails_source").on(table.source),
+    createdAtIdx: index("idx_waitlist_emails_created_at").on(table.createdAt),
+  })
+);
