@@ -64,9 +64,12 @@ export default function TermsOfServicePage() {
                       platforma.
                     </p>
                     <p className="mb-20">
-                      Pentru a crea un cont și a folosi serviciile Yuvoo, trebuie să ai cel puțin 18
-                      ani sau să ai consimțământul părinților/tutorelor legali. Platforma este
-                      destinată părinților care caută activități sportive pentru copiii lor.
+                      Yuvoo este un proiect operat de <strong>Neorimia SRL</strong>, societate
+                      comercială înregistrată în România cu CUI 51196719, Reg. Comerțului
+                      J2025005816003. Pentru a crea un cont și a folosi serviciile Yuvoo, trebuie să
+                      ai cel puțin 18 ani sau să ai consimțământul părinților/tutorelor legali.
+                      Platforma este destinată părinților care caută activități sportive pentru
+                      copiii lor.
                     </p>
                   </div>
 
@@ -240,6 +243,10 @@ export default function TermsOfServicePage() {
                     <p className="mb-15">
                       Pentru întrebări despre acești termeni și condiții, contactează-ne:
                     </p>
+                    <p className="mb-15">
+                      <strong>Operator servicii:</strong> Neorimia SRL (CUI: 51196719, Reg.
+                      Comerțului: J2025005816003)
+                    </p>
                     <ul className="mb-0">
                       <li>
                         <strong>Email:</strong>{" "}
@@ -248,7 +255,17 @@ export default function TermsOfServicePage() {
                         </a>
                       </li>
                       <li>
+                        <strong>Telefon:</strong>{" "}
+                        <a href="tel:+40746385038" className="text-primary">
+                          +40 746 385 038
+                        </a>
+                      </li>
+                      <li>
                         <strong>Adresă:</strong> București, România
+                      </li>
+                      <li>
+                        <strong>Adresă legală (sediu social):</strong> Jud. Vrancea, Mun. Focsani,
+                        Bld. Dimitrie Cantemir, Nr.3, Bl.p, Sc.1, Ap.b16
                       </li>
                     </ul>
                   </div>

@@ -3,7 +3,7 @@
 import Image, { StaticImageData } from "next/image";
 import Link from "next/link";
 import React from "react";
-import promotion from "../../../../public/assets/img/promotion/1.png";
+import promotion from "../../../../public/assets/img/promotion/1.jpg";
 import line from "../../../../public/assets/img/shape/tripple-line.png";
 import { useVideoModal } from "@/provider/VideoProvider";
 import factData from "@/data/fact-data";

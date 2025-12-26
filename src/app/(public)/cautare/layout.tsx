@@ -1,3 +1,5 @@
+import PreLaunchPage from "@/components/features/early-access/PreLaunchPage";
+import { PRE_LAUNCH_RESTRICTIONS_ENABLED } from "@/lib/config/pre-launch";
 import type { Metadata } from "next";
 
 /**
@@ -20,5 +22,8 @@ export const metadata: Metadata = {
 };
 
 export default function SearchLayout({ children }: { children: React.ReactNode }) {
+  if (PRE_LAUNCH_RESTRICTIONS_ENABLED) {
+    return <PreLaunchPage routeType="dashboard" />;
+  }
   return <>{children}</>;
 }

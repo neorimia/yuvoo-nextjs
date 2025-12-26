@@ -64,7 +64,10 @@ export default function GDPRForParentsPage() {
                       General privind Protecția Datelor (GDPR) și legislației române.
                     </p>
                     <p className="mb-20">
-                      GDPR oferă protecție specială pentru datele copiilor sub 16 ani. Yuvoo
+                      Yuvoo este un proiect operat de <strong>Neorimia SRL</strong>, societate
+                      comercială înregistrată în România cu CUI 51196719, Reg. Comerțului
+                      J2025005816003. GDPR oferă protecție specială pentru datele copiilor sub 16
+                      ani. Neorimia SRL, ca operator de date personale pentru platforma Yuvoo,
                       respectă aceste reguli și lucrează doar cu consimțământul părinților sau
                       tutorelor legali.
                     </p>
@@ -333,6 +336,10 @@ export default function GDPRForParentsPage() {
                     <p className="mb-15">
                       Pentru întrebări despre protecția datelor copiilor, contactează-ne:
                     </p>
+                    <p className="mb-15">
+                      <strong>Operator de date personale:</strong> Neorimia SRL (CUI: 51196719, Reg.
+                      Comerțului: J2025005816003)
+                    </p>
                     <ul className="mb-0">
                       <li>
                         <strong>Email:</strong>{" "}
@@ -341,7 +348,17 @@ export default function GDPRForParentsPage() {
                         </a>
                       </li>
                       <li>
+                        <strong>Telefon:</strong>{" "}
+                        <a href="tel:+40746385038" className="text-primary">
+                          +40 746 385 038
+                        </a>
+                      </li>
+                      <li>
                         <strong>Adresă:</strong> București, România
+                      </li>
+                      <li>
+                        <strong>Adresă legală (sediu social):</strong> Jud. Vrancea, Mun. Focsani,
+                        Bld. Dimitrie Cantemir, Nr.3, Bl.p, Sc.1, Ap.b16
                       </li>
                     </ul>
                   </div>

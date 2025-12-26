@@ -111,13 +111,19 @@ export default async function SportsPage() {
                 </div>
                 <h3 className="bd-sports-intro-card-title">Găsește Sportul Potrivit</h3>
                 <p className="bd-sports-intro-card-text">
-                  <Link href={routes.quiz.intro} className="text-primary text-decoration-underline">
+                  <Link
+                    href={routes.quiz.intro}
+                    className="text-yuvoo-primary text-decoration-underline"
+                  >
                     Folosește chestionarul nostru AI
                   </Link>{" "}
                   pentru a primi recomandări personalizate bazate pe profilul copilului tău. Sau
                   explorează manual toate sporturile disponibile și descoperă opțiunile care se
                   potrivesc cel mai bine. După ce alegi un sport,{" "}
-                  <Link href={routes.clubs.list} className="text-primary text-decoration-underline">
+                  <Link
+                    href={routes.clubs.list}
+                    className="text-yuvoo-primary text-decoration-underline"
+                  >
                     găsește cluburi verificate
                   </Link>{" "}
                   care îl oferă.
@@ -135,7 +141,10 @@ export default async function SportsPage() {
                 </div>
                 <h3 className="bd-sports-intro-card-title">Cluburi Verificate</h3>
                 <p className="bd-sports-intro-card-text">
-                  <Link href={routes.clubs.list} className="text-primary text-decoration-underline">
+                  <Link
+                    href={routes.clubs.list}
+                    className="text-yuvoo-primary text-decoration-underline"
+                  >
                     Toate cluburile de pe Yuvoo sunt verificate
                   </Link>{" "}
                   de echipa noastră pentru siguranță și calitate. Găsește cluburi aproape de tine,

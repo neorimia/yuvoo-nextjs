@@ -64,8 +64,10 @@ export default function PrivacyPolicyPage() {
                       folosim, păstrăm și protejăm informațiile tale când folosești platforma Yuvoo.
                     </p>
                     <p className="mb-20">
-                      Respectăm Regulamentul General privind Protecția Datelor (GDPR) și legislația
-                      română privind protecția datelor personale. Această politică se aplică tuturor
+                      Yuvoo este un proiect operat de <strong>Neorimia SRL</strong>, societate
+                      comercială înregistrată în România cu CUI 51196719, J2025005816003. Respectăm
+                      Regulamentul General privind Protecția Datelor (GDPR) și legislația română
+                      privind protecția datelor personale. Această politică se aplică tuturor
                       utilizatorilor platformei Yuvoo.
                     </p>
                   </div>
@@ -292,6 +294,10 @@ export default function PrivacyPolicyPage() {
                       Pentru întrebări despre această politică de confidențialitate sau pentru a
                       exercita drepturile tale GDPR, contactează-ne:
                     </p>
+                    <p className="mb-15">
+                      <strong>Operator de date personale:</strong> Neorimia SRL (CUI: 51196719, Reg.
+                      Comerțului: J2025005816003)
+                    </p>
                     <ul className="mb-0">
                       <li>
                         <strong>Email:</strong>{" "}
@@ -300,7 +306,17 @@ export default function PrivacyPolicyPage() {
                         </a>
                       </li>
                       <li>
+                        <strong>Telefon:</strong>{" "}
+                        <a href="tel:+40746385038" className="text-primary">
+                          +40 746 385 038
+                        </a>
+                      </li>
+                      <li>
                         <strong>Adresă:</strong> București, România
+                      </li>
+                      <li>
+                        <strong>Adresă legală (sediu social):</strong> Jud. Vrancea, Mun. Focsani,
+                        Bld. Dimitrie Cantemir, Nr.3, Bl.p, Sc.1, Ap.b16
                       </li>
                     </ul>
                   </div>

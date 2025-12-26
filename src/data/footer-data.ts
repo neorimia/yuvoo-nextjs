@@ -64,11 +64,16 @@ const footerData: IFooterData = {
       },
       {
         id: 6,
+        menu: "Pentru Doctori",
+        path: "/pentru-doctori",
+      },
+      {
+        id: 7,
         menu: "Chestionar",
         path: "/chestionar",
       },
       {
-        id: 7,
+        id: 8,
         menu: "Contact",
         path: "/contact",
       },
@@ -136,11 +141,16 @@ const footerData: IFooterData = {
       },
       {
         id: 5,
+        menu: "Pentru Doctori",
+        path: "/pentru-doctori",
+      },
+      {
+        id: 6,
         menu: "Întrebări frecvente",
         path: "/intrebari-frecvente",
       },
       {
-        id: 6,
+        id: 7,
         menu: "Ajutor",
         path: "/ajutor",
       },
@@ -159,8 +169,8 @@ const footerData: IFooterData = {
       {
         id: 2,
         icon: "fa-light fa-phone",
-        url: "tel:+40700000000",
-        title: "+40 700 000 000",
+        url: "tel:+40746385038",
+        title: "+40 746 385 038",
       },
       {
         id: 3,

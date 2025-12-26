@@ -42,6 +42,7 @@ export const routes = {
   // Doctors (Doctori)
   doctors: {
     list: "/doctori",
+    landing: "/pentru-doctori", // Landing page for doctors to join as Verified Pediatric Experts
     detail: (slug: string) => `/doctori/${slug}`,
   },
   // Quiz (Chestionar)

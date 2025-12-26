@@ -4,15 +4,24 @@ import { requireAuth } from "@/lib/auth/session";
 import PostHogUserIdentification from "@/components/analytics/PostHogUserIdentification";
 import { SentryUserContext } from "@/components/shared/SentryUserContext";
 import DashboardShell from "@/components/layout/DashboardShell";
+import { PRE_LAUNCH_RESTRICTIONS_ENABLED } from "@/lib/config/pre-launch";
+import PreLaunchPage from "@/components/features/early-access/PreLaunchPage";
 
 /**
  * Doctor Routes Layout
  *
  * Layout for all doctor-protected routes.
- * Wraps content with DashboardShell for consistent navigation and layout.
+ * Checks pre-launch restrictions flag first.
+ * If enabled, shows pre-launch page instead of dashboard.
+ * Otherwise, wraps content with DashboardShell for consistent navigation and layout.
  * Automatically identifies users with PostHog for analytics tracking.
  */
 export default async function DoctorLayout({ children }: { children: React.ReactNode }) {
+  // Check pre-launch restrictions first
+  if (PRE_LAUNCH_RESTRICTIONS_ENABLED) {
+    return <PreLaunchPage routeType="doctor-portal" />;
+  }
+
   // Explicitly access cookies to ensure route is dynamic
   await cookies();
   // Require authentication

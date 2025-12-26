@@ -9,6 +9,8 @@ import React from "react";
 import Link from "next/link";
 import { routes } from "@/lib/routes";
 import type { Sport } from "@/modules/sports/sports.types";
+import Image from "next/image";
+import { isPlaceholderUrl } from "@/lib/utils/image-helpers";
 
 interface SportCardProps {
   sport: Sport;
@@ -35,10 +37,16 @@ const SportCard: React.FC<SportCardProps> = ({ sport, className = "" }) => {
   return (
     <div className={`bd-sport-card fix radius-24 p-relative mb-50 ${className}`}>
       <div className="bd-sport-card-thumb">
-        {sport.icon && (
-          <div className="bd-sport-card-icon-wrapper">
-            <i className={`bd-sport-card-icon ${sport.icon}`}></i>
-          </div>
+        {sport.image && (
+          <Image
+            src={sport.image}
+            alt={sport.name}
+            width={600}
+            height={400}
+            style={{ width: "100%", height: "100%", objectFit: "cover" }}
+            quality={85}
+            unoptimized={isPlaceholderUrl(sport.image)}
+          />
         )}
         <div className={`bd-sport-card-category-badge ${categoryColors[sport.category] || ""}`}>
           <i className="flaticon-category"></i>

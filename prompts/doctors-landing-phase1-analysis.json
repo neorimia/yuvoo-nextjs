@@ -1,0 +1,449 @@
+{
+  "analysis": {
+    "reusableComponents": [
+      {
+        "componentName": "SectionTitle",
+        "location": "src/components/shared/SectionTitle.tsx",
+        "canBeReused": true,
+        "changesNeeded": null,
+        "reasoning": "Fully reusable shared component. Used in all clubs landing sections and can be used identically in doctors landing."
+      },
+      {
+        "componentName": "FaqAccordionItem",
+        "location": "src/components/shared/FaqAccordionItem.tsx",
+        "canBeReused": true,
+        "changesNeeded": null,
+        "reasoning": "Fully reusable shared component for FAQ accordion structure. Only content changes needed (FAQ data)."
+      },
+      {
+        "componentName": "StepCard",
+        "location": "src/components/shared/StepCard.tsx",
+        "canBeReused": true,
+        "changesNeeded": null,
+        "reasoning": "Fully reusable for step-by-step process display (e.g., collaboration process). Used in ClubsLandingSolution, can be used in doctors collaboration section."
+      },
+      {
+        "componentName": "TrustCard",
+        "location": "src/components/shared/TrustCard.tsx",
+        "canBeReused": true,
+        "changesNeeded": null,
+        "reasoning": "Fully reusable for trust indicators, benefits, or feature cards. Used in ClubsLandingBenefits and ClubsLandingTrust, can be used identically in doctors sections."
+      }
+    ],
+    "extractableSharedComponents": [
+      {
+        "componentName": "LandingHero",
+        "currentLocation": "src/components/features/clubs/ClubsLandingHero.tsx",
+        "proposedSharedLocation": "src/components/shared/LandingHero.tsx",
+        "abstraction": "Extract common hero structure (section wrapper, gradient bg, headline, subheadline, CTA button) with props for content customization. Keep domain-specific props (verifiedCount, remainingSpots) as optional.",
+        "props": {
+          "subtitle": "string",
+          "headline": "string",
+          "valueProposition": "string",
+          "keyBenefits": "string[]",
+          "primaryCTA": {
+            "text": "string",
+            "onClick": "function",
+            "modalId": "string"
+          },
+          "secondaryCTA": {
+            "text": "string",
+            "href": "string",
+            "optional": true
+          },
+          "ctaSubtitle": {
+            "type": "string",
+            "optional": true
+          },
+          "dynamicContent": {
+            "type": "React.ReactNode",
+            "optional": true
+          }
+        },
+        "priority": "low",
+        "reasoning": "Hero sections have similar structure but significant content differences. Extraction would require many props, reducing clarity. Better to adapt per landing page."
+      },
+      {
+        "componentName": "LandingProblem",
+        "currentLocation": "src/components/features/clubs/ClubsLandingProblem.tsx",
+        "proposedSharedLocation": "src/components/shared/LandingProblem.tsx",
+        "abstraction": "Extract problem section structure (image on left, content on right, problem list, closing statement box) with props for content.",
+        "props": {
+          "title": "string",
+          "introText": "string",
+          "problems": "string[]",
+          "closingStatement": "string",
+          "image": {
+            "src": "string",
+            "alt": "string"
+          }
+        },
+        "priority": "medium",
+        "reasoning": "Problem section structure is identical (image + content layout). Only content differs. Could be extracted for reuse, but low priority given it's only used twice."
+      },
+      {
+        "componentName": "LandingFooter",
+        "currentLocation": "src/components/features/clubs/ClubsLandingFooter.tsx",
+        "proposedSharedLocation": "src/components/shared/LandingFooter.tsx",
+        "abstraction": "Extract footer microcopy section structure with props for content text.",
+        "props": {
+          "text": "string | React.ReactNode",
+          "className": "string | null"
+        },
+        "priority": "low",
+        "reasoning": "Very simple component with only text content. Extraction adds little value. Better to adapt per landing page for clarity."
+      }
+    ],
+    "adaptableComponents": [
+      {
+        "originalComponent": "ClubsLandingHero",
+        "newComponentName": "DoctorsLandingHero",
+        "adaptations": [
+          "Remove verifiedCount and remainingSpots props (no spots counter for doctors)",
+          "Remove dynamic spots counter UI",
+          "Remove 'remaining spots' conditional logic",
+          "Change CTA text to 'Devino Expert Pediatric Verificat'",
+          "Add secondary CTA 'Programează un call de 15 minute'",
+          "Update headline, subheadline, value proposition per brief",
+          "Change key benefits to trust cues per brief",
+          "Remove urgency language",
+          "Simplify CTA section (no conditional rendering for spots)"
+        ],
+        "contentChanges": [
+          "Subtitle: 'Pentru Doctori & Specialiști Pediatrici' → Brief content",
+          "Headline: 'Ajută părinții să aleagă sportul potrivit pentru copii, în siguranță medicală'",
+          "Value proposition: Brief content about guidance platform with medical validation",
+          "Trust cues: 'Nu suntem marketplace medical', 'Fără promovare agresivă', 'Control editorial complet'",
+          "Primary CTA: 'Devino Expert Pediatric Verificat'",
+          "Secondary CTA: 'Programează un call de 15 minute'"
+        ],
+        "props": {
+          "onCTAClick": "function",
+          "modalId": "string"
+        }
+      },
+      {
+        "originalComponent": "ClubsLandingProblem",
+        "newComponentName": "DoctorsLandingProblem",
+        "adaptations": [
+          "Update content to reflect doctor's perspective (not club's perspective)",
+          "Change problems list to match brief (parents choosing wrong sports, doctor sees consequences too late)",
+          "Update closing statement to match brief",
+          "Update image alt text for doctors context",
+          "Update section title and intro text"
+        ],
+        "contentChanges": [
+          "Title: 'De ce este nevoie de expertiza ta'",
+          "Intro: Brief content about parents choosing sports too early",
+          "Problems: Brief list (parents choose too early, based on incomplete info, without considering development)",
+          "Closing statement: 'Yuvoo intervine înainte de decizia greșită'"
+        ],
+        "props": {}
+      },
+      {
+        "originalComponent": "ClubsLandingSolution",
+        "newComponentName": "DoctorsLandingWhatIsNot",
+        "adaptations": [
+          "Change section title to 'Ce este (și ce NU este) Yuvoo'",
+          "Replace 4-step process with 'What Is' and 'What Is Not' sections",
+          "Use two-column layout with checkmarks (✓) for 'What Is' and X marks (✗) for 'What Is Not'",
+          "Remove CTA button (no CTA in this section per brief)",
+          "Update background color if needed"
+        ],
+        "contentChanges": [
+          "Title: 'Ce este (și ce NU este) Yuvoo'",
+          "What Is list: Brief content (platformă de educație, strat de validare, cadru pentru expertiză, proiect de prevenție)",
+          "What Is Not list: Brief content (nu marketplace, nu platformă de vânzare, nu promovează agresiv, nu afectează autonomia)"
+        ],
+        "props": {}
+      },
+      {
+        "originalComponent": "ClubsLandingBenefits",
+        "newComponentName": "DoctorsLandingRole",
+        "adaptations": [
+          "Replace benefits grid with 'Doctor's Role' content",
+          "Change section title to 'Rolul tău în Yuvoo'",
+          "Subtitle: 'Expert pediatric, nu furnizor comercial'",
+          "Use bullet points for role description",
+          "Add 'How you appear in platform' subsection",
+          "Add 'No obligation' callout boxes",
+          "Remove requirements and eligibility sections (not needed for doctors)"
+        ],
+        "contentChanges": [
+          "Title: 'Rolul tău în Yuvoo'",
+          "Subtitle: 'Expert pediatric, nu furnizor comercial'",
+          "Role bullets: Brief content (contribute to validation, offer medical context, help prevent wrong decisions)",
+          "Platform appearance: Brief content (appear as recommended expert, cited in content, associated with sport types)",
+          "No obligation callouts: 'Fără obligația de a oferi consultații', 'Fără presiune comercială'"
+        ],
+        "props": {}
+      },
+      {
+        "originalComponent": "ClubsLandingSolution",
+        "newComponentName": "DoctorsLandingCollaboration",
+        "adaptations": [
+          "Reuse step-by-step structure with StepCard component",
+          "Update to 5 steps instead of 4",
+          "Change step content to match collaboration process from brief",
+          "Update section title to 'Cum funcționează colaborarea'",
+          "Add emphasis: 'Niciun profil nu este afișat public fără verificare'",
+          "Remove CTA button (no CTA in this section per brief)"
+        ],
+        "contentChanges": [
+          "Title: 'Cum funcționează colaborarea'",
+          "Step 1: 'Creezi un cont profesional'",
+          "Step 2: 'Completezi profilul (specializare, experiență pediatrică relevantă)'",
+          "Step 3: 'Profilul este verificat manual'",
+          "Step 4: 'Primești badge-ul Verified Pediatric Expert'",
+          "Step 5: 'Apari ca expert în platformă'",
+          "Emphasis text: 'Niciun profil nu este afișat public fără verificare'"
+        ],
+        "props": {}
+      },
+      {
+        "originalComponent": "ClubsLandingBenefits",
+        "newComponentName": "DoctorsLandingEthics",
+        "adaptations": [
+          "Create new section for Ethics, GDPR & Professional Control (critical section per brief)",
+          "Use TrustCard components to display ethics points",
+          "Structure: Section title + grid of trust cards",
+          "Content focused on GDPR, data protection, professional control",
+          "Use icons: shield (GDPR), lock (data protection), user-check (control), edit (edit profile)"
+        ],
+        "contentChanges": [
+          "Title: 'Etică, confidențialitate și control profesional'",
+          "Trust cards: Brief content (GDPR-compliant, no sensitive data storage, no online diagnosis, no individual recommendations, full control, can edit/withdraw anytime)",
+          "Closing statement: 'Reputația ta profesională este tratată cu maximă responsabilitate'"
+        ],
+        "props": {}
+      },
+      {
+        "originalComponent": "ClubsLandingTestimonials",
+        "newComponentName": "DoctorsLandingWhyChoose",
+        "adaptations": [
+          "Replace testimonials with 'Why Doctors Choose Yuvoo' section",
+          "NOT commercial testimonials - use proof logic instead",
+          "Use bullet points or cards for reasons",
+          "Add quote: 'Yuvoo creează un spațiu în care expertiza medicală este folosită corect, nu exploatată.'",
+          "Structure: Section title + list of reasons + quote"
+        ],
+        "contentChanges": [
+          "Title: 'De ce medicii aleg Yuvoo'",
+          "Reasons: Brief content (responsible association, educational impact, professional visibility not advertising, clear ethical framework)",
+          "Quote: Brief quote about medical expertise being used correctly, not exploited"
+        ],
+        "props": {}
+      },
+      {
+        "originalComponent": "ClubsLandingBenefits",
+        "newComponentName": "DoctorsLandingTargetAudience",
+        "adaptations": [
+          "Reuse eligibility section structure (two-column: 'Is For' / 'Is Not For')",
+          "Update to match doctors brief content",
+          "Change section title to 'Cui se adresează această pagină'",
+          "Update icons and styling"
+        ],
+        "contentChanges": [
+          "Title: 'Cui se adresează această pagină'",
+          "Is For: Brief list (pediatri, ortopezi pediatrici, medici sportivă pediatrică, psihologi copii, nutriționiști pediatrici)",
+          "Is Not For: Brief list (promovare agresivă, lead selling, practici medicale neclare)"
+        ],
+        "props": {}
+      },
+      {
+        "originalComponent": "ClubsLandingFAQ",
+        "newComponentName": "DoctorsLandingFAQ",
+        "adaptations": [
+          "Keep exact structure (SectionTitle + FaqAccordionItem + link to full FAQ)",
+          "Update FAQ data source (create doctors-faq-data.tsx)",
+          "Update accordion ID to 'doctorsFaqAccordion'",
+          "Update section title if needed",
+          "Keep link to routes.faq (same FAQ page)"
+        ],
+        "contentChanges": [
+          "Title: 'Întrebări frecvente' (same)",
+          "FAQ items: Brief questions and answers (Is Yuvoo commercial platform? Must I accept consultations? How is reputation protected? Can I withdraw anytime? Are there costs?)"
+        ],
+        "props": {
+          "accordionId": "string (doctorsFaqAccordion)"
+        }
+      },
+      {
+        "originalComponent": "ClubsLandingFinalCTA",
+        "newComponentName": "DoctorsLandingFinalCTA",
+        "adaptations": [
+          "Remove verifiedCount and remainingSpots props (NO urgency/spots for doctors)",
+          "Remove spots counter UI completely",
+          "Remove location info (not needed per brief)",
+          "Simplify to just title, CTA buttons, subtitle",
+          "Add secondary CTA button",
+          "Update CTA text per brief",
+          "Remove conditional rendering for spots",
+          "Low-pressure language only"
+        ],
+        "contentChanges": [
+          "Title: 'Devino Expert Pediatric Verificat'",
+          "Primary CTA: 'Aplică pentru rolul de Expert Pediatric Verificat'",
+          "Secondary CTA: 'Programează un call de clarificare (15 min)'",
+          "Subtitle: Brief content about contributing to safer sport choices (low-pressure)",
+          "Remove all urgency language"
+        ],
+        "props": {
+          "onPrimaryCTAClick": "function",
+          "onSecondaryCTAClick": "function | null",
+          "modalId": "string"
+        }
+      },
+      {
+        "originalComponent": "ClubsLandingTrust",
+        "newComponentName": "DoctorsLandingTrust",
+        "adaptations": [
+          "Keep exact structure (SectionTitle + TrustCard grid)",
+          "Update trust indicators content for doctors context",
+          "Update section title if needed",
+          "Update icons and descriptions",
+          "Keep links if applicable (e.g., GDPR link)"
+        ],
+        "contentChanges": [
+          "Title: 'Siguranță & încredere' (can keep same or update)",
+          "Trust cards: Brief content updated for doctors (GDPR compliance, manual verification, focus on children's healthy development)"
+        ],
+        "props": {}
+      },
+      {
+        "originalComponent": "ClubsLandingFooter",
+        "newComponentName": "DoctorsLandingFooter",
+        "adaptations": [
+          "Keep exact structure (simple text section)",
+          "Update text content per brief"
+        ],
+        "contentChanges": [
+          "Text: 'Yuvoo nu înlocuiește actul medical. Yuvoo ajută părinții să ajungă la decizii mai bune, mai devreme.'"
+        ],
+        "props": {}
+      },
+      {
+        "originalComponent": "ClubsContactModal",
+        "newComponentName": "DoctorsContactModal",
+        "adaptations": [
+          "Keep exact structure (modal form with React Hook Form)",
+          "Update modal title to 'Devino Expert Pediatric Verificat'",
+          "Update form subject default to 'Interesat în rolul de Expert Pediatric Verificat'",
+          "Update 'What you get' content for doctors",
+          "Update success message for doctors context",
+          "Update form labels/placeholders if needed",
+          "Update modal ID constant"
+        ],
+        "contentChanges": [
+          "Title: 'Devino Expert Pediatric Verificat'",
+          "Subject default: 'Interesat în rolul de Expert Pediatric Verificat'",
+          "What you get: Update to doctors benefits (expert verification, educational contribution, etc.)",
+          "Success message: Update to doctors context"
+        ],
+        "props": {
+          "modalId": "string (DOCTORS_CONTACT_MODAL_ID)"
+        }
+      }
+    ],
+    "newComponents": [
+      {
+        "componentName": "doctors-landing-modal.ts",
+        "reason": "Utility file for doctors contact modal (similar to clubs-landing-modal.ts)",
+        "structure": "Export DOCTORS_CONTACT_MODAL_ID constant and openDoctorsContactModal function",
+        "relatedBriefSection": "Modal utilities"
+      },
+      {
+        "componentName": "doctors-faq-data.tsx",
+        "reason": "FAQ data source for doctors landing page (similar to clubs-faq-data.tsx)",
+        "structure": "Export doctorsFaqItems array with FAQItem type",
+        "relatedBriefSection": "FAQ section from brief"
+      }
+    ]
+  },
+  "sharedPatterns": {
+    "stylingPatterns": [
+      "Bootstrap 5.3.3 utility classes (container, row, col-lg-*, etc.)",
+      "SCSS classes: bd-hero-area, bd-section-title-wrapper, bd-promotion-area, etc.",
+      "Inline styles for custom styling (borderRadius, padding, backgroundColor, etc.)",
+      "WOW.js animation classes: wow fadeInUp, data-wow-duration, data-wow-delay",
+      "Color variables: var(--bd-theme-1), #EBFFFE (light cyan), #FFF6EB (light beige), #FFFFFF, #424242, #6B6B6B",
+      "Border radius: 16px for cards/boxes, 12px for badges",
+      "Section spacing: pt-120 pb-70 or pt-70 pb-120",
+      "Box shadows: 0px 4px 12px rgba(0, 0, 0, 0.06) for cards"
+    ],
+    "structurePatterns": [
+      "Section wrapper: <section className='bd-[name] pt-X pb-Y'>",
+      "Container: <div className='container'>",
+      "Row/Center: <div className='row justify-content-center'>",
+      "Content width: <div className='col-lg-10 col-xl-9'> or <div className='col-lg-12'>",
+      "Section title: <SectionTitle title='...' className='mb-50' animationDelay='.3s' />",
+      "WOW animation: data-wow-duration='1s' data-wow-delay='[incrementing values]'",
+      "Text center alignment for hero/CTA sections",
+      "Two-column layouts for eligibility/comparison sections (col-lg-6)"
+    ],
+    "animationPatterns": [
+      "WOW.js fadeInUp with incremental delays (0.3s, 0.4s, 0.5s, etc.)",
+      "Animation delay increments of 0.1s between items",
+      "data-wow-duration='1s' consistently used",
+      "Section titles: animationDelay='.3s'",
+      "Content items: animationDelay starting at '.4s' and incrementing"
+    ],
+    "modalPatterns": [
+      "Bootstrap 5 modal structure with modal-dialog-centered modal-lg",
+      "React Hook Form for form handling",
+      "useState for submit status (success/error)",
+      "useEffect for modal cleanup (backdrop removal, body class removal)",
+      "Auto-close modal after 3 seconds on success",
+      "Form validation with error messages",
+      "Privacy checkbox with link to routes.privacy"
+    ],
+    "ctaPatterns": [
+      "bd-btn class with bd-btn-inner and bd-btn-normal/bd-btn-hover spans",
+      "PostHog event tracking on CTA clicks",
+      "Modal opening via utility function",
+      "Primary CTA: prominent button",
+      "Secondary CTA: text link or smaller button",
+      "CTA subtitle: smaller text below button"
+    ]
+  },
+  "recommendations": {
+    "sharedComponentLocation": "src/components/shared/",
+    "namingConvention": "DoctorsLanding[SectionName] for doctors-specific components (matching ClubsLanding[SectionName] pattern)",
+    "extractionPriority": [
+      "Low priority: Most components have domain-specific content and structure differences",
+      "SectionTitle, FaqAccordionItem, StepCard, TrustCard already shared and reusable",
+      "No need to extract LandingHero, LandingProblem, LandingFooter - adapt per landing page for clarity",
+      "Consider extraction only if pattern repeats 3+ times across different landing pages"
+    ],
+    "implementationOrder": [
+      "1. Create doctors-faq-data.tsx (data source)",
+      "2. Create doctors-landing-modal.ts (utilities)",
+      "3. Create DoctorsLandingHero (most visible section)",
+      "4. Create DoctorsLandingProblem",
+      "5. Create DoctorsLandingWhatIsNot",
+      "6. Create DoctorsLandingRole",
+      "7. Create DoctorsLandingCollaboration",
+      "8. Create DoctorsLandingEthics (critical section)",
+      "9. Create DoctorsLandingWhyChoose",
+      "10. Create DoctorsLandingTargetAudience",
+      "11. Create DoctorsLandingFAQ",
+      "12. Create DoctorsLandingFinalCTA",
+      "13. Create DoctorsLandingTrust",
+      "14. Create DoctorsLandingFooter",
+      "15. Create DoctorsContactModal",
+      "16. Create doctors landing page (orchestrates all components)",
+      "17. Add doctors.landing route to routes.ts"
+    ],
+    "keyDifferencesFromClubs": [
+      "NO urgency/spots counter (doctors landing is low-pressure)",
+      "NO commercial language (professional, ethical tone)",
+      "NO pricing mentions",
+      "NO lead selling promises",
+      "Emphasis on GDPR, ethics, professional control (critical section)",
+      "Secondary CTA available (call scheduling)",
+      "Testimonials replaced with 'proof logic' (not commercial testimonials)",
+      "Collaboration process: 5 steps instead of 4",
+      "What Is/Is Not section instead of solution section"
+    ]
+  }
+}
