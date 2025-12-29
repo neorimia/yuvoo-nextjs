@@ -7,7 +7,7 @@ import { routes } from "@/lib/routes";
 export const metadata: Metadata = {
   title: "Chestionar AI - Descoperă Sportul Potrivit | Yuvoo",
   description:
-    "Chestionar AI personalizat pentru recomandări de sporturi. Doar 3-4 minute, 6 întrebări simple pentru a găsi sportul perfect pentru copilul tău. Recomandări bazate pe specialiști.",
+    "Chestionar AI personalizat pentru recomandări de sporturi. Doar 3-4 minute, 6 întrebări simple pentru a găsi sportul perfect pentru copilul tău. Recomandări AI bazate pe analiza pattern-urilor și profilului copilului.",
   keywords: [
     "chestionar sporturi copii",
     "AI recomandări sport",
@@ -19,7 +19,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: "Chestionar AI - Descoperă Sportul Potrivit | Yuvoo",
     description:
-      "Chestionar AI personalizat pentru recomandări de sporturi. Doar 3-4 minute pentru recomandări bazate pe specialiști.",
+      "Chestionar AI personalizat pentru recomandări de sporturi. Doar 3-4 minute pentru recomandări AI bazate pe analiza pattern-urilor și profilului copilului.",
     url: `${process.env.NEXT_PUBLIC_APP_URL || "https://yuvoo.ro"}/chestionar`,
     siteName: "Yuvoo",
     type: "website",
@@ -37,7 +37,7 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     title: "Chestionar AI - Descoperă Sportul Potrivit | Yuvoo",
     description:
-      "Chestionar AI personalizat pentru recomandări de sporturi. Doar 3-4 minute pentru recomandări bazate pe specialiști.",
+      "Chestionar AI personalizat pentru recomandări de sporturi. Doar 3-4 minute pentru recomandări AI bazate pe analiza pattern-urilor și profilului copilului.",
     images: [
       `${process.env.NEXT_PUBLIC_APP_URL || "https://yuvoo.ro"}/assets/img/logo/og-image.jpg`,
     ],
