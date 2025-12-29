@@ -19,7 +19,7 @@ const features: IFeatureItem[] = [
     id: 1,
     title: "Recomandări AI",
     teaser:
-      "Recomandări personalizate bazate pe profilul copilului tău, susținute de tehnologie AI și validate de specialiști.",
+      "Recomandări personalizate bazate pe profilul copilului tău, generate de AI prin analiza pattern-urilor și a mii de profiluri similare pentru precizie mare.",
     iconStyle: "icon-1",
     icon: "flaticon-exclusive",
   },

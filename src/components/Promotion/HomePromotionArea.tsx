@@ -59,8 +59,8 @@ const HomePromotionArea: React.FC<HomePromAreaProps> = ({ promoImg, promo_space 
                 <h2 className="bd-section-title mb-10">Cel mai bun pentru copilul tău</h2>
                 {promo_space && (
                   <span>
-                    Descoperă sportul potrivit pentru copilul tău cu ajutorul tehnologiei AI și al
-                    expertizei specialiștilor pediatrici.
+                    Descoperă sportul potrivit pentru copilul tău cu ajutorul tehnologiei AI și
+                    analiza pattern-urilor pentru fiecare copil.
                   </span>
                 )}
                 <p>
@@ -90,7 +90,8 @@ const HomePromotionArea: React.FC<HomePromAreaProps> = ({ promoImg, promo_space 
               <div className="bd-promotion-list mb-50">
                 <ul>
                   <li>
-                    Recomandări personalizate bazate pe AI și validate de specialiști pediatrici.
+                    Recomandări personalizate bazate pe AI și analiza pattern-urilor pentru fiecare
+                    copil. Date protejate conform GDPR.
                   </li>
                   <li>
                     Bază de date cu peste 500 de cluburi sportive verificate și specialiști
