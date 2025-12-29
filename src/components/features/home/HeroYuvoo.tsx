@@ -55,7 +55,8 @@ const HeroYuvoo = () => {
                   style={{ fontSize: "18px", marginBottom: "30px", color: "#424242" }}
                 >
                   Recomandări personalizate bazate pe personalitatea, interesul și ritmul de
-                  dezvoltare al copilului susținute de AI și validate de specialiști pediatrici.
+                  dezvoltare al copilului, generate de AI prin analiza pattern-urilor și profilului
+                  unic al fiecărui copil.
                 </p>
                 <div
                   className="bd-hero-btn wow fadeInUp"

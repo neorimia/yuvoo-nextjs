@@ -199,10 +199,22 @@ export default function QuizIntroContent() {
               <div>
                 <h4 className="h6 fw-semibold mb-2 text-white">De ce să ai încredere în Yuvoo?</h4>
                 <ul className="small mb-0 ps-3">
-                  <li>Recomandări bazate pe specialiști în psihologie sportivă</li>
-                  <li>Date sigure. Proces transparent. GDPR compliant.</li>
-                  <li>Îți oferim liniștea că ai ales bine pentru copilul tău.</li>
-                  <li>Peste 1,000 de părinți au folosit deja chestionarul nostru</li>
+                  <li>
+                    Recomandări AI personalizate bazate pe analiza pattern-urilor și profilului unic
+                    al copilului tău
+                  </li>
+                  <li>
+                    Date sigure și private. Proces transparent. 100% GDPR compliant cu protecție
+                    completă a datelor copilului tău
+                  </li>
+                  <li>
+                    Algoritm bazat pe mii de profiluri analizate pentru recomandări precise și
+                    personalizate
+                  </li>
+                  <li>
+                    Peste 1,000 de părinți au folosit deja chestionarul nostru și au primit
+                    recomandări relevante
+                  </li>
                 </ul>
               </div>
             </div>
