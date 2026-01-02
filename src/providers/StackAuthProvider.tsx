@@ -33,28 +33,37 @@ interface StackAuthProviderProps {
  * 1. StackAssertionError (configuration mismatch)
  * 2. Hydration errors (server/client render mismatch)
  *
- * The component uses a two-phase approach:
- * 1. Initial render (SSR + client): renders children without StackProvider
- * 2. After hydration (client only): wraps children with StackProvider
+ * IMPORTANT: To prevent hydration mismatches, we:
+ * 1. Always render the same structure on server and initial client render
+ * 2. Only initialize Stack Auth after the component mounts on the client
+ * 3. Use a mounted flag to ensure consistent rendering
  */
 export function StackAuthProvider({ children }: StackAuthProviderProps) {
+  // Track if component has mounted (client-side only)
+  // This ensures server and initial client render match
+  const [mounted, setMounted] = useState(false);
   const [stackClientApp, setStackClientApp] = useState<StackClientApp<true> | null>(null);
 
-  // Initialize Stack Auth ONLY on the client side, AFTER hydration
-  // This ensures server and client render the same thing initially
+  // Initialize Stack Auth ONLY after component mounts on client
+  // This ensures server and initial client render are identical
   useEffect(() => {
-    // This only runs on the client after hydration
-    const app = getStackClientApp();
-    setStackClientApp(app);
+    setMounted(true);
+    try {
+      const app = getStackClientApp();
+      setStackClientApp(app);
+    } catch (_error) {
+      // Failed to initialize - components will handle null user
+      // Error is logged by getStackClientApp() if needed
+      setStackClientApp(null);
+    }
   }, []);
 
-  // Until Stack Auth is initialized (SSR + initial client render),
-  // render children without StackProvider to prevent hydration mismatch
-  if (!stackClientApp) {
+  // During SSR and initial client render (before mount),
+  // render children without StackProvider to ensure hydration match
+  if (!mounted || !stackClientApp) {
     return <>{children}</>;
   }
 
-  // After Stack Auth is initialized (client only, post-hydration),
-  // wrap children with StackProvider
+  // After mount and initialization, wrap children with StackProvider
   return <StackProvider app={stackClientApp}>{children}</StackProvider>;
 }

@@ -9,11 +9,11 @@
 import React from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { useUser } from "@stackframe/stack";
 import type { UserRole } from "@/modules/auth/auth.types";
 import { routes } from "@/lib/routes";
 import Image from "next/image";
 import { UserProfileDropdown } from "@/components/shared/UserProfileDropdown";
+import { signOutAction } from "@/app/actions/auth";
 
 interface DashboardHeaderProps {
   user: {
@@ -45,24 +45,29 @@ export function DashboardHeader({
   isMobileMenuOpen,
   onMobileMenuToggle,
 }: DashboardHeaderProps) {
-  const stackUser = useUser();
   const router = useRouter();
 
   /**
-   * Handle logout
+   * Handle logout using Server Action
+   *
+   * Uses server-side signOut to avoid dependency on Stack Auth client context.
+   * This prevents "Cannot use 'in' operator" errors when StackProvider
+   * hasn't initialized yet during initial render.
    */
   const handleLogout = async () => {
     try {
-      // Stack Auth: signOut is a method on the User object, not on StackClientApp
-      if (stackUser) {
-        await stackUser.signOut();
+      const result = await signOutAction();
+      if (result.success && result.redirect) {
+        router.push(result.redirect);
+        router.refresh();
+      } else {
+        // Fallback: redirect to login even if Server Action fails
+        router.push(routes.login);
+        router.refresh();
       }
-      // Always redirect to login, even if signOut fails or user is already logged out
-      router.push(routes.login);
-      router.refresh();
     } catch (error) {
       console.error("Error signing out:", error);
-      // Still redirect on error - user session may have expired or doesn't exist
+      // Always redirect to login, even on error
       router.push(routes.login);
       router.refresh();
     }

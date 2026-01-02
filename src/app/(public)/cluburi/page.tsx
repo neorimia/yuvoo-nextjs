@@ -15,6 +15,9 @@ import PreLaunchPage from "@/components/features/early-access/PreLaunchPage";
 /**
  * Generate metadata for clubs listing page
  * Uses base URL without query params as canonical URL
+ *
+ * Note: This route is dynamic due to searchParams usage in the page component.
+ * Metadata is static and doesn't require dynamic APIs.
  */
 export async function generateMetadata(): Promise<Metadata> {
   const baseUrl = process.env.NEXT_PUBLIC_APP_URL || "https://yuvoo.ro";
