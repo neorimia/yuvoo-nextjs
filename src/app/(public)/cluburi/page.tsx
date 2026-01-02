@@ -1,5 +1,6 @@
 import React from "react";
 import Link from "next/link";
+import { headers } from "next/headers";
 import type { Metadata } from "next";
 import BreadcrumbOne from "@/components/Breadcrumb/BreadcrumbOne";
 import ClubsMain from "@/components/features/clubs/ClubsMain";
@@ -15,8 +16,14 @@ import PreLaunchPage from "@/components/features/early-access/PreLaunchPage";
 /**
  * Generate metadata for clubs listing page
  * Uses base URL without query params as canonical URL
+ *
+ * Note: Accessing headers() makes this route dynamic, which prevents
+ * crypto.randomUUID() errors in Next.js 16 Cache Components
  */
 export async function generateMetadata(): Promise<Metadata> {
+  // Access headers() to make route dynamic (prevents crypto.randomUUID() errors)
+  await headers();
+
   const baseUrl = process.env.NEXT_PUBLIC_APP_URL || "https://yuvoo.ro";
 
   return {

@@ -593,3 +593,46 @@ export async function verifyEmailAction(token: string) {
     };
   }
 }
+
+/**
+ * Sign out current user
+ *
+ * Clears the user session and redirects to login page.
+ */
+export async function signOutAction() {
+  try {
+    // Get current session to track logout event
+    const session = await getSession();
+
+    // Sign out using Stack Auth server app
+    await stackServerApp.signOut();
+
+    // Track logout event if user was authenticated
+    if (session?.user) {
+      try {
+        await trackEventServer(PostHogEvents.USER_LOGGED_OUT, {
+          distinctId: session.user.id,
+          [PostHogProperties.USER_ID]: session.user.id,
+        });
+      } catch (trackingError) {
+        // Don't fail if tracking fails
+        if (process.env.NODE_ENV === "development") {
+          console.error("[PostHog] Error tracking logout:", trackingError);
+        }
+      }
+    }
+
+    return {
+      success: true,
+      redirect: routes.login,
+    };
+  } catch (error) {
+    // Even if signOut fails, redirect to login
+    // User session may have expired or doesn't exist
+    console.error("Error signing out:", error);
+    return {
+      success: true, // Still return success to allow redirect
+      redirect: routes.login,
+    };
+  }
+}
