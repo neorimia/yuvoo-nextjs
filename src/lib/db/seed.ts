@@ -7,6 +7,7 @@
  * This script creates:
  * - Sports reference data (for future sports table)
  * - Sample clubs (60+ sports clubs in Romania with all fields)
+ * - Research clubs (436+ real clubs from Bucharest, Cluj-Napoca, Timișoara, Iași, Constanța, Brașov, Craiova, Galați, Ploiești, Oradea, Arad, Pitești, Sibiu and Bacău)
  * - Sample doctors (18 pediatric specialists with all fields)
  * - Test users (parent accounts)
  *
@@ -18,6 +19,20 @@ import { db } from "./index";
 import { clubs, doctors, users } from "./schema";
 import { CLUBS_SEED_DATA } from "./seed-data/clubs";
 import { DOCTORS_SEED_DATA } from "./seed-data/doctors";
+import { CLUBS_RESEARCH_BUCHAREST } from "./seed-data/clubs-research-bucuresti";
+import { CLUBS_RESEARCH_CLUJ_NAPOCA } from "./seed-data/clubs-research-cluj-napoca";
+import { CLUBS_RESEARCH_TIMISOARA } from "./seed-data/clubs-research-timisoara";
+import { CLUBS_RESEARCH_IASI } from "./seed-data/clubs-research-iasi";
+import { CLUBS_RESEARCH_CONSTANTA } from "./seed-data/clubs-research-constanta";
+import { CLUBS_RESEARCH_BRASOV } from "./seed-data/clubs-research-brasov";
+import { CLUBS_RESEARCH_CRAIOVA } from "./seed-data/clubs-research-craiova";
+import { CLUBS_RESEARCH_GALATI } from "./seed-data/clubs-research-galati";
+import { CLUBS_RESEARCH_PLOIESTI } from "./seed-data/clubs-research-ploiesti";
+import { CLUBS_RESEARCH_ORADEA } from "./seed-data/clubs-research-oradea";
+import { CLUBS_RESEARCH_ARAD } from "./seed-data/clubs-research-arad";
+import { CLUBS_RESEARCH_PITESTI } from "./seed-data/clubs-research-pitesti";
+import { CLUBS_RESEARCH_SIBIU } from "./seed-data/clubs-research-sibiu";
+import { CLUBS_RESEARCH_BACAU } from "./seed-data/clubs-research-bacau";
 
 // Load environment variables
 dotenv.config({ path: ".env.local" });
@@ -123,6 +138,77 @@ async function seedClubs() {
 }
 
 /**
+ * Seed Research Clubs (București, Cluj-Napoca, Timișoara, Iași, Constanța, Brașov, Craiova, Galați, Ploiești, Oradea, Arad, Pitești, Sibiu & Bacău)
+ */
+async function seedResearchClubs() {
+  console.log(
+    "\n🔍 Seeding research clubs (București, Cluj-Napoca, Timișoara, Iași, Constanța, Brașov, Craiova, Galați, Ploiești, Oradea, Arad, Pitești, Sibiu & Bacău)..."
+  );
+  let clubsCreated = 0;
+  let clubsSkipped = 0;
+
+  // Combine research data from all cities
+  const allResearchClubs = [
+    ...CLUBS_RESEARCH_BUCHAREST,
+    ...CLUBS_RESEARCH_CLUJ_NAPOCA,
+    ...CLUBS_RESEARCH_TIMISOARA,
+    ...CLUBS_RESEARCH_IASI,
+    ...CLUBS_RESEARCH_CONSTANTA,
+    ...CLUBS_RESEARCH_BRASOV,
+    ...CLUBS_RESEARCH_CRAIOVA,
+    ...CLUBS_RESEARCH_GALATI,
+    ...CLUBS_RESEARCH_PLOIESTI,
+    ...CLUBS_RESEARCH_ORADEA,
+    ...CLUBS_RESEARCH_ARAD,
+    ...CLUBS_RESEARCH_PITESTI,
+    ...CLUBS_RESEARCH_SIBIU,
+    ...CLUBS_RESEARCH_BACAU,
+  ];
+
+  for (const club of allResearchClubs) {
+    try {
+      await db.insert(clubs).values({
+        id: crypto.randomUUID(),
+        ...club,
+        createdAt: new Date(),
+        updatedAt: new Date(),
+      });
+      clubsCreated++;
+      console.log(`   ✅ Created research club: ${club.name} (${club.sportType}, ${club.city})`);
+    } catch (error: unknown) {
+      // Check if it's a unique constraint violation (slug or other unique field)
+      const err = error as { code?: string; message?: string };
+      if (err?.code === "23505" || err?.message?.includes("unique")) {
+        clubsSkipped++;
+        console.log(
+          `   ⚠️  Research club ${club.name} already exists (slug: ${club.slug}), skipping...`
+        );
+      } else {
+        console.error(`   ❌ Error creating research club ${club.name}:`, error);
+        throw error;
+      }
+    }
+  }
+
+  console.log(`   📊 Research Clubs: ${clubsCreated} created, ${clubsSkipped} skipped`);
+  console.log(`      - București: ${CLUBS_RESEARCH_BUCHAREST.length} clubs`);
+  console.log(`      - Cluj-Napoca: ${CLUBS_RESEARCH_CLUJ_NAPOCA.length} clubs`);
+  console.log(`      - Timișoara: ${CLUBS_RESEARCH_TIMISOARA.length} clubs`);
+  console.log(`      - Iași: ${CLUBS_RESEARCH_IASI.length} clubs`);
+  console.log(`      - Constanța: ${CLUBS_RESEARCH_CONSTANTA.length} clubs`);
+  console.log(`      - Brașov: ${CLUBS_RESEARCH_BRASOV.length} clubs`);
+  console.log(`      - Craiova: ${CLUBS_RESEARCH_CRAIOVA.length} clubs`);
+  console.log(`      - Galați: ${CLUBS_RESEARCH_GALATI.length} clubs`);
+  console.log(`      - Ploiești: ${CLUBS_RESEARCH_PLOIESTI.length} clubs`);
+  console.log(`      - Oradea: ${CLUBS_RESEARCH_ORADEA.length} clubs`);
+  console.log(`      - Arad: ${CLUBS_RESEARCH_ARAD.length} clubs`);
+  console.log(`      - Pitești: ${CLUBS_RESEARCH_PITESTI.length} clubs`);
+  console.log(`      - Sibiu: ${CLUBS_RESEARCH_SIBIU.length} clubs`);
+  console.log(`      - Bacău: ${CLUBS_RESEARCH_BACAU.length} clubs`);
+  return { created: clubsCreated, skipped: clubsSkipped };
+}
+
+/**
  * Seed Doctors
  */
 async function seedDoctors() {
@@ -169,14 +255,31 @@ async function seed() {
     console.log("🌱 Starting database seed...\n");
     console.log("📋 Seed data summary:");
     console.log(`   - Clubs: ${CLUBS_SEED_DATA.length}`);
+    console.log(`   - Research Clubs (București): ${CLUBS_RESEARCH_BUCHAREST.length}`);
+    console.log(`   - Research Clubs (Cluj-Napoca): ${CLUBS_RESEARCH_CLUJ_NAPOCA.length}`);
+    console.log(`   - Research Clubs (Timișoara): ${CLUBS_RESEARCH_TIMISOARA.length}`);
+    console.log(`   - Research Clubs (Iași): ${CLUBS_RESEARCH_IASI.length}`);
+    console.log(`   - Research Clubs (Constanța): ${CLUBS_RESEARCH_CONSTANTA.length}`);
+    console.log(`   - Research Clubs (Brașov): ${CLUBS_RESEARCH_BRASOV.length}`);
+    console.log(`   - Research Clubs (Craiova): ${CLUBS_RESEARCH_CRAIOVA.length}`);
+    console.log(`   - Research Clubs (Galați): ${CLUBS_RESEARCH_GALATI.length}`);
+    console.log(`   - Research Clubs (Ploiești): ${CLUBS_RESEARCH_PLOIESTI.length}`);
+    console.log(`   - Research Clubs (Oradea): ${CLUBS_RESEARCH_ORADEA.length}`);
+    console.log(`   - Research Clubs (Arad): ${CLUBS_RESEARCH_ARAD.length}`);
+    console.log(`   - Research Clubs (Pitești): ${CLUBS_RESEARCH_PITESTI.length}`);
+    console.log(`   - Research Clubs (Sibiu): ${CLUBS_RESEARCH_SIBIU.length}`);
+    console.log(`   - Research Clubs (Bacău): ${CLUBS_RESEARCH_BACAU.length}`);
     console.log(`   - Doctors: ${DOCTORS_SEED_DATA.length}`);
     console.log(`   - Test Users: ${testUsers.length}\n`);
 
     // Seed Users
     const usersResult = await seedUsers();
 
-    // Seed Clubs
+    // Seed Clubs (sample data)
     const clubsResult = await seedClubs();
+
+    // Seed Research Clubs (real data from research)
+    const researchClubsResult = await seedResearchClubs();
 
     // Seed Doctors
     const doctorsResult = await seedDoctors();
@@ -185,31 +288,51 @@ async function seed() {
     console.log("\n✅ Database seed completed successfully!");
     console.log("\n📊 Final Summary:");
     console.log(`   - Users: ${usersResult.created} created, ${usersResult.skipped} skipped`);
-    console.log(`   - Clubs: ${clubsResult.created} created, ${clubsResult.skipped} skipped`);
+    console.log(
+      `   - Clubs (sample): ${clubsResult.created} created, ${clubsResult.skipped} skipped`
+    );
+    console.log(
+      `   - Research Clubs: ${researchClubsResult.created} created, ${researchClubsResult.skipped} skipped`
+    );
     console.log(`   - Doctors: ${doctorsResult.created} created, ${doctorsResult.skipped} skipped`);
 
-    // Sports coverage
-    const uniqueSports = new Set(CLUBS_SEED_DATA.map((c) => c.sportType));
+    // Sports coverage (combine sample and research clubs)
+    const allClubs = [
+      ...CLUBS_SEED_DATA,
+      ...CLUBS_RESEARCH_BUCHAREST,
+      ...CLUBS_RESEARCH_CLUJ_NAPOCA,
+      ...CLUBS_RESEARCH_TIMISOARA,
+      ...CLUBS_RESEARCH_IASI,
+      ...CLUBS_RESEARCH_CONSTANTA,
+      ...CLUBS_RESEARCH_BRASOV,
+      ...CLUBS_RESEARCH_CRAIOVA,
+      ...CLUBS_RESEARCH_GALATI,
+      ...CLUBS_RESEARCH_PLOIESTI,
+      ...CLUBS_RESEARCH_ORADEA,
+      ...CLUBS_RESEARCH_ARAD,
+      ...CLUBS_RESEARCH_PITESTI,
+      ...CLUBS_RESEARCH_SIBIU,
+      ...CLUBS_RESEARCH_BACAU,
+    ];
+    const uniqueSports = new Set(allClubs.map((c) => c.sportType));
     console.log(`   - Sports covered: ${uniqueSports.size} different sports`);
     console.log(
-      `   - Cities covered: ${new Set(CLUBS_SEED_DATA.map((c) => c.city)).size} different cities`
+      `   - Cities covered: ${new Set(allClubs.map((c) => c.city)).size} different cities`
     );
 
-    // Verification status breakdown
-    const verifiedClubs = CLUBS_SEED_DATA.filter((c) => c.verified).length;
-    const pendingClubs = CLUBS_SEED_DATA.filter((c) => c.verificationStatus === "pending").length;
-    const inReviewClubs = CLUBS_SEED_DATA.filter(
-      (c) => c.verificationStatus === "in_review"
-    ).length;
-    const approvedClubs = CLUBS_SEED_DATA.filter((c) => c.verificationStatus === "approved").length;
+    // Verification status breakdown (combine sample and research clubs)
+    const verifiedClubs = allClubs.filter((c) => c.verified).length;
+    const pendingClubs = allClubs.filter((c) => c.verificationStatus === "pending").length;
+    const inReviewClubs = allClubs.filter((c) => c.verificationStatus === "in_review").length;
+    const approvedClubs = allClubs.filter((c) => c.verificationStatus === "approved").length;
 
-    console.log("\n📈 Club Verification Status:");
+    console.log("\n📈 Club Verification Status (all clubs):");
     console.log(`   - Verified: ${verifiedClubs} clubs`);
     console.log(`   - Approved: ${approvedClubs} clubs`);
     console.log(`   - Pending: ${pendingClubs} clubs`);
     console.log(`   - In Review: ${inReviewClubs} clubs`);
 
-    const featuredClubs = CLUBS_SEED_DATA.filter((c) => c.featured).length;
+    const featuredClubs = allClubs.filter((c) => c.featured).length;
     console.log(`   - Featured: ${featuredClubs} clubs`);
 
     // Doctor specialties breakdown

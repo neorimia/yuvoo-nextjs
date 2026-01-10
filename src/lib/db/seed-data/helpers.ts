@@ -34,6 +34,9 @@ export const CITY_COORDINATES: Record<string, { lat: number; lng: number }> = {
   Oradea: { lat: 47.0465, lng: 21.919 },
   Brăila: { lat: 45.2692, lng: 27.9574 },
   Arad: { lat: 46.1866, lng: 21.3123 },
+  Bacău: { lat: 46.5662, lng: 26.9098 },
+  Pitești: { lat: 44.8565, lng: 24.8687 },
+  Sibiu: { lat: 45.7983, lng: 24.1253 },
 };
 
 /**
