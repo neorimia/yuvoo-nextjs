@@ -70,7 +70,7 @@ const testUsers = [
 /**
  * Seed Users
  */
-async function seedUsers() {
+async function _seedUsers() {
   console.log("📝 Seeding test users...");
   let usersCreated = 0;
   let usersSkipped = 0;
@@ -105,7 +105,7 @@ async function seedUsers() {
 /**
  * Seed Clubs
  */
-async function seedClubs() {
+async function _seedClubs() {
   console.log("\n🏃 Seeding clubs...");
   let clubsCreated = 0;
   let clubsSkipped = 0;
@@ -211,7 +211,7 @@ async function seedResearchClubs() {
 /**
  * Seed Doctors
  */
-async function seedDoctors() {
+async function _seedDoctors() {
   console.log("\n👨‍⚕️ Seeding doctors...");
   let doctorsCreated = 0;
   let doctorsSkipped = 0;
@@ -254,7 +254,7 @@ async function seed() {
   try {
     console.log("🌱 Starting database seed...\n");
     console.log("📋 Seed data summary:");
-    console.log(`   - Clubs: ${CLUBS_SEED_DATA.length}`);
+    // console.log(`   - Clubs: ${CLUBS_SEED_DATA.length}`);
     console.log(`   - Research Clubs (București): ${CLUBS_RESEARCH_BUCHAREST.length}`);
     console.log(`   - Research Clubs (Cluj-Napoca): ${CLUBS_RESEARCH_CLUJ_NAPOCA.length}`);
     console.log(`   - Research Clubs (Timișoara): ${CLUBS_RESEARCH_TIMISOARA.length}`);
@@ -269,32 +269,32 @@ async function seed() {
     console.log(`   - Research Clubs (Pitești): ${CLUBS_RESEARCH_PITESTI.length}`);
     console.log(`   - Research Clubs (Sibiu): ${CLUBS_RESEARCH_SIBIU.length}`);
     console.log(`   - Research Clubs (Bacău): ${CLUBS_RESEARCH_BACAU.length}`);
-    console.log(`   - Doctors: ${DOCTORS_SEED_DATA.length}`);
-    console.log(`   - Test Users: ${testUsers.length}\n`);
+    // console.log(`   - Doctors: ${DOCTORS_SEED_DATA.length}`);
+    // console.log(`   - Test Users: ${testUsers.length}\n`);
 
     // Seed Users
-    const usersResult = await seedUsers();
+    // const usersResult = await seedUsers();
 
     // Seed Clubs (sample data)
-    const clubsResult = await seedClubs();
+    // const clubsResult = await seedClubs();
 
     // Seed Research Clubs (real data from research)
     const researchClubsResult = await seedResearchClubs();
 
     // Seed Doctors
-    const doctorsResult = await seedDoctors();
+    // const doctorsResult = await seedDoctors();
 
     // Summary
     console.log("\n✅ Database seed completed successfully!");
     console.log("\n📊 Final Summary:");
-    console.log(`   - Users: ${usersResult.created} created, ${usersResult.skipped} skipped`);
-    console.log(
-      `   - Clubs (sample): ${clubsResult.created} created, ${clubsResult.skipped} skipped`
-    );
+    // console.log(`   - Users: ${usersResult.created} created, ${usersResult.skipped} skipped`);
+    // console.log(
+    //   `   - Clubs (sample): ${clubsResult.created} created, ${clubsResult.skipped} skipped`
+    // );
     console.log(
       `   - Research Clubs: ${researchClubsResult.created} created, ${researchClubsResult.skipped} skipped`
     );
-    console.log(`   - Doctors: ${doctorsResult.created} created, ${doctorsResult.skipped} skipped`);
+    // console.log(`   - Doctors: ${doctorsResult.created} created, ${doctorsResult.skipped} skipped`);
 
     // Sports coverage (combine sample and research clubs)
     const allClubs = [

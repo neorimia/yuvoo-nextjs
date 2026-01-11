@@ -97,7 +97,7 @@ export default function ClubsLandingHero({ verifiedCount, remainingSpots }: Club
                   }}
                 >
                   <span style={{ color: "var(--bd-theme-1)" }}>✓</span> Părinți pre-calificați ·{" "}
-                  <span style={{ color: "var(--bd-theme-1)" }}>✓</span> Cluburi verificate ·{" "}
+                  <span style={{ color: "var(--bd-theme-1)" }}>✓</span> Cluburi sportive ·{" "}
                   <span style={{ color: "var(--bd-theme-1)" }}>✓</span> Zero risc în MVP
                 </div>
 

@@ -37,9 +37,8 @@ const steps: IStep[] = [
   {
     id: 3,
     icon: "flaticon-location-pin",
-    title: "3. Găsești cluburi verificate aproape de tine",
-    microcopy:
-      "Fiecare club este verificat manual de echipa noastră. Vezi program, prețuri, antrenori și poți trimite întrebări direct cluburilor.",
+    title: "3. Găsești cluburi sportive aproape de tine",
+    microcopy: "Vezi program, prețuri, antrenori și poți trimite întrebări direct cluburilor.",
     link: routes.clubs.list,
   },
 ];

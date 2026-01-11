@@ -54,7 +54,7 @@ const ClubDetailsWidgetTwo: React.FC<ClubDetailsWidgetTwoProps> = ({ club }) => 
   }
 
   return (
-    <section className="bd-club-details-widget pb-70">
+    <section className="bd-club-details-widget">
       <div className="container">
         <div className="row">
           <div className="col-lg-6 mb-50">

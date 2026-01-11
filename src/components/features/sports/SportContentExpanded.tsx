@@ -156,11 +156,11 @@ const SportContentExpanded: React.FC<SportContentExpandedProps> = ({ content }) 
           >
             <div className="bd-sport-internal-links-content text-center">
               <h3 className="bd-sport-internal-links-title">
-                Găsește cluburi verificate pentru acest sport
+                Găsește cluburi sportive pentru acest sport
               </h3>
               <p className="bd-sport-internal-links-description">
-                Explorează cluburile sportive verificate de Yuvoo care oferă programe de calitate
-                pentru acest sport.
+                Explorează cluburile sportive de Yuvoo care oferă programe de calitate pentru acest
+                sport.
               </p>
               <Link href={content.internalLinks.clubsLink} className="bd-btn">
                 <span className="bd-btn-inner">

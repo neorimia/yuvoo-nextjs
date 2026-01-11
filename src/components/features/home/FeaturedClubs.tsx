@@ -118,8 +118,8 @@ const FeaturedClubs = () => {
         <div className="row bd-featured-clubs-title-row">
           <div className="col-lg-8">
             <SectionTitle
-              title="Cluburi verificate lângă tine"
-              subtitle="Descoperă cele mai bune cluburi sportive verificate din apropierea ta. Toate cluburile sunt verificate de echipa noastră pentru siguranță și calitate."
+              title="Cluburi lângă tine"
+              subtitle="Descoperă cele mai bune cluburi sportive din apropierea ta."
               className="bd-featured-clubs-title-wrapper"
               titleClassName="bd-featured-clubs-section-title"
               subtitleClassName="bd-featured-clubs-section-text"

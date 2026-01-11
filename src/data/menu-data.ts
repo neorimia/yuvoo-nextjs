@@ -40,16 +40,17 @@ const menuData: MenuItem[] = [
       { title: "Pentru Cluburi", link: routes.clubs.landing },
     ],
   },
-  {
-    id: 4,
-    hasDropdown: true,
-    title: "Doctori",
-    link: routes.doctors.list,
-    submenus: [
-      { title: "Toți doctorii", link: routes.doctors.list },
-      { title: "Pentru Doctori", link: routes.doctors.landing },
-    ],
-  },
+  //  Hide until we have doctors
+  // {
+  //   id: 4,
+  //   hasDropdown: true,
+  //   title: "Doctori",
+  //   link: routes.doctors.list,
+  //   submenus: [
+  //     { title: "Toți doctorii", link: routes.doctors.list },
+  //     { title: "Pentru Doctori", link: routes.doctors.landing },
+  //   ],
+  // },
   {
     id: 5,
     hasDropdown: false,

@@ -20,7 +20,7 @@ const ContactFormMain = () => {
                   </Link>{" "}
                   sau{" "}
                   <Link href={routes.clubs.list} className="text-primary">
-                    cluburile verificate
+                    cluburile
                   </Link>
                   ? Completează formularul de mai jos și te vom contacta în cel mai scurt timp. Sau
                   verifică{" "}

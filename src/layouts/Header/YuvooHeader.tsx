@@ -46,18 +46,18 @@ const YuvooHeader = () => {
                     <nav id="mobile-menu">
                       <HeaderMenus />
                     </nav>
-                    <div className="bd-search-btn-wrapper">
-                      <button className="bd-search-open-btn" onClick={() => setIsSearchOpen(true)}>
-                        <i className="flaticon-search"></i>
-                      </button>
-                    </div>
+                    {/*<div className="bd-search-btn-wrapper">*/}
+                    {/*  <button className="bd-search-open-btn" onClick={() => setIsSearchOpen(true)}>*/}
+                    {/*    <i className="flaticon-search"></i>*/}
+                    {/*  </button>*/}
+                    {/*</div>*/}
                   </div>
                   <div className="bd-header-bottom-right d-flex justify-content-end align-items-center">
                     <div className="bd-header-btn d-none d-lg-block">
-                      <Link href={routes.authRedirect} className="bd-btn">
+                      <Link href={routes.quiz.intro} className="bd-btn">
                         <span className="bd-btn-inner">
-                          <span className="bd-btn-normal">Autentificare</span>
-                          <span className="bd-btn-hover">Autentificare</span>
+                          <span className="bd-btn-normal">Începe Quiz-ul</span>
+                          <span className="bd-btn-hover">Începe Quiz-ul</span>
                         </span>
                       </Link>
                     </div>

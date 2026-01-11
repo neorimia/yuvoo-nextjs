@@ -12,6 +12,7 @@ import { routes } from "@/lib/routes";
 import type { Sport } from "@/modules/sports/sports.types";
 import SportContentExpanded from "./SportContentExpanded";
 import { getExpandedContentBySportId } from "@/data/sport-expanded-content";
+import Image from "next/image";
 
 interface SportDetailsMainProps {
   sport: Sport;
@@ -40,9 +41,16 @@ const SportDetailsMain: React.FC<SportDetailsMainProps> = ({ sport }) => {
                 data-wow-duration="1s"
                 data-wow-delay=".3s"
               >
-                {sport.icon && (
+                {sport.image && (
                   <div className="bd-sport-details-icon-wrapper">
-                    <i className={`bd-sport-details-icon ${sport.icon}`}></i>
+                    {/*<i className={`bd-sport-details-icon ${sport.icon}`}></i>*/}
+                    <Image
+                      src={sport.image}
+                      alt={sport.name}
+                      height={800}
+                      width={1200}
+                      className="bd-sport-details-thumb-img"
+                    />
                   </div>
                 )}
               </div>
@@ -56,7 +64,7 @@ const SportDetailsMain: React.FC<SportDetailsMainProps> = ({ sport }) => {
                 <h2 className="bd-sport-details-title">{sport.name}</h2>
                 <p className="bd-sport-details-description">
                   {sport.description ||
-                    "Descoperă acest sport și găsește cluburi verificate care oferă programe adaptate pentru copiii tăi."}
+                    "Descoperă acest sport și găsește cluburi sportive care oferă programe adaptate pentru copiii tăi."}
                 </p>
 
                 <div className="bd-sport-details-info-wrapper">

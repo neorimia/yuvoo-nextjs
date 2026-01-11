@@ -28,11 +28,11 @@ const canonicalUrl = `${baseUrl}${routes.clubs.landing}`;
 export const metadata: Metadata = {
   title: "Pentru Cluburi - Yuvoo | Devino Founding Club Gratuit",
   description:
-    "Yuvoo conectează cluburi sportive pentru copii cu părinți care știu deja că sportul tău este potrivit pentru copilul lor. Primele 15 cluburi din București intră gratuit ca Founding Clubs. Părinți pre-calificați, cluburi verificate, zero risc în MVP.",
+    "Yuvoo conectează cluburi sportive pentru copii cu părinți care știu deja că sportul tău este potrivit pentru copilul lor. Primele 15 cluburi din București intră gratuit ca Founding Clubs. Părinți pre-calificați, cluburi sportive, zero risc în MVP.",
   keywords: [
     "cluburi sportive copii",
     "founding club gratuit",
-    "cluburi verificate",
+    "cluburi sportive",
     "părinți pre-calificați",
     "cluburi sportive bucurești",
     "program founding club",

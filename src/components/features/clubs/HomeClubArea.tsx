@@ -32,12 +32,8 @@ const HomeClubArea: React.FC<HomeClubAreaProps> = ({ clubs }) => {
           <div className="row justify-content-center">
             <div className="col-lg-8">
               <div className="bd-section-title-wrapper text-center mb-55 wow fadeInUp">
-                <h2 className="bd-section-title mb-0">Cluburi Sportive Verificate</h2>
-                <p>
-                  Descoperă cele mai bune cluburi sportive pentru copiii tăi
-                  <br />
-                  Verificate și recomandate de specialiști
-                </p>
+                <h2 className="bd-section-title mb-0">Cluburi Sportive</h2>
+                <p>Descoperă cele mai bune cluburi sportive pentru copiii tăi</p>
                 <div className="mt-4">
                   <Link href={routes.clubs.list} className="bd-btn">
                     <span className="bd-btn-inner">
@@ -60,12 +56,8 @@ const HomeClubArea: React.FC<HomeClubAreaProps> = ({ clubs }) => {
         <div className="row justify-content-center">
           <div className="col-lg-8">
             <div className="bd-section-title-wrapper text-center mb-55 wow fadeInUp">
-              <h2 className="bd-section-title mb-0">Cluburi Sportive Verificate</h2>
-              <p>
-                Descoperă cele mai bune cluburi sportive pentru copiii tăi
-                <br />
-                Verificate și recomandate de specialiști
-              </p>
+              <h2 className="bd-section-title mb-0">Cluburi Sportive</h2>
+              <p>Descoperă cele mai bune cluburi sportive pentru copiii tăi</p>
             </div>
           </div>
         </div>

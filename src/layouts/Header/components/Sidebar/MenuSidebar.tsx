@@ -11,7 +11,7 @@ interface MenuSidebarProps {
 }
 
 const MenuSidebar: React.FC<MenuSidebarProps> = ({ sideMenuOpen, setSideMenuOpen }) => {
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+  const _handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
   };
 
@@ -37,14 +37,14 @@ const MenuSidebar: React.FC<MenuSidebarProps> = ({ sideMenuOpen, setSideMenuOpen
                 </button>
               </div>
             </div>
-            <div className="offcanvas__search mb-40">
-              <form onSubmit={handleSubmit}>
-                <button type="submit">
-                  <i className="flaticon-search"></i>
-                </button>
-                <input type="text" placeholder="Caută aici..." />
-              </form>
-            </div>
+            {/*<div className="offcanvas__search mb-40">*/}
+            {/*  <form onSubmit={handleSubmit}>*/}
+            {/*    <button type="submit">*/}
+            {/*      <i className="flaticon-search"></i>*/}
+            {/*    </button>*/}
+            {/*    <input type="text" placeholder="Caută aici..." />*/}
+            {/*  </form>*/}
+            {/*</div>*/}
             <div className="mobile-menu fix mb-30 menu-counter d-lg-none mean-container">
               <div className="mean-bar">
                 <MobileMenu onClose={() => setSideMenuOpen(false)} />
@@ -54,7 +54,7 @@ const MenuSidebar: React.FC<MenuSidebarProps> = ({ sideMenuOpen, setSideMenuOpen
               <h4>Despre Yuvoo</h4>
               <p>
                 Yuvoo te ajută să găsești activitățile sportive perfecte pentru copilul tău.
-                Descoperă sporturi personalizate, cluburi verificate și specialiști pediatri.
+                Descoperă sporturi personalizate, cluburi și specialiști pediatri.
               </p>
             </div>
             <div className="offcanvas__contact mb-30">

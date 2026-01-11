@@ -16,7 +16,7 @@ import ItemListSchema from "@/components/SEO/ItemListSchema";
 export const metadata: Metadata = {
   title: "Sporturi pentru Copii - Descoperă Sportul Perfect | Yuvoo",
   description:
-    "Explorează peste 15 sporturi disponibile pentru copii (4-14 ani) pe platforma Yuvoo. Găsește sportul potrivit pentru copilul tău cu ajutorul recomandărilor AI și al cluburilor verificate. Înot, fotbal, gimnastică, karate, dans și multe altele.",
+    "Explorează peste 15 sporturi disponibile pentru copii (4-14 ani) pe platforma Yuvoo. Găsește sportul potrivit pentru copilul tău cu ajutorul recomandărilor AI și al cluburilor. Înot, fotbal, gimnastică, karate, dans și multe altele.",
   keywords: [
     "sporturi copii",
     "activități sportive copii",
@@ -28,7 +28,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: "Sporturi pentru Copii - Descoperă Sportul Perfect | Yuvoo",
     description:
-      "Explorează peste 15 sporturi disponibile pentru copii pe platforma Yuvoo. Găsește sportul potrivit cu ajutorul recomandărilor AI și al cluburilor verificate.",
+      "Explorează peste 15 sporturi disponibile pentru copii pe platforma Yuvoo. Găsește sportul potrivit cu ajutorul recomandărilor AI și al cluburilor.",
     url: `${process.env.NEXT_PUBLIC_APP_URL || "https://yuvoo.ro"}/sporturi`,
     siteName: "Yuvoo",
     type: "website",
@@ -46,7 +46,7 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     title: "Sporturi pentru Copii - Descoperă Sportul Perfect | Yuvoo",
     description:
-      "Explorează peste 15 sporturi disponibile pentru copii pe platforma Yuvoo. Găsește sportul potrivit cu ajutorul recomandărilor AI și al cluburilor verificate.",
+      "Explorează peste 15 sporturi disponibile pentru copii pe platforma Yuvoo. Găsește sportul potrivit cu ajutorul recomandărilor AI și al cluburilor.",
     images: [
       `${process.env.NEXT_PUBLIC_APP_URL || "https://yuvoo.ro"}/assets/img/logo/og-image.jpg`,
     ],
@@ -124,7 +124,7 @@ export default async function SportsPage() {
                     href={routes.clubs.list}
                     className="text-yuvoo-primary text-decoration-underline"
                   >
-                    găsește cluburi verificate
+                    găsește cluburi sportive
                   </Link>{" "}
                   care îl oferă.
                 </p>
@@ -139,16 +139,16 @@ export default async function SportsPage() {
                 <div className="bd-sports-intro-icon">
                   <i className="flaticon-certificate"></i>
                 </div>
-                <h3 className="bd-sports-intro-card-title">Cluburi Verificate</h3>
+                <h3 className="bd-sports-intro-card-title">Cluburi sportive</h3>
                 <p className="bd-sports-intro-card-text">
                   <Link
                     href={routes.clubs.list}
                     className="text-yuvoo-primary text-decoration-underline"
                   >
-                    Toate cluburile de pe Yuvoo sunt verificate
+                    Toate cluburile sportive.
                   </Link>{" "}
-                  de echipa noastră pentru siguranță și calitate. Găsește cluburi aproape de tine,
-                  vezi programe, prețuri și rezervă o probă gratuită direct din platformă.
+                  Găsește cluburi aproape de tine, vezi programe, prețuri și rezervă o probă
+                  gratuită direct din platformă.
                 </p>
               </div>
             </div>

@@ -65,10 +65,10 @@ const ClubsMain: React.FC<ClubsMainProps> = ({
               <div className="alert alert-info d-flex align-items-center" role="alert">
                 <i className="bi bi-star-fill text-warning me-3 fs-4"></i>
                 <div className="flex-grow-1">
-                  <h5 className="alert-heading mb-1">Cluburi Recomandate</h5>
+                  <h5 className="alert-heading mb-1">Cluburi Sportive</h5>
                   <p className="mb-0">
-                    Aceste cluburi oferă sporturile recomandate pentru copilul tău. Explorează
-                    opțiunile și rezervă o probă gratuită!
+                    Aceste cluburi sportive oferă sporturile recomandate pentru copilul tău.
+                    Explorează opțiunile și rezervă o probă gratuită!
                   </p>
                 </div>
               </div>

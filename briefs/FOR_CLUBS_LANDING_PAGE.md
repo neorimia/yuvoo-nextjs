@@ -1,6 +1,6 @@
 🏆 Crești numărul de copii înscriși, fără lead-uri inutile
 
-Părinți pre-calificați · Cluburi verificate · Zero risc în MVP
+Părinți pre-calificați · Cluburi sportive · Zero risc în MVP
 
 Yuvoo conectează cluburi sportive pentru copii cu părinți care știu deja că sportul tău este potrivit pentru copilul lor.
 
@@ -27,7 +27,7 @@ Dacă administrezi un club pentru copii (4–14 ani), probabil recunoști asta:
 
 Yuvoo filtrează părinții înainte să ajungă la tine.
 
-Cum funcționează: 1. 👨‍👩‍👧 Părintele completează un quiz AI (3 min) despre copil 2. 🧠 Primește sporturile compatibile cu vârsta & personalitatea 3. 🏅 Vede doar cluburi verificate care se potrivesc 4. 📞 Te contactează doar dacă există match real
+Cum funcționează: 1. 👨‍👩‍👧 Părintele completează un quiz AI (3 min) despre copil 2. 🧠 Primește sporturile compatibile cu vârsta & personalitatea 3. 🏅 Vede doar cluburi sportive care se potrivesc 4. 📞 Te contactează doar dacă există match real
 
 ➡️ Mai puține mesaje inutile. Mai multe înscrieri reale.
 

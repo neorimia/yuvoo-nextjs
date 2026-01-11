@@ -92,7 +92,7 @@ const FeaturedDoctors = () => {
                   </Link>{" "}
                   și{" "}
                   <Link href={routes.clubs.list} className="text-primary text-decoration-underline">
-                    cluburile verificate
+                    cluburile
                   </Link>
                   .
                 </>

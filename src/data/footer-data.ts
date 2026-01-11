@@ -8,7 +8,7 @@ const footerData: IFooterData = {
     logo: logo,
     logoWhite: logoWhite,
     teaser:
-      "Yuvoo te ajută să găsești activitățile sportive perfecte pentru copilul tău. Descoperă sporturi personalizate, cluburi verificate și specialiști pediatri.",
+      "Yuvoo te ajută să găsești activitățile sportive perfecte pentru copilul tău. Descoperă sporturi personalizate, cluburi sportive și specialiști pediatri.",
     socialTitle: "Social",
     newsTitle: "Alătură-te Newsletter-ului",
     newsBtn: "Abonează-te acum",
@@ -57,16 +57,16 @@ const footerData: IFooterData = {
         menu: "Pentru Cluburi",
         path: "/pentru-cluburi",
       },
-      {
-        id: 5,
-        menu: "Doctori",
-        path: "/doctori",
-      },
-      {
-        id: 6,
-        menu: "Pentru Doctori",
-        path: "/pentru-doctori",
-      },
+      // {
+      //   id: 5,
+      //   menu: "Doctori",
+      //   path: "/doctori",
+      // },
+      // {
+      //   id: 6,
+      //   menu: "Pentru Doctori",
+      //   path: "/pentru-doctori",
+      // },
       {
         id: 7,
         menu: "Chestionar",
@@ -126,7 +126,7 @@ const footerData: IFooterData = {
       },
       {
         id: 2,
-        menu: "Cluburi verificate",
+        menu: "Cluburi sportive",
         path: "/cluburi",
       },
       {
@@ -134,16 +134,16 @@ const footerData: IFooterData = {
         menu: "Pentru Cluburi",
         path: "/pentru-cluburi",
       },
-      {
-        id: 4,
-        menu: "Specialiști pediatri",
-        path: "/doctori",
-      },
-      {
-        id: 5,
-        menu: "Pentru Doctori",
-        path: "/pentru-doctori",
-      },
+      // {
+      //   id: 4,
+      //   menu: "Specialiști pediatri",
+      //   path: "/doctori",
+      // },
+      // {
+      //   id: 5,
+      //   menu: "Pentru Doctori",
+      //   path: "/pentru-doctori",
+      // },
       {
         id: 6,
         menu: "Întrebări frecvente",

@@ -1,7 +1,7 @@
 {
   "name": "Yuvoo - Descoperă sportul potrivit copilului tău",
   "short_name": "Yuvoo",
-  "description": "Platformă AI pentru descoperirea activităților sportive potrivite pentru copiii tăi. Cluburi verificate și specialiști pediatri.",
+  "description": "Platformă AI pentru descoperirea activităților sportive potrivite pentru copiii tăi. Cluburi sportive și specialiști pediatri.",
   "start_url": "/",
   "scope": "/",
   "display": "standalone",

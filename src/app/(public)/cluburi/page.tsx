@@ -25,7 +25,7 @@ export async function generateMetadata(): Promise<Metadata> {
   return {
     title: "Cluburi Sportive - Yuvoo",
     description:
-      "Descoperă cluburi sportive verificate pentru copii. Găsește activități sportive potrivite în orașul tău.",
+      "Descoperă cluburi sportive pentru copii. Găsește activități sportive potrivite în orașul tău.",
     alternates: {
       canonical: `${baseUrl}/cluburi`,
     },
@@ -55,12 +55,13 @@ interface ClubsPageProps {
  * Dynamic route due to searchParams
  */
 export default async function ClubsPage({ searchParams }: ClubsPageProps) {
+  // Access dynamic data sources first to mark route as dynamic
+  // This prevents crypto.randomUUID() errors (e.g., from Sentry) during prerendering
+  const params = await searchParams;
+
   if (PRE_LAUNCH_RESTRICTIONS_ENABLED) {
     return <PreLaunchPage routeType="club-portal" />;
   }
-
-  // Page is dynamic due to searchParams usage
-  const params = await searchParams;
   const {
     sport: sportId,
     quiz: isQuizContext,
@@ -92,7 +93,7 @@ export default async function ClubsPage({ searchParams }: ClubsPageProps) {
 
   return (
     <>
-      <ItemListSchema items={clubs} type="Club" listName="Cluburi Sportive Verificate" />
+      <ItemListSchema items={clubs} type="Club" listName="Cluburi Sportive" />
       <BreadcrumbOne
         title="Cluburi Sportive"
         subTitle="Cluburi"
@@ -106,12 +107,11 @@ export default async function ClubsPage({ searchParams }: ClubsPageProps) {
           <div className="row">
             <div className="col-lg-10 mx-auto">
               <SectionTitle
-                title="Cluburi Sportive Verificate"
+                title="Cluburi Sportive"
                 subtitle={
                   <>
-                    Descoperă cluburi sportive verificate pentru copii. Filtrează după sport,
-                    locație sau vârstă. Dacă nu ești sigur ce sport se potrivește copilului tău,
-                    încearcă{" "}
+                    Descoperă cluburi sportive pentru copii. Filtrează după sport, locație sau
+                    vârstă. Dacă nu ești sigur ce sport se potrivește copilului tău, încearcă{" "}
                     <Link
                       href={routes.quiz.intro}
                       className="text-primary text-decoration-underline"

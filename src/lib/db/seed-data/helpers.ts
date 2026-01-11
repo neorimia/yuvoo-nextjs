@@ -182,6 +182,114 @@ export function generateImageUrls(count: number = 3): string[] {
   return urls;
 }
 
+// Generate the club image by type of sport
+/**
+ * Generate club image path based on sport type
+ * Maps sport types to available images in /public/assets/img/sports/
+ * Includes fallbacks for variants and sports without specific images
+ */
+export function generateClubImage(sportType: string): string {
+  switch (sportType) {
+    // Ball sports
+    case "fotbal":
+      return "/assets/img/sports/fotbal.jpg";
+    case "baschet":
+      return "/assets/img/sports/baschet.jpg";
+    case "volei":
+      return "/assets/img/sports/volei.jpg";
+    case "handbal":
+      return "/assets/img/sports/handbal.jpg";
+    case "tenis":
+      return "/assets/img/sports/tenis.jpg";
+    case "tenis-de-masa":
+      return "/assets/img/sports/tenis-de-masa.jpg";
+    case "badminton":
+      return "/assets/img/sports/badminton.jpg";
+    case "rugby":
+    case "rugbi": // Variant spelling
+      return "/assets/img/sports/rugby.jpg";
+
+    // Water sports
+    case "inot":
+      return "/assets/img/sports/inot.jpg";
+    case "polo-apa":
+    case "polo-aquatic":
+    case "polo":
+      // Use inot.jpg as fallback for water polo (no specific image available)
+      return "/assets/img/sports/inot.jpg";
+    case "polo-terrestru":
+      // Use fotbal.jpg as fallback for field polo (no specific image available)
+      return "/assets/img/sports/fotbal.jpg";
+
+    // Winter sports
+    case "schi":
+      return "/assets/img/sports/schi.jpg";
+    case "snowboard":
+      // Use schi.jpg as fallback (similar winter sport)
+      return "/assets/img/sports/schi.jpg";
+    case "patinaj":
+      return "/assets/img/sports/patinaj.jpg";
+    case "patinaj-artistic":
+      return "/assets/img/sports/patinaj-artistic.jpg";
+    case "patinaj-ghata":
+      // Use patinaj.jpg as fallback
+      return "/assets/img/sports/patinaj.jpg";
+    case "hochei":
+      return "/assets/img/sports/hochei.jpg";
+    case "hochei-ghata":
+      // Use hochei.jpg as fallback
+      return "/assets/img/sports/hochei.jpg";
+
+    // Combat sports
+    case "karate":
+      return "/assets/img/sports/karate.jpg";
+    case "judo":
+      return "/assets/img/sports/judo.jpg";
+    case "taekwondo":
+      return "/assets/img/sports/taekwondo.jpg";
+    case "box":
+      return "/assets/img/sports/box.jpg";
+    case "lupte":
+      // Use judo.jpg as fallback for wrestling (no specific image available)
+      return "/assets/img/sports/judo.jpg";
+    case "scrima":
+      return "/assets/img/sports/scrima.jpg";
+
+    // Gymnastics & Dance
+    case "gimnastica":
+      // Use artistic gymnastics as default (most common)
+      return "/assets/img/sports/gimnastica-artistica.jpg";
+    case "gimnastica-artistica":
+      return "/assets/img/sports/gimnastica-artistica.jpg";
+    case "gimnastica-ritmica":
+      return "/assets/img/sports/gimnastica-ritmica.jpg";
+    case "dans":
+      return "/assets/img/sports/dans.jpg";
+
+    // Athletics & Outdoor
+    case "atletism":
+      return "/assets/img/sports/atletism.jpg";
+    case "ciclism":
+      return "/assets/img/sports/ciclism.jpg";
+    case "echitatie":
+      return "/assets/img/sports/echitatie.jpg";
+    case "escalada":
+    case "alpinism":
+      return "/assets/img/sports/alpinism.jpg";
+    case "tiro-cu-arcul":
+      return "/assets/img/sports/tiro-cu-arcul.jpg";
+
+    // Multi-sport clubs
+    case "multi-sport":
+      // Use a generic sport image (fotbal is most common)
+      return "/assets/img/sports/fotbal.jpg";
+
+    // Default fallback
+    default:
+      return "/assets/img/sports/fotbal.jpg";
+  }
+}
+
 /**
  * Generate doctor schedule (availability)
  * Returns JSONB-compatible schedule for doctors

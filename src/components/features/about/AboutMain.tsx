@@ -24,7 +24,7 @@ const AboutMain: React.FC = () => {
                 subtitle="
                   Platforma AI care transformă modul în care părinții din România găsesc
                   activitățile sportive perfecte pentru copiii lor. Combinăm recomandări AI personalizate,
-                  cluburi sportive verificate și rețeaua de specialiști pediatri pentru a oferi o ghidare
+                  cluburi sportive și rețeaua de specialiști pediatri pentru a oferi o ghidare
                   completă și sigură în alegerile sportive pentru copiii între 4-14 ani."
                 className="mb-60"
                 animationDelay=".2s"
@@ -86,7 +86,7 @@ const AboutMain: React.FC = () => {
                 </div>
                 <h3 className="bd-about-value-title mb-20">
                   <Link href={routes.clubs.list} className="text-decoration-none">
-                    Cluburi Verificate
+                    Cluburi sportive
                   </Link>
                 </h3>
                 <p className="bd-about-value-text">
@@ -94,7 +94,7 @@ const AboutMain: React.FC = () => {
                     href={routes.clubs.list}
                     className="text-yuvoo-primary text-decoration-underline"
                   >
-                    Listă curată de cluburi sportive verificate
+                    Listă curată de cluburi sportive
                   </Link>
                   , cu informații complete despre programe, prețuri și locații.
                 </p>

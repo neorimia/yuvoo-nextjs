@@ -92,7 +92,7 @@ export default function QuizIntroContent() {
                       <p className="text-muted small mb-0">
                         Acces direct la{" "}
                         <Link href={routes.clubs.list} className="text-primary">
-                          cluburi verificate
+                          cluburi sportive
                         </Link>{" "}
                         care oferă sporturile recomandate. Explorează{" "}
                         <Link href={routes.sports.list} className="text-primary">
@@ -170,7 +170,7 @@ export default function QuizIntroContent() {
                 </div>
                 <h3 className="h6 fw-semibold mb-2">Primești recomandări</h3>
                 <p className="text-muted small mb-0">
-                  Recomandări personalizate cu explicații și cluburi verificate
+                  Recomandări personalizate cu explicații și cluburi sportive
                 </p>
               </div>
             </div>

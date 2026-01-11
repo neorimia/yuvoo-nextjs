@@ -8,7 +8,7 @@ import Link from "next/link";
 export const metadata: Metadata = {
   title: "Ajutor - Ghid de utilizare Yuvoo | Suport și Asistență",
   description:
-    "Ghid complet de utilizare pentru platforma Yuvoo. Află cum să folosești chestionarul AI, cum să găsești cluburi verificate, cum să contactezi specialiști pediatri și multe altele. Suport și asistență pentru părinți.",
+    "Ghid complet de utilizare pentru platforma Yuvoo. Află cum să folosești chestionarul AI, cum să găsești cluburi sportive, cum să contactezi specialiști pediatri și multe altele. Suport și asistență pentru părinți.",
   keywords: [
     "ajutor Yuvoo",
     "ghid utilizare Yuvoo",
@@ -22,7 +22,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: "Ajutor - Ghid de utilizare Yuvoo | Suport și Asistență",
     description:
-      "Ghid complet de utilizare pentru platforma Yuvoo. Află cum să folosești chestionarul AI, cum să găsești cluburi verificate și cum să contactezi specialiști pediatri.",
+      "Ghid complet de utilizare pentru platforma Yuvoo. Află cum să folosești chestionarul AI, cum să găsești cluburi sportive și cum să contactezi specialiști pediatri.",
     type: "website",
     url: `${process.env.NEXT_PUBLIC_APP_URL || "https://yuvoo.ro"}/ajutor`,
     siteName: "Yuvoo",

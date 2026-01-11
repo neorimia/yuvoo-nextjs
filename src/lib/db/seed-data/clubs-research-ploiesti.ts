@@ -23,7 +23,7 @@ import {
   generateLevels,
   generateSchedule,
   generatePricing,
-  generateImageUrls,
+  generateClubImage,
 } from "./helpers";
 
 /**
@@ -100,7 +100,7 @@ function createClubFromResearch(
     experienceLevels: data.experienceLevels || generateLevels(true, true, false),
     schedule,
     pricing,
-    galleryUrls: data.galleryUrls || generateImageUrls(3),
+    galleryUrls: data.galleryUrls || ([generateClubImage(data.sportType)] as string[]),
     verified: false, // Research clubs start as unverified
     featured: false, // Research clubs start as not featured
     rating: 0, // No rating until verified

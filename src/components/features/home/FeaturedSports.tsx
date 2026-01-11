@@ -59,7 +59,7 @@ const FeaturedSports = () => {
                     href={routes.clubs.list}
                     className="text-yuvoo-primary text-decoration-underline"
                   >
-                    găsește cluburi verificate
+                    găsește cluburi sportive
                   </Link>{" "}
                   în apropierea ta. Sau începe cu{" "}
                   <Link

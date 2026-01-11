@@ -20,7 +20,7 @@ const ClubDetailsWidget: React.FC<ClubDetailsWidgetProps> = ({ club }) => {
   const mainImage = club.images?.[0] || "/assets/img/placeholder-club.jpg";
 
   return (
-    <section className="bd-club-details-widget pb-70">
+    <section className="bd-club-details-widget">
       <div className="container">
         <div className="row">
           <div className="col-lg-6 mb-50">
@@ -29,7 +29,7 @@ const ClubDetailsWidget: React.FC<ClubDetailsWidgetProps> = ({ club }) => {
               data-wow-duration="1s"
               data-wow-delay=".3s"
             >
-              <h3 className="bd-club-details-widget-title mb-20">Despre Clubul Nostru</h3>
+              <h3 className="bd-club-details-widget-title mb-20">Despre Club</h3>
               <p className="mb-25">{club.description}</p>
               <p className="mb-25">
                 Oferim un mediu sigur și stimulativ pentru dezvoltarea copiilor prin{" "}
@@ -56,18 +56,18 @@ const ClubDetailsWidget: React.FC<ClubDetailsWidgetProps> = ({ club }) => {
                     </span>
                   </span>
                 </Link>
-                <Link href={routes.doctors.list} className="bd-btn">
-                  <span className="bd-btn-inner">
-                    <span className="bd-btn-normal">
-                      <i className="fa-solid fa-user-doctor me-2"></i>
-                      Specialiști pediatri
-                    </span>
-                    <span className="bd-btn-hover">
-                      <i className="fa-solid fa-user-doctor me-2"></i>
-                      Specialiști pediatri
-                    </span>
-                  </span>
-                </Link>
+                {/*<Link href={routes.doctors.list} className="bd-btn">*/}
+                {/*  <span className="bd-btn-inner">*/}
+                {/*    <span className="bd-btn-normal">*/}
+                {/*      <i className="fa-solid fa-user-doctor me-2"></i>*/}
+                {/*      Specialiști pediatri*/}
+                {/*    </span>*/}
+                {/*    <span className="bd-btn-hover">*/}
+                {/*      <i className="fa-solid fa-user-doctor me-2"></i>*/}
+                {/*      Specialiști pediatri*/}
+                {/*    </span>*/}
+                {/*  </span>*/}
+                {/*</Link>*/}
               </div>
             </div>
           </div>

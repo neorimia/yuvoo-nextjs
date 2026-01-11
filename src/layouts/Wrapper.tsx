@@ -1,7 +1,7 @@
 "use client";
 
 import BackToTop from "@/components/Common/BackToTop";
-import Preloader from "@/components/Common/Preloader/Preloader";
+// import Preloader from "@/components/Common/Preloader/Preloader";
 import React, { useEffect, useState } from "react";
 
 interface WrapperProps {
@@ -9,7 +9,7 @@ interface WrapperProps {
 }
 
 const Wrapper: React.FC<WrapperProps> = ({ children }) => {
-  const [isLoading, setIsLoading] = useState<boolean>(true);
+  const [_isLoading, _setIsLoading] = useState<boolean>(true);
 
   // Load Bootstrap JS only on the client-side
   useEffect(() => {
@@ -57,7 +57,8 @@ const Wrapper: React.FC<WrapperProps> = ({ children }) => {
 
   return (
     <>
-      {isLoading ? <Preloader /> : children}
+      {/*{isLoading ? <Preloader /> : children}*/}
+      {children}
       <BackToTop />
     </>
   );

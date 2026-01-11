@@ -20,7 +20,7 @@ export async function generateMetadata(): Promise<Metadata> {
       "misiune Yuvoo",
       "platformă AI sporturi copii",
       "specialiști pediatri România",
-      "cluburi sportive verificate",
+      "cluburi sportive",
       "despre platformă sport copii",
     ],
     openGraph: {
