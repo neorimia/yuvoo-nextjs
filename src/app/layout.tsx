@@ -26,7 +26,7 @@ const gabarito = Gabarito({
 export const metadata: Metadata = {
   title: "Yuvoo - Descoperă sportul potrivit copilului tău",
   description:
-    "Yuvoo este platforma AI care ajută părinții din România să găsească activitățile sportive potrivite pentru copiii lor (4-14 ani). Descoperă sporturi personalizate, cluburi verificate și specialiști pediatri.",
+    "Yuvoo este platforma AI care ajută părinții din România să găsească activitățile sportive potrivite pentru copiii lor (4-14 ani). Descoperă sporturi personalizate, cluburi sportive și specialiști pediatri.",
   keywords: [
     "sport copii",
     "cluburi sportive copii",
@@ -50,7 +50,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: "Yuvoo - Descoperă sportul potrivit copilului tău",
     description:
-      "Platformă AI pentru descoperirea activităților sportive potrivite pentru copiii tăi. Cluburi verificate și specialiști pediatri.",
+      "Platformă AI pentru descoperirea activităților sportive potrivite pentru copiii tăi. Cluburi sportive și specialiști pediatri.",
     url: process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000",
     siteName: "Yuvoo",
     locale: "ro_RO",

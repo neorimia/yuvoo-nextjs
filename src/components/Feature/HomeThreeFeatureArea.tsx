@@ -25,20 +25,20 @@ const features: IFeatureItem[] = [
   },
   {
     id: 2,
-    title: "Cluburi Verificate",
+    title: "Cluburi Sportive",
     teaser:
-      "Bază de date cu peste 500 de cluburi sportive verificate, cu informații complete despre facilități și antrenori.",
+      "Bază de date cu peste 500 de cluburi sportive, cu informații complete despre facilități și antrenori.",
     iconStyle: "icon-2",
     icon: "flaticon-humanitarian-help",
   },
-  {
-    id: 3,
-    title: "Specialiști Pediatri",
-    teaser:
-      "Acces la rețeaua de specialiști pediatri pentru consultații legate de sport și dezvoltarea copilului.",
-    iconStyle: "icon-3",
-    icon: "flaticon-like-1",
-  },
+  // {
+  //   id: 3,
+  //   title: "Specialiști Pediatri",
+  //   teaser:
+  //     "Acces la rețeaua de specialiști pediatri pentru consultații legate de sport și dezvoltarea copilului.",
+  //   iconStyle: "icon-3",
+  //   icon: "flaticon-like-1",
+  // },
   {
     id: 4,
     title: "Personalizat",
@@ -69,7 +69,7 @@ const HomeThreeFeatureArea: React.FC<IHomeThreeFeatureAreaProps> = ({ wave }) =>
               <p>
                 Platformă completă pentru descoperirea sporturilor potrivite copilului tău.
                 <br />
-                De la recomandări AI la cluburi verificate și specialiști pediatri.
+                De la recomandări AI la cluburi sportive și specialiști pediatri.
               </p>
             </div>
           </div>

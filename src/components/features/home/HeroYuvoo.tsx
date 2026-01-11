@@ -73,19 +73,19 @@ const HeroYuvoo = () => {
                     Vreau doar să explorez cluburile
                   </Link>
                 </div>
-                <div
-                  className="bd-hero-trust-tag wow fadeInUp"
-                  data-wow-duration="1s"
-                  data-wow-delay=".8s"
-                  style={{
-                    marginTop: "30px",
-                    fontSize: "14px",
-                    color: "#6B6B6B",
-                    fontWeight: 400,
-                  }}
-                >
-                  Peste 5.000 de familii au folosit deja Yuvoo
-                </div>
+                {/*<div*/}
+                {/*  className="bd-hero-trust-tag wow fadeInUp"*/}
+                {/*  data-wow-duration="1s"*/}
+                {/*  data-wow-delay=".8s"*/}
+                {/*  style={{*/}
+                {/*    marginTop: "30px",*/}
+                {/*    fontSize: "14px",*/}
+                {/*    color: "#6B6B6B",*/}
+                {/*    fontWeight: 400,*/}
+                {/*  }}*/}
+                {/*>*/}
+                {/*  Peste 5.000 de familii au folosit deja Yuvoo*/}
+                {/*</div>*/}
               </div>
             </div>
             <div className="col-lg-5 col-md-6">

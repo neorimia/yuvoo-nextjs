@@ -11,9 +11,10 @@ import ClubDetailsWidgetTwo from "@/components/features/clubs/ClubDetailsWidgetT
 import ClubSchedule from "@/components/features/clubs/ClubSchedule";
 import ClubGallery from "@/components/features/clubs/ClubGallery";
 import ClubMap from "@/components/features/clubs/ClubMap";
-import BookingFormSection from "@/components/features/clubs/BookingFormSection";
+// import BookingFormSection from "@/components/features/clubs/BookingFormSection";
 import ClubContentExpanded from "@/components/features/clubs/ClubContentExpanded";
 import { getClubBySlug } from "@/modules/clubs/clubs.service";
+import { clubsRepository } from "@/modules/clubs/clubs.repository";
 import { routes } from "@/lib/routes";
 import { cacheLife, cacheTag } from "next/cache";
 import type { Club } from "@/modules/clubs/clubs.types";
@@ -23,6 +24,7 @@ import PostHogViewTracking from "@/components/analytics/PostHogViewTracking";
 import { PostHogEvents } from "@/lib/analytics/events";
 import { PRE_LAUNCH_RESTRICTIONS_ENABLED } from "@/lib/config/pre-launch";
 import PreLaunchPage from "@/components/features/early-access/PreLaunchPage";
+import ClubClaimProfile from "@/components/features/clubs/ClubClaimProfile";
 
 interface ClubDetailPageProps {
   params: Promise<{
@@ -32,16 +34,36 @@ interface ClubDetailPageProps {
 
 /**
  * Generate static params for SSG
+ * Fetches all club slugs for static generation.
+ * During production builds, returns placeholder to prevent crypto.randomUUID() errors.
+ * ISR will handle dynamic generation at runtime.
  * Returns at least one value to satisfy Cache Components requirement.
- * TODO: When repository is implemented, fetch all club slugs here.
  */
 export async function generateStaticParams() {
-  // TODO: When repository is implemented, fetch all club slugs
-  // const clubs = await clubsRepository.findAll();
-  // return clubs.map((club) => ({ slug: club.slug }));
+  // During production builds, skip database queries to prevent crypto.randomUUID() errors
+  // ISR will handle dynamic generation at runtime
+  const isProductionBuild = process.env.NEXT_PHASE === "phase-production-build";
 
-  // For now, return placeholder to satisfy Cache Components requirement
-  return [{ slug: "example-club" }];
+  if (isProductionBuild) {
+    // Return placeholder to satisfy Cache Components requirement
+    return [{ slug: "example-club" }];
+  }
+
+  try {
+    const clubs = await clubsRepository.getAllClubs();
+
+    // Return at least one value (or placeholder if no clubs)
+    if (clubs.length === 0) {
+      return [{ slug: "example-club" }];
+    }
+
+    return clubs.map((club) => ({ slug: club.slug }));
+  } catch (error) {
+    // If database query fails (e.g., during build), return placeholder
+    // ISR will generate routes dynamically at runtime
+    console.warn("Failed to fetch clubs in generateStaticParams:", error);
+    return [{ slug: "example-club" }];
+  }
 }
 
 /**
@@ -52,11 +74,13 @@ export async function generateStaticParams() {
  * SEO-friendly route: /cluburi/[slug]
  */
 export default async function ClubDetailPage({ params }: ClubDetailPageProps) {
+  // Access dynamic data sources FIRST to mark route as dynamic
+  // This prevents crypto.randomUUID() errors (e.g., from Sentry) during prerendering
+  const { slug } = await params;
+
   if (PRE_LAUNCH_RESTRICTIONS_ENABLED) {
     return <PreLaunchPage routeType="club-portal" />;
   }
-
-  const { slug } = await params;
 
   // Check if we're in production build phase
   const isProductionBuild = process.env.NEXT_PHASE === "phase-production-build";
@@ -123,16 +147,18 @@ export default async function ClubDetailPage({ params }: ClubDetailPageProps) {
         ]}
       />
       <ClubDetailsMain club={club!} />
-      {club!.images && club!.images.length > 0 && (
+      {club!.images && club!.images.length > 1 && (
         <ClubGallery images={club!.images} clubName={club!.name} />
       )}
-      <ClubMap club={club!} />
+      {club?.location.address && <ClubMap club={club!} />}
       <ClubDetailsWidget club={club!} />
       <ClubSchedule club={club!} />
       <ClubDetailsWidgetTwo club={club!} />
       {/* Expanded Content Section for SEO (600-900 words) */}
       <ClubContentExpanded content={expandedContent} />
-      <BookingFormSection club={club!} />
+      {/*<BookingFormSection club={club!} />*/}
+      {/* Sticky button for club representatives to claim profile */}
+      <ClubClaimProfile clubId={club!.id} clubSlug={slug} />
     </>
   );
 }
@@ -150,8 +176,7 @@ export async function generateMetadata({ params }: ClubDetailPageProps): Promise
   if (isProductionBuild) {
     return {
       title: "Club Sportiv pentru Copii - Yuvoo",
-      description:
-        "Cluburi sportive verificate pentru copii. Găsește activități sportive potrivite.",
+      description: "Cluburi sportive pentru copii. Găsește activități sportive potrivite.",
     };
   }
 

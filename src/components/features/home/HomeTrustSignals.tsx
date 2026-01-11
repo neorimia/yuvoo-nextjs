@@ -12,10 +12,9 @@ import TrustCard, { TrustCardProps } from "@/components/shared/TrustCard";
 const trustSignals: TrustCardProps[] = [
   {
     id: 1,
-    icon: "fa-solid fa-certificate",
-    title: "Cluburi verificate",
-    description: "Toate cluburile sunt verificate de echipa noastră pentru siguranță și calitate",
-    link: routes.clubs.list,
+    icon: "fa-solid fa-lock",
+    title: "Platformă securizată",
+    description: "Tehnologie avansată pentru protecția datelor și siguranța utilizatorilor",
   },
   {
     id: 2,
@@ -27,30 +26,32 @@ const trustSignals: TrustCardProps[] = [
   },
   {
     id: 3,
-    icon: "fa-solid fa-user-doctor",
-    title: "Specialiști verificați",
-    description: "Toți doctorii sunt verificați și au credențiale medicale valide",
-    link: routes.doctors.list,
-  },
-  {
-    id: 4,
-    icon: "fa-solid fa-lock",
-    title: "Platformă securizată",
-    description: "Tehnologie avansată pentru protecția datelor și siguranța utilizatorilor",
-  },
-  {
-    id: 5,
-    icon: "fa-solid fa-heart",
-    title: "100% gratuit pentru părinți",
-    description: "Platforma Yuvoo este complet gratuită. Fără costuri ascunse sau abonamente",
-  },
-  {
-    id: 6,
     icon: "fa-solid fa-robot",
     title: "Recomandări bazate pe AI",
     description:
       "Sistem AI avansat care analizează profilul copilului pentru recomandări personalizate",
   },
+  {
+    id: 4,
+    icon: "fa-solid fa-certificate",
+    title: "Cluburi verificate",
+    description:
+      "Toate cluburile cu badge-ul 'Verificat' sunt verificate de echipa noastră pentru siguranță și calitate",
+    link: routes.clubs.list,
+  },
+  // {
+  //   id: 3,
+  //   icon: "fa-solid fa-user-doctor",
+  //   title: "Specialiști verificați",
+  //   description: "Toți doctorii sunt verificați și au credențiale medicale valide",
+  //   link: routes.doctors.list,
+  // },
+  // {
+  //   id: 5,
+  //   icon: "fa-solid fa-heart",
+  //   title: "100% gratuit pentru părinți",
+  //   description: "Platforma Yuvoo este complet gratuită. Fără costuri ascunse sau abonamente",
+  // },
 ];
 
 const HomeTrustSignals = () => {

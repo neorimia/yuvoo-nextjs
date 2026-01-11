@@ -16,7 +16,7 @@ interface HomePromAreaProps {
 }
 
 const HomePromotionArea: React.FC<HomePromAreaProps> = ({ promoImg, promo_space }) => {
-  const { playVideo } = useVideoModal();
+  const { playVideo: _playVideo } = useVideoModal();
   return (
     <section
       className={`bd-promotion-area ${promo_space ? promo_space : "pb-60"}`}
@@ -93,10 +93,7 @@ const HomePromotionArea: React.FC<HomePromAreaProps> = ({ promoImg, promo_space 
                     Recomandări personalizate bazate pe AI și analiza pattern-urilor pentru fiecare
                     copil. Date protejate conform GDPR.
                   </li>
-                  <li>
-                    Bază de date cu peste 500 de cluburi sportive verificate și specialiști
-                    pediatri.
-                  </li>
+                  <li>Bază de date cu peste 500 de cluburi sportive și specialiști pediatri.</li>
                 </ul>
               </div>
               <div className="bd-promotion-btn-wrapper flex-wrap">
@@ -108,15 +105,15 @@ const HomePromotionArea: React.FC<HomePromAreaProps> = ({ promoImg, promo_space 
                     </span>
                   </Link>
                 </div>
-                <div className="bd-promotion-btn-2 bd-pulse-btn btn-2">
-                  <button
-                    type="button"
-                    className="popup-video"
-                    onClick={() => playVideo("go7QYaQR494", "youtube")}
-                  >
-                    <i className="flaticon-play-button"></i> Video Promoțional
-                  </button>
-                </div>
+                {/*<div className="bd-promotion-btn-2 bd-pulse-btn btn-2">*/}
+                {/*  <button*/}
+                {/*    type="button"*/}
+                {/*    className="popup-video"*/}
+                {/*    onClick={() => playVideo("go7QYaQR494", "youtube")}*/}
+                {/*  >*/}
+                {/*    <i className="flaticon-play-button"></i> Video Promoțional*/}
+                {/*  </button>*/}
+                {/*</div>*/}
               </div>
             </div>
           </div>

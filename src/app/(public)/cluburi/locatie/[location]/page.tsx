@@ -84,8 +84,8 @@ export async function generateMetadata({ params }: LocationPageProps): Promise<M
     : `Cluburi Sportive ${city} - Yuvoo`;
 
   const description = district
-    ? `Descoperă cluburi sportive verificate pentru copii în ${district}, ${city}. Găsește activități sportive potrivite, programe adaptate pe vârstă și probe gratuite. Toate cluburile sunt verificate de echipa Yuvoo.`
-    : `Descoperă cluburi sportive verificate pentru copii în ${city}. Găsește activități sportive potrivite, programe adaptate pe vârstă și probe gratuite. Toate cluburile sunt verificate de echipa Yuvoo.`;
+    ? `Descoperă cluburi sportive pentru copii în ${district}, ${city}. Găsește activități sportive potrivite, programe adaptate pe vârstă și probe gratuite. Toate cluburile sunt verificate de echipa Yuvoo.`
+    : `Descoperă cluburi sportive pentru copii în ${city}. Găsește activități sportive potrivite, programe adaptate pe vârstă și probe gratuite. Toate cluburile sunt verificate de echipa Yuvoo.`;
 
   return {
     title,
@@ -95,7 +95,7 @@ export async function generateMetadata({ params }: LocationPageProps): Promise<M
       `activități sportive ${locationDisplayName}`,
       `sport copii ${locationDisplayName}`,
       district ? `cluburi ${district}` : undefined,
-      `cluburi verificate ${city}`,
+      `cluburi sportive ${city}`,
     ].filter(Boolean) as string[],
     openGraph: {
       title,
@@ -181,12 +181,12 @@ export default async function LocationClubsPage({ params }: LocationPageProps) {
           <div className="row">
             <div className="col-lg-10 mx-auto">
               <SectionTitle
-                title={`Cluburi Sportive Verificate în ${locationDisplayName}`}
+                title={`Cluburi Sportive în ${locationDisplayName}`}
                 subtitle={
                   <>
-                    Descoperă cluburi sportive verificate pentru copii în {locationDisplayName}.
-                    Filtrează după sport sau vârstă pentru a găsi activități potrivite. Dacă nu ești
-                    sigur ce sport se potrivește copilului tău, încearcă{" "}
+                    Descoperă cluburi pentru copii în {locationDisplayName}. Filtrează după sport
+                    sau vârstă pentru a găsi activități potrivite. Dacă nu ești sigur ce sport se
+                    potrivește copilului tău, încearcă{" "}
                     <Link
                       href={routes.quiz.intro}
                       className="text-primary text-decoration-underline"

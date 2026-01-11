@@ -60,7 +60,7 @@ export const teamMembers: TeamMember[] = [
     id: 4,
     name: "Elena Vasilescu",
     role: "Head of Partnerships",
-    bio: "Cu experiență în managementul parteneriatelor și dezvoltarea business-ului, Elena construiește rețeaua de cluburi verificate și specialiști pediatri care fac parte din ecosistemul Yuvoo.",
+    bio: "Cu experiență în managementul parteneriatelor și dezvoltarea business-ului, Elena construiește rețeaua de cluburi sportive și specialiști pediatri care fac parte din ecosistemul Yuvoo.",
     image: "/assets/img/placeholder-team.jpg",
     credentials: ["Business Development", "Partnership Management"],
     socialLinks: [

@@ -16,7 +16,7 @@ export const metadata: Metadata = {
     "întrebări frecvente",
     "cum funcționează Yuvoo",
     "chestionar AI",
-    "cluburi sportive verificate",
+    "cluburi sportive",
     "specialiști pediatri",
     "siguranță date",
     "GDPR",
@@ -25,7 +25,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: "Întrebări Frecvente - Răspunsuri Despre Yuvoo | FAQ",
     description:
-      "Răspunsuri la peste 20 de întrebări frecvente despre platforma Yuvoo, chestionarul AI, cluburile verificate și specialiștii pediatri.",
+      "Răspunsuri la peste 20 de întrebări frecvente despre platforma Yuvoo, chestionarul AI, cluburile și specialiștii pediatri.",
     type: "website",
     url: `${process.env.NEXT_PUBLIC_APP_URL || "https://yuvoo.ro"}/intrebari-frecvente`,
     siteName: "Yuvoo",

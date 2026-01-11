@@ -758,7 +758,7 @@ export function welcomeEmailTemplate(user: AuthUser): { html: string; text: stri
     <p><strong>Ce poți face acum:</strong></p>
     <ul>
       <li>📋 Completează chestionarul AI pentru recomandări personalizate</li>
-      <li>🏃 Explorează cluburile verificate din zona ta</li>
+      <li>🏃 Explorează cluburile din zona ta</li>
       <li>👨‍⚕️ Descoperă specialiști pediatri pentru consultații</li>
       <li>📅 Rezervă probe gratuite la cluburile preferate</li>
     </ul>

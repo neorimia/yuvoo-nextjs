@@ -18,16 +18,16 @@ const factData: IFactItem[] = [
     id: 2,
     count: 500,
     title: "Cluburi",
-    subTitle: "sportive verificate",
+    subTitle: "sportive",
     text: "+",
   },
-  {
-    id: 3,
-    count: 50,
-    title: "Specialiști ",
-    subTitle: "pediatri verificați",
-    text: "+",
-  },
+  // {
+  //   id: 3,
+  //   count: 50,
+  //   title: "Specialiști ",
+  //   subTitle: "pediatri verificați",
+  //   text: "+",
+  // },
   {
     id: 4,
     count: 5000,
@@ -38,7 +38,7 @@ const factData: IFactItem[] = [
   {
     id: 5,
     count: 500,
-    title: "Cluburi sportive verificate",
+    title: "Cluburi sportive",
     icon: "flaticon-reading",
     text: "+",
   },

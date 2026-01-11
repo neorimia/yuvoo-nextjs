@@ -17,7 +17,7 @@ interface ClubContentExpandedProps {
 
 const ClubContentExpanded: React.FC<ClubContentExpandedProps> = ({ content }) => {
   return (
-    <section className="bd-club-expanded-content-area container pt-70 pb-70">
+    <section className="bd-club-expanded-content-area container pb-70">
       {/* Introduction Section */}
       <div className="row g-4">
         <div className="col-12">
@@ -66,7 +66,11 @@ const ClubContentExpanded: React.FC<ClubContentExpandedProps> = ({ content }) =>
       {/* Benefits Section */}
       <div className="row g-4">
         <div className="col-12">
-          <SectionTitle title={content.benefits.title} className="mb-50" animationDelay=".5s" />
+          <SectionTitle
+            title={content.benefits.title}
+            className="mt-20 mb-4"
+            animationDelay=".5s"
+          />
           <div className="bd-club-benefits-grid">
             {content.benefits.items.map((benefit, index) => (
               <div
@@ -152,36 +156,36 @@ const ClubContentExpanded: React.FC<ClubContentExpandedProps> = ({ content }) =>
       </div>
 
       {/* Internal Links Section - Doctors */}
-      <div className="row g-4">
-        <div className="col-12">
-          <div
-            className="bd-club-internal-links theme-bg-6 wow fadeInUp"
-            data-wow-duration="1s"
-            data-wow-delay="1s"
-          >
-            <div className="bd-club-internal-links-content text-center">
-              <h3 className="bd-club-internal-links-title">Consultă specialiști pediatri</h3>
-              <p className="bd-club-internal-links-description">
-                Găsește specialiști pediatri verificați pentru consultații despre activitățile
-                sportive ale copilului tău. Ortopedie, nutriție sau psihologie pediatrică - totul
-                pentru sănătatea și dezvoltarea optimă a copilului prin sport.
-              </p>
-              <Link href={content.internalLinks.doctorsLink} className="bd-btn bd-btn-outline">
-                <span className="bd-btn-inner">
-                  <span className="bd-btn-normal">
-                    <i className="fa-solid fa-user-doctor me-2"></i>
-                    {content.internalLinks.doctorsLinkText}
-                  </span>
-                  <span className="bd-btn-hover">
-                    <i className="fa-solid fa-user-doctor me-2"></i>
-                    {content.internalLinks.doctorsLinkText}
-                  </span>
-                </span>
-              </Link>
-            </div>
-          </div>
-        </div>
-      </div>
+      {/*<div className="row g-4">*/}
+      {/*  <div className="col-12">*/}
+      {/*    <div*/}
+      {/*      className="bd-club-internal-links theme-bg-6 wow fadeInUp"*/}
+      {/*      data-wow-duration="1s"*/}
+      {/*      data-wow-delay="1s"*/}
+      {/*    >*/}
+      {/*      <div className="bd-club-internal-links-content text-center">*/}
+      {/*        <h3 className="bd-club-internal-links-title">Consultă specialiști pediatri</h3>*/}
+      {/*        <p className="bd-club-internal-links-description">*/}
+      {/*          Găsește specialiști pediatri verificați pentru consultații despre activitățile*/}
+      {/*          sportive ale copilului tău. Ortopedie, nutriție sau psihologie pediatrică - totul*/}
+      {/*          pentru sănătatea și dezvoltarea optimă a copilului prin sport.*/}
+      {/*        </p>*/}
+      {/*        <Link href={content.internalLinks.doctorsLink} className="bd-btn bd-btn-outline">*/}
+      {/*          <span className="bd-btn-inner">*/}
+      {/*            <span className="bd-btn-normal">*/}
+      {/*              <i className="fa-solid fa-user-doctor me-2"></i>*/}
+      {/*              {content.internalLinks.doctorsLinkText}*/}
+      {/*            </span>*/}
+      {/*            <span className="bd-btn-hover">*/}
+      {/*              <i className="fa-solid fa-user-doctor me-2"></i>*/}
+      {/*              {content.internalLinks.doctorsLinkText}*/}
+      {/*            </span>*/}
+      {/*          </span>*/}
+      {/*        </Link>*/}
+      {/*      </div>*/}
+      {/*    </div>*/}
+      {/*  </div>*/}
+      {/*</div>*/}
     </section>
   );
 };
