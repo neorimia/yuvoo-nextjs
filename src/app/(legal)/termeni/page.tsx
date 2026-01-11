@@ -82,8 +82,8 @@ export default function TermsOfServicePage() {
                         pe profilul copilului tău
                       </li>
                       <li>
-                        <strong>Directorul de cluburi:</strong> Listă de cluburi sportive verificate
-                        pentru copii, cu informații despre programe, prețuri și locații
+                        <strong>Directorul de cluburi:</strong> Listă de cluburi sportive pentru
+                        copii, cu informații despre programe, prețuri și locații
                       </li>
                       <li>
                         <strong>Directorul de specialiști:</strong> Acces la specialiști pediatri

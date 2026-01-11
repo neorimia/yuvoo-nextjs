@@ -59,7 +59,7 @@ const SportCard: React.FC<SportCardProps> = ({ sport, className = "" }) => {
         </h3>
         <p className="bd-sport-card-description">
           {sport.description ||
-            "Descoperă acest sport și găsește cluburi verificate care oferă programe adaptate pentru copiii tăi."}
+            "Descoperă acest sport și găsește cluburi sportive care oferă programe adaptate pentru copiii tăi."}
         </p>
         <div className="bd-sport-card-meta-wrapper">
           <div className="bd-sport-card-meta">

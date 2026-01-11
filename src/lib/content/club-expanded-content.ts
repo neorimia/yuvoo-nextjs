@@ -241,7 +241,7 @@ ${club.verified ? "Clubul a primit verificarea Yuvoo, ceea ce confirmă că înd
 Programele noastre sunt concepute să fie atât distractive, cât și educative, combinând elemente de joc cu dezvoltarea tehnică și tactică necesară pentru progres în ${club.sportName.toLowerCase()}. Fie că copilul tău este la început de drum sau are deja experiență în acest sport, oferim structura și suportul necesar pentru a-și atinge potențialul maxim. Pentru mai multe informații despre ${club.sportName.toLowerCase()} și beneficiile acestuia pentru copii, consultă ghidul nostru despre ${club.sportName.toLowerCase()}.`;
 
   const about = {
-    title: "Despre Clubul Nostru",
+    title: "Despre Club",
     content: `Clubul ${club.name} este dedicat promovării ${club.sportName.toLowerCase()} în rândul copiilor din ${locationText}, oferind programe structurate și adaptate vârstelor și nivelurilor de experiență. Misiunea noastră este să creăm un mediu unde copiii pot învăța, se pot dezvolta și se pot bucura de sport într-un context sigur și încurajator.
 
 ${club.verified ? "Ca club verificat Yuvoo, ne angajăm să respectăm cele mai înalte standarde de calitate, siguranță și profesionalism. Verificarea noastră confirmă că facilitățile, echipamentele și programele noastre îndeplinesc cerințele stricte stabilite pentru programele destinate copiilor." : ""} Antrenorii noștri sunt selectați atent pentru experiența lor în lucrul cu copiii și pentru calificările lor profesionale în domeniul ${club.sportName.toLowerCase()}. Pentru o înțelegere mai profundă a beneficiilor ${club.sportName.toLowerCase()} pentru copii, explorează ghidul complet despre ${club.sportName.toLowerCase()} disponibil pe platforma Yuvoo.

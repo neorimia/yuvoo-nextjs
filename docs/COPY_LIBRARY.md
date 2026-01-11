@@ -467,7 +467,7 @@ This document serves as the **single source of truth** for all user-facing text 
 
 **Page Titles**:
 
-- "Cluburi Sportive Verificate"
+- "Cluburi Sportive"
 - "Descoperă cluburile potrivite"
 - "Cluburi pentru copii"
 

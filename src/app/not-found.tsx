@@ -22,7 +22,7 @@ const ErrorPageMain = async () => {
                 găsești ceea ce cauți!
               </p>
               <p className="text-muted">
-                Poți explora sporturile disponibile, descoperi cluburi verificate sau începe
+                Poți explora sporturile disponibile, descoperi cluburi sportive sau începe
                 chestionarul nostru AI pentru a primi recomandări personalizate pentru copilul tău.
               </p>
             </div>

@@ -15,7 +15,7 @@ import ClubsLandingFooter from "@/components/features/clubs/ClubsLandingFooter";
 import ClubsContactModal from "@/components/features/clubs/ClubsContactModal";
 import { CLUBS_CONTACT_MODAL_ID } from "@/lib/clubs-landing-modal";
 import { routes } from "@/lib/routes";
-import { countVerifiedClubsByCity } from "@/modules/clubs/clubs.service";
+import { countVerifiedClubs } from "@/modules/clubs/clubs.service";
 
 /**
  * Metadata for clubs landing page
@@ -28,11 +28,11 @@ const canonicalUrl = `${baseUrl}${routes.clubs.landing}`;
 export const metadata: Metadata = {
   title: "Pentru Cluburi - Yuvoo | Devino Founding Club Gratuit",
   description:
-    "Yuvoo conectează cluburi sportive pentru copii cu părinți care știu deja că sportul tău este potrivit pentru copilul lor. Primele 15 cluburi din București intră gratuit ca Founding Clubs. Părinți pre-calificați, cluburi verificate, zero risc în MVP.",
+    "Yuvoo conectează cluburi sportive pentru copii cu părinți care știu deja că sportul tău este potrivit pentru copilul lor. Primele 15 cluburi din România intră gratuit ca Founding Clubs. Părinți pre-calificați, cluburi sportive, zero risc în MVP.",
   keywords: [
     "cluburi sportive copii",
     "founding club gratuit",
-    "cluburi verificate",
+    "cluburi sportive",
     "părinți pre-calificați",
     "cluburi sportive bucurești",
     "program founding club",
@@ -41,7 +41,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: "Pentru Cluburi - Yuvoo | Devino Founding Club Gratuit",
     description:
-      "Yuvoo conectează cluburi sportive pentru copii cu părinți pre-calificați. Primele 15 cluburi din București intră gratuit ca Founding Clubs.",
+      "Yuvoo conectează cluburi sportive pentru copii cu părinți pre-calificați. Primele 15 cluburi din România intră gratuit ca Founding Clubs.",
     url: canonicalUrl,
     siteName: "Yuvoo",
     type: "website",
@@ -59,7 +59,7 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     title: "Pentru Cluburi - Yuvoo | Devino Founding Club Gratuit",
     description:
-      "Yuvoo conectează cluburi sportive pentru copii cu părinți pre-calificați. Primele 15 cluburi din București intră gratuit ca Founding Clubs.",
+      "Yuvoo conectează cluburi sportive pentru copii cu părinți pre-calificați. Primele 15 cluburi din România intră gratuit ca Founding Clubs.",
     images: [`${baseUrl}/assets/img/logo/og-image.jpg`],
   },
   alternates: {
@@ -77,12 +77,11 @@ export const metadata: Metadata = {
 export default async function ClubsLandingPage() {
   // Fetch verified clubs count from Bucharest
   const MAX_FOUNDING_CLUBS = 15;
-  const CITY = "București";
 
   // Tag for cache revalidation when clubs are verified
   cacheTag("clubs-verified");
 
-  const verifiedCount = await countVerifiedClubsByCity(CITY);
+  const verifiedCount = await countVerifiedClubs();
   const remainingSpots = Math.max(0, MAX_FOUNDING_CLUBS - verifiedCount);
 
   return (

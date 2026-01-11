@@ -13,12 +13,12 @@ import { cacheLife, cacheTag } from "next/cache";
 export const metadata: Metadata = {
   title: "Yuvoo - Descoperă sportul potrivit copilului tău",
   description:
-    "Descoperă cluburi sport verificate pentru copii în București. Recomandări personalizate bazate pe profilul copilului tău cu AI Coach. Începe chestionarul gratuit.",
+    "Descoperă cluburi sport pentru copii în București. Recomandări personalizate bazate pe profilul copilului tău cu AI Coach. Începe chestionarul gratuit.",
   keywords: [
     "sport copii bucuresti",
     "cluburi sport copii",
     "sport potrivit copil",
-    "cluburi verificate copii",
+    "cluburi sportive copii",
     "specialist pediatru sport",
     "ce sport i se potriveste copilului",
     "cluburi fotbal copii bucuresti",
@@ -29,7 +29,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: "Yuvoo - Descoperă sportul potrivit copilului tău",
     description:
-      "Descoperă cluburi sport verificate pentru copii în București. Recomandări personalizate bazate pe profilul copilului tău cu AI Coach.",
+      "Descoperă cluburi sport pentru copii în București. Recomandări personalizate bazate pe profilul copilului tău cu AI Coach.",
     url: process.env.NEXT_PUBLIC_APP_URL || "https://yuvoo.ro",
     siteName: "Yuvoo",
     locale: "ro_RO",
@@ -47,7 +47,7 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     title: "Yuvoo - Descoperă sportul potrivit copilului tău",
     description:
-      "Descoperă cluburi sport verificate pentru copii în București. Recomandări personalizate cu AI Coach.",
+      "Descoperă cluburi sport pentru copii în București. Recomandări personalizate cu AI Coach.",
     images: [
       `${process.env.NEXT_PUBLIC_APP_URL || "https://yuvoo.ro"}/assets/img/logo/og-image.jpg`,
     ],

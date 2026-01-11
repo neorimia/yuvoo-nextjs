@@ -29,7 +29,7 @@ const statsData: StatItem[] = [
   {
     id: 2,
     count: 500,
-    title: "Cluburi verificate",
+    title: "Cluburi sportive",
     icon: "flaticon-certificate",
     text: "+",
   },

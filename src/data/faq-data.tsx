@@ -39,13 +39,12 @@ export const faqCategories: FAQCategory[] = [
             </Link>
             ,{" "}
             <Link href={routes.clubs.list} className="text-primary">
-              listă de cluburi sportive verificate
+              listă de cluburi sportive
             </Link>{" "}
-            și{" "}
-            <Link href={routes.doctors.list} className="text-primary">
-              acces la specialiști pediatri relevanți pentru sport
-            </Link>
-            .
+            {/*și{" "}*/}
+            {/*<Link href={routes.doctors.list} className="text-primary">*/}
+            {/*  acces la specialiști pediatri relevanți pentru sport*/}
+            {/*</Link>*/}.
           </>
         ),
         category: "Despre Platformă",
@@ -66,14 +65,16 @@ export const faqCategories: FAQCategory[] = [
             </Link>{" "}
             pentru recomandări personalizate de sporturi,{" "}
             <Link href={routes.clubs.list} className="text-primary">
-              Directorul de Cluburi Verificate
+              Directorul de Cluburi
             </Link>{" "}
-            unde găsești cluburi sportive verificate și calificate, și{" "}
-            <Link href={routes.doctors.list} className="text-primary">
-              Rețeaua de Specialiști Pediatri
-            </Link>{" "}
-            pentru consultații medicale legate de sport. Toate aceste servicii sunt integrate pentru
-            a te ajuta să alegi cel mai bun sport pentru copilul tău.
+            unde găsești cluburi sportive și calificate.
+            {/*și{" "}*/}
+            {/*<Link href={routes.doctors.list} className="text-primary">*/}
+            {/*  Rețeaua de Specialiști Pediatri*/}
+            {/*</Link>{" "}*/}
+            {/*pentru consultații medicale legate de sport. */}
+            Toate aceste servicii sunt integrate pentru a te ajuta să alegi cel mai bun sport pentru
+            copilul tău.
           </>
         ),
         category: "Despre Platformă",
@@ -136,7 +137,7 @@ export const faqCategories: FAQCategory[] = [
             </Link>{" "}
             pentru a vedea ce îi place realmente copilului tău și să explorezi{" "}
             <Link href={routes.clubs.list} className="text-primary">
-              cluburi verificate
+              cluburi
             </Link>{" "}
             care oferă aceste sporturi.
           </>

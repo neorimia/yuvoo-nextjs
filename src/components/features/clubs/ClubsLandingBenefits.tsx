@@ -117,7 +117,7 @@ export default function ClubsLandingBenefits() {
                 subtitle={
                   <>
                     Program gratuit 6 luni, limitat doar pentru{" "}
-                    <strong style={{ color: "var(--bd-theme-1)" }}>15 cluburi / oraș</strong>
+                    <strong style={{ color: "var(--bd-theme-1)" }}>15 cluburi / România</strong>
                   </>
                 }
                 className="mb-50"

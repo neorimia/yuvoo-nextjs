@@ -111,7 +111,7 @@ export default async function ParentTourPage() {
                 <div className="flex-fill">
                   <h3 className="h4 fw-bold text-body mb-2">2. Găsești Cluburi</h3>
                   <p className="text-body mb-0" style={{ lineHeight: "1.75" }}>
-                    Explorează cluburi verificate potrivite pentru copilul tău, cu toate detaliile
+                    Explorează cluburi sportive potrivite pentru copilul tău, cu toate detaliile
                     despre program, tarife și locație.
                   </p>
                 </div>

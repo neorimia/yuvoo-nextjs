@@ -368,7 +368,7 @@ export const QuizResultsEmail = ({
                   Cluburi recomandate
                 </Heading>
                 <Text style={body}>
-                  Iată câteva cluburi verificate care oferă sporturile recomandate:
+                  Iată câteva cluburi sportive care oferă sporturile recomandate:
                 </Text>
                 {topRecommendations.map((rec) => {
                   const clubs = clubsBySport.get(rec.sportId) || [];

@@ -7,13 +7,13 @@
 Yuvoo conectează trei propuneri de valoare cheie:
 
 1. **AI Coach Quiz** - Recomandări personalizate de sporturi bazate pe profilul copilului
-2. **Directorul de Cluburi Verificate** - Listă curată și verificată de cluburi sportive pentru copii
+2. **Directorul de Cluburi** - Listă curată și verificată de cluburi sportive pentru copii
 3. **Rețeaua de Specialiști Pediatri** - Acces la profesioniști medicali relevanți pentru sport
 
 ### Triunghiul de Valoare
 
 ```
-AI Coach → Cluburi Verificate → Specialiști Pediatri
+AI Coach → Cluburi → Specialiști Pediatri
 ```
 
 ## 🎯 Faza 1 - MVP

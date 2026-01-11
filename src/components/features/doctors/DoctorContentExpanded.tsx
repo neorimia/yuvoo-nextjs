@@ -176,13 +176,10 @@ const DoctorContentExpanded: React.FC<DoctorContentExpandedProps> = ({ content }
             data-wow-delay="1.2s"
           >
             <div className="bd-doctor-internal-links-content text-center">
-              <h3 className="bd-doctor-internal-links-title">
-                Găsește cluburi sportive verificate
-              </h3>
+              <h3 className="bd-doctor-internal-links-title">Găsește cluburi sportive</h3>
               <p className="bd-doctor-internal-links-description">
-                Explorează cluburile sportive verificate de Yuvoo care oferă programe de calitate
-                pentru copiii tăi. Cluburi verificate cu antrenori calificați și programe adaptate
-                pe vârstă.
+                Explorează cluburile sportive de Yuvoo care oferă programe de calitate pentru copiii
+                tăi. Cluburi cu antrenori calificați și programe adaptate pe vârstă.
               </p>
               <Link href={content.internalLinks.clubsLink} className="bd-btn bd-btn-outline">
                 <span className="bd-btn-inner">

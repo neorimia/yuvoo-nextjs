@@ -50,7 +50,7 @@ export const SPORT_EXPANDED_CONTENT: SportExpandedContent[] = [
 
 Fotbalul pentru copii începe de obicei cu jocuri simple și exerciții de bază care se concentrează pe dezvoltarea coordonării, echilibrului și înțelegerii fundamentelor sportului. Pe măsură ce copiii cresc, antrenamentele devin mai structurate, introducându-se concepte precum tactica de echipă, strategia de joc și tehnica individuală. Acest sport este ideal pentru copiii activi care se bucură de activități în grup și care doresc să dezvolte atât abilități fizice, cât și spirit de echipă.
 
-În România, fotbalul are o tradiție bogată și multe cluburi sportive oferă programe specializate pentru copii de diferite vârste. Cluburile verificate de Yuvoo asigură că antrenamentele sunt conduse de antrenori calificați, care înțeleg nevoile specifice ale copiilor și care creează un mediu sigur și încurajator pentru dezvoltare. Fie că copilul tău visează să devină un fotbalist profesionist sau pur și simplu vrea să se bucure de joc și prietenie, fotbalul oferă oportunități excelente de creștere și dezvoltare.`,
+În România, fotbalul are o tradiție bogată și multe cluburi sportive oferă programe specializate pentru copii de diferite vârste. Cluburile de Yuvoo asigură că antrenamentele sunt conduse de antrenori calificați, care înțeleg nevoile specifice ale copiilor și care creează un mediu sigur și încurajator pentru dezvoltare. Fie că copilul tău visează să devină un fotbalist profesionist sau pur și simplu vrea să se bucure de joc și prietenie, fotbalul oferă oportunități excelente de creștere și dezvoltare.`,
     benefits: {
       title: "Beneficii ale fotbalului pentru copii",
       items: [
@@ -161,7 +161,7 @@ Este important să verifici regulile specifice ale clubului sau ligii în care p
       {
         question: "Este fotbalul sigur pentru copii?",
         answer:
-          "Da, fotbalul este un sport sigur când este practicat sub supravegherea unui antrenor calificat și cu echipamentul adecvat. Riscu de accidente este redus prin folosirea protecțiilor pentru tibie, respectarea regulilor și antrenamentele progresive. Cluburile verificate de Yuvoo au antrenori calificați care prioritizează siguranța copiilor.",
+          "Da, fotbalul este un sport sigur când este practicat sub supravegherea unui antrenor calificat și cu echipamentul adecvat. Riscu de accidente este redus prin folosirea protecțiilor pentru tibie, respectarea regulilor și antrenamentele progresive. Cluburile de Yuvoo au antrenori calificați care prioritizează siguranța copiilor.",
       },
       {
         question: "Copilul meu poate juca fotbal dacă nu are experiență anterioară?",
@@ -171,7 +171,7 @@ Este important să verifici regulile specifice ale clubului sau ligii în care p
     ],
     internalLinks: {
       clubsLink: "/cluburi?sport=fotbal",
-      clubsLinkText: "Vezi cluburi de fotbal verificate",
+      clubsLinkText: "Vezi cluburi de fotbal",
     },
   },
   {
@@ -180,7 +180,7 @@ Este important să verifici regulile specifice ale clubului sau ligii în care p
 
 Pentru copiii mici, înotul începe cu familiarizarea cu apa, jocuri distractive și învățarea tehnicilor de bază de siguranță. Acestea sunt esențiale nu doar pentru practicarea sportului, ci și pentru siguranța generală în și în jurul apei. Pe măsură ce copiii progresează, antrenamentele devin mai structurate, introducându-se stilurile de înot clasice: liber, spate, bras și fluture.
 
-Înotul este un sport ideal pentru copiii de toate tipurile, inclusiv pentru cei cu probleme de articulații sau care preferă activități cu impact redus. Deoarece apa susține greutatea corpului, înotul este foarte prietenos cu articulațiile și poate fi practicat de copiii cu diverse nevoi speciale. Cluburile verificate de Yuvoo oferă programe adaptate pentru începători și avansați, asigurându-se că fiecare copil primește atenția și îndrumarea necesară pentru a progresa în siguranță și cu încredere.`,
+Înotul este un sport ideal pentru copiii de toate tipurile, inclusiv pentru cei cu probleme de articulații sau care preferă activități cu impact redus. Deoarece apa susține greutatea corpului, înotul este foarte prietenos cu articulațiile și poate fi practicat de copiii cu diverse nevoi speciale. Cluburile de Yuvoo oferă programe adaptate pentru începători și avansați, asigurându-se că fiecare copil primește atenția și îndrumarea necesară pentru a progresa în siguranță și cu încredere.`,
     benefits: {
       title: "Beneficii ale înotului pentru copii",
       items: [
@@ -301,7 +301,7 @@ Este important să verifici cerințele specifice ale clubului sau bazinului unde
     ],
     internalLinks: {
       clubsLink: "/cluburi?sport=inot",
-      clubsLinkText: "Vezi cluburi de înot verificate",
+      clubsLinkText: "Vezi cluburi de înot",
     },
   },
   {
@@ -312,7 +312,7 @@ Pentru copiii mici, tenisul începe cu jocuri distractive și exerciții de baz�
 
 Pe măsură ce copiii cresc, antrenamentele devin mai structurate, introducându-se tehnica corectă de lovire, poziționare, strategie de joc și regulile oficiale. Tenisul poate fi practicat atât individual, cât și în dublu, oferind oportunități excelente pentru dezvoltarea atât a abilităților individuale, cât și a spiritului de echipă.
 
-Cluburile verificate de Yuvoo oferă programe adaptate pentru toate nivelurile, de la începători absoluți până la jucători avansați care doresc să participe la competiții. Antrenorii calificați asigură că fiecare copil primește atenția necesară pentru a progresa într-un mediu pozitiv și încurajator.`,
+Cluburile de Yuvoo oferă programe adaptate pentru toate nivelurile, de la începători absoluți până la jucători avansați care doresc să participe la competiții. Antrenorii calificați asigură că fiecare copil primește atenția necesară pentru a progresa într-un mediu pozitiv și încurajator.`,
     benefits: {
       title: "Beneficii ale tenisului pentru copii",
       items: [
@@ -433,7 +433,7 @@ Mingile de tenis pentru copii sunt disponibile în diferite tipuri: mingi mai ma
     ],
     internalLinks: {
       clubsLink: "/cluburi?sport=tenis",
-      clubsLinkText: "Vezi cluburi de tenis verificate",
+      clubsLinkText: "Vezi cluburi de tenis",
     },
   },
   {
@@ -444,7 +444,7 @@ Pentru copiii mici, baschetul începe cu jocuri distractive și exerciții de ba
 
 Pe măsură ce copiii cresc, antrenamentele devin mai structurate, introducându-se tehnica corectă de aruncare, dribling avansat, pase, strategii de atac și apărare, precum și regulile oficiale ale jocului. Baschetul dezvoltă nu doar abilități fizice, ci și gândirea strategică, comunicarea în echipă și capacitatea de a lua decizii rapide sub presiune.
 
-Cluburile verificate de Yuvoo oferă programe adaptate pentru toate nivelurile, de la începători absoluți până la jucători avansați care doresc să participe la competiții. Antrenorii calificați asigură că fiecare copil primește atenția necesară pentru a progresa într-un mediu sigur, pozitiv și încurajator, unde se promovează atât dezvoltarea individuală, cât și spiritul de echipă.`,
+Cluburile de Yuvoo oferă programe adaptate pentru toate nivelurile, de la începători absoluți până la jucători avansați care doresc să participe la competiții. Antrenorii calificați asigură că fiecare copil primește atenția necesară pentru a progresa într-un mediu sigur, pozitiv și încurajator, unde se promovează atât dezvoltarea individuală, cât și spiritul de echipă.`,
     benefits: {
       title: "Beneficii ale baschetului pentru copii",
       items: [
@@ -555,7 +555,7 @@ Este important să verifici cerințele specifice ale clubului sau ligii în care
       {
         question: "Este baschetul sigur pentru copii?",
         answer:
-          "Da, baschetul este un sport sigur când este practicat sub supravegherea unui antrenor calificat și cu echipamentul adecvat. Riscu de accidente este redus prin folosirea ghetelor potrivite, respectarea regulilor și antrenamentele progresive. Cluburile verificate de Yuvoo au antrenori calificați care prioritizează siguranța copiilor și adaptează antrenamentele în funcție de vârstă și nivel.",
+          "Da, baschetul este un sport sigur când este practicat sub supravegherea unui antrenor calificat și cu echipamentul adecvat. Riscu de accidente este redus prin folosirea ghetelor potrivite, respectarea regulilor și antrenamentele progresive. Cluburile de Yuvoo au antrenori calificați care prioritizează siguranța copiilor și adaptează antrenamentele în funcție de vârstă și nivel.",
       },
       {
         question: "Copilul meu poate juca baschet dacă nu are experiență anterioară?",
@@ -565,7 +565,7 @@ Este important să verifici cerințele specifice ale clubului sau ligii în care
     ],
     internalLinks: {
       clubsLink: "/cluburi?sport=baschet",
-      clubsLinkText: "Vezi cluburi de baschet verificate",
+      clubsLinkText: "Vezi cluburi de baschet",
     },
   },
   {
@@ -576,7 +576,7 @@ Pentru copiii mici, gimnastica artistică începe cu jocuri distractive și exer
 
 Pe măsură ce copiii cresc, antrenamentele devin mai structurate, introducându-se elemente mai complexe pe aparatele specifice: sol, paralele, bârnă (pentru fete), inele, bară fixă (pentru băieți). Gimnastica artistică dezvoltă nu doar abilități fizice excepționale, ci și disciplina mentală, concentrarea, perseverența și încrederea în sine.
 
-Cluburile verificate de Yuvoo oferă programe adaptate pentru toate nivelurile, de la începători absoluți până la gimnaști avansați care doresc să participe la competiții. Antrenorii calificați asigură că fiecare copil primește atenția necesară pentru a progresa într-un mediu sigur, structurat și încurajator, unde se promovează atât dezvoltarea tehnică, cât și buna formă fizică și disciplina.`,
+Cluburile de Yuvoo oferă programe adaptate pentru toate nivelurile, de la începători absoluți până la gimnaști avansați care doresc să participe la competiții. Antrenorii calificați asigură că fiecare copil primește atenția necesară pentru a progresa într-un mediu sigur, structurat și încurajator, unde se promovează atât dezvoltarea tehnică, cât și buna formă fizică și disciplina.`,
     benefits: {
       title: "Beneficii ale gimnasticii artistice pentru copii",
       items: [
@@ -677,7 +677,7 @@ Este important să verifici cerințele specifice ale clubului, deoarece unele po
       {
         question: "Este gimnastica artistică sigură pentru copii?",
         answer:
-          "Da, gimnastica artistică este un sport sigur când este practicată sub supravegherea unui antrenor calificat și cu echipamentul adecvat. Cluburile verificate de Yuvoo au antrenori calificați care prioritizează siguranța copiilor, folosesc echipament de siguranță (colțuri, saltele) și adaptează antrenamentele în funcție de vârstă și nivel. Riscu de accidente este redus prin respectarea regulilor și antrenamentele progresive.",
+          "Da, gimnastica artistică este un sport sigur când este practicată sub supravegherea unui antrenor calificat și cu echipamentul adecvat. Cluburile de Yuvoo au antrenori calificați care prioritizează siguranța copiilor, folosesc echipament de siguranță (colțuri, saltele) și adaptează antrenamentele în funcție de vârstă și nivel. Riscu de accidente este redus prin respectarea regulilor și antrenamentele progresive.",
       },
       {
         question: "Cât de des sunt antrenamentele de gimnastică artistică?",
@@ -697,7 +697,7 @@ Este important să verifici cerințele specifice ale clubului, deoarece unele po
     ],
     internalLinks: {
       clubsLink: "/cluburi?sport=gimnastica-artistica",
-      clubsLinkText: "Vezi cluburi de gimnastică artistică verificate",
+      clubsLinkText: "Vezi cluburi de gimnastică artistică",
     },
   },
   {
@@ -708,7 +708,7 @@ Pentru copiii mici, karate-ul începe cu jocuri distractive și exerciții de ba
 
 Pe măsură ce copiii cresc, antrenamentele devin mai structurate, introducându-se tehnici de bază (kihon), forme (kata) și eventual sparring controlat (kumite). Karate-ul dezvoltă nu doar abilități fizice, ci și disciplina mentală, respectul, autocontrolul și încrederea în sine.
 
-Cluburile verificate de Yuvoo oferă programe adaptate pentru toate nivelurile, de la începători absoluți până la practicanți avansați care doresc să obțină benzi și să participe la competiții. Antrenorii calificați (sensei) asigură că fiecare copil primește atenția necesară pentru a progresa într-un mediu sigur, respectuos și disciplinat, unde se promovează atât dezvoltarea tehnică, cât și valorile esențiale ale karate-ului.`,
+Cluburile oferă programe adaptate pentru toate nivelurile, de la începători absoluți până la practicanți avansați care doresc să obțină benzi și să participe la competiții. Antrenorii calificați (sensei) asigură că fiecare copil primește atenția necesară pentru a progresa într-un mediu sigur, respectuos și disciplinat, unde se promovează atât dezvoltarea tehnică, cât și valorile esențiale ale karate-ului.`,
     benefits: {
       title: "Beneficii ale karate-ului pentru copii",
       items: [
@@ -803,7 +803,7 @@ Este important să verifici cerințele specifice ale clubului, deoarece unele po
       {
         question: "Este karate-ul violent sau periculos pentru copii?",
         answer:
-          "Nu, absolut nu! Karate-ul pentru copii este foarte sigur și se concentrează pe dezvoltare fizică, disciplină și respect, nu pe violență. Contactul este controlat strict și permis doar în sparring-uri supervizate pentru copiii mai mari. Karate-ul promovează evitarea conflictelor și folosirea responsabilă a tehnicilor. Cluburile verificate de Yuvoo au antrenori calificați care prioritizează siguranța și adaptează antrenamentele în funcție de vârstă și nivel.",
+          "Nu, absolut nu! Karate-ul pentru copii este foarte sigur și se concentrează pe dezvoltare fizică, disciplină și respect, nu pe violență. Contactul este controlat strict și permis doar în sparring-uri supervizate pentru copiii mai mari. Karate-ul promovează evitarea conflictelor și folosirea responsabilă a tehnicilor. Cluburile au antrenori calificați care prioritizează siguranța și adaptează antrenamentele în funcție de vârstă și nivel.",
       },
       {
         question: "Cât de des sunt antrenamentele de karate?",
@@ -823,7 +823,7 @@ Este important să verifici cerințele specifice ale clubului, deoarece unele po
     ],
     internalLinks: {
       clubsLink: "/cluburi?sport=karate",
-      clubsLinkText: "Vezi cluburi de karate verificate",
+      clubsLinkText: "Vezi cluburi de karate",
     },
   },
   {
@@ -834,7 +834,7 @@ Pentru copiii mici, dansul începe cu jocuri muzicale și exerciții de bază ca
 
 Pe măsură ce copiii cresc, antrenamentele devin mai structurate, introducându-se tehnica corectă pentru stilul ales, coregrafii, expresie artistică și eventual performanțe. Dansul dezvoltă nu doar abilități fizice, ci și creativitatea, expresivitatea, disciplina și încrederea în sine.
 
-Cluburile verificate de Yuvoo oferă programe adaptate pentru toate nivelurile și stilurile, de la începători absoluți până la dansatori avansați care doresc să participe la spectacole și competiții. Antrenorii calificați asigură că fiecare copil primește atenția necesară pentru a progresa într-un mediu pozitiv, creativ și încurajator, unde se promovează atât dezvoltarea tehnică, cât și expresia artistică individuală.`,
+Cluburile oferă programe adaptate pentru toate nivelurile și stilurile, de la începători absoluți până la dansatori avansați care doresc să participe la spectacole și competiții. Antrenorii calificați asigură că fiecare copil primește atenția necesară pentru a progresa într-un mediu pozitiv, creativ și încurajator, unde se promovează atât dezvoltarea tehnică, cât și expresia artistică individuală.`,
     benefits: {
       title: "Beneficii ale dansului pentru copii",
       items: [
@@ -949,7 +949,7 @@ Este important să verifici cerințele specifice ale clubului sau stilului de da
     ],
     internalLinks: {
       clubsLink: "/cluburi?sport=dans",
-      clubsLinkText: "Vezi cluburi de dans verificate",
+      clubsLinkText: "Vezi cluburi de dans",
     },
   },
   {
@@ -960,7 +960,7 @@ Pentru copiii mici, voleiul începe cu jocuri distractive și exerciții de baz�
 
 Pe măsură ce copiii cresc, antrenamentele devin mai structurate, introducându-se tehnica corectă de serviciu, recepție, setare, atac și blocare, precum și regulile oficiale ale jocului. Voleiul dezvoltă nu doar abilități fizice, ci și gândirea strategică, comunicarea în echipă și capacitatea de a lua decizii rapide sub presiune.
 
-Cluburile verificate de Yuvoo oferă programe adaptate pentru toate nivelurile, de la începători absoluți până la jucători avansați care doresc să participe la competiții. Antrenorii calificați asigură că fiecare copil primește atenția necesară pentru a progresa într-un mediu sigur, pozitiv și încurajator, unde se promovează atât dezvoltarea individuală, cât și spiritul de echipă.`,
+Cluburile oferă programe adaptate pentru toate nivelurile, de la începători absoluți până la jucători avansați care doresc să participe la competiții. Antrenorii calificați asigură că fiecare copil primește atenția necesară pentru a progresa într-un mediu sigur, pozitiv și încurajator, unde se promovează atât dezvoltarea individuală, cât și spiritul de echipă.`,
     benefits: {
       title: "Beneficii ale voleiului pentru copii",
       items: [
@@ -1061,7 +1061,7 @@ Este important să verifici cerințele specifice ale clubului sau ligii în care
       {
         question: "Este voleiul sigur pentru copii?",
         answer:
-          "Da, voleiul este un sport sigur când este practicat sub supravegherea unui antrenor calificat și cu echipamentul adecvat. Riscu de accidente este redus prin folosirea ghetelor potrivite, protecțiilor (dacă este necesar), respectarea regulilor și antrenamentele progresive. Cluburile verificate de Yuvoo au antrenori calificați care prioritizează siguranța copiilor și adaptează antrenamentele în funcție de vârstă și nivel.",
+          "Da, voleiul este un sport sigur când este practicat sub supravegherea unui antrenor calificat și cu echipamentul adecvat. Riscu de accidente este redus prin folosirea ghetelor potrivite, protecțiilor (dacă este necesar), respectarea regulilor și antrenamentele progresive. Cluburile au antrenori calificați care prioritizează siguranța copiilor și adaptează antrenamentele în funcție de vârstă și nivel.",
       },
       {
         question: "Cât de des sunt antrenamentele de volei?",
@@ -1081,7 +1081,7 @@ Este important să verifici cerințele specifice ale clubului sau ligii în care
     ],
     internalLinks: {
       clubsLink: "/cluburi?sport=volei",
-      clubsLinkText: "Vezi cluburi de volei verificate",
+      clubsLinkText: "Vezi cluburi de volei",
     },
   },
   {
@@ -1092,7 +1092,7 @@ Pentru copiii mici, handbalul începe cu jocuri distractive și exerciții de ba
 
 Pe măsură ce copiii cresc, antrenamentele devin mai structurate, introducându-se tehnica corectă de aruncare, dribling avansat, pase, strategii de atac și apărare, precum și regulile oficiale ale jocului. Handbalul dezvoltă nu doar abilități fizice, ci și gândirea strategică, comunicarea în echipă și capacitatea de a lua decizii rapide sub presiune.
 
-Cluburile verificate de Yuvoo oferă programe adaptate pentru toate nivelurile, de la începători absoluți până la jucători avansați care doresc să participe la competiții. Antrenorii calificați asigură că fiecare copil primește atenția necesară pentru a progresa într-un mediu sigur, pozitiv și încurajator, unde se promovează atât dezvoltarea individuală, cât și spiritul de echipă.`,
+Cluburile oferă programe adaptate pentru toate nivelurile, de la începători absoluți până la jucători avansați care doresc să participe la competiții. Antrenorii calificați asigură că fiecare copil primește atenția necesară pentru a progresa într-un mediu sigur, pozitiv și încurajator, unde se promovează atât dezvoltarea individuală, cât și spiritul de echipă.`,
     benefits: {
       title: "Beneficii ale handbalului pentru copii",
       items: [
@@ -1193,7 +1193,7 @@ Este important să verifici cerințele specifice ale clubului sau ligii în care
       {
         question: "Este handbalul sigur pentru copii?",
         answer:
-          "Da, handbalul este un sport sigur când este practicat sub supravegherea unui antrenor calificat și cu echipamentul adecvat. Riscu de accidente este redus prin folosirea ghetelor potrivite, protecțiilor (dacă este necesar), respectarea regulilor și antrenamentele progresive. Cluburile verificate de Yuvoo au antrenori calificați care prioritizează siguranța copiilor și adaptează antrenamentele în funcție de vârstă și nivel.",
+          "Da, handbalul este un sport sigur când este practicat sub supravegherea unui antrenor calificat și cu echipamentul adecvat. Riscu de accidente este redus prin folosirea ghetelor potrivite, protecțiilor (dacă este necesar), respectarea regulilor și antrenamentele progresive. Cluburile au antrenori calificați care prioritizează siguranța copiilor și adaptează antrenamentele în funcție de vârstă și nivel.",
       },
       {
         question: "Cât de des sunt antrenamentele de handbal?",
@@ -1213,7 +1213,7 @@ Este important să verifici cerințele specifice ale clubului sau ligii în care
     ],
     internalLinks: {
       clubsLink: "/cluburi?sport=handbal",
-      clubsLinkText: "Vezi cluburi de handbal verificate",
+      clubsLinkText: "Vezi cluburi de handbal",
     },
   },
   {
@@ -1224,7 +1224,7 @@ Pentru copiii mici, judo-ul începe cu jocuri distractive și exerciții de baz�
 
 Pe măsură ce copiii cresc, antrenamentele devin mai structurate, introducându-se tehnici de bază (waza), forme (kata) și eventual lupte controlate (randori). Judo-ul dezvoltă nu doar abilități fizice, ci și disciplina mentală, respectul, autocontrolul și încrederea în sine.
 
-Cluburile verificate de Yuvoo oferă programe adaptate pentru toate nivelurile, de la începători absoluți până la practicanți avansați care doresc să obțină benzi și să participe la competiții. Antrenorii calificați (sensei) asigură că fiecare copil primește atenția necesară pentru a progresa într-un mediu sigur, respectuos și disciplinat, unde se promovează atât dezvoltarea tehnică, cât și valorile esențiale ale judo-ului.`,
+Cluburile oferă programe adaptate pentru toate nivelurile, de la începători absoluți până la practicanți avansați care doresc să obțină benzi și să participe la competiții. Antrenorii calificați (sensei) asigură că fiecare copil primește atenția necesară pentru a progresa într-un mediu sigur, respectuos și disciplinat, unde se promovează atât dezvoltarea tehnică, cât și valorile esențiale ale judo-ului.`,
     benefits: {
       title: "Beneficii ale judo-ului pentru copii",
       items: [
@@ -1319,7 +1319,7 @@ Este important să verifici cerințele specifice ale clubului, deoarece unele po
       {
         question: "Este judo-ul violent sau periculos pentru copii?",
         answer:
-          "Nu, absolut nu! Judo-ul pentru copii este foarte sigur și se concentrează pe dezvoltare fizică, disciplină și respect, nu pe violență. Contactul este controlat strict și permis doar în lupte supervizate pentru copiii mai mari. Judo-ul promovează evitarea conflictelor și folosirea responsabilă a tehnicilor. Cluburile verificate de Yuvoo au antrenori calificați care prioritizează siguranța și adaptează antrenamentele în funcție de vârstă și nivel.",
+          "Nu, absolut nu! Judo-ul pentru copii este foarte sigur și se concentrează pe dezvoltare fizică, disciplină și respect, nu pe violență. Contactul este controlat strict și permis doar în lupte supervizate pentru copiii mai mari. Judo-ul promovează evitarea conflictelor și folosirea responsabilă a tehnicilor. Cluburile au antrenori calificați care prioritizează siguranța și adaptează antrenamentele în funcție de vârstă și nivel.",
       },
       {
         question: "Cât de des sunt antrenamentele de judo?",
@@ -1339,7 +1339,7 @@ Este important să verifici cerințele specifice ale clubului, deoarece unele po
     ],
     internalLinks: {
       clubsLink: "/cluburi?sport=judo",
-      clubsLinkText: "Vezi cluburi de judo verificate",
+      clubsLinkText: "Vezi cluburi de judo",
     },
   },
   {
@@ -1350,7 +1350,7 @@ Pentru copiii mici, rugby-ul începe cu varianta de touch rugby sau rugby tag, c
 
 Pe măsură ce copiii cresc, antrenamentele devin mai structurate, introducându-se progresiv elemente de contact controlat și tehnici avansate. Rugby-ul dezvoltă nu doar abilități fizice excepționale, ci și gândirea strategică, comunicarea în echipă și capacitatea de a lua decizii rapide sub presiune.
 
-Cluburile verificate de Yuvoo oferă programe adaptate pentru toate nivelurile, cu accent pe siguranță, respect și dezvoltare progresivă. Antrenorii calificați asigură că fiecare copil primește atenția necesară pentru a progresa într-un mediu sigur și încurajator.`,
+Cluburile oferă programe adaptate pentru toate nivelurile, cu accent pe siguranță, respect și dezvoltare progresivă. Antrenorii calificați asigură că fiecare copil primește atenția necesară pentru a progresa într-un mediu sigur și încurajator.`,
     benefits: {
       title: "Beneficii ale rugby-ului pentru copii",
       items: [
@@ -1449,7 +1449,7 @@ Este important să verifici cerințele specifice ale clubului sau ligii, deoarec
       {
         question: "Este rugby-ul sigur pentru copii?",
         answer:
-          "Da, rugby-ul poate fi sigur când este practicat sub supravegherea unui antrenor calificat și cu echipamentul adecvat. Pentru copiii mici, se folosesc variante non-contact. Contactul este introdus progresiv și întotdeauna cu echipament de protecție complet. Cluburile verificate de Yuvoo au antrenori calificați care prioritizează siguranța și adaptează antrenamentele în funcție de vârstă și nivel.",
+          "Da, rugby-ul poate fi sigur când este practicat sub supravegherea unui antrenor calificat și cu echipamentul adecvat. Pentru copiii mici, se folosesc variante non-contact. Contactul este introdus progresiv și întotdeauna cu echipament de protecție complet. Cluburile au antrenori calificați care prioritizează siguranța și adaptează antrenamentele în funcție de vârstă și nivel.",
       },
       {
         question: "Cât de des sunt antrenamentele de rugby?",
@@ -1469,7 +1469,7 @@ Este important să verifici cerințele specifice ale clubului sau ligii, deoarec
     ],
     internalLinks: {
       clubsLink: "/cluburi?sport=rugby",
-      clubsLinkText: "Vezi cluburi de rugby verificate",
+      clubsLinkText: "Vezi cluburi de rugby",
     },
   },
   {
@@ -1480,7 +1480,7 @@ Pentru copiii mici, hocheiul începe cu învățarea patinajului de bază și fa
 
 Pe măsură ce copiii cresc, antrenamentele devin mai structurate, introducându-se tehnici de patinaj avansate, control al puck-ului, pase, șuturi și strategie de echipă. Hocheiul dezvoltă nu doar abilități fizice excepționale, ci și coordonarea, echilibrul, viteza de reacție și gândirea strategică.
 
-Cluburile verificate de Yuvoo oferă programe adaptate pentru toate nivelurile, cu acces la bazine de gheață și echipament de siguranță complet. Antrenorii calificați asigură că fiecare copil primește atenția necesară pentru a progresa în siguranță și cu încredere.`,
+Cluburile oferă programe adaptate pentru toate nivelurile, cu acces la bazine de gheață și echipament de siguranță complet. Antrenorii calificați asigură că fiecare copil primește atenția necesară pentru a progresa în siguranță și cu încredere.`,
     benefits: {
       title: "Beneficii ale hocheiului pentru copii",
       items: [
@@ -1581,7 +1581,7 @@ Este important să verifici cerințele specifice ale clubului sau ligii, deoarec
       {
         question: "Este hocheiul sigur pentru copii?",
         answer:
-          "Da, hocheiul poate fi sigur când este practicat sub supravegherea unui antrenor calificat și cu echipamentul complet de protecție. Cluburile verificate de Yuvoo au antrenori calificați care prioritizează siguranța, folosesc echipament certificat și adaptează antrenamentele în funcție de vârstă și nivel. Investiția în echipament de calitate este esențială.",
+          "Da, hocheiul poate fi sigur când este practicat sub supravegherea unui antrenor calificat și cu echipamentul complet de protecție. Cluburile au antrenori calificați care prioritizează siguranța, folosesc echipament certificat și adaptează antrenamentele în funcție de vârstă și nivel. Investiția în echipament de calitate este esențială.",
       },
       {
         question: "Cât costă echipamentul de bază pentru hochei?",
@@ -1601,7 +1601,7 @@ Este important să verifici cerințele specifice ale clubului sau ligii, deoarec
     ],
     internalLinks: {
       clubsLink: "/cluburi?sport=hochei",
-      clubsLinkText: "Vezi cluburi de hochei verificate",
+      clubsLinkText: "Vezi cluburi de hochei",
     },
   },
   {
@@ -1612,7 +1612,7 @@ Pentru copiii mici, tenisul de masă începe cu jocuri distractive și exerciți
 
 Pe măsură ce copiii cresc, antrenamentele devin mai structurate, introducându-se tehnica corectă de lovire, servicii, topspin, backspin și strategie de joc. Tenisul de masă dezvoltă nu doar abilități fizice, ci și concentrarea intensă, viteza de reacție și gândirea strategică.
 
-Cluburile verificate de Yuvoo oferă programe adaptate pentru toate nivelurile, de la începători absoluți până la jucători avansați care doresc să participe la competiții. Antrenorii calificați asigură că fiecare copil primește atenția necesară pentru a progresa într-un mediu pozitiv și încurajator.`,
+Cluburile oferă programe adaptate pentru toate nivelurile, de la începători absoluți până la jucători avansați care doresc să participe la competiții. Antrenorii calificați asigură că fiecare copil primește atenția necesară pentru a progresa într-un mediu pozitiv și încurajator.`,
     benefits: {
       title: "Beneficii ale tenisului de masă pentru copii",
       items: [
@@ -1725,7 +1725,7 @@ Pentru început, este suficient să ai racheta și mingile. Pe măsură ce copil
     ],
     internalLinks: {
       clubsLink: "/cluburi?sport=tenis-de-masa",
-      clubsLinkText: "Vezi cluburi de tenis de masă verificate",
+      clubsLinkText: "Vezi cluburi de tenis de masă",
     },
   },
   {
@@ -1736,7 +1736,7 @@ Pentru copiii mici, badmintonul începe cu jocuri distractive și exerciții de 
 
 Pe măsură ce copiii cresc, antrenamentele devin mai structurate, introducându-se tehnica corectă de lovire, servicii, smasuri, dropshot-uri și strategie de joc. Badmintonul dezvoltă nu doar abilități fizice excepționale, ci și concentrarea intensă, viteza de reacție și gândirea strategică.
 
-Cluburile verificate de Yuvoo oferă programe adaptate pentru toate nivelurile, de la începători absoluți până la jucători avansați care doresc să participe la competiții. Antrenorii calificați asigură că fiecare copil primește atenția necesară pentru a progresa într-un mediu pozitiv și încurajator.`,
+Cluburile oferă programe adaptate pentru toate nivelurile, de la începători absoluți până la jucători avansați care doresc să participe la competiții. Antrenorii calificați asigură că fiecare copil primește atenția necesară pentru a progresa într-un mediu pozitiv și încurajator.`,
     benefits: {
       title: "Beneficii ale badmintonului pentru copii",
       items: [
@@ -1849,7 +1849,7 @@ Pentru început, este suficient să ai racheta, volanele și încălțămintea a
     ],
     internalLinks: {
       clubsLink: "/cluburi?sport=badminton",
-      clubsLinkText: "Vezi cluburi de badminton verificate",
+      clubsLinkText: "Vezi cluburi de badminton",
     },
   },
   {
@@ -1860,7 +1860,7 @@ Pentru copiii mici, atletismul începe cu jocuri distractive și exerciții de b
 
 Pe măsură ce copiii cresc, antrenamentele devin mai structurate, introducându-se tehnici specifice pentru fiecare disciplină: alergare pe distanțe diferite, sărituri (în înălțime, în lungime), aruncări (grea, disc, suliță). Atletismul dezvoltă nu doar abilități fizice excepționale, ci și disciplina, perseverența și încrederea în sine.
 
-Cluburile verificate de Yuvoo oferă programe adaptate pentru toate nivelurile, cu acces la facilități de atletism (pistă, sărituri, aruncări). Antrenorii calificați asigură că fiecare copil primește atenția necesară pentru a progresa și poate explora diferite discipline pentru a găsi cea care se potrivește cel mai bine.`,
+Cluburile oferă programe adaptate pentru toate nivelurile, cu acces la facilități de atletism (pistă, sărituri, aruncări). Antrenorii calificați asigură că fiecare copil primește atenția necesară pentru a progresa și poate explora diferite discipline pentru a găsi cea care se potrivește cel mai bine.`,
     benefits: {
       title: "Beneficii ale atletismului pentru copii",
       items: [
@@ -1979,7 +1979,7 @@ Pentru început, este suficient să ai încălțăminte de alergare de calitate 
     ],
     internalLinks: {
       clubsLink: "/cluburi?sport=atletism",
-      clubsLinkText: "Vezi cluburi de atletism verificate",
+      clubsLinkText: "Vezi cluburi de atletism",
     },
   },
   {
@@ -1990,7 +1990,7 @@ Pentru copiii mici, ciclismul începe cu biciclete cu roți de echilibrare sau b
 
 Pe măsură ce copiii cresc, antrenamentele devin mai structurate, introducându-se tehnici de ciclism, trasee pe teren variat și eventual competiții. Ciclismul dezvoltă nu doar rezistența și forța, ci și echilibrul, coordonarea și cunoașterea mediului înconjurător.
 
-Cluburile verificate de Yuvoo oferă programe adaptate pentru toate nivelurile, cu accent pe siguranță, echipament adecvat și progresie graduală. Antrenorii calificați asigură că fiecare copil primește atenția necesară pentru a progresa în siguranță.`,
+Cluburile oferă programe adaptate pentru toate nivelurile, cu accent pe siguranță, echipament adecvat și progresie graduală. Antrenorii calificați asigură că fiecare copil primește atenția necesară pentru a progresa în siguranță.`,
     benefits: {
       title: "Beneficii ale ciclismului pentru copii",
       items: [
@@ -2089,7 +2089,7 @@ Pentru început, este necesar să ai o bicicletă potrivită pentru vârstă și
       {
         question: "Este ciclismul sigur pentru copii?",
         answer:
-          "Da, ciclismul poate fi sigur când este practicat cu echipamentul adecvat (căști obligatorii) și sub supraveghere sau în zone sigure. Este important să înveți copiii despre siguranță rutieră și să alegi trasee potrivite pentru vârstă. Cluburile verificate de Yuvoo au antrenori calificați care prioritizează siguranța și organizează antrenamente în zone sigure.",
+          "Da, ciclismul poate fi sigur când este practicat cu echipamentul adecvat (căști obligatorii) și sub supraveghere sau în zone sigure. Este important să înveți copiii despre siguranță rutieră și să alegi trasee potrivite pentru vârstă. Cluburile au antrenori calificați care prioritizează siguranța și organizează antrenamente în zone sigure.",
       },
       {
         question: "Cât costă echipamentul de bază pentru ciclism?",
@@ -2109,7 +2109,7 @@ Pentru început, este necesar să ai o bicicletă potrivită pentru vârstă și
     ],
     internalLinks: {
       clubsLink: "/cluburi?sport=ciclism",
-      clubsLinkText: "Vezi cluburi de ciclism verificate",
+      clubsLinkText: "Vezi cluburi de ciclism",
     },
   },
   {
@@ -2175,7 +2175,7 @@ Pe măsură ce copiii cresc, antrenamentele devin mai structurate, introducându
     ],
     internalLinks: {
       clubsLink: "/cluburi?sport=patinaj",
-      clubsLinkText: "Vezi cluburi de patinaj verificate",
+      clubsLinkText: "Vezi cluburi de patinaj",
     },
   },
   {
@@ -2245,7 +2245,7 @@ Pe măsură ce copiii cresc, antrenamentele devin mai structurate, introducându
     ],
     internalLinks: {
       clubsLink: "/cluburi?sport=schi",
-      clubsLinkText: "Vezi cluburi de schi verificate",
+      clubsLinkText: "Vezi cluburi de schi",
     },
   },
   {
@@ -2316,7 +2316,7 @@ Pe măsură ce copiii cresc, antrenamentele devin mai structurate, introducându
     ],
     internalLinks: {
       clubsLink: "/cluburi?sport=taekwondo",
-      clubsLinkText: "Vezi cluburi de taekwondo verificate",
+      clubsLinkText: "Vezi cluburi de taekwondo",
     },
   },
   {
@@ -2388,7 +2388,7 @@ Pe măsură ce copiii cresc, antrenamentele devin mai structurate, introducându
     ],
     internalLinks: {
       clubsLink: "/cluburi?sport=scrima",
-      clubsLinkText: "Vezi cluburi de scrimă verificate",
+      clubsLinkText: "Vezi cluburi de scrimă",
     },
   },
   {
@@ -2470,7 +2470,7 @@ Pe măsură ce copiii cresc, antrenamentele devin mai structurate, introducându
     ],
     internalLinks: {
       clubsLink: "/cluburi?sport=box",
-      clubsLinkText: "Vezi cluburi de box verificate",
+      clubsLinkText: "Vezi cluburi de box",
     },
   },
   {
@@ -2542,7 +2542,7 @@ Pe măsură ce copiii cresc, antrenamentele devin mai structurate, introducându
     ],
     internalLinks: {
       clubsLink: "/cluburi?sport=gimnastica-ritmica",
-      clubsLinkText: "Vezi cluburi de gimnastică ritmică verificate",
+      clubsLinkText: "Vezi cluburi de gimnastică ritmică",
     },
   },
   {
@@ -2614,7 +2614,7 @@ Pe măsură ce copiii cresc, antrenamentele devin mai structurate, introducându
     ],
     internalLinks: {
       clubsLink: "/cluburi?sport=patinaj-artistic",
-      clubsLinkText: "Vezi cluburi de patinaj artistic verificate",
+      clubsLinkText: "Vezi cluburi de patinaj artistic",
     },
   },
   {
@@ -2685,12 +2685,12 @@ Pe măsură ce copiii cresc, antrenamentele devin mai structurate, introducându
       {
         question: "Este echiția sigură pentru copii?",
         answer:
-          "Da, echiția poate fi sigură când este practicată sub supravegherea unui instructor calificat și cu echipamentul adecvat. Cluburile verificate prioritizează siguranța și folosesc cai potriviți pentru copiii mici.",
+          "Da, echiția poate fi sigură când este practicată sub supravegherea unui instructor calificat și cu echipamentul adecvat. Cluburile prioritizează siguranța și folosesc cai potriviți pentru copiii mici.",
       },
     ],
     internalLinks: {
       clubsLink: "/cluburi?sport=echitatie",
-      clubsLinkText: "Vezi cluburi de echiție verificate",
+      clubsLinkText: "Vezi cluburi de echiție",
     },
   },
   {
@@ -2762,12 +2762,12 @@ Pe măsură ce copiii cresc, antrenamentele devin mai structurate, introducându
       {
         question: "Este tirul cu arcul sigur pentru copii?",
         answer:
-          "Da, tirul cu arcul este foarte sigur când este practicat sub supravegherea unui instructor calificat și cu reguli stricte de siguranță. Cluburile verificate prioritizează siguranța și folosesc arcuri adaptate pentru copii.",
+          "Da, tirul cu arcul este foarte sigur când este practicat sub supravegherea unui instructor calificat și cu reguli stricte de siguranță. Cluburile prioritizează siguranța și folosesc arcuri adaptate pentru copii.",
       },
     ],
     internalLinks: {
       clubsLink: "/cluburi?sport=tiro-cu-arcul",
-      clubsLinkText: "Vezi cluburi de tir cu arcul verificate",
+      clubsLinkText: "Vezi cluburi de tir cu arcul",
     },
   },
   {
@@ -2839,12 +2839,12 @@ Pe măsură ce copiii cresc, antrenamentele devin mai structurate, introducându
       {
         question: "Este alpinismul sigur pentru copii?",
         answer:
-          "Da, alpinismul poate fi sigur când este practicat sub supravegherea unui instructor calificat, cu echipamentul adecvat și pe trasee adaptate pentru copii. Cluburile verificate prioritizează siguranța și adaptează activitățile pentru vârstă și nivel.",
+          "Da, alpinismul poate fi sigur când este practicat sub supravegherea unui instructor calificat, cu echipamentul adecvat și pe trasee adaptate pentru copii. Cluburile prioritizează siguranța și adaptează activitățile pentru vârstă și nivel.",
       },
     ],
     internalLinks: {
       clubsLink: "/cluburi?sport=alpinism",
-      clubsLinkText: "Vezi cluburi de alpinism verificate",
+      clubsLinkText: "Vezi cluburi de alpinism",
     },
   },
 ];
