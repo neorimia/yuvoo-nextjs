@@ -2,15 +2,13 @@
 
 import BackToTop from "@/components/Common/BackToTop";
 // import Preloader from "@/components/Common/Preloader/Preloader";
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 
 interface WrapperProps {
   children: React.ReactNode;
 }
 
 const Wrapper: React.FC<WrapperProps> = ({ children }) => {
-  const [_isLoading, _setIsLoading] = useState<boolean>(true);
-
   // Load Bootstrap JS only on the client-side
   useEffect(() => {
     if (typeof window !== "undefined") {
@@ -30,12 +28,6 @@ const Wrapper: React.FC<WrapperProps> = ({ children }) => {
         })
         .catch((err) => console.error("Bootstrap failed to load", err));
     }
-  }, []);
-
-  // Set the loading state to false after a timeout
-  useEffect(() => {
-    const loadingTimeout = setTimeout(() => setIsLoading(false), 1000);
-    return () => clearTimeout(loadingTimeout);
   }, []);
 
   // Initialize WOW.js animations on the client side

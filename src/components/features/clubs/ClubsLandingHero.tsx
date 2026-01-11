@@ -118,7 +118,7 @@ export default function ClubsLandingHero({ verifiedCount, remainingSpots }: Club
                       fontWeight: 400,
                     }}
                   >
-                    Primele 15 cluburi din București intră gratuit ca Founding Clubs
+                    Primele 15 cluburi din România intră gratuit ca Founding Clubs
                   </p>
                   {/* Dynamic Spots Counter - Prominent Display */}
                   <div

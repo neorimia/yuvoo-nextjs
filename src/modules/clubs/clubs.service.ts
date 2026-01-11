@@ -41,12 +41,12 @@ export async function getVerifiedClubs(): Promise<Club[]> {
 }
 
 /**
- * Count verified clubs from a specific city
+ * Count verified clubs
  * Used for displaying availability in Founding Club program
  */
-export async function countVerifiedClubsByCity(city: string): Promise<number> {
+export async function countVerifiedClubs(): Promise<number> {
   const verifiedClubs = await db.query.clubs.findMany({
-    where: and(eq(clubs.verificationStatus, "approved"), eq(clubs.city, city)),
+    where: and(eq(clubs.verificationStatus, "approved")),
     columns: { id: true }, // Only need IDs for counting
   });
 
