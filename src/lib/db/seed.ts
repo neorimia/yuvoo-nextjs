@@ -7,7 +7,7 @@
  * This script creates:
  * - Sports reference data (for future sports table)
  * - Sample clubs (60+ sports clubs in Romania with all fields)
- * - Research clubs (436+ real clubs from Bucharest, Cluj-Napoca, Timișoara, Iași, Constanța, Brașov, Craiova, Galați, Ploiești, Oradea, Arad, Pitești, Sibiu and Bacău)
+ * - Research clubs (705+ real clubs from Bucharest, Cluj-Napoca, Timișoara, Iași, Constanța, Brașov, Craiova, Galați, Ploiești, Oradea, Arad, Pitești, Sibiu, Bacău, Târgu Mureș, Baia Mare, Buzău, Satu Mare, Botoșani, Râmnicu Vâlcea, Drobeta-Turnu Severin, Suceava, Piatra Neamț, Târgoviște, Focșani, Târgu Jiu, Bistrița and Reșița)
  * - Sample doctors (18 pediatric specialists with all fields)
  * - Test users (parent accounts)
  *
@@ -33,6 +33,20 @@ import { CLUBS_RESEARCH_ARAD } from "./seed-data/clubs-research-arad";
 import { CLUBS_RESEARCH_PITESTI } from "./seed-data/clubs-research-pitesti";
 import { CLUBS_RESEARCH_SIBIU } from "./seed-data/clubs-research-sibiu";
 import { CLUBS_RESEARCH_BACAU } from "./seed-data/clubs-research-bacau";
+import { CLUBS_RESEARCH_TARGU_MURES } from "./seed-data/clubs-research-targu-mures";
+import { CLUBS_RESEARCH_BAIA_MARE } from "./seed-data/clubs-research-baia-mare";
+import { CLUBS_RESEARCH_BUZAU } from "./seed-data/clubs-research-buzau";
+import { CLUBS_RESEARCH_SATU_MARE } from "./seed-data/clubs-research-satu-mare";
+import { CLUBS_RESEARCH_BOTOSANI } from "./seed-data/clubs-research-botosani";
+import { CLUBS_RESEARCH_RAMNICU_VALCEA } from "./seed-data/clubs-research-ramnicu-valcea";
+import { CLUBS_RESEARCH_DROBETA_TURNU_SEVERIN } from "./seed-data/clubs-research-drobeta-turnu-severin";
+import { CLUBS_RESEARCH_SUCEAVA } from "./seed-data/clubs-research-suceava";
+import { CLUBS_RESEARCH_PIATRA_NEAMT } from "./seed-data/clubs-research-piatra-neamt";
+import { CLUBS_RESEARCH_TARGOVISTE } from "./seed-data/clubs-research-targoviste";
+import { CLUBS_RESEARCH_FOCSANI } from "./seed-data/clubs-research-focsani";
+import { CLUBS_RESEARCH_TARGU_JIU } from "./seed-data/clubs-research-targu-jiu";
+import { CLUBS_RESEARCH_BISTRITA } from "./seed-data/clubs-research-bistrita";
+import { CLUBS_RESEARCH_RESITA } from "./seed-data/clubs-research-resita";
 
 // Load environment variables
 dotenv.config({ path: ".env.local" });
@@ -138,11 +152,11 @@ async function _seedClubs() {
 }
 
 /**
- * Seed Research Clubs (București, Cluj-Napoca, Timișoara, Iași, Constanța, Brașov, Craiova, Galați, Ploiești, Oradea, Arad, Pitești, Sibiu & Bacău)
+ * Seed Research Clubs (București, Cluj-Napoca, Timișoara, Iași, Constanța, Brașov, Craiova, Galați, Ploiești, Oradea, Arad, Pitești, Sibiu, Bacău, Târgu Mureș, Baia Mare, Buzău, Satu Mare, Botoșani, Râmnicu Vâlcea, Drobeta-Turnu Severin, Suceava, Piatra Neamț, Târgoviște, Focșani, Târgu Jiu, Bistrița & Reșița)
  */
 async function seedResearchClubs() {
   console.log(
-    "\n🔍 Seeding research clubs (București, Cluj-Napoca, Timișoara, Iași, Constanța, Brașov, Craiova, Galați, Ploiești, Oradea, Arad, Pitești, Sibiu & Bacău)..."
+    "\n🔍 Seeding research clubs (București, Cluj-Napoca, Timișoara, Iași, Constanța, Brașov, Craiova, Galați, Ploiești, Oradea, Arad, Pitești, Sibiu, Bacău, Târgu Mureș, Baia Mare, Buzău, Satu Mare, Botoșani, Râmnicu Vâlcea, Drobeta-Turnu Severin, Suceava, Piatra Neamț, Târgoviște, Focșani, Târgu Jiu, Bistrița & Reșița)..."
   );
   let clubsCreated = 0;
   let clubsSkipped = 0;
@@ -163,6 +177,20 @@ async function seedResearchClubs() {
     ...CLUBS_RESEARCH_PITESTI,
     ...CLUBS_RESEARCH_SIBIU,
     ...CLUBS_RESEARCH_BACAU,
+    ...CLUBS_RESEARCH_TARGU_MURES,
+    ...CLUBS_RESEARCH_BAIA_MARE,
+    ...CLUBS_RESEARCH_BUZAU,
+    ...CLUBS_RESEARCH_SATU_MARE,
+    ...CLUBS_RESEARCH_BOTOSANI,
+    ...CLUBS_RESEARCH_RAMNICU_VALCEA,
+    ...CLUBS_RESEARCH_DROBETA_TURNU_SEVERIN,
+    ...CLUBS_RESEARCH_SUCEAVA,
+    ...CLUBS_RESEARCH_PIATRA_NEAMT,
+    ...CLUBS_RESEARCH_TARGOVISTE,
+    ...CLUBS_RESEARCH_FOCSANI,
+    ...CLUBS_RESEARCH_TARGU_JIU,
+    ...CLUBS_RESEARCH_BISTRITA,
+    ...CLUBS_RESEARCH_RESITA,
   ];
 
   for (const club of allResearchClubs) {
@@ -205,6 +233,22 @@ async function seedResearchClubs() {
   console.log(`      - Pitești: ${CLUBS_RESEARCH_PITESTI.length} clubs`);
   console.log(`      - Sibiu: ${CLUBS_RESEARCH_SIBIU.length} clubs`);
   console.log(`      - Bacău: ${CLUBS_RESEARCH_BACAU.length} clubs`);
+  console.log(`      - Târgu Mureș: ${CLUBS_RESEARCH_TARGU_MURES.length} clubs`);
+  console.log(`      - Baia Mare: ${CLUBS_RESEARCH_BAIA_MARE.length} clubs`);
+  console.log(`      - Buzău: ${CLUBS_RESEARCH_BUZAU.length} clubs`);
+  console.log(`      - Satu Mare: ${CLUBS_RESEARCH_SATU_MARE.length} clubs`);
+  console.log(`      - Botoșani: ${CLUBS_RESEARCH_BOTOSANI.length} clubs`);
+  console.log(`      - Râmnicu Vâlcea: ${CLUBS_RESEARCH_RAMNICU_VALCEA.length} clubs`);
+  console.log(
+    `      - Drobeta-Turnu Severin: ${CLUBS_RESEARCH_DROBETA_TURNU_SEVERIN.length} clubs`
+  );
+  console.log(`      - Suceava: ${CLUBS_RESEARCH_SUCEAVA.length} clubs`);
+  console.log(`      - Piatra Neamț: ${CLUBS_RESEARCH_PIATRA_NEAMT.length} clubs`);
+  console.log(`      - Târgoviște: ${CLUBS_RESEARCH_TARGOVISTE.length} clubs`);
+  console.log(`      - Focșani: ${CLUBS_RESEARCH_FOCSANI.length} clubs`);
+  console.log(`      - Târgu Jiu: ${CLUBS_RESEARCH_TARGU_JIU.length} clubs`);
+  console.log(`      - Bistrița: ${CLUBS_RESEARCH_BISTRITA.length} clubs`);
+  console.log(`      - Reșița: ${CLUBS_RESEARCH_RESITA.length} clubs`);
   return { created: clubsCreated, skipped: clubsSkipped };
 }
 
@@ -269,6 +313,22 @@ async function seed() {
     console.log(`   - Research Clubs (Pitești): ${CLUBS_RESEARCH_PITESTI.length}`);
     console.log(`   - Research Clubs (Sibiu): ${CLUBS_RESEARCH_SIBIU.length}`);
     console.log(`   - Research Clubs (Bacău): ${CLUBS_RESEARCH_BACAU.length}`);
+    console.log(`   - Research Clubs (Târgu Mureș): ${CLUBS_RESEARCH_TARGU_MURES.length}`);
+    console.log(`   - Research Clubs (Baia Mare): ${CLUBS_RESEARCH_BAIA_MARE.length}`);
+    console.log(`   - Research Clubs (Buzău): ${CLUBS_RESEARCH_BUZAU.length}`);
+    console.log(`   - Research Clubs (Satu Mare): ${CLUBS_RESEARCH_SATU_MARE.length}`);
+    console.log(`   - Research Clubs (Botoșani): ${CLUBS_RESEARCH_BOTOSANI.length}`);
+    console.log(`   - Research Clubs (Râmnicu Vâlcea): ${CLUBS_RESEARCH_RAMNICU_VALCEA.length}`);
+    console.log(
+      `   - Research Clubs (Drobeta-Turnu Severin): ${CLUBS_RESEARCH_DROBETA_TURNU_SEVERIN.length}`
+    );
+    console.log(`   - Research Clubs (Suceava): ${CLUBS_RESEARCH_SUCEAVA.length}`);
+    console.log(`   - Research Clubs (Piatra Neamț): ${CLUBS_RESEARCH_PIATRA_NEAMT.length}`);
+    console.log(`   - Research Clubs (Târgoviște): ${CLUBS_RESEARCH_TARGOVISTE.length}`);
+    console.log(`   - Research Clubs (Focșani): ${CLUBS_RESEARCH_FOCSANI.length}`);
+    console.log(`   - Research Clubs (Târgu Jiu): ${CLUBS_RESEARCH_TARGU_JIU.length}`);
+    console.log(`   - Research Clubs (Bistrița): ${CLUBS_RESEARCH_BISTRITA.length}`);
+    console.log(`   - Research Clubs (Reșița): ${CLUBS_RESEARCH_RESITA.length}`);
     // console.log(`   - Doctors: ${DOCTORS_SEED_DATA.length}`);
     // console.log(`   - Test Users: ${testUsers.length}\n`);
 
@@ -313,6 +373,20 @@ async function seed() {
       ...CLUBS_RESEARCH_PITESTI,
       ...CLUBS_RESEARCH_SIBIU,
       ...CLUBS_RESEARCH_BACAU,
+      ...CLUBS_RESEARCH_TARGU_MURES,
+      ...CLUBS_RESEARCH_BAIA_MARE,
+      ...CLUBS_RESEARCH_BUZAU,
+      ...CLUBS_RESEARCH_SATU_MARE,
+      ...CLUBS_RESEARCH_BOTOSANI,
+      ...CLUBS_RESEARCH_RAMNICU_VALCEA,
+      ...CLUBS_RESEARCH_DROBETA_TURNU_SEVERIN,
+      ...CLUBS_RESEARCH_SUCEAVA,
+      ...CLUBS_RESEARCH_PIATRA_NEAMT,
+      ...CLUBS_RESEARCH_TARGOVISTE,
+      ...CLUBS_RESEARCH_FOCSANI,
+      ...CLUBS_RESEARCH_TARGU_JIU,
+      ...CLUBS_RESEARCH_BISTRITA,
+      ...CLUBS_RESEARCH_RESITA,
     ];
     const uniqueSports = new Set(allClubs.map((c) => c.sportType));
     console.log(`   - Sports covered: ${uniqueSports.size} different sports`);

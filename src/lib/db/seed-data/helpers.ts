@@ -37,6 +37,20 @@ export const CITY_COORDINATES: Record<string, { lat: number; lng: number }> = {
   Bacău: { lat: 46.5662, lng: 26.9098 },
   Pitești: { lat: 44.8565, lng: 24.8687 },
   Sibiu: { lat: 45.7983, lng: 24.1253 },
+  "Târgu Mureș": { lat: 46.5425, lng: 24.5576 },
+  "Baia Mare": { lat: 47.6574, lng: 23.5681 },
+  Buzău: { lat: 45.1517, lng: 26.8185 },
+  "Satu Mare": { lat: 47.8017, lng: 22.8575 },
+  Botoșani: { lat: 47.7486, lng: 26.6694 },
+  "Râmnicu Vâlcea": { lat: 45.1, lng: 24.3667 },
+  "Drobeta-Turnu Severin": { lat: 44.6319, lng: 22.6567 },
+  Suceava: { lat: 47.6514, lng: 26.2556 },
+  "Piatra Neamț": { lat: 46.9275, lng: 26.3708 },
+  Târgoviște: { lat: 44.9244, lng: 25.4572 },
+  Focșani: { lat: 45.7, lng: 27.1833 },
+  "Târgu Jiu": { lat: 45.0333, lng: 23.2667 },
+  Bistrița: { lat: 47.1333, lng: 24.4833 },
+  Reșița: { lat: 45.3, lng: 21.8833 },
 };
 
 /**
