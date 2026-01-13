@@ -66,6 +66,7 @@ export interface QuizResult {
   childId: string;
   recommendations: SportRecommendation[];
   specialistRecommendation?: SpecialistRecommendation;
+  location?: string | null; // City/location for local club recommendations
   createdAt: Date;
 }
 

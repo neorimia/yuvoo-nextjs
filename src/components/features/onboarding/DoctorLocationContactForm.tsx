@@ -6,8 +6,7 @@
  *
  * Features:
  * - Romanian labels and error messages
- * - City dropdown (30 major Romanian cities)
- * - District/Sector input (optional)
+ * - Location dropdown (county → city/sector) - handles all Romanian cities and Bucharest sectors
  * - Address input (required, 10-300 characters)
  * - Phone input with Romanian format normalization
  * - Email input
@@ -19,7 +18,7 @@
 
 "use client";
 
-import { useEffect } from "react";
+import { useEffect, useMemo } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { updateDoctorLocationContact } from "@/app/actions/onboarding";
@@ -32,43 +31,11 @@ import { normalizePhoneNumber } from "@/lib/utils";
 import { OnboardingNavigation } from "./OnboardingNavigation";
 import { InfoTooltip } from "@/components/shared/InfoTooltip";
 import { ServerErrorAlert } from "./components/ServerErrorAlert";
-import { BootstrapInput, BootstrapSelect } from "@/components/UI/bootstrap-index";
+import { BootstrapInput } from "@/components/UI/bootstrap-index";
+import LocationDropdown from "@/components/shared/LocationDropdown";
+import { allLocations } from "@/lib/db/locations-data";
 import { useOnboardingForm } from "./hooks/useOnboardingForm";
 import { saveFormData, getFormData } from "./hooks/useOnboardingLocalStorage";
-
-// Romanian cities (major cities)
-const ROMANIAN_CITIES = [
-  "București",
-  "Cluj-Napoca",
-  "Timișoara",
-  "Iași",
-  "Constanța",
-  "Craiova",
-  "Brașov",
-  "Galați",
-  "Ploiești",
-  "Oradea",
-  "Brăila",
-  "Arad",
-  "Pitești",
-  "Sibiu",
-  "Bacău",
-  "Târgu Mureș",
-  "Baia Mare",
-  "Buzău",
-  "Satu Mare",
-  "Botoșani",
-  "Râmnicu Vâlcea",
-  "Suceava",
-  "Piatra Neamț",
-  "Drobeta-Turnu Severin",
-  "Focșani",
-  "Târgu Jiu",
-  "Tulcea",
-  "Târgoviște",
-  "Reșița",
-  "Călărași",
-] as const;
 
 export function DoctorLocationContactForm() {
   const {
@@ -128,43 +95,55 @@ export function DoctorLocationContactForm() {
     }),
   });
 
+  // Get current city value
+  const currentCity = watch("city");
+
+  // Reconstruct location string from city name for LocationDropdown
+  // Handles both cities and Bucharest sectors
+  const locationValue = useMemo(() => {
+    if (!currentCity) return "";
+
+    // Check if it's a Bucharest sector (format: "Sector X")
+    if (currentCity.startsWith("Sector ")) {
+      return `${currentCity}, București`;
+    }
+
+    // Try to find the city in location data and reconstruct "City, County" format
+    const city = allLocations.find((loc) => loc.type === "city" && loc.name === currentCity);
+    if (city && city.parentId) {
+      const county = allLocations.find((loc) => loc.id === city.parentId);
+      if (county) {
+        return `${city.name}, ${county.name}`;
+      }
+    }
+    return "";
+  }, [currentCity]);
+
   return (
     <form onSubmit={rhfHandleSubmit(handleSubmit)} className="px-3 px-sm-0">
       {/* Server error */}
       <ServerErrorAlert error={serverError} className="mb-4" />
 
-      {/* City */}
+      {/* Location (County → City/Sector) */}
       <div className="mb-4">
-        <label htmlFor="city" className="d-block small fw-medium text-body mb-2">
-          Oraș <span className="text-danger">*</span>
-        </label>
-        <BootstrapSelect
-          id="city"
-          {...register("city")}
-          error={!!errors.city}
+        <LocationDropdown
+          value={locationValue}
+          onChange={(locationString) => {
+            // Extract city/sector name from "City Name, County Name" or "Sector X, București" format
+            // Store the full location string in the city field (includes sector info for Bucharest)
+            const locationName = locationString.split(",")[0]?.trim() || "";
+            setValue("city", locationName, { shouldValidate: true });
+          }}
+          label="Locație"
+          required
+          disabled={isLoading}
+          error={errors.city?.message || null}
+          id="location"
+          name="location"
+          showHelpText={true}
+          helpText="Selectează județul și orașul (sau sectorul pentru București)"
           className="w-100"
-          options={[
-            { value: "", label: "Selectează orașul" },
-            ...ROMANIAN_CITIES.map((city) => ({ value: city, label: city })),
-          ]}
         />
-        {errors.city && <p className="mt-1 small text-danger">{errors.city.message}</p>}
-      </div>
-
-      {/* District/Sector (Optional) */}
-      <div className="mb-4">
-        <label htmlFor="district" className="d-block small fw-medium text-body mb-2">
-          District/Sector <span className="text-secondary text-xs">(opțional)</span>
-        </label>
-        <BootstrapInput
-          id="district"
-          type="text"
-          {...register("district")}
-          error={!!errors.district}
-          className="w-100"
-          placeholder="Ex: Sector 1, Sector 2, etc."
-        />
-        {errors.district && <p className="mt-1 small text-danger">{errors.district.message}</p>}
       </div>
 
       {/* Address */}

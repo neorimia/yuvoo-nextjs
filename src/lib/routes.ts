@@ -51,6 +51,13 @@ export const routes = {
     container: "/chestionar/container",
     preview: "/chestionar/previzualizare",
     results: (id: string) => `/chestionar/rezultate/${id}`,
+    // Payment flow routes
+    emailGate: (quizId: string) => `/chestionar/email/${quizId}`,
+    teaser: (quizId: string) => `/chestionar/teaser/${quizId}`,
+    paywall: (quizId: string) => `/chestionar/paywall/${quizId}`,
+    paymentSuccess: (quizId: string) => `/chestionar/payment/success/${quizId}`,
+    paymentFailure: (quizId: string) => `/chestionar/payment/failure/${quizId}`,
+    report: (accessToken: string) => `/chestionar/raport/${accessToken}`,
   },
   // Search
   search: "/cautare",

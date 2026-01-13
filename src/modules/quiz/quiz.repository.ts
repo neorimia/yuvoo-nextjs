@@ -131,6 +131,7 @@ export async function findResultById(quizId: string): Promise<QuizResult | null>
     childId: quiz.childId,
     recommendations: storedResults.sportRecommendations || [],
     specialistRecommendation: storedResults.specialistRecommendation,
+    location: quiz.location || null,
     createdAt: quiz.createdAt,
   };
 }
@@ -160,6 +161,7 @@ export async function findByChildId(childId: string): Promise<QuizResult[]> {
         childId: quiz.childId,
         recommendations: storedResults.sportRecommendations || [],
         specialistRecommendation: storedResults.specialistRecommendation,
+        location: quiz.location || null,
         createdAt: quiz.createdAt,
       };
     });
@@ -185,9 +187,46 @@ export async function getQuizAnswers(quizId: string): Promise<QuizAnswers | null
   return quiz.answers as unknown as QuizAnswers;
 }
 
+/**
+ * Update quiz email
+ *
+ * Updates the email field in the quiz record.
+ *
+ * @param quizId - UUID of the quiz
+ * @param email - Email address to store
+ */
+export async function updateQuizEmail(quizId: string, email: string): Promise<void> {
+  await db
+    .update(quizzes)
+    .set({
+      email: email.trim(),
+    })
+    .where(eq(quizzes.id, quizId));
+}
+
+/**
+ * Update quiz location
+ *
+ * Updates the location field in the quiz record.
+ *
+ * @param quizId - UUID of the quiz
+ * @param location - City/location to store
+ */
+export async function updateQuizLocation(quizId: string, location: string): Promise<void> {
+  await db
+    .update(quizzes)
+    .set({
+      location: location.trim(),
+    })
+    .where(eq(quizzes.id, quizId));
+}
+
 export const quizRepository = {
   create,
   saveResults,
   findResultById,
   findByChildId,
+  getQuizAnswers,
+  updateQuizEmail,
+  updateQuizLocation,
 };

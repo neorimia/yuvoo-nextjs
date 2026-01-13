@@ -18,6 +18,8 @@ export const PostHogEvents = {
   QUIZ_STEP_COMPLETED: "quiz_step_completed",
   QUIZ_COMPLETED: "quiz_completed",
   QUIZ_ABANDONED: "quiz_abandoned",
+  EMAIL_COLLECTED: "email_collected",
+  TEASER_VIEWED: "teaser_viewed",
 
   // Child Profile Events
   CHILD_PROFILE_CREATED: "child_profile_created",
@@ -62,6 +64,14 @@ export const PostHogEvents = {
   EMAIL_UNSUBSCRIBED: "email_unsubscribed",
   EMAIL_PREFERENCES_UPDATED: "email_preferences_updated",
   EMAIL_RESUBSCRIBED: "email_resubscribed",
+
+  // Payment Events
+  PAYMENT_CREATED: "payment_created",
+  PAYMENT_COMPLETED: "payment_completed",
+  PAYMENT_FAILED: "payment_failed",
+  PAYMENT_VERIFIED: "payment_verified",
+  PAYWALL_VIEWED: "paywall_viewed",
+  REPORT_ACCESSED: "report_accessed",
 } as const;
 
 /**
@@ -83,6 +93,8 @@ export const PostHogProperties = {
   QUIZ_STEP: "quizStep",
   TOTAL_STEPS: "totalSteps",
   RECOMMENDATIONS_COUNT: "recommendationsCount",
+  SPORT_NAME: "sportName",
+  MATCH_SCORE: "matchScore",
 
   // Club Properties
   CLUB_ID: "clubId",
@@ -98,6 +110,13 @@ export const PostHogProperties = {
   DOCTOR_SPECIALTY: "doctorSpecialty",
   CONSULTATION_ID: "consultationId",
   CONSULTATION_STATUS: "consultationStatus",
+
+  // Payment Properties
+  PAYMENT_ID: "paymentId",
+  PAYMENT_AMOUNT: "paymentAmount",
+  PAYMENT_STATUS: "paymentStatus",
+  PAYMENT_PROVIDER: "paymentProvider",
+  ACCESS_TOKEN: "accessToken",
 
   // Onboarding Properties
   ONBOARDING_ROLE: "onboardingRole",
