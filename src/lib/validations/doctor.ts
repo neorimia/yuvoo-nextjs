@@ -62,7 +62,7 @@ export const doctorBioExperienceSchema = z.object({
  * Doctor Location & Contact Schema (Doctor Onboarding - Step 4)
  */
 export const doctorLocationContactSchema = z.object({
-  city: z.string(zodRomanianErrors).min(1, "Orașul este obligatoriu"),
+  city: z.string(zodRomanianErrors).min(1, "Locația este obligatorie"),
 
   district: z.string().optional(),
 

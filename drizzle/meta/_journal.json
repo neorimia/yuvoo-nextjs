@@ -15,6 +15,27 @@
       "when": 1766696683721,
       "tag": "0001_shiny_moonstone",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1768295793532,
+      "tag": "0002_volatile_magik",
+      "breakpoints": true
+    },
+    {
+      "idx": 3,
+      "version": "7",
+      "when": 1768303995638,
+      "tag": "0003_sticky_goblin_queen",
+      "breakpoints": true
+    },
+    {
+      "idx": 4,
+      "version": "7",
+      "when": 1768305187741,
+      "tag": "0004_special_marrow",
+      "breakpoints": true
     }
   ]
 }

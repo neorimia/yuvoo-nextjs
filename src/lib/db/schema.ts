@@ -15,6 +15,7 @@
  * - onboarding_progress: Cross-session onboarding state tracking (NEW)
  * - uploads: File upload tracking for ownership verification (NEW)
  * - audit_logs: Admin action audit trail for security and compliance (NEW)
+ * - locations: Single source of truth for Romanian counties, cities, and sectors (NEW)
  */
 
 import {
@@ -26,6 +27,7 @@ import {
   jsonb,
   pgEnum,
   index,
+  uniqueIndex,
 } from "drizzle-orm/pg-core";
 import { sql } from "drizzle-orm";
 
@@ -44,6 +46,21 @@ export const verificationStatusEnum = pgEnum("verification_status", [
   "in_review", // Documents submitted, admin reviewing
   "approved", // Verified and approved
   "rejected", // Rejected, needs resubmission
+]);
+
+// Payment status enum
+export const paymentStatusEnum = pgEnum("payment_status", [
+  "pending", // Payment created but not completed
+  "completed", // Payment successfully completed
+  "failed", // Payment failed
+  "refunded", // Payment refunded
+]);
+
+// Location type enum for Romania locations table
+export const locationTypeEnum = pgEnum("location_type", [
+  "county", // Județ (41 counties + Bucharest)
+  "city", // Municipiu or oraș (cities)
+  "sector", // Sector (Bucharest sectors 1-6)
 ]);
 
 // Users table
@@ -107,6 +124,8 @@ export const quizzes = pgTable(
       .references(() => children.id),
     answers: jsonb("answers").notNull(), // Quiz answers as JSON
     recommendations: jsonb("recommendations"), // AI recommendations as JSON
+    email: text("email"), // Email collected at gate (for payment flow)
+    location: text("location"), // City/location for local club recommendations
     createdAt: timestamp("created_at").defaultNow().notNull(),
   },
   (table) => ({
@@ -114,6 +133,8 @@ export const quizzes = pgTable(
     childIdIdx: index("idx_quizzes_child_id").on(table.childId),
     createdAtIdx: index("idx_quizzes_created_at").on(table.createdAt),
     childCreatedIdx: index("idx_quizzes_child_created").on(table.childId, table.createdAt),
+    emailIdx: index("idx_quizzes_email").on(table.email),
+    locationIdx: index("idx_quizzes_location").on(table.location),
   })
 );
 
@@ -463,5 +484,110 @@ export const waitlistEmails = pgTable(
     userTypeIdx: index("idx_waitlist_emails_user_type").on(table.userType),
     sourceIdx: index("idx_waitlist_emails_source").on(table.source),
     createdAtIdx: index("idx_waitlist_emails_created_at").on(table.createdAt),
+  })
+);
+
+// Payments table - tracks one-time payments for quiz reports
+export const payments = pgTable(
+  "payments",
+  {
+    id: text("id").primaryKey(),
+    userId: text("user_id").references(() => users.id), // Optional (for authenticated users)
+    quizId: text("quiz_id")
+      .notNull()
+      .references(() => quizzes.id, { onDelete: "cascade" }),
+
+    // Payment details
+    amount: integer("amount").notNull(), // Amount in smallest currency unit (lei * 100 = bani)
+    currency: text("currency").notNull().default("RON"),
+    status: paymentStatusEnum("status").notNull().default("pending"), // pending | completed | failed | refunded
+
+    // Payment provider
+    paymentProvider: text("payment_provider").notNull(), // "stripe" | "paypal" | "netopia" | etc.
+    paymentProviderId: text("payment_provider_id"), // Provider's transaction ID
+    paymentProviderMetadata: jsonb("payment_provider_metadata"), // Additional provider data
+
+    // Timestamps
+    createdAt: timestamp("created_at").defaultNow().notNull(),
+    completedAt: timestamp("completed_at"),
+    updatedAt: timestamp("updated_at").defaultNow().notNull(),
+  },
+  (table) => ({
+    // Performance indexes
+    quizIdIdx: index("idx_payments_quiz_id").on(table.quizId),
+    userIdIdx: index("idx_payments_user_id").on(table.userId),
+    statusIdx: index("idx_payments_status").on(table.status),
+    paymentProviderIdIdx: index("idx_payments_provider_id").on(table.paymentProviderId),
+    // Composite indexes for common query patterns
+    quizStatusIdx: index("idx_payments_quiz_status").on(table.quizId, table.status),
+  })
+);
+
+// Report access table - manages persistent access tokens for paid reports
+export const reportAccess = pgTable(
+  "report_access",
+  {
+    id: text("id").primaryKey(),
+    quizId: text("quiz_id")
+      .notNull()
+      .references(() => quizzes.id, { onDelete: "cascade" }),
+    paymentId: text("payment_id")
+      .notNull()
+      .references(() => payments.id, { onDelete: "cascade" }),
+
+    // Access token (unique, non-guessable)
+    accessToken: text("access_token").notNull().unique(),
+
+    // Expiration (set to 10 years for "permanent" access)
+    expiresAt: timestamp("expires_at"),
+
+    // Timestamps
+    createdAt: timestamp("created_at").defaultNow().notNull(),
+    lastAccessedAt: timestamp("last_accessed_at"), // Track usage
+  },
+  (table) => ({
+    // Performance indexes
+    quizIdIdx: index("idx_report_access_quiz_id").on(table.quizId),
+    paymentIdIdx: index("idx_report_access_payment_id").on(table.paymentId),
+    accessTokenIdx: index("idx_report_access_token").on(table.accessToken),
+    // Composite index for access verification
+    tokenExpiresIdx: index("idx_report_access_token_expires").on(
+      table.accessToken,
+      table.expiresAt
+    ),
+  })
+);
+
+// Locations table - Single source of truth for Romanian counties, cities, and sectors
+export const locations = pgTable(
+  "locations",
+  {
+    id: text("id").primaryKey(),
+    name: text("name").notNull(), // Location name in Romanian (e.g., "București", "Cluj-Napoca")
+    type: locationTypeEnum("type").notNull(), // "county" | "city" | "sector"
+    parentId: text("parent_id"), // Self-referential: null for counties, county ID for cities, city ID for sectors
+    // Note: Foreign key constraint to locations.id will be added in migration for self-reference
+    code: text("code"), // County code (e.g., "B" for București, "CJ" for Cluj, "TM" for Timiș)
+    isActive: boolean("is_active").notNull().default(true), // Soft delete flag
+    createdAt: timestamp("created_at").defaultNow().notNull(),
+    updatedAt: timestamp("updated_at").defaultNow().notNull(),
+  },
+  (table) => ({
+    // Performance indexes
+    typeIdx: index("idx_locations_type").on(table.type),
+    parentIdIdx: index("idx_locations_parent_id").on(table.parentId),
+    codeIdx: index("idx_locations_code").on(table.code),
+    isActiveIdx: index("idx_locations_is_active").on(table.isActive),
+    // Composite unique index: prevent duplicate locations (same name, type, and parent)
+    // Note: For counties (parentId IS NULL), we'll need a partial unique index in migration
+    // to ensure county name uniqueness. This index handles cities and sectors.
+    nameTypeParentUniqueIdx: uniqueIndex("idx_locations_name_type_parent_unique").on(
+      table.name,
+      table.type,
+      table.parentId
+    ),
+    // Composite indexes for common query patterns
+    typeParentIdx: index("idx_locations_type_parent").on(table.type, table.parentId),
+    codeTypeIdx: index("idx_locations_code_type").on(table.code, table.type),
   })
 );

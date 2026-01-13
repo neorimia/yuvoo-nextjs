@@ -1,6 +1,18 @@
-CREATE TYPE "public"."booking_status" AS ENUM('pending', 'confirmed', 'cancelled', 'completed');--> statement-breakpoint
-CREATE TYPE "public"."user_role" AS ENUM('parent', 'club_admin', 'doctor', 'admin');--> statement-breakpoint
-CREATE TYPE "public"."verification_status" AS ENUM('pending', 'in_review', 'approved', 'rejected');--> statement-breakpoint
+DO $$ BEGIN
+ CREATE TYPE "public"."booking_status" AS ENUM('pending', 'confirmed', 'cancelled', 'completed');
+EXCEPTION
+ WHEN duplicate_object THEN null;
+END $$;--> statement-breakpoint
+DO $$ BEGIN
+ CREATE TYPE "public"."user_role" AS ENUM('parent', 'club_admin', 'doctor', 'admin');
+EXCEPTION
+ WHEN duplicate_object THEN null;
+END $$;--> statement-breakpoint
+DO $$ BEGIN
+ CREATE TYPE "public"."verification_status" AS ENUM('pending', 'in_review', 'approved', 'rejected');
+EXCEPTION
+ WHEN duplicate_object THEN null;
+END $$;--> statement-breakpoint
 CREATE TABLE IF NOT EXISTS "bookings" (
 	"id" text PRIMARY KEY NOT NULL,
 	"parent_id" text NOT NULL,
