@@ -1,4 +1,4 @@
-CREATE TABLE "audit_logs" (
+CREATE TABLE IF NOT EXISTS "audit_logs" (
 	"id" text PRIMARY KEY DEFAULT gen_random_uuid() NOT NULL,
 	"user_id" text NOT NULL,
 	"action" text NOT NULL,
@@ -12,7 +12,7 @@ CREATE TABLE "audit_logs" (
 	"created_at" timestamp DEFAULT now() NOT NULL
 );
 --> statement-breakpoint
-CREATE TABLE "uploads" (
+CREATE TABLE IF NOT EXISTS "uploads" (
 	"id" text PRIMARY KEY DEFAULT gen_random_uuid() NOT NULL,
 	"user_id" text NOT NULL,
 	"url" text NOT NULL,
@@ -22,7 +22,7 @@ CREATE TABLE "uploads" (
 	"created_at" timestamp DEFAULT now() NOT NULL
 );
 --> statement-breakpoint
-CREATE TABLE "waitlist_emails" (
+CREATE TABLE IF NOT EXISTS "waitlist_emails" (
 	"id" text PRIMARY KEY DEFAULT gen_random_uuid() NOT NULL,
 	"email" text NOT NULL,
 	"name" text,
@@ -31,8 +31,16 @@ CREATE TABLE "waitlist_emails" (
 	"created_at" timestamp DEFAULT now() NOT NULL
 );
 --> statement-breakpoint
-ALTER TABLE "doctors" ADD COLUMN "slug" text;--> statement-breakpoint
-ALTER TABLE "users" ADD COLUMN "email_notification_preferences" jsonb;--> statement-breakpoint
+DO $$ BEGIN
+ ALTER TABLE "doctors" ADD COLUMN "slug" text;
+EXCEPTION
+ WHEN duplicate_column THEN null;
+END $$;--> statement-breakpoint
+DO $$ BEGIN
+ ALTER TABLE "users" ADD COLUMN "email_notification_preferences" jsonb;
+EXCEPTION
+ WHEN duplicate_column THEN null;
+END $$;--> statement-breakpoint
 ALTER TABLE "audit_logs" ADD CONSTRAINT "audit_logs_user_id_users_id_fk" FOREIGN KEY ("user_id") REFERENCES "public"."users"("id") ON DELETE cascade ON UPDATE no action;--> statement-breakpoint
 ALTER TABLE "uploads" ADD CONSTRAINT "uploads_user_id_users_id_fk" FOREIGN KEY ("user_id") REFERENCES "public"."users"("id") ON DELETE cascade ON UPDATE no action;--> statement-breakpoint
 CREATE INDEX "idx_audit_logs_user_id" ON "audit_logs" USING btree ("user_id");--> statement-breakpoint

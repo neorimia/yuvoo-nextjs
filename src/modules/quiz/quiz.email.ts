@@ -9,6 +9,9 @@ import { sendQuizResults } from "@/lib/integrations/brevo";
 import { db } from "@/lib/db";
 import { children } from "@/lib/db/schema";
 import { eq } from "drizzle-orm";
+import * as React from "react";
+import { renderEmail } from "../../../emails/utils/render-email";
+import QuizTeaserEmail from "../../../emails/quiz-teaser-email";
 import type { QuizResult } from "./quiz.types";
 import type { Child } from "@/modules/children/children.types";
 import type { AuthUser } from "@/modules/auth/auth.types";
@@ -61,6 +64,75 @@ async function getChildById(childId: string): Promise<Child | null> {
   } catch (error) {
     console.error("[Quiz Email] Error fetching child:", error);
     return null;
+  }
+}
+
+/**
+ * Send teaser email
+ *
+ * Sends a teaser email with only the top sport recommendation (minimal details).
+ * Used after email collection to create desire for the full report.
+ *
+ * @param quizResult - Quiz result with recommendations
+ * @param userEmail - Email address to send to (required)
+ * @returns Promise that resolves when email is sent (or fails silently)
+ */
+export async function sendTeaserEmail(quizResult: QuizResult, userEmail: string): Promise<void> {
+  try {
+    // Validate email
+    if (!userEmail || typeof userEmail !== "string" || !userEmail.includes("@")) {
+      console.error("[Quiz Email] Invalid email address:", userEmail);
+      return;
+    }
+
+    // Validate quiz has recommendations
+    if (!quizResult.recommendations || quizResult.recommendations.length === 0) {
+      console.error("[Quiz Email] Quiz has no recommendations for teaser email:", quizResult.id);
+      return;
+    }
+
+    // Get top recommendation (highest match score)
+    const topRecommendation = [...quizResult.recommendations].sort(
+      (a, b) => b.matchScore - a.matchScore
+    )[0];
+
+    if (!topRecommendation) {
+      console.error("[Quiz Email] No top recommendation found for teaser email");
+      return;
+    }
+
+    // Fetch child data
+    const child = await getChildById(quizResult.childId);
+    if (!child) {
+      console.error("[Quiz Email] Child not found for teaser email:", quizResult.childId);
+      return;
+    }
+
+    // Send teaser email via Brevo using React Email
+    const { sendEmail } = await import("@/lib/integrations/brevo");
+    const appUrl = process.env.NEXT_PUBLIC_APP_URL || "https://yuvoo.ro";
+    const teaserUrl = `${appUrl}/chestionar/teaser/${quizResult.id}`;
+
+    // Render React Email component to HTML
+    const emailComponent = React.createElement(QuizTeaserEmail, {
+      quizResult,
+      child,
+      teaserUrl,
+    });
+    const { html, text } = await renderEmail(emailComponent);
+
+    await sendEmail({
+      to: userEmail,
+      subject: `Recomandarea noastră pentru ${child.firstName} - ${topRecommendation.sportName}`,
+      htmlContent: html,
+      textContent: text,
+      tags: ["quiz-teaser", "sport-recommendation"],
+    });
+
+    console.log(`[Quiz Email] Teaser email sent to ${userEmail}`);
+  } catch (error) {
+    // Don't throw - email failures shouldn't block quiz operations
+    console.error("[Quiz Email] Error sending teaser email:", error);
   }
 }
 

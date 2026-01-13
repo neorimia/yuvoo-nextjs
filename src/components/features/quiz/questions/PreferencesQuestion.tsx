@@ -80,7 +80,7 @@ const PreferencesQuestion = memo(function PreferencesQuestion() {
             </button>
           </div>
         </div>
-        {!preferences.indoor && !preferences.outdoor && (
+        {errors.preferences && !preferences.indoor && !preferences.outdoor && (
           <div className="alert alert-danger d-flex align-items-center gap-2 mt-3 mb-0 py-2 shadow-sm">
             <i className="bi bi-exclamation-circle-fill flex-shrink-0"></i>
             <small className="mb-0">Selectează cel puțin o locație preferată</small>
@@ -132,7 +132,7 @@ const PreferencesQuestion = memo(function PreferencesQuestion() {
             </button>
           </div>
         </div>
-        {!preferences.team && !preferences.individual && (
+        {errors.preferences && !preferences.team && !preferences.individual && (
           <div className="alert alert-danger d-flex align-items-center gap-2 mt-3 mb-0 py-2 shadow-sm">
             <i className="bi bi-exclamation-circle-fill flex-shrink-0"></i>
             <small className="mb-0">Selectează cel puțin un tip de activitate</small>
@@ -193,7 +193,7 @@ const PreferencesQuestion = memo(function PreferencesQuestion() {
             <div key={option.value} className="col-12 col-md-6">
               <button
                 type="button"
-                className={`btn w-100 text-start p-3 ${
+                className={`btn w-100 text-start p-3 hover:bg-yuvoo-primary hover:text-white-80 ${
                   preferences.parentInvolvement === option.value
                     ? "btn-yuvoo-primary"
                     : "btn-outline-secondary"
@@ -203,9 +203,9 @@ const PreferencesQuestion = memo(function PreferencesQuestion() {
               >
                 <div className="fw-semibold mb-1">{option.label}</div>
                 <small
-                  className={
+                  className={`group-hover:text-white-80 transition-colors duration-200 ${
                     preferences.parentInvolvement === option.value ? "text-white-80" : "text-muted"
-                  }
+                  }`}
                 >
                   {option.description}
                 </small>

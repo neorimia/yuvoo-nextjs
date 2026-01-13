@@ -1,0 +1,300 @@
+/**
+ * Paywall Page
+ *
+ * Displays pricing and payment form for unlocking full report.
+ * Integrates with Stripe for secure payment processing.
+ */
+
+import React from "react";
+import type { Metadata } from "next";
+import { notFound } from "next/navigation";
+import { cookies } from "next/headers";
+import BreadcrumbOne from "@/components/Breadcrumb/BreadcrumbOne";
+import { getQuizResultAction } from "@/app/actions/quiz";
+import { getPaymentByQuizId } from "@/modules/payments/payments.repository";
+import { routes } from "@/lib/routes";
+import { StripeProvider } from "@/components/providers/StripeProvider";
+import PaymentForm from "@/components/features/payments/PaymentForm";
+import { PaymentErrorBoundary } from "@/components/shared/ErrorBoundary";
+import { trackEventServer } from "@/lib/analytics/tracking-server";
+import { PostHogEvents, PostHogProperties } from "@/lib/analytics/events";
+import { PAYMENT_AMOUNT_LEI } from "@/modules/payments/payments.service";
+
+interface PaywallPageProps {
+  params: Promise<{ quizId: string }>;
+}
+
+/**
+ * Generate static params for Cache Components compatibility
+ */
+export async function generateStaticParams() {
+  return [{ quizId: "placeholder" }];
+}
+
+/**
+ * Generate metadata for paywall page
+ */
+export async function generateMetadata({ params }: PaywallPageProps): Promise<Metadata> {
+  const { quizId: _quizId } = await params;
+
+  return {
+    title: "Deblochează Raportul Complet | Yuvoo",
+    description: `Deblochează raportul complet cu recomandările personalizate pentru ${PAYMENT_AMOUNT_LEI} lei (plată unică, fără abonament).`,
+    robots: {
+      index: false,
+      follow: false,
+    },
+  };
+}
+
+/**
+ * Paywall Page
+ *
+ * Displays pricing and payment form.
+ * Public route (no authentication required).
+ */
+export default async function PaywallPage({ params }: PaywallPageProps) {
+  // Access dynamic data sources first to mark route as dynamic
+  const _cookies = await cookies();
+  const { quizId } = await params;
+
+  // Fetch quiz results
+  const quizResult = await getQuizResultAction(quizId);
+
+  if (!quizResult) {
+    notFound();
+  }
+
+  // Verify quiz has recommendations
+  if (!quizResult.recommendations || quizResult.recommendations.length === 0) {
+    notFound();
+  }
+
+  // Check if payment already completed
+  const existingPayment = await getPaymentByQuizId(quizId);
+  const isAlreadyPaid = existingPayment?.status === "completed";
+
+  // Track paywall view
+  try {
+    await trackEventServer(PostHogEvents.PAYWALL_VIEWED, {
+      distinctId: "anonymous",
+      [PostHogProperties.QUIZ_ID]: quizId,
+      [PostHogProperties.PAYMENT_AMOUNT]: PAYMENT_AMOUNT_LEI * 100,
+    });
+  } catch (error) {
+    // Don't block page render if tracking fails
+    console.error("[Paywall Page] Error tracking event:", error);
+  }
+
+  // If already paid, redirect to report (if we have access token)
+  if (isAlreadyPaid) {
+    // TODO: In Phase 5, redirect to report page with access token
+    // For now, show a message that payment is already completed
+  }
+
+  return (
+    <>
+      <BreadcrumbOne
+        title="Deblochează Raportul Complet"
+        subTitle="Plată"
+        items={[
+          { name: "Yuvoo", url: routes.home },
+          { name: "Chestionar", url: routes.quiz.intro },
+          { name: "Plată", url: routes.quiz.paywall(quizId) },
+        ]}
+      />
+      <section className="paywall-section py-5">
+        <div className="container">
+          <div className="row justify-content-center">
+            <div className="col-12 col-lg-10 col-xl-8">
+              {/* Header */}
+              <div className="text-center mb-5">
+                <h1 className="display-5 fw-bold mb-3">Deblochează Raportul Complet</h1>
+                <p className="lead text-muted">
+                  Am identificat sportul potrivit pentru copilul tău. Pentru a înțelege de ce este
+                  potrivit și ce pași să urmezi mai departe, deblochează raportul complet.
+                </p>
+              </div>
+
+              {/* Pricing Card */}
+              <div className="card shadow-lg border-0 mb-4 border-top border-5 border-primary">
+                <div className="card-body p-4 p-md-5">
+                  <div className="text-center mb-4">
+                    <div className="mb-3">
+                      <span className="display-4 fw-bold text-primary">
+                        {PAYMENT_AMOUNT_LEI} lei
+                      </span>
+                    </div>
+                    <p className="text-muted mb-2">
+                      <i
+                        className="bi bi-check-circle-fill text-success me-2"
+                        aria-hidden="true"
+                      ></i>
+                      Plată unică
+                    </p>
+                    <p className="text-muted mb-2">
+                      <i
+                        className="bi bi-check-circle-fill text-success me-2"
+                        aria-hidden="true"
+                      ></i>
+                      Fără abonament
+                    </p>
+                    <p className="text-muted mb-0">
+                      <i
+                        className="bi bi-check-circle-fill text-success me-2"
+                        aria-hidden="true"
+                      ></i>
+                      Acces permanent
+                    </p>
+                  </div>
+                </div>
+              </div>
+
+              {/* What's Included */}
+              <div className="card bg-light border-0 mb-4">
+                <div className="card-body p-4">
+                  <h3 className="h5 mb-3">Ce include raportul complet:</h3>
+                  <div className="row g-3">
+                    <div className="col-12 col-md-6">
+                      <ul className="list-unstyled mb-0">
+                        <li className="mb-2">
+                          <i
+                            className="bi bi-check-circle-fill text-success me-2"
+                            aria-hidden="true"
+                          ></i>
+                          Top 2-3 sporturi recomandate cu scoruri de potrivire
+                        </li>
+                        <li className="mb-2">
+                          <i
+                            className="bi bi-check-circle-fill text-success me-2"
+                            aria-hidden="true"
+                          ></i>
+                          Explicații detaliate despre de ce aceste sporturi sunt potrivite
+                        </li>
+                        <li className="mb-2">
+                          <i
+                            className="bi bi-check-circle-fill text-success me-2"
+                            aria-hidden="true"
+                          ></i>
+                          Beneficii fizice și emoționale pentru fiecare sport
+                        </li>
+                        <li className="mb-2">
+                          <i
+                            className="bi bi-check-circle-fill text-success me-2"
+                            aria-hidden="true"
+                          ></i>
+                          Sporturi de evitat momentan
+                        </li>
+                      </ul>
+                    </div>
+                    <div className="col-12 col-md-6">
+                      <ul className="list-unstyled mb-0">
+                        <li className="mb-2">
+                          <i
+                            className="bi bi-check-circle-fill text-success me-2"
+                            aria-hidden="true"
+                          ></i>
+                          Vârsta ideală pentru început
+                        </li>
+                        <li className="mb-2">
+                          <i
+                            className="bi bi-check-circle-fill text-success me-2"
+                            aria-hidden="true"
+                          ></i>
+                          Pașii următori recomandați
+                        </li>
+                        <li className="mb-2">
+                          <i
+                            className="bi bi-check-circle-fill text-success me-2"
+                            aria-hidden="true"
+                          ></i>
+                          Sugestii de cluburi locale
+                        </li>
+                        <li className="mb-2">
+                          <i
+                            className="bi bi-check-circle-fill text-success me-2"
+                            aria-hidden="true"
+                          ></i>
+                          Acces permanent + PDF descărcabil
+                        </li>
+                      </ul>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              {/* Payment Form */}
+              <div className="card shadow-sm border-0 mb-4">
+                <div className="card-body p-4 p-md-5">
+                  <h3 className="h5 mb-4">Detalii de plată</h3>
+                  <StripeProvider>
+                    <PaymentErrorBoundary>
+                      <PaymentForm quizId={quizId} />
+                    </PaymentErrorBoundary>
+                  </StripeProvider>
+                </div>
+              </div>
+
+              {/* Trust Indicators */}
+              <div className="text-center">
+                <div className="row g-3 mb-4">
+                  <div className="col-12 col-md-4">
+                    <div className="d-flex flex-column align-items-center">
+                      <i
+                        className="bi bi-shield-check text-success mb-2"
+                        style={{ fontSize: "1.5rem" }}
+                        aria-hidden="true"
+                      ></i>
+                      <small className="text-muted">Plată securizată</small>
+                    </div>
+                  </div>
+                  <div className="col-12 col-md-4">
+                    <div className="d-flex flex-column align-items-center">
+                      <i
+                        className="bi bi-arrow-counterclockwise text-primary mb-2"
+                        style={{ fontSize: "1.5rem" }}
+                        aria-hidden="true"
+                      ></i>
+                      <small className="text-muted">Fără costuri ascunse</small>
+                    </div>
+                  </div>
+                  <div className="col-12 col-md-4">
+                    <div className="d-flex flex-column align-items-center">
+                      <i
+                        className="bi bi-clock-history text-warning mb-2"
+                        style={{ fontSize: "1.5rem" }}
+                        aria-hidden="true"
+                      ></i>
+                      <small className="text-muted">Acces instant</small>
+                    </div>
+                  </div>
+                </div>
+                <p className="text-muted small mb-0">
+                  Prin continuare, confirmi că ai citit și ești de acord cu{" "}
+                  <a
+                    href={routes.terms}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-decoration-none"
+                  >
+                    Termenii și condițiile
+                  </a>{" "}
+                  și{" "}
+                  <a
+                    href={routes.privacy}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-decoration-none"
+                  >
+                    Politica de confidențialitate
+                  </a>
+                  .
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+    </>
+  );
+}

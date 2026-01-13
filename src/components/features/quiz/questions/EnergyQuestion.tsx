@@ -82,7 +82,7 @@ const EnergyQuestion = memo(function EnergyQuestion() {
                     <div className="fw-semibold mb-1">{option.label}</div>
                     <small
                       className={
-                        answers.energyLevel === option.value ? "text-white-50" : "text-muted"
+                        answers.energyLevel === option.value ? "text-white-80" : "text-muted"
                       }
                     >
                       {option.description}

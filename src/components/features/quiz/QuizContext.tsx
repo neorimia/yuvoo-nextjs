@@ -46,7 +46,9 @@ interface QuizProviderProps {
 
 export function QuizProvider({ children, childId }: QuizProviderProps) {
   const [currentStep, setCurrentStep] = useState(1);
-  const [answers, setAnswersState] = useState<PartialQuizAnswers>({});
+  const [answers, setAnswersState] = useState<PartialQuizAnswers>({
+    age: 4, // Default age to 4 years
+  });
   const [errors, setErrorsState] = useState<Record<string, string>>({});
 
   // Load quiz progress from localStorage on mount

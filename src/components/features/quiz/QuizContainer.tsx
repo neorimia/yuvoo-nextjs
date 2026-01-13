@@ -107,6 +107,9 @@ function QuizContent({ childId }: { childId: string }) {
       // Call quiz submission server action
       const response = await submitQuizAction(quizInput);
 
+      // For Phase 3: Redirect to email collection instead of results
+      // This implements the payment flow: quiz → email → teaser → paywall → report
+
       if (!response.success) {
         // Display error message from server
         setSubmitError(
@@ -126,7 +129,8 @@ function QuizContent({ childId }: { childId: string }) {
       resetQuiz();
 
       // Redirect to results page (loading overlay will remain until redirect completes)
-      router.push(routes.quiz.results(response.result.id));
+      // Redirect to email collection page (Phase 3: Email Gate)
+      router.push(routes.quiz.emailGate(response.result.id));
     } catch (error) {
       console.error("Quiz submission failed:", error);
       setSubmitError(
