@@ -160,7 +160,7 @@ export async function updateClub(
     throw new Error("Eroare la actualizarea clubului");
   }
 
-  return clubsRepository.mapDbClubToClub(updatedClub);
+  return await clubsRepository.mapDbClubToClub(updatedClub);
 }
 
 /**

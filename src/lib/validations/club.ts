@@ -25,12 +25,9 @@ export const clubBasicInfoSchema = z.object({
     .max(1000, "Descrierea este prea lungă (maxim 1000 caractere)")
     .trim(),
 
-  city: z.string(zodRomanianErrors).min(1, "Orașul este obligatoriu"),
-
-  district: z
-    .string()
-    .optional()
-    .transform((val) => (val && val.trim() !== "" ? val.trim() : undefined)),
+  // Phase 6: Only location IDs (text columns removed)
+  cityId: z.string(zodRomanianErrors).min(1, "Selectează orașul"),
+  sectorId: z.string().optional(), // For Bucharest sectors
 
   address: z
     .string(zodRomanianErrors)
@@ -132,12 +129,9 @@ export const clubProfileUpdateSchema = z.object({
     .optional(),
 
   // Location
-  city: z.string(zodRomanianErrors).min(1, "Orașul este obligatoriu").optional(),
-
-  district: z
-    .string()
-    .optional()
-    .transform((val) => (val && val.trim() !== "" ? val.trim() : undefined)),
+  // Phase 6: Only location IDs (text columns removed)
+  cityId: z.string(zodRomanianErrors).min(1, "Selectează orașul").optional(),
+  sectorId: z.string().optional(), // For Bucharest sectors
 
   address: z
     .string(zodRomanianErrors)

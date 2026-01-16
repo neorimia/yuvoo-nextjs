@@ -12,34 +12,11 @@ import { useRouter, useSearchParams } from "next/navigation";
 import { routes } from "@/lib/routes";
 import { SPORT_TYPES } from "@/lib/utils/constants";
 import type { ClubSearchFilters } from "@/modules/clubs/clubs.types";
+import { LocationSelector } from "@/components/shared/LocationSelector";
 
 interface ClubSearchFiltersProps {
   initialFilters?: Partial<ClubSearchFilters>;
 }
-
-// Romanian cities (main cities in Romania)
-const ROMANIAN_CITIES = [
-  "București",
-  "Cluj-Napoca",
-  "Timișoara",
-  "Iași",
-  "Constanța",
-  "Craiova",
-  "Brașov",
-  "Galați",
-  "Ploiești",
-  "Oradea",
-  "Brăila",
-  "Arad",
-  "Pitești",
-  "Sibiu",
-  "Bacău",
-  "Târgu Mureș",
-  "Baia Mare",
-  "Buzău",
-  "Botoșani",
-  "Satu Mare",
-] as const;
 
 // Age groups for filtering
 const AGE_GROUPS = [4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14] as const;
@@ -67,8 +44,8 @@ const ClubSearchFiltersComponent: React.FC<ClubSearchFiltersProps> = ({ initialF
   const [filters, setFilters] = useState<Partial<ClubSearchFilters>>({
     sportId: searchParams.get("sport") || initialFilters?.sportId || "",
     age: searchParams.get("age") ? parseInt(searchParams.get("age")!) : initialFilters?.age,
-    city: searchParams.get("city") || initialFilters?.city || "",
-    district: searchParams.get("district") || initialFilters?.district || "",
+    cityId: searchParams.get("cityId") || initialFilters?.cityId || "",
+    sectorId: searchParams.get("sectorId") || initialFilters?.sectorId || "",
     level: searchParams.get("level") || initialFilters?.level || "",
     verified: searchParams.get("verified") === "true" || initialFilters?.verified || false,
     featured: searchParams.get("featured") === "true" || initialFilters?.featured || false,
@@ -87,8 +64,8 @@ const ClubSearchFiltersComponent: React.FC<ClubSearchFiltersProps> = ({ initialF
     const params = new URLSearchParams();
     if (updatedFilters.sportId) params.set("sport", updatedFilters.sportId);
     if (updatedFilters.age) params.set("age", updatedFilters.age.toString());
-    if (updatedFilters.city) params.set("city", updatedFilters.city);
-    if (updatedFilters.district) params.set("district", updatedFilters.district);
+    if (updatedFilters.cityId) params.set("cityId", updatedFilters.cityId);
+    if (updatedFilters.sectorId) params.set("sectorId", updatedFilters.sectorId);
     if (updatedFilters.level) params.set("level", updatedFilters.level);
     if (updatedFilters.verified) params.set("verified", "true");
     if (updatedFilters.featured) params.set("featured", "true");
@@ -111,8 +88,8 @@ const ClubSearchFiltersComponent: React.FC<ClubSearchFiltersProps> = ({ initialF
     setFilters({
       sportId: "",
       age: undefined,
-      city: "",
-      district: "",
+      cityId: "",
+      sectorId: "",
       level: "",
       verified: false,
       featured: false,
@@ -133,8 +110,8 @@ const ClubSearchFiltersComponent: React.FC<ClubSearchFiltersProps> = ({ initialF
   const activeFiltersCount = [
     filters.sportId,
     filters.age,
-    filters.city,
-    filters.district,
+    filters.cityId,
+    filters.sectorId,
     filters.level,
     filters.verified,
     filters.featured,
@@ -217,25 +194,48 @@ const ClubSearchFiltersComponent: React.FC<ClubSearchFiltersProps> = ({ initialF
 
                 {/* City Filter */}
                 <div className="col-lg-3 col-md-6">
-                  <label htmlFor="filter-city" className="form-label">
-                    <i className="flaticon-location me-2"></i>
-                    Oraș
-                  </label>
-                  <select
+                  <LocationSelector
+                    type="city"
+                    value={filters.cityId}
+                    onChange={(cityId) => {
+                      // Clear sector when city changes
+                      updateFilters({
+                        cityId: cityId || undefined,
+                        sectorId: undefined,
+                      });
+                    }}
+                    label={
+                      <>
+                        <i className="flaticon-location me-2"></i>
+                        Oraș
+                      </>
+                    }
                     id="filter-city"
-                    className="form-select"
-                    value={filters.city || ""}
-                    onChange={(e) => updateFilters({ city: e.target.value || undefined })}
                     disabled={isPending}
-                  >
-                    <option value="">Toate orașele</option>
-                    {ROMANIAN_CITIES.map((city) => (
-                      <option key={city} value={city}>
-                        {city}
-                      </option>
-                    ))}
-                  </select>
+                    placeholder="Toate orașele"
+                  />
                 </div>
+
+                {/* Sector Filter (only for Bucharest) */}
+                {filters.cityId && (
+                  <div className="col-lg-3 col-md-6">
+                    <LocationSelector
+                      type="sector"
+                      value={filters.sectorId}
+                      onChange={(sectorId) => updateFilters({ sectorId: sectorId || undefined })}
+                      parentId={filters.cityId}
+                      label={
+                        <>
+                          <i className="flaticon-map me-2"></i>
+                          Sector
+                        </>
+                      }
+                      id="filter-sector"
+                      disabled={isPending}
+                      placeholder="Toate sectoarele"
+                    />
+                  </div>
+                )}
 
                 {/* Level Filter */}
                 <div className="col-lg-3 col-md-6">

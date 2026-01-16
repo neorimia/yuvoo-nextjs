@@ -1,12 +1,15 @@
 /**
  * Report Content Component
  *
- * Async server component that fetches and displays report content.
+ * Server component that renders report content.
+ * Data is pre-fetched and verified in the page component to prevent hooks errors.
  * Wrapped in Suspense for better loading UX.
+ *
+ * IMPORTANT: This must remain a SERVER component. Do not add "use client".
+ * Client components (like ReportDownloadButton) can be used inside server components.
  */
 
 import React from "react";
-import { getReportAction } from "@/app/actions/quiz/get-report";
 import ReportHeader from "@/components/features/quiz/report/ReportHeader";
 import SportRecommendationsSection from "@/components/features/quiz/report/SportRecommendationsSection";
 import SportExplanationsSection from "@/components/features/quiz/report/SportExplanationsSection";
@@ -16,9 +19,12 @@ import AgeGuidanceSection from "@/components/features/quiz/report/AgeGuidanceSec
 import NextStepsSection from "@/components/features/quiz/report/NextStepsSection";
 import LocalClubsSection from "@/components/features/quiz/report/LocalClubsSection";
 import ReportDownloadButton from "@/components/features/quiz/report/ReportDownloadButton";
-import { notFound } from "next/navigation";
+
+import type { QuizResult, QuizAnswers } from "@/modules/quiz/quiz.types";
 
 interface ReportContentProps {
+  quizResult: QuizResult;
+  quizAnswers?: QuizAnswers | null;
   accessToken: string;
   isPdfMode: boolean;
 }
@@ -26,22 +32,18 @@ interface ReportContentProps {
 /**
  * Report Content
  *
- * Async component that fetches report data and renders content.
+ * Server component that renders report content.
+ * Data is pre-fetched and verified in the page component to prevent hooks errors.
  */
-export default async function ReportContent({ accessToken, isPdfMode }: ReportContentProps) {
-  // Get report data (includes access verification)
-  const result = await getReportAction(accessToken);
-
-  if (!result.success || !result.quizResult) {
-    notFound();
-  }
-
-  const { quizResult, quizAnswers } = result;
-
-  // Verify quiz has recommendations
-  if (!quizResult.recommendations || quizResult.recommendations.length === 0) {
-    notFound();
-  }
+export default function ReportContent({
+  quizResult,
+  quizAnswers,
+  accessToken,
+  isPdfMode,
+}: ReportContentProps) {
+  // Data is already validated in page component - no need to fetch or validate here
+  // This prevents hooks errors by ensuring consistent component tree structure
+  // All validation (including recommendations check) is done in page component
 
   // Sort recommendations by match score (highest first)
   const sortedRecommendations = [...quizResult.recommendations].sort(
@@ -56,12 +58,11 @@ export default async function ReportContent({ accessToken, isPdfMode }: ReportCo
       {/* Report Header */}
       <ReportHeader quizResult={quizResult} />
 
-      {/* Download PDF Button */}
-      {!isPdfMode && (
-        <div className="text-center mb-5">
-          <ReportDownloadButton accessToken={accessToken} quizId={quizResult.id} />
-        </div>
-      )}
+      {/* Download PDF Button - Always render to maintain consistent hook order */}
+      {/* Use CSS class instead of inline style to prevent hooks errors */}
+      <div className={`text-center mb-4 ${isPdfMode ? "d-none" : ""}`}>
+        <ReportDownloadButton accessToken={accessToken} quizId={quizResult.id} />
+      </div>
 
       {/* Section 1: Top 2-3 Sport Recommendations */}
       <SportRecommendationsSection recommendations={topRecommendations} />
@@ -88,7 +89,7 @@ export default async function ReportContent({ accessToken, isPdfMode }: ReportCo
       <LocalClubsSection quizResult={quizResult} />
 
       {/* Footer Note */}
-      <div className="card bg-light border-0 mt-5">
+      <div className="card bg-light border-0 mt-4">
         <div className="card-body p-4 text-center">
           <p className="text-muted small mb-0">
             <i className="bi bi-info-circle me-2" aria-hidden="true"></i>

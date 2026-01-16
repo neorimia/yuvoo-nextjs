@@ -75,6 +75,11 @@ export const users = pgTable(
     lastName: text("last_name"),
     phone: text("phone"),
 
+    // NEW: Location foreign keys (Phase 1: nullable, optional for parent location preferences)
+    cityId: text("city_id").references(() => locations.id, { onDelete: "set null" }), // Optional foreign key to locations (type='city')
+    sectorId: text("sector_id").references(() => locations.id, { onDelete: "set null" }), // Optional foreign key to locations (type='sector', for Bucharest parents)
+    countyId: text("county_id").references(() => locations.id, { onDelete: "set null" }), // Optional denormalized foreign key to locations (type='county')
+
     // NEW: Onboarding tracking fields
     onboardingCompleted: boolean("onboarding_completed").notNull().default(false),
     profileCompletionPercentage: integer("profile_completion_percentage").default(0),
@@ -90,6 +95,10 @@ export const users = pgTable(
     emailIdx: index("idx_users_email").on(table.email),
     stackUserIdIdx: index("idx_users_stack_user_id").on(table.stackUserId),
     roleIdx: index("idx_users_role").on(table.role),
+    // NEW: Foreign key indexes for location queries (Phase 1)
+    cityIdIdx: index("idx_users_city_id").on(table.cityId),
+    sectorIdIdx: index("idx_users_sector_id").on(table.sectorId),
+    countyIdIdx: index("idx_users_county_id").on(table.countyId),
   })
 );
 
@@ -152,11 +161,19 @@ export const clubs = pgTable(
     sportType: text("sport_type").notNull(),
 
     // Location
-    city: text("city").notNull(),
-    district: text("district"), // Sector/District (e.g., "Sector 1" in București)
+    // Phase 6: Removed city and district text columns - use foreign keys (cityId, sectorId) instead
     address: text("address"),
     latitude: text("latitude"),
     longitude: text("longitude"),
+
+    // Location foreign keys (Phase 3: NOT NULL enforced after data migration)
+    cityId: text("city_id")
+      .notNull()
+      .references(() => locations.id, { onDelete: "restrict" }), // Foreign key to locations (type='city') - REQUIRED
+    sectorId: text("sector_id").references(() => locations.id, { onDelete: "restrict" }), // Foreign key to locations (type='sector', optional for Bucharest)
+    countyId: text("county_id")
+      .notNull()
+      .references(() => locations.id, { onDelete: "restrict" }), // Denormalized foreign key to locations (type='county') for performance - REQUIRED
 
     // Contact
     phone: text("phone"),
@@ -202,13 +219,18 @@ export const clubs = pgTable(
     // Performance indexes for club queries
     slugIdx: index("idx_clubs_slug").on(table.slug),
     sportTypeIdx: index("idx_clubs_sport_type").on(table.sportType),
-    cityIdx: index("idx_clubs_city").on(table.city),
     verifiedIdx: index("idx_clubs_verified").on(table.verified),
     featuredIdx: index("idx_clubs_featured").on(table.featured),
     verificationStatusIdx: index("idx_clubs_verification_status").on(table.verificationStatus),
     // Composite indexes for common query patterns
-    sportCityIdx: index("idx_clubs_sport_city").on(table.sportType, table.city),
     verifiedFeaturedIdx: index("idx_clubs_verified_featured").on(table.verified, table.featured),
+    // Foreign key indexes for location queries (Phase 1)
+    cityIdIdx: index("idx_clubs_city_id").on(table.cityId),
+    sectorIdIdx: index("idx_clubs_sector_id").on(table.sectorId),
+    countyIdIdx: index("idx_clubs_county_id").on(table.countyId),
+    // Composite indexes with foreign keys (Phase 4: Index Updates)
+    sportCityIdIdx: index("idx_clubs_sport_city_id").on(table.sportType, table.cityId),
+    sportCountyIdIdx: index("idx_clubs_sport_county_id").on(table.sportType, table.countyId),
   })
 );
 
@@ -240,9 +262,17 @@ export const doctors = pgTable(
       .default(sql`'{}'::text[]`), // ["Română", "Engleză", ...]
 
     // Location
-    city: text("city").notNull(),
-    district: text("district"),
+    // Phase 6: Removed city and district text columns - use foreign keys (cityId, sectorId) instead
     address: text("address"),
+
+    // Location foreign keys (Phase 3: NOT NULL enforced after data migration)
+    cityId: text("city_id")
+      .notNull()
+      .references(() => locations.id, { onDelete: "restrict" }), // Foreign key to locations (type='city') - REQUIRED
+    sectorId: text("sector_id").references(() => locations.id, { onDelete: "restrict" }), // Foreign key to locations (type='sector', optional for Bucharest)
+    countyId: text("county_id")
+      .notNull()
+      .references(() => locations.id, { onDelete: "restrict" }), // Denormalized foreign key to locations (type='county') for performance - REQUIRED
 
     // Contact
     phone: text("phone"),
@@ -277,14 +307,22 @@ export const doctors = pgTable(
     // Performance indexes for doctor queries
     slugIdx: index("idx_doctors_slug").on(table.slug),
     specialtyIdx: index("idx_doctors_specialty").on(table.specialty),
-    cityIdx: index("idx_doctors_city").on(table.city),
     verifiedIdx: index("idx_doctors_verified").on(table.verified),
     verificationStatusIdx: index("idx_doctors_verification_status").on(table.verificationStatus),
     // Composite indexes for common query patterns
-    specialtyCityIdx: index("idx_doctors_specialty_city").on(table.specialty, table.city),
     verifiedSpecialtyIdx: index("idx_doctors_verified_specialty").on(
       table.verified,
       table.specialty
+    ),
+    // Foreign key indexes for location queries (Phase 1)
+    cityIdIdx: index("idx_doctors_city_id").on(table.cityId),
+    sectorIdIdx: index("idx_doctors_sector_id").on(table.sectorId),
+    countyIdIdx: index("idx_doctors_county_id").on(table.countyId),
+    // Composite indexes with foreign keys (Phase 4: Index Updates)
+    specialtyCityIdIdx: index("idx_doctors_specialty_city_id").on(table.specialty, table.cityId),
+    specialtyCountyIdIdx: index("idx_doctors_specialty_county_id").on(
+      table.specialty,
+      table.countyId
     ),
   })
 );

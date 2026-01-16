@@ -9,7 +9,7 @@
 
 import { requireAuth } from "@/modules/auth/auth.service";
 import { db } from "@/lib/db";
-import { users, onboardingProgress, children, clubs, doctors } from "@/lib/db/schema";
+import { users, onboardingProgress, children, clubs, doctors, locations } from "@/lib/db/schema";
 import { eq, and, sql } from "drizzle-orm";
 import { redirect } from "next/navigation";
 import { routes } from "@/lib/routes";
@@ -528,9 +528,27 @@ export async function createClubOnboarding(
       throw validationError;
     }
 
-    // Normalize optional fields (empty string -> null)
-    const district =
-      validated.district && validated.district.trim() !== "" ? validated.district.trim() : null;
+    // Phase 6: Use location IDs instead of text fields
+    // validated.cityId is required (enforced by validation schema)
+    if (!validated.cityId) {
+      return {
+        success: false,
+        error: "Orașul este obligatoriu. Te rugăm să selectezi un oraș.",
+      };
+    }
+
+    // Get countyId from cityId (required for clubs)
+    const cityLocation = await db.query.locations.findFirst({
+      where: eq(locations.id, validated.cityId),
+      columns: { parentId: true },
+    });
+
+    if (!cityLocation?.parentId) {
+      return {
+        success: false,
+        error: "Eroare la determinarea județului. Te rugăm să încerci din nou.",
+      };
+    }
 
     // Generate SEO-friendly slug from club name
     const slug = generateSlug(validated.name);
@@ -556,8 +574,9 @@ export async function createClubOnboarding(
         slug: finalSlug,
         sportType: validated.sportType,
         description: validated.description.trim(),
-        city: validated.city.trim(),
-        district: district,
+        cityId: validated.cityId, // Phase 6: Use cityId instead of city
+        sectorId: validated.sectorId || null, // Phase 6: Use sectorId instead of district
+        countyId: cityLocation.parentId, // Required - derived from cityId
         address: validated.address.trim(),
         profileComplete: false,
         verificationStatus: "pending",
@@ -976,6 +995,20 @@ export async function createDoctorOnboarding(
     // Validate the input
     const validated = doctorBasicInfoSchema.parse(data);
 
+    // Phase 6: Get default location (Bucharest) as placeholder
+    // Location will be updated properly in step 4 (updateDoctorLocationContact)
+    const defaultCity = await db.query.locations.findFirst({
+      where: and(eq(locations.type, "city"), eq(locations.name, "București")),
+      columns: { id: true, parentId: true },
+    });
+
+    if (!defaultCity || !defaultCity.parentId) {
+      return {
+        success: false,
+        error: "Eroare la inițializarea locației. Te rugăm să încerci din nou.",
+      };
+    }
+
     const [doctor] = await db
       .insert(doctors)
       .values({
@@ -987,7 +1020,10 @@ export async function createDoctorOnboarding(
         specialty: validated.specialty,
         secondarySpecialties: validated.secondarySpecialties || [],
         credentials: validated.credentials,
-        city: "", // Will be filled in step 4
+        // Phase 6: Use location IDs (placeholder - will be updated in step 4)
+        cityId: defaultCity.id,
+        countyId: defaultCity.parentId,
+        sectorId: null, // Will be set in step 4 if needed
         profileComplete: false,
         verificationStatus: "pending",
       })
@@ -1123,12 +1159,35 @@ export async function updateDoctorLocationContact(
     // Normalize phone number
     const normalizedPhone = normalizePhoneNumber(validated.phone);
 
+    // Phase 6: Use location IDs instead of text fields
+    // validated.cityId is required (enforced by validation schema)
+    if (!validated.cityId) {
+      return {
+        success: false,
+        error: "Orașul este obligatoriu. Te rugăm să selectezi un oraș.",
+      };
+    }
+
+    // Get countyId from cityId (required for doctors)
+    const cityLocation = await db.query.locations.findFirst({
+      where: eq(locations.id, validated.cityId),
+      columns: { parentId: true },
+    });
+
+    if (!cityLocation?.parentId) {
+      return {
+        success: false,
+        error: "Eroare la determinarea județului. Te rugăm să încerci din nou.",
+      };
+    }
+
     // Update doctor with location and contact information
     await db
       .update(doctors)
       .set({
-        city: validated.city,
-        district: validated.district || null,
+        cityId: validated.cityId, // Phase 6: Use cityId instead of city
+        sectorId: validated.sectorId || null, // Phase 6: Use sectorId instead of district
+        countyId: cityLocation.parentId, // Required - derived from cityId
         address: validated.address,
         phone: normalizedPhone,
         email: validated.email,

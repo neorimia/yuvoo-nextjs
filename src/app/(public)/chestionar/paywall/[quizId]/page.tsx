@@ -8,14 +8,14 @@
 import React from "react";
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
-import { cookies } from "next/headers";
+import { cookies, headers } from "next/headers";
+import { connection } from "next/server";
 import BreadcrumbOne from "@/components/Breadcrumb/BreadcrumbOne";
 import { getQuizResultAction } from "@/app/actions/quiz";
 import { getPaymentByQuizId } from "@/modules/payments/payments.repository";
 import { routes } from "@/lib/routes";
-import { StripeProvider } from "@/components/providers/StripeProvider";
-import PaymentForm from "@/components/features/payments/PaymentForm";
 import { PaymentErrorBoundary } from "@/components/shared/ErrorBoundary";
+import PaymentFormWrapper from "@/components/features/payments/PaymentFormWrapper";
 import { trackEventServer } from "@/lib/analytics/tracking-server";
 import { PostHogEvents, PostHogProperties } from "@/lib/analytics/events";
 import { PAYMENT_AMOUNT_LEI } from "@/modules/payments/payments.service";
@@ -23,6 +23,13 @@ import { PAYMENT_AMOUNT_LEI } from "@/modules/payments/payments.service";
 interface PaywallPageProps {
   params: Promise<{ quizId: string }>;
 }
+
+/**
+ * Note: With Cache Components enabled, routes are dynamic by default.
+ * We access dynamic data sources (connection, cookies, headers, params) at the
+ * start of both generateMetadata and the component to mark this route as dynamic
+ * and prevent crypto.randomUUID() errors.
+ */
 
 /**
  * Generate static params for Cache Components compatibility
@@ -35,6 +42,11 @@ export async function generateStaticParams() {
  * Generate metadata for paywall page
  */
 export async function generateMetadata({ params }: PaywallPageProps): Promise<Metadata> {
+  // Access dynamic data sources first to mark route as dynamic
+  // This prevents crypto.randomUUID() errors during static generation
+  await connection(); // Mark route as dynamic before any crypto.randomUUID() usage
+  const _cookies = await cookies();
+  const _headers = await headers();
   const { quizId: _quizId } = await params;
 
   return {
@@ -55,7 +67,10 @@ export async function generateMetadata({ params }: PaywallPageProps): Promise<Me
  */
 export default async function PaywallPage({ params }: PaywallPageProps) {
   // Access dynamic data sources first to mark route as dynamic
+  // This must be done before any code that might use crypto.randomUUID()
+  await connection(); // Mark route as dynamic before any crypto.randomUUID() usage
   const _cookies = await cookies();
+  const _headers = await headers();
   const { quizId } = await params;
 
   // Fetch quiz results
@@ -108,7 +123,7 @@ export default async function PaywallPage({ params }: PaywallPageProps) {
           <div className="row justify-content-center">
             <div className="col-12 col-lg-10 col-xl-8">
               {/* Header */}
-              <div className="text-center mb-5">
+              <div className="text-center mb-4">
                 <h1 className="display-5 fw-bold mb-3">Deblochează Raportul Complet</h1>
                 <p className="lead text-muted">
                   Am identificat sportul potrivit pentru copilul tău. Pentru a înțelege de ce este
@@ -117,11 +132,11 @@ export default async function PaywallPage({ params }: PaywallPageProps) {
               </div>
 
               {/* Pricing Card */}
-              <div className="card shadow-lg border-0 mb-4 border-top border-5 border-primary">
+              <div className="card shadow-lg border-0 mb-4 border-top border-5 border-yuvoo-primary">
                 <div className="card-body p-4 p-md-5">
                   <div className="text-center mb-4">
                     <div className="mb-3">
-                      <span className="display-4 fw-bold text-primary">
+                      <span className="display-4 fw-bold text-yuvoo-primary">
                         {PAYMENT_AMOUNT_LEI} lei
                       </span>
                     </div>
@@ -227,11 +242,9 @@ export default async function PaywallPage({ params }: PaywallPageProps) {
               <div className="card shadow-sm border-0 mb-4">
                 <div className="card-body p-4 p-md-5">
                   <h3 className="h5 mb-4">Detalii de plată</h3>
-                  <StripeProvider>
-                    <PaymentErrorBoundary>
-                      <PaymentForm quizId={quizId} />
-                    </PaymentErrorBoundary>
-                  </StripeProvider>
+                  <PaymentErrorBoundary>
+                    <PaymentFormWrapper quizId={quizId} />
+                  </PaymentErrorBoundary>
                 </div>
               </div>
 

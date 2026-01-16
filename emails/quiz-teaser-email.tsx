@@ -81,7 +81,7 @@ export const QuizTeaserEmail = ({ quizResult, child, teaserUrl }: QuizTeaserEmai
   return (
     <Html lang="ro">
       <Head>
-        <title>Recomandarea noastră pentru {child.firstName} - Yuvoo</title>
+        <title>{`Recomandarea noastră pentru ${child.firstName} - Yuvoo`}</title>
       </Head>
       <Preview>
         {`Recomandarea noastră pentru ${child.firstName}: ${topRecommendation.sportName} - ${String(topRecommendation.matchScore)}% potrivire`}

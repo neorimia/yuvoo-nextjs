@@ -23,6 +23,7 @@
     "db:check": "drizzle-kit check",
     "db:seed": "tsx src/lib/db/seed.ts",
     "db:seed:locations": "tsx src/lib/db/seed-locations.ts",
+    "db:migrate:locations": "tsx scripts/migrate-location-foreign-keys.ts",
     "test:posthog": "tsx scripts/test-posthog-events.ts",
     "email:dev": "email dev --port=3001"
   },
@@ -88,6 +89,7 @@
     "lint-staged": "^16.2.7",
     "postcss": "^8.5.6",
     "prettier": "^3.7.4",
+    "puppeteer": "^24.35.0",
     "react-email": "^5.1.0",
     "typescript": "^5"
   }

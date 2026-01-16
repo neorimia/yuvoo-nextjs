@@ -5,19 +5,36 @@
  * Generates PDF from report page HTML.
  */
 
-import puppeteer from "puppeteer-core";
+import puppeteerCore from "puppeteer-core";
+import puppeteer from "puppeteer";
 import chromium from "@sparticuz/chromium";
 import type { QuizResult, QuizAnswers } from "@/modules/quiz/quiz.types";
+
+/**
+ * Get the appropriate Puppeteer instance based on environment
+ *
+ * In development, uses full puppeteer (includes Chromium).
+ * In production, uses puppeteer-core with @sparticuz/chromium.
+ */
+function getPuppeteerInstance() {
+  if (process.env.NODE_ENV === "development") {
+    // Use full puppeteer in development (includes Chromium)
+    return puppeteer;
+  }
+  // Use puppeteer-core in production (with @sparticuz/chromium)
+  return puppeteerCore;
+}
 
 /**
  * Get browser executable path
  *
  * Returns the appropriate Chromium executable based on environment.
+ * Only needed for puppeteer-core (production).
  */
 async function getBrowserExecutablePath(): Promise<string | undefined> {
-  // In development, use local Puppeteer Chromium
+  // In development, full puppeteer includes Chromium, so no path needed
   if (process.env.NODE_ENV === "development") {
-    return undefined; // Will use locally installed Chromium
+    return undefined;
   }
 
   // In production/serverless, use @sparticuz/chromium
@@ -46,10 +63,13 @@ export async function generateReportPDF(
   let browser;
 
   try {
+    // Get the appropriate Puppeteer instance
+    const puppeteerInstance = getPuppeteerInstance();
+
     // Launch browser
     const executablePath = await getBrowserExecutablePath();
 
-    const launchOptions: Parameters<typeof puppeteer.launch>[0] = {
+    const launchOptions: Parameters<typeof puppeteerInstance.launch>[0] = {
       headless: true,
       args: process.env.NODE_ENV === "production" ? chromium.args : [],
       defaultViewport: {
@@ -61,11 +81,12 @@ export async function generateReportPDF(
       }),
     };
 
+    // Only set executablePath if we have one (production with puppeteer-core)
     if (executablePath) {
       launchOptions.executablePath = executablePath;
     }
 
-    browser = await puppeteer.launch(launchOptions);
+    browser = await puppeteerInstance.launch(launchOptions);
 
     // Create new page
     const page = await browser.newPage();
@@ -99,7 +120,7 @@ export async function generateReportPDF(
         bottom: "20mm",
         left: "15mm",
       },
-      preferCSSPageSize: false,
+      preferCSSPageSize: true,
       // Optimize for faster generation
       displayHeaderFooter: false,
       scale: 1.0,
@@ -129,10 +150,13 @@ export async function generatePDFFromHTML(html: string): Promise<Buffer> {
   let browser;
 
   try {
+    // Get the appropriate Puppeteer instance
+    const puppeteerInstance = getPuppeteerInstance();
+
     // Launch browser
     const executablePath = await getBrowserExecutablePath();
 
-    const launchOptions: Parameters<typeof puppeteer.launch>[0] = {
+    const launchOptions: Parameters<typeof puppeteerInstance.launch>[0] = {
       headless: true,
       args: process.env.NODE_ENV === "production" ? chromium.args : [],
       defaultViewport: {
@@ -144,11 +168,12 @@ export async function generatePDFFromHTML(html: string): Promise<Buffer> {
       }),
     };
 
+    // Only set executablePath if we have one (production with puppeteer-core)
     if (executablePath) {
       launchOptions.executablePath = executablePath;
     }
 
-    browser = await puppeteer.launch(launchOptions);
+    browser = await puppeteerInstance.launch(launchOptions);
 
     // Create new page
     const page = await browser.newPage();
@@ -168,7 +193,7 @@ export async function generatePDFFromHTML(html: string): Promise<Buffer> {
         bottom: "20mm",
         left: "15mm",
       },
-      preferCSSPageSize: false,
+      preferCSSPageSize: true,
       // Optimize for faster generation
       displayHeaderFooter: false,
       scale: 1.0,

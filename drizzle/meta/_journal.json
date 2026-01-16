@@ -36,6 +36,41 @@
       "when": 1768305187741,
       "tag": "0004_special_marrow",
       "breakpoints": true
+    },
+    {
+      "idx": 5,
+      "version": "7",
+      "when": 1768307332429,
+      "tag": "0005_magical_vector",
+      "breakpoints": true
+    },
+    {
+      "idx": 6,
+      "version": "7",
+      "when": 1768307538991,
+      "tag": "0006_curved_deadpool",
+      "breakpoints": true
+    },
+    {
+      "idx": 7,
+      "version": "7",
+      "when": 1768308895776,
+      "tag": "0007_fearless_union_jack",
+      "breakpoints": true
+    },
+    {
+      "idx": 8,
+      "version": "7",
+      "when": 1768309472012,
+      "tag": "0008_rapid_king_bedlam",
+      "breakpoints": true
+    },
+    {
+      "idx": 9,
+      "version": "7",
+      "when": 1768310306886,
+      "tag": "0009_omniscient_puppet_master",
+      "breakpoints": true
     }
   ]
 }

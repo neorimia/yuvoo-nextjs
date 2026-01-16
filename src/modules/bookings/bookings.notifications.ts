@@ -11,7 +11,7 @@ import {
   sendBookingReminder,
 } from "@/lib/integrations/brevo";
 import { db } from "@/lib/db";
-import { clubs, doctors, children, users } from "@/lib/db/schema";
+import { children, users } from "@/lib/db/schema";
 import { eq } from "drizzle-orm";
 import type { Booking } from "./bookings.types";
 import type { Club } from "@/modules/clubs/clubs.types";
@@ -19,131 +19,14 @@ import type { Doctor } from "@/modules/doctors/doctors.types";
 import type { Child } from "@/modules/children/children.types";
 import type { AuthUser } from "@/modules/auth/auth.types";
 
-/**
- * Map database club to Club type
- */
-function mapDbClubToClub(dbClub: typeof clubs.$inferSelect): Club {
-  const scheduleData = dbClub.schedule as unknown;
-  const schedule =
-    Array.isArray(scheduleData) && scheduleData.length > 0
-      ? (scheduleData as { day: string; time: string }[])
-      : undefined;
+// Phase 5: Use repository mapping functions instead of local duplicates
+// These functions are now async and handle location name fetching from IDs
+import { clubsRepository } from "@/modules/clubs/clubs.repository";
+import { doctorsRepository } from "@/modules/doctors/doctors.repository";
 
-  const pricingData = dbClub.pricing as unknown;
-  let pricing: Club["pricing"] = undefined;
-  if (pricingData) {
-    if (Array.isArray(pricingData) && pricingData.length > 0) {
-      // If array, use directly
-      pricing = pricingData as Club["pricing"];
-    } else if (typeof pricingData === "object" && pricingData !== null) {
-      // If single object, wrap in array for backward compatibility
-      pricing = [
-        pricingData as {
-          type: "monthly" | "per_class" | "per_semester";
-          amount: number;
-          currency: "RON";
-        },
-      ];
-    }
-  }
-
-  return {
-    id: dbClub.id,
-    name: dbClub.name,
-    slug: dbClub.slug || dbClub.id,
-    description: dbClub.description || "",
-    sportId: dbClub.sportType,
-    sportName: dbClub.sportType,
-    location: {
-      city: dbClub.city,
-      district: dbClub.district || undefined,
-      address: dbClub.address || "",
-      coordinates:
-        dbClub.latitude && dbClub.longitude
-          ? {
-              lat: parseFloat(dbClub.latitude),
-              lng: parseFloat(dbClub.longitude),
-            }
-          : undefined,
-    },
-    ageGroups: dbClub.ageGroups || [],
-    levels: dbClub.experienceLevels || [],
-    verified: dbClub.verified || false,
-    featured: dbClub.featured || false,
-    logoUrl: dbClub.logoUrl || "",
-    galleryUrls: dbClub.galleryUrls || [],
-    images: dbClub.galleryUrls || [],
-    verificationStatus: dbClub.verificationStatus || "pending",
-    profileComplete: dbClub.profileComplete ?? false,
-    rating: dbClub.rating || 0,
-    contact: {
-      phone: dbClub.phone || undefined,
-      email: dbClub.email || undefined,
-      website: dbClub.website || undefined,
-    },
-    schedule,
-    pricing,
-    createdAt: dbClub.createdAt,
-    updatedAt: dbClub.updatedAt,
-  };
-}
-
-/**
- * Map database doctor to Doctor type
- */
-function mapDbDoctorToDoctor(dbDoctor: typeof doctors.$inferSelect): Doctor {
-  const name = [dbDoctor.title, dbDoctor.firstName, dbDoctor.lastName].filter(Boolean).join(" ");
-
-  const slug =
-    dbDoctor.slug ||
-    `${dbDoctor.firstName}-${dbDoctor.lastName}`
-      .toLowerCase()
-      .normalize("NFD")
-      .replace(/[\u0300-\u036f]/g, "")
-      .replace(/[^a-z0-9]+/g, "-")
-      .replace(/^-+|-+$/g, "");
-
-  const specialtyMap: Record<string, Doctor["specialty"]> = {
-    orthopedist: "orthopedist",
-    nutritionist: "nutritionist",
-    psychologist: "psychologist",
-    general: "general",
-  };
-  const specialty =
-    specialtyMap[dbDoctor.specialty.toLowerCase()] || ("general" as Doctor["specialty"]);
-
-  return {
-    id: dbDoctor.id,
-    name,
-    firstName: dbDoctor.firstName,
-    lastName: dbDoctor.lastName,
-    title: dbDoctor.title || undefined,
-    slug,
-    specialty,
-    description: dbDoctor.bio || "",
-    credentials: dbDoctor.credentials || [],
-    location: {
-      city: dbDoctor.city,
-      district: dbDoctor.district || undefined,
-      address: dbDoctor.address || "",
-      coordinates: undefined,
-    },
-    contact: {
-      phone: dbDoctor.phone || undefined,
-      email: dbDoctor.email || undefined,
-      website: dbDoctor.website || undefined,
-    },
-    image: dbDoctor.photoUrl || undefined,
-    verified: dbDoctor.verified || false,
-    rating: dbDoctor.rating || 0,
-    verificationStatus: dbDoctor.verificationStatus || "pending",
-    profileComplete: dbDoctor.profileComplete ?? false,
-    acceptingNewPatients: dbDoctor.acceptingNewPatients ?? true,
-    onlineConsultations: dbDoctor.onlineConsultations || false,
-    createdAt: dbDoctor.createdAt,
-    updatedAt: dbDoctor.updatedAt,
-  };
-}
+// Phase 5: Removed duplicate mapping functions - use repository functions instead
+// mapDbClubToClub -> clubsRepository.mapDbClubToClub()
+// mapDbDoctorToDoctor -> doctorsRepository.mapDbDoctorToDoctor()
 
 /**
  * Map database child to Child type
@@ -210,18 +93,11 @@ async function getUserById(userId: string): Promise<AuthUser | null> {
 
 /**
  * Get club by ID
+ * Phase 5: Use repository function (handles location IDs)
  */
 async function getClubById(clubId: string): Promise<Club | null> {
   try {
-    const dbClub = await db.query.clubs.findFirst({
-      where: eq(clubs.id, clubId),
-    });
-
-    if (!dbClub) {
-      return null;
-    }
-
-    return mapDbClubToClub(dbClub);
+    return await clubsRepository.getClubById(clubId);
   } catch (error) {
     console.error("[Bookings Notifications] Error fetching club:", error);
     return null;
@@ -230,18 +106,11 @@ async function getClubById(clubId: string): Promise<Club | null> {
 
 /**
  * Get doctor by ID
+ * Phase 5: Use repository function (handles location IDs)
  */
 async function getDoctorById(doctorId: string): Promise<Doctor | null> {
   try {
-    const dbDoctor = await db.query.doctors.findFirst({
-      where: eq(doctors.id, doctorId),
-    });
-
-    if (!dbDoctor) {
-      return null;
-    }
-
-    return mapDbDoctorToDoctor(dbDoctor);
+    return await doctorsRepository.getDoctorById(doctorId);
   } catch (error) {
     console.error("[Bookings Notifications] Error fetching doctor:", error);
     return null;

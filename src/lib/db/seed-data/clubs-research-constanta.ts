@@ -23,6 +23,9 @@ import {
   generateSchedule,
   generatePricing,
   generateClubImage,
+  getCityLocationId,
+  getSectorLocationId,
+  getCountyLocationId,
 } from "./helpers";
 
 /**
@@ -34,7 +37,10 @@ export interface ClubSeedData {
   description: string;
   sportType: string;
   city: string;
-  district?: string;
+  district?: string; // Keep for backward compatibility
+  cityId?: string; // NEW: Foreign key to locations (type='city')
+  sectorId?: string; // NEW: Foreign key to locations (type='sector', optional for Bucharest)
+  countyId?: string; // NEW: Foreign key to locations (type='county', denormalized)
   address: string;
   latitude?: string;
   longitude?: string;
@@ -88,8 +94,17 @@ function createClubFromResearch(
   // Ensure schedule is always an array (required by schema)
   const schedule = data.schedule || generateSchedule(3, "16:00", 90);
 
+  // Derive location IDs from city/district names
+  const cityId = data.cityId || getCityLocationId(data.city);
+  const sectorId =
+    data.sectorId || (data.district ? getSectorLocationId(data.district) : undefined);
+  const countyId = data.countyId || (cityId ? getCountyLocationId(cityId) : undefined);
+
   return {
     ...data,
+    cityId,
+    sectorId,
+    countyId,
     slug,
     description,
     latitude: coords?.lat.toString(),
@@ -156,7 +171,7 @@ export const CLUBS_RESEARCH_CONSTANTA: ClubSeedData[] = [
   createClubFromResearch({
     name: "CS Agigea",
     sportType: "fotbal",
-    city: "Agigea",
+    city: "Constanța", // Changed from "Agigea" - Agigea is a commune near Constanța, using Constanța for location mapping
     district: "N/A",
     address: "Strada Bujorului, nr. 11, Agigea, Constanța",
     phone: "+40 724 774 009",

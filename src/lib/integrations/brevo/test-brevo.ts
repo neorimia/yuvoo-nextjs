@@ -42,9 +42,30 @@ async function testBrevo() {
     process.exit(1);
   }
 
-  console.log("   ✅ BREVO_API_KEY:", apiKey.substring(0, 20) + "...");
+  // Show API key info (masked for security)
+  const apiKeyLength = apiKey.length;
+  const apiKeyPrefix = apiKey.substring(0, 15);
+  const apiKeySuffix = apiKey.substring(apiKey.length - 4);
+  console.log(
+    "   ✅ BREVO_API_KEY:",
+    `${apiKeyPrefix}...${apiKeySuffix} (length: ${apiKeyLength})`
+  );
   console.log("   ✅ BREVO_SENDER_EMAIL:", senderEmail);
   console.log("   ✅ BREVO_SENDER_NAME:", senderName);
+
+  // Validate API key format
+  if (!apiKey.startsWith("xkeysib-")) {
+    console.error("   ⚠️  WARNING: API key should start with 'xkeysib-'");
+    console.error("      Current prefix:", apiKey.substring(0, 10));
+  }
+  if (apiKeyLength < 50) {
+    console.error("   ⚠️  WARNING: API key seems too short (expected ~70+ characters)");
+  }
+  if (apiKey.includes(" ") || apiKey.includes("\n") || apiKey.includes("\t")) {
+    console.error(
+      "   ⚠️  WARNING: API key contains whitespace - this will cause authentication to fail"
+    );
+  }
   console.log();
 
   // Step 2: Initialize Brevo client
@@ -60,34 +81,19 @@ async function testBrevo() {
   }
   console.log();
 
-  // Step 3: Test API connection (get account info)
-  console.log("3️⃣ Testing Brevo API connection...");
+  // Step 3: Test Account API (optional - requires Account permission)
+  // This is just a quick check. The real test is email sending in step 4.
+  console.log("3️⃣ Testing Brevo Account API (optional)...");
   try {
     const accountApi = new brevo.AccountApi();
     accountApi.setApiKey(brevo.AccountApiApiKeys.apiKey, apiKey);
     const account = await accountApi.getAccount();
-    console.log("   ✅ API connection successful");
+    console.log("   ✅ Account API connection successful");
     console.log("   📧 Account email:", account.body?.email || "N/A");
     console.log("   🏢 Company:", account.body?.companyName || "N/A");
-  } catch (error: unknown) {
-    console.error("   ❌ API connection failed");
-    if (error && typeof error === "object" && "response" in error) {
-      const brevoError = error as { response?: { body?: unknown } };
-      if (brevoError.response?.body) {
-        console.error("   Error:", brevoError.response.body);
-      } else {
-        const errorWithMessage = error as { message?: string };
-        console.error("   Error:", errorWithMessage.message || "Unknown error");
-      }
-    } else {
-      const errorWithMessage = error as { message?: string };
-      console.error("   Error:", errorWithMessage.message || "Unknown error");
-    }
-    console.error("\n   💡 Check that:");
-    console.error("      - API key is correct and complete");
-    console.error("      - API key has 'Email' permissions");
-    console.error("      - No extra spaces in API key");
-    process.exit(1);
+  } catch (_accountError: unknown) {
+    console.log("   ⚠️  Account API test skipped (key may only have Email permission)");
+    console.log("   → This is OK - we'll test with email sending in the next step");
   }
   console.log();
 
@@ -142,23 +148,74 @@ Dacă ai primit acest email, configurația Brevo este corectă și poți continu
     console.log("   💡 Check your inbox (and spam folder) for the test email.");
   } catch (error: unknown) {
     console.error("   ❌ Failed to send test email");
+
+    // Extract detailed error information
     if (error && typeof error === "object" && "response" in error) {
-      const brevoError = error as { response?: { body?: unknown } };
-      if (brevoError.response?.body) {
-        console.error("   Error:", JSON.stringify(brevoError.response.body, null, 2));
+      const brevoError = error as {
+        response?: {
+          status?: number;
+          statusText?: string;
+          body?: unknown;
+          data?: unknown;
+        };
+      };
+
+      const status = brevoError.response?.status;
+      const statusText = brevoError.response?.statusText;
+      const body = brevoError.response?.body;
+
+      console.error("   Status:", status || "N/A");
+      console.error("   Status Text:", statusText || "N/A");
+
+      if (body) {
+        console.error("   Error Details:", JSON.stringify(body, null, 2));
+
+        // Check for specific error messages
+        if (typeof body === "object" && body !== null) {
+          const errorBody = body as Record<string, unknown>;
+          if ("message" in errorBody) {
+            console.error("   Message:", errorBody.message);
+          }
+          if ("code" in errorBody) {
+            console.error("   Error Code:", errorBody.code);
+          }
+        }
       } else {
-        const errorWithMessage = error as { message?: string };
-        console.error("   Error:", errorWithMessage.message || "Unknown error");
+        // Try to get error from data property
+        const errorData = brevoError.response?.data;
+        if (errorData) {
+          console.error("   Error Data:", JSON.stringify(errorData, null, 2));
+        }
       }
     } else {
       const errorWithMessage = error as { message?: string };
       console.error("   Error:", errorWithMessage.message || "Unknown error");
     }
-    console.error("\n   💡 Common issues:");
-    console.error("      - Sender email not verified in Brevo dashboard");
-    console.error("      - Invalid recipient email address");
-    console.error("      - Rate limit exceeded (300 emails/day on free tier)");
-    console.error("      - Check Brevo dashboard → Senders for verification status");
+
+    console.error("\n   💡 Troubleshooting steps for 401 Unauthorized:");
+    console.error("      1. Check API key permissions in Brevo Dashboard:");
+    console.error("         → Go to https://app.brevo.com");
+    console.error("         → Settings → API Keys");
+    console.error("         → Edit your API key");
+    console.error("         → Ensure 'Email' permission is ENABLED (required)");
+    console.error("         → 'Account' permission is optional");
+    console.error("      2. Verify sender email is verified:");
+    console.error("         → Go to Senders & IP");
+    console.error("         → Ensure noreply@yuvoo.ro is verified");
+    console.error("         → If not verified, check your email and click verification link");
+    console.error("      3. Try creating a new API key:");
+    console.error("         → Delete the old one");
+    console.error("         → Create a new API key");
+    console.error("         → Make sure to enable 'Email' permission");
+    console.error("         → Copy the FULL key (all characters)");
+    console.error("         → Update .env.local and restart dev server");
+    console.error("      4. Check account match:");
+    console.error("         → Ensure API key is from the same Brevo account");
+    console.error("         → where the sender email is verified");
+    console.error("      5. Other common issues:");
+    console.error("         → Invalid recipient email address");
+    console.error("         → Rate limit exceeded (300 emails/day on free tier)");
+
     process.exit(1);
   }
   console.log();

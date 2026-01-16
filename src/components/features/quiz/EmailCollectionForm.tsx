@@ -7,6 +7,7 @@
 "use client";
 
 import { useState, useTransition } from "react";
+import { useRouter } from "next/navigation";
 import { collectEmailAction } from "@/app/actions/quiz/collect-email";
 import { routes } from "@/lib/routes";
 import LocationDropdown from "@/components/shared/LocationDropdown";
@@ -21,6 +22,7 @@ interface EmailCollectionFormProps {
  * Collects email address and redirects to teaser page.
  */
 export default function EmailCollectionForm({ quizId }: EmailCollectionFormProps) {
+  const router = useRouter();
   const [email, setEmail] = useState("");
   const [location, setLocation] = useState("");
   const [error, setError] = useState<string | null>(null);
@@ -53,12 +55,27 @@ export default function EmailCollectionForm({ quizId }: EmailCollectionFormProps
       formData.append("email", email.trim());
       formData.append("location", location.trim());
 
-      const result = await collectEmailAction(formData);
+      try {
+        const result = await collectEmailAction(formData);
 
-      if (!result.success && result.error) {
-        setError(result.error);
+        if (result.success && result.redirectUrl) {
+          // Redirect to teaser page
+          router.push(result.redirectUrl);
+        } else if (!result.success && result.error) {
+          setError(result.error);
+        }
+      } catch (error) {
+        // Handle NEXT_REDIRECT error (shouldn't happen with new pattern, but catch just in case)
+        if (error && typeof error === "object" && "digest" in error) {
+          const digest = (error as { digest?: string }).digest;
+          if (digest?.startsWith("NEXT_REDIRECT")) {
+            // Next.js will handle this redirect automatically
+            return;
+          }
+        }
+        // Other errors
+        setError("Eroare la procesarea email-ului. Te rugăm să încerci din nou.");
       }
-      // If successful, redirect happens in the server action
     });
   };
 

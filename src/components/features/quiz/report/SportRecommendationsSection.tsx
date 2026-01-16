@@ -24,12 +24,12 @@ export default function SportRecommendationsSection({
   }
 
   return (
-    <section className="mb-5">
+    <section className="mb-4">
       <div className="card shadow-sm border-0">
-        <div className="card-header bg-primary text-white">
+        <div className="card-header bg-light">
           <h2 className="h4 mb-0">
-            <i className="bi bi-star-fill me-2"></i>
-            Top {recommendations.length} Sporturi Recomandate
+            <i className="bi bi-star-fill me-2 text-warning"></i>
+            Top {recommendations.length} sporturi recomandate pentru copilul tău
           </h2>
         </div>
         <div className="card-body p-4">
@@ -40,18 +40,18 @@ export default function SportRecommendationsSection({
 
           <div className="row g-4">
             {recommendations.map((recommendation, index) => (
-              <div key={recommendation.sportId} className="col-12 col-md-6 col-lg-4">
+              <div key={recommendation.sportId} className="col-12">
                 <div className="card h-100 border-0 shadow-sm">
                   <div className="card-body p-4">
                     {/* Rank Badge */}
                     <div className="d-flex align-items-center justify-content-between mb-3">
                       <span
-                        className="badge bg-primary rounded-pill"
-                        style={{ fontSize: "0.875rem" }}
+                        className="badge bg-yuvoo-primary rounded-md"
+                        style={{ fontSize: "1rem" }}
                       >
                         #{index + 1}
                       </span>
-                      <span className="badge bg-success rounded-pill" style={{ fontSize: "1rem" }}>
+                      <span className="badge bg-success rounded-md" style={{ fontSize: "1rem" }}>
                         {recommendation.matchScore}% potrivire
                       </span>
                     </div>

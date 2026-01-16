@@ -29,12 +29,12 @@ export default function LocalClubsSection({ quizResult }: LocalClubsSectionProps
   }
 
   return (
-    <section className="mb-5">
+    <section className="mb-4">
       <div className="card shadow-sm border-0">
         <div className="card-header bg-light">
           <h2 className="h4 mb-0">
             <i className="bi bi-geo-alt-fill me-2 text-danger"></i>
-            Sugestii de Cluburi Locale
+            Sugestii de cluburi locale
           </h2>
         </div>
         <div className="card-body p-4">
@@ -55,9 +55,9 @@ export default function LocalClubsSection({ quizResult }: LocalClubsSectionProps
             )}
           </p>
 
-          <div className="row g-4">
+          <div className="row gap-4">
             {topRecommendations.map((recommendation) => (
-              <div key={recommendation.sportId} className="col-12 col-md-6 col-lg-4">
+              <div key={recommendation.sportId} className="col-12">
                 <div className="card border-0 bg-light h-100">
                   <div className="card-body p-4">
                     <h3 className="h5 fw-bold mb-3">{recommendation.sportName}</h3>
@@ -67,7 +67,7 @@ export default function LocalClubsSection({ quizResult }: LocalClubsSectionProps
                     </p>
                     <Link
                       href={`${routes.clubs.list}?sport=${encodeURIComponent(recommendation.sportName)}${quizResult.location ? `&city=${encodeURIComponent(quizResult.location)}` : ""}`}
-                      className="btn btn-outline-primary btn-sm w-100"
+                      className="btn btn-yuvoo-outline-primary btn-sm w-100"
                     >
                       <i className="bi bi-search me-2"></i>
                       Caută Cluburi{quizResult.location ? ` în ${quizResult.location}` : ""}
@@ -88,7 +88,7 @@ export default function LocalClubsSection({ quizResult }: LocalClubsSectionProps
           </div>
 
           <div className="mt-4 text-center">
-            <Link href={routes.clubs.list} className="btn btn-primary">
+            <Link href={routes.clubs.list} className="btn btn-yuvoo-primary">
               <i className="bi bi-list-ul me-2"></i>
               Vezi Toate Cluburile
             </Link>

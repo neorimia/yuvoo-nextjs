@@ -11,6 +11,7 @@ import React, { useState, useTransition } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { routes } from "@/lib/routes";
 import type { DoctorSearchFilters } from "@/modules/doctors/doctors.types";
+import { LocationSelector } from "@/components/shared/LocationSelector";
 
 interface DoctorSearchFiltersProps {
   initialFilters?: Partial<DoctorSearchFilters>;
@@ -22,30 +23,6 @@ const DOCTOR_SPECIALTIES = [
   { value: "nutritionist", label: "Nutriție pediatrică" },
   { value: "psychologist", label: "Psihologie pediatrică" },
   { value: "general", label: "Medic pediatru" },
-] as const;
-
-// Romanian cities (main cities in Romania)
-const ROMANIAN_CITIES = [
-  "București",
-  "Cluj-Napoca",
-  "Timișoara",
-  "Iași",
-  "Constanța",
-  "Craiova",
-  "Brașov",
-  "Galați",
-  "Ploiești",
-  "Oradea",
-  "Brăila",
-  "Arad",
-  "Pitești",
-  "Sibiu",
-  "Bacău",
-  "Târgu Mureș",
-  "Baia Mare",
-  "Buzău",
-  "Botoșani",
-  "Satu Mare",
 ] as const;
 
 // Sort options
@@ -66,8 +43,8 @@ const DoctorSearchFiltersComponent: React.FC<DoctorSearchFiltersProps> = ({ init
       (searchParams.get("specialty") as DoctorSearchFilters["specialty"]) ||
       initialFilters?.specialty ||
       undefined,
-    city: searchParams.get("city") || initialFilters?.city || "",
-    district: searchParams.get("district") || initialFilters?.district || "",
+    cityId: searchParams.get("cityId") || initialFilters?.cityId || "",
+    sectorId: searchParams.get("sectorId") || initialFilters?.sectorId || "",
     verified: searchParams.get("verified") === "true" || initialFilters?.verified || false,
     sortBy:
       (searchParams.get("sortBy") as "name" | "specialty" | "verified") ||
@@ -91,8 +68,8 @@ const DoctorSearchFiltersComponent: React.FC<DoctorSearchFiltersProps> = ({ init
     // Build URL search params
     const params = new URLSearchParams();
     if (updatedFilters.specialty) params.set("specialty", updatedFilters.specialty);
-    if (updatedFilters.city) params.set("city", updatedFilters.city);
-    if (updatedFilters.district) params.set("district", updatedFilters.district);
+    if (updatedFilters.cityId) params.set("cityId", updatedFilters.cityId);
+    if (updatedFilters.sectorId) params.set("sectorId", updatedFilters.sectorId);
     if (updatedFilters.verified) params.set("verified", "true");
     if (acceptingNewPatients) params.set("acceptingNewPatients", "true");
     if (onlineConsultations) params.set("onlineConsultations", "true");
@@ -119,8 +96,8 @@ const DoctorSearchFiltersComponent: React.FC<DoctorSearchFiltersProps> = ({ init
     // Build URL search params
     const params = new URLSearchParams();
     if (filters.specialty) params.set("specialty", filters.specialty);
-    if (filters.city) params.set("city", filters.city);
-    if (filters.district) params.set("district", filters.district);
+    if (filters.cityId) params.set("cityId", filters.cityId);
+    if (filters.sectorId) params.set("sectorId", filters.sectorId);
     if (filters.verified) params.set("verified", "true");
     if (field === "acceptingNewPatients" ? value : acceptingNewPatients) {
       params.set("acceptingNewPatients", "true");
@@ -141,8 +118,8 @@ const DoctorSearchFiltersComponent: React.FC<DoctorSearchFiltersProps> = ({ init
   const clearFilters = () => {
     setFilters({
       specialty: undefined,
-      city: "",
-      district: "",
+      cityId: "",
+      sectorId: "",
       verified: false,
       sortBy: "verified",
     });
@@ -157,8 +134,8 @@ const DoctorSearchFiltersComponent: React.FC<DoctorSearchFiltersProps> = ({ init
   // Count active filters
   const activeFiltersCount = [
     filters.specialty,
-    filters.city,
-    filters.district,
+    filters.cityId,
+    filters.sectorId,
     filters.verified,
     acceptingNewPatients,
     onlineConsultations,
@@ -222,42 +199,48 @@ const DoctorSearchFiltersComponent: React.FC<DoctorSearchFiltersProps> = ({ init
 
                 {/* City Filter */}
                 <div className="col-lg-3 col-md-6">
-                  <label htmlFor="filter-city" className="form-label">
-                    <i className="flaticon-location me-2"></i>
-                    Oraș
-                  </label>
-                  <select
+                  <LocationSelector
+                    type="city"
+                    value={filters.cityId}
+                    onChange={(cityId) => {
+                      // Clear sector when city changes
+                      updateFilters({
+                        cityId: cityId || undefined,
+                        sectorId: undefined,
+                      });
+                    }}
+                    label={
+                      <>
+                        <i className="flaticon-location me-2"></i>
+                        Oraș
+                      </>
+                    }
                     id="filter-city"
-                    className="form-select"
-                    value={filters.city || ""}
-                    onChange={(e) => updateFilters({ city: e.target.value || undefined })}
                     disabled={isPending}
-                  >
-                    <option value="">Toate orașele</option>
-                    {ROMANIAN_CITIES.map((city) => (
-                      <option key={city} value={city}>
-                        {city}
-                      </option>
-                    ))}
-                  </select>
-                </div>
-
-                {/* District Filter */}
-                <div className="col-lg-3 col-md-6">
-                  <label htmlFor="filter-district" className="form-label">
-                    <i className="flaticon-map me-2"></i>
-                    Sector/Județ
-                  </label>
-                  <input
-                    type="text"
-                    id="filter-district"
-                    className="form-control"
-                    placeholder="Ex: Sector 1, Sector 2..."
-                    value={filters.district || ""}
-                    onChange={(e) => updateFilters({ district: e.target.value || undefined })}
-                    disabled={isPending}
+                    placeholder="Toate orașele"
                   />
                 </div>
+
+                {/* Sector Filter (only when city is selected) */}
+                {filters.cityId && (
+                  <div className="col-lg-3 col-md-6">
+                    <LocationSelector
+                      type="sector"
+                      value={filters.sectorId}
+                      onChange={(sectorId) => updateFilters({ sectorId: sectorId || undefined })}
+                      parentId={filters.cityId}
+                      label={
+                        <>
+                          <i className="flaticon-map me-2"></i>
+                          Sector
+                        </>
+                      }
+                      id="filter-sector"
+                      disabled={isPending}
+                      placeholder="Toate sectoarele"
+                    />
+                  </div>
+                )}
 
                 {/* Sort By */}
                 <div className="col-lg-3 col-md-6">

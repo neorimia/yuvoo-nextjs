@@ -88,7 +88,8 @@ export async function searchClubsAction(filters: ClubSearchFilters): Promise<Clu
       await trackEventServer(PostHogEvents.CLUB_SEARCHED, {
         distinctId,
         ...(filters.sportId && { [PostHogProperties.CLUB_SPORT]: filters.sportId }),
-        ...(filters.city && { [PostHogProperties.CLUB_CITY]: filters.city }),
+        // Phase 6: Track cityId instead of city text (if available, fetch city name for tracking)
+        ...(filters.cityId && { [PostHogProperties.CLUB_CITY]: filters.cityId }),
         // Note: We don't track location (latitude/longitude) for privacy
       });
     } catch (trackingError) {
@@ -132,7 +133,7 @@ export async function getClubsBySportAction(sportId: string): Promise<Club[]> {
  */
 export async function getRecommendedClubsAction(
   sportId: string,
-  city?: string,
+  cityId?: string, // Phase 6: Changed from city (string) to cityId (string)
   limit: number = 5
 ): Promise<ClubSearchResult> {
   try {
@@ -144,8 +145,8 @@ export async function getRecommendedClubsAction(
       sortBy: "verified", // Verified clubs first
     };
 
-    if (city) {
-      filters.city = city;
+    if (cityId) {
+      filters.cityId = cityId; // Phase 6: Use cityId instead of city
     }
 
     const result = await searchClubs(filters);

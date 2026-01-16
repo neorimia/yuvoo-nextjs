@@ -17,6 +17,7 @@ import { PostHogEvents, PostHogProperties } from "@/lib/analytics/events";
 
 interface PaymentFormProps {
   quizId: string;
+  initialClientSecret?: string;
   onPaymentCreated?: (clientSecret: string) => void;
 }
 
@@ -25,17 +26,28 @@ interface PaymentFormProps {
  *
  * Handles Stripe payment processing with Elements.
  */
-export default function PaymentForm({ quizId, onPaymentCreated }: PaymentFormProps) {
+export default function PaymentForm({
+  quizId,
+  initialClientSecret,
+  onPaymentCreated,
+}: PaymentFormProps) {
   const router = useRouter();
   const stripe = useStripe();
   const elements = useElements();
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const [clientSecret, setClientSecret] = useState<string | null>(null);
+  const [clientSecret, setClientSecret] = useState<string | null>(initialClientSecret || null);
   const [paymentId, setPaymentId] = useState<string | null>(null);
 
-  // Create payment intent on mount
+  // If initialClientSecret is provided, use it and skip payment creation
+  // Otherwise, create payment intent on mount (fallback for direct usage)
   useEffect(() => {
+    // If we already have a clientSecret from props, skip creation
+    if (initialClientSecret) {
+      setClientSecret(initialClientSecret);
+      return;
+    }
+
     async function initializePayment() {
       try {
         setIsLoading(true);
@@ -82,7 +94,7 @@ export default function PaymentForm({ quizId, onPaymentCreated }: PaymentFormPro
     }
 
     initializePayment();
-  }, [quizId, onPaymentCreated]);
+  }, [quizId, initialClientSecret, onPaymentCreated]);
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -96,7 +108,17 @@ export default function PaymentForm({ quizId, onPaymentCreated }: PaymentFormPro
     setError(null);
 
     try {
-      // Confirm payment with Stripe
+      // Step 1: Submit elements to validate form (required before confirmPayment)
+      const { error: submitError } = await elements.submit();
+
+      if (submitError) {
+        // Form validation failed
+        setError(submitError.message || "Te rugăm să completezi toate câmpurile corect.");
+        setIsLoading(false);
+        return;
+      }
+
+      // Step 2: Confirm payment with Stripe (after successful form submission)
       const { error: confirmError, paymentIntent } = await stripe.confirmPayment({
         elements,
         clientSecret,
@@ -157,7 +179,7 @@ export default function PaymentForm({ quizId, onPaymentCreated }: PaymentFormPro
         </div>
       )}
 
-      {isLoading && !clientSecret && (
+      {isLoading && !clientSecret && !initialClientSecret && (
         <div className="text-center py-4">
           <div className="spinner-border text-primary" role="status">
             <span className="visually-hidden">Se încarcă...</span>
@@ -174,7 +196,7 @@ export default function PaymentForm({ quizId, onPaymentCreated }: PaymentFormPro
 
           <button
             type="submit"
-            className="btn btn-primary btn-lg w-100 py-3"
+            className="btn btn-yuvoo-primary w-100 py-3"
             disabled={!stripe || !elements || isLoading}
           >
             {isLoading ? (

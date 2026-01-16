@@ -19,6 +19,10 @@ export interface Club {
       lat: number;
       lng: number;
     };
+    // Phase 5: Location foreign keys (for filtering and joins)
+    cityId?: string;
+    sectorId?: string;
+    countyId?: string;
   };
   ageGroups: number[]; // e.g., [4, 5, 6, 7, 8]
   levels: string[]; // e.g., ["beginner", "intermediate", "advanced"]
@@ -56,8 +60,10 @@ export interface Club {
 export interface ClubSearchFilters {
   sportId?: string;
   age?: number;
-  city?: string;
-  district?: string;
+  // Phase 6: Only ID-based filters (text columns removed)
+  cityId?: string; // Location ID filter (required for city filtering)
+  sectorId?: string; // Sector ID filter (for Bucharest)
+  countyId?: string; // County ID filter (for county-wide searches)
   level?: string;
   verified?: boolean;
   featured?: boolean;
