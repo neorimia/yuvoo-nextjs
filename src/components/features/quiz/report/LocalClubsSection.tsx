@@ -8,6 +8,8 @@ import React from "react";
 import type { QuizResult } from "@/modules/quiz/quiz.types";
 import { routes } from "@/lib/routes";
 import Link from "next/link";
+import { getCityIdByName } from "@/lib/db/location-helpers";
+import { normalizeSportName } from "@/lib/utils/sport-normalization";
 
 interface LocalClubsSectionProps {
   quizResult: QuizResult;
@@ -19,13 +21,23 @@ interface LocalClubsSectionProps {
  * Displays club suggestions based on recommended sports.
  * Note: This is a placeholder - actual club data will be fetched in Phase 6.
  */
-export default function LocalClubsSection({ quizResult }: LocalClubsSectionProps) {
+export default async function LocalClubsSection({ quizResult }: LocalClubsSectionProps) {
   const topRecommendations = [...quizResult.recommendations]
     .sort((a, b) => b.matchScore - a.matchScore)
     .slice(0, 3);
 
   if (topRecommendations.length === 0) {
     return null;
+  }
+
+  // Parse location to extract city name and get cityId
+  // Location format might be "Sector 1, București" or just "București"
+  let cityId: string | null = null;
+  if (quizResult.location) {
+    // Extract city name (everything after the last comma, or the whole string if no comma)
+    const locationParts = quizResult.location.split(",").map((part) => part.trim());
+    const cityName = locationParts[locationParts.length - 1]; // Get last part (city name)
+    cityId = await getCityIdByName(cityName);
   }
 
   return (
@@ -66,7 +78,7 @@ export default function LocalClubsSection({ quizResult }: LocalClubsSectionProps
                       au experiență în lucrul cu începători.
                     </p>
                     <Link
-                      href={`${routes.clubs.list}?sport=${encodeURIComponent(recommendation.sportName)}${quizResult.location ? `&city=${encodeURIComponent(quizResult.location)}` : ""}`}
+                      href={`${routes.clubs.list}?sport=${encodeURIComponent(normalizeSportName(recommendation.sportName))}${cityId ? `&cityId=${encodeURIComponent(cityId)}` : ""}&quiz=true`}
                       className="btn btn-yuvoo-outline-primary btn-sm w-100"
                     >
                       <i className="bi bi-search me-2"></i>

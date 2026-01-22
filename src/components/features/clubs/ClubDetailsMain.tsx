@@ -35,7 +35,7 @@ const ClubDetailsMain: React.FC<ClubDetailsMainProps> = ({ club }) => {
       : "Contactează pentru preț";
 
   return (
-    <section className="bd-club-details-widget pt-120 pb-70">
+    <section className="bd-club-details-widget pt-70 pb-70">
       <div className="container">
         <div className="row">
           <div className="col-xl-6 col-lg-12 mb-50">

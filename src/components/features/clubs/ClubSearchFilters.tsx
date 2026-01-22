@@ -11,6 +11,7 @@ import React, { useState, useTransition } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { routes } from "@/lib/routes";
 import { SPORT_TYPES } from "@/lib/utils/constants";
+import { normalizeSportName, getSportDisplayName } from "@/lib/utils/sport-normalization";
 import type { ClubSearchFilters } from "@/modules/clubs/clubs.types";
 import { LocationSelector } from "@/components/shared/LocationSelector";
 
@@ -41,8 +42,12 @@ const ClubSearchFiltersComponent: React.FC<ClubSearchFiltersProps> = ({ initialF
   const [isPending, startTransition] = useTransition();
 
   // Initialize state from URL params or initial filters
+  // Normalize sport ID from URL to match database format
+  const sportParam = searchParams.get("sport");
+  const normalizedSportId = sportParam ? normalizeSportName(sportParam) : undefined;
+
   const [filters, setFilters] = useState<Partial<ClubSearchFilters>>({
-    sportId: searchParams.get("sport") || initialFilters?.sportId || "",
+    sportId: normalizedSportId || initialFilters?.sportId || "",
     age: searchParams.get("age") ? parseInt(searchParams.get("age")!) : initialFilters?.age,
     cityId: searchParams.get("cityId") || initialFilters?.cityId || "",
     sectorId: searchParams.get("sectorId") || initialFilters?.sectorId || "",
@@ -57,7 +62,13 @@ const ClubSearchFiltersComponent: React.FC<ClubSearchFiltersProps> = ({ initialF
 
   // Update URL with new filters
   const updateFilters = (newFilters: Partial<ClubSearchFilters>) => {
-    const updatedFilters = { ...filters, ...newFilters };
+    // Normalize sport ID if provided
+    const normalizedNewFilters = { ...newFilters };
+    if (normalizedNewFilters.sportId) {
+      normalizedNewFilters.sportId = normalizeSportName(normalizedNewFilters.sportId);
+    }
+
+    const updatedFilters = { ...filters, ...normalizedNewFilters };
     setFilters(updatedFilters);
 
     // Build URL search params
@@ -119,7 +130,7 @@ const ClubSearchFiltersComponent: React.FC<ClubSearchFiltersProps> = ({ initialF
   ].filter(Boolean).length;
 
   return (
-    <section className="bd-club-filters-area pt-70 pb-50">
+    <section className="bd-club-filters-area pb-50">
       <div className="container">
         <div className="row">
           <div className="col-12">
@@ -162,7 +173,7 @@ const ClubSearchFiltersComponent: React.FC<ClubSearchFiltersProps> = ({ initialF
                     <option value="">Toate sporturile</option>
                     {SPORT_TYPES.map((sport) => (
                       <option key={sport} value={sport}>
-                        {sport.charAt(0).toUpperCase() + sport.slice(1)}
+                        {getSportDisplayName(sport)}
                       </option>
                     ))}
                   </select>

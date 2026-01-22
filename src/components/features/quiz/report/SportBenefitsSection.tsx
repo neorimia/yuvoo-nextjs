@@ -40,7 +40,7 @@ export default function SportBenefitsSection({ recommendations }: SportBenefitsS
             {recommendations.map((recommendation) => (
               <div key={recommendation.sportId} className="col-12">
                 <div className="card border-0" style={{ borderLeft: "4px solid #00BBAE" }}>
-                  <div className="card-body p-4">
+                  <div className="card-body">
                     <h3 className="h5 fw-bold mb-3">{recommendation.sportName}</h3>
 
                     {/* Benefits List */}

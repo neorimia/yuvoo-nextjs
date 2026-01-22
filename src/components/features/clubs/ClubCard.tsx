@@ -31,16 +31,21 @@ const ClubCard: React.FC<ClubCardProps> = ({
   delay,
 }) => {
   const mainImage = club.images?.[0] || "/assets/img/placeholder-club.jpg";
+
+  // Find the lowest price and format it with "de la"
   const pricingDisplay =
     club.pricing && club.pricing.length > 0
-      ? club.pricing.length === 1
-        ? `${club.pricing[0].amount} ${club.pricing[0].currency || "RON"}/${club.pricing[0].type === "monthly" ? "lună" : club.pricing[0].type === "per_class" ? "ședință" : "semestru"}`
-        : club.pricing
-            .map(
-              (p) =>
-                `${p.amount} ${p.currency || "RON"}/${p.type === "monthly" ? "lună" : p.type === "per_class" ? "ședință" : "semestru"}`
-            )
-            .join(", ")
+      ? (() => {
+          // Find the lowest price
+          const lowestPrice = [...club.pricing].sort((a, b) => a.amount - b.amount)[0];
+          const priceTypeLabel =
+            lowestPrice.type === "monthly"
+              ? "lună"
+              : lowestPrice.type === "per_class"
+                ? "ședință"
+                : "semestru";
+          return `de la ${lowestPrice.amount} ${lowestPrice.currency || "RON"}/${priceTypeLabel}`;
+        })()
       : "Contactează pentru preț";
 
   // Listing variant matches bd-class-3 structure from ClassesMain

@@ -11,6 +11,7 @@ import type { Club, ClubSearchFilters as ClubSearchFiltersType } from "@/modules
 import ItemListSchema from "@/components/SEO/ItemListSchema";
 import { PRE_LAUNCH_RESTRICTIONS_ENABLED } from "@/lib/config/pre-launch";
 import PreLaunchPage from "@/components/features/early-access/PreLaunchPage";
+import { normalizeSportName } from "@/lib/utils/sport-normalization";
 
 /**
  * Generate metadata for clubs listing page
@@ -36,13 +37,16 @@ interface ClubsPageProps {
   searchParams: Promise<{
     sport?: string;
     quiz?: string;
-    city?: string;
-    district?: string;
+    city?: string; // Legacy support
+    cityId?: string; // Preferred: location ID
+    sectorId?: string; // Sector ID (for Bucharest)
+    district?: string; // Legacy support
     age?: string;
     level?: string;
     verified?: string;
     featured?: string;
     sortBy?: string;
+    page?: string; // Pagination page number
   }>;
 }
 
@@ -65,32 +69,42 @@ export default async function ClubsPage({ searchParams }: ClubsPageProps) {
   const {
     sport: sportId,
     quiz: isQuizContext,
-    city,
-    district,
+    cityId,
+    sectorId,
     age,
     level,
     verified,
     featured,
     sortBy,
+    page: pageParam,
   } = params;
 
   // Build filters object from search params
+  // Prefer cityId over city (cityId is the new format)
+  // Normalize sport ID to match database format (e.g., "înot" → "inot")
+  const page = pageParam ? parseInt(pageParam) : 1;
+  const pageSize = 9; // Default page size
+
   const filters: ClubSearchFiltersType = {
-    sportId: sportId || undefined,
-    city: city || undefined,
-    district: district || undefined,
+    sportId: sportId ? normalizeSportName(sportId) : undefined,
+    cityId: cityId || undefined, // Use cityId if provided
+    sectorId: sectorId || undefined,
+    // Legacy support: if cityId not provided but city is, we'd need to convert
+    // For now, cityId takes precedence
     age: age ? parseInt(age) : undefined,
     level: level || undefined,
     verified: verified === "true" ? true : undefined,
     featured: featured === "true" ? true : undefined,
     sortBy: (sortBy as "name" | "verified" | "rating") || "verified",
+    page,
+    pageSize,
   };
 
-  // Fetch clubs with filters
+  // Fetch clubs with filters and pagination
   const result = await searchClubs(filters);
   const clubs: Club[] = result.clubs;
-  const recommendedSportIds: string[] = sportId ? [sportId] : [];
-
+  // Normalize sport ID for recommended sports display
+  const recommendedSportIds: string[] = filters.sportId ? [filters.sportId] : [];
   return (
     <>
       <ItemListSchema items={clubs} type="Club" listName="Cluburi Sportive" />
@@ -140,6 +154,12 @@ export default async function ClubsPage({ searchParams }: ClubsPageProps) {
         clubs={clubs}
         recommendedSportIds={isQuizContext === "true" ? recommendedSportIds : undefined}
         isQuizContext={isQuizContext === "true"}
+        pagination={{
+          currentPage: result.page,
+          totalPages: Math.ceil(result.total / result.pageSize),
+          total: result.total,
+          pageSize: result.pageSize,
+        }}
       />
     </>
   );

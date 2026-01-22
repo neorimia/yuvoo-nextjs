@@ -6,18 +6,42 @@
  * Note: For routes and paths, use `@/lib/routes` instead.
  */
 
-// Sports types (will be expanded)
+// Sports types
+// Note: Sport names match database seed data format (e.g., "inot" not "înot", "gimnastica" not "gimnastică")
+// All sport types available in the database seed data
 export const SPORT_TYPES = [
-  "fotbal",
-  "baschet",
-  "tenis",
-  "înot",
-  "gimnastică",
-  "dans",
-  "karate",
-  "volei",
-  "handbal",
   "atletism",
+  "badminton",
+  "baschet",
+  "baseball",
+  "box",
+  "ciclism",
+  "dans",
+  "echitatie",
+  "escalada",
+  "fotbal",
+  "gimnastica",
+  "handbal",
+  "hochei",
+  "hochei-ghata",
+  "inot",
+  "judo",
+  "karate",
+  "karting",
+  "kickboxing",
+  "lupte",
+  "multi-sport",
+  "patinaj",
+  "patinaj-ghata",
+  "polo-apa",
+  "rugby",
+  "schi",
+  "scrima",
+  "snowboard",
+  "taekwondo",
+  "tenis",
+  "tenis-de-masa",
+  "volei",
 ] as const;
 
 // Doctor specialties

@@ -9,21 +9,49 @@
 
 import React from "react";
 import Link from "next/link";
+import { useRouter, useSearchParams } from "next/navigation";
 import { routes } from "@/lib/routes";
 import type { Club } from "@/modules/clubs/clubs.types";
 import ClubCard from "./ClubCard";
+import PaginationData from "@/components/Common/Pagination/PaginationData";
 
 interface ClubsMainProps {
   clubs: Club[];
   recommendedSportIds?: string[]; // Sport IDs from quiz recommendations
   isQuizContext?: boolean; // Whether this is a quiz-based recommendation view
+  pagination?: {
+    currentPage: number;
+    totalPages: number;
+    total: number;
+    pageSize: number;
+  };
 }
 
 const ClubsMain: React.FC<ClubsMainProps> = ({
   clubs,
   recommendedSportIds = [],
   isQuizContext = false,
+  pagination,
 }) => {
+  const router = useRouter();
+  const searchParams = useSearchParams();
+
+  // Handle page change
+  const handlePageChange = (page: number) => {
+    if (page < 1 || (pagination && page > pagination.totalPages)) {
+      return;
+    }
+
+    // Build new URL with updated page parameter
+    const params = new URLSearchParams(searchParams.toString());
+    if (page === 1) {
+      params.delete("page"); // Remove page param for page 1
+    } else {
+      params.set("page", page.toString());
+    }
+
+    router.push(`${routes.clubs.list}?${params.toString()}`);
+  };
   // Empty state
   if (!clubs || clubs.length === 0) {
     return (
@@ -80,7 +108,9 @@ const ClubsMain: React.FC<ClubsMainProps> = ({
         <div className="row mb-4">
           <div className="col-12">
             <p className="text-muted mb-0">
-              {clubs.length} {clubs.length === 1 ? "club găsit" : "cluburi găsite"}
+              {pagination
+                ? `Afișând ${clubs.length} din ${pagination.total} ${pagination.total === 1 ? "club" : "cluburi"}`
+                : `${clubs.length} ${clubs.length === 1 ? "club găsit" : "cluburi găsite"}`}
             </p>
           </div>
         </div>
@@ -100,6 +130,15 @@ const ClubsMain: React.FC<ClubsMainProps> = ({
             </div>
           ))}
         </div>
+
+        {/* Pagination */}
+        {pagination && pagination.totalPages > 1 && (
+          <PaginationData
+            currentPage={pagination.currentPage}
+            totalPages={pagination.totalPages}
+            onPageChange={handlePageChange}
+          />
+        )}
       </div>
     </section>
   );

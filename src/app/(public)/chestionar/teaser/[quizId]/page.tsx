@@ -176,7 +176,7 @@ export default async function TeaserPage({ params }: TeaserPageProps) {
               <div className="card bg-light border-0 mb-4">
                 <div className="card-body p-4">
                   <h4 className="h5 mb-3">Ce include raportul complet:</h4>
-                  <div className="row g-3">
+                  <div className="row g-md-3">
                     <div className="col-12 col-md-6">
                       <ul className="list-unstyled mb-0">
                         <li className="mb-2">
