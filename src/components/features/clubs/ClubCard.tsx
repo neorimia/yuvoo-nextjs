@@ -52,7 +52,7 @@ const ClubCard: React.FC<ClubCardProps> = ({
   if (variant === "listing") {
     return (
       <div
-        className={`bd-club-3 fix radius-24 p-relative mb-50 ${className}`}
+        className={`bd-club-3 fix radius-24 p-relative mb-50 d-flex flex-column h-100 ${className}`}
         data-wow-duration="1s"
         data-wow-delay={delay}
       >
@@ -80,7 +80,7 @@ const ClubCard: React.FC<ClubCardProps> = ({
             {club.verified && <VerificationBadge verified={club.verified} />}
           </div>
         </div>
-        <div className="bd-club-content-3 theme-bg-6">
+        <div className="bd-club-content-3 theme-bg-6 d-flex flex-column flex-grow-1">
           <h3 className="bd-club-title-3">
             <Link href={routes.clubs.detail(club.slug)}>{club.name}</Link>
           </h3>

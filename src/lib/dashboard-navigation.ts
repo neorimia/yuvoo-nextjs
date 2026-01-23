@@ -31,8 +31,10 @@ export const dashboardNavigation: NavigationConfig = {
   ],
   club_admin: [
     { label: "Dashboard", href: routes.club.dashboard, icon: "bi-house" },
+    { label: "Cereri", href: routes.club.leads.list, icon: "bi-inbox" },
     { label: "Profil", href: routes.club.profile, icon: "bi-person" },
     { label: "Rezervări", href: routes.club.bookings, icon: "bi-calendar-check" },
+    { label: "Premium", href: routes.club.premium, icon: "bi-star" },
     { label: "Setări", href: routes.club.settings, icon: "bi-gear" },
   ],
   doctor: [

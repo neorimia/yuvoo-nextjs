@@ -17,9 +17,9 @@
 import { useState, useEffect, type ReactNode } from "react";
 
 export interface LocationSelectorProps {
-  value?: string; // locationId (cityId or sectorId)
+  value?: string; // locationId (countyId, cityId, or sectorId)
   onChange: (locationId: string | null) => void;
-  type: "city" | "sector";
+  type: "county" | "city" | "sector";
   parentId?: string; // Required for sector selection (cityId), optional for city selection (countyId)
   label?: ReactNode; // Optional label (if not provided, no label is rendered)
   required?: boolean;
@@ -86,7 +86,12 @@ export function LocationSelector({
 
   const displayError = error || fetchError;
   const defaultPlaceholder =
-    placeholder || (type === "sector" ? "Selectează sectorul" : "Selectează orașul");
+    placeholder ||
+    (type === "county"
+      ? "Selectează județul"
+      : type === "sector"
+        ? "Selectează sectorul"
+        : "Selectează orașul");
 
   const selectId = id || `location-selector-${type}`;
   const errorId = `${selectId}-error`;

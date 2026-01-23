@@ -116,7 +116,7 @@ export default async function ClubsPage({ searchParams }: ClubsPageProps) {
           { name: "Cluburi", url: routes.clubs.list }, // Current page
         ]}
       />
-      <section className="bd-clubs-intro-area pt-120 pb-70">
+      <section className="bd-clubs-intro-area pt-70">
         <div className="container">
           <div className="row">
             <div className="col-lg-10 mx-auto">

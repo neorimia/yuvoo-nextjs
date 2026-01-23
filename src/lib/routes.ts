@@ -161,6 +161,12 @@ export const routes = {
     },
     bookings: "/club/bookings",
     settings: "/club/settings",
+    leads: {
+      list: "/club/dashboard/leaduri",
+      detail: (leadId: string) => `/club/dashboard/leaduri/${leadId}`,
+      payment: (leadId: string) => `/club/dashboard/leaduri/${leadId}/plata`,
+    },
+    premium: "/club/dashboard/premium",
   },
 
   // Doctor Portal Routes

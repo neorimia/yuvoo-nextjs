@@ -72,6 +72,15 @@ export const PostHogEvents = {
   PAYMENT_VERIFIED: "payment_verified",
   PAYWALL_VIEWED: "paywall_viewed",
   REPORT_ACCESSED: "report_accessed",
+
+  // Lead Events
+  LEAD_SUBMITTED: "lead_submitted",
+  LEAD_VIEWED: "lead_viewed",
+  LEAD_PAYMENT_INITIATED: "lead_payment_initiated",
+  LEAD_PAYMENT_COMPLETED: "lead_payment_completed",
+  LEAD_EXPIRED: "lead_expired",
+  PREMIUM_UPGRADE_INITIATED: "premium_upgrade_initiated",
+  PREMIUM_UPGRADE_COMPLETED: "premium_upgrade_completed",
 } as const;
 
 /**
@@ -136,6 +145,11 @@ export const PostHogProperties = {
   REVIEW_ID: "reviewId",
   REVIEW_RATING: "reviewRating",
   REVIEW_TYPE: "reviewType", // "club" | "doctor"
+
+  // Lead Properties
+  LEAD_ID: "leadId",
+  LEAD_STATUS: "leadStatus",
+  LEAD_PAYMENT_METHOD: "leadPaymentMethod", // "pay_per_lead" | "premium"
 } as const;
 
 /**

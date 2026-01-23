@@ -9,6 +9,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { stripe } from "@/lib/integrations/stripe/client";
 import { handleStripeWebhook } from "@/modules/payments/payments.service";
 import { sendPaymentSuccessEmail } from "@/modules/payments/payments.email";
+import { verifyStripePayment as verifyLeadPayment } from "@/modules/payments/lead-payment.service";
 import type Stripe from "stripe";
 
 /**
@@ -47,11 +48,81 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: "Invalid signature" }, { status: 400 });
     }
 
-    // Handle webhook event
-    const { payment, reportAccess } = await handleStripeWebhook(event);
+    // Check if this is a lead payment (has leadId or clubId in metadata, or paymentMethod)
+    const paymentIntent = event.data.object as Stripe.PaymentIntent;
+    const isLeadPayment =
+      !!paymentIntent.metadata?.leadId ||
+      (!!paymentIntent.metadata?.clubId &&
+        (paymentIntent.metadata?.paymentMethod === "pay_per_lead" ||
+          paymentIntent.metadata?.paymentMethod === "premium"));
 
-    // Send email notification if payment succeeded
-    if (event.type === "payment_intent.succeeded" && payment && reportAccess) {
+    let payment = null;
+    let reportAccess = null;
+
+    if (isLeadPayment) {
+      // Handle lead payment webhook
+      if (event.type === "payment_intent.succeeded") {
+        try {
+          // Verify and process lead payment
+          const leadPayment = await verifyLeadPayment(paymentIntent.id);
+
+          // Revalidate cache for lead/premium pages
+          const { revalidatePath, revalidateTag } = await import("next/cache");
+          if (leadPayment.paymentMethod === "pay_per_lead" && leadPayment.leadId) {
+            revalidatePath(`/club/dashboard/leaduri/${leadPayment.leadId}`);
+          } else if (leadPayment.paymentMethod === "premium") {
+            revalidatePath("/club/dashboard");
+            revalidatePath("/club/dashboard/leaduri");
+            revalidatePath("/club/dashboard/premium");
+          }
+          revalidateTag(`club-dashboard-${leadPayment.clubId}`, "max");
+
+          // Track payment completion
+          const { trackEventServer } = await import("@/lib/analytics/tracking-server");
+          const { PostHogEvents, PostHogProperties } = await import("@/lib/analytics/events");
+
+          await trackEventServer(
+            leadPayment.paymentMethod === "pay_per_lead"
+              ? PostHogEvents.LEAD_PAYMENT_COMPLETED
+              : PostHogEvents.PREMIUM_UPGRADE_COMPLETED,
+            {
+              distinctId: "webhook",
+              [PostHogProperties.LEAD_ID]: leadPayment.leadId || undefined,
+              [PostHogProperties.CLUB_ID]: leadPayment.clubId,
+              [PostHogProperties.LEAD_PAYMENT_METHOD]: leadPayment.paymentMethod,
+              [PostHogProperties.PAYMENT_AMOUNT]: leadPayment.amount,
+            }
+          );
+        } catch (error) {
+          console.error("[Stripe Webhook] Error processing lead payment:", error);
+          // Don't throw - let webhook return success to prevent retries
+        }
+      } else if (event.type === "payment_intent.payment_failed") {
+        // Handle payment failure for lead payments
+        try {
+          const { leadPaymentRepository } =
+            await import("@/modules/payments/lead-payment.repository");
+          const { LeadPaymentStatus } = await import("@/types/leads");
+          const payment = await leadPaymentRepository.findByStripePaymentIntentId(paymentIntent.id);
+          if (payment) {
+            await leadPaymentRepository.updateStatus(payment.id, LeadPaymentStatus.FAILED, null);
+          }
+        } catch (error) {
+          console.error("[Stripe Webhook] Error handling lead payment failure:", error);
+        }
+      }
+
+      // Return success for lead payments (no email sending needed)
+      return NextResponse.json({ received: true, type: "lead_payment" });
+    } else {
+      // Handle quiz payment webhook (existing logic)
+      const result = await handleStripeWebhook(event);
+      payment = result.payment;
+      reportAccess = result.reportAccess;
+    }
+
+    // Send email notification if payment succeeded (only for quiz payments)
+    if (event.type === "payment_intent.succeeded" && payment && reportAccess && !isLeadPayment) {
       try {
         // Get email from quiz or user
         let email: string | null = null;

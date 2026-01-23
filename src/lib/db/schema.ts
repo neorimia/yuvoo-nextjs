@@ -1,5 +1,5 @@
 /**
- * Database Schema - UPDATED FOR ONBOARDING
+ * Database Schema - UPDATED FOR CLUB MONETIZATION
  *
  * Drizzle ORM schema definitions for Yuvoo.
  *
@@ -12,10 +12,15 @@
  * - bookings: Club trials and doctor consultations
  * - favorites: Saved clubs and doctors
  * - reviews: Club and doctor reviews (moderated)
- * - onboarding_progress: Cross-session onboarding state tracking (NEW)
- * - uploads: File upload tracking for ownership verification (NEW)
- * - audit_logs: Admin action audit trail for security and compliance (NEW)
- * - locations: Single source of truth for Romanian counties, cities, and sectors (NEW)
+ * - onboarding_progress: Cross-session onboarding state tracking
+ * - uploads: File upload tracking for ownership verification
+ * - audit_logs: Admin action audit trail for security and compliance
+ * - locations: Single source of truth for Romanian counties, cities, and sectors
+ * - payments: One-time payments for quiz reports
+ * - report_access: Persistent access tokens for paid reports
+ * - leads: Parent interest in clubs (locked until payment) (NEW)
+ * - premium_club_status: Premium club subscription tracking (NEW)
+ * - lead_payments: Pay-per-lead payments (3€ per lead) (NEW)
  */
 
 import {
@@ -54,6 +59,27 @@ export const paymentStatusEnum = pgEnum("payment_status", [
   "completed", // Payment successfully completed
   "failed", // Payment failed
   "refunded", // Payment refunded
+]);
+
+// Lead status enum
+export const leadStatusEnum = pgEnum("lead_status", [
+  "nou", // New lead, just created
+  "in_asteptare", // Waiting for club response (after reminder)
+  "acceptat", // Accepted by club (payment completed or premium)
+  "expirat", // Expired (5 days passed without acceptance)
+]);
+
+// Lead payment method enum
+export const leadPaymentMethodEnum = pgEnum("lead_payment_method", [
+  "pay_per_lead", // One-time payment per lead (3€)
+  "premium", // Premium club subscription (unlimited leads)
+]);
+
+// Lead payment status enum (for Stripe payment intents)
+export const leadPaymentStatusEnum = pgEnum("lead_payment_status", [
+  "pending", // Payment intent created
+  "succeeded", // Payment completed
+  "failed", // Payment failed
 ]);
 
 // Location type enum for Romania locations table
@@ -627,5 +653,105 @@ export const locations = pgTable(
     // Composite indexes for common query patterns
     typeParentIdx: index("idx_locations_type_parent").on(table.type, table.parentId),
     codeTypeIdx: index("idx_locations_code_type").on(table.code, table.type),
+  })
+);
+
+// Leads table - tracks parent interest in clubs (locked until payment)
+export const leads = pgTable(
+  "leads",
+  {
+    id: text("id")
+      .primaryKey()
+      .default(sql`gen_random_uuid()`),
+    clubId: text("club_id")
+      .notNull()
+      .references(() => clubs.id, { onDelete: "cascade" }),
+    parentId: text("parent_id").references(() => users.id, { onDelete: "set null" }), // Optional - can be anonymous
+    parentName: text("parent_name").notNull(),
+    parentEmail: text("parent_email").notNull(),
+    parentPhone: text("parent_phone"), // Optional but recommended
+    childAge: integer("child_age").notNull(),
+    message: text("message"), // Optional message from parent
+    sportType: text("sport_type"), // Sport name (matches clubs.sportType)
+    locationId: text("location_id").references(() => locations.id, { onDelete: "set null" }), // City/location
+    status: leadStatusEnum("status").notNull().default("nou"), // 'nou', 'in_asteptare', 'acceptat', 'expirat'
+    createdAt: timestamp("created_at").defaultNow().notNull(),
+    expiresAt: timestamp("expires_at").notNull(), // 5 days from creation
+    acceptedAt: timestamp("accepted_at"), // When club accepted (paid or premium)
+    paymentId: text("payment_id"), // Link to lead_payments.id if pay-per-lead (foreign key added via migration)
+    paymentMethod: leadPaymentMethodEnum("payment_method"), // 'pay_per_lead' | 'premium' (null if not accepted yet)
+    createdBy: text("created_by"), // IP address or user ID for tracking
+  },
+  (table) => ({
+    // Performance indexes for lead queries
+    clubIdIdx: index("idx_leads_club_id").on(table.clubId),
+    parentEmailIdx: index("idx_leads_parent_email").on(table.parentEmail),
+    statusIdx: index("idx_leads_status").on(table.status),
+    expiresAtIdx: index("idx_leads_expires_at").on(table.expiresAt),
+    createdAtIdx: index("idx_leads_created_at").on(table.createdAt),
+    // Composite indexes for common query patterns
+    clubStatusIdx: index("idx_leads_club_status").on(table.clubId, table.status),
+    statusExpiresAtIdx: index("idx_leads_status_expires_at").on(table.status, table.expiresAt),
+  })
+);
+
+// Premium Club Status table - tracks which clubs have premium subscriptions
+export const premiumClubStatus = pgTable(
+  "premium_club_status",
+  {
+    id: text("id")
+      .primaryKey()
+      .default(sql`gen_random_uuid()`),
+    clubId: text("club_id")
+      .notNull()
+      .unique()
+      .references(() => clubs.id, { onDelete: "cascade" }),
+    isPremium: boolean("is_premium").notNull().default(false),
+    premiumStartDate: timestamp("premium_start_date"),
+    premiumEndDate: timestamp("premium_end_date"), // 1 year from start
+    stripeSubscriptionId: text("stripe_subscription_id"), // Stripe subscription ID (if subscription model)
+    stripeCustomerId: text("stripe_customer_id"), // Stripe customer ID
+    createdAt: timestamp("created_at").defaultNow().notNull(),
+    updatedAt: timestamp("updated_at").defaultNow().notNull(),
+  },
+  (table) => ({
+    // Performance indexes
+    clubIdIdx: index("idx_premium_club_status_club_id").on(table.clubId),
+    isPremiumIdx: index("idx_premium_club_status_is_premium").on(table.isPremium),
+    premiumEndDateIdx: index("idx_premium_club_status_end_date").on(table.premiumEndDate),
+  })
+);
+
+// Lead Payments table - tracks pay-per-lead payments (3€ per lead)
+export const leadPayments = pgTable(
+  "lead_payments",
+  {
+    id: text("id")
+      .primaryKey()
+      .default(sql`gen_random_uuid()`),
+    leadId: text("lead_id")
+      .notNull()
+      .references(() => leads.id, { onDelete: "cascade" }),
+    clubId: text("club_id")
+      .notNull()
+      .references(() => clubs.id, { onDelete: "cascade" }),
+    amount: integer("amount").notNull(), // Amount in cents (300 = 3€)
+    currency: text("currency").notNull().default("EUR"),
+    paymentMethod: leadPaymentMethodEnum("payment_method").notNull(), // 'pay_per_lead' | 'premium'
+    stripePaymentIntentId: text("stripe_payment_intent_id").notNull(),
+    status: leadPaymentStatusEnum("status").notNull(), // 'pending', 'succeeded', 'failed'
+    paidAt: timestamp("paid_at"), // When payment completed
+    createdAt: timestamp("created_at").defaultNow().notNull(),
+  },
+  (table) => ({
+    // Performance indexes
+    leadIdIdx: index("idx_lead_payments_lead_id").on(table.leadId),
+    clubIdIdx: index("idx_lead_payments_club_id").on(table.clubId),
+    stripePaymentIntentIdIdx: index("idx_lead_payments_stripe_payment_intent_id").on(
+      table.stripePaymentIntentId
+    ),
+    statusIdx: index("idx_lead_payments_status").on(table.status),
+    // Composite indexes for common query patterns
+    clubStatusIdx: index("idx_lead_payments_club_status").on(table.clubId, table.status),
   })
 );

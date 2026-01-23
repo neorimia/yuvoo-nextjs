@@ -55,7 +55,7 @@ const ClubsMain: React.FC<ClubsMainProps> = ({
   // Empty state
   if (!clubs || clubs.length === 0) {
     return (
-      <section className="bd-club-area pt-110 pb-70">
+      <section className="bd-club-area pt-70 pb-70">
         <div className="container">
           <div className="row">
             <div className="col-12">
@@ -84,7 +84,7 @@ const ClubsMain: React.FC<ClubsMainProps> = ({
   }
 
   return (
-    <section className="bd-club-area pt-110 pb-70">
+    <section className="bd-club-area pt-70 pb-70">
       <div className="container">
         {/* Quiz Recommendations Banner */}
         {isQuizContext && recommendedSportIds.length > 0 && (
@@ -118,7 +118,7 @@ const ClubsMain: React.FC<ClubsMainProps> = ({
         <div className="row">
           {clubs.map((club, index) => (
             <div className="col-xl-4 col-lg-6 col-md-6" key={club.id}>
-              <div className="wow fadeInUp">
+              <div className="wow fadeInUp w-100">
                 <ClubCard
                   club={club}
                   variant="listing"

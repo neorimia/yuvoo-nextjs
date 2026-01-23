@@ -13,12 +13,14 @@ import type { Club } from "@/modules/clubs/clubs.types";
 import VerificationBadge from "./VerificationBadge";
 import { isPlaceholderUrl } from "@/lib/utils/image-helpers";
 import { routes } from "@/lib/routes";
+import LeadSubmissionButton from "./LeadSubmissionButton";
 
 interface ClubDetailsMainProps {
   club: Club;
+  isPremium?: boolean;
 }
 
-const ClubDetailsMain: React.FC<ClubDetailsMainProps> = ({ club }) => {
+const ClubDetailsMain: React.FC<ClubDetailsMainProps> = ({ club, isPremium = false }) => {
   const mainImage = club.images?.[0] || "/assets/img/placeholder-club.jpg";
 
   // Handle pricing as array - display first pricing option or all if multiple
@@ -189,49 +191,68 @@ const ClubDetailsMain: React.FC<ClubDetailsMainProps> = ({ club }) => {
                     <h5 className="mb-3">
                       <i className="fa-regular fa-phone me-2"></i>Informații de Contact
                     </h5>
-                    <div className="d-flex flex-column gap-3">
-                      {club.contact.phone && (
-                        <div className="d-flex align-items-center">
-                          <i className="fa-regular fa-phone text-primary me-3 fs-5"></i>
-                          <div>
-                            <span className="d-block small text-muted">Telefon</span>
-                            <a href={`tel:${club.contact.phone}`} className="text-decoration-none">
-                              {club.contact.phone}
-                            </a>
+                    {isPremium ? (
+                      // Premium clubs: Show all contact info
+                      <div className="d-flex flex-column gap-3">
+                        {club.contact.phone && (
+                          <div className="d-flex align-items-center">
+                            <i className="fa-regular fa-phone text-primary me-3 fs-5"></i>
+                            <div>
+                              <span className="d-block small text-muted">Telefon</span>
+                              <a
+                                href={`tel:${club.contact.phone}`}
+                                className="text-decoration-none"
+                              >
+                                {club.contact.phone}
+                              </a>
+                            </div>
                           </div>
-                        </div>
-                      )}
-                      {club.contact.email && (
-                        <div className="d-flex align-items-center">
-                          <i className="fa-regular fa-envelope text-primary me-3 fs-5"></i>
-                          <div>
-                            <span className="d-block small text-muted">Email</span>
-                            <a
-                              href={`mailto:${club.contact.email}`}
-                              className="text-decoration-none"
-                            >
-                              {club.contact.email}
-                            </a>
+                        )}
+                        {club.contact.email && (
+                          <div className="d-flex align-items-center">
+                            <i className="fa-regular fa-envelope text-primary me-3 fs-5"></i>
+                            <div>
+                              <span className="d-block small text-muted">Email</span>
+                              <a
+                                href={`mailto:${club.contact.email}`}
+                                className="text-decoration-none"
+                              >
+                                {club.contact.email}
+                              </a>
+                            </div>
                           </div>
-                        </div>
-                      )}
-                      {club.contact.website && (
-                        <div className="d-flex align-items-center">
-                          <i className="fa-regular fa-globe text-primary me-3 fs-5"></i>
-                          <div>
-                            <span className="d-block small text-muted">Website</span>
-                            <a
-                              href={club.contact.website}
-                              target="_blank"
-                              rel="noopener noreferrer"
-                              className="text-decoration-none"
-                            >
-                              {club.contact.website.replace(/^https?:\/\//, "")}
-                            </a>
+                        )}
+                        {club.contact.website && (
+                          <div className="d-flex align-items-center">
+                            <i className="fa-regular fa-globe text-primary me-3 fs-5"></i>
+                            <div>
+                              <span className="d-block small text-muted">Website</span>
+                              <a
+                                href={club.contact.website}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="text-decoration-none"
+                              >
+                                {club.contact.website.replace(/^https?:\/\//, "")}
+                              </a>
+                            </div>
                           </div>
-                        </div>
-                      )}
-                    </div>
+                        )}
+                      </div>
+                    ) : (
+                      // Non-premium clubs: Show lead submission button instead of contact info
+                      <div className="d-flex flex-column gap-3">
+                        <p className="text-muted mb-3">
+                          Pentru a contacta acest club, te rugăm să trimiți un mesaj prin platformă.
+                        </p>
+                        <LeadSubmissionButton
+                          clubId={club.id}
+                          clubName={club.name}
+                          sportType={club.sportName || null}
+                          locationId={club.location.cityId || null}
+                        />
+                      </div>
+                    )}
                   </div>
                 )}
             </div>

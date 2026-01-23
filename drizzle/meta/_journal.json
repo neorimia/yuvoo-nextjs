@@ -71,6 +71,20 @@
       "when": 1768310306886,
       "tag": "0009_omniscient_puppet_master",
       "breakpoints": true
+    },
+    {
+      "idx": 10,
+      "version": "7",
+      "when": 1769090571401,
+      "tag": "0010_tense_sandman",
+      "breakpoints": true
+    },
+    {
+      "idx": 11,
+      "version": "7",
+      "when": 1769090851948,
+      "tag": "0011_careless_proemial_gods",
+      "breakpoints": true
     }
   ]
 }
