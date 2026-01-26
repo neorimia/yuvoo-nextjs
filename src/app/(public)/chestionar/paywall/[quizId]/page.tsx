@@ -42,12 +42,26 @@ export async function generateStaticParams() {
  * Generate metadata for paywall page
  */
 export async function generateMetadata({ params }: PaywallPageProps): Promise<Metadata> {
-  // Access dynamic data sources first to mark route as dynamic
-  // This prevents crypto.randomUUID() errors during static generation
-  await connection(); // Mark route as dynamic before any crypto.randomUUID() usage
-  const _cookies = await cookies();
-  const _headers = await headers();
-  const { quizId: _quizId } = await params;
+  // Access params first to mark route as dynamic
+  const { quizId } = await params;
+  const isProductionBuild = process.env.NEXT_PHASE === "phase-production-build";
+
+  // During build with placeholder, return static metadata
+  if (isProductionBuild && quizId === "placeholder") {
+    return {
+      title: "Deblochează Raportul Complet | Yuvoo",
+      description: `Deblochează raportul complet cu recomandările personalizate pentru ${PAYMENT_AMOUNT_LEI} lei (plată unică, fără abonament).`,
+      robots: {
+        index: false,
+        follow: false,
+      },
+    };
+  }
+
+  // At runtime, access dynamic data sources to mark route as dynamic
+  await connection();
+  await cookies();
+  await headers();
 
   return {
     title: "Deblochează Raportul Complet | Yuvoo",
@@ -66,12 +80,42 @@ export async function generateMetadata({ params }: PaywallPageProps): Promise<Me
  * Public route (no authentication required).
  */
 export default async function PaywallPage({ params }: PaywallPageProps) {
-  // Access dynamic data sources first to mark route as dynamic
-  // This must be done before any code that might use crypto.randomUUID()
-  await connection(); // Mark route as dynamic before any crypto.randomUUID() usage
-  const _cookies = await cookies();
-  const _headers = await headers();
   const { quizId } = await params;
+  const isProductionBuild = process.env.NEXT_PHASE === "phase-production-build";
+
+  // During build, render placeholder for placeholder quiz ID
+  if (isProductionBuild && quizId === "placeholder") {
+    return (
+      <>
+        <BreadcrumbOne
+          title="Deblochează Raportul Complet"
+          subTitle="Plată"
+          items={[
+            { name: "Yuvoo", url: routes.home },
+            { name: "Chestionar", url: routes.quiz.intro },
+            { name: "Plată", url: routes.quiz.paywall(quizId) },
+          ]}
+        />
+        <section className="paywall-section py-5">
+          <div className="container">
+            <div className="row justify-content-center">
+              <div className="col-12 col-lg-10 col-xl-8">
+                <div className="text-center">
+                  <h1 className="display-5 fw-bold mb-3">Deblochează Raportul Complet</h1>
+                  <p className="text-muted">Build placeholder</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+      </>
+    );
+  }
+
+  // At runtime, access dynamic data sources to mark route as dynamic
+  await connection();
+  await cookies();
+  await headers();
 
   // Fetch quiz results
   const quizResult = await getQuizResultAction(quizId);

@@ -120,9 +120,11 @@ const isBuildPhase =
 // The key is to NOT import @sentry/nextjs during prerendering in development.
 let finalConfig: NextConfig = nextConfig;
 
-// Only apply Sentry config during actual builds (not dev mode prerendering)
-// In development, Sentry is still initialized via instrumentation.ts but
-// we skip the webpack plugin wrapping to avoid crypto.randomUUID() issues
+// IMPORTANT: We skip Sentry wrapping during build/prerendering to avoid crypto.randomUUID() errors
+// with Next.js 16 Cache Components. Source maps will still be uploaded via Sentry CLI if needed,
+// but pages won't be wrapped during build. Sentry will work at runtime via instrumentation.ts.
+// Skip Sentry wrapping during build to prevent crypto.randomUUID() errors during prerendering
+
 if (isBuildPhase) {
   // Dynamic require to avoid top-level import issues
   // eslint-disable-next-line @typescript-eslint/no-require-imports

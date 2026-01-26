@@ -4,16 +4,15 @@
  * Public page displaying parent contact information after successful guest payment.
  * No authentication required.
  * Route: /cereri/[leadId]/plata-guest/success
+ *
+ * Note: This is a dynamic route that depends on params and searchParams, so we don't use "use cache" directive.
  */
-
-"use cache";
 
 import React from "react";
 import type { Metadata } from "next";
 import { redirect } from "next/navigation";
 import { getGuestPaymentSuccessData } from "@/app/actions/guest-lead-payments";
 import { routes } from "@/lib/routes";
-import { cacheLife, cacheTag } from "next/cache";
 
 interface GuestPaymentSuccessPageProps {
   params: Promise<{
@@ -24,7 +23,18 @@ interface GuestPaymentSuccessPageProps {
   }>;
 }
 
-export async function generateMetadata(): Promise<Metadata> {
+/**
+ * Generate static params - returns placeholder to satisfy Cache Components requirement
+ */
+export async function generateStaticParams() {
+  return [{ leadId: "placeholder-lead-id" }];
+}
+
+export async function generateMetadata({
+  params,
+}: GuestPaymentSuccessPageProps): Promise<Metadata> {
+  // Access params to mark as dynamic
+  await params;
   return {
     title: `Plată confirmată - Yuvoo`,
     description: "Informații de contact părinte.",
@@ -35,10 +45,26 @@ export default async function GuestPaymentSuccessPage({
   params,
   searchParams,
 }: GuestPaymentSuccessPageProps) {
-  // Cache configuration for public cache
-  cacheLife("minutes");
   const { leadId } = await params;
-  cacheTag(`lead-${leadId}`);
+  const isProductionBuild = process.env.NEXT_PHASE === "phase-production-build";
+
+  // During build, render placeholder for placeholder lead ID
+  if (isProductionBuild && leadId === "placeholder-lead-id") {
+    return (
+      <div className="container py-5">
+        <div className="row justify-content-center">
+          <div className="col-lg-8">
+            <div className="card">
+              <div className="card-body text-center py-5">
+                <h2 className="mb-3">Plată confirmată</h2>
+                <p className="text-muted">Build placeholder</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    );
+  }
 
   const { payment_intent } = await searchParams;
 

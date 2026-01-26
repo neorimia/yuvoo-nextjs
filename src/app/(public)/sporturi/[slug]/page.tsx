@@ -1,3 +1,5 @@
+"use cache";
+
 import React from "react";
 import { notFound } from "next/navigation";
 import type { Metadata } from "next";

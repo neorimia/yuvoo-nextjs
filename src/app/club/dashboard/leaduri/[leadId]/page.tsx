@@ -4,9 +4,10 @@
  * Protected page for club admins to view lead details.
  * Shows paywall if contact info is locked, or full details if unlocked.
  * Route: /club/dashboard/leaduri/[leadId]
+ *
+ * Note: This is a protected route that requires authentication, so it's always dynamic.
+ * We don't use "use cache: private" here because it requires request context.
  */
-
-"use cache: private";
 
 import React from "react";
 import type { Metadata } from "next";
@@ -17,7 +18,6 @@ import { premiumClubService } from "@/modules/clubs/premium-club.service";
 import ClubNotFoundState from "@/components/features/clubs/ClubNotFoundState";
 import LeadDetailView from "@/components/features/clubs/LeadDetailView";
 import { routes } from "@/lib/routes";
-import { cacheLife, cacheTag } from "next/cache";
 import { redirect, notFound } from "next/navigation";
 import { UserRoleEnum } from "@/modules/auth/auth.types";
 import { getLocationNameById } from "@/lib/db/location-helpers";
@@ -30,8 +30,26 @@ interface LeadDetailPageProps {
   }>;
 }
 
+/**
+ * Generate static params - returns placeholder to satisfy Cache Components requirement
+ * This is a protected route that should be dynamic at runtime
+ */
+export async function generateStaticParams() {
+  return [{ leadId: "placeholder-lead-id" }];
+}
+
 export async function generateMetadata({ params }: LeadDetailPageProps): Promise<Metadata> {
   const { leadId } = await params;
+  const isProductionBuild = process.env.NEXT_PHASE === "phase-production-build";
+
+  // During build with placeholder, return static metadata
+  if (isProductionBuild && leadId === "placeholder-lead-id") {
+    return {
+      title: `Cerere - Dashboard Club - Yuvoo`,
+      description: "Detalii cerere de la părinte.",
+    };
+  }
+
   return {
     title: `Cerere #${leadId.substring(0, 8)} - Dashboard Club - Yuvoo`,
     description: "Detalii cerere de la părinte.",
@@ -39,6 +57,27 @@ export async function generateMetadata({ params }: LeadDetailPageProps): Promise
 }
 
 export default async function LeadDetailPage({ params }: LeadDetailPageProps) {
+  const { leadId } = await params;
+  const isProductionBuild = process.env.NEXT_PHASE === "phase-production-build";
+
+  // During build, render placeholder for placeholder lead ID
+  if (isProductionBuild && leadId === "placeholder-lead-id") {
+    return (
+      <div className="container py-5">
+        <div className="row justify-content-center">
+          <div className="col-lg-8">
+            <div className="card">
+              <div className="card-body text-center py-5">
+                <h2 className="mb-3">Detalii Cerere</h2>
+                <p className="text-muted">Build placeholder</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
   // Require authentication
   const session = await requireAuth();
 
@@ -47,11 +86,6 @@ export default async function LeadDetailPage({ params }: LeadDetailPageProps) {
     redirect(routes.parent.dashboard);
   }
 
-  // Cache configuration for private cache
-  cacheLife("minutes");
-  cacheTag(`user-${session.dbUser.id}`);
-  cacheTag(`club-dashboard-${session.dbUser.id}`);
-
   // Fetch club for this admin user
   const club = await getClubByAdminUserId(session.dbUser.id);
 
@@ -59,9 +93,6 @@ export default async function LeadDetailPage({ params }: LeadDetailPageProps) {
   if (!club) {
     return <ClubNotFoundState />;
   }
-
-  // Get lead ID
-  const { leadId } = await params;
 
   // Fetch lead for club
   const lead = await getLeadForClub(leadId, club.id);
