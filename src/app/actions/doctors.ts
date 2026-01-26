@@ -91,7 +91,8 @@ export async function searchDoctorsAction(
       await trackEventServer(PostHogEvents.DOCTOR_SEARCHED, {
         distinctId,
         ...(filters.specialty && { [PostHogProperties.DOCTOR_SPECIALTY]: filters.specialty }),
-        ...(filters.city && { [PostHogProperties.CLUB_CITY]: filters.city }), // Reusing CLUB_CITY property for city
+        // Phase 6: Track cityId instead of city text (if available, fetch city name for tracking)
+        ...(filters.cityId && { [PostHogProperties.CLUB_CITY]: filters.cityId }), // Reusing CLUB_CITY property for city
       });
     } catch (trackingError) {
       // Don't fail search if tracking fails
@@ -134,7 +135,7 @@ export async function getDoctorsBySpecialtyAction(specialty: string): Promise<Do
  */
 export async function getRecommendedDoctorsAction(
   specialty: "orthopedist" | "nutritionist" | "psychologist" | "general",
-  city?: string,
+  cityId?: string, // Phase 6: Changed from city (string) to cityId (string)
   limit: number = 5
 ): Promise<DoctorSearchResult> {
   try {
@@ -147,8 +148,8 @@ export async function getRecommendedDoctorsAction(
       sortBy: "verified", // Verified doctors first
     };
 
-    if (city) {
-      filters.city = city;
+    if (cityId) {
+      filters.cityId = cityId; // Phase 6: Use cityId instead of city
     }
 
     const result = await doctorsSearch.search(filters);

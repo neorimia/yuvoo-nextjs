@@ -245,6 +245,7 @@ yuvoo-nextjs/
 │   ├── ARCHITECTURE_OVERVIEW.md
 │   ├── BRAND_GUIDELINES.md
 │   ├── COMPONENTS_GUIDE.md
+│   ├── LEAD_SYSTEM_DOCUMENTATION.md  # Lead generation system & cron jobs
 │   └── ...
 │
 ├── briefs/                   # Brief-uri proiect
@@ -323,6 +324,14 @@ Documentația completă a proiectului se află în directorul `memory-bank/`:
 **Faza Curentă**: ✅ **Core Features Complete** - Dezvoltare activă, pregătire pentru lansare
 
 ### Features Complete ✅
+
+- ✅ **Lead Generation System** - Complete monetization system with pay-per-lead (3€) and premium upgrades (199 lei/year)
+  - Lead submission flow for parents
+  - Club notification and payment flow
+  - Automated expiration (5 days) and reminders (48h)
+  - Premium club benefits (badge, priority listing, visible contact)
+  - PostHog tracking for all key events
+  - See [Lead System Documentation](docs/LEAD_SYSTEM_DOCUMENTATION.md) for details
 
 - ✅ **Foundation**: Next.js 16, React 19, TypeScript, Database, Authentication
 - ✅ **Quiz System**: AI Coach Quiz complet cu recomandări personalizate

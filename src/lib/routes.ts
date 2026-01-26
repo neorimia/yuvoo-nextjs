@@ -32,8 +32,13 @@ export const routes = {
   // Clubs (Cluburi)
   clubs: {
     list: "/cluburi",
+    premium: "/pentru-cluburi/abonare-premium", // Premium page for clubs to upgrade to Premium
     landing: "/pentru-cluburi", // Landing page for clubs to join as Founding Clubs
     pricing: "/preturi-cluburi", // Pricing page for clubs TODO: CREATE THIS PAGE
+    caseStudies: "/pentru-cluburi/povesti-de-succes", // Case studies / success stories page
+    roiCalculator: "/pentru-cluburi/calculator-roi", // ROI calculator standalone page
+    howItWorks: "/pentru-cluburi/cum-functioneaza", // Detailed "How It Works" page
+    helpCenter: "/pentru-cluburi/ajutor", // FAQ / Help Center page
     detail: (slug: string) => `/cluburi/${slug}`,
     category: (category: string) => `/cluburi/categorie/${category}`,
     reviews: (slug: string) => `/cluburi/${slug}/recenzii`,
@@ -58,6 +63,11 @@ export const routes = {
     paymentSuccess: (quizId: string) => `/chestionar/payment/success/${quizId}`,
     paymentFailure: (quizId: string) => `/chestionar/payment/failure/${quizId}`,
     report: (accessToken: string) => `/chestionar/raport/${accessToken}`,
+  },
+  // Leads (Cereri) - Public guest payment routes
+  leads: {
+    guestPayment: (leadId: string) => `/cereri/${leadId}/plata-guest`,
+    guestPaymentSuccess: (leadId: string) => `/cereri/${leadId}/plata-guest/success`,
   },
   // Search
   search: "/cautare",
@@ -161,6 +171,12 @@ export const routes = {
     },
     bookings: "/club/bookings",
     settings: "/club/settings",
+    leads: {
+      list: "/club/dashboard/leaduri",
+      detail: (leadId: string) => `/club/dashboard/leaduri/${leadId}`,
+      payment: (leadId: string) => `/club/dashboard/leaduri/${leadId}/plata`,
+    },
+    premium: "/club/dashboard/premium",
   },
 
   // Doctor Portal Routes

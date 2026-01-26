@@ -30,42 +30,9 @@ import {
   BootstrapButton,
   BootstrapAlert,
 } from "@/components/UI/bootstrap-index";
+import { LocationSelector } from "@/components/shared/LocationSelector";
 import { AlertCircle, Plus, X } from "lucide-react";
 import type { FieldError } from "react-hook-form";
-
-// Romanian cities (major cities)
-const ROMANIAN_CITIES = [
-  "București",
-  "Cluj-Napoca",
-  "Timișoara",
-  "Iași",
-  "Constanța",
-  "Craiova",
-  "Brașov",
-  "Galați",
-  "Ploiești",
-  "Oradea",
-  "Brăila",
-  "Arad",
-  "Pitești",
-  "Sibiu",
-  "Bacău",
-  "Târgu Mureș",
-  "Baia Mare",
-  "Buzău",
-  "Satu Mare",
-  "Botoșani",
-  "Râmnicu Vâlcea",
-  "Suceava",
-  "Piatra Neamț",
-  "Drobeta-Turnu Severin",
-  "Focșani",
-  "Târgu Jiu",
-  "Tulcea",
-  "Târgoviște",
-  "Reșița",
-  "Călărași",
-] as const;
 
 // Days of the week in Romanian
 const DAYS_OF_WEEK = [
@@ -121,8 +88,8 @@ const ClubProfileEditForm: React.FC<ClubProfileEditFormProps> = ({ club }) => {
       name: club.name,
       sportType: club.sportId || club.sportName,
       description: club.description,
-      city: club.location.city,
-      district: club.location.district,
+      cityId: club.location.cityId || "",
+      sectorId: club.location.sectorId || "",
       address: club.location.address,
       phone: club.contact.phone,
       email: club.contact.email,
@@ -174,8 +141,8 @@ const ClubProfileEditForm: React.FC<ClubProfileEditFormProps> = ({ club }) => {
           ...(data.name && { name: data.name }),
           ...(data.sportType && { sportType: data.sportType }),
           ...(data.description && { description: data.description }),
-          ...(data.city && { city: data.city }),
-          ...(data.district && { district: data.district }),
+          ...(data.cityId && { cityId: data.cityId }),
+          ...(data.sectorId && { sectorId: data.sectorId }),
           ...(data.address && { address: data.address }),
           ...(data.phone && { phone: normalizePhoneNumber(data.phone) }),
           ...(data.email && { email: data.email }),
@@ -399,41 +366,44 @@ const ClubProfileEditForm: React.FC<ClubProfileEditFormProps> = ({ club }) => {
 
           <div className="row g-3">
             <div className="col-md-6">
-              <label htmlFor="city" className="form-label">
-                Oraș <span className="text-danger">*</span>
-              </label>
-              <BootstrapSelect
-                id="city"
-                {...register("city")}
+              <LocationSelector
+                type="city"
+                value={watch("cityId")}
+                onChange={(cityId) => {
+                  setValue("cityId", cityId || "");
+                  // Clear sector when city changes
+                  if (!cityId) {
+                    setValue("sectorId", "");
+                  }
+                }}
+                label={
+                  <>
+                    Oraș <span className="text-danger">*</span>
+                  </>
+                }
+                id="cityId"
                 disabled={isPending}
-                error={!!errors.city}
-                options={[
-                  { value: "", label: "Selectează orașul" },
-                  ...ROMANIAN_CITIES.map((city) => ({
-                    value: city,
-                    label: city,
-                  })),
-                ]}
+                placeholder="Selectează orașul"
+                error={errors.cityId?.message || null}
+                required
               />
-              {errors.city && <div className="text-danger small mt-1">{errors.city.message}</div>}
             </div>
 
-            <div className="col-md-6">
-              <label htmlFor="district" className="form-label">
-                Sector/District
-              </label>
-              <BootstrapInput
-                id="district"
-                type="text"
-                {...register("district")}
-                disabled={isPending}
-                error={!!errors.district}
-                placeholder="Ex: Sector 1"
-              />
-              {errors.district && (
-                <div className="text-danger small mt-1">{errors.district.message}</div>
-              )}
-            </div>
+            {watch("cityId") && (
+              <div className="col-md-6">
+                <LocationSelector
+                  type="sector"
+                  value={watch("sectorId")}
+                  onChange={(sectorId) => setValue("sectorId", sectorId || "")}
+                  parentId={watch("cityId")}
+                  label="Sector"
+                  id="sectorId"
+                  disabled={isPending}
+                  placeholder="Selectează sectorul (opțional)"
+                  error={errors.sectorId?.message || null}
+                />
+              </div>
+            )}
 
             <div className="col-12">
               <label htmlFor="address" className="form-label">

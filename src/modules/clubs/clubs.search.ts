@@ -7,7 +7,7 @@
 
 import { db } from "@/lib/db";
 import { clubs } from "@/lib/db/schema";
-import { eq, and, ilike, desc, asc, sql, arrayOverlaps } from "drizzle-orm";
+import { eq, and, desc, asc, sql, arrayOverlaps } from "drizzle-orm";
 import { clubsRepository } from "./clubs.repository";
 import type { ClubSearchFilters, ClubSearchResult } from "./clubs.types";
 
@@ -76,14 +76,18 @@ export async function search(filters: ClubSearchFilters): Promise<ClubSearchResu
     conditions.push(arrayOverlaps(clubs.ageGroups, [filters.age]));
   }
 
-  // City filter (case-insensitive, exact match preferred)
-  if (filters.city) {
-    conditions.push(ilike(clubs.city, filters.city));
+  // Phase 6: Location filters - only ID-based (text columns removed)
+  if (filters.cityId) {
+    conditions.push(eq(clubs.cityId, filters.cityId));
   }
 
-  // District filter (case-insensitive, exact match preferred)
-  if (filters.district) {
-    conditions.push(ilike(clubs.district, filters.district));
+  if (filters.sectorId) {
+    conditions.push(eq(clubs.sectorId, filters.sectorId));
+  }
+
+  // County filter (Phase 5: new filter option)
+  if (filters.countyId) {
+    conditions.push(eq(clubs.countyId, filters.countyId));
   }
 
   // Level filter (check if level is in experienceLevels array)
@@ -130,6 +134,8 @@ export async function search(filters: ClubSearchFilters): Promise<ClubSearchResu
   const whereClause = conditions.length > 0 ? and(...conditions) : undefined;
 
   // Build order by clause
+  // Note: Premium prioritization happens after fetching (in JavaScript) since premium status
+  // is checked during mapping with date validation
   let orderBy;
   if (filters.sortBy === "distance" && hasLocationSearch) {
     // Sort by distance (closest first)
@@ -180,8 +186,21 @@ export async function search(filters: ClubSearchFilters): Promise<ClubSearchResu
   });
 
   // Map database results to Club type
+  // Phase 5: mapDbClubToClub is now async, use Promise.all
   // Ensure results is always an array
-  const clubsList = (results || []).map(clubsRepository.mapDbClubToClub);
+  const clubsList = await Promise.all((results || []).map(clubsRepository.mapDbClubToClub));
+
+  // Phase 6: Sort by premium status first (premium clubs appear first)
+  // Premium status is already checked in mapDbClubToClub with date validation
+  clubsList.sort((a, b) => {
+    // Premium clubs first
+    if (a.isPremium && !b.isPremium) return -1;
+    if (!a.isPremium && b.isPremium) return 1;
+
+    // If both premium or both non-premium, maintain original sort order
+    // (already sorted by orderBy clause above)
+    return 0;
+  });
 
   // Calculate distances if location-based search was used
   const distances = new Map<string, number>();

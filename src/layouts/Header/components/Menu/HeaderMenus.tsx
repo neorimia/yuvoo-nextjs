@@ -5,35 +5,71 @@ import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import React from "react";
+import {
+  isSubmenuLinkActive,
+  isClubsMenuActive,
+  isClubsLandingSubmenuActive,
+} from "@/lib/navigation-utils";
+import { routes } from "@/lib/routes";
 
 const HeaderMenus = () => {
   const pathname = usePathname();
 
   // Helper function to check if a link is active
-  const isActive = (link: string) => {
+  // Uses improved logic for better active state detection
+  const isActive = (link: string, isSubmenu = false) => {
     if (link === "/") {
       return pathname === "/";
     }
-    return pathname.startsWith(link);
+
+    // Special handling for Clubs menu
+    if (link === routes.clubs.list) {
+      return isClubsMenuActive(pathname);
+    }
+
+    // Special handling for "Pentru Cluburi" submenu
+    if (link === routes.clubs.landing) {
+      return isClubsLandingSubmenuActive(pathname);
+    }
+
+    // For submenus, allow sub-routes
+    if (isSubmenu) {
+      return isSubmenuLinkActive(pathname, link);
+    }
+
+    // For parent menu items, only exact match (unless it's a dropdown with active submenu)
+    return pathname === link || pathname === `${link}/`;
   };
 
   return (
     <ul>
       {menuData.map((menu, i) => {
-        const active = isActive(menu.link);
+        // For parent menu items with dropdowns, check if any submenu is active
+        // Parent should only be active if exact match, not if submenu is active
+        let parentActive = false;
+        if (menu.hasDropdown && menu.submenus) {
+          const anySubmenuActive = menu.submenus.some((sub) =>
+            isSubmenuLinkActive(pathname, sub.link)
+          );
+          // Parent is active only if exact match AND no submenu is active
+          parentActive = isActive(menu.link, false) && !anySubmenuActive;
+        } else {
+          parentActive = isActive(menu.link, false);
+        }
+
         return (
           <li
             key={i}
-            className={`${menu.megaMenu ? "has-dropdown has-mega-menu" : ""} ${menu.megaMenuTwo ? "has-dropdown has-mega-menu" : ""} ${menu.hasDropdown ? "has-dropdown" : ""} ${active ? "active" : ""}`}
+            className={`${menu.megaMenu ? "has-dropdown has-mega-menu" : ""} ${menu.megaMenuTwo ? "has-dropdown has-mega-menu" : ""} ${menu.hasDropdown ? "has-dropdown" : ""} ${parentActive ? "active" : ""}`}
           >
-            <Link href={menu.link} className={active ? "active" : ""}>
+            <Link href={menu.link} className={parentActive ? "active" : ""}>
               {menu.title}
             </Link>
             {menu.hasDropdown && (
               <ul className="submenu">
                 {menu.submenus &&
                   menu.submenus.map((sub, i) => {
-                    const subActive = isActive(sub.link);
+                    const subActive = isActive(sub.link, true);
                     return (
                       <li key={i} className={subActive ? "active" : ""}>
                         <Link href={sub.link} className={subActive ? "active" : ""}>

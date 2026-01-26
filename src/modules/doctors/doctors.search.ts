@@ -7,7 +7,7 @@
 
 import { db } from "@/lib/db";
 import { doctors } from "@/lib/db/schema";
-import { eq, and, ilike, desc, asc, sql } from "drizzle-orm";
+import { eq, and, desc, asc, sql } from "drizzle-orm";
 import { doctorsRepository } from "./doctors.repository";
 import type { DoctorSearchFilters, DoctorSearchResult } from "./doctors.types";
 
@@ -42,14 +42,18 @@ export async function search(filters: DoctorSearchFilters): Promise<DoctorSearch
     conditions.push(eq(doctors.specialty, filters.specialty));
   }
 
-  // City filter (case-insensitive)
-  if (filters.city) {
-    conditions.push(ilike(doctors.city, filters.city));
+  // Phase 6: Location filters - only ID-based (text columns removed)
+  if (filters.cityId) {
+    conditions.push(eq(doctors.cityId, filters.cityId));
   }
 
-  // District filter (case-insensitive)
-  if (filters.district) {
-    conditions.push(ilike(doctors.district, filters.district));
+  if (filters.sectorId) {
+    conditions.push(eq(doctors.sectorId, filters.sectorId));
+  }
+
+  // County filter (Phase 5: new filter option)
+  if (filters.countyId) {
+    conditions.push(eq(doctors.countyId, filters.countyId));
   }
 
   // Verified filter
@@ -101,7 +105,8 @@ export async function search(filters: DoctorSearchFilters): Promise<DoctorSearch
   });
 
   // Map database results to Doctor type
-  const doctorsList = results.map(doctorsRepository.mapDbDoctorToDoctor);
+  // Phase 5: mapDbDoctorToDoctor is now async, use Promise.all
+  const doctorsList = await Promise.all(results.map(doctorsRepository.mapDbDoctorToDoctor));
 
   return {
     doctors: doctorsList,

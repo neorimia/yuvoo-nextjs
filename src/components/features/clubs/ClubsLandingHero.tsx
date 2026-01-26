@@ -1,7 +1,8 @@
 "use client";
 
-import React from "react";
-import { trackEvent, PostHogEvents } from "@/lib/analytics/tracking";
+import React, { useEffect } from "react";
+import { trackEvent, PostHogEvents, PostHogProperties } from "@/lib/analytics/tracking";
+import { useFeatureFlag, FeatureFlags, FeatureFlagVariants } from "@/lib/analytics/feature-flags";
 import { CLUBS_CONTACT_MODAL_ID, openClubsContactModal } from "@/lib/clubs-landing-modal";
 import Link from "next/link";
 import { routes } from "@/lib/routes";
@@ -19,13 +20,73 @@ interface ClubsLandingHeroProps {
 }
 
 export default function ClubsLandingHero({ verifiedCount, remainingSpots }: ClubsLandingHeroProps) {
+  // A/B Testing: Hero Headline Variant
+  const { value: headlineVariant } = useFeatureFlag(
+    FeatureFlags.CLUBS_LANDING_HERO_HEADLINE_VARIANT
+  );
+
+  // A/B Testing: Hero CTA Variant
+  const { value: ctaVariant } = useFeatureFlag(FeatureFlags.CLUBS_LANDING_HERO_CTA_VARIANT);
+
+  // Get headline text based on variant
+  const getHeadlineText = () => {
+    switch (headlineVariant) {
+      case FeatureFlagVariants.HERO_HEADLINE_VARIANT_A:
+        return "Părinți pre-calificați. Zero timp pierdut. Mai multe înscrieri.";
+      case FeatureFlagVariants.HERO_HEADLINE_VARIANT_B:
+        return "Stop la mesaje inutile. Start cu lead-uri calificate.";
+      default:
+        return "Crești numărul de copii înscriși, fără lead-uri inutile";
+    }
+  };
+
+  // Get CTA text based on variant
+  const getCTAText = () => {
+    switch (ctaVariant) {
+      case FeatureFlagVariants.CTA_VARIANT_A:
+        return "Rezervă locul tău gratuit";
+      case FeatureFlagVariants.CTA_VARIANT_B:
+        return "Începe acum - 6 luni gratuite";
+      default:
+        return `Rezervă locul tău gratuit (${remainingSpots} locuri rămase)`;
+    }
+  };
+
+  // Track variant shown when component mounts
+  useEffect(() => {
+    if (headlineVariant) {
+      trackEvent(PostHogEvents.CLUBS_LANDING_VARIANT_SHOWN, {
+        [PostHogProperties.VARIANT_NAME]: FeatureFlags.CLUBS_LANDING_HERO_HEADLINE_VARIANT,
+        [PostHogProperties.VARIANT_VALUE]: headlineVariant,
+        [PostHogProperties.VARIANT_LOCATION]: "hero",
+      });
+    }
+    if (ctaVariant) {
+      trackEvent(PostHogEvents.CLUBS_LANDING_VARIANT_SHOWN, {
+        [PostHogProperties.VARIANT_NAME]: FeatureFlags.CLUBS_LANDING_HERO_CTA_VARIANT,
+        [PostHogProperties.VARIANT_VALUE]: ctaVariant,
+        [PostHogProperties.VARIANT_LOCATION]: "hero",
+      });
+    }
+  }, [headlineVariant, ctaVariant]);
+
   const handleCTAClick = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
 
-    // Track event
+    const ctaText = getCTAText();
+
+    // Track event with variant info
+    trackEvent(PostHogEvents.CLUBS_LANDING_VARIANT_CLICKED, {
+      [PostHogProperties.VARIANT_NAME]: FeatureFlags.CLUBS_LANDING_HERO_CTA_VARIANT,
+      [PostHogProperties.VARIANT_VALUE]: ctaVariant || FeatureFlagVariants.CTA_CURRENT,
+      [PostHogProperties.VARIANT_LOCATION]: "hero",
+      [PostHogProperties.CTA_TEXT]: ctaText,
+    });
+
+    // Also track standard CTA click event
     trackEvent(PostHogEvents.CLUBS_LANDING_CTA_CLICKED, {
       location: "hero",
-      cta_text: "Devino Founding Club Gratuit",
+      cta_text: ctaText,
     });
 
     // Open modal
@@ -62,7 +123,7 @@ export default function ClubsLandingHero({ verifiedCount, remainingSpots }: Club
                   data-wow-duration="1s"
                   data-wow-delay=".5s"
                 >
-                  Crești numărul de copii înscriși, fără lead-uri inutile
+                  {getHeadlineText()}
                 </h1>
 
                 {/* Value Proposition */}
@@ -174,20 +235,27 @@ export default function ClubsLandingHero({ verifiedCount, remainingSpots }: Club
                       data-bs-target={`#${CLUBS_CONTACT_MODAL_ID}`}
                     >
                       <span className="bd-btn-inner">
-                        <span className="bd-btn-normal">Devino Founding Club</span>
-                        <span className="bd-btn-hover">Devino Founding Club</span>
+                        <span className="bd-btn-normal">{getCTAText()}</span>
+                        <span className="bd-btn-hover">{getCTAText()}</span>
                       </span>
                     </button>
                   )}
                   {remainingSpots === 0 && (
                     <div className="text-center display-flex flex-column align-items-center mx-auto">
-                      <p className="text-center text-muted">
-                        Nu mai sunt locuri disponibile. Vezi oferta completa aici:
+                      <p className="text-center text-muted mb-3">
+                        Nu mai sunt locuri disponibile în programul Founding Club.
                       </p>
-                      <Link href={routes.clubs.pricing} className="bd-btn mx-auto">
+                      <p
+                        className="text-center"
+                        style={{ fontSize: "16px", color: "#424242", marginBottom: "20px" }}
+                      >
+                        Upgrade la Premium pentru acces nelimitat la cereri și beneficii exclusive
+                        (99 lei/lună sau 990 lei/an)
+                      </p>
+                      <Link href={routes.club.premium} className="bd-btn mx-auto">
                         <span className="bd-btn-inner">
-                          <span className="bd-btn-normal">Vezi oferta completa</span>
-                          <span className="bd-btn-hover">Vezi oferta completa</span>
+                          <span className="bd-btn-normal">Upgrade la Premium</span>
+                          <span className="bd-btn-hover">Upgrade la Premium</span>
                         </span>
                       </Link>
                     </div>

@@ -24,12 +24,12 @@ export default function SportExplanationsSection({
   }
 
   return (
-    <section className="mb-5">
+    <section className="mb-4">
       <div className="card shadow-sm border-0">
         <div className="card-header bg-light">
           <h2 className="h4 mb-0">
             <i className="bi bi-lightbulb-fill me-2 text-warning"></i>
-            De Ce Aceste Sporturi Sunt Potrivite
+            De ce aceste sporturi sunt potrivite
           </h2>
         </div>
         <div className="card-body p-4">
@@ -44,7 +44,9 @@ export default function SportExplanationsSection({
                 <div className="card border-0 bg-light">
                   <div className="card-body p-4">
                     <h3 className="h5 fw-bold mb-3">
-                      <span className="badge bg-primary me-2">{recommendation.matchScore}%</span>
+                      <span className="badge bg-yuvoo-primary me-2" style={{ fontSize: "1rem" }}>
+                        {recommendation.matchScore}%
+                      </span>
                       {recommendation.sportName}
                     </h3>
                     {recommendation.reasoning ? (

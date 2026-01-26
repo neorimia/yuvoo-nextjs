@@ -8,7 +8,7 @@ import React from "react";
  */
 export default function ClubsLandingFooter() {
   return (
-    <section className="bd-clubs-landing-footer pt-50 pb-50">
+    <section className="bd-clubs-landing-footer pb-50">
       <div className="container">
         <div className="row justify-content-center">
           <div className="col-lg-10 col-xl-9">

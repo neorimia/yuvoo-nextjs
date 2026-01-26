@@ -1,6 +1,6 @@
-'use client';
+"use client";
 
-import { useEffect, useState } from 'react';
+import { useEffect, useState } from "react";
 
 interface TimeLeft {
   days: number;
@@ -23,9 +23,7 @@ const calculateTimeLeft = (targetDate: string): TimeLeft => {
 
 const CountdownSection = ({ targetDate }: { targetDate: string }) => {
   const [mounted, setMounted] = useState(false);
-  const [timeLeft, setTimeLeft] = useState<TimeLeft>(() =>
-    calculateTimeLeft(targetDate)
-  );
+  const [timeLeft, setTimeLeft] = useState<TimeLeft>(() => calculateTimeLeft(targetDate));
 
   useEffect(() => {
     setMounted(true);
@@ -40,18 +38,18 @@ const CountdownSection = ({ targetDate }: { targetDate: string }) => {
   if (!mounted) return null; // Prevents hydration mismatch
 
   const timeBox = (value: number, label: string) => (
-    <div className='countdown-item'>
-      <div className="countdown-item-count">{String(value).padStart(2, '0')}</div>
+    <div className="countdown-item">
+      <div className="countdown-item-count">{String(value).padStart(2, "0")}</div>
       <div className="countdown-item-label">{label}</div>
     </div>
   );
 
   return (
     <div className="bd-countdown mb-30">
-      {timeBox(timeLeft.days, 'Days')}
-      {timeBox(timeLeft.hours, 'Hours')}
-      {timeBox(timeLeft.minutes, 'Minutes')}
-      {timeBox(timeLeft.seconds, 'Seconds')}
+      {timeBox(timeLeft.days, "Days")}
+      {timeBox(timeLeft.hours, "Hours")}
+      {timeBox(timeLeft.minutes, "Minutes")}
+      {timeBox(timeLeft.seconds, "Seconds")}
     </div>
   );
 };

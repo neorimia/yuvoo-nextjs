@@ -9,9 +9,7 @@ const useCartInfo = () => {
   const [quantity, setQuantity] = useState(0);
   const [total, setTotal] = useState(0);
 
-  const cartProducts = useSelector(
-    (state: RootState) => state.cart.cartProducts
-  );
+  const cartProducts = useSelector((state: RootState) => state.cart.cartProducts);
 
   // Memoize cartItems to prevent recreation on every render
   const cartItems: CartItem[] = useMemo(() => {

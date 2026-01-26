@@ -238,7 +238,8 @@ export async function verifyReportAccessAction(
       };
     }
 
-    const { accessToken } = validationResult.data;
+    // validationResult.data is now the token string directly (not an object)
+    const accessToken = validationResult.data;
 
     // Step 2: Verify access
     const { access, payment } = await verifyReportAccess(accessToken);

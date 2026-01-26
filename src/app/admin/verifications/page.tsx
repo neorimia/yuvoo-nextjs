@@ -110,7 +110,7 @@ export default async function AdminVerificationsPage() {
           <>
             {/* Pending Clubs */}
             {pendingClubs.length > 0 && (
-              <div className="mb-5">
+              <div className="mb-4">
                 <h2 className="mb-3">
                   <i className="bi bi-building me-2"></i>
                   Cluburi în așteptare ({pendingClubs.length})
@@ -123,7 +123,7 @@ export default async function AdminVerificationsPage() {
 
             {/* Pending Doctors */}
             {pendingDoctors.length > 0 && (
-              <div className="mb-5">
+              <div className="mb-4">
                 <h2 className="mb-3">
                   <i className="bi bi-person-badge me-2"></i>
                   Doctori în așteptare ({pendingDoctors.length})
@@ -140,7 +140,7 @@ export default async function AdminVerificationsPage() {
 
             {/* In Review Clubs */}
             {inReviewClubs.length > 0 && (
-              <div className="mb-5">
+              <div className="mb-4">
                 <h2 className="mb-3">
                   <i className="bi bi-eye me-2"></i>
                   Cluburi în revizuire ({inReviewClubs.length})
@@ -153,7 +153,7 @@ export default async function AdminVerificationsPage() {
 
             {/* In Review Doctors */}
             {inReviewDoctors.length > 0 && (
-              <div className="mb-5">
+              <div className="mb-4">
                 <h2 className="mb-3">
                   <i className="bi bi-eye me-2"></i>
                   Doctori în revizuire ({inReviewDoctors.length})

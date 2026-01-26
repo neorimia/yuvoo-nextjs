@@ -5,6 +5,8 @@
  * on the clubs landing page (/pentru-cluburi).
  */
 
+import { trackEvent, PostHogEvents, PostHogProperties } from "@/lib/analytics/tracking";
+
 export const CLUBS_CONTACT_MODAL_ID = "clubsContactModal";
 
 /**
@@ -33,19 +35,29 @@ export function cleanupModalStyles() {
 /**
  * Opens the clubs contact modal using Bootstrap 5 API
  * @param location - Location identifier for tracking (e.g., "hero", "solution", "final")
- * @param _ctaText - CTA text for tracking (reserved for future use)
+ * @param ctaText - CTA text for tracking
  */
 export function openClubsContactModal(
   location: string,
-  _ctaText: string = "Devino Founding Club Gratuit"
+  ctaText: string = "Devino Founding Club Gratuit"
 ) {
   if (typeof window === "undefined") return;
+
+  // Track modal open event
+  trackEvent(PostHogEvents.CLUBS_CONTACT_MODAL_OPENED, {
+    [PostHogProperties.VARIANT_LOCATION]: location,
+    [PostHogProperties.CTA_TEXT]: ctaText,
+  });
 
   // Clean up any leftover styles first
   cleanupModalStyles();
 
   const modalElement = document.getElementById(CLUBS_CONTACT_MODAL_ID);
   if (modalElement) {
+    // Store location in data attribute for form submission tracking
+    modalElement.setAttribute("data-location", location);
+    modalElement.setAttribute("data-cta-text", ctaText);
+
     // Use Bootstrap 5 modal API
     const bootstrap = (window as Window & typeof globalThis).bootstrap;
     if (bootstrap) {

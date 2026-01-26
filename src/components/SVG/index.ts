@@ -10,14 +10,14 @@ import ProgramSvgFive from "./ProgramSvgFive";
 import ProgramSvgSix from "./ProgramSvgSix";
 
 export {
-    EmailSvgIcon,
-    EyeCutSvgIcon,
-    LockSvgIcon,
-    UserSvgIcon,
-    ProgramSvgOne,
-    ProgramSvgTwo,
-    ProgramSvgThree,
-    ProgramSvgFour,
-    ProgramSvgFive,
-    ProgramSvgSix,
-}
+  EmailSvgIcon,
+  EyeCutSvgIcon,
+  LockSvgIcon,
+  UserSvgIcon,
+  ProgramSvgOne,
+  ProgramSvgTwo,
+  ProgramSvgThree,
+  ProgramSvgFour,
+  ProgramSvgFive,
+  ProgramSvgSix,
+};

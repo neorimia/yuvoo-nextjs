@@ -8,6 +8,8 @@ import React from "react";
 import type { QuizResult } from "@/modules/quiz/quiz.types";
 import { routes } from "@/lib/routes";
 import Link from "next/link";
+import { getCityIdByName } from "@/lib/db/location-helpers";
+import { normalizeSportName } from "@/lib/utils/sport-normalization";
 
 interface LocalClubsSectionProps {
   quizResult: QuizResult;
@@ -19,7 +21,7 @@ interface LocalClubsSectionProps {
  * Displays club suggestions based on recommended sports.
  * Note: This is a placeholder - actual club data will be fetched in Phase 6.
  */
-export default function LocalClubsSection({ quizResult }: LocalClubsSectionProps) {
+export default async function LocalClubsSection({ quizResult }: LocalClubsSectionProps) {
   const topRecommendations = [...quizResult.recommendations]
     .sort((a, b) => b.matchScore - a.matchScore)
     .slice(0, 3);
@@ -28,13 +30,23 @@ export default function LocalClubsSection({ quizResult }: LocalClubsSectionProps
     return null;
   }
 
+  // Parse location to extract city name and get cityId
+  // Location format might be "Sector 1, București" or just "București"
+  let cityId: string | null = null;
+  if (quizResult.location) {
+    // Extract city name (everything after the last comma, or the whole string if no comma)
+    const locationParts = quizResult.location.split(",").map((part) => part.trim());
+    const cityName = locationParts[locationParts.length - 1]; // Get last part (city name)
+    cityId = await getCityIdByName(cityName);
+  }
+
   return (
-    <section className="mb-5">
+    <section className="mb-4">
       <div className="card shadow-sm border-0">
         <div className="card-header bg-light">
           <h2 className="h4 mb-0">
             <i className="bi bi-geo-alt-fill me-2 text-danger"></i>
-            Sugestii de Cluburi Locale
+            Sugestii de cluburi locale
           </h2>
         </div>
         <div className="card-body p-4">
@@ -55,9 +67,9 @@ export default function LocalClubsSection({ quizResult }: LocalClubsSectionProps
             )}
           </p>
 
-          <div className="row g-4">
+          <div className="row gap-4">
             {topRecommendations.map((recommendation) => (
-              <div key={recommendation.sportId} className="col-12 col-md-6 col-lg-4">
+              <div key={recommendation.sportId} className="col-12">
                 <div className="card border-0 bg-light h-100">
                   <div className="card-body p-4">
                     <h3 className="h5 fw-bold mb-3">{recommendation.sportName}</h3>
@@ -66,8 +78,8 @@ export default function LocalClubsSection({ quizResult }: LocalClubsSectionProps
                       au experiență în lucrul cu începători.
                     </p>
                     <Link
-                      href={`${routes.clubs.list}?sport=${encodeURIComponent(recommendation.sportName)}${quizResult.location ? `&city=${encodeURIComponent(quizResult.location)}` : ""}`}
-                      className="btn btn-outline-primary btn-sm w-100"
+                      href={`${routes.clubs.list}?sport=${encodeURIComponent(normalizeSportName(recommendation.sportName))}${cityId ? `&cityId=${encodeURIComponent(cityId)}` : ""}&quiz=true`}
+                      className="btn btn-yuvoo-outline-primary btn-sm w-100"
                     >
                       <i className="bi bi-search me-2"></i>
                       Caută Cluburi{quizResult.location ? ` în ${quizResult.location}` : ""}
@@ -88,7 +100,7 @@ export default function LocalClubsSection({ quizResult }: LocalClubsSectionProps
           </div>
 
           <div className="mt-4 text-center">
-            <Link href={routes.clubs.list} className="btn btn-primary">
+            <Link href={routes.clubs.list} className="btn btn-yuvoo-primary">
               <i className="bi bi-list-ul me-2"></i>
               Vezi Toate Cluburile
             </Link>

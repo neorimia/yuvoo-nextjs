@@ -1,7 +1,7 @@
-import { productData } from '@/data';
-import { IProduct } from '@/types/product-interface';
-import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { StaticImageData } from 'next/image';
+import { productData } from "@/data";
+import { IProduct } from "@/types/product-interface";
+import { createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { StaticImageData } from "next/image";
 
 // Define product type
 interface Product {
@@ -29,14 +29,14 @@ const initialState: ProductState = {
 
 // Create the slice
 export const productSlice = createSlice({
-  name: 'products',
+  name: "products",
   initialState,
   reducers: {
     single_product: (state, action: PayloadAction<number | string>) => {
-      state.product = state.products.find(product => product.id === action.payload) || null;
+      state.product = state.products.find((product) => product.id === action.payload) || null;
     },
     specific_product: (state, action: PayloadAction<number | string>) => {
-      state.product = state.products.find(product => product.id === action.payload) || null;
+      state.product = state.products.find((product) => product.id === action.payload) || null;
     },
     getSingleProduct: (state, action: PayloadAction<Product>) => {
       state.product = action.payload;

@@ -21,8 +21,7 @@ interface EmailLayoutProps {
 export const EmailLayout = ({ preview, children }: EmailLayoutProps) => {
   return (
     <Html lang="ro">
-      <Head />
-      {preview && <title>{preview}</title>}
+      <Head>{preview && <title>{preview}</title>}</Head>
       <Body style={main}>
         <Container style={container}>
           <EmailHeader />

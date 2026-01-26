@@ -22,12 +22,12 @@ export default function SportBenefitsSection({ recommendations }: SportBenefitsS
   }
 
   return (
-    <section className="mb-5">
+    <section className="mb-4">
       <div className="card shadow-sm border-0">
         <div className="card-header bg-light">
           <h2 className="h4 mb-0">
             <i className="bi bi-heart-fill me-2 text-danger"></i>
-            Ce Dezvoltă Fiecare Sport
+            Ce dezvoltă fiecare sport
           </h2>
         </div>
         <div className="card-body p-4">
@@ -36,11 +36,11 @@ export default function SportBenefitsSection({ recommendations }: SportBenefitsS
             cât și emoțional. Iată principalele beneficii pentru fiecare recomandare:
           </p>
 
-          <div className="row g-4">
+          <div className="row">
             {recommendations.map((recommendation) => (
-              <div key={recommendation.sportId} className="col-12 col-md-6">
-                <div className="card border-0 h-100" style={{ borderLeft: "4px solid #00BBAE" }}>
-                  <div className="card-body p-4">
+              <div key={recommendation.sportId} className="col-12">
+                <div className="card border-0" style={{ borderLeft: "4px solid #00BBAE" }}>
+                  <div className="card-body">
                     <h3 className="h5 fw-bold mb-3">{recommendation.sportName}</h3>
 
                     {/* Benefits List */}

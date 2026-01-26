@@ -12,10 +12,12 @@ import line from "../../../../public/assets/img/shape/tripple-line.png";
  */
 export default function ClubsLandingProblem() {
   const problems = [
-    "Primești zeci de mesaje de la părinți care „nu sunt siguri”",
-    "Organizezi probe care nu se concretizează",
-    "Pierzi timp explicând de ce un copil nu este încă pregătit",
-    "Google & Facebook aduc volum, dar nu potrivire",
+    "Primești zeci de mesaje de la părinți care „nu sunt siguri dacă sportul tău este potrivit",
+    "Organizezi probe gratuite care nu se concretizează în înscrieri",
+    "Pierzi ore de timp explicând părinților de ce copilul lor nu este încă pregătit",
+    "Google & Facebook aduc volum mare, dar potrivire mică (părinți necalificați)",
+    "Plătești sute de lei pe ads pentru lead-uri care nu se convertesc în înscrieri",
+    "Nu știi dacă investiția în marketing se traduce în rezultate reale",
   ];
 
   return (
@@ -59,7 +61,8 @@ export default function ClubsLandingProblem() {
               <div className="bd-section-title-wrapper mb-35">
                 <h2 className="bd-section-title mb-10">Problema reală a cluburilor pentru copii</h2>
                 <span className="mb-10 d-inline-block">
-                  Dacă administrezi un club pentru copii (4–14 ani), probabil recunoști asta:
+                  Dacă administrezi un club pentru copii (4–14 ani), probabil recunoști aceste
+                  situații:
                 </span>
               </div>
 
@@ -86,11 +89,24 @@ export default function ClubsLandingProblem() {
                     fontSize: "20px",
                     fontWeight: 600,
                     color: "#1B1B1B",
-                    marginBottom: 0,
+                    marginBottom: "15px",
                     lineHeight: "1.5",
                   }}
                 >
                   Nu ai o problemă de vizibilitate. Ai o problemă de calitate a lead-urilor.
+                </p>
+                <p
+                  style={{
+                    fontSize: "16px",
+                    fontWeight: 400,
+                    color: "#424242",
+                    marginBottom: 0,
+                    lineHeight: "1.6",
+                  }}
+                >
+                  Costuri ascunse: timp pierdut pe mesaje inutile și probe care nu se concretizează
+                  = ore de antrenor care ar putea fi folosite pentru copiii care sunt deja potriviți
+                  pentru sportul tău.
                 </p>
               </div>
             </div>

@@ -28,12 +28,12 @@ export default function NextStepsSection({ quizResult }: NextStepsSectionProps) 
   }
 
   return (
-    <section className="mb-5">
+    <section className="mb-4">
       <div className="card shadow-sm border-0">
         <div className="card-header bg-light">
           <h2 className="h4 mb-0">
-            <i className="bi bi-arrow-right-circle-fill me-2 text-primary"></i>
-            Pașii Următori Recomandați
+            <i className="bi bi-arrow-right-circle-fill me-2 text-yuvoo-primary"></i>
+            Pașii următori recomandați
           </h2>
         </div>
         <div className="card-body p-4">
@@ -41,14 +41,14 @@ export default function NextStepsSection({ quizResult }: NextStepsSectionProps) 
             Iată un ghid practic pentru a începe călătoria copilului tău în sportul recomandat:
           </p>
 
-          <div className="row g-4">
+          <div className="row gap-4">
             {/* How to Start */}
-            <div className="col-12 col-md-6">
+            <div className="col-12">
               <div className="card border-0 bg-light h-100">
                 <div className="card-body p-4">
                   <h3 className="h5 fw-bold mb-3">
-                    <i className="bi bi-play-circle-fill text-primary me-2"></i>
-                    Cum Să Începi
+                    <i className="bi bi-play-circle-fill text-yuvoo-primary me-2"></i>
+                    Cum să începi
                   </h3>
                   <ol className="mb-0">
                     <li className="mb-2">
@@ -72,12 +72,12 @@ export default function NextStepsSection({ quizResult }: NextStepsSectionProps) 
             </div>
 
             {/* What to Watch */}
-            <div className="col-12 col-md-6">
+            <div className="col-12">
               <div className="card border-0 bg-light h-100">
                 <div className="card-body p-4">
                   <h3 className="h5 fw-bold mb-3">
-                    <i className="bi bi-eye-fill text-warning me-2"></i>
-                    La Ce Să Fii Atent la Primul Antrenament
+                    <i className="bi bi-eye-fill text-yuvoo-primary me-2"></i>
+                    La ce să fii atent la primul antrenament
                   </h3>
                   <ul className="list-unstyled mb-0">
                     <li className="mb-2">
@@ -105,41 +105,37 @@ export default function NextStepsSection({ quizResult }: NextStepsSectionProps) 
 
           {/* Questions to Ask */}
           <div className="mt-4">
-            <div className="card border-0" style={{ borderLeft: "4px solid #00BBAE" }}>
+            <div className="card border-0" style={{ borderLeft: "4px solid #7C81FF" }}>
               <div className="card-body p-4">
                 <h3 className="h5 fw-bold mb-3">
-                  <i className="bi bi-question-circle-fill text-info me-2"></i>
-                  Întrebări Importante de Pus Clubului
+                  <i className="bi bi-question-circle-fill text-yuvoo-primary me-2"></i>
+                  Întrebări importante de pus clubului
                 </h3>
-                <div className="row g-3">
-                  <div className="col-12 col-md-6">
+                <div className="row">
+                  <div className="col-12">
                     <ul className="list-unstyled mb-0">
                       <li className="mb-2">
-                        <i className="bi bi-dot text-primary me-2"></i>
+                        <i className="bi bi-dot text-yuvoo-primary me-2"></i>
                         Ce vârstă minimă acceptați pentru programul de începători?
                       </li>
                       <li className="mb-2">
-                        <i className="bi bi-dot text-primary me-2"></i>
+                        <i className="bi bi-dot text-yuvoo-primary me-2"></i>
                         Câte copii sunt într-un grup și câți antrenori?
                       </li>
                       <li className="mb-2">
-                        <i className="bi bi-dot text-primary me-2"></i>
+                        <i className="bi bi-dot text-yuvoo-primary me-2"></i>
                         Oferiți lecții de probă sau programe de introducere?
                       </li>
-                    </ul>
-                  </div>
-                  <div className="col-12 col-md-6">
-                    <ul className="list-unstyled mb-0">
                       <li className="mb-2">
-                        <i className="bi bi-dot text-primary me-2"></i>
+                        <i className="bi bi-dot text-yuvoo-primary me-2"></i>
                         Care este programul și cât de flexibil este?
                       </li>
                       <li className="mb-2">
-                        <i className="bi bi-dot text-primary me-2"></i>
+                        <i className="bi bi-dot text-yuvoo-primary me-2"></i>
                         Ce echipament este necesar și unde poate fi procurat?
                       </li>
                       <li className="mb-0">
-                        <i className="bi bi-dot text-primary me-2"></i>
+                        <i className="bi bi-dot text-yuvoo-primary me-2"></i>
                         Cum gestionați dezvoltarea progresivă a copiilor?
                       </li>
                     </ul>
@@ -151,7 +147,7 @@ export default function NextStepsSection({ quizResult }: NextStepsSectionProps) 
 
           {/* CTA to Browse Clubs */}
           <div className="mt-4 text-center">
-            <Link href={routes.clubs.list} className="btn btn-primary btn-lg">
+            <Link href={routes.clubs.list} className="btn btn-yuvoo-primary btn-lg">
               <i className="bi bi-search me-2"></i>
               Explorează Cluburi Locale
             </Link>

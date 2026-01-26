@@ -27,6 +27,10 @@ export interface Doctor {
       lat: number;
       lng: number;
     };
+    // Phase 5: Location foreign keys (for filtering and joins)
+    cityId?: string;
+    sectorId?: string;
+    countyId?: string;
   };
   contact: {
     phone?: string; // From schema: phone (optional)
@@ -48,8 +52,10 @@ export interface Doctor {
 
 export interface DoctorSearchFilters {
   specialty?: DoctorSpecialty;
-  city?: string;
-  district?: string;
+  // Phase 6: Only ID-based filters (text columns removed)
+  cityId?: string; // Location ID filter (required for city filtering)
+  sectorId?: string; // Sector ID filter (for Bucharest)
+  countyId?: string; // County ID filter (for county-wide searches)
   verified?: boolean;
   acceptingNewPatients?: boolean;
   onlineConsultations?: boolean;

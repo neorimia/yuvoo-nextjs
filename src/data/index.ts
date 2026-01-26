@@ -16,4 +16,4 @@ export {
   blogData,
   productData,
   footerData,
-}
+};

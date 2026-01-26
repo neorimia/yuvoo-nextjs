@@ -7,7 +7,6 @@
 
 "use server";
 
-import { redirect } from "next/navigation";
 import { revalidatePath } from "next/cache";
 import { z } from "zod";
 import { getQuizResult } from "@/modules/quiz/quiz.service";
@@ -43,11 +42,11 @@ const collectEmailSchema = z.object({
 /**
  * Collect email after quiz completion
  *
- * Updates quiz record with email and redirects to teaser page.
+ * Updates quiz record with email and returns redirect URL.
  * Sends teaser email with single sport recommendation.
  *
- * @param formData - Form data with quizId and email
- * @returns Redirects to teaser page or returns error
+ * @param formData - Form data with quizId, email, and location
+ * @returns Success with redirectUrl or error object
  */
 export async function collectEmailAction(formData: FormData) {
   try {
@@ -113,10 +112,22 @@ export async function collectEmailAction(formData: FormData) {
     revalidatePath(routes.quiz.emailGate(quizId));
     revalidatePath(routes.quiz.teaser(quizId));
 
-    // Redirect to teaser page
-    redirect(routes.quiz.teaser(quizId));
+    // Return success with redirect URL (client will handle redirect)
+    return {
+      success: true as const,
+      redirectUrl: routes.quiz.teaser(quizId),
+    };
   } catch (error) {
     console.error("[Email Collection] Error collecting email:", error);
+
+    // Handle NEXT_REDIRECT error (this is expected when redirect() is called)
+    if (error && typeof error === "object" && "digest" in error) {
+      const digest = (error as { digest?: string }).digest;
+      if (digest?.startsWith("NEXT_REDIRECT")) {
+        // Re-throw redirect errors so Next.js can handle them
+        throw error;
+      }
+    }
 
     return {
       success: false as const,

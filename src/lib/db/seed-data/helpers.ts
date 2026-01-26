@@ -4,6 +4,116 @@
  * Utility functions for generating seed data.
  */
 
+import { countyCapitals, bucharestSectors, majorCities } from "@/lib/db/locations-data";
+
+/**
+ * Map city names to location IDs
+ * Handles variations and matches city names to location IDs
+ */
+const CITY_TO_LOCATION_ID: Record<string, string> = {};
+
+// Build city to location ID mapping
+[...countyCapitals, ...majorCities].forEach((city) => {
+  CITY_TO_LOCATION_ID[city.name] = city.id;
+  // Also add normalized version (without diacritics) for fuzzy matching
+  const normalized = city.name
+    .toLowerCase()
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "");
+  if (normalized !== city.name.toLowerCase()) {
+    CITY_TO_LOCATION_ID[normalized] = city.id;
+  }
+});
+
+/**
+ * Map sector names to location IDs (Bucharest only)
+ */
+const SECTOR_TO_LOCATION_ID: Record<string, string> = {};
+
+bucharestSectors.forEach((sector) => {
+  SECTOR_TO_LOCATION_ID[sector.name] = sector.id;
+  // Also add variations
+  SECTOR_TO_LOCATION_ID[`Sectorul ${sector.name.split(" ")[1]}`] = sector.id;
+  SECTOR_TO_LOCATION_ID[`Sector ${sector.name.split(" ")[1]}`] = sector.id;
+});
+
+/**
+ * Get city location ID from city name
+ */
+export function getCityLocationId(cityName: string): string | undefined {
+  if (!cityName) return undefined;
+
+  // Try exact match first
+  if (CITY_TO_LOCATION_ID[cityName]) {
+    return CITY_TO_LOCATION_ID[cityName];
+  }
+
+  // Try normalized match
+  const normalized = cityName
+    .toLowerCase()
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "");
+  if (CITY_TO_LOCATION_ID[normalized]) {
+    return CITY_TO_LOCATION_ID[normalized];
+  }
+
+  // Try case-insensitive match
+  for (const [name, id] of Object.entries(CITY_TO_LOCATION_ID)) {
+    if (name.toLowerCase() === cityName.toLowerCase()) {
+      return id;
+    }
+  }
+
+  return undefined;
+}
+
+/**
+ * Get sector location ID from sector/district name (Bucharest only)
+ */
+export function getSectorLocationId(districtName: string): string | undefined {
+  if (!districtName) return undefined;
+
+  // Try exact match first
+  if (SECTOR_TO_LOCATION_ID[districtName]) {
+    return SECTOR_TO_LOCATION_ID[districtName];
+  }
+
+  // Try normalized match
+  const normalized = districtName
+    .toLowerCase()
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "")
+    .trim();
+
+  for (const [name, id] of Object.entries(SECTOR_TO_LOCATION_ID)) {
+    const normalizedName = name
+      .toLowerCase()
+      .normalize("NFD")
+      .replace(/[\u0300-\u036f]/g, "")
+      .trim();
+    if (normalizedName === normalized) {
+      return id;
+    }
+  }
+
+  return undefined;
+}
+
+/**
+ * Get county location ID from city location ID
+ * Derives county from city's parent relationship
+ */
+export function getCountyLocationId(cityId: string | undefined): string | undefined {
+  if (!cityId) return undefined;
+
+  // Find city in locations data
+  const city = [...countyCapitals, ...majorCities].find((c) => c.id === cityId);
+  if (!city || !city.parentId) return undefined;
+
+  // parentId of a city is the county ID
+  return city.parentId;
+}
+
 /**
  * Generate URL-friendly slug from Romanian text
  * Converts: "Fotbal Club Junior București" -> "fotbal-club-junior-bucuresti"

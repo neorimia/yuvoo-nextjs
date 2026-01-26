@@ -7,12 +7,15 @@ import ClubsLandingHero from "@/components/features/clubs/ClubsLandingHero";
 import ClubsLandingProblem from "@/components/features/clubs/ClubsLandingProblem";
 import ClubsLandingSolution from "@/components/features/clubs/ClubsLandingSolution";
 import ClubsLandingBenefits from "@/components/features/clubs/ClubsLandingBenefits";
+import ClubsLandingWhyNow from "@/components/features/clubs/ClubsLandingWhyNow";
+import ClubsLandingPricing from "@/components/features/clubs/ClubsLandingPricing";
 import ClubsLandingTestimonials from "@/components/features/clubs/ClubsLandingTestimonials";
 import ClubsLandingFAQ from "@/components/features/clubs/ClubsLandingFAQ";
 import ClubsLandingFinalCTA from "@/components/features/clubs/ClubsLandingFinalCTA";
 import ClubsLandingTrust from "@/components/features/clubs/ClubsLandingTrust";
 import ClubsLandingFooter from "@/components/features/clubs/ClubsLandingFooter";
 import ClubsContactModal from "@/components/features/clubs/ClubsContactModal";
+import ClubsLandingPageTracker from "@/components/features/clubs/ClubsLandingPageTracker";
 import { CLUBS_CONTACT_MODAL_ID } from "@/lib/clubs-landing-modal";
 import { routes } from "@/lib/routes";
 import { countVerifiedClubs } from "@/modules/clubs/clubs.service";
@@ -26,9 +29,9 @@ const baseUrl = process.env.NEXT_PUBLIC_APP_URL || "https://yuvoo.ro";
 const canonicalUrl = `${baseUrl}${routes.clubs.landing}`;
 
 export const metadata: Metadata = {
-  title: "Pentru Cluburi - Yuvoo | Devino Founding Club Gratuit",
+  title: "Pentru Cluburi - Yuvoo | Devino Founding Club sau Upgrade la Premium",
   description:
-    "Yuvoo conectează cluburi sportive pentru copii cu părinți care știu deja că sportul tău este potrivit pentru copilul lor. Primele 15 cluburi din România intră gratuit ca Founding Clubs. Părinți pre-calificați, cluburi sportive, zero risc în MVP.",
+    "Yuvoo conectează cluburi sportive pentru copii cu părinți pre-calificați. Primele 15 cluburi intră gratuit ca Founding Clubs. Sau upgrade la Premium (99 lei/lună sau 990 lei/an) pentru acces nelimitat la cereri și beneficii exclusive. Părinți pre-calificați, cluburi sportive, zero risc.",
   keywords: [
     "cluburi sportive copii",
     "founding club gratuit",
@@ -39,9 +42,9 @@ export const metadata: Metadata = {
     "cluburi pentru copii",
   ],
   openGraph: {
-    title: "Pentru Cluburi - Yuvoo | Devino Founding Club Gratuit",
+    title: "Pentru Cluburi - Yuvoo | Devino Founding Club sau Upgrade la Premium",
     description:
-      "Yuvoo conectează cluburi sportive pentru copii cu părinți pre-calificați. Primele 15 cluburi din România intră gratuit ca Founding Clubs.",
+      "Yuvoo conectează cluburi sportive pentru copii cu părinți pre-calificați. Primele 15 cluburi intră gratuit ca Founding Clubs. Sau upgrade la Premium (99 lei/lună sau 990 lei/an) pentru acces nelimitat.",
     url: canonicalUrl,
     siteName: "Yuvoo",
     type: "website",
@@ -57,9 +60,9 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    title: "Pentru Cluburi - Yuvoo | Devino Founding Club Gratuit",
+    title: "Pentru Cluburi - Yuvoo | Devino Founding Club sau Upgrade la Premium",
     description:
-      "Yuvoo conectează cluburi sportive pentru copii cu părinți pre-calificați. Primele 15 cluburi din România intră gratuit ca Founding Clubs.",
+      "Yuvoo conectează cluburi sportive pentru copii cu părinți pre-calificați. Primele 15 cluburi intră gratuit ca Founding Clubs. Sau upgrade la Premium (99 lei/lună sau 990 lei/an) pentru acces nelimitat.",
     images: [`${baseUrl}/assets/img/logo/og-image.jpg`],
   },
   alternates: {
@@ -86,6 +89,9 @@ export default async function ClubsLandingPage() {
 
   return (
     <>
+      {/* Page View Tracker */}
+      <ClubsLandingPageTracker />
+
       {/* Hero Section */}
       <ClubsLandingHero verifiedCount={verifiedCount} remainingSpots={remainingSpots} />
 
@@ -98,6 +104,12 @@ export default async function ClubsLandingPage() {
       {/* Benefits Section */}
       <ClubsLandingBenefits />
 
+      {/* Why Now Section */}
+      <ClubsLandingWhyNow remainingSpots={remainingSpots} />
+
+      {/* Pricing Section */}
+      <ClubsLandingPricing />
+
       {/* Testimonials Section */}
       <ClubsLandingTestimonials />
 
@@ -108,7 +120,7 @@ export default async function ClubsLandingPage() {
       <ClubsLandingFinalCTA verifiedCount={verifiedCount} remainingSpots={remainingSpots} />
 
       {/* Trust Indicators Section */}
-      <ClubsLandingTrust />
+      <ClubsLandingTrust verifiedCount={verifiedCount} />
 
       {/* Footer Microcopy Section */}
       <ClubsLandingFooter />

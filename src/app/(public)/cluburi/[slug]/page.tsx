@@ -15,6 +15,7 @@ import ClubMap from "@/components/features/clubs/ClubMap";
 import ClubContentExpanded from "@/components/features/clubs/ClubContentExpanded";
 import { getClubBySlug } from "@/modules/clubs/clubs.service";
 import { clubsRepository } from "@/modules/clubs/clubs.repository";
+import { premiumClubService } from "@/modules/clubs/premium-club.service";
 import { routes } from "@/lib/routes";
 import { cacheLife, cacheTag } from "next/cache";
 import type { Club } from "@/modules/clubs/clubs.types";
@@ -128,6 +129,9 @@ export default async function ClubDetailPage({ params }: ClubDetailPageProps) {
   // Generate expanded content for SEO (600-900 words)
   const expandedContent = generateClubExpandedContent(club!);
 
+  // Check if club is premium (for contact info visibility)
+  const isPremium = await premiumClubService.checkIsPremium(club!.id);
+
   return (
     <>
       <PostHogViewTracking
@@ -146,7 +150,7 @@ export default async function ClubDetailPage({ params }: ClubDetailPageProps) {
           { name: club!.name, url: routes.clubs.detail(slug) }, // Current page
         ]}
       />
-      <ClubDetailsMain club={club!} />
+      <ClubDetailsMain club={club!} isPremium={isPremium} />
       {club!.images && club!.images.length > 1 && (
         <ClubGallery images={club!.images} clubName={club!.name} />
       )}

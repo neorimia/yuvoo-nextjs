@@ -34,12 +34,12 @@ export default function SportsToAvoidSection({
   }
 
   return (
-    <section className="mb-5">
+    <section className="mb-4">
       <div className="card shadow-sm border-0">
         <div className="card-header bg-light">
           <h2 className="h4 mb-0">
             <i className="bi bi-exclamation-triangle-fill me-2 text-warning"></i>
-            Ce Sporturi Ar Trebui Evitate Momentan
+            Ce sporturi ar trebui evitate momentan
           </h2>
         </div>
         <div className="card-body p-4">
@@ -49,9 +49,9 @@ export default function SportsToAvoidSection({
             ci că momentan există opțiuni mai potrivite pentru dezvoltarea sa.
           </p>
 
-          <div className="row g-3">
+          <div className="row">
             {sportsToAvoid.map((recommendation) => (
-              <div key={recommendation.sportId} className="col-12 col-md-6">
+              <div key={recommendation.sportId} className="col-12">
                 <div className="card border-0 bg-light">
                   <div className="card-body p-3">
                     <div className="d-flex align-items-start">

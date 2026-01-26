@@ -18,9 +18,7 @@ const wishlistSlice = createSlice({
   initialState,
   reducers: {
     add_to_wishlist: (state, action: PayloadAction<CartProduct>) => {
-      const productIndex = state.wishlist.findIndex(
-        (item) => item.id === action.payload.id
-      );
+      const productIndex = state.wishlist.findIndex((item) => item.id === action.payload.id);
       const toastId = toast.loading("");
       if (productIndex >= 0) {
         toast.error(`${action.payload.title} already added to wishlist`, {
@@ -35,13 +33,8 @@ const wishlistSlice = createSlice({
         });
       }
     },
-    remove_wishlist_product: (
-      state,
-      action: PayloadAction<{ id: number | string }>
-    ) => {
-      state.wishlist = state.wishlist.filter(
-        (item) => item.id !== action.payload.id
-      );
+    remove_wishlist_product: (state, action: PayloadAction<{ id: number | string }>) => {
+      state.wishlist = state.wishlist.filter((item) => item.id !== action.payload.id);
       const toastId = toast.loading("");
       toast.error("Removed from your wishlist", {
         id: toastId,
@@ -51,8 +44,7 @@ const wishlistSlice = createSlice({
   },
 });
 
-export const { add_to_wishlist, remove_wishlist_product } =
-  wishlistSlice.actions;
+export const { add_to_wishlist, remove_wishlist_product } = wishlistSlice.actions;
 
 // ✅ Proper selector using RootState
 export const wishlistItems = (state: RootState) => state.wishlist.wishlist;

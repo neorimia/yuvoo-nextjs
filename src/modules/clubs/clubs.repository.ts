@@ -6,15 +6,17 @@
  */
 
 import { db } from "@/lib/db";
-import { clubs } from "@/lib/db/schema";
+import { clubs, premiumClubStatus } from "@/lib/db/schema";
 import { eq, desc, asc, inArray } from "drizzle-orm";
+import { getLocationNamesByIds } from "@/lib/db/location-helpers";
 import type { Club } from "./clubs.types";
 
 /**
  * Map database club record to Club type
  * Maps all fields from schema to Club interface, handling optional fields and defaults.
+ * Phase 5: Now populates location names from foreign keys when available.
  */
-export function mapDbClubToClub(dbClub: typeof clubs.$inferSelect): Club {
+export async function mapDbClubToClub(dbClub: typeof clubs.$inferSelect): Promise<Club> {
   // Parse schedule from JSONB - handle both old format (time) and new format (startTime/endTime)
   // Schema: schedule jsonb default '[]'
   const scheduleData = dbClub.schedule as unknown;
@@ -45,10 +47,18 @@ export function mapDbClubToClub(dbClub: typeof clubs.$inferSelect): Club {
   }
 
   // Build location with coordinates
+  // Phase 5: Populate location names from foreign keys when available, fallback to text fields
   // Schema: city (notNull), district (optional), address (optional), latitude/longitude (optional)
+  // Schema: cityId (notNull), sectorId (optional), countyId (notNull) - Phase 3
+  const locationIds = [dbClub.cityId, dbClub.sectorId, dbClub.countyId].filter(
+    (id): id is string => !!id
+  );
+  const locationNames = await getLocationNamesByIds(locationIds);
+
   const location: Club["location"] = {
-    city: dbClub.city, // Schema: notNull
-    district: dbClub.district || undefined, // Schema: optional
+    // Phase 6: Location names are now always fetched from foreign keys (no text fallback)
+    city: locationNames.get(dbClub.cityId || "") || "", // Required - must have cityId
+    district: dbClub.sectorId ? locationNames.get(dbClub.sectorId) || undefined : undefined, // Optional
     address: dbClub.address || "", // Schema: optional, but interface requires string
     coordinates:
       dbClub.latitude && dbClub.longitude
@@ -57,6 +67,10 @@ export function mapDbClubToClub(dbClub: typeof clubs.$inferSelect): Club {
             lng: parseFloat(dbClub.longitude),
           }
         : undefined,
+    // Phase 5: Include location IDs for filtering and joins
+    cityId: dbClub.cityId || undefined,
+    sectorId: dbClub.sectorId || undefined,
+    countyId: dbClub.countyId || undefined,
   };
 
   // Map images from logoUrl and galleryUrls
@@ -67,6 +81,28 @@ export function mapDbClubToClub(dbClub: typeof clubs.$inferSelect): Club {
   }
   if (dbClub.galleryUrls && Array.isArray(dbClub.galleryUrls)) {
     images.push(...dbClub.galleryUrls);
+  }
+
+  // Check premium status (with date validation)
+  let isPremium = false;
+  try {
+    const premiumStatus = await db.query.premiumClubStatus.findFirst({
+      where: eq(premiumClubStatus.clubId, dbClub.id),
+    });
+
+    if (premiumStatus && premiumStatus.isPremium) {
+      // Check if premium has expired
+      if (premiumStatus.premiumEndDate) {
+        const now = new Date();
+        isPremium = now <= premiumStatus.premiumEndDate;
+      } else {
+        // No end date means active premium
+        isPremium = true;
+      }
+    }
+  } catch (error) {
+    // If premium check fails, default to false
+    console.warn(`[Clubs Repository] Failed to check premium status for club ${dbClub.id}:`, error);
   }
 
   return {
@@ -95,6 +131,7 @@ export function mapDbClubToClub(dbClub: typeof clubs.$inferSelect): Club {
     verificationDocuments: dbClub.verificationDocuments || [], // Schema: text array, default '{}'
     profileComplete: dbClub.profileComplete ?? false, // Schema: notNull, default false
     rating: dbClub.rating || 0, // Schema: integer, default 0
+    isPremium, // Premium status (checked with date validation)
     createdAt: dbClub.createdAt, // Schema: notNull, defaultNow
     updatedAt: dbClub.updatedAt, // Schema: notNull, defaultNow
   };
@@ -112,7 +149,7 @@ export async function getClubBySlug(slug: string): Promise<Club | null> {
     return null;
   }
 
-  return mapDbClubToClub(dbClub);
+  return await mapDbClubToClub(dbClub);
 }
 
 /**
@@ -127,7 +164,7 @@ export async function getClubById(id: string): Promise<Club | null> {
     return null;
   }
 
-  return mapDbClubToClub(dbClub);
+  return await mapDbClubToClub(dbClub);
 }
 
 /**
@@ -138,7 +175,7 @@ export async function getAllClubs(): Promise<Club[]> {
     orderBy: [desc(clubs.createdAt)],
   });
 
-  return dbClubs.map(mapDbClubToClub);
+  return Promise.all(dbClubs.map(mapDbClubToClub));
 }
 
 /**
@@ -152,7 +189,7 @@ export async function getClubsByVerificationStatus(
     orderBy: [asc(clubs.createdAt)], // Oldest first (FIFO for review queue)
   });
 
-  return dbClubs.map(mapDbClubToClub);
+  return Promise.all(dbClubs.map(mapDbClubToClub));
 }
 
 /**
@@ -164,7 +201,7 @@ export async function getClubsPendingVerification(): Promise<Club[]> {
     orderBy: [asc(clubs.createdAt)], // Oldest first
   });
 
-  return dbClubs.map(mapDbClubToClub);
+  return Promise.all(dbClubs.map(mapDbClubToClub));
 }
 
 /**
@@ -176,34 +213,52 @@ export async function findBySportType(sportType: string): Promise<Club[]> {
     orderBy: [desc(clubs.verified), desc(clubs.createdAt)], // Verified first, then newest
   });
 
-  return dbClubs.map(mapDbClubToClub);
+  return Promise.all(dbClubs.map(mapDbClubToClub));
 }
 
 /**
  * Get unique locations (city/district combinations) from clubs
+ * Phase 6: Updated to use location foreign keys instead of text columns
  * Returns array of { city, district? } objects
  */
 export async function getUniqueLocations(): Promise<Array<{ city: string; district?: string }>> {
   const dbClubs = await db.query.clubs.findMany({
     columns: {
-      city: true,
-      district: true,
+      cityId: true,
+      sectorId: true,
     },
   });
 
-  // Use Set to track unique combinations
-  const locationSet = new Set<string>();
-  const locations: Array<{ city: string; district?: string }> = [];
+  // Collect all unique location IDs
+  const locationIds = new Set<string>();
+  const locationPairs = new Map<string, { cityId: string; sectorId?: string }>();
 
   for (const club of dbClubs) {
-    // Create a unique key for city/district combination
-    const key = club.district ? `${club.city}|${club.district}` : club.city;
+    if (!club.cityId) continue; // Skip clubs without cityId
 
-    if (!locationSet.has(key)) {
-      locationSet.add(key);
+    const key = club.sectorId ? `${club.cityId}|${club.sectorId}` : club.cityId;
+
+    if (!locationPairs.has(key)) {
+      locationPairs.set(key, {
+        cityId: club.cityId,
+        sectorId: club.sectorId || undefined,
+      });
+      locationIds.add(club.cityId);
+      if (club.sectorId) locationIds.add(club.sectorId);
+    }
+  }
+
+  // Fetch location names
+  const locationNames = await getLocationNamesByIds(Array.from(locationIds));
+
+  // Build result array
+  const locations: Array<{ city: string; district?: string }> = [];
+  for (const { cityId, sectorId } of locationPairs.values()) {
+    const city = locationNames.get(cityId);
+    if (city) {
       locations.push({
-        city: club.city,
-        district: club.district || undefined,
+        city,
+        district: sectorId ? locationNames.get(sectorId) || undefined : undefined,
       });
     }
   }
@@ -223,7 +278,7 @@ export async function getClubByAdminUserId(adminUserId: string): Promise<Club | 
     return null;
   }
 
-  return mapDbClubToClub(dbClub);
+  return await mapDbClubToClub(dbClub);
 }
 
 export const clubsRepository = {

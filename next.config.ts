@@ -1,4 +1,3 @@
-import { withSentryConfig } from "@sentry/nextjs";
 import type { NextConfig } from "next";
 
 /**
@@ -105,48 +104,63 @@ const nextConfig: NextConfig = {
   skipTrailingSlashRedirect: true,
 };
 
-// Conditionally apply Sentry config - skip entirely during build to avoid crypto.randomUUID() issues
-// Check both NEXT_PHASE and presence of specific build commands
+// Sentry Configuration
+// We use dynamic import to avoid crypto.randomUUID() errors during Next.js 16 Cache Components prerendering.
+// The @sentry/nextjs package uses crypto.randomUUID() internally during module initialization,
+// which conflicts with Next.js's prerendering constraints.
+
+// Check if we're in a build phase where Sentry should be applied
 const isBuildPhase =
   process.env.NEXT_PHASE === "phase-production-build" ||
   process.argv.includes("build") ||
   process.env.npm_lifecycle_event === "build";
 
-const finalConfig = isBuildPhase
-  ? nextConfig
-  : withSentryConfig(nextConfig, {
-      // For all available options, see:
-      // https://www.npmjs.com/package/@sentry/webpack-plugin#options
+// For development and production runtime, we need to apply Sentry config.
+// For production builds, we also need Sentry for source map uploads.
+// The key is to NOT import @sentry/nextjs during prerendering in development.
+let finalConfig: NextConfig = nextConfig;
 
-      org: "yuvoo",
+// Only apply Sentry config during actual builds (not dev mode prerendering)
+// In development, Sentry is still initialized via instrumentation.ts but
+// we skip the webpack plugin wrapping to avoid crypto.randomUUID() issues
+if (isBuildPhase) {
+  // Dynamic require to avoid top-level import issues
+  // eslint-disable-next-line @typescript-eslint/no-require-imports
+  const { withSentryConfig } = require("@sentry/nextjs");
+  finalConfig = withSentryConfig(nextConfig, {
+    // For all available options, see:
+    // https://www.npmjs.com/package/@sentry/webpack-plugin#options
 
-      project: "javascript-nextjs",
+    org: "yuvoo",
 
-      // Only print logs for uploading source maps in CI
-      silent: !process.env.CI,
+    project: "javascript-nextjs",
 
-      // For all available options, see:
-      // https://docs.sentry.io/platforms/javascript/guides/nextjs/manual-setup/
+    // Only print logs for uploading source maps in CI
+    silent: !process.env.CI,
 
-      // Upload a larger set of source maps for prettier stack traces (increases build time)
-      widenClientFileUpload: true,
+    // For all available options, see:
+    // https://docs.sentry.io/platforms/javascript/guides/nextjs/manual-setup/
 
-      // Route browser requests to Sentry through a Next.js rewrite to circumvent ad-blockers.
-      // This can increase your server load as well as your hosting bill.
-      // Note: Check that the configured route will not match with your Next.js middleware, otherwise reporting of client-
-      // side errors will fail.
-      tunnelRoute: "/monitoring",
+    // Upload a larger set of source maps for prettier stack traces (increases build time)
+    widenClientFileUpload: true,
 
-      // Note: Sentry's webpack config is a plugin config, not a full webpack function
-      // The webpack externals for ws are handled in nextConfig.webpack above
-      automaticVercelMonitors: true,
+    // Route browser requests to Sentry through a Next.js rewrite to circumvent ad-blockers.
+    // This can increase your server load as well as your hosting bill.
+    // Note: Check that the configured route will not match with your Next.js middleware, otherwise reporting of client-
+    // side errors will fail.
+    tunnelRoute: "/monitoring",
 
-      // Tree-shaking options for reducing bundle size
-      sourcemaps: {
-        assets: "./.next/**/*",
-        deleteSourcemapsAfterUpload: false, // Keep source maps for better debugging
-      },
-      disableLogger: false, // Keep logger for production debugging
-    });
+    // Note: Sentry's webpack config is a plugin config, not a full webpack function
+    // The webpack externals for ws are handled in nextConfig.webpack above
+    automaticVercelMonitors: true,
+
+    // Tree-shaking options for reducing bundle size
+    sourcemaps: {
+      assets: "./.next/**/*",
+      deleteSourcemapsAfterUpload: false, // Keep source maps for better debugging
+    },
+    disableLogger: false, // Keep logger for production debugging
+  });
+}
 
 export default finalConfig;

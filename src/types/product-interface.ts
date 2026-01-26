@@ -2,7 +2,7 @@ import { StaticImageData } from "next/image";
 
 export interface IProductImage {
   id: number;
-  img: StaticImageData; 
+  img: StaticImageData;
 }
 
 export interface IRating {
@@ -17,7 +17,7 @@ export interface IProduct {
   discount: number | string;
   delay: string;
   badge: string;
-  productImg: StaticImageData; 
+  productImg: StaticImageData;
   images: IProductImage[];
   ratings: IRating[];
   sale?: boolean;

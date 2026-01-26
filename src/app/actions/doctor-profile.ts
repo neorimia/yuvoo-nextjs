@@ -13,6 +13,9 @@ import { doctorProfileUpdateSchema, type DoctorProfileUpdateInput } from "@/lib/
 import { normalizePhoneNumber } from "@/lib/utils";
 import { routes } from "@/lib/routes";
 import type { Doctor } from "@/modules/doctors/doctors.types";
+import { db } from "@/lib/db";
+import { locations } from "@/lib/db/schema";
+import { eq } from "drizzle-orm";
 
 /**
  * Update doctor profile (for doctor - automatically gets doctor ID)
@@ -90,11 +93,22 @@ export async function updateDoctorProfileAction(
     if (validatedInput.languages !== undefined) {
       updates.languages = validatedInput.languages;
     }
-    if (validatedInput.city !== undefined) {
-      updates.city = validatedInput.city;
+    // Phase 6: Use location IDs instead of text fields
+    if (validatedInput.cityId !== undefined) {
+      updates.cityId = validatedInput.cityId;
+      // Also update countyId when cityId changes
+      if (validatedInput.cityId) {
+        const cityLocation = await db.query.locations.findFirst({
+          where: eq(locations.id, validatedInput.cityId),
+          columns: { parentId: true },
+        });
+        if (cityLocation?.parentId) {
+          updates.countyId = cityLocation.parentId;
+        }
+      }
     }
-    if (validatedInput.district !== undefined) {
-      updates.district = validatedInput.district || null;
+    if (validatedInput.sectorId !== undefined) {
+      updates.sectorId = validatedInput.sectorId || null;
     }
     if (validatedInput.address !== undefined) {
       updates.address = validatedInput.address || null;

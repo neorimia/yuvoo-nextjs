@@ -1,10 +1,11 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { useForm } from "react-hook-form";
 import Link from "next/link";
 import { routes } from "@/lib/routes";
 import { submitContactForm } from "@/app/actions/contact";
+import { trackEvent, PostHogEvents, PostHogProperties } from "@/lib/analytics/tracking";
 
 interface FormData {
   firstName: string;
@@ -31,6 +32,8 @@ export default function ClubsContactModal({ modalId }: ClubsContactModalProps) {
     type: "success" | "error" | null;
     message: string;
   }>({ type: null, message: "" });
+  const formStartTimeRef = useRef<number | null>(null);
+  const modalLocationRef = useRef<string>("unknown");
 
   const {
     register,
@@ -43,10 +46,20 @@ export default function ClubsContactModal({ modalId }: ClubsContactModalProps) {
     },
   });
 
-  // Cleanup backdrop and restore scroll when modal is closed
+  // Track modal open and store location for form submission tracking
   useEffect(() => {
     const modalElement = document.getElementById(modalId);
     if (!modalElement) return;
+
+    const handleShown = () => {
+      // Reset form start time when modal opens
+      formStartTimeRef.current = performance.now();
+      // Try to get location from data attribute or default to "unknown"
+      const location = modalElement.getAttribute("data-location") || "unknown";
+      modalLocationRef.current = location;
+    };
+
+    modalElement.addEventListener("shown.bs.modal", handleShown);
 
     const handleHidden = () => {
       // Remove backdrop if it still exists
@@ -103,7 +116,19 @@ export default function ClubsContactModal({ modalId }: ClubsContactModalProps) {
     try {
       const result = await submitContactForm(data);
 
+      // Calculate time to submit
+      const timeToSubmit = formStartTimeRef.current
+        ? Math.round((performance.now() - formStartTimeRef.current) / 1000)
+        : null;
+
       if (result.success) {
+        // Track successful form submission
+        trackEvent(PostHogEvents.CLUBS_CONTACT_FORM_SUBMITTED, {
+          [PostHogProperties.VARIANT_LOCATION]: modalLocationRef.current,
+          [PostHogProperties.FORM_TYPE]: "founding_club",
+          ...(timeToSubmit !== null && { [PostHogProperties.TIME_TO_SUBMIT]: timeToSubmit }),
+        });
+
         setSubmitStatus({
           type: "success",
           message:
@@ -129,6 +154,13 @@ export default function ClubsContactModal({ modalId }: ClubsContactModalProps) {
           }
         }, 3000);
       } else {
+        // Track form error
+        trackEvent(PostHogEvents.CLUBS_CONTACT_FORM_ERROR, {
+          [PostHogProperties.VARIANT_LOCATION]: modalLocationRef.current,
+          [PostHogProperties.FORM_TYPE]: "founding_club",
+          [PostHogProperties.ERROR_MESSAGE]: result.error || "Unknown error",
+        });
+
         setSubmitStatus({
           type: "error",
           message:
@@ -136,7 +168,15 @@ export default function ClubsContactModal({ modalId }: ClubsContactModalProps) {
             "A apărut o eroare la trimiterea mesajului. Te rugăm să încerci din nou.",
         });
       }
-    } catch (_error) {
+    } catch (error) {
+      // Track unexpected error
+      trackEvent(PostHogEvents.CLUBS_CONTACT_FORM_ERROR, {
+        [PostHogProperties.VARIANT_LOCATION]: modalLocationRef.current,
+        [PostHogProperties.FORM_TYPE]: "founding_club",
+        [PostHogProperties.ERROR_MESSAGE]:
+          error instanceof Error ? error.message : "Unexpected error",
+      });
+
       setSubmitStatus({
         type: "error",
         message:
@@ -186,7 +226,7 @@ export default function ClubsContactModal({ modalId }: ClubsContactModalProps) {
               >
                 <strong>Ce primești:</strong>
                 <ul style={{ marginBottom: 0, paddingLeft: "20px", marginTop: "10px" }}>
-                  <li>Profil complet GRATUIT – 6 luni (valoare €180)</li>
+                  <li>Profil complet GRATUIT – 6 luni (valoare echivalentă cu 594 lei)</li>
                   <li>Badge &quot;Verified Founding Club&quot;</li>
                   <li>Prioritate în rezultate la lansarea oficială</li>
                   <li>Părinți pre-calificați</li>
@@ -292,7 +332,7 @@ export default function ClubsContactModal({ modalId }: ClubsContactModalProps) {
                       })}
                       id="privacy-check"
                       type="checkbox"
-                      className="me-2 mt-1"
+                      className="me-2"
                     />
                     <label htmlFor="privacy-check" className="bd-contact-agree-label">
                       Accept{" "}

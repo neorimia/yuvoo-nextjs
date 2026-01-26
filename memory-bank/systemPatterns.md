@@ -954,6 +954,89 @@ Parent Dashboard → getQuizHistoryAction(childId) → Quiz Repository
 - Client Component: Receives `isAuthenticated` prop (no hooks needed)
 - Follows server-first authentication pattern
 
+## Payment Flow Patterns
+
+### Guest Payment Flow (No Authentication Required)
+
+**Location**: `app/(public)/cereri/[leadId]/plata-guest/`, `app/actions/guest-lead-payments.ts`, `modules/payments/lead-payment.service.ts`
+
+**Pattern**: Public payment flow for clubs without user accounts to pay for lead access
+
+**Flow**:
+
+1. **Public Page** (`/cereri/[leadId]/plata-guest`)
+   - Server Component with public cache (`"use cache"`)
+   - No authentication required
+   - Fetches lead and club information
+   - Checks for expired/paid leads (shows appropriate messages)
+   - Renders `GuestLeadPayment` component
+
+2. **Email Collection** (Client Component)
+   - Guest enters email address (required)
+   - Server Action validates email (Zod schema)
+   - Rate limiting: 5 attempts per hour per IP/email
+   - Creates Stripe Payment Intent with guest metadata
+   - Returns client secret for Stripe Elements
+
+3. **Payment Form** (Client Component with Stripe Elements)
+   - Conditional StripeProvider rendering (only when clientSecret available)
+   - Stripe Elements integration for secure payment
+   - Payment submission via Stripe Elements
+   - Redirects to success page on completion
+
+4. **Success Page** (`/cereri/[leadId]/plata-guest/success`)
+   - Validates payment intent ID from URL params
+   - Fetches parent contact information via Server Action
+   - Displays parent contact details
+   - Email also sent (dual delivery)
+
+5. **Webhook Processing** (`/api/payments/webhook`)
+   - Detects guest payments via `isGuestPayment` metadata
+   - Routes to `processGuestLeadPayment()` for guest payments
+   - Sends email with parent information
+   - Unlocks lead (accepts lead with payment info)
+   - Tracks completion in PostHog
+
+**Security Measures**:
+
+- Rate limiting: 5 attempts per hour per IP/email combination
+- IP address tracking for fraud prevention
+- Email validation (Zod schema)
+- Lead expiration check
+- Duplicate payment prevention
+- Payment token/session validation for success page
+
+**Database Schema**:
+
+- `lead_payments` table includes:
+  - `isGuestPayment` boolean (default false)
+  - `guestEmail` text (nullable, only for guest payments)
+
+**Key Components**:
+
+- `GuestLeadPayment.tsx` - Payment form component
+- `createGuestLeadPaymentAction()` - Server Action for payment intent creation
+- `getGuestPaymentSuccessData()` - Server Action for success page data
+- `createGuestLeadPaymentIntent()` - Service function for Stripe integration
+- `processGuestLeadPayment()` - Service function for webhook processing
+- `sendGuestPaymentSuccessEmail()` - Email service function
+
+**PostHog Tracking**:
+
+- `LEAD_PAYMENT_INITIATED` with `isGuestPayment: true`, `clientIp`, `rateLimitRemaining`
+- `LEAD_PAYMENT_COMPLETED` with `isGuestPayment` flag
+- `PAYMENT_FAILED` with guest payment context
+
+**Error Handling**:
+
+- All error messages in Romanian
+- Expired lead: Checked before payment intent creation
+- Duplicate payment: Checked before payment intent creation
+- Invalid email: Zod validation with Romanian error messages
+- Rate limiting: Romanian error message with reset time
+- Payment failure: Webhook handles and updates status
+- Invalid payment intent: Success page validates before displaying data
+
 ## Search & Filtering Pattern
 
 ### Club Search
@@ -2133,3 +2216,5 @@ Club Directory (pre-filtered by sport)
 - **Product Context**: `memory-bank/productContext.md` - Product requirements
 - **Progress Tracking**: `memory-bank/progress.md` - Development progress
 - **Prompting System**: `memory-bank/promptingSystem.md` - Yuvoo Prompting Standard (templates, constraints, examples)
+  - **Prompt File Management**: Implementation prompts are saved as separate files in `prompts/` folder (kebab-case naming: `feature-name-implementation-plan.md`)
+  - **Example Prompts**: `prompts/guest-club-payment-flow-implementation-plan.md`, `prompts/parent-feature-implementation-plan.md`, `prompts/doctor-portal-implementation-plan.md`
