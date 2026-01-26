@@ -1,0 +1,40 @@
+name: Yuvoo Cron Jobs
+
+on:
+  schedule:
+    # Expire leads - Daily at midnight UTC
+    # Note: For Romania (UTC+2), this runs at 2:00 AM EET
+    # To run at midnight Romania time, use: '0 22 * * *' (10 PM UTC = midnight EET)
+    - cron: "0 0 * * *"
+    # Send reminders - Every hour at the top of the hour
+    - cron: "0 * * * *"
+  workflow_dispatch: # Allow manual triggering from GitHub UI
+
+jobs:
+  expire-leads:
+    name: Expire Leads
+    runs-on: ubuntu-latest
+    if: github.event.schedule == '0 0 * * *' || github.event_name == 'workflow_dispatch'
+    steps:
+      - name: Call Expire Leads Endpoint
+        run: |
+          curl -X POST \
+            -H "Authorization: Bearer ${{ secrets.CRON_SECRET }}" \
+            -H "Content-Type: application/json" \
+            -f \
+            ${{ secrets.VERCEL_APP_URL }}/api/cron/expire-leads
+        continue-on-error: true
+
+  send-reminders:
+    name: Send Lead Reminders
+    runs-on: ubuntu-latest
+    if: github.event.schedule == '0 * * * *' || github.event_name == 'workflow_dispatch'
+    steps:
+      - name: Call Send Reminders Endpoint
+        run: |
+          curl -X POST \
+            -H "Authorization: Bearer ${{ secrets.CRON_SECRET }}" \
+            -H "Content-Type: application/json" \
+            -f \
+            ${{ secrets.VERCEL_APP_URL }}/api/cron/send-lead-reminders
+        continue-on-error: true
