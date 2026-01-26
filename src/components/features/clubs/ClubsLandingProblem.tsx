@@ -16,6 +16,7 @@ export default function ClubsLandingProblem() {
     "Organizezi probe care nu se concretizează",
     "Pierzi timp explicând de ce un copil nu este încă pregătit",
     "Google & Facebook aduc volum, dar nu potrivire",
+    "Plătești sute de lei pe ads pentru lead-uri necalificate",
   ];
 
   return (
@@ -86,11 +87,23 @@ export default function ClubsLandingProblem() {
                     fontSize: "20px",
                     fontWeight: 600,
                     color: "#1B1B1B",
-                    marginBottom: 0,
+                    marginBottom: "15px",
                     lineHeight: "1.5",
                   }}
                 >
                   Nu ai o problemă de vizibilitate. Ai o problemă de calitate a lead-urilor.
+                </p>
+                <p
+                  style={{
+                    fontSize: "16px",
+                    fontWeight: 400,
+                    color: "#424242",
+                    marginBottom: 0,
+                    lineHeight: "1.6",
+                  }}
+                >
+                  Costuri ascunse: timp pierdut pe mesaje inutile = ore de antrenor care ar putea fi
+                  folosite altfel.
                 </p>
               </div>
             </div>

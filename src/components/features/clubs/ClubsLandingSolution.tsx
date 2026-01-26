@@ -1,9 +1,11 @@
 "use client";
 import React from "react";
+import Link from "next/link";
 import SectionTitle from "@/components/shared/SectionTitle";
 import StepCard from "@/components/shared/StepCard";
 import { trackEvent, PostHogEvents } from "@/lib/analytics/tracking";
 import { CLUBS_CONTACT_MODAL_ID, openClubsContactModal } from "@/lib/clubs-landing-modal";
+import { routes } from "@/lib/routes";
 
 /**
  * Clubs Landing Solution Section
@@ -55,7 +57,7 @@ export default function ClubsLandingSolution() {
     // Track event
     trackEvent(PostHogEvents.CLUBS_LANDING_CTA_CLICKED, {
       location: "solution",
-      cta_text: "Devino Founding Club Gratuit",
+      cta_text: "Vrei mai multe lead-uri calificate? Rezervă call-ul",
     });
 
     // Open modal
@@ -137,11 +139,35 @@ export default function ClubsLandingSolution() {
                   data-bs-target={`#${CLUBS_CONTACT_MODAL_ID}`}
                 >
                   <span className="bd-btn-inner">
-                    <span className="bd-btn-normal">Devino Founding Club</span>
-                    <span className="bd-btn-hover">Devino Founding Club</span>
+                    <span className="bd-btn-normal">
+                      Vrei mai multe lead-uri calificate? Rezervă call-ul
+                    </span>
+                    <span className="bd-btn-hover">
+                      Vrei mai multe lead-uri calificate? Rezervă call-ul
+                    </span>
                   </span>
                 </button>
               </div>
+            </div>
+
+            {/* Link to How It Works Page */}
+            <div
+              className="text-center wow fadeInUp"
+              data-wow-duration="1s"
+              data-wow-delay=".6s"
+              style={{ marginTop: "40px" }}
+            >
+              <Link
+                href={routes.clubs.howItWorks}
+                className="text-decoration-none"
+                style={{
+                  color: "var(--bd-theme-1)",
+                  fontSize: "16px",
+                  fontWeight: 600,
+                }}
+              >
+                Vezi procesul complet →
+              </Link>
             </div>
           </div>
         </div>

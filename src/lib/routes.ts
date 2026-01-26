@@ -35,6 +35,10 @@ export const routes = {
     premium: "/pentru-cluburi/abonare-premium", // Premium page for clubs to upgrade to Premium
     landing: "/pentru-cluburi", // Landing page for clubs to join as Founding Clubs
     pricing: "/preturi-cluburi", // Pricing page for clubs TODO: CREATE THIS PAGE
+    caseStudies: "/pentru-cluburi/povesti-de-succes", // Case studies / success stories page
+    roiCalculator: "/pentru-cluburi/calculator-roi", // ROI calculator standalone page
+    howItWorks: "/pentru-cluburi/cum-functioneaza", // Detailed "How It Works" page
+    helpCenter: "/pentru-cluburi/ajutor", // FAQ / Help Center page
     detail: (slug: string) => `/cluburi/${slug}`,
     category: (category: string) => `/cluburi/categorie/${category}`,
     reviews: (slug: string) => `/cluburi/${slug}/recenzii`,

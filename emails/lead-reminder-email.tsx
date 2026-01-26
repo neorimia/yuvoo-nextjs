@@ -56,6 +56,10 @@ export const LeadReminderEmail = ({
             <Text style={body}>
               Această cerere a fost creată acum 48 de ore. Nu uita să o accesezi înainte să expire!
             </Text>
+            <Text style={body}>
+              <strong>💡 Sfat:</strong> Alte cluburi similare au deja acceptat cereri în ultimele
+              24h. Nu rata șansa!
+            </Text>
             <div style={buttonContainer}>
               <EmailButton href={leadUrl} variant="primary">
                 Vezi cererea

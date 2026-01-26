@@ -929,6 +929,7 @@ This template ensures all feature implementations:
   - `prompts/parent-feature-implementation-plan.md` - Parent feature example
   - `prompts/doctor-portal-implementation-plan.md` - Doctor portal example
   - `prompts/guest-club-payment-flow-implementation-plan.md` - Guest payment flow example
+  - `prompts/clubs-landing-email-copy-analysis-prompt.md` - Sales director copy analysis prompt (clubs landing page + emails)
 
 ---
 

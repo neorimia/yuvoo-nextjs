@@ -362,8 +362,8 @@ export const faqCategories: FAQCategory[] = [
             </Link>
             , primele 15 cluburi din fiecare oraș primesc profil complet gratuit pentru 6 luni
             (valoare €180). După aceea, dacă Yuvoo îți aduce părinți potriviți, vei putea continua
-            cu un abonament clar și transparent (începând de la €29/lună). Dacă nu funcționează → nu
-            plătești nimic. Nu există obligații sau contracte pe termen lung.
+            cu un abonament clar și transparent (începând de la 99 lei/lună). Dacă nu funcționează →
+            nu plătești nimic. Nu există obligații sau contracte pe termen lung.
           </>
         ),
         category: "Parteneri și Verificare",

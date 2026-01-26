@@ -154,6 +154,11 @@ const footerData: IFooterData = {
         menu: "Ajutor",
         path: "/ajutor",
       },
+      {
+        id: 8,
+        menu: "Pentru Cluburi - Ajutor",
+        path: "/pentru-cluburi/ajutor",
+      },
     ],
   },
   contact_info: {

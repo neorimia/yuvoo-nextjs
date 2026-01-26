@@ -37,10 +37,13 @@ export const LeadNotificationEmail = ({
   return (
     <Html lang="ro">
       <Head>
-        <title>Cerere nouă - Yuvoo</title>
+        <title>
+          🎯 Părinte pre-calificat caută {sportName} în {locationName} - Yuvoo
+        </title>
       </Head>
       <Preview>
-        Un părinte caută {sportName} pentru copil de {childAge.toString()} ani, în {locationName}.
+        Părinte pre-calificat prin quiz AI caută {sportName} pentru copil de {childAge.toString()}{" "}
+        ani, în {locationName}.
       </Preview>
       <Body style={main}>
         <Container style={container}>
@@ -49,7 +52,8 @@ export const LeadNotificationEmail = ({
           <EmailSection>
             <Heading style={heading}>Bună, {clubName}!</Heading>
             <Text style={body}>
-              Un părinte caută <strong>{sportName}</strong> pentru copil de{" "}
+              Un <strong>părinte pre-calificat</strong> (prin quiz AI) caută{" "}
+              <strong>{sportName}</strong> pentru copil de{" "}
               <strong>{childAge.toString()} ani</strong>, în <strong>{locationName}</strong>.
             </Text>
             <Text style={body}>Vrei să vezi datele de contact?</Text>

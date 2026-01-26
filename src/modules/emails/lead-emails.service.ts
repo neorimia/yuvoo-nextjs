@@ -7,6 +7,10 @@
 
 import { sendEmail, isValidEmail } from "@/lib/integrations/brevo/client";
 import { renderEmail } from "../../../emails/utils/render-email";
+import { generateEmailSubjectWithVariant } from "@/lib/analytics/feature-flags-server";
+import { FeatureFlags } from "@/lib/analytics/feature-flags";
+import { trackEventServer } from "@/lib/analytics/tracking-server";
+import { PostHogEvents, PostHogProperties } from "@/lib/analytics/events";
 import type { Club } from "@/modules/clubs/clubs.types";
 
 /**
@@ -43,16 +47,53 @@ export async function sendLeadNotificationEmail(params: {
 
     const { html, text } = await renderEmail(emailComponent);
 
+    // Generate subject line with A/B testing support
+    // Use club email as distinct ID for consistent variant assignment
+    const subjectVariants = {
+      current: `🎯 Părinte pre-calificat caută ${params.sportName} în ${params.locationName}`,
+      variant_a: `Nou: Cerere ${params.sportName} pentru copil de ${params.childAge} ani`,
+      variant_b: `Cerere pre-calificată - ${params.sportName} în ${params.locationName}`,
+    };
+
+    const subject = await generateEmailSubjectWithVariant({
+      flagName: FeatureFlags.LEAD_NOTIFICATION_EMAIL_SUBJECT_VARIANT,
+      distinctId: params.clubEmail,
+      sportName: params.sportName,
+      locationName: params.locationName,
+      childAge: params.childAge,
+      variants: subjectVariants,
+    });
+
+    // Determine which variant was used for tracking
+    let variantValue = "current";
+    if (subject === subjectVariants.variant_a) {
+      variantValue = "variant_a";
+    } else if (subject === subjectVariants.variant_b) {
+      variantValue = "variant_b";
+    }
+
     // Send email
     const result = await sendEmail({
       to: params.clubEmail,
-      subject: `Un părinte caută ${params.sportName} pentru copil de ${params.childAge} ani, în ${params.locationName}`,
+      subject,
       htmlContent: html,
       textContent: text,
       tags: ["lead", "notification", "club"],
     });
 
-    if (!result.success) {
+    if (result.success) {
+      // Track email variant sent event
+      await trackEventServer(PostHogEvents.EMAIL_VARIANT_SENT, {
+        distinctId: params.clubEmail,
+        [PostHogProperties.VARIANT_NAME]: FeatureFlags.LEAD_NOTIFICATION_EMAIL_SUBJECT_VARIANT,
+        [PostHogProperties.VARIANT_VALUE]: variantValue,
+        [PostHogProperties.VARIANT_LOCATION]: "email",
+        email_type: "lead_notification",
+        sport_name: params.sportName,
+        location_name: params.locationName,
+        child_age: params.childAge,
+      });
+    } else {
       console.error("[Lead Email] Failed to send lead notification:", result.error);
     }
   } catch (error) {

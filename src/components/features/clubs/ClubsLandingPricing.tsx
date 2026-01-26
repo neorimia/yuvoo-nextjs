@@ -6,6 +6,7 @@ import TrustCard, { TrustCardProps } from "@/components/shared/TrustCard";
 import { routes } from "@/lib/routes";
 import Link from "next/link";
 import { trackEvent, PostHogEvents } from "@/lib/analytics/tracking";
+import ClubsLandingROICalculator from "./ClubsLandingROICalculator";
 
 /**
  * Clubs Landing Pricing Section
@@ -313,6 +314,26 @@ export default function ClubsLandingPricing() {
                     </span>
                   </Link>
                 </div>
+              </div>
+            </div>
+
+            {/* ROI Calculator */}
+            <div className="row justify-content-center mb-50">
+              <div className="col-lg-12">
+                <div className="text-center mb-30">
+                  <Link
+                    href={routes.clubs.roiCalculator}
+                    className="text-decoration-none"
+                    style={{
+                      color: "var(--bd-theme-1)",
+                      fontSize: "16px",
+                      fontWeight: 600,
+                    }}
+                  >
+                    Calculează ROI-ul tău →{" "}
+                  </Link>
+                </div>
+                <ClubsLandingROICalculator />
               </div>
             </div>
 

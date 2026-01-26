@@ -19,78 +19,78 @@ export default function ClubsLandingBenefits() {
       id: 1,
       icon: "fa-solid fa-gift",
       title: "Profil complet GRATUIT – 6 luni",
-      description: "valoare echivalentă cu 594 lei",
+      description: "valoare echivalentă cu 594 lei (99 lei/lună × 6 luni)",
     },
     {
       id: 2,
       icon: "fa-solid fa-certificate",
       title: 'Badge "Verified Founding Club"',
-      description: "încredere instant",
+      description: "distincție exclusivă pentru primele 15 cluburi",
     },
     {
       id: 3,
       icon: "fa-solid fa-globe",
       title: "Pagină publică optimizată SEO",
-      description: "folosește-o ca site web propriu, fără agenție",
+      description: "site web propriu, găsit ușor de părinți pe Google",
     },
     {
       id: 4,
       icon: "fa-solid fa-star",
       title: "Prioritate în rezultate",
-      description: "la lansarea oficială",
+      description: "afișat primul când părinții caută sportul tău",
     },
     {
       id: 5,
       icon: "fa-solid fa-users",
-      title: "Părinți pre-calificați",
-      description: "cereri de părinți care știu că sportul tău este potrivit",
+      title: "Părinți pre-calificați prin AI",
+      description: "cereri de părinți care știu că sportul tău este potrivit pentru copilul lor",
     },
     {
       id: 6,
       icon: "fa-solid fa-user-plus",
-      title: "Cereri reale de părinți",
-      description: "părinți care au completat quiz-ul AI și au primit recomandări",
+      title: "Cereri reale, nu spam",
+      description: "părinți care au completat quiz-ul AI și au primit recomandări personalizate",
     },
     {
       id: 7,
       icon: "fa-solid fa-comments",
       title: "Feedback direct",
-      description: "despre calitatea cererilor și a părinților",
+      description: "ajută-ne să îmbunătățim calitatea cererilor pentru toți",
     },
     {
       id: 8,
       icon: "fa-solid fa-chart-line",
       title: "Analiză și statistici",
-      description: "vezi câți părinți vizitează profilul tău",
+      description: "vezi câți părinți vizitează profilul și câte cereri primești",
     },
     {
       id: 9,
       icon: "fa-solid fa-headset",
       title: "Suport dedicat",
-      description: "asistență personalizată de la echipa Yuvoo",
+      description: "asistență personalizată de la echipa Yuvoo pentru configurarea profilului",
     },
   ];
 
   const requirements = [
-    "Profil complet al clubului (informații despre sporturi, vârste, locație, contact)",
-    "Confirmarea identității legale și a calificărilor antrenorilor",
-    "Verificarea protocolurilor de siguranță pentru copii",
-    "Disponibilitate pentru un call de 15 minute pentru configurarea profilului",
-    "Feedback periodic despre calitatea cererilor (opțional)",
-    "Disponibilitate pentru un mini-testimonial (dacă experiența e pozitivă)",
+    "Profil complet al clubului (sporturi oferite, vârste acceptate, locație, contact, program)",
+    "Confirmarea identității legale și a calificărilor antrenorilor (diplome, certificări)",
+    "Verificarea protocolurilor de siguranță pentru copii (spații, echipamente, proceduri)",
+    "Disponibilitate pentru un call de 15 minute pentru configurarea profilului și onboarding",
+    "Feedback periodic despre calitatea cererilor (opțional, dar apreciat)",
+    "Disponibilitate pentru un mini-testimonial după primele 2-3 luni (dacă experiența e pozitivă)",
   ];
 
   const eligibleTypes = [
-    "Cluburi de înot, fotbal, gimnastică",
-    "Grupe pentru copii între 4 și 14 ani",
-    "Minim 2 ani activitate",
-    "Reviews pozitive & focus pe siguranță",
+    "Cluburi de înot, fotbal, baschet, tenis, gimnastică, dans și alte sporturi pentru copii",
+    "Grupe dedicate pentru copii între 4 și 14 ani (nu doar adulți)",
+    "Minim 2 ani de activitate continuă și experiență cu copii",
+    "Reviews pozitive de la părinți și focus clar pe siguranță copiilor",
   ];
 
   const nonEligibleTypes = [
-    "Cluburi doar pentru adulți",
-    "Sporturi ultra-niche (încă)",
-    "Organizații care caută exclusivitate sau volume mari instant",
+    "Cluburi exclusiv pentru adulți (fără programe pentru copii)",
+    "Sporturi ultra-niche sau experimentale (în faza MVP)",
+    "Organizații care caută exclusivitate sau volume mari instant (nu suntem agenție de marketing)",
   ];
 
   const handleCTAClick = (e: React.MouseEvent<HTMLButtonElement>) => {
@@ -99,7 +99,7 @@ export default function ClubsLandingBenefits() {
     // Track event
     trackEvent(PostHogEvents.CLUBS_LANDING_CTA_CLICKED, {
       location: "benefits",
-      cta_text: "Devino Founding Club Gratuit",
+      cta_text: "Începe acum - 6 luni gratuite",
     });
 
     // Open modal
@@ -229,7 +229,7 @@ export default function ClubsLandingBenefits() {
                     lineHeight: "1.6",
                   }}
                 >
-                  Nu mai sunt locuri disponibile?{" "}
+                  Nu mai sunt locuri disponibile în programul Founding Club?{" "}
                   <Link
                     href={routes.club.premium}
                     style={{
@@ -240,7 +240,8 @@ export default function ClubsLandingBenefits() {
                   >
                     Upgrade la Premium
                   </Link>{" "}
-                  pentru acces nelimitat la cereri (99 lei/lună sau 990 lei/an)
+                  pentru acces nelimitat la cereri de părinți pre-calificați (99 lei/lună sau 990
+                  lei/an)
                 </p>
                 {/* Primary CTA Button */}
                 <div
@@ -256,8 +257,8 @@ export default function ClubsLandingBenefits() {
                     data-bs-target={`#${CLUBS_CONTACT_MODAL_ID}`}
                   >
                     <span className="bd-btn-inner">
-                      <span className="bd-btn-normal">Devino Founding Club</span>
-                      <span className="bd-btn-hover">Devino Founding Club</span>
+                      <span className="bd-btn-normal">Începe acum - 6 luni gratuite</span>
+                      <span className="bd-btn-hover">Începe acum - 6 luni gratuite</span>
                     </span>
                   </button>
                 </div>

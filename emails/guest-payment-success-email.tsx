@@ -44,11 +44,11 @@ export const GuestPaymentSuccessEmail = ({
   return (
     <Html lang="ro">
       <Head>
-        <title>Informații părinte - Cerere {sportType} - Yuvoo</title>
+        <title>✅ Ai acces la cererea de {sportType} - Contactează acum - Yuvoo</title>
       </Head>
       <Preview>
-        Ai plătit cu succes pentru cererea de {sportType}. Iată informațiile de contact ale
-        părintelui.
+        ✅ Ai acces la cererea de {sportType}. Contactează părintele acum - cererea expiră în 5
+        zile.
       </Preview>
       <Body style={main}>
         <Container style={container}>

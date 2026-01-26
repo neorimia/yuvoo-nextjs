@@ -4,6 +4,7 @@ import React, { useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { menuData } from "@/data";
+import { routes } from "@/lib/routes";
 
 interface MobileMenuProps {
   onClose?: () => void;
@@ -22,11 +23,30 @@ const MobileMenu: React.FC<MobileMenuProps> = ({ onClose }) => {
   };
 
   // Helper function to check if a link is active
-  const isActive = (link: string) => {
+  // Uses improved logic for better active state detection
+  const isActive = (link: string, isSubmenu = false) => {
     if (link === "/") {
       return pathname === "/";
     }
-    return pathname.startsWith(link);
+
+    // Special handling for Clubs menu
+    if (link === routes.clubs.list) {
+      return pathname === routes.clubs.list || pathname === `${routes.clubs.list}/`;
+    }
+
+    // Special handling for "Pentru Cluburi" submenu
+    if (link === routes.clubs.landing) {
+      // Active on exact match or sub-routes
+      return pathname === link || pathname === `${link}/` || pathname.startsWith(`${link}/`);
+    }
+
+    // For submenus, allow sub-routes
+    if (isSubmenu) {
+      return pathname === link || pathname === `${link}/` || pathname.startsWith(`${link}/`);
+    }
+
+    // For parent menu items, only exact match
+    return pathname === link || pathname === `${link}/`;
   };
 
   //openMobileMenu
@@ -50,13 +70,26 @@ const MobileMenu: React.FC<MobileMenuProps> = ({ onClose }) => {
     <nav className="mean-nav">
       <ul>
         {menuData.map((menu, i) => {
-          const active = isActive(menu.link);
+          // For parent menu items with dropdowns, check if any submenu is active
+          // Parent should only be active if exact match, not if submenu is active
+          let parentActive = false;
+          if (menu.hasDropdown && menu.submenus) {
+            const anySubmenuActive = menu.submenus.some((sub) => isActive(sub.link, true));
+            // Parent is active only if exact match AND no submenu is active
+            parentActive = isActive(menu.link, false) && !anySubmenuActive;
+          } else {
+            parentActive = isActive(menu.link, false);
+          }
 
           // Simple menu item (no dropdown)
           if (!menu.hasDropdown && !menu.megaMenu && !menu.megaMenuTwo && !menu.pages) {
             return (
-              <li key={i} className={active ? "active" : ""}>
-                <Link href={menu.link} className={active ? "active" : ""} onClick={handleLinkClick}>
+              <li key={i} className={parentActive ? "active" : ""}>
+                <Link
+                  href={menu.link}
+                  className={parentActive ? "active" : ""}
+                  onClick={handleLinkClick}
+                >
                   {menu.title}
                 </Link>
               </li>
@@ -66,8 +99,12 @@ const MobileMenu: React.FC<MobileMenuProps> = ({ onClose }) => {
           // Menu item with dropdown (but not mega menu)
           if (menu.hasDropdown && !menu?.megaMenu && !menu.pages && !menu.megaMenuTwo) {
             return (
-              <li key={i} className={`has-dropdown ${active ? "active" : ""}`}>
-                <Link href={menu.link} className={active ? "active" : ""} onClick={handleLinkClick}>
+              <li key={i} className={`has-dropdown ${parentActive ? "active" : ""}`}>
+                <Link
+                  href={menu.link}
+                  className={parentActive ? "active" : ""}
+                  onClick={handleLinkClick}
+                >
                   {menu.title}
                 </Link>
                 <ul
@@ -78,7 +115,7 @@ const MobileMenu: React.FC<MobileMenuProps> = ({ onClose }) => {
                 >
                   {menu.submenus &&
                     menu.submenus.map((sub, i) => {
-                      const subActive = isActive(sub.link);
+                      const subActive = isActive(sub.link, true);
                       return (
                         <li key={i} className={subActive ? "active" : ""}>
                           <Link
@@ -106,8 +143,12 @@ const MobileMenu: React.FC<MobileMenuProps> = ({ onClose }) => {
           // Mega menu (if used in future)
           if (menu?.megaMenu && !menu.pages) {
             return (
-              <li key={i} className={`has-dropdown has-mega-menu ${active ? "active" : ""}`}>
-                <Link href={menu.link} className={active ? "active" : ""} onClick={handleLinkClick}>
+              <li key={i} className={`has-dropdown has-mega-menu ${parentActive ? "active" : ""}`}>
+                <Link
+                  href={menu.link}
+                  className={parentActive ? "active" : ""}
+                  onClick={handleLinkClick}
+                >
                   {menu.title}
                 </Link>
                 <ul
@@ -173,8 +214,12 @@ const MobileMenu: React.FC<MobileMenuProps> = ({ onClose }) => {
           // Mega menu two (if used in future)
           if (menu.megaMenuTwo && !menu.pages) {
             return (
-              <li key={i} className={`has-dropdown has-mega-menu ${active ? "active" : ""}`}>
-                <Link href={menu.link} className={active ? "active" : ""} onClick={handleLinkClick}>
+              <li key={i} className={`has-dropdown has-mega-menu ${parentActive ? "active" : ""}`}>
+                <Link
+                  href={menu.link}
+                  className={parentActive ? "active" : ""}
+                  onClick={handleLinkClick}
+                >
                   {menu.title}
                 </Link>
                 <ul
@@ -219,8 +264,12 @@ const MobileMenu: React.FC<MobileMenuProps> = ({ onClose }) => {
           // Pages menu (if used in future)
           if (menu.pages) {
             return (
-              <li key={i} className={`has-dropdown has-mega-menu ${active ? "active" : ""}`}>
-                <Link href={menu.link} className={active ? "active" : ""} onClick={handleLinkClick}>
+              <li key={i} className={`has-dropdown has-mega-menu ${parentActive ? "active" : ""}`}>
+                <Link
+                  href={menu.link}
+                  className={parentActive ? "active" : ""}
+                  onClick={handleLinkClick}
+                >
                   {menu.title}
                 </Link>
                 <ul

@@ -38,6 +38,10 @@ const menuData: MenuItem[] = [
     submenus: [
       { title: "Toate cluburile", link: routes.clubs.list },
       { title: "Pentru Cluburi", link: routes.clubs.landing },
+      { title: "Povești de Succes", link: routes.clubs.caseStudies },
+      { title: "Calculator ROI", link: routes.clubs.roiCalculator },
+      { title: "Cum Funcționează", link: routes.clubs.howItWorks },
+      { title: "Ajutor", link: routes.clubs.helpCenter },
     ],
   },
   //  Hide until we have doctors

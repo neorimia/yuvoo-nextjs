@@ -7,6 +7,7 @@ import ClubsLandingHero from "@/components/features/clubs/ClubsLandingHero";
 import ClubsLandingProblem from "@/components/features/clubs/ClubsLandingProblem";
 import ClubsLandingSolution from "@/components/features/clubs/ClubsLandingSolution";
 import ClubsLandingBenefits from "@/components/features/clubs/ClubsLandingBenefits";
+import ClubsLandingWhyNow from "@/components/features/clubs/ClubsLandingWhyNow";
 import ClubsLandingPricing from "@/components/features/clubs/ClubsLandingPricing";
 import ClubsLandingTestimonials from "@/components/features/clubs/ClubsLandingTestimonials";
 import ClubsLandingFAQ from "@/components/features/clubs/ClubsLandingFAQ";
@@ -14,6 +15,7 @@ import ClubsLandingFinalCTA from "@/components/features/clubs/ClubsLandingFinalC
 import ClubsLandingTrust from "@/components/features/clubs/ClubsLandingTrust";
 import ClubsLandingFooter from "@/components/features/clubs/ClubsLandingFooter";
 import ClubsContactModal from "@/components/features/clubs/ClubsContactModal";
+import ClubsLandingPageTracker from "@/components/features/clubs/ClubsLandingPageTracker";
 import { CLUBS_CONTACT_MODAL_ID } from "@/lib/clubs-landing-modal";
 import { routes } from "@/lib/routes";
 import { countVerifiedClubs } from "@/modules/clubs/clubs.service";
@@ -87,6 +89,9 @@ export default async function ClubsLandingPage() {
 
   return (
     <>
+      {/* Page View Tracker */}
+      <ClubsLandingPageTracker />
+
       {/* Hero Section */}
       <ClubsLandingHero verifiedCount={verifiedCount} remainingSpots={remainingSpots} />
 
@@ -98,6 +103,9 @@ export default async function ClubsLandingPage() {
 
       {/* Benefits Section */}
       <ClubsLandingBenefits />
+
+      {/* Why Now Section */}
+      <ClubsLandingWhyNow remainingSpots={remainingSpots} />
 
       {/* Pricing Section */}
       <ClubsLandingPricing />
@@ -112,7 +120,7 @@ export default async function ClubsLandingPage() {
       <ClubsLandingFinalCTA verifiedCount={verifiedCount} remainingSpots={remainingSpots} />
 
       {/* Trust Indicators Section */}
-      <ClubsLandingTrust />
+      <ClubsLandingTrust verifiedCount={verifiedCount} />
 
       {/* Footer Microcopy Section */}
       <ClubsLandingFooter />
