@@ -109,23 +109,19 @@ const nextConfig: NextConfig = {
 // The @sentry/nextjs package uses crypto.randomUUID() internally during module initialization,
 // which conflicts with Next.js's prerendering constraints.
 
-// Check if we're in a build phase where Sentry should be applied
-const isBuildPhase =
-  process.env.NEXT_PHASE === "phase-production-build" ||
-  process.argv.includes("build") ||
-  process.env.npm_lifecycle_event === "build";
-
 // For development and production runtime, we need to apply Sentry config.
 // For production builds, we also need Sentry for source map uploads.
 // The key is to NOT import @sentry/nextjs during prerendering in development.
 let finalConfig: NextConfig = nextConfig;
 
-// IMPORTANT: We skip Sentry wrapping during build/prerendering to avoid crypto.randomUUID() errors
-// with Next.js 16 Cache Components. Source maps will still be uploaded via Sentry CLI if needed,
-// but pages won't be wrapped during build. Sentry will work at runtime via instrumentation.ts.
-// Skip Sentry wrapping during build to prevent crypto.randomUUID() errors during prerendering
+// IMPORTANT: We completely disable Sentry wrapping during build to avoid crypto.randomUUID() errors
+// with Next.js 16 Cache Components. Sentry's webpack wrapper uses crypto.randomUUID() during
+// module initialization, which conflicts with Next.js prerendering constraints.
+// Source maps can still be uploaded via Sentry CLI if needed, but pages won't be wrapped during build.
+// Sentry will work at runtime via instrumentation.ts.
+// Completely disable Sentry wrapping during build to prevent crypto.randomUUID() errors
 
-if (isBuildPhase) {
+if (false) {
   // Dynamic require to avoid top-level import issues
   // eslint-disable-next-line @typescript-eslint/no-require-imports
   const { withSentryConfig } = require("@sentry/nextjs");
