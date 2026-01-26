@@ -103,11 +103,11 @@ jobs:
 
 ### 2. cron-job.org ⭐ **BEST FREE OPTION**
 
-**Best for**: Simple HTTP endpoint triggering, completely free
+**Best for**: Simple HTTP endpoint triggering, completely free (with optional paid tier)
 
 #### Pros
 
-- ✅ **Completely free** (no paid tier required)
+- ✅ **Completely free** default tier (no paid tier required)
 - ✅ **Per-minute precision** (up to 60 executions/hour)
 - ✅ **15+ years** of operation, millions of jobs daily
 - ✅ Simple HTTP request configuration
@@ -115,12 +115,36 @@ jobs:
 - ✅ Status notifications (email)
 - ✅ REST API available
 - ✅ Open-source (GPL-licensed)
+- ✅ Optional Sustaining Membership for enhanced limits
 
 #### Cons
 
 - ❌ External service dependency
 - ❌ Requires account creation
-- ❌ Free tier may have rate limits (check current limits)
+- ❌ Free tier: 30-second timeout, 64 KB response size limit
+
+#### Pricing Tiers
+
+**Default Membership (Free)**:
+
+- Max job timeout: 30 seconds
+- Max response size: 64 KB
+- Max failures before disabling: 25
+- Max status pages / monitors: 5 / 10
+- Max API calls per day: 100
+- **Price**: Free
+
+**Sustaining Membership (Paid)**:
+
+- Max job timeout: **5 minutes** (vs 30 seconds)
+- Max response size: **256 KB** (vs 64 KB)
+- Max failures before disabling: **200** (vs 25)
+- Max status pages / monitors: **15 / 20** (vs 5 / 10)
+- Max API calls per day: **5,000** (vs 100)
+- **Price**:
+  - Monthly: €5, €10, or €20/month (your choice)
+  - Yearly: €12, €24, or €36/year (your choice)
+- **Note**: Helps fund ongoing operation and improvement of the service
 
 #### Implementation
 
@@ -133,7 +157,7 @@ jobs:
    - **Content-Type**: `application/json`
 3. Repeat for reminder job
 
-**Cost**: Free
+**Cost**: Free (default) or €5-20/month / €12-36/year (Sustaining Membership)
 
 ---
 
@@ -213,14 +237,14 @@ jobs:
 
 ## Comparison Table
 
-| Solution           | Cost        | Precision  | Setup Complexity | Reliability | Best For          |
-| ------------------ | ----------- | ---------- | ---------------- | ----------- | ----------------- |
-| **GitHub Actions** | Free        | Per-minute | Medium           | High        | GitHub users      |
-| **cron-job.org**   | Free        | Per-minute | Low              | High        | Simple needs      |
-| **EasyCron**       | Free/$24/yr | 20min/1min | Low              | High        | Advanced features |
-| **CronUptime**     | Free/Paid   | Per-minute | Low              | High        | Vercel users      |
-| **Render**         | $1/job      | Per-minute | Medium           | High        | Render users      |
-| **Vercel Cron**    | Free        | Hourly     | Low              | High        | Current setup     |
+| Solution           | Cost            | Precision  | Setup Complexity | Reliability | Best For          |
+| ------------------ | --------------- | ---------- | ---------------- | ----------- | ----------------- |
+| **GitHub Actions** | Free            | Per-minute | Medium           | High        | GitHub users      |
+| **cron-job.org**   | Free / €5-20/mo | Per-minute | Low              | High        | Simple needs      |
+| **EasyCron**       | Free/$24/yr     | 20min/1min | Low              | High        | Advanced features |
+| **CronUptime**     | Free/Paid       | Per-minute | Low              | High        | Vercel users      |
+| **Render**         | $1/job          | Per-minute | Medium           | High        | Render users      |
+| **Vercel Cron**    | Free            | Hourly     | Low              | High        | Current setup     |
 
 ---
 
@@ -462,14 +486,14 @@ Romania is UTC+2 (EET) or UTC+3 (EEST during daylight saving).
 
 ## Cost Summary
 
-| Solution           | Monthly Cost | Annual Cost | Notes                      |
-| ------------------ | ------------ | ----------- | -------------------------- |
-| **GitHub Actions** | $0           | $0          | Free for public repos      |
-| **cron-job.org**   | $0           | $0          | Completely free            |
-| **EasyCron**       | $0-$2        | $0-$24      | Free tier limited          |
-| **CronUptime**     | $0+          | $0+         | Free tier: 5 jobs          |
-| **Render**         | $2           | $24         | $1 per cron job            |
-| **Vercel Cron**    | $0           | $0          | Current (hourly precision) |
+| Solution           | Monthly Cost | Annual Cost | Notes                                |
+| ------------------ | ------------ | ----------- | ------------------------------------ |
+| **GitHub Actions** | $0           | $0          | Free for public repos                |
+| **cron-job.org**   | €0 / €5-20   | €0 / €12-36 | Free default / Sustaining Membership |
+| **EasyCron**       | $0-$2        | $0-$24      | Free tier limited                    |
+| **CronUptime**     | $0+          | $0+         | Free tier: 5 jobs                    |
+| **Render**         | $2           | $24         | $1 per cron job                      |
+| **Vercel Cron**    | $0           | $0          | Current (hourly precision)           |
 
 ---
 
