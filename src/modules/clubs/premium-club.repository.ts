@@ -8,7 +8,7 @@
 import { db } from "@/lib/db";
 import { premiumClubStatus } from "@/lib/db/schema";
 import { eq } from "drizzle-orm";
-import type { PremiumClubStatus } from "@/types/leads";
+import type { PremiumClubStatus, SubscriptionType } from "@/types/leads";
 
 /**
  * Map database premium club status record to PremiumClubStatus type
@@ -22,6 +22,10 @@ function mapDbPremiumToPremium(
     isPremium: dbPremium.isPremium,
     premiumStartDate: dbPremium.premiumStartDate || null,
     premiumEndDate: dbPremium.premiumEndDate || null,
+    subscriptionType: dbPremium.subscriptionType as SubscriptionType | null,
+    billingPeriod: dbPremium.billingPeriod || null,
+    nextBillingDate: dbPremium.nextBillingDate || null,
+    billingAmount: dbPremium.billingAmount || null,
     stripeSubscriptionId: dbPremium.stripeSubscriptionId || null,
     stripeCustomerId: dbPremium.stripeCustomerId || null,
     createdAt: dbPremium.createdAt,
@@ -53,6 +57,10 @@ export async function upsert(
     isPremium: boolean;
     premiumStartDate?: Date | null;
     premiumEndDate?: Date | null;
+    subscriptionType?: "MONTHLY" | "YEARLY" | null;
+    billingPeriod?: number | null;
+    nextBillingDate?: Date | null;
+    billingAmount?: number | null;
     stripeSubscriptionId?: string | null;
     stripeCustomerId?: string | null;
   }
@@ -64,6 +72,10 @@ export async function upsert(
       isPremium: data.isPremium,
       premiumStartDate: data.premiumStartDate || null,
       premiumEndDate: data.premiumEndDate || null,
+      subscriptionType: data.subscriptionType || null,
+      billingPeriod: data.billingPeriod || null,
+      nextBillingDate: data.nextBillingDate || null,
+      billingAmount: data.billingAmount || null,
       stripeSubscriptionId: data.stripeSubscriptionId || null,
       stripeCustomerId: data.stripeCustomerId || null,
     })
@@ -73,6 +85,10 @@ export async function upsert(
         isPremium: data.isPremium,
         premiumStartDate: data.premiumStartDate || null,
         premiumEndDate: data.premiumEndDate || null,
+        subscriptionType: data.subscriptionType || null,
+        billingPeriod: data.billingPeriod || null,
+        nextBillingDate: data.nextBillingDate || null,
+        billingAmount: data.billingAmount || null,
         stripeSubscriptionId: data.stripeSubscriptionId || null,
         stripeCustomerId: data.stripeCustomerId || null,
         updatedAt: new Date(),
@@ -103,6 +119,10 @@ export async function update(
     isPremium: boolean;
     premiumStartDate: Date | null;
     premiumEndDate: Date | null;
+    subscriptionType: "MONTHLY" | "YEARLY" | null;
+    billingPeriod: number | null;
+    nextBillingDate: Date | null;
+    billingAmount: number | null;
     stripeSubscriptionId: string | null;
     stripeCustomerId: string | null;
   }>

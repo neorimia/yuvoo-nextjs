@@ -403,11 +403,11 @@ export const faqCategories: FAQCategory[] = [
             <Link href={routes.clubs.landing} className="text-primary">
               Founding Club
             </Link>
-            , primești: profil complet gratuit 6 luni (valoare €180), badge &quot;Verified Founding
-            Club&quot; pentru încredere instant, pagină publică optimizată SEO (poți folosi ca site
-            web propriu), prioritate în rezultate la lansarea oficială, părinți pre-calificați (nu
-            lead-uri random), analiză și statistici despre vizitatori, și suport dedicat de la
-            echipa Yuvoo.
+            , primești: profil complet gratuit 6 luni (valoare echivalentă cu 594 lei), badge
+            &quot;Verified Founding Club&quot; pentru încredere instant, pagină publică optimizată
+            SEO (poți folosi ca site web propriu), prioritate în rezultate la lansarea oficială,
+            părinți pre-calificați (nu lead-uri random), analiză și statistici despre vizitatori, și
+            suport dedicat de la echipa Yuvoo.
           </>
         ),
         category: "Parteneri și Verificare",

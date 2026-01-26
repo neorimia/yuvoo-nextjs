@@ -1,9 +1,11 @@
 "use client";
 import React from "react";
+import Link from "next/link";
 import SectionTitle from "@/components/shared/SectionTitle";
 import TrustCard, { TrustCardProps } from "@/components/shared/TrustCard";
 import { CLUBS_CONTACT_MODAL_ID, openClubsContactModal } from "@/lib/clubs-landing-modal";
 import { PostHogEvents, trackEvent } from "@/lib/analytics/tracking";
+import { routes } from "@/lib/routes";
 
 /**
  * Clubs Landing Benefits Section
@@ -17,7 +19,7 @@ export default function ClubsLandingBenefits() {
       id: 1,
       icon: "fa-solid fa-gift",
       title: "Profil complet GRATUIT – 6 luni",
-      description: "valoare €180",
+      description: "valoare echivalentă cu 594 lei",
     },
     {
       id: 2,
@@ -41,19 +43,19 @@ export default function ClubsLandingBenefits() {
       id: 5,
       icon: "fa-solid fa-users",
       title: "Părinți pre-calificați",
-      description: "nu lead-uri random",
+      description: "cereri de părinți care știu că sportul tău este potrivit",
     },
     {
       id: 6,
       icon: "fa-solid fa-user-plus",
-      title: "Înregistrează lead-uri reale",
-      description: "mai puține mesaje inutile",
+      title: "Cereri reale de părinți",
+      description: "părinți care au completat quiz-ul AI și au primit recomandări",
     },
     {
       id: 7,
       icon: "fa-solid fa-comments",
       title: "Feedback direct",
-      description: "despre calitatea lead-urilor",
+      description: "despre calitatea cererilor și a părinților",
     },
     {
       id: 8,
@@ -74,7 +76,7 @@ export default function ClubsLandingBenefits() {
     "Confirmarea identității legale și a calificărilor antrenorilor",
     "Verificarea protocolurilor de siguranță pentru copii",
     "Disponibilitate pentru un call de 15 minute pentru configurarea profilului",
-    "Feedback periodic despre calitatea lead-urilor (opțional)",
+    "Feedback periodic despre calitatea cererilor (opțional)",
     "Disponibilitate pentru un mini-testimonial (dacă experiența e pozitivă)",
   ];
 
@@ -118,6 +120,10 @@ export default function ClubsLandingBenefits() {
                   <>
                     Program gratuit 6 luni, limitat doar pentru{" "}
                     <strong style={{ color: "var(--bd-theme-1)" }}>15 cluburi / România</strong>
+                    <br />
+                    <span style={{ fontSize: "16px", fontWeight: 400, color: "#6B6B6B" }}>
+                      Acces la cereri de părinți pre-calificați prin sistemul AI Yuvoo
+                    </span>
                   </>
                 }
                 className="mb-50"
@@ -209,11 +215,32 @@ export default function ClubsLandingBenefits() {
                     fontSize: "22px",
                     fontWeight: 600,
                     color: "#1B1B1B",
-                    marginBottom: 0,
+                    marginBottom: "15px",
                     lineHeight: "1.5",
                   }}
                 >
                   Zero costuri. Zero riscuri. Zero compromisuri.
+                </p>
+                <p
+                  style={{
+                    fontSize: "16px",
+                    color: "#6B6B6B",
+                    marginBottom: "20px",
+                    lineHeight: "1.6",
+                  }}
+                >
+                  Nu mai sunt locuri disponibile?{" "}
+                  <Link
+                    href={routes.club.premium}
+                    style={{
+                      color: "var(--bd-theme-1)",
+                      fontWeight: 600,
+                      textDecoration: "none",
+                    }}
+                  >
+                    Upgrade la Premium
+                  </Link>{" "}
+                  pentru acces nelimitat la cereri (99 lei/lună sau 990 lei/an)
                 </p>
                 {/* Primary CTA Button */}
                 <div

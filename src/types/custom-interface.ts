@@ -11,11 +11,11 @@ export interface AppContextType {
   isVideoOpen: boolean;
   setIsVideoOpen: React.Dispatch<React.SetStateAction<boolean>>;
   openVideoModal: () => void;
-  isOpen:boolean,
-  toggleOpen:() => void;
-  isSearchOpen:boolean,
-  setIsSearchOpen:React.Dispatch<React.SetStateAction<boolean>>;
-  toggleSidebarMenu:() => void;
+  isOpen: boolean;
+  toggleOpen: () => void;
+  isSearchOpen: boolean;
+  setIsSearchOpen: React.Dispatch<React.SetStateAction<boolean>>;
+  toggleSidebarMenu: () => void;
   sidebarHandle: () => void;
   isCollapse: boolean;
   setIsCollapse: React.Dispatch<React.SetStateAction<boolean>>;

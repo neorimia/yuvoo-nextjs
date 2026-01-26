@@ -294,7 +294,7 @@ export default function DoctorsContactModal({ modalId }: DoctorsContactModalProp
                       })}
                       id="privacy-check"
                       type="checkbox"
-                      className="me-2 mt-1"
+                      className="me-2 "
                     />
                     <label htmlFor="privacy-check" className="bd-contact-agree-label">
                       Accept{" "}

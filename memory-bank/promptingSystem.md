@@ -870,11 +870,16 @@ Phase 4: Document & Test
    - Define clear acceptance criteria
    - Specify output formats
    - Include code examples
-4. **Review before implementation**:
+4. **Save prompt to file**:
+   - ⚠️ **CRITICAL**: Always save completed prompts as files in the `prompts/` folder
+   - Use kebab-case naming: `feature-name-implementation-plan.md`
+   - Include full prompt content (not just a reference)
+   - Update `promptingSystem.md` to reference the new file instead of embedding the full prompt
+5. **Review before implementation**:
    - Verify all phases are necessary
    - Check dependencies are listed
    - Ensure acceptance criteria are testable
-5. **Update as you work**:
+6. **Update as you work**:
    - Mark completed tasks with `[x]`
    - Update status at bottom
    - Document any deviations or learnings
@@ -923,9 +928,44 @@ This template ensures all feature implementations:
 - **Example Plans**:
   - `prompts/parent-feature-implementation-plan.md` - Parent feature example
   - `prompts/doctor-portal-implementation-plan.md` - Doctor portal example
+  - `prompts/guest-club-payment-flow-implementation-plan.md` - Guest payment flow example
 
 ---
 
-**Last Updated**: January 2025
+**Last Updated**: January 2026
 **Status**: Active Standard - All prompts should follow this system
+
+---
+
+## Prompt File Management
+
+### ⚠️ CRITICAL: Save Prompts as Files
+
+**Rule**: When creating a new implementation prompt using the Yuvoo Prompting Standard template, **always save it as a separate file** in the `prompts/` folder instead of embedding it in `promptingSystem.md`.
+
+**Why**:
+- Keeps `promptingSystem.md` focused on the standard itself
+- Makes prompts easier to find and reference
+- Allows version control tracking of individual prompts
+- Enables reuse across different contexts
+
+**Process**:
+1. Create the prompt using the template
+2. Save it as `prompts/[feature-name]-implementation-plan.md` (kebab-case)
+3. Update `promptingSystem.md` to reference the new file in the "Example Plans" section
+4. If replacing an embedded prompt, remove the embedded content and add a reference
+
+**Example**:
+- ✅ **Correct**: Save prompt to `prompts/guest-club-payment-flow-implementation-plan.md` and reference it in `promptingSystem.md`
+- ❌ **Incorrect**: Embed the full prompt content directly in `promptingSystem.md`
+
+### Example: Guest Club Payment Flow
+
+**Task**: Implement guest payment flow for clubs without user accounts to pay 3€ and receive parent information via email or view on a page.
+
+**Prompt File**: [`prompts/guest-club-payment-flow-implementation-plan.md`](../prompts/guest-club-payment-flow-implementation-plan.md)
+
+**Status**: ✅ Complete - All phases implemented (January 2026)
+
+**Usage**: Reference the prompt file when implementing similar guest payment flows or reviewing the implementation approach.
 ```

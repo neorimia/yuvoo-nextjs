@@ -25,6 +25,12 @@ export enum LeadPaymentStatus {
   FAILED = "failed", // Payment failed
 }
 
+// Subscription type enum for premium clubs
+export enum SubscriptionType {
+  MONTHLY = "MONTHLY", // Monthly subscription (99 lei/month)
+  YEARLY = "YEARLY", // Yearly subscription (990 lei/year)
+}
+
 // Lead interface (matches database schema)
 export interface Lead {
   id: string;
@@ -72,7 +78,11 @@ export interface PremiumClubStatus {
   clubId: string;
   isPremium: boolean;
   premiumStartDate: Date | null;
-  premiumEndDate: Date | null; // 1 year from start
+  premiumEndDate: Date | null; // End date based on subscription type (1 month for monthly, 12 months for yearly)
+  subscriptionType: SubscriptionType | null; // MONTHLY or YEARLY
+  billingPeriod: number | null; // Number of months (1 for monthly, 12 for yearly)
+  nextBillingDate: Date | null; // When next payment is due
+  billingAmount: number | null; // Amount paid in bani (9900 for monthly, 99000 for yearly)
   stripeSubscriptionId: string | null; // Stripe subscription ID
   stripeCustomerId: string | null; // Stripe customer ID
   createdAt: Date;
@@ -90,6 +100,9 @@ export interface LeadPayment {
   stripePaymentIntentId: string;
   status: LeadPaymentStatus; // 'pending', 'succeeded', 'failed'
   paidAt: Date | null; // When payment completed
+  // Guest payment fields (for clubs without user accounts)
+  isGuestPayment: boolean; // true if payment from guest (no account)
+  guestEmail: string | null; // Email address for guest payments (nullable, only set for guest payments)
   createdAt: Date;
 }
 

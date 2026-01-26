@@ -7,7 +7,7 @@
 
 import { db } from "@/lib/db";
 import { leads } from "@/lib/db/schema";
-import { eq, and, lt, desc, sql } from "drizzle-orm";
+import { eq, and, lt, desc, sql, lte } from "drizzle-orm";
 import type { Lead, CreateLeadInput, LeadStatus } from "@/types/leads";
 
 /**
@@ -188,14 +188,15 @@ export async function findExpiredLeads(): Promise<Lead[]> {
 
 /**
  * Get leads needing reminder (created 48h ago, status = 'nou')
- * Uses SQL to calculate 48 hours ago
+ * Finds leads where createdAt <= 48 hours ago AND status = 'nou'
  */
 export async function findLeadsNeedingReminder(): Promise<Lead[]> {
   const fortyEightHoursAgo = new Date();
   fortyEightHoursAgo.setHours(fortyEightHoursAgo.getHours() - 48);
 
+  // Use lte (less than or equal) for timestamp comparison
   const dbLeads = await db.query.leads.findMany({
-    where: and(eq(leads.status, "nou"), sql`${leads.createdAt} <= ${fortyEightHoursAgo}`),
+    where: and(eq(leads.status, "nou"), lte(leads.createdAt, fortyEightHoursAgo)),
   });
 
   return dbLeads.map(mapDbLeadToLead);

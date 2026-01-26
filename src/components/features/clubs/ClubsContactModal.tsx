@@ -186,7 +186,7 @@ export default function ClubsContactModal({ modalId }: ClubsContactModalProps) {
               >
                 <strong>Ce primești:</strong>
                 <ul style={{ marginBottom: 0, paddingLeft: "20px", marginTop: "10px" }}>
-                  <li>Profil complet GRATUIT – 6 luni (valoare €180)</li>
+                  <li>Profil complet GRATUIT – 6 luni (valoare echivalentă cu 594 lei)</li>
                   <li>Badge &quot;Verified Founding Club&quot;</li>
                   <li>Prioritate în rezultate la lansarea oficială</li>
                   <li>Părinți pre-calificați</li>
@@ -292,7 +292,7 @@ export default function ClubsContactModal({ modalId }: ClubsContactModalProps) {
                       })}
                       id="privacy-check"
                       type="checkbox"
-                      className="me-2 mt-1"
+                      className="me-2"
                     />
                     <label htmlFor="privacy-check" className="bd-contact-agree-label">
                       Accept{" "}

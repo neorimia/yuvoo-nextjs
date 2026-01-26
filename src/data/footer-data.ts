@@ -8,7 +8,7 @@ const footerData: IFooterData = {
     logo: logo,
     logoWhite: logoWhite,
     teaser:
-      "Yuvoo te ajută să găsești activitățile sportive perfecte pentru copilul tău. Descoperă sporturi personalizate, cluburi sportive și specialiști pediatri.",
+      "Yuvoo te ajută să găsești activitățile sportive perfecte pentru copilul tău. Descoperă sporturi personalizate și cluburi sportive.",
     socialTitle: "Social",
     newsTitle: "Alătură-te Newsletter-ului",
     newsBtn: "Abonează-te acum",

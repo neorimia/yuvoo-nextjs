@@ -24,6 +24,8 @@ function mapDbPaymentToPayment(dbPayment: typeof leadPayments.$inferSelect): Lea
     stripePaymentIntentId: dbPayment.stripePaymentIntentId,
     status: dbPayment.status as LeadPaymentStatus,
     paidAt: dbPayment.paidAt || null,
+    isGuestPayment: dbPayment.isGuestPayment || false,
+    guestEmail: dbPayment.guestEmail || null,
     createdAt: dbPayment.createdAt,
   };
 }
@@ -39,6 +41,8 @@ export async function create(input: {
   paymentMethod: LeadPaymentMethod;
   stripePaymentIntentId: string;
   status: LeadPaymentStatus;
+  isGuestPayment?: boolean; // Optional: true for guest payments
+  guestEmail?: string | null; // Optional: email for guest payments
 }): Promise<LeadPayment> {
   const paymentId = crypto.randomUUID();
 
@@ -53,6 +57,8 @@ export async function create(input: {
       paymentMethod: input.paymentMethod,
       stripePaymentIntentId: input.stripePaymentIntentId,
       status: input.status,
+      isGuestPayment: input.isGuestPayment || false,
+      guestEmail: input.guestEmail || null,
     })
     .returning();
 

@@ -35,8 +35,9 @@ function normalizeLocationName(name: string): string {
 
 /**
  * Find location by name and type using fuzzy matching
+ * @deprecated Not currently used - kept for reference
  */
-async function findLocationByName(
+async function _findLocationByName(
   name: string,
   type: "county" | "city" | "sector",
   parentId?: string | null
@@ -77,8 +78,9 @@ async function findLocationByName(
 
 /**
  * Get Bucharest city ID
+ * @deprecated Not currently used - kept for reference
  */
-async function getBucharestCityId(): Promise<string | null> {
+async function _getBucharestCityId(): Promise<string | null> {
   const bucharest = await db
     .select()
     .from(locations)
@@ -92,8 +94,9 @@ async function getBucharestCityId(): Promise<string | null> {
 
 /**
  * Get county ID from city ID (via parent relationship)
+ * @deprecated Not currently used - kept for reference
  */
-async function getCountyIdFromCityId(cityId: string | null): Promise<string | null> {
+async function _getCountyIdFromCityId(cityId: string | null): Promise<string | null> {
   if (!cityId) return null;
 
   const city = await db.select().from(locations).where(eq(locations.id, cityId)).limit(1);
@@ -121,6 +124,9 @@ interface UnmatchedRecord {
 
 /**
  * Migrate clubs table
+ * NOTE: This migration script is for migrating from old text-based city/district
+ * columns to foreign key references. The schema has already been migrated
+ * (city/district columns removed), so this function now just reports completion.
  */
 async function migrateClubs(): Promise<{
   stats: MigrationStats;
@@ -128,93 +134,31 @@ async function migrateClubs(): Promise<{
 }> {
   console.log("\n📊 Migrating clubs table...");
 
+  // Migration is already complete - schema no longer has city/district columns
+  console.log(
+    "✅ Migration already complete: clubs table uses foreign keys (cityId, sectorId, countyId)"
+  );
+  console.log("   The old text-based city/district columns have been removed from the schema.");
+
   const allClubs = await db.select().from(clubs);
-  const stats: MigrationStats = {
-    total: allClubs.length,
-    matched: 0,
-    unmatched: 0,
-    errors: 0,
+  const clubsWithCityId = allClubs.filter((c) => c.cityId);
+
+  return {
+    stats: {
+      total: allClubs.length,
+      matched: clubsWithCityId.length,
+      unmatched: 0,
+      errors: 0,
+    },
+    unmatched: [],
   };
-  const unmatched: UnmatchedRecord[] = [];
-  const bucharestCityId = await getBucharestCityId();
-
-  for (const club of allClubs) {
-    try {
-      let cityId: string | null = null;
-      let sectorId: string | null = null;
-      let countyId: string | null = null;
-
-      // Step 1: Match city
-      if (club.city) {
-        cityId = await findLocationByName(club.city, "city");
-        if (!cityId) {
-          unmatched.push({
-            id: club.id,
-            name: club.name,
-            city: club.city,
-            district: club.district || null,
-            reason: `City "${club.city}" not found in locations table`,
-          });
-          stats.unmatched++;
-          continue;
-        }
-      } else {
-        unmatched.push({
-          id: club.id,
-          name: club.name,
-          city: null,
-          district: club.district || null,
-          reason: "City field is empty",
-        });
-        stats.unmatched++;
-        continue;
-      }
-
-      // Step 2: Match sector (only for Bucharest clubs)
-      if (club.district && cityId === bucharestCityId) {
-        sectorId = await findLocationByName(club.district, "sector", cityId);
-        if (!sectorId) {
-          console.warn(
-            `⚠️  Club "${club.name}": Sector "${club.district}" not found, but continuing with cityId`
-          );
-        }
-      }
-
-      // Step 3: Derive countyId from cityId
-      countyId = await getCountyIdFromCityId(cityId);
-      if (!countyId) {
-        console.warn(`⚠️  Club "${club.name}": Could not derive countyId from cityId "${cityId}"`);
-      }
-
-      // Step 4: Update club with new foreign keys
-      await db
-        .update(clubs)
-        .set({
-          cityId,
-          sectorId,
-          countyId, // Keep as null if not found (will be handled by validation)
-        })
-        .where(eq(clubs.id, club.id));
-
-      stats.matched++;
-    } catch (error) {
-      console.error(`❌ Error migrating club "${club.name}":`, error);
-      stats.errors++;
-      unmatched.push({
-        id: club.id,
-        name: club.name,
-        city: club.city || null,
-        district: club.district || null,
-        reason: `Error: ${error instanceof Error ? error.message : String(error)}`,
-      });
-    }
-  }
-
-  return { stats, unmatched };
 }
 
 /**
  * Migrate doctors table
+ * NOTE: This migration script is for migrating from old text-based city/district
+ * columns to foreign key references. The schema has already been migrated
+ * (city/district columns removed), so this function now just reports completion.
  */
 async function migrateDoctors(): Promise<{
   stats: MigrationStats;
@@ -222,91 +166,24 @@ async function migrateDoctors(): Promise<{
 }> {
   console.log("\n📊 Migrating doctors table...");
 
+  // Migration is already complete - schema no longer has city/district columns
+  console.log(
+    "✅ Migration already complete: doctors table uses foreign keys (cityId, sectorId, countyId)"
+  );
+  console.log("   The old text-based city/district columns have been removed from the schema.");
+
   const allDoctors = await db.select().from(doctors);
-  const stats: MigrationStats = {
-    total: allDoctors.length,
-    matched: 0,
-    unmatched: 0,
-    errors: 0,
+  const doctorsWithCityId = allDoctors.filter((d) => d.cityId);
+
+  return {
+    stats: {
+      total: allDoctors.length,
+      matched: doctorsWithCityId.length,
+      unmatched: 0,
+      errors: 0,
+    },
+    unmatched: [],
   };
-  const unmatched: UnmatchedRecord[] = [];
-  const bucharestCityId = await getBucharestCityId();
-
-  for (const doctor of allDoctors) {
-    try {
-      let cityId: string | null = null;
-      let sectorId: string | null = null;
-      let countyId: string | null = null;
-
-      // Step 1: Match city
-      if (doctor.city) {
-        cityId = await findLocationByName(doctor.city, "city");
-        if (!cityId) {
-          unmatched.push({
-            id: doctor.id,
-            name: `${doctor.firstName} ${doctor.lastName}`,
-            city: doctor.city,
-            district: doctor.district || null,
-            reason: `City "${doctor.city}" not found in locations table`,
-          });
-          stats.unmatched++;
-          continue;
-        }
-      } else {
-        unmatched.push({
-          id: doctor.id,
-          name: `${doctor.firstName} ${doctor.lastName}`,
-          city: null,
-          district: doctor.district || null,
-          reason: "City field is empty",
-        });
-        stats.unmatched++;
-        continue;
-      }
-
-      // Step 2: Match sector (only for Bucharest doctors)
-      if (doctor.district && cityId === bucharestCityId) {
-        sectorId = await findLocationByName(doctor.district, "sector", cityId);
-        if (!sectorId) {
-          console.warn(
-            `⚠️  Doctor "${doctor.firstName} ${doctor.lastName}": Sector "${doctor.district}" not found, but continuing with cityId`
-          );
-        }
-      }
-
-      // Step 3: Derive countyId from cityId
-      countyId = await getCountyIdFromCityId(cityId);
-      if (!countyId) {
-        console.warn(
-          `⚠️  Doctor "${doctor.firstName} ${doctor.lastName}": Could not derive countyId from cityId "${cityId}"`
-        );
-      }
-
-      // Step 4: Update doctor with new foreign keys
-      await db
-        .update(doctors)
-        .set({
-          cityId,
-          sectorId,
-          countyId,
-        })
-        .where(eq(doctors.id, doctor.id));
-
-      stats.matched++;
-    } catch (error) {
-      console.error(`❌ Error migrating doctor "${doctor.firstName} ${doctor.lastName}":`, error);
-      stats.errors++;
-      unmatched.push({
-        id: doctor.id,
-        name: `${doctor.firstName} ${doctor.lastName}`,
-        city: doctor.city || null,
-        district: doctor.district || null,
-        reason: `Error: ${error instanceof Error ? error.message : String(error)}`,
-      });
-    }
-  }
-
-  return { stats, unmatched };
 }
 
 /**

@@ -9,13 +9,15 @@ import React from "react";
 import Link from "next/link";
 import type { Club } from "@/modules/clubs/clubs.types";
 import type { Booking } from "@/modules/bookings/bookings.types";
+import type { PremiumClubStatus } from "@/types/leads";
 import ClubDashboardHeader from "./ClubDashboardHeader";
 import ProfileCompletenessIndicator from "@/components/shared/ProfileCompletenessIndicator";
 import BookingStatistics from "./BookingStatistics";
 import RecentActivityFeed from "@/components/shared/RecentActivityFeed";
+import PremiumBadge from "./PremiumBadge";
 import { routes } from "@/lib/routes";
 import { getStatusBadgeConfig } from "@/lib/utils/status-badges";
-import { formatDateForActivityFeed } from "@/lib/utils/date-formatting";
+import { formatDateForActivityFeed, formatDateOnly } from "@/lib/utils/date-formatting";
 
 interface ProfileCompleteness {
   percentage: number;
@@ -37,6 +39,8 @@ interface ClubDashboardContentProps {
   profileCompleteness: ProfileCompleteness;
   bookingStats: BookingStats;
   recentBookings: Booking[];
+  isPremium?: boolean;
+  premiumStatus?: PremiumClubStatus | null;
 }
 
 const ClubDashboardContent: React.FC<ClubDashboardContentProps> = ({
@@ -44,12 +48,127 @@ const ClubDashboardContent: React.FC<ClubDashboardContentProps> = ({
   profileCompleteness,
   bookingStats,
   recentBookings,
+  isPremium = false,
+  premiumStatus,
 }) => {
   return (
     <div className="bd-club-dashboard-content">
       {/* Header */}
       <div className="mb-5">
         <ClubDashboardHeader club={club} />
+      </div>
+
+      {/* Premium Status Section */}
+      <div className="mb-5">
+        <div className="card border-0 shadow-sm">
+          <div className="card-body">
+            <div className="d-flex justify-content-between align-items-start">
+              <div className="flex-grow-1">
+                <h3 className="card-title mb-3">
+                  <i className="bi bi-star-fill text-yuvoo-primary me-2"></i>
+                  Status Premium
+                </h3>
+                {isPremium && premiumStatus ? (
+                  <div>
+                    <div className="mb-3">
+                      <PremiumBadge />{" "}
+                      <span className="fw-semibold">Clubul tău are status Premium activ.</span>
+                    </div>
+
+                    {/* Subscription Details */}
+                    <div className="row g-3">
+                      {/* Subscription Type */}
+                      {premiumStatus.subscriptionType && (
+                        <div className="col-md-6">
+                          <div className="d-flex align-items-center">
+                            <i className="bi bi-calendar-check text-yuvoo-primary me-2"></i>
+                            <div>
+                              <small className="text-muted d-block">Plan de abonament</small>
+                              <span className="fw-semibold">
+                                {premiumStatus.subscriptionType === "MONTHLY"
+                                  ? "Plan Lunar"
+                                  : "Plan Anual"}
+                              </span>
+                            </div>
+                          </div>
+                        </div>
+                      )}
+
+                      {/* Next Billing Date */}
+                      {premiumStatus.nextBillingDate && (
+                        <div className="col-md-6">
+                          <div className="d-flex align-items-center">
+                            <i className="bi bi-credit-card text-yuvoo-primary me-2"></i>
+                            <div>
+                              <small className="text-muted d-block">Următoarea plată</small>
+                              <span className="fw-semibold">
+                                {formatDateOnly(premiumStatus.nextBillingDate)}
+                              </span>
+                            </div>
+                          </div>
+                        </div>
+                      )}
+
+                      {/* Premium End Date */}
+                      {premiumStatus.premiumEndDate && (
+                        <div className="col-md-6">
+                          <div className="d-flex align-items-center">
+                            <i className="bi bi-calendar-x text-yuvoo-primary me-2"></i>
+                            <div>
+                              <small className="text-muted d-block">Expiră la</small>
+                              <span className="fw-semibold">
+                                {formatDateOnly(premiumStatus.premiumEndDate)}
+                              </span>
+                            </div>
+                          </div>
+                        </div>
+                      )}
+
+                      {/* Billing Amount */}
+                      {premiumStatus.billingAmount && (
+                        <div className="col-md-6">
+                          <div className="d-flex align-items-center">
+                            <i className="bi bi-cash-coin text-yuvoo-primary me-2"></i>
+                            <div>
+                              <small className="text-muted d-block">Suma plătită</small>
+                              <span className="fw-semibold">
+                                {(premiumStatus.billingAmount / 100).toFixed(0)} lei
+                                {premiumStatus.subscriptionType === "MONTHLY" ? "/lună" : "/an"}
+                              </span>
+                            </div>
+                          </div>
+                        </div>
+                      )}
+                    </div>
+
+                    {/* Upgrade/Manage Link */}
+                    <div className="mt-3">
+                      <Link href={routes.club.premium} className="btn btn-sm btn-outline-primary">
+                        <i className="bi bi-gear me-2"></i>
+                        Gestionează abonamentul
+                      </Link>
+                    </div>
+                  </div>
+                ) : (
+                  <div>
+                    <p className="mb-3 text-muted">
+                      Upgradează la Premium pentru acces nelimitat la cereri și beneficii exclusive.
+                    </p>
+                    <Link href={routes.club.premium} className="btn btn-yuvoo-primary">
+                      <i className="bi bi-star-fill me-2"></i>
+                      Upgradează la Premium
+                    </Link>
+                  </div>
+                )}
+              </div>
+              {isPremium && (
+                <div className="text-end ms-3">
+                  <PremiumBadge size="lg" />
+                </div>
+              )}
+            </div>
+          </div>
+        </div>
       </div>
 
       {/* Profile Completeness */}

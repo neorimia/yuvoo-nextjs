@@ -4,11 +4,11 @@ import { useClickAway } from "react-use";
 interface Option {
   id: number;
   option: string;
-  value?:string
+  value?: string;
 }
 
 interface NiceSelectProps {
-  filterIcon:boolean;
+  filterIcon: boolean;
   options: Option[];
   defaultCurrent: number;
   placeholder?: string;
@@ -86,5 +86,3 @@ const NiceSelect: React.FC<NiceSelectProps> = ({
 };
 
 export default NiceSelect;
-
-

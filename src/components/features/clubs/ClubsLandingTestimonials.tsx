@@ -119,20 +119,6 @@ export default function ClubsLandingTestimonials() {
                 </div>
               ))}
             </div>
-
-            {/* Note */}
-            <div className="wow fadeInUp text-center" data-wow-duration="1s" data-wow-delay=".6s">
-              <p
-                style={{
-                  fontSize: "14px",
-                  color: "#6B6B6B",
-                  fontStyle: "italic",
-                  marginBottom: 0,
-                }}
-              >
-                (testimoniale reale – MVP phase)
-              </p>
-            </div>
           </div>
         </div>
       </div>

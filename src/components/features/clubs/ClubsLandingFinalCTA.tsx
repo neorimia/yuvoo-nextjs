@@ -50,12 +50,6 @@ export default function ClubsLandingFinalCTA({
 
                 {/* Location & Availability Info */}
                 <div className="bd-clubs-landing-final-cta-info-wrapper mb-40">
-                  <div className="bd-clubs-landing-final-cta-info-item">
-                    <span>📍</span>
-                    <span>
-                      <strong>Oraș:</strong> București
-                    </span>
-                  </div>
                   <div className="bd-clubs-landing-final-cta-spots-counter">
                     <span>🏅</span>
                     <div className="bd-clubs-landing-final-cta-spots-counter-text">
@@ -94,16 +88,20 @@ export default function ClubsLandingFinalCTA({
                 )}
                 {remainingSpots === 0 && (
                   <>
-                    <p className="text-center mb-30">
+                    <p className="text-center mb-3">
                       <span className="bd-clubs-landing-final-cta-subtitle-small">
-                        Nu mai sunt locuri disponibile. Vezi oferta completa aici:
+                        Nu mai sunt locuri disponibile în programul Founding Club.
                       </span>
                     </p>
+                    <p className="text-center mb-30" style={{ fontSize: "16px", color: "#424242" }}>
+                      Upgrade la Premium pentru acces nelimitat la cereri și beneficii exclusive (99
+                      lei/lună sau 990 lei/an)
+                    </p>
                     <div className="mb-30">
-                      <Link href={routes.clubs.pricing} className="bd-btn mx-auto">
+                      <Link href={routes.club.premium} className="bd-btn mx-auto">
                         <span className="bd-btn-inner">
-                          <span className="bd-btn-normal">Vezi oferta completa</span>
-                          <span className="bd-btn-hover">Vezi oferta completa</span>
+                          <span className="bd-btn-normal">Upgrade la Premium</span>
+                          <span className="bd-btn-hover">Upgrade la Premium</span>
                         </span>
                       </Link>
                     </div>

@@ -21,6 +21,8 @@ import { cacheLife, cacheTag } from "next/cache";
 import { redirect, notFound } from "next/navigation";
 import { UserRoleEnum } from "@/modules/auth/auth.types";
 import { getLocationNameById } from "@/lib/db/location-helpers";
+import { trackEventServer } from "@/lib/analytics/tracking-server";
+import { PostHogEvents, PostHogProperties } from "@/lib/analytics/events";
 
 interface LeadDetailPageProps {
   params: Promise<{
@@ -81,6 +83,20 @@ export default async function LeadDetailPage({ params }: LeadDetailPageProps) {
     ...lead,
     locationName,
   };
+
+  // Track lead view (non-blocking)
+  try {
+    await trackEventServer(PostHogEvents.LEAD_VIEWED, {
+      distinctId: session.dbUser.id,
+      [PostHogProperties.LEAD_ID]: leadId,
+      [PostHogProperties.CLUB_ID]: club.id,
+      [PostHogProperties.LEAD_STATUS]: lead.status,
+      [PostHogProperties.LEAD_PAYMENT_METHOD]: lead.paymentMethod || null,
+    });
+  } catch (error) {
+    // Log but don't throw - tracking failures shouldn't block page load
+    console.error("[Lead Detail Page] Error tracking lead view:", error);
+  }
 
   return (
     <LeadDetailView

@@ -1,12 +1,12 @@
-import React from 'react';
+import React from "react";
 
 type ErrorMsgProps = {
-    error?: string;
+  error?: string;
 };
 
 const ErrorMsg: React.FC<ErrorMsgProps> = ({ error }) => {
-    if (!error) return null;
-    return <p style={{ color: 'red', fontSize: "12px" }}>{error}</p>;
+  if (!error) return null;
+  return <p style={{ color: "red", fontSize: "12px" }}>{error}</p>;
 };
 
 export default ErrorMsg;

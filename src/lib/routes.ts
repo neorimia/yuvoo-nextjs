@@ -32,6 +32,7 @@ export const routes = {
   // Clubs (Cluburi)
   clubs: {
     list: "/cluburi",
+    premium: "/pentru-cluburi/abonare-premium", // Premium page for clubs to upgrade to Premium
     landing: "/pentru-cluburi", // Landing page for clubs to join as Founding Clubs
     pricing: "/preturi-cluburi", // Pricing page for clubs TODO: CREATE THIS PAGE
     detail: (slug: string) => `/cluburi/${slug}`,
@@ -58,6 +59,11 @@ export const routes = {
     paymentSuccess: (quizId: string) => `/chestionar/payment/success/${quizId}`,
     paymentFailure: (quizId: string) => `/chestionar/payment/failure/${quizId}`,
     report: (accessToken: string) => `/chestionar/raport/${accessToken}`,
+  },
+  // Leads (Cereri) - Public guest payment routes
+  leads: {
+    guestPayment: (leadId: string) => `/cereri/${leadId}/plata-guest`,
+    guestPaymentSuccess: (leadId: string) => `/cereri/${leadId}/plata-guest/success`,
   },
   // Search
   search: "/cautare",

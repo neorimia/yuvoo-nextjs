@@ -210,3 +210,62 @@ export async function sendLeadAcceptedEmailToParent(params: {
     console.error("[Lead Email] Error sending lead accepted email:", error);
   }
 }
+
+/**
+ * Send guest payment success email with parent information
+ * Sends parent contact details to guest email after successful payment
+ */
+export async function sendGuestPaymentSuccessEmail(params: {
+  guestEmail: string;
+  leadId: string;
+  parentName: string;
+  parentEmail: string;
+  parentPhone: string | null;
+  childAge: number;
+  message: string | null;
+  sportType: string;
+  clubName: string;
+}): Promise<void> {
+  try {
+    // Validate email
+    if (!isValidEmail(params.guestEmail)) {
+      console.error("[Lead Email] Invalid guest email:", params.guestEmail);
+      return;
+    }
+
+    // Render React Email component
+    const React = await import("react");
+    const { GuestPaymentSuccessEmail } =
+      await import("../../../emails/guest-payment-success-email");
+
+    const emailComponent = React.createElement(GuestPaymentSuccessEmail, {
+      guestEmail: params.guestEmail,
+      leadId: params.leadId,
+      parentName: params.parentName,
+      parentEmail: params.parentEmail,
+      parentPhone: params.parentPhone,
+      childAge: params.childAge,
+      message: params.message,
+      sportType: params.sportType,
+      clubName: params.clubName,
+    });
+
+    const { html, text } = await renderEmail(emailComponent);
+
+    // Send email
+    const result = await sendEmail({
+      to: params.guestEmail,
+      subject: `Informații părinte - Cerere ${params.sportType}`,
+      htmlContent: html,
+      textContent: text,
+      tags: ["lead", "guest-payment", "success"],
+    });
+
+    if (!result.success) {
+      console.error("[Lead Email] Failed to send guest payment success email:", result.error);
+    }
+  } catch (error) {
+    // Don't throw - email failures shouldn't block operations
+    console.error("[Lead Email] Error sending guest payment success email:", error);
+  }
+}

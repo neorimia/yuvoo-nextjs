@@ -28,7 +28,7 @@ export default function ClubsLandingTrust() {
     {
       id: 3,
       icon: "fa-solid fa-heart",
-      title: "Focus pe dezvoltarea sănătoasă a copiilor",
+      title: "Focus pe dezvoltarea sănătoasă",
       description: "Prioritizăm siguranța și bunăstarea copiilor în toate deciziile noastre",
     },
   ];
@@ -37,7 +37,7 @@ export default function ClubsLandingTrust() {
     <section className="bd-clubs-landing-trust pt-70 pb-70">
       <div className="container">
         <div className="row justify-content-center">
-          <div className="col-lg-10 col-xl-9">
+          <div className="col-lg-12">
             {/* Section Title */}
             <SectionTitle title="Siguranță & încredere" className="mb-40" animationDelay=".3s" />
 
@@ -47,7 +47,7 @@ export default function ClubsLandingTrust() {
                 <TrustCard
                   key={indicator.id}
                   {...indicator}
-                  columnClasses="col-lg-4 col-md-4 col-sm-10"
+                  columnClasses="col-md-4 col-sm-10"
                   animationDelay={`${0.4 + (indicator.id - 1) * 0.1}s`}
                 />
               ))}

@@ -7,6 +7,7 @@
 
 import { premiumClubRepository } from "./premium-club.repository";
 import type { PremiumClubStatus } from "@/types/leads";
+import { SubscriptionType } from "@/types/leads";
 
 /**
  * Check if club is premium (with date validation)
@@ -35,32 +36,72 @@ export async function checkIsPremium(clubId: string): Promise<boolean> {
 }
 
 /**
- * Calculate premium end date (1 year from start)
+ * Add months to a date (native implementation)
+ * @param date - Start date
+ * @param months - Number of months to add
  */
-function calculatePremiumEndDate(startDate: Date): Date {
-  const endDate = new Date(startDate);
-  endDate.setFullYear(endDate.getFullYear() + 1);
-  return endDate;
+function addMonths(date: Date, months: number): Date {
+  const result = new Date(date);
+  result.setMonth(result.getMonth() + months);
+  return result;
+}
+
+/**
+ * Calculate premium end date based on subscription type
+ * @param startDate - Start date
+ * @param subscriptionType - MONTHLY (1 month) or YEARLY (12 months)
+ */
+function calculatePremiumEndDate(startDate: Date, subscriptionType: SubscriptionType): Date {
+  const billingPeriod = subscriptionType === SubscriptionType.MONTHLY ? 1 : 12;
+  return addMonths(startDate, billingPeriod);
+}
+
+/**
+ * Calculate next billing date based on subscription type
+ * @param startDate - Start date
+ * @param subscriptionType - MONTHLY (1 month) or YEARLY (12 months)
+ */
+function calculateNextBillingDate(startDate: Date, subscriptionType: SubscriptionType): Date {
+  const billingPeriod = subscriptionType === SubscriptionType.MONTHLY ? 1 : 12;
+  return addMonths(startDate, billingPeriod);
+}
+
+/**
+ * Get billing amount in bani based on subscription type
+ * @param subscriptionType - MONTHLY or YEARLY
+ */
+function getBillingAmount(subscriptionType: SubscriptionType): number {
+  return subscriptionType === SubscriptionType.MONTHLY ? 9900 : 99000; // 99 lei or 990 lei in bani
 }
 
 /**
  * Upgrade club to premium
- * Processes premium upgrade (199 lei/year)
+ * Processes premium upgrade (99 lei/month or 990 lei/year)
+ * @param clubId - Club ID
+ * @param data - Upgrade data including subscription type
  */
 export async function upgradeToPremium(
   clubId: string,
   data: {
+    subscriptionType: SubscriptionType;
     stripeSubscriptionId?: string | null;
     stripeCustomerId?: string | null;
   }
 ): Promise<PremiumClubStatus> {
   const now = new Date();
-  const endDate = calculatePremiumEndDate(now);
+  const endDate = calculatePremiumEndDate(now, data.subscriptionType);
+  const nextBillingDate = calculateNextBillingDate(now, data.subscriptionType);
+  const billingPeriod = data.subscriptionType === SubscriptionType.MONTHLY ? 1 : 12;
+  const billingAmount = getBillingAmount(data.subscriptionType);
 
   const premiumStatus = await premiumClubRepository.upsert(clubId, {
     isPremium: true,
     premiumStartDate: now,
     premiumEndDate: endDate,
+    subscriptionType: data.subscriptionType,
+    billingPeriod,
+    nextBillingDate,
+    billingAmount,
     stripeSubscriptionId: data.stripeSubscriptionId || null,
     stripeCustomerId: data.stripeCustomerId || null,
   });

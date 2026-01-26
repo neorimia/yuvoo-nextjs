@@ -181,13 +181,20 @@ export default function ClubsLandingHero({ verifiedCount, remainingSpots }: Club
                   )}
                   {remainingSpots === 0 && (
                     <div className="text-center display-flex flex-column align-items-center mx-auto">
-                      <p className="text-center text-muted">
-                        Nu mai sunt locuri disponibile. Vezi oferta completa aici:
+                      <p className="text-center text-muted mb-3">
+                        Nu mai sunt locuri disponibile în programul Founding Club.
                       </p>
-                      <Link href={routes.clubs.pricing} className="bd-btn mx-auto">
+                      <p
+                        className="text-center"
+                        style={{ fontSize: "16px", color: "#424242", marginBottom: "20px" }}
+                      >
+                        Upgrade la Premium pentru acces nelimitat la cereri și beneficii exclusive
+                        (99 lei/lună sau 990 lei/an)
+                      </p>
+                      <Link href={routes.club.premium} className="bd-btn mx-auto">
                         <span className="bd-btn-inner">
-                          <span className="bd-btn-normal">Vezi oferta completa</span>
-                          <span className="bd-btn-hover">Vezi oferta completa</span>
+                          <span className="bd-btn-normal">Upgrade la Premium</span>
+                          <span className="bd-btn-hover">Upgrade la Premium</span>
                         </span>
                       </Link>
                     </div>

@@ -6,7 +6,7 @@
  */
 
 import { db } from "@/lib/db";
-import { clubs } from "@/lib/db/schema";
+import { clubs, premiumClubStatus } from "@/lib/db/schema";
 import { eq, desc, asc, inArray } from "drizzle-orm";
 import { getLocationNamesByIds } from "@/lib/db/location-helpers";
 import type { Club } from "./clubs.types";
@@ -83,6 +83,28 @@ export async function mapDbClubToClub(dbClub: typeof clubs.$inferSelect): Promis
     images.push(...dbClub.galleryUrls);
   }
 
+  // Check premium status (with date validation)
+  let isPremium = false;
+  try {
+    const premiumStatus = await db.query.premiumClubStatus.findFirst({
+      where: eq(premiumClubStatus.clubId, dbClub.id),
+    });
+
+    if (premiumStatus && premiumStatus.isPremium) {
+      // Check if premium has expired
+      if (premiumStatus.premiumEndDate) {
+        const now = new Date();
+        isPremium = now <= premiumStatus.premiumEndDate;
+      } else {
+        // No end date means active premium
+        isPremium = true;
+      }
+    }
+  } catch (error) {
+    // If premium check fails, default to false
+    console.warn(`[Clubs Repository] Failed to check premium status for club ${dbClub.id}:`, error);
+  }
+
   return {
     id: dbClub.id, // Schema: primaryKey
     name: dbClub.name, // Schema: notNull
@@ -109,6 +131,7 @@ export async function mapDbClubToClub(dbClub: typeof clubs.$inferSelect): Promis
     verificationDocuments: dbClub.verificationDocuments || [], // Schema: text array, default '{}'
     profileComplete: dbClub.profileComplete ?? false, // Schema: notNull, default false
     rating: dbClub.rating || 0, // Schema: integer, default 0
+    isPremium, // Premium status (checked with date validation)
     createdAt: dbClub.createdAt, // Schema: notNull, defaultNow
     updatedAt: dbClub.updatedAt, // Schema: notNull, defaultNow
   };

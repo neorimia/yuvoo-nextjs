@@ -11,13 +11,18 @@ import type { Lead, CreateLeadInput, LeadStatus, LeadWithRelations } from "@/typ
 import { LeadStatus as LeadStatusEnum } from "@/types/leads";
 import { premiumClubService } from "@/modules/clubs/premium-club.service";
 import { clubsRepository } from "@/modules/clubs/clubs.repository";
+import { suggestAlternativeClubs } from "@/modules/clubs/clubs.service";
 import {
   sendLeadNotificationEmail,
   sendLeadAcceptedEmailToParent,
+  sendLeadExpiredEmailToParent,
+  sendLeadReminderEmail,
 } from "@/modules/emails/lead-emails.service";
 import { db } from "@/lib/db";
 import { locations } from "@/lib/db/schema";
 import { eq } from "drizzle-orm";
+import { trackEventServer } from "@/lib/analytics/tracking-server";
+import { PostHogEvents, PostHogProperties } from "@/lib/analytics/events";
 
 /**
  * Calculate expiration date (5 days from now)
@@ -191,13 +196,44 @@ export async function expireLead(leadId: string): Promise<Lead> {
   // Update status to expired
   const expiredLead = await leadsRepository.updateStatus(leadId, LeadStatusEnum.EXPIRAT);
 
-  // TODO: Send email to parent with alternative clubs (Phase 5)
-  // await sendLeadExpiredEmailToParent({
-  //   parentEmail: lead.parentEmail,
-  //   parentName: lead.parentName,
-  //   clubName: lead.club?.name,
-  //   alternativeClubs: await suggestAlternativeClubs(...),
-  // });
+  // Get club information for email
+  const club = await clubsRepository.getClubById(lead.clubId);
+  const clubName = club?.name || "Club";
+
+  // Find alternative clubs
+  const alternativeClubs = await suggestAlternativeClubs({
+    sportId: lead.sportType || null,
+    locationId: lead.locationId || null,
+    excludeClubId: lead.clubId,
+    limit: 5,
+  });
+
+  // Send email to parent with alternative clubs (non-blocking)
+  try {
+    await sendLeadExpiredEmailToParent({
+      parentEmail: lead.parentEmail,
+      parentName: lead.parentName,
+      clubName: clubName,
+      sportName: lead.sportType || club?.sportName || "sport",
+      alternativeClubs: alternativeClubs,
+    });
+  } catch (error) {
+    // Log but don't throw - email failures shouldn't block expiration
+    console.error("[Lead Service] Failed to send lead expired email:", error);
+  }
+
+  // Track lead expiration (non-blocking)
+  try {
+    await trackEventServer(PostHogEvents.LEAD_EXPIRED, {
+      distinctId: "cron-job",
+      [PostHogProperties.LEAD_ID]: leadId,
+      [PostHogProperties.CLUB_ID]: lead.clubId,
+      [PostHogProperties.LEAD_STATUS]: LeadStatusEnum.EXPIRAT,
+    });
+  } catch (error) {
+    // Log but don't throw - tracking failures shouldn't block expiration
+    console.error("[Lead Service] Failed to track lead expiration:", error);
+  }
 
   return expiredLead;
 }
@@ -218,17 +254,49 @@ export async function sendReminderToClub(leadId: string): Promise<void> {
     return;
   }
 
+  // Get club information
+  const club = await clubsRepository.getClubById(lead.clubId);
+  if (!club || !club.contact.email) {
+    console.warn(`[Lead Service] Club ${lead.clubId} not found or has no email for reminder`);
+    return;
+  }
+
+  // Get location name
+  let locationName = club.location.city;
+  if (lead.locationId) {
+    try {
+      const location = await db.query.locations.findFirst({
+        where: eq(locations.id, lead.locationId),
+      });
+      if (location) {
+        locationName = location.name;
+      }
+    } catch (error) {
+      // Fallback to club location if location query fails
+      console.warn(
+        `[Lead Service] Failed to fetch location ${lead.locationId} for reminder:`,
+        error
+      );
+    }
+  }
+
   // Update status to 'in_asteptare' (optional - can keep as 'nou')
   await leadsRepository.updateStatus(leadId, LeadStatusEnum.IN_ASTEPTARE);
 
-  // TODO: Send reminder email to club (Phase 4)
-  // await sendLeadReminderEmail({
-  //   clubId: lead.clubId,
-  //   leadId: lead.id,
-  //   sport: lead.sportType,
-  //   childAge: lead.childAge,
-  //   location: lead.locationId,
-  // });
+  // Send reminder email to club (non-blocking)
+  try {
+    await sendLeadReminderEmail({
+      clubEmail: club.contact.email,
+      clubName: club.name,
+      sportName: lead.sportType || club.sportName,
+      childAge: lead.childAge,
+      locationName: locationName,
+      leadId: lead.id,
+    });
+  } catch (error) {
+    // Log but don't throw - email failures shouldn't block reminder
+    console.error("[Lead Service] Failed to send lead reminder email:", error);
+  }
 }
 
 /**
@@ -282,12 +350,67 @@ export async function acceptLead(
   return acceptedLead;
 }
 
+/**
+ * Expire all expired leads (batch operation for cron job)
+ * Finds leads where expiresAt < now AND status is 'nou' or 'in_asteptare'
+ * Marks them as expired and sends emails to parents
+ */
+export async function expireLeads(): Promise<{
+  expired: number;
+  errors: number;
+}> {
+  const expiredLeads = await leadsRepository.findExpiredLeads();
+
+  let expired = 0;
+  let errors = 0;
+
+  for (const lead of expiredLeads) {
+    try {
+      await expireLead(lead.id);
+      expired++;
+    } catch (error) {
+      console.error(`[Lead Service] Error expiring lead ${lead.id}:`, error);
+      errors++;
+    }
+  }
+
+  return { expired, errors };
+}
+
+/**
+ * Send reminders for leads needing reminder (batch operation for cron job)
+ * Finds leads created 48h ago with status 'nou' and sends reminder emails
+ */
+export async function sendReminders(): Promise<{
+  sent: number;
+  errors: number;
+}> {
+  const leadsNeedingReminder = await leadsRepository.findLeadsNeedingReminder();
+
+  let sent = 0;
+  let errors = 0;
+
+  for (const lead of leadsNeedingReminder) {
+    try {
+      await sendReminderToClub(lead.id);
+      sent++;
+    } catch (error) {
+      console.error(`[Lead Service] Error sending reminder for lead ${lead.id}:`, error);
+      errors++;
+    }
+  }
+
+  return { sent, errors };
+}
+
 export const leadsService = {
   createLead,
   getLeadForClub,
   getLeadsForClubDashboard,
   getParentLeadStatus,
   expireLead,
+  expireLeads,
   sendReminderToClub,
+  sendReminders,
   acceptLead,
 };

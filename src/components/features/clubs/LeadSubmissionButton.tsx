@@ -28,7 +28,7 @@ const LeadSubmissionButton: React.FC<LeadSubmissionButtonProps> = ({
     <>
       <button
         type="button"
-        className="btn btn-primary btn-lg w-100"
+        className="btn btn-yuvoo-primary btn-lg w-100"
         onClick={() => setIsModalOpen(true)}
       >
         <i className="fa-regular fa-hand-pointer me-2"></i>

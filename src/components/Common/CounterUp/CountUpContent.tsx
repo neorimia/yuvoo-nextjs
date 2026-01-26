@@ -20,7 +20,9 @@ const CountUpContent: React.FC<CountUpContentProps> = ({ number, text, add_style
   return (
     <CountUp start={focus ? 0 : undefined} end={number} duration={5}>
       {({ countUpRef }) => (
-        <div className={`bd-promotion-counter-number ${add_style ? 'align-items-center justify-content-center' : ''}`}>
+        <div
+          className={`bd-promotion-counter-number ${add_style ? "align-items-center justify-content-center" : ""}`}
+        >
           <span className="counter" ref={countUpRef} />
           <InView as="span" onChange={visibleChangeHandler}>
             {text && <span className="counter-text">{text}</span>}

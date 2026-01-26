@@ -82,6 +82,12 @@ export const leadPaymentStatusEnum = pgEnum("lead_payment_status", [
   "failed", // Payment failed
 ]);
 
+// Subscription type enum for premium clubs
+export const subscriptionTypeEnum = pgEnum("subscription_type", [
+  "MONTHLY", // Monthly subscription (99 lei/month)
+  "YEARLY", // Yearly subscription (990 lei/year)
+]);
+
 // Location type enum for Romania locations table
 export const locationTypeEnum = pgEnum("location_type", [
   "county", // Județ (41 counties + Bucharest)
@@ -708,7 +714,11 @@ export const premiumClubStatus = pgTable(
       .references(() => clubs.id, { onDelete: "cascade" }),
     isPremium: boolean("is_premium").notNull().default(false),
     premiumStartDate: timestamp("premium_start_date"),
-    premiumEndDate: timestamp("premium_end_date"), // 1 year from start
+    premiumEndDate: timestamp("premium_end_date"), // End date based on subscription type (1 month for monthly, 12 months for yearly)
+    subscriptionType: subscriptionTypeEnum("subscription_type").default("MONTHLY"), // MONTHLY or YEARLY
+    billingPeriod: integer("billing_period").default(1), // Number of months (1 for monthly, 12 for yearly)
+    nextBillingDate: timestamp("next_billing_date"), // When next payment is due
+    billingAmount: integer("billing_amount"), // Amount paid in bani (9900 for monthly, 99000 for yearly)
     stripeSubscriptionId: text("stripe_subscription_id"), // Stripe subscription ID (if subscription model)
     stripeCustomerId: text("stripe_customer_id"), // Stripe customer ID
     createdAt: timestamp("created_at").defaultNow().notNull(),
@@ -719,6 +729,12 @@ export const premiumClubStatus = pgTable(
     clubIdIdx: index("idx_premium_club_status_club_id").on(table.clubId),
     isPremiumIdx: index("idx_premium_club_status_is_premium").on(table.isPremium),
     premiumEndDateIdx: index("idx_premium_club_status_end_date").on(table.premiumEndDate),
+    subscriptionTypeIdx: index("idx_premium_club_status_subscription_type").on(
+      table.subscriptionType
+    ),
+    nextBillingDateIdx: index("idx_premium_club_status_next_billing_date").on(
+      table.nextBillingDate
+    ),
   })
 );
 
@@ -741,6 +757,9 @@ export const leadPayments = pgTable(
     stripePaymentIntentId: text("stripe_payment_intent_id").notNull(),
     status: leadPaymentStatusEnum("status").notNull(), // 'pending', 'succeeded', 'failed'
     paidAt: timestamp("paid_at"), // When payment completed
+    // Guest payment fields (for clubs without user accounts)
+    isGuestPayment: boolean("is_guest_payment").notNull().default(false), // true if payment from guest (no account)
+    guestEmail: text("guest_email"), // Email address for guest payments (nullable, only set for guest payments)
     createdAt: timestamp("created_at").defaultNow().notNull(),
   },
   (table) => ({
@@ -753,5 +772,8 @@ export const leadPayments = pgTable(
     statusIdx: index("idx_lead_payments_status").on(table.status),
     // Composite indexes for common query patterns
     clubStatusIdx: index("idx_lead_payments_club_status").on(table.clubId, table.status),
+    // Index for guest payment queries
+    guestEmailIdx: index("idx_lead_payments_guest_email").on(table.guestEmail),
+    isGuestPaymentIdx: index("idx_lead_payments_is_guest_payment").on(table.isGuestPayment),
   })
 );

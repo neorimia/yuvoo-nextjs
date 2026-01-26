@@ -201,11 +201,12 @@ const LeadDetailView: React.FC<LeadDetailViewProps> = ({
                           Opțiunea B — Upgrade Premium
                         </h5>
                         <p className="card-text">
-                          <strong>199 lei/an</strong>
+                          <strong>99 lei/lună</strong> sau <strong>990 lei/an</strong>
                         </p>
                         <p className="card-text small text-muted">
                           Acces nelimitat la toate cererile, badge &quot;Verificat Yuvoo&quot;,
-                          afișare prioritară și multe altele.
+                          afișare prioritară și multe altele. Abonament cu reînnoire automată prin
+                          Stripe Subscriptions.
                         </p>
                         <Link href={routes.club.premium} className="btn btn-success w-100">
                           Upgrade la Premium

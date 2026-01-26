@@ -1,7 +1,7 @@
 /**
  * Premium Upgrade Component
  *
- * Client component for processing premium upgrade payment (199 lei/year).
+ * Client component for processing premium upgrade payment (99 lei/month or 990 lei/year).
  * Uses Stripe Elements for secure payment collection.
  */
 
@@ -10,12 +10,11 @@
 import React, { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
-import { PaymentElement, useStripe, useElements } from "@stripe/react-stripe-js";
-import { createPremiumUpgradePaymentAction } from "@/app/actions/lead-payments";
+import { createPremiumUpgradeCheckoutAction } from "@/app/actions/lead-payments";
 import { routes } from "@/lib/routes";
-import { StripeProvider } from "@/components/providers/StripeProvider";
 import type { Club } from "@/modules/clubs/clubs.types";
 import type { PremiumClubStatus } from "@/types/leads";
+import { SubscriptionType } from "@/types/leads";
 import { trackEvent } from "@/lib/analytics/tracking";
 import { PostHogEvents, PostHogProperties } from "@/lib/analytics/events";
 import { format } from "date-fns";
@@ -33,119 +32,64 @@ const PremiumUpgradeContent: React.FC<PremiumUpgradeProps> = ({
   premiumStatus,
 }) => {
   const router = useRouter();
-  const stripe = useStripe();
-  const elements = useElements();
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const [clientSecret, setClientSecret] = useState<string | null>(null);
+  const [subscriptionType, setSubscriptionType] = useState<SubscriptionType>(
+    SubscriptionType.YEARLY
+  ); // Default to yearly (recommended)
 
-  // Create payment intent on mount (only if not already premium)
+  // Check for checkout session completion or cancellation
   useEffect(() => {
+    if (typeof window === "undefined") return;
+
+    const params = new URLSearchParams(window.location.search);
+    const sessionId = params.get("session_id");
+    const canceled = params.get("canceled");
+
+    if (sessionId) {
+      // Checkout completed - refresh page to show updated premium status
+      router.replace("/club/dashboard/premium");
+    } else if (canceled) {
+      setError("Plata a fost anulată. Poți încerca din nou când ești gata.");
+      // Remove canceled param from URL
+      router.replace("/club/dashboard/premium");
+    }
+  }, [router]);
+
+  const handleUpgrade = async () => {
     if (isPremium) {
-      return; // Don't create payment if already premium
-    }
-
-    async function initializePayment() {
-      try {
-        setIsLoading(true);
-        setError(null);
-
-        const result = await createPremiumUpgradePaymentAction();
-
-        if (!result.success) {
-          setError(result.error || "Eroare la inițializarea plății. Te rugăm să încerci din nou.");
-          setIsLoading(false);
-          return;
-        }
-
-        if (!result.clientSecret) {
-          setError("Eroare: Client secret lipsă. Te rugăm să încerci din nou.");
-          setIsLoading(false);
-          return;
-        }
-
-        setClientSecret(result.clientSecret);
-
-        // Track premium upgrade initiation
-        trackEvent(PostHogEvents.PREMIUM_UPGRADE_INITIATED, {
-          [PostHogProperties.CLUB_ID]: club.id,
-        });
-      } catch (err) {
-        console.error("[Premium Upgrade] Error initializing payment:", err);
-        setError("Eroare la inițializarea plății. Te rugăm să încerci din nou.");
-      } finally {
-        setIsLoading(false);
-      }
-    }
-
-    initializePayment();
-  }, [club.id, isPremium]);
-
-  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-
-    if (!stripe || !elements || !clientSecret) {
-      setError("Plata nu este încă pregătită. Te rugăm să aștepți.");
-      return;
+      return; // Already premium
     }
 
     setIsLoading(true);
     setError(null);
 
     try {
-      // Submit elements to validate form
-      const { error: submitError } = await elements.submit();
+      const result = await createPremiumUpgradeCheckoutAction(subscriptionType);
 
-      if (submitError) {
-        setError(submitError.message || "Te rugăm să completezi toate câmpurile corect.");
+      if (!result.success) {
+        setError(result.error || "Eroare la inițializarea plății. Te rugăm să încerci din nou.");
         setIsLoading(false);
         return;
       }
 
-      // Confirm payment with Stripe
-      const { error: confirmError, paymentIntent } = await stripe.confirmPayment({
-        elements,
-        clientSecret,
-        confirmParams: {
-          return_url: `${window.location.origin}${routes.club.dashboard}`,
-        },
-        redirect: "if_required",
+      if (!result.checkoutUrl) {
+        setError("Eroare: URL-ul de checkout lipsă. Te rugăm să încerci din nou.");
+        setIsLoading(false);
+        return;
+      }
+
+      // Track premium upgrade initiation
+      trackEvent(PostHogEvents.PREMIUM_UPGRADE_INITIATED, {
+        [PostHogProperties.CLUB_ID]: club.id,
+        subscriptionType,
       });
 
-      if (confirmError) {
-        setError(confirmError.message || "Plata a eșuat. Te rugăm să încerci din nou.");
-        setIsLoading(false);
-
-        // Track payment failure
-        trackEvent(PostHogEvents.PAYMENT_FAILED, {
-          [PostHogProperties.CLUB_ID]: club.id,
-          error: confirmError.message || "Unknown error",
-        });
-
-        return;
-      }
-
-      // Payment succeeded
-      if (paymentIntent?.status === "succeeded") {
-        // Track premium upgrade completion
-        trackEvent(PostHogEvents.PREMIUM_UPGRADE_COMPLETED, {
-          [PostHogProperties.CLUB_ID]: club.id,
-          [PostHogProperties.PAYMENT_AMOUNT]: paymentIntent.amount,
-        });
-
-        // Redirect to dashboard
-        router.push(routes.club.dashboard);
-      } else {
-        // Payment requires additional action (3D Secure, etc.)
-        setError("Plata necesită verificare suplimentară. Vei fi redirecționat automat.");
-      }
+      // Redirect to Stripe Checkout
+      window.location.href = result.checkoutUrl;
     } catch (err) {
-      console.error("[Premium Upgrade] Error processing payment:", err);
-      setError(
-        err instanceof Error
-          ? err.message
-          : "Eroare la procesarea plății. Te rugăm să încerci din nou."
-      );
+      console.error("[Premium Upgrade] Error initializing checkout:", err);
+      setError("Eroare la inițializarea plății. Te rugăm să încerci din nou.");
       setIsLoading(false);
     }
   };
@@ -208,6 +152,23 @@ const PremiumUpgradeContent: React.FC<PremiumUpgradeProps> = ({
                 Notificări instant pentru cereri noi
               </li>
             </ul>
+            {premiumStatus.subscriptionType && (
+              <div className="mt-3 pt-3 border-top">
+                <small className="text-muted">
+                  <strong>Plan activ:</strong>{" "}
+                  {premiumStatus.subscriptionType === SubscriptionType.MONTHLY ? "Lunar" : "Anual"}
+                  {premiumStatus.nextBillingDate && (
+                    <>
+                      {" "}
+                      • Următoarea plată:{" "}
+                      {format(new Date(premiumStatus.nextBillingDate), "dd MMM yyyy", {
+                        locale: ro,
+                      })}
+                    </>
+                  )}
+                </small>
+              </div>
+            )}
           </div>
         </div>
       </div>
@@ -267,12 +228,127 @@ const PremiumUpgradeContent: React.FC<PremiumUpgradeProps> = ({
             </div>
           </div>
 
-          {/* Payment Form */}
+          {/* Subscription Type Selector */}
+          <div className="card mb-4">
+            <div className="card-header">
+              <h5 className="mb-0">
+                <i className="bi bi-calendar-check me-2"></i>
+                Alege planul
+              </h5>
+            </div>
+            <div className="card-body">
+              <div className="row g-3">
+                {/* Monthly Option */}
+                <div className="col-md-6">
+                  <label
+                    className={`card h-100 m-0 cursor-pointer ${
+                      subscriptionType === SubscriptionType.MONTHLY
+                        ? "border-primary border-2"
+                        : "border"
+                    }`}
+                    style={{ cursor: "pointer" }}
+                  >
+                    <div className="card-body">
+                      <div className="form-check">
+                        <input
+                          className="form-check-input"
+                          type="radio"
+                          name="subscriptionType"
+                          id="subscriptionMonthly"
+                          value={SubscriptionType.MONTHLY}
+                          checked={subscriptionType === SubscriptionType.MONTHLY}
+                          onChange={(e) => setSubscriptionType(e.target.value as SubscriptionType)}
+                        />
+                        <label
+                          className="form-check-label w-100"
+                          htmlFor="subscriptionMonthly"
+                          style={{ cursor: "pointer" }}
+                        >
+                          <div className="d-flex justify-content-between align-items-center mb-2">
+                            <strong>Plan Lunar</strong>
+                          </div>
+                          <div className="mb-2">
+                            <span className="h4 mb-0">99</span>
+                            <span className="text-muted"> lei/lună</span>
+                          </div>
+                          <small className="text-muted d-block">
+                            Plată flexibilă • Anulează oricând
+                          </small>
+                        </label>
+                      </div>
+                    </div>
+                  </label>
+                </div>
+
+                {/* Yearly Option */}
+                <div className="col-md-6">
+                  <label
+                    className={`card h-100 m-0 cursor-pointer ${
+                      subscriptionType === SubscriptionType.YEARLY
+                        ? "border-primary border-2"
+                        : "border"
+                    }`}
+                    style={{ cursor: "pointer" }}
+                  >
+                    <div className="card-body">
+                      <div className="form-check">
+                        <input
+                          className="form-check-input"
+                          type="radio"
+                          name="subscriptionType"
+                          id="subscriptionYearly"
+                          value={SubscriptionType.YEARLY}
+                          checked={subscriptionType === SubscriptionType.YEARLY}
+                          onChange={(e) => setSubscriptionType(e.target.value as SubscriptionType)}
+                        />
+                        <label
+                          className="form-check-label w-100"
+                          htmlFor="subscriptionYearly"
+                          style={{ cursor: "pointer" }}
+                        >
+                          <div className="d-flex justify-content-between align-items-center mb-2">
+                            <strong>Plan Anual</strong>
+                            <span
+                              className="badge bg-primary"
+                              style={{ fontSize: "10px", padding: "4px 8px" }}
+                            >
+                              Recomandat
+                            </span>
+                          </div>
+                          <div className="mb-2">
+                            <span className="h4 mb-0 text-primary">990</span>
+                            <span className="text-muted"> lei/an</span>
+                          </div>
+                          <small className="text-success d-block fw-semibold mb-1">
+                            Economisești 198 lei/an
+                          </small>
+                          <small className="text-muted d-block">
+                            Doar 82.5 lei/lună echivalent
+                          </small>
+                        </label>
+                      </div>
+                    </div>
+                  </label>
+                </div>
+              </div>
+
+              {/* Savings Message for Annual */}
+              {subscriptionType === SubscriptionType.YEARLY && (
+                <div className="alert alert-info mt-3 mb-0" role="alert">
+                  <i className="bi bi-info-circle me-2"></i>
+                  <strong>Plătești pentru 10 luni, primești 12!</strong> Planul anual oferă 2 luni
+                  gratuite comparativ cu planul lunar.
+                </div>
+              )}
+            </div>
+          </div>
+
+          {/* Checkout Button */}
           <div className="card">
             <div className="card-header">
               <h5 className="mb-0">
                 <i className="bi bi-credit-card me-2"></i>
-                Detalii plată
+                Finalizează upgrade-ul
               </h5>
             </div>
             <div className="card-body">
@@ -283,56 +359,49 @@ const PremiumUpgradeContent: React.FC<PremiumUpgradeProps> = ({
                 </div>
               )}
 
-              {isLoading && !clientSecret && (
-                <div className="text-center py-4">
-                  <div className="spinner-border text-primary" role="status">
-                    <span className="visually-hidden">Se încarcă...</span>
-                  </div>
-                  <p className="mt-2 text-muted">Se pregătește plata...</p>
+              <div className="d-flex justify-content-between align-items-center mb-4">
+                <div>
+                  <h4 className="mb-0">
+                    Total:{" "}
+                    {subscriptionType === SubscriptionType.MONTHLY ? "99 lei/lună" : "990 lei/an"}
+                  </h4>
+                  <small className="text-muted">
+                    {subscriptionType === SubscriptionType.MONTHLY
+                      ? "Abonament lunar - reînnoire automată"
+                      : "Abonament anual - reînnoire automată"}
+                  </small>
                 </div>
-              )}
+              </div>
 
-              {clientSecret && (
-                <form onSubmit={handleSubmit} className="payment-form">
-                  <div className="mb-4">
-                    <PaymentElement />
-                  </div>
+              <button
+                type="button"
+                onClick={handleUpgrade}
+                className="btn btn-success btn-lg w-100"
+                disabled={isLoading}
+              >
+                {isLoading ? (
+                  <>
+                    <span
+                      className="spinner-border spinner-border-sm me-2"
+                      role="status"
+                      aria-hidden="true"
+                    ></span>
+                    Se pregătește plata...
+                  </>
+                ) : (
+                  <>
+                    <i className="bi bi-star-fill me-2"></i>
+                    Continuă la plată -{" "}
+                    {subscriptionType === SubscriptionType.MONTHLY ? "99 lei/lună" : "990 lei/an"}
+                  </>
+                )}
+              </button>
 
-                  <div className="d-flex justify-content-between align-items-center mb-4">
-                    <div>
-                      <h4 className="mb-0">Total: 199 lei/an</h4>
-                      <small className="text-muted">Abonament anual - reînnoire automată</small>
-                    </div>
-                  </div>
-
-                  <button
-                    type="submit"
-                    className="btn btn-success btn-lg w-100"
-                    disabled={!stripe || !elements || isLoading}
-                  >
-                    {isLoading ? (
-                      <>
-                        <span
-                          className="spinner-border spinner-border-sm me-2"
-                          role="status"
-                          aria-hidden="true"
-                        ></span>
-                        Se procesează plata...
-                      </>
-                    ) : (
-                      <>
-                        <i className="bi bi-star-fill me-2"></i>
-                        Upgrade la Premium - 199 lei/an
-                      </>
-                    )}
-                  </button>
-
-                  <p className="text-center text-muted small mt-3 mb-0">
-                    <i className="bi bi-shield-check text-success me-1"></i>
-                    Plata este securizată și procesată de Stripe. Nu stocăm datele tale de card.
-                  </p>
-                </form>
-              )}
+              <p className="text-center text-muted small mt-3 mb-0">
+                <i className="bi bi-shield-check text-success me-1"></i>
+                Vei fi redirecționat către Stripe Checkout pentru plată securizată. Nu stocăm datele
+                tale de card.
+              </p>
             </div>
           </div>
         </div>
@@ -355,13 +424,22 @@ const PremiumUpgradeContent: React.FC<PremiumUpgradeProps> = ({
                 </small>
               </div>
               <hr />
-              <div className="mb-0">
-                <strong className="text-success">Premium:</strong>
+              <div className="mb-3">
+                <strong className="text-success">Premium Lunar:</strong>
                 <p className="mb-0 text-success">
-                  <strong>199 lei/an</strong>
+                  <strong>99 lei/lună</strong>
                 </p>
-                <small className="text-muted">
-                  Acces nelimitat - economisești dacă primești mai mult de 7 cereri/lună
+                <small className="text-muted">Break-even: ~3-4 leaduri/lună</small>
+              </div>
+              <hr />
+              <div className="mb-0">
+                <strong className="text-success">Premium Anual:</strong>
+                <p className="mb-0 text-success">
+                  <strong>990 lei/an</strong>
+                </p>
+                <small className="text-muted d-block mb-1">Doar 82.5 lei/lună echivalent</small>
+                <small className="text-success fw-semibold d-block">
+                  Economisești 198 lei/an vs planul lunar
                 </small>
               </div>
             </div>
@@ -372,12 +450,22 @@ const PremiumUpgradeContent: React.FC<PremiumUpgradeProps> = ({
               <h6 className="mb-3">Întrebări frecvente</h6>
               <div className="mb-3">
                 <strong>Se reînnoiește automat?</strong>
-                <p className="small text-muted mb-0">Da, abonamentul se reînnoiește anual.</p>
+                <p className="small text-muted mb-0">
+                  Da, abonamentul se reînnoiește{" "}
+                  {subscriptionType === SubscriptionType.MONTHLY ? "lunar" : "anual"}.
+                </p>
               </div>
-              <div className="mb-0">
+              <div className="mb-3">
                 <strong>Pot anula oricând?</strong>
                 <p className="small text-muted mb-0">
                   Da, poți anula abonamentul oricând din setări.
+                </p>
+              </div>
+              <div className="mb-0">
+                <strong>Pot schimba planul?</strong>
+                <p className="small text-muted mb-0">
+                  Da, poți trece de la planul lunar la cel anual oricând pentru a beneficia de
+                  economii.
                 </p>
               </div>
             </div>
@@ -388,12 +476,4 @@ const PremiumUpgradeContent: React.FC<PremiumUpgradeProps> = ({
   );
 };
 
-const PremiumUpgrade: React.FC<PremiumUpgradeProps> = ({ club, isPremium, premiumStatus }) => {
-  return (
-    <StripeProvider>
-      <PremiumUpgradeContent club={club} isPremium={isPremium} premiumStatus={premiumStatus} />
-    </StripeProvider>
-  );
-};
-
-export default PremiumUpgrade;
+export default PremiumUpgradeContent;

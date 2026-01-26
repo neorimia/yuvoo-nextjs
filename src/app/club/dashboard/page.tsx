@@ -4,6 +4,7 @@ import React from "react";
 import type { Metadata } from "next";
 import { requireAuth } from "@/lib/auth/session";
 import { getClubByAdminUserId, calculateProfileCompleteness } from "@/modules/clubs/clubs.service";
+import { premiumClubService } from "@/modules/clubs/premium-club.service";
 import { bookingsRepository } from "@/modules/bookings/bookings.repository";
 import ClubNotFoundState from "@/components/features/clubs/ClubNotFoundState";
 import ClubDashboardContent from "@/components/features/clubs/ClubDashboardContent";
@@ -55,6 +56,10 @@ export default async function ClubDashboardPage() {
   // Calculate profile completeness
   const profileCompleteness = calculateProfileCompleteness(club);
 
+  // Check premium status
+  const isPremium = await premiumClubService.checkIsPremium(club.id);
+  const premiumStatus = await premiumClubService.getPremiumStatus(club.id);
+
   // Fetch booking statistics
   const bookingStats = await bookingsRepository.getBookingStatsByClubId(club.id);
 
@@ -68,6 +73,8 @@ export default async function ClubDashboardPage() {
       profileCompleteness={profileCompleteness}
       bookingStats={bookingStats}
       recentBookings={recentBookingsLimited}
+      isPremium={isPremium}
+      premiumStatus={premiumStatus}
     />
   );
 }

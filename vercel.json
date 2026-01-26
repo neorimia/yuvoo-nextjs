@@ -51,5 +51,15 @@
       "source": "/robots.txt",
       "destination": "/api/robots"
     }
+  ],
+  "crons": [
+    {
+      "path": "/api/cron/expire-leads",
+      "schedule": "0 0 * * *"
+    },
+    {
+      "path": "/api/cron/send-lead-reminders",
+      "schedule": "0 * * * *"
+    }
   ]
 }

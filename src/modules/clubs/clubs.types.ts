@@ -53,6 +53,7 @@ export interface Club {
   verificationDocuments?: string[]; // From schema: verification_documents (text array, default '{}')
   profileComplete: boolean; // From schema: profile_complete (notNull, default false)
   rating: number; // From schema: rating (integer, default 0)
+  isPremium?: boolean; // Premium club status (from premium_club_status table)
   createdAt: Date; // From schema: created_at (notNull, defaultNow)
   updatedAt: Date; // From schema: updated_at (notNull, defaultNow)
 }

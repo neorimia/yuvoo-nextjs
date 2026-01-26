@@ -129,7 +129,7 @@ const LeadSubmissionModal: React.FC<LeadSubmissionModalProps> = ({
         >
           <div className="modal-content">
             <div className="modal-header">
-              <h5 className="modal-title" id="leadModalLabel">
+              <h5 className="modal-title mb-0" id="leadModalLabel">
                 Sunt interesat
               </h5>
               <button
@@ -256,13 +256,13 @@ const LeadSubmissionModal: React.FC<LeadSubmissionModalProps> = ({
                   <div className="d-flex gap-2 justify-content-end">
                     <button
                       type="button"
-                      className="btn btn-outline-secondary"
+                      className="btn btn-yuvoo-secondary"
                       onClick={onClose}
                       disabled={isSubmitting}
                     >
                       Anulează
                     </button>
-                    <button type="submit" className="btn btn-primary" disabled={isSubmitting}>
+                    <button type="submit" className="btn btn-yuvoo-primary" disabled={isSubmitting}>
                       {isSubmitting ? (
                         <>
                           <span

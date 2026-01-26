@@ -97,6 +97,55 @@ export async function searchNearbyClubs(
 }
 
 /**
+ * Suggest alternative clubs for expired leads
+ * Finds similar clubs based on sport, location, and age group
+ *
+ * @param options - Search options
+ * @param options.sportId - Sport type to match
+ * @param options.locationId - Location ID (city or county)
+ * @param options.excludeClubId - Club ID to exclude (the expired lead's club)
+ * @param options.limit - Maximum number of clubs to return (default: 5)
+ * @returns Array of alternative clubs
+ */
+export async function suggestAlternativeClubs(options: {
+  sportId?: string | null;
+  locationId?: string | null;
+  excludeClubId: string;
+  limit?: number;
+}): Promise<Club[]> {
+  const limit = options.limit || 5;
+
+  // Build search filters
+  const filters: ClubSearchFilters = {
+    page: 1,
+    pageSize: limit + 5, // Get a few extra in case some are filtered out
+    sortBy: "verified", // Prioritize verified clubs
+  };
+
+  // Filter by sport if provided
+  if (options.sportId) {
+    filters.sportId = options.sportId;
+  }
+
+  // Filter by location if provided
+  if (options.locationId) {
+    // Try to determine if it's a city or county
+    // For now, we'll search by cityId first, then fallback to countyId
+    filters.cityId = options.locationId;
+  }
+
+  // Search for clubs
+  const result = await clubsSearch.search(filters);
+
+  // Filter out the excluded club and limit results
+  const alternativeClubs = result.clubs
+    .filter((club) => club.id !== options.excludeClubId)
+    .slice(0, limit);
+
+  return alternativeClubs;
+}
+
+/**
  * Verify club ownership
  * Throws error if club doesn't exist or user doesn't own it
  */

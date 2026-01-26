@@ -134,6 +134,8 @@ export async function search(filters: ClubSearchFilters): Promise<ClubSearchResu
   const whereClause = conditions.length > 0 ? and(...conditions) : undefined;
 
   // Build order by clause
+  // Note: Premium prioritization happens after fetching (in JavaScript) since premium status
+  // is checked during mapping with date validation
   let orderBy;
   if (filters.sortBy === "distance" && hasLocationSearch) {
     // Sort by distance (closest first)
@@ -187,6 +189,18 @@ export async function search(filters: ClubSearchFilters): Promise<ClubSearchResu
   // Phase 5: mapDbClubToClub is now async, use Promise.all
   // Ensure results is always an array
   const clubsList = await Promise.all((results || []).map(clubsRepository.mapDbClubToClub));
+
+  // Phase 6: Sort by premium status first (premium clubs appear first)
+  // Premium status is already checked in mapDbClubToClub with date validation
+  clubsList.sort((a, b) => {
+    // Premium clubs first
+    if (a.isPremium && !b.isPremium) return -1;
+    if (!a.isPremium && b.isPremium) return 1;
+
+    // If both premium or both non-premium, maintain original sort order
+    // (already sorted by orderBy clause above)
+    return 0;
+  });
 
   // Calculate distances if location-based search was used
   const distances = new Map<string, number>();

@@ -9,7 +9,12 @@ import { NextRequest, NextResponse } from "next/server";
 import { stripe } from "@/lib/integrations/stripe/client";
 import { handleStripeWebhook } from "@/modules/payments/payments.service";
 import { sendPaymentSuccessEmail } from "@/modules/payments/payments.email";
-import { verifyStripePayment as verifyLeadPayment } from "@/modules/payments/lead-payment.service";
+import {
+  verifyStripePayment as verifyLeadPayment,
+  processPremiumSubscriptionRenewal,
+} from "@/modules/payments/lead-payment.service";
+import { premiumClubService } from "@/modules/clubs/premium-club.service";
+import { SubscriptionType } from "@/types/leads";
 import type Stripe from "stripe";
 
 /**
@@ -48,32 +53,197 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: "Invalid signature" }, { status: 400 });
     }
 
-    // Check if this is a lead payment (has leadId or clubId in metadata, or paymentMethod)
-    const paymentIntent = event.data.object as Stripe.PaymentIntent;
-    const isLeadPayment =
-      !!paymentIntent.metadata?.leadId ||
-      (!!paymentIntent.metadata?.clubId &&
-        (paymentIntent.metadata?.paymentMethod === "pay_per_lead" ||
-          paymentIntent.metadata?.paymentMethod === "premium"));
+    // Handle subscription checkout completion (premium upgrades)
+    if (event.type === "checkout.session.completed") {
+      const session = event.data.object as Stripe.Checkout.Session;
+      if (session.mode === "subscription" && session.metadata?.clubId) {
+        // Premium subscription checkout completed
+        try {
+          const subscriptionId = session.subscription as string;
+          const subscription = await stripe.subscriptions.retrieve(subscriptionId);
+          const clubId = session.metadata.clubId;
+          const subscriptionType =
+            (session.metadata.subscriptionType as SubscriptionType) || SubscriptionType.MONTHLY;
 
+          // Upgrade club to premium
+          await premiumClubService.upgradeToPremium(clubId, {
+            subscriptionType,
+            stripeSubscriptionId: subscriptionId,
+            stripeCustomerId: subscription.customer as string,
+          });
+
+          // Revalidate cache
+          const { revalidatePath, revalidateTag } = await import("next/cache");
+          revalidatePath("/club/dashboard");
+          revalidatePath("/club/dashboard/leaduri");
+          revalidatePath("/club/dashboard/premium");
+          revalidateTag(`club-dashboard-${clubId}`, "max");
+
+          // Track subscription creation
+          const { trackEventServer } = await import("@/lib/analytics/tracking-server");
+          const { PostHogEvents, PostHogProperties } = await import("@/lib/analytics/events");
+
+          await trackEventServer(PostHogEvents.PREMIUM_UPGRADE_COMPLETED, {
+            distinctId: "webhook",
+            [PostHogProperties.CLUB_ID]: clubId,
+            [PostHogProperties.LEAD_PAYMENT_METHOD]: "premium",
+            subscriptionType,
+          });
+        } catch (error) {
+          console.error("[Stripe Webhook] Error processing subscription checkout:", error);
+        }
+      }
+      // Continue to handle other checkout sessions (quiz payments, etc.)
+    }
+
+    // Handle subscription renewal (invoice.payment_succeeded for subscriptions)
+    if (event.type === "invoice.payment_succeeded") {
+      const invoice = event.data.object as Stripe.Invoice;
+      // Access subscription ID from invoice
+      // Note: Stripe Invoice type includes subscription field, but TypeScript types may not expose it
+
+      const invoiceWithSubscription = invoice as Stripe.Invoice & {
+        subscription?: string | { id: string };
+      };
+      const subscriptionId =
+        typeof invoiceWithSubscription.subscription === "string"
+          ? invoiceWithSubscription.subscription
+          : invoiceWithSubscription.subscription?.id;
+      if (subscriptionId && invoice.billing_reason === "subscription_cycle") {
+        // Subscription renewal payment succeeded
+        try {
+          await processPremiumSubscriptionRenewal(subscriptionId);
+
+          // Revalidate cache
+          const { revalidatePath, revalidateTag } = await import("next/cache");
+          // Get club ID from subscription metadata
+          const subscription = await stripe.subscriptions.retrieve(subscriptionId);
+          if (subscription.metadata?.clubId) {
+            revalidatePath("/club/dashboard");
+            revalidatePath("/club/dashboard/premium");
+            revalidateTag(`club-dashboard-${subscription.metadata.clubId}`, "max");
+          }
+        } catch (error) {
+          console.error("[Stripe Webhook] Error processing subscription renewal:", error);
+        }
+      }
+    }
+
+    // Handle subscription updates (e.g., cancellation, plan changes)
+    if (event.type === "customer.subscription.updated") {
+      const subscription = event.data.object as Stripe.Subscription;
+      if (subscription.metadata?.clubId) {
+        try {
+          const clubId = subscription.metadata.clubId;
+          const subscriptionType =
+            (subscription.metadata.subscriptionType as SubscriptionType) ||
+            SubscriptionType.MONTHLY;
+
+          // Update premium status based on subscription status
+          if (subscription.status === "active" || subscription.status === "trialing") {
+            // Subscription is active - update dates
+            await premiumClubService.upgradeToPremium(clubId, {
+              subscriptionType,
+              stripeSubscriptionId: subscription.id,
+              stripeCustomerId: subscription.customer as string,
+            });
+          } else if (
+            subscription.status === "canceled" ||
+            subscription.status === "unpaid" ||
+            subscription.status === "past_due"
+          ) {
+            // Subscription canceled or unpaid - mark premium as inactive
+            const { premiumClubRepository } =
+              await import("@/modules/clubs/premium-club.repository");
+            await premiumClubRepository.update(clubId, {
+              isPremium: false,
+            });
+          }
+
+          // Revalidate cache
+          const { revalidatePath, revalidateTag } = await import("next/cache");
+          revalidatePath("/club/dashboard");
+          revalidatePath("/club/dashboard/premium");
+          revalidateTag(`club-dashboard-${clubId}`, "max");
+        } catch (error) {
+          console.error("[Stripe Webhook] Error processing subscription update:", error);
+        }
+      }
+    }
+
+    // Handle subscription deletion (cancellation)
+    if (event.type === "customer.subscription.deleted") {
+      const subscription = event.data.object as Stripe.Subscription;
+      if (subscription.metadata?.clubId) {
+        try {
+          const clubId = subscription.metadata.clubId;
+          const { premiumClubRepository } = await import("@/modules/clubs/premium-club.repository");
+          await premiumClubRepository.update(clubId, {
+            isPremium: false,
+          });
+
+          // Revalidate cache
+          const { revalidatePath, revalidateTag } = await import("next/cache");
+          revalidatePath("/club/dashboard");
+          revalidatePath("/club/dashboard/premium");
+          revalidateTag(`club-dashboard-${clubId}`, "max");
+        } catch (error) {
+          console.error("[Stripe Webhook] Error processing subscription deletion:", error);
+        }
+      }
+    }
+
+    // Handle pay-per-lead payment intents (one-time payments)
     let payment = null;
     let reportAccess = null;
+    let isLeadPayment = false;
 
-    if (isLeadPayment) {
-      // Handle lead payment webhook
+    if (
+      event.type === "payment_intent.succeeded" ||
+      event.type === "payment_intent.payment_failed"
+    ) {
+      const paymentIntent = event.data.object as Stripe.PaymentIntent;
+      isLeadPayment =
+        !!paymentIntent.metadata?.leadId ||
+        (!!paymentIntent.metadata?.clubId &&
+          (paymentIntent.metadata?.paymentMethod === "pay_per_lead" ||
+            paymentIntent.metadata?.paymentMethod === "premium"));
+    }
+
+    if (
+      isLeadPayment &&
+      (event.type === "payment_intent.succeeded" || event.type === "payment_intent.payment_failed")
+    ) {
+      const paymentIntent = event.data.object as Stripe.PaymentIntent;
+      // Handle pay-per-lead payment webhook
       if (event.type === "payment_intent.succeeded") {
         try {
-          // Verify and process lead payment
-          const leadPayment = await verifyLeadPayment(paymentIntent.id);
+          // Check if this is a guest payment
+          const isGuestPayment = paymentIntent.metadata?.isGuestPayment === "true";
+
+          let leadPayment;
+          if (isGuestPayment) {
+            // Process guest payment (sends email with parent info)
+            const { processGuestLeadPayment } =
+              await import("@/modules/payments/lead-payment.service");
+            const { leadPaymentRepository } =
+              await import("@/modules/payments/lead-payment.repository");
+            const payment = await leadPaymentRepository.findByStripePaymentIntentId(
+              paymentIntent.id
+            );
+            if (!payment) {
+              throw new Error("Payment not found");
+            }
+            leadPayment = await processGuestLeadPayment(payment.id);
+          } else {
+            // Process regular authenticated payment
+            leadPayment = await verifyLeadPayment(paymentIntent.id);
+          }
 
           // Revalidate cache for lead/premium pages
           const { revalidatePath, revalidateTag } = await import("next/cache");
           if (leadPayment.paymentMethod === "pay_per_lead" && leadPayment.leadId) {
             revalidatePath(`/club/dashboard/leaduri/${leadPayment.leadId}`);
-          } else if (leadPayment.paymentMethod === "premium") {
-            revalidatePath("/club/dashboard");
-            revalidatePath("/club/dashboard/leaduri");
-            revalidatePath("/club/dashboard/premium");
           }
           revalidateTag(`club-dashboard-${leadPayment.clubId}`, "max");
 
@@ -81,18 +251,14 @@ export async function POST(request: NextRequest) {
           const { trackEventServer } = await import("@/lib/analytics/tracking-server");
           const { PostHogEvents, PostHogProperties } = await import("@/lib/analytics/events");
 
-          await trackEventServer(
-            leadPayment.paymentMethod === "pay_per_lead"
-              ? PostHogEvents.LEAD_PAYMENT_COMPLETED
-              : PostHogEvents.PREMIUM_UPGRADE_COMPLETED,
-            {
-              distinctId: "webhook",
-              [PostHogProperties.LEAD_ID]: leadPayment.leadId || undefined,
-              [PostHogProperties.CLUB_ID]: leadPayment.clubId,
-              [PostHogProperties.LEAD_PAYMENT_METHOD]: leadPayment.paymentMethod,
-              [PostHogProperties.PAYMENT_AMOUNT]: leadPayment.amount,
-            }
-          );
+          await trackEventServer(PostHogEvents.LEAD_PAYMENT_COMPLETED, {
+            distinctId: "webhook",
+            [PostHogProperties.LEAD_ID]: leadPayment.leadId || undefined,
+            [PostHogProperties.CLUB_ID]: leadPayment.clubId,
+            [PostHogProperties.LEAD_PAYMENT_METHOD]: leadPayment.paymentMethod,
+            [PostHogProperties.PAYMENT_AMOUNT]: leadPayment.amount,
+            isGuestPayment: isGuestPayment || false,
+          });
         } catch (error) {
           console.error("[Stripe Webhook] Error processing lead payment:", error);
           // Don't throw - let webhook return success to prevent retries
@@ -112,8 +278,8 @@ export async function POST(request: NextRequest) {
         }
       }
 
-      // Return success for lead payments (no email sending needed)
-      return NextResponse.json({ received: true, type: "lead_payment" });
+      // Return success for pay-per-lead payments
+      return NextResponse.json({ received: true, type: "pay_per_lead" });
     } else {
       // Handle quiz payment webhook (existing logic)
       const result = await handleStripeWebhook(event);

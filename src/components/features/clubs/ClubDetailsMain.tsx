@@ -11,6 +11,7 @@ import Image from "next/image";
 import Link from "next/link";
 import type { Club } from "@/modules/clubs/clubs.types";
 import VerificationBadge from "./VerificationBadge";
+import PremiumBadge from "./PremiumBadge";
 import { isPlaceholderUrl } from "@/lib/utils/image-helpers";
 import { routes } from "@/lib/routes";
 import LeadSubmissionButton from "./LeadSubmissionButton";
@@ -21,6 +22,8 @@ interface ClubDetailsMainProps {
 }
 
 const ClubDetailsMain: React.FC<ClubDetailsMainProps> = ({ club, isPremium = false }) => {
+  // Use club.isPremium if available, otherwise fallback to prop
+  const clubIsPremium = club.isPremium ?? isPremium;
   const mainImage = club.images?.[0] || "/assets/img/placeholder-club.jpg";
 
   // Handle pricing as array - display first pricing option or all if multiple
@@ -58,11 +61,11 @@ const ClubDetailsMain: React.FC<ClubDetailsMainProps> = ({ club, isPremium = fal
                 unoptimized={isPlaceholderUrl(mainImage)}
               />
               <div className="panel wow"></div>
-              {club.verified && (
-                <div className="position-absolute top-0 end-0 m-3">
-                  <VerificationBadge verified={club.verified} />
-                </div>
-              )}
+              {/* Badges: Premium and Verified */}
+              <div className="position-absolute top-0 end-0 m-3 d-flex flex-column gap-2">
+                {clubIsPremium && <PremiumBadge />}
+                {club.verified && <VerificationBadge verified={club.verified} />}
+              </div>
             </div>
           </div>
           <div className="col-xl-6 col-lg-12 mb-50">
@@ -191,7 +194,7 @@ const ClubDetailsMain: React.FC<ClubDetailsMainProps> = ({ club, isPremium = fal
                     <h5 className="mb-3">
                       <i className="fa-regular fa-phone me-2"></i>Informații de Contact
                     </h5>
-                    {isPremium ? (
+                    {clubIsPremium ? (
                       // Premium clubs: Show all contact info
                       <div className="d-flex flex-column gap-3">
                         {club.contact.phone && (
