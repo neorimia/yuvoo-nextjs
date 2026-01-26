@@ -119,7 +119,12 @@ let finalConfig: NextConfig = nextConfig;
 // module initialization, which conflicts with Next.js prerendering constraints.
 // Source maps can still be uploaded via Sentry CLI if needed, but pages won't be wrapped during build.
 // Sentry will work at runtime via instrumentation.ts.
-// Completely disable Sentry wrapping during build to prevent crypto.randomUUID() errors
+//
+// CURRENT STATUS: Disabled (if (false)) - Never active
+// TO ENABLE: Change condition to check if NOT prerendering, e.g.:
+//   const isPrerendering = process.env.NEXT_PHASE === "phase-production-build";
+//   if (!isPrerendering) { ... }
+// However, this may still cause issues during webpack compilation phase.
 
 if (false) {
   // Dynamic require to avoid top-level import issues
