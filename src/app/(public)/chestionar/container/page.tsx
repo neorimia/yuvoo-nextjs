@@ -9,7 +9,7 @@ export const maxDuration = 30; // 30 seconds (optimized for GPT-3.5-turbo)
 export const metadata: Metadata = {
   title: "Completează Chestionarul | Yuvoo",
   description:
-    "Răspunde la 6 întrebări simple despre copilul tău și primește recomandări personalizate de sporturi. Doar 3-4 minute.",
+    "Răspunde la 7 întrebări simple despre copilul tău și primește recomandări personalizate de sporturi. Doar 3-4 minute.",
   robots: {
     index: false, // Don't index the quiz container page (it's a form)
     follow: true,
