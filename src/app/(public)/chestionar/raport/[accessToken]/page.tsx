@@ -101,20 +101,22 @@ export default async function ReportPage({ params, searchParams }: ReportPagePro
         <BreadcrumbOne
           title="Raport Complet"
           subTitle="Chestionar"
+          titleAs="p"
           items={[
             { name: "Yuvoo", url: routes.home },
             { name: "Chestionar", url: routes.quiz.intro },
             { name: "Raport", url: routes.quiz.report(accessToken) },
           ]}
         />
-        <section className="report-section py-5">
-          <div className="container">
-            <div className="text-center">
-              <h1 className="display-5 fw-bold mb-3">Raport Complet</h1>
-              <p className="text-muted">Build placeholder</p>
+        <main aria-label="Conținut raport">
+          <section className="report-section py-5">
+            <div className="container">
+              <div className="text-center">
+                <p className="text-muted mb-0">Raport</p>
+              </div>
             </div>
-          </div>
-        </section>
+          </section>
+        </main>
       </>
     );
   }
@@ -166,26 +168,29 @@ export default async function ReportPage({ params, searchParams }: ReportPagePro
       <BreadcrumbOne
         title="Raport Complet"
         subTitle="Recomandări Personalizate"
+        titleAs="p"
         items={[
           { name: "Yuvoo", url: routes.home },
           { name: "Chestionar", url: routes.quiz.intro },
           { name: "Raport", url: routes.quiz.report(accessToken) },
         ]}
       />
-      <section className={sectionClassName}>
-        <div className="container">
-          <div className="row justify-content-center">
-            <div className="col-12 col-lg-10 col-xl-9">
-              <ReportContent
-                quizResult={quizResult}
-                quizAnswers={accessResult.quizAnswers}
-                accessToken={accessToken}
-                isPdfMode={isPdfMode}
-              />
+      <main aria-label="Conținut raport">
+        <section className={sectionClassName}>
+          <div className="container">
+            <div className="row justify-content-center">
+              <div className="col-12 col-lg-10 col-xl-9">
+                <ReportContent
+                  quizResult={quizResult}
+                  quizAnswers={accessResult.quizAnswers}
+                  accessToken={accessToken}
+                  isPdfMode={isPdfMode}
+                />
+              </div>
             </div>
           </div>
-        </div>
-      </section>
+        </section>
+      </main>
     </>
   );
 }

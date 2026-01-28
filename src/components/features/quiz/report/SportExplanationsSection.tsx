@@ -11,6 +11,8 @@ interface SportExplanationsSectionProps {
   recommendations: SportRecommendation[];
 }
 
+const headingId = "de-ce-potrivite-heading";
+
 /**
  * Sport Explanations Section
  *
@@ -24,11 +26,11 @@ export default function SportExplanationsSection({
   }
 
   return (
-    <section className="mb-4">
+    <section id="de-ce-potrivite" className="mb-4" aria-labelledby={headingId}>
       <div className="card shadow-sm border-0">
         <div className="card-header bg-light">
-          <h2 className="h4 mb-0">
-            <i className="bi bi-lightbulb-fill me-2 text-warning"></i>
+          <h2 id={headingId} className="h4 mb-0">
+            <i className="bi bi-lightbulb-fill me-2 text-warning" aria-hidden="true"></i>
             De ce aceste sporturi sunt potrivite
           </h2>
         </div>
@@ -44,7 +46,7 @@ export default function SportExplanationsSection({
                 <div className="card border-0 bg-light">
                   <div className="card-body p-4">
                     <h3 className="h5 fw-bold mb-3">
-                      <span className="badge bg-yuvoo-primary me-2" style={{ fontSize: "1rem" }}>
+                      <span className="badge bg-yuvoo-primary me-2 report-badge">
                         {recommendation.matchScore}%
                       </span>
                       {recommendation.sportName}
@@ -53,8 +55,8 @@ export default function SportExplanationsSection({
                       <p className="mb-0">{recommendation.reasoning}</p>
                     ) : (
                       <p className="text-muted mb-0">
-                        Acest sport este potrivit pentru profilul completat, oferind un echilibru
-                        între dezvoltarea fizică și emoțională.
+                        {recommendation.sportName} este potrivit pentru profilul completat, oferind
+                        un echilibru între dezvoltarea fizică și emoțională.
                       </p>
                     )}
                   </div>
