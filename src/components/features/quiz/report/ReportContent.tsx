@@ -56,7 +56,7 @@ export default function ReportContent({
   return (
     <>
       {/* Report Header */}
-      <ReportHeader quizResult={quizResult} />
+      <ReportHeader quizResult={quizResult} topRecommendations={topRecommendations} />
 
       {/* Download PDF Button - Always render to maintain consistent hook order */}
       {/* Use CSS class instead of inline style to prevent hooks errors */}
@@ -80,16 +80,20 @@ export default function ReportContent({
       />
 
       {/* Section 5: Ideal Age to Start */}
-      <AgeGuidanceSection quizResult={quizResult} quizAnswers={quizAnswers} />
+      <AgeGuidanceSection
+        quizResult={quizResult}
+        quizAnswers={quizAnswers}
+        topRecommendations={topRecommendations}
+      />
 
       {/* Section 6: Next Steps */}
-      <NextStepsSection quizResult={quizResult} />
+      <NextStepsSection quizResult={quizResult} topRecommendations={topRecommendations} />
 
       {/* Section 7: Local Clubs Suggestions */}
-      <LocalClubsSection quizResult={quizResult} />
+      <LocalClubsSection quizResult={quizResult} topRecommendations={topRecommendations} />
 
       {/* Footer Note */}
-      <div className="card bg-light border-0 mt-4">
+      <footer className="card bg-light border-0 mt-4" aria-label="Informații raport">
         <div className="card-body p-4 text-center">
           <p className="text-muted small mb-0">
             <i className="bi bi-info-circle me-2" aria-hidden="true"></i>
@@ -105,7 +109,7 @@ export default function ReportContent({
             .
           </p>
         </div>
-      </div>
+      </footer>
     </>
   );
 }

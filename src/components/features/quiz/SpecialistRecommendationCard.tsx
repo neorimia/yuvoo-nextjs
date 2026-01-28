@@ -21,6 +21,17 @@ interface SpecialistRecommendationCardProps {
   className?: string;
 }
 
+/**
+ * External specialists that are not available in the Yuvoo platform
+ * These require referral to specialized medical centers
+ */
+const EXTERNAL_SPECIALISTS = ["cardiologist", "neurologist", "pulmonologist"] as const;
+type ExternalSpecialist = (typeof EXTERNAL_SPECIALISTS)[number];
+
+function isExternalSpecialist(specialty: string): specialty is ExternalSpecialist {
+  return EXTERNAL_SPECIALISTS.includes(specialty as ExternalSpecialist);
+}
+
 export default function SpecialistRecommendationCard({
   recommendation,
   className = "",
@@ -37,6 +48,9 @@ export default function SpecialistRecommendationCard({
   const priorityName = recommendation.priority
     ? getPriorityDisplayName(recommendation.priority)
     : null;
+
+  // Check if this is an external specialist (not available in Yuvoo platform)
+  const isExternal = isExternalSpecialist(recommendation.specialty);
 
   // Load recommended doctors when user clicks to view
   const handleViewDoctors = async () => {
@@ -80,6 +94,12 @@ export default function SpecialistRecommendationCard({
         return "bi-apple";
       case "psychologist":
         return "bi-brain";
+      case "cardiologist": // Added in Task 1.4.1
+        return "bi-heart";
+      case "neurologist": // Added in Task 1.4.1
+        return "bi-activity";
+      case "pulmonologist": // Added in Task 1.4.2
+        return "bi-lungs";
       case "general":
         return "bi-person-badge";
       default:
@@ -114,52 +134,72 @@ export default function SpecialistRecommendationCard({
           </div>
         </div>
 
-        <div className="alert alert-info d-flex align-items-start mb-3" role="alert">
-          <i className="bi bi-info-circle me-2 mt-1"></i>
-          <div>
-            <strong>De ce este recomandat acest specialist?</strong>
-            <p className="mb-0 small">
-              Pe baza răspunsurilor tale, am identificat că ar putea fi utilă o consultație cu un
-              specialist în {specialtyName.toLowerCase()} pentru a asigura cel mai bun început
-              pentru copilul tău în activitățile sportive.
-            </p>
+        {isExternal ? (
+          /* External specialist alert - requires referral outside Yuvoo */
+          <div className="alert alert-warning d-flex align-items-start mb-3" role="alert">
+            <i className="bi bi-exclamation-triangle me-2 mt-1"></i>
+            <div>
+              <strong>Recomandare specialist extern</strong>
+              <p className="mb-0 small">
+                Pe baza răspunsurilor tale, recomandăm o consultație cu un specialist în{" "}
+                {specialtyName.toLowerCase()}. Acest tip de specialist nu este disponibil direct pe
+                platforma Yuvoo, dar îți recomandăm să contactezi medicul pediatru al copilului
+                pentru o trimitere către un {specialtyName.toLowerCase()} din sistemul medical.
+              </p>
+            </div>
           </div>
-        </div>
+        ) : (
+          /* Platform specialist alert */
+          <div className="alert alert-info d-flex align-items-start mb-3" role="alert">
+            <i className="bi bi-info-circle me-2 mt-1"></i>
+            <div>
+              <strong>De ce este recomandat acest specialist?</strong>
+              <p className="mb-0 small">
+                Pe baza răspunsurilor tale, am identificat că ar putea fi utilă o consultație cu un
+                specialist în {specialtyName.toLowerCase()} pentru a asigura cel mai bun început
+                pentru copilul tău în activitățile sportive.
+              </p>
+            </div>
+          </div>
+        )}
 
-        <div className="d-flex gap-2 flex-wrap">
-          <button
-            type="button"
-            className="btn btn-primary"
-            onClick={handleViewDoctors}
-            disabled={loadingDoctors}
-          >
-            {loadingDoctors ? (
-              <>
-                <span
-                  className="spinner-border spinner-border-sm me-2"
-                  role="status"
-                  aria-hidden="true"
-                ></span>
-                Se încarcă...
-              </>
-            ) : (
-              <>
-                <i className="bi bi-search me-2"></i>
-                {showDoctors ? "Ascunde" : "Vezi"} {specialtyName} Recomandați
-              </>
-            )}
-          </button>
-          <Link
-            href={routes.doctors.list + `?specialty=${recommendation.specialty}`}
-            className="btn btn-outline-primary"
-          >
-            <i className="bi bi-list-ul me-2"></i>
-            Vezi toți doctorii
-          </Link>
-        </div>
+        {/* Only show doctor search buttons for platform specialists */}
+        {!isExternal && (
+          <div className="d-flex gap-2 flex-wrap">
+            <button
+              type="button"
+              className="btn btn-primary"
+              onClick={handleViewDoctors}
+              disabled={loadingDoctors}
+            >
+              {loadingDoctors ? (
+                <>
+                  <span
+                    className="spinner-border spinner-border-sm me-2"
+                    role="status"
+                    aria-hidden="true"
+                  ></span>
+                  Se încarcă...
+                </>
+              ) : (
+                <>
+                  <i className="bi bi-search me-2"></i>
+                  {showDoctors ? "Ascunde" : "Vezi"} {specialtyName} Recomandați
+                </>
+              )}
+            </button>
+            <Link
+              href={routes.doctors.list + `?specialty=${recommendation.specialty}`}
+              className="btn btn-outline-primary"
+            >
+              <i className="bi bi-list-ul me-2"></i>
+              Vezi toți doctorii
+            </Link>
+          </div>
+        )}
 
-        {/* Recommended Doctors List */}
-        {showDoctors && recommendedDoctors.length > 0 && (
+        {/* Recommended Doctors List - only for platform specialists */}
+        {!isExternal && showDoctors && recommendedDoctors.length > 0 && (
           <div className="mt-4 pt-4 border-top">
             <h6 className="mb-3">
               <i className="bi bi-heart-pulse-fill text-primary me-2"></i>
@@ -183,7 +223,7 @@ export default function SpecialistRecommendationCard({
           </div>
         )}
 
-        {showDoctors && recommendedDoctors.length === 0 && !loadingDoctors && (
+        {!isExternal && showDoctors && recommendedDoctors.length === 0 && !loadingDoctors && (
           <div className="mt-4 pt-4 border-top">
             <div className="alert alert-info mb-0" role="alert">
               <i className="bi bi-info-circle me-2"></i>

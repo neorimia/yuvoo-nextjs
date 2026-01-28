@@ -930,6 +930,7 @@ This template ensures all feature implementations:
   - `prompts/doctor-portal-implementation-plan.md` - Doctor portal example
   - `prompts/guest-club-payment-flow-implementation-plan.md` - Guest payment flow example
   - `prompts/clubs-landing-email-copy-analysis-prompt.md` - Sales director copy analysis prompt (clubs landing page + emails)
+  - `prompts/raport-quality-analysis-and-improvement-prompt.md` - Raport page + report components analysis and quality improvement
 
 ---
 

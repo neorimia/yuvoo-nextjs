@@ -23,17 +23,17 @@ const TopbarTwo = () => {
                     <div className="bd-header-meta-icon">
                       <i className="fas fa-map-marker-alt"></i>
                     </div>
-                    <div className="bd-header-meta-text">
+                    {/* <div className="bd-header-meta-text">
                       <p>
                         <a
                           href="https://www.google.com/maps/place/București"
                           target="_blank"
                           rel="noreferrer"
                         >
-                          București, România
+                          Mun. Focsani, România
                         </a>
                       </p>
-                    </div>
+                    </div> */}
                   </div>
                 </div>
               </div>

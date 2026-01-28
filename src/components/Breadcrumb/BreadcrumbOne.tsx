@@ -15,9 +15,11 @@ interface BreadcrumbProps {
   title?: string;
   subTitle?: string;
   items?: BreadcrumbItem[]; // Optional: for BreadcrumbList schema
+  /** When "p", title is rendered as <p> instead of <h1> (e.g. report page with single h1 in content). */
+  titleAs?: "h1" | "p";
 }
 
-const BreadcrumbOne: React.FC<BreadcrumbProps> = ({ title, subTitle, items }) => {
+const BreadcrumbOne: React.FC<BreadcrumbProps> = ({ title, subTitle, items, titleAs = "h1" }) => {
   // Generate breadcrumb items if not provided
   // For listing pages (title === subTitle), just home + current page
   // For detail pages, items should be passed explicitly
@@ -48,7 +50,11 @@ const BreadcrumbOne: React.FC<BreadcrumbProps> = ({ title, subTitle, items }) =>
             <div className="col-xl-10">
               <div className="bd-breadcrumb d-flex align-items-center justify-content-center">
                 <div className="bd-breadcrumb-content text-center">
-                  <h1 className="bd-breadcrumb-title">{title}</h1>
+                  {titleAs === "p" ? (
+                    <p className="bd-breadcrumb-title mb-0">{title}</p>
+                  ) : (
+                    <h1 className="bd-breadcrumb-title">{title}</h1>
+                  )}
                   <div className="bd-breadcrumb-list">
                     <span>
                       <Link href="/">

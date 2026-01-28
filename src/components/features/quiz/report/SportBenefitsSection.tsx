@@ -11,6 +11,8 @@ interface SportBenefitsSectionProps {
   recommendations: SportRecommendation[];
 }
 
+const headingId = "ce-dezvolta-heading";
+
 /**
  * Sport Benefits Section
  *
@@ -22,11 +24,11 @@ export default function SportBenefitsSection({ recommendations }: SportBenefitsS
   }
 
   return (
-    <section className="mb-4">
+    <section id="ce-dezvolta" className="mb-4" aria-labelledby={headingId}>
       <div className="card shadow-sm border-0">
         <div className="card-header bg-light">
-          <h2 className="h4 mb-0">
-            <i className="bi bi-heart-fill me-2 text-danger"></i>
+          <h2 id={headingId} className="h4 mb-0">
+            <i className="bi bi-heart-fill me-2 text-danger" aria-hidden="true"></i>
             Ce dezvoltă fiecare sport
           </h2>
         </div>
@@ -39,16 +41,18 @@ export default function SportBenefitsSection({ recommendations }: SportBenefitsS
           <div className="row">
             {recommendations.map((recommendation) => (
               <div key={recommendation.sportId} className="col-12">
-                <div className="card border-0" style={{ borderLeft: "4px solid #00BBAE" }}>
+                <div className="card border-0 report-card-accent">
                   <div className="card-body">
                     <h3 className="h5 fw-bold mb-3">{recommendation.sportName}</h3>
 
-                    {/* Benefits List */}
                     {recommendation.benefits && recommendation.benefits.length > 0 ? (
                       <ul className="list-unstyled mb-0">
-                        {recommendation.benefits.map((benefit, index) => (
-                          <li key={index} className="mb-2">
-                            <i className="bi bi-check-circle-fill text-success me-2"></i>
+                        {recommendation.benefits.map((benefit, idx) => (
+                          <li key={`${recommendation.sportId}-benefit-${idx}`} className="mb-2">
+                            <i
+                              className="bi bi-check-circle-fill text-success me-2"
+                              aria-hidden="true"
+                            ></i>
                             {benefit}
                           </li>
                         ))}
@@ -58,44 +62,67 @@ export default function SportBenefitsSection({ recommendations }: SportBenefitsS
                         <h4 className="h6 text-muted mb-2">Dezvoltare Fizică:</h4>
                         <ul className="list-unstyled mb-3">
                           <li>
-                            <i className="bi bi-check-circle-fill text-success me-2"></i>
+                            <i
+                              className="bi bi-check-circle-fill text-success me-2"
+                              aria-hidden="true"
+                            ></i>
                             Coordonare și echilibru
                           </li>
                           <li>
-                            <i className="bi bi-check-circle-fill text-success me-2"></i>
+                            <i
+                              className="bi bi-check-circle-fill text-success me-2"
+                              aria-hidden="true"
+                            ></i>
                             Forță și rezistență
                           </li>
                           <li>
-                            <i className="bi bi-check-circle-fill text-success me-2"></i>
+                            <i
+                              className="bi bi-check-circle-fill text-success me-2"
+                              aria-hidden="true"
+                            ></i>
                             Mobilitate și flexibilitate
                           </li>
                         </ul>
                         <h4 className="h6 text-muted mb-2">Dezvoltare Emoțională:</h4>
                         <ul className="list-unstyled mb-0">
                           <li>
-                            <i className="bi bi-check-circle-fill text-success me-2"></i>
+                            <i
+                              className="bi bi-check-circle-fill text-success me-2"
+                              aria-hidden="true"
+                            ></i>
                             Încredere în sine
                           </li>
                           <li>
-                            <i className="bi bi-check-circle-fill text-success me-2"></i>
+                            <i
+                              className="bi bi-check-circle-fill text-success me-2"
+                              aria-hidden="true"
+                            ></i>
                             Disciplină și perseverență
                           </li>
                           <li>
-                            <i className="bi bi-check-circle-fill text-success me-2"></i>
+                            <i
+                              className="bi bi-check-circle-fill text-success me-2"
+                              aria-hidden="true"
+                            ></i>
                             Socializare și lucru în echipă
                           </li>
                         </ul>
                       </div>
                     )}
 
-                    {/* Considerations */}
                     {recommendation.considerations && recommendation.considerations.length > 0 && (
                       <div className="mt-3 pt-3 border-top">
                         <h4 className="h6 text-muted mb-2">Considerații:</h4>
                         <ul className="list-unstyled mb-0 small">
-                          {recommendation.considerations.map((consideration, index) => (
-                            <li key={index} className="mb-1">
-                              <i className="bi bi-info-circle text-info me-2"></i>
+                          {recommendation.considerations.map((consideration, idx) => (
+                            <li
+                              key={`${recommendation.sportId}-consideration-${idx}`}
+                              className="mb-1"
+                            >
+                              <i
+                                className="bi bi-info-circle text-info me-2"
+                                aria-hidden="true"
+                              ></i>
                               {consideration}
                             </li>
                           ))}

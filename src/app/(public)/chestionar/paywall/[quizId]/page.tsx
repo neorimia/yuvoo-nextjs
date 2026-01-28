@@ -19,6 +19,7 @@ import PaymentFormWrapper from "@/components/features/payments/PaymentFormWrappe
 import { trackEventServer } from "@/lib/analytics/tracking-server";
 import { PostHogEvents, PostHogProperties } from "@/lib/analytics/events";
 import { PAYMENT_AMOUNT_LEI } from "@/modules/payments/payments.service";
+import { getQuizCount } from "@/modules/quiz/quiz.repository";
 
 interface PaywallPageProps {
   params: Promise<{ quizId: string }>;
@@ -49,8 +50,8 @@ export async function generateMetadata({ params }: PaywallPageProps): Promise<Me
   // During build with placeholder, return static metadata
   if (isProductionBuild && quizId === "placeholder") {
     return {
-      title: "Deblochează Raportul Complet | Yuvoo",
-      description: `Deblochează raportul complet cu recomandările personalizate pentru ${PAYMENT_AMOUNT_LEI} lei (plată unică, fără abonament).`,
+      title: "Obține Raportul Complet - Tot ce trebuie să știi | Yuvoo",
+      description: `Obține raportul complet personalizat cu tot ce trebuie să știi pentru a alege sportul potrivit pentru copilul tău. ${PAYMENT_AMOUNT_LEI} lei, plată unică, fără abonament.`,
       robots: {
         index: false,
         follow: false,
@@ -88,7 +89,7 @@ export default async function PaywallPage({ params }: PaywallPageProps) {
     return (
       <>
         <BreadcrumbOne
-          title="Deblochează Raportul Complet"
+          title="Obține Raportul Complet - Tot ce trebuie să știi"
           subTitle="Plată"
           items={[
             { name: "Yuvoo", url: routes.home },
@@ -101,7 +102,9 @@ export default async function PaywallPage({ params }: PaywallPageProps) {
             <div className="row justify-content-center">
               <div className="col-12 col-lg-10 col-xl-8">
                 <div className="text-center">
-                  <h1 className="display-5 fw-bold mb-3">Deblochează Raportul Complet</h1>
+                  <h1 className="display-5 fw-bold mb-3">
+                    Obține Raportul Complet - Tot ce trebuie să știi pentru a alege sportul potrivit
+                  </h1>
                   <p className="text-muted">Build placeholder</p>
                 </div>
               </div>
@@ -133,6 +136,9 @@ export default async function PaywallPage({ params }: PaywallPageProps) {
   const existingPayment = await getPaymentByQuizId(quizId);
   const isAlreadyPaid = existingPayment?.status === "completed";
 
+  // Get quiz count for social proof
+  const quizCount = await getQuizCount();
+
   // Track paywall view
   try {
     await trackEventServer(PostHogEvents.PAYWALL_VIEWED, {
@@ -154,7 +160,7 @@ export default async function PaywallPage({ params }: PaywallPageProps) {
   return (
     <>
       <BreadcrumbOne
-        title="Deblochează Raportul Complet"
+        title="Obține Raportul Complet - Tot ce trebuie să știi"
         subTitle="Plată"
         items={[
           { name: "Yuvoo", url: routes.home },
@@ -183,6 +189,9 @@ export default async function PaywallPage({ params }: PaywallPageProps) {
                       <span className="display-4 fw-bold text-yuvoo-primary">
                         {PAYMENT_AMOUNT_LEI} lei
                       </span>
+                      <p className="text-muted small mt-2 mb-0">
+                        (echivalentul unei cărți sau a unei ore de activitate)
+                      </p>
                     </div>
                     <p className="text-muted mb-2">
                       <i
@@ -209,19 +218,42 @@ export default async function PaywallPage({ params }: PaywallPageProps) {
                 </div>
               </div>
 
+              {/* Value Proposition - Economy */}
+              <div className="card bg-light border-0 mb-4">
+                <div className="card-body p-3 text-center">
+                  <p className="text-muted mb-0">
+                    <i className="bi bi-piggy-bank text-success me-2" aria-hidden="true"></i>
+                    <strong>Economisește timp și bani:</strong> Evită consultații costisitoare și
+                    ore de cercetare manuală
+                  </p>
+                </div>
+              </div>
+
+              {/* Social Proof */}
+              {quizCount >= 100 && (
+                <div className="text-center mb-4">
+                  <p className="text-muted small mb-0">
+                    <i className="bi bi-people-fill text-primary me-2" aria-hidden="true"></i>
+                    Peste {quizCount.toLocaleString("ro-RO")} părinți au folosit deja serviciul
+                    nostru pentru a găsi sportul potrivit
+                  </p>
+                </div>
+              )}
+
               {/* What's Included */}
               <div className="card bg-light border-0 mb-4">
                 <div className="card-body p-4">
                   <h3 className="h5 mb-3">Ce include raportul complet:</h3>
                   <div className="row g-md-3">
-                    <div className="col-12 col-md-6">
+                    <div className="col-12">
                       <ul className="list-unstyled mb-0">
                         <li className="mb-2">
                           <i
                             className="bi bi-check-circle-fill text-success me-2"
                             aria-hidden="true"
                           ></i>
-                          Top 2-3 sporturi recomandate cu scoruri de potrivire
+                          Top 2-3 sporturi potrivite pentru copilul tău, cu explicații detaliate
+                          despre de ce fiecare este o alegere bună
                         </li>
                         <li className="mb-2">
                           <i
@@ -244,10 +276,6 @@ export default async function PaywallPage({ params }: PaywallPageProps) {
                           ></i>
                           Sporturi de evitat momentan
                         </li>
-                      </ul>
-                    </div>
-                    <div className="col-12 col-md-6">
-                      <ul className="list-unstyled mb-0">
                         <li className="mb-2">
                           <i
                             className="bi bi-check-circle-fill text-success me-2"
@@ -282,6 +310,13 @@ export default async function PaywallPage({ params }: PaywallPageProps) {
                 </div>
               </div>
 
+              {/* Post-Payment Process */}
+              <div className="alert alert-success mb-4" role="alert">
+                <i className="bi bi-check-circle-fill me-2" aria-hidden="true"></i>
+                <strong>După plată:</strong> Vei primi imediat accesul la raportul complet + un
+                email cu link permanent. Raportul este tău pentru 10 ani.
+              </div>
+
               {/* Payment Form */}
               <div className="card shadow-sm border-0 mb-4">
                 <div className="card-body p-4 p-md-5">
@@ -302,7 +337,9 @@ export default async function PaywallPage({ params }: PaywallPageProps) {
                         style={{ fontSize: "1.5rem" }}
                         aria-hidden="true"
                       ></i>
-                      <small className="text-muted">Plată securizată</small>
+                      <small className="text-muted">
+                        Plată securizată prin Stripe (standard industrie)
+                      </small>
                     </div>
                   </div>
                   <div className="col-12 col-md-4">
@@ -327,7 +364,7 @@ export default async function PaywallPage({ params }: PaywallPageProps) {
                   </div>
                 </div>
                 <p className="text-muted small mb-0">
-                  Prin continuare, confirmi că ai citit și ești de acord cu{" "}
+                  Prin continuare, confirmi că ai citit{" "}
                   <a
                     href={routes.terms}
                     target="_blank"

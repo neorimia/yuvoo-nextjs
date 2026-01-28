@@ -15,7 +15,7 @@ type PartialQuizAnswers = Partial<QuizAnswers>;
 
 interface QuizContextValue {
   // State
-  currentStep: number; // Current step (1-6)
+  currentStep: number; // Current step (1-7)
   answers: PartialQuizAnswers; // Current quiz answers
   errors: Record<string, string>; // Validation errors by field
 
@@ -36,7 +36,7 @@ interface QuizContextValue {
 
 const QuizContext = createContext<QuizContextValue | undefined>(undefined);
 
-const TOTAL_STEPS = 6;
+const TOTAL_STEPS = 7;
 const STORAGE_KEY = "yuvoo_quiz_progress";
 
 interface QuizProviderProps {
@@ -156,7 +156,11 @@ export function QuizProvider({ children, childId }: QuizProviderProps) {
           stepErrors.interests = "Te rugăm să selectezi cel puțin un interes sau hobby.";
         }
         break;
-      case 5: // Physical Build, Coordination & Health
+      case 5: // Critical Health Screening (optional - no validation required)
+        // This step is optional - users can answer "unknown" for all questions
+        // No validation needed, but we check if critical conditions are detected
+        break;
+      case 6: // Physical Build, Coordination & Health
         if (answers.physicalBuild === undefined) {
           stepErrors.physicalBuild = "Te rugăm să selectezi constituția fizică a copilului.";
         }
@@ -165,7 +169,7 @@ export function QuizProvider({ children, childId }: QuizProviderProps) {
             "Te rugăm să selectezi nivelul de coordonare al copilului.";
         }
         break;
-      case 6: // Preferences
+      case 7: // Preferences
         if (!answers.preferences) {
           stepErrors.preferences = "Te rugăm să completezi preferințele.";
         } else {

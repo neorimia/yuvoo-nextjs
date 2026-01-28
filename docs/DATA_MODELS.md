@@ -357,7 +357,7 @@ interface DoctorSearchResult {
 **Type**: `QuizSubmission`, `QuizResult` from `modules/quiz/quiz.types.ts`  
 **Database Table**: `quizzes`
 
-**Description**: Represents a quiz submission and its AI-generated recommendations.
+**Description**: Represents a quiz submission and its AI-generated recommendations. Medical safety (screening, sport exclusions, risk signals) is documented in [MEDICAL_SAFETY.md](./MEDICAL_SAFETY.md).
 
 ```typescript
 interface QuizSubmission {
@@ -368,17 +368,49 @@ interface QuizSubmission {
 }
 
 interface QuizAnswers {
-  age: number; // Child's age
-  energyLevel: "low" | "medium" | "high";
-  personality: string[]; // Personality traits
-  interests: string[]; // Interests and hobbies
+  // Question 1: Age & Basic Info
+  age: number; // 4-14 years
+  gender?: "male" | "female" | "other";
+
+  // Question 2-3: Energy, Personality, Interests
+  energyLevel: "low" | "medium" | "high" | "very_high";
+  personality: string[];
+  interests: string[];
+  previousSports: string[];
+  whyStoppedSports?: string[];
+  injuryDetails?: {
+    type?: "fracture" | "growth-plate" | "dislocation" | "sprain" | "concussion" | "other";
+    when?: "<1month" | "1-3months" | "3-6months" | "6-12months" | ">1year";
+    healed?: boolean | null;
+    restrictions?: boolean;
+  };
+
+  // Question 5: Critical Health Screening (medical safety)
+  criticalHealth?: {
+    cardiacSymptoms?: boolean;
+    cardiacFamilyHistory?: boolean;
+    recentConcussion?: boolean;
+    multipleConcussions?: boolean;
+  };
+
+  // Question 6: Physical Build & Health
   physicalBuild: "slim" | "average" | "athletic";
-  previousSports: string[]; // Previously tried sports
+  coordinationLevel: "excellent" | "good" | "developing" | "challenges";
+  healthConditions?: string[];
+  asthmaSeverity?: "none" | "mild" | "moderate" | "severe";
+  inhalerUse?: "yes" | "no" | "sometimes";
+  jointPainSeverity?: "none" | "mild" | "moderate" | "severe";
+  physicalConsiderations?: string;
+
+  // Question 7: Preferences
   preferences: {
-    indoor: boolean; // Prefers indoor activities
-    outdoor: boolean; // Prefers outdoor activities
-    team: boolean; // Prefers team sports
-    individual: boolean; // Prefers individual sports
+    indoor: boolean;
+    outdoor: boolean;
+    team: boolean;
+    individual: boolean;
+    timeAvailability?: string;
+    budgetConsiderations?: string;
+    parentInvolvement?: string;
   };
 }
 

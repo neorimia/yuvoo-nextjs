@@ -5,7 +5,7 @@
  */
 
 import React from "react";
-import type { QuizResult } from "@/modules/quiz/quiz.types";
+import type { QuizResult, SportRecommendation } from "@/modules/quiz/quiz.types";
 import { routes } from "@/lib/routes";
 import Link from "next/link";
 import { getCityIdByName } from "@/lib/db/location-helpers";
@@ -13,7 +13,10 @@ import { normalizeSportName } from "@/lib/utils/sport-normalization";
 
 interface LocalClubsSectionProps {
   quizResult: QuizResult;
+  topRecommendations?: SportRecommendation[];
 }
+
+const headingId = "cluburi-locale-heading";
 
 /**
  * Local Clubs Section
@@ -21,31 +24,35 @@ interface LocalClubsSectionProps {
  * Displays club suggestions based on recommended sports.
  * Note: This is a placeholder - actual club data will be fetched in Phase 6.
  */
-export default async function LocalClubsSection({ quizResult }: LocalClubsSectionProps) {
-  const topRecommendations = [...quizResult.recommendations]
-    .sort((a, b) => b.matchScore - a.matchScore)
-    .slice(0, 3);
+export default async function LocalClubsSection({
+  quizResult,
+  topRecommendations: topProp,
+}: LocalClubsSectionProps) {
+  const topRecommendations =
+    topProp ??
+    [...quizResult.recommendations].sort((a, b) => b.matchScore - a.matchScore).slice(0, 3);
 
   if (topRecommendations.length === 0) {
     return null;
   }
 
-  // Parse location to extract city name and get cityId
-  // Location format might be "Sector 1, București" or just "București"
   let cityId: string | null = null;
   if (quizResult.location) {
-    // Extract city name (everything after the last comma, or the whole string if no comma)
-    const locationParts = quizResult.location.split(",").map((part) => part.trim());
-    const cityName = locationParts[locationParts.length - 1]; // Get last part (city name)
-    cityId = await getCityIdByName(cityName);
+    try {
+      const locationParts = quizResult.location.split(",").map((part) => part.trim());
+      const cityName = locationParts[locationParts.length - 1];
+      cityId = await getCityIdByName(cityName);
+    } catch (e) {
+      console.warn("[LocalClubsSection] getCityIdByName failed:", e);
+    }
   }
 
   return (
-    <section className="mb-4">
+    <section id="cluburi-locale" className="mb-4" aria-labelledby={headingId}>
       <div className="card shadow-sm border-0">
         <div className="card-header bg-light">
-          <h2 className="h4 mb-0">
-            <i className="bi bi-geo-alt-fill me-2 text-danger"></i>
+          <h2 id={headingId} className="h4 mb-0">
+            <i className="bi bi-geo-alt-fill me-2 text-danger" aria-hidden="true"></i>
             Sugestii de cluburi locale
           </h2>
         </div>
@@ -67,7 +74,7 @@ export default async function LocalClubsSection({ quizResult }: LocalClubsSectio
             )}
           </p>
 
-          <div className="row gap-4">
+          <div className="row g-4">
             {topRecommendations.map((recommendation) => (
               <div key={recommendation.sportId} className="col-12">
                 <div className="card border-0 bg-light h-100">
@@ -81,8 +88,8 @@ export default async function LocalClubsSection({ quizResult }: LocalClubsSectio
                       href={`${routes.clubs.list}?sport=${encodeURIComponent(normalizeSportName(recommendation.sportName))}${cityId ? `&cityId=${encodeURIComponent(cityId)}` : ""}&quiz=true`}
                       className="btn btn-yuvoo-outline-primary btn-sm w-100"
                     >
-                      <i className="bi bi-search me-2"></i>
-                      Caută Cluburi{quizResult.location ? ` în ${quizResult.location}` : ""}
+                      <i className="bi bi-search me-2" aria-hidden="true"></i>
+                      Caută cluburi{quizResult.location ? ` în ${quizResult.location}` : ""}
                     </Link>
                   </div>
                 </div>
@@ -92,7 +99,7 @@ export default async function LocalClubsSection({ quizResult }: LocalClubsSectio
 
           <div className="mt-4">
             <div className="alert alert-info mb-0" role="alert">
-              <i className="bi bi-info-circle me-2"></i>
+              <i className="bi bi-info-circle me-2" aria-hidden="true"></i>
               <strong>Notă importantă:</strong> Aceste sugestii sunt bazate pe sporturile
               recomandate. Te rugăm să verifici disponibilitatea și programele actuale direct cu
               cluburile. Nu garantăm locuri disponibile sau programe specifice.
@@ -101,8 +108,8 @@ export default async function LocalClubsSection({ quizResult }: LocalClubsSectio
 
           <div className="mt-4 text-center">
             <Link href={routes.clubs.list} className="btn btn-yuvoo-primary">
-              <i className="bi bi-list-ul me-2"></i>
-              Vezi Toate Cluburile
+              <i className="bi bi-list-ul me-2" aria-hidden="true"></i>
+              Explorează toate cluburile
             </Link>
           </div>
         </div>

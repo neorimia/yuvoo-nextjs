@@ -2,37 +2,45 @@
  * Age Guidance Section Component
  *
  * Displays ideal age to start each recommended sport.
+ * Age guidance is global (same rule for all sports); per-sport logic may be added later.
  */
 
 import React from "react";
-import type { QuizResult, QuizAnswers } from "@/modules/quiz/quiz.types";
+import type { QuizResult, QuizAnswers, SportRecommendation } from "@/modules/quiz/quiz.types";
 
 interface AgeGuidanceSectionProps {
   quizResult: QuizResult;
   quizAnswers?: QuizAnswers | null;
+  topRecommendations?: SportRecommendation[];
 }
+
+const headingId = "varsta-ideala-heading";
 
 /**
  * Age Guidance Section
  *
  * Displays when to start each sport (now vs in 6-12 months) and signs to watch.
  */
-export default function AgeGuidanceSection({ quizResult, quizAnswers }: AgeGuidanceSectionProps) {
-  const childAge = quizAnswers?.age || null;
-  const topRecommendations = [...quizResult.recommendations]
-    .sort((a, b) => b.matchScore - a.matchScore)
-    .slice(0, 3);
+export default function AgeGuidanceSection({
+  quizResult,
+  quizAnswers,
+  topRecommendations: topProp,
+}: AgeGuidanceSectionProps) {
+  const childAge = quizAnswers?.age ?? null;
+  const topRecommendations =
+    topProp ??
+    [...quizResult.recommendations].sort((a, b) => b.matchScore - a.matchScore).slice(0, 3);
 
   if (topRecommendations.length === 0) {
     return null;
   }
 
   return (
-    <section className="mb-4">
+    <section id="varsta-ideala" className="mb-4" aria-labelledby={headingId}>
       <div className="card shadow-sm border-0">
         <div className="card-header bg-light">
-          <h2 className="h4 mb-0">
-            <i className="bi bi-calendar-check-fill me-2 text-warning"></i>
+          <h2 id={headingId} className="h4 mb-0">
+            <i className="bi bi-calendar-check-fill me-2 text-warning" aria-hidden="true"></i>
             Vârsta ideală pentru început
           </h2>
         </div>
@@ -46,20 +54,19 @@ export default function AgeGuidanceSection({ quizResult, quizAnswers }: AgeGuida
 
               <div className="row">
                 {topRecommendations.map((recommendation) => {
-                  // Determine start timing based on age and sport
                   const canStart = childAge >= 5;
                   const waitMonths = childAge < 5 ? 6 : 0;
 
                   return (
                     <div key={recommendation.sportId} className="col-12">
-                      <div className="card border-0" style={{ borderLeft: "4px solid #00BBAE" }}>
+                      <div className="card border-0 report-card-accent">
                         <div className="card-body p-4">
                           <h3 className="h5 fw-bold mb-3">{recommendation.sportName}</h3>
 
                           {canStart ? (
                             <div>
                               <div className="alert alert-success mb-3" role="alert">
-                                <i className="bi bi-check-circle-fill me-2"></i>
+                                <i className="bi bi-check-circle-fill me-2" aria-hidden="true"></i>
                                 <strong>Poate începe acum</strong>
                               </div>
                               <p className="small mb-0">
@@ -71,7 +78,7 @@ export default function AgeGuidanceSection({ quizResult, quizAnswers }: AgeGuida
                           ) : (
                             <div>
                               <div className="alert alert-warning mb-3" role="alert">
-                                <i className="bi bi-clock-fill me-2"></i>
+                                <i className="bi bi-clock-fill me-2" aria-hidden="true"></i>
                                 <strong>Recomandăm să aștepți {waitMonths} luni</strong>
                               </div>
                               <p className="small mb-0">
@@ -82,24 +89,35 @@ export default function AgeGuidanceSection({ quizResult, quizAnswers }: AgeGuida
                             </div>
                           )}
 
-                          {/* Signs to Watch */}
                           <div className="mt-3 pt-3 border-top">
                             <h4 className="h6 text-muted mb-2">Semne de urmărit:</h4>
                             <ul className="list-unstyled mb-0 small">
                               <li className="mb-1">
-                                <i className="bi bi-check-circle text-success me-2"></i>
+                                <i
+                                  className="bi bi-check-circle text-success me-2"
+                                  aria-hidden="true"
+                                ></i>
                                 Interes și entuziasm pentru sport
                               </li>
                               <li className="mb-1">
-                                <i className="bi bi-check-circle text-success me-2"></i>
+                                <i
+                                  className="bi bi-check-circle text-success me-2"
+                                  aria-hidden="true"
+                                ></i>
                                 Capacitatea de a urmări instrucțiuni simple
                               </li>
                               <li className="mb-1">
-                                <i className="bi bi-check-circle text-success me-2"></i>
+                                <i
+                                  className="bi bi-check-circle text-success me-2"
+                                  aria-hidden="true"
+                                ></i>
                                 Coordonare de bază și echilibru
                               </li>
                               <li className="mb-0">
-                                <i className="bi bi-check-circle text-success me-2"></i>
+                                <i
+                                  className="bi bi-check-circle text-success me-2"
+                                  aria-hidden="true"
+                                ></i>
                                 Dispoziție de a interacționa cu alți copii (pentru sporturi de
                                 echipă)
                               </li>

@@ -73,6 +73,29 @@ const InterestsQuestion = memo(function InterestsQuestion() {
       : [...whyStoppedSports, reason];
 
     setAnswer("whyStoppedSports", updated.length > 0 ? updated : undefined);
+
+    // Clear injury details if "injury" is deselected
+    if (reason === "injury" && !updated.includes("injury")) {
+      setAnswer("injuryDetails", undefined);
+    }
+  };
+
+  // Get current injury details
+  const injuryDetails = answers.injuryDetails || {
+    type: undefined,
+    when: undefined,
+    healed: undefined,
+    restrictions: undefined,
+  };
+
+  const updateInjuryDetail = <K extends keyof typeof injuryDetails>(
+    key: K,
+    value: (typeof injuryDetails)[K]
+  ) => {
+    setAnswer("injuryDetails", {
+      ...injuryDetails,
+      [key]: value,
+    });
   };
 
   const _addCustomInterest = () => {
@@ -245,6 +268,147 @@ const InterestsQuestion = memo(function InterestsQuestion() {
               </small>
             </div>
           )}
+        </div>
+      )}
+
+      {/* Injury Details Form (conditional - only if "injury" selected) */}
+      {whyStoppedSports.includes("injury") && (
+        <div className="mb-3 p-3 bg-light rounded border border-warning">
+          <div className="d-flex align-items-center gap-2 mb-3">
+            <i className="bi bi-exclamation-triangle-fill text-warning fs-5"></i>
+            <h6 className="mb-0 fw-semibold">Detalii despre accidentare</h6>
+          </div>
+          <p className="text-muted small mb-3">
+            Aceste informații ne ajută să recomandăm sporturi sigure și să evităm accidentări
+            similare.
+          </p>
+
+          {/* Injury Type */}
+          <div className="mb-3">
+            <label htmlFor="injuryType" className="form-label fw-semibold">
+              Tip accidentare
+            </label>
+            <select
+              className="form-select"
+              id="injuryType"
+              value={injuryDetails.type || ""}
+              onChange={(e) =>
+                updateInjuryDetail("type", e.target.value as typeof injuryDetails.type)
+              }
+            >
+              <option value="">Selectează tipul...</option>
+              <option value="fracture">Fractură</option>
+              <option value="growth-plate">Fractură placa de creștere</option>
+              <option value="dislocation">Luxație</option>
+              <option value="sprain">Entorsă</option>
+              <option value="concussion">Contuzie</option>
+              <option value="other">Altele</option>
+            </select>
+          </div>
+
+          {/* When it happened */}
+          <div className="mb-3">
+            <label htmlFor="injuryWhen" className="form-label fw-semibold">
+              Când s-a întâmplat?
+            </label>
+            <select
+              className="form-select"
+              id="injuryWhen"
+              value={injuryDetails.when || ""}
+              onChange={(e) =>
+                updateInjuryDetail("when", e.target.value as typeof injuryDetails.when)
+              }
+            >
+              <option value="">Selectează...</option>
+              <option value="<1month">Mai puțin de 1 lună</option>
+              <option value="1-3months">1-3 luni</option>
+              <option value="3-6months">3-6 luni</option>
+              <option value="6-12months">6-12 luni</option>
+              <option value=">1year">Mai mult de 1 an</option>
+            </select>
+          </div>
+
+          {/* Fully healed */}
+          <div className="mb-3">
+            <label className="form-label fw-semibold mb-2">A fost rezolvată complet?</label>
+            <div className="d-flex gap-2 flex-wrap">
+              <button
+                type="button"
+                className={`btn ${
+                  injuryDetails.healed === true ? "btn-success" : "btn-outline-success"
+                }`}
+                onClick={() => updateInjuryDetail("healed", true)}
+                aria-pressed={injuryDetails.healed === true}
+              >
+                <i className="bi bi-check-circle me-2"></i>
+                Da
+              </button>
+              <button
+                type="button"
+                className={`btn ${
+                  injuryDetails.healed === false ? "btn-danger" : "btn-outline-danger"
+                }`}
+                onClick={() => updateInjuryDetail("healed", false)}
+                aria-pressed={injuryDetails.healed === false}
+              >
+                <i className="bi bi-x-circle me-2"></i>
+                Nu
+              </button>
+              <button
+                type="button"
+                className={`btn ${
+                  injuryDetails.healed === null || injuryDetails.healed === undefined
+                    ? "btn-secondary"
+                    : "btn-outline-secondary"
+                }`}
+                onClick={() => updateInjuryDetail("healed", null)}
+                aria-pressed={injuryDetails.healed === null || injuryDetails.healed === undefined}
+              >
+                <i className="bi bi-question-circle me-2"></i>
+                Neclar
+              </button>
+            </div>
+          </div>
+
+          {/* Current restrictions */}
+          <div className="mb-0">
+            <label className="form-label fw-semibold mb-2">
+              Există restricții medicale curente?
+            </label>
+            <div className="d-flex gap-2">
+              <button
+                type="button"
+                className={`btn ${
+                  injuryDetails.restrictions === true ? "btn-warning" : "btn-outline-warning"
+                }`}
+                onClick={() => updateInjuryDetail("restrictions", true)}
+                aria-pressed={injuryDetails.restrictions === true}
+              >
+                <i className="bi bi-exclamation-triangle me-2"></i>
+                Da
+              </button>
+              <button
+                type="button"
+                className={`btn ${
+                  injuryDetails.restrictions === false ? "btn-success" : "btn-outline-success"
+                }`}
+                onClick={() => updateInjuryDetail("restrictions", false)}
+                aria-pressed={injuryDetails.restrictions === false}
+              >
+                <i className="bi bi-check-circle me-2"></i>
+                Nu
+              </button>
+            </div>
+            {injuryDetails.restrictions === true && (
+              <div className="alert alert-warning d-flex align-items-start gap-2 mt-2 mb-0 py-2">
+                <i className="bi bi-info-circle-fill flex-shrink-0 mt-1"></i>
+                <small className="mb-0">
+                  Restricțiile medicale vor fi luate în considerare în recomandările noastre. Vă
+                  recomandăm să consultați un medic înainte de a începe un nou sport.
+                </small>
+              </div>
+            )}
+          </div>
         </div>
       )}
     </QuestionWrapper>

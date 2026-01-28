@@ -427,6 +427,7 @@ export default defineConfig({
 **Response Format**: JSON mode
 **Temperature**: 0.7 (balanced creativity/consistency)
 **Language Requirement**: All AI-generated content (recommendations, explanations, reasoning) must be in Romanian language. System prompts must explicitly instruct the AI to respond in Romanian.
+**Medical Safety**: System prompt includes absolute contraindications, severity-based recommendations, and Romanian age minimums; programmatic sport exclusion and risk detection run in `quiz.analyzer.ts` (see `docs/MEDICAL_SAFETY.md`).
 
 **Cost Considerations**:
 

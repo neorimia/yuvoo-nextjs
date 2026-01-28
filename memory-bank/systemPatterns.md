@@ -58,10 +58,11 @@ yuvoo-nextjs/
 │   ├── quiz/                     # AI Coach Quiz logic
 │   │   ├── quiz.service.ts       # Quiz orchestration
 │   │   ├── quiz.repository.ts    # Data access layer
-│   │   ├── quiz.analyzer.ts      # AI analysis orchestration + risk detection
-│   │   ├── ai-recommendations.service.ts  # OpenAI integration
+│   │   ├── quiz.analyzer.ts      # AI analysis orchestration + risk detection + sport exclusion
+│   │   ├── ai-recommendations.service.ts  # OpenAI integration (medical safety rules in prompt)
 │   │   ├── ai-recommendations-cache.service.ts  # Response caching
-│   │   ├── risk-signal-detection.service.ts  # Programmatic risk detection
+│   │   ├── risk-signal-detection.service.ts  # Programmatic risk detection (cardiac, concussion, orthopedist, etc.)
+│   │   ├── sport-exclusion.service.ts  # Sport exclusion by medical contraindications
 │   │   ├── doctor-specialist-mapping.service.ts  # Specialist recommendations
 │   │   ├── sport-club-mapping.service.ts  # Club recommendations
 │   │   └── quiz.types.ts         # TypeScript types
@@ -712,10 +713,15 @@ Quiz Answers → AI Analysis → Risk Signal Detection → Specialist Recommenda
 
 The system includes programmatic risk signal detection (`risk-signal-detection.service.ts`) that analyzes quiz answers independently of AI to identify risk signals:
 
-- **Orthopedist Risks**: Coordination challenges, physical considerations (pain, joints, posture), orthopedic health conditions
+- **Cardiac Risks** (highest priority): Critical health screening (cardiac symptoms, family history), cardiac keywords in physical considerations → cardiologist
+- **Concussion/Neurologist Risks**: Critical health screening (recent/multiple concussion), injury details (concussion + timing), concussion keywords → neurologist
+- **Orthopedist Risks**: Coordination challenges, joint pain severity, physical considerations (pain, joints, posture), injury details (growth-plate, fracture, etc.), orthopedic health conditions
+- **Pulmonologist Risks**: Asthma severity (severe/moderate)
 - **Nutritionist Risks**: Weight-related conditions, nutrition-related health conditions, dietary restrictions
 - **Psychologist Risks**: Anxiety-related personality traits, psychological reasons for stopping sports, mental health conditions
 - **General Pediatrician Risks**: Very low energy, multiple health conditions, young age with concerns
+
+**Medical Safety (Phase 1)** – See `docs/MEDICAL_SAFETY.md`: Critical health screening (step 5), sport exclusion service (`sport-exclusion.service.ts`), severity levels (asthma, joint pain), injury follow-up, AI prompt absolute contraindications and age minimums. Programmatic exclusions filter AI recommendations before display; fallback (e.g. Înot) when all excluded.
 
 **Detection Flow**:
 
@@ -725,7 +731,7 @@ Quiz Answers → detectRiskSignals() → Risk Signals → riskSignalsToSpecialis
                                                           Specialist Recommendation
 ```
 
-**Integration**: Programmatic risk detection runs first and takes precedence over AI-generated specialist recommendations for reliability and consistency.
+**Integration**: Programmatic risk detection runs first and takes precedence over AI-generated specialist recommendations for reliability and consistency. Sport exclusion runs after AI recommendations and filters out contraindicated sports.
 
 **Future**: ML models for improved matching
 

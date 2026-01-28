@@ -235,7 +235,7 @@ export default function CookiePolicyPage() {
                         </a>
                       </li>
                       <li>
-                        <strong>Adresă:</strong> București, România
+                        <strong>Adresă:</strong> Mun. Focsani, România
                       </li>
                       <li>
                         <strong>Adresă legală (sediu social):</strong> Jud. Vrancea, Mun. Focsani,

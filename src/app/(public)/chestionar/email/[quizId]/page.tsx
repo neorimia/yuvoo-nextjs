@@ -1,8 +1,8 @@
 /**
  * Email Collection Page
  *
- * Collects email address after quiz completion.
- * Redirects to teaser page after email submission.
+ * Collects email address and location after quiz completion.
+ * On submit, shows next-steps UI (check email, etc.) with CTAs to view teaser or home.
  */
 
 import React from "react";
@@ -13,6 +13,7 @@ import BreadcrumbOne from "@/components/Breadcrumb/BreadcrumbOne";
 import { getQuizResultAction } from "@/app/actions/quiz";
 import { routes } from "@/lib/routes";
 import EmailCollectionForm from "@/components/features/quiz/EmailCollectionForm";
+import { getQuizCount } from "@/modules/quiz/quiz.repository";
 
 interface EmailCollectionPageProps {
   params: Promise<{ quizId: string }>;
@@ -32,9 +33,9 @@ export async function generateMetadata({ params }: EmailCollectionPageProps): Pr
   const { quizId: _quizId } = await params;
 
   return {
-    title: "Completează pentru a vedea recomandarea | Yuvoo",
+    title: "Vezi recomandarea personalizată pentru copilul tău | Yuvoo",
     description:
-      "Introdu email-ul tău pentru a primi recomandarea personalizată de sport pentru copilul tău.",
+      "Pe baza răspunsurilor tale, am identificat sportul cel mai potrivit. Introdu email-ul pentru a vedea imediat recomandarea personalizată.",
     robots: {
       index: false,
       follow: false,
@@ -60,14 +61,12 @@ export default async function EmailCollectionPage({ params }: EmailCollectionPag
     notFound();
   }
 
-  // Check if quiz already has email (already collected)
-  // If email exists, redirect to teaser page
-  // Note: We'll check this in the form component or handle redirect here
+  const quizCount = await getQuizCount();
 
   return (
     <>
       <BreadcrumbOne
-        title="Completează pentru a vedea recomandarea"
+        title="Vezi recomandarea personalizată pentru copilul tău"
         subTitle="Email"
         items={[
           { name: "Yuvoo", url: routes.home },
@@ -81,60 +80,7 @@ export default async function EmailCollectionPage({ params }: EmailCollectionPag
             <div className="col-12 col-lg-8 col-xl-6">
               <div className="card shadow-sm border-0">
                 <div className="card-body p-4 p-md-5">
-                  {/* Header */}
-                  <div className="text-center mb-4">
-                    <div className="mb-3">
-                      <i
-                        className="bi bi-envelope-check text-success"
-                        style={{ fontSize: "3rem" }}
-                        aria-hidden="true"
-                      ></i>
-                    </div>
-                    <h1 className="h3 fw-bold mb-3">Completează pentru a vedea recomandarea</h1>
-                    <p className="text-muted mb-0">
-                      Am analizat răspunsurile tale și am identificat sportul potrivit pentru
-                      copilul tău. Introdu email-ul tău pentru a primi recomandarea personalizată.
-                    </p>
-                  </div>
-
-                  {/* Email Collection Form */}
-                  <EmailCollectionForm quizId={quizId} />
-
-                  {/* Trust Indicators */}
-                  <div className="mt-4 pt-4 border-top">
-                    <div className="row g-3 text-center">
-                      <div className="col-12 col-md-4">
-                        <div className="d-flex flex-column align-items-center">
-                          <i
-                            className="bi bi-shield-check text-success mb-2"
-                            style={{ fontSize: "1.5rem" }}
-                            aria-hidden="true"
-                          ></i>
-                          <small className="text-muted">Confidențialitate garantată</small>
-                        </div>
-                      </div>
-                      <div className="col-12 col-md-4">
-                        <div className="d-flex flex-column align-items-center">
-                          <i
-                            className="bi bi-clock text-primary mb-2"
-                            style={{ fontSize: "1.5rem" }}
-                            aria-hidden="true"
-                          ></i>
-                          <small className="text-muted">Rezultate instant</small>
-                        </div>
-                      </div>
-                      <div className="col-12 col-md-4">
-                        <div className="d-flex flex-column align-items-center">
-                          <i
-                            className="bi bi-gift text-warning mb-2"
-                            style={{ fontSize: "1.5rem" }}
-                            aria-hidden="true"
-                          ></i>
-                          <small className="text-muted">Recomandare gratuită</small>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
+                  <EmailCollectionForm quizId={quizId} quizCount={quizCount} />
                 </div>
               </div>
             </div>

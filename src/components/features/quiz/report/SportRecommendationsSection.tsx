@@ -23,18 +23,21 @@ export default function SportRecommendationsSection({
     return null;
   }
 
+  const noun = recommendations.length === 1 ? "sport" : "sporturi";
+  const headingId = "sporturi-recomandate-heading";
+
   return (
-    <section className="mb-4">
+    <section id="sporturi-recomandate" className="mb-4" aria-labelledby={headingId}>
       <div className="card shadow-sm border-0">
         <div className="card-header bg-light">
-          <h2 className="h4 mb-0">
-            <i className="bi bi-star-fill me-2 text-warning"></i>
-            Top {recommendations.length} sporturi recomandate pentru copilul tău
+          <h2 id={headingId} className="h4 mb-0">
+            <i className="bi bi-star-fill me-2 text-warning" aria-hidden="true"></i>
+            Top {recommendations.length} {noun} recomandate pentru copilul tău
           </h2>
         </div>
         <div className="card-body p-4">
           <p className="text-muted mb-4">
-            Pe baza profilului completat, am identificat următoarele sporturi ca fiind cele mai
+            Pe baza profilului completat, am identificat următoarele {noun} ca fiind cele mai
             potrivite pentru copilul tău, ordonate după nivelul de compatibilitate:
           </p>
 
@@ -43,25 +46,19 @@ export default function SportRecommendationsSection({
               <div key={recommendation.sportId} className="col-12">
                 <div className="card h-100 border-0 shadow-sm">
                   <div className="card-body p-4">
-                    {/* Rank Badge */}
                     <div className="d-flex align-items-center justify-content-between mb-3">
-                      <span
-                        className="badge bg-yuvoo-primary rounded-md"
-                        style={{ fontSize: "1rem" }}
-                      >
+                      <span className="badge bg-yuvoo-primary rounded-md report-badge">
                         #{index + 1}
                       </span>
-                      <span className="badge bg-success rounded-md" style={{ fontSize: "1rem" }}>
+                      <span className="badge bg-success rounded-md report-badge">
                         {recommendation.matchScore}% potrivire
                       </span>
                     </div>
 
-                    {/* Sport Name */}
                     <h3 className="h5 fw-bold mb-3">{recommendation.sportName}</h3>
 
-                    {/* Match Score Visual */}
-                    <div className="mb-3">
-                      <div className="progress" style={{ height: "8px" }}>
+                    <div className="mb-0">
+                      <div className="progress report-progress">
                         <div
                           className="progress-bar bg-success"
                           role="progressbar"
@@ -69,18 +66,10 @@ export default function SportRecommendationsSection({
                           aria-valuenow={recommendation.matchScore}
                           aria-valuemin={0}
                           aria-valuemax={100}
-                        ></div>
+                          aria-valuetext={`${recommendation.matchScore}% potrivire`}
+                        />
                       </div>
                     </div>
-
-                    {/* Quick Preview */}
-                    {recommendation.reasoning && (
-                      <p className="text-muted small mb-0" style={{ minHeight: "60px" }}>
-                        {recommendation.reasoning.length > 120
-                          ? `${recommendation.reasoning.substring(0, 120)}...`
-                          : recommendation.reasoning}
-                      </p>
-                    )}
                   </div>
                 </div>
               </div>

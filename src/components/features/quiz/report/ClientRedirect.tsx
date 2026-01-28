@@ -22,6 +22,9 @@ export default function ClientRedirect({ to }: ClientRedirectProps) {
     router.replace(to);
   }, [router, to]);
 
-  // Return null to prevent rendering anything
-  return null;
+  return (
+    <div className="visually-hidden" role="status" aria-live="polite" aria-atomic="true">
+      Se redirecționează...
+    </div>
+  );
 }

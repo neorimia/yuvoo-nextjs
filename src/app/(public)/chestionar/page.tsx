@@ -1,8 +1,10 @@
 import React from "react";
 import type { Metadata } from "next";
+import { cookies } from "next/headers";
 import BreadcrumbOne from "@/components/Breadcrumb/BreadcrumbOne";
 import QuizIntroContent from "@/components/features/quiz/QuizIntroContent";
 import { routes } from "@/lib/routes";
+import { getQuizCount } from "@/modules/quiz/quiz.repository";
 
 export const metadata: Metadata = {
   title: "Chestionar AI - Descoperă Sportul Potrivit | Yuvoo",
@@ -52,8 +54,13 @@ export const metadata: Metadata = {
  *
  * Public page introducing the AI Coach Quiz.
  * SEO-friendly route: /chestionar
+ *
+ * Access cookies first so the route is dynamic (avoids crypto.randomBytes-before-dynamic-data error
+ * when getQuizCount hits the DB).
  */
-export default function QuizIntroPage() {
+export default async function QuizIntroPage() {
+  const _cookies = await cookies();
+  const quizCount = await getQuizCount();
   return (
     <>
       <BreadcrumbOne
@@ -68,7 +75,7 @@ export default function QuizIntroPage() {
         <div className="container">
           <div className="row justify-content-center">
             <div className="col-12">
-              <QuizIntroContent />
+              <QuizIntroContent quizCount={quizCount} />
             </div>
           </div>
         </div>
