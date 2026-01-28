@@ -11,14 +11,19 @@ import Image from "next/image";
 import Link from "next/link";
 import type { Club } from "@/modules/clubs/clubs.types";
 import VerificationBadge from "./VerificationBadge";
+import PremiumBadge from "./PremiumBadge";
 import { isPlaceholderUrl } from "@/lib/utils/image-helpers";
 import { routes } from "@/lib/routes";
+import LeadSubmissionButton from "./LeadSubmissionButton";
 
 interface ClubDetailsMainProps {
   club: Club;
+  isPremium?: boolean;
 }
 
-const ClubDetailsMain: React.FC<ClubDetailsMainProps> = ({ club }) => {
+const ClubDetailsMain: React.FC<ClubDetailsMainProps> = ({ club, isPremium = false }) => {
+  // Use club.isPremium if available, otherwise fallback to prop
+  const clubIsPremium = club.isPremium ?? isPremium;
   const mainImage = club.images?.[0] || "/assets/img/placeholder-club.jpg";
 
   // Handle pricing as array - display first pricing option or all if multiple
@@ -35,7 +40,7 @@ const ClubDetailsMain: React.FC<ClubDetailsMainProps> = ({ club }) => {
       : "Contactează pentru preț";
 
   return (
-    <section className="bd-club-details-widget pt-120 pb-70">
+    <section className="bd-club-details-widget pt-70 pb-70">
       <div className="container">
         <div className="row">
           <div className="col-xl-6 col-lg-12 mb-50">
@@ -56,11 +61,11 @@ const ClubDetailsMain: React.FC<ClubDetailsMainProps> = ({ club }) => {
                 unoptimized={isPlaceholderUrl(mainImage)}
               />
               <div className="panel wow"></div>
-              {club.verified && (
-                <div className="position-absolute top-0 end-0 m-3">
-                  <VerificationBadge verified={club.verified} />
-                </div>
-              )}
+              {/* Badges: Premium and Verified */}
+              <div className="position-absolute top-0 end-0 m-3 d-flex flex-column gap-2">
+                {clubIsPremium && <PremiumBadge />}
+                {club.verified && <VerificationBadge verified={club.verified} />}
+              </div>
             </div>
           </div>
           <div className="col-xl-6 col-lg-12 mb-50">
@@ -189,49 +194,68 @@ const ClubDetailsMain: React.FC<ClubDetailsMainProps> = ({ club }) => {
                     <h5 className="mb-3">
                       <i className="fa-regular fa-phone me-2"></i>Informații de Contact
                     </h5>
-                    <div className="d-flex flex-column gap-3">
-                      {club.contact.phone && (
-                        <div className="d-flex align-items-center">
-                          <i className="fa-regular fa-phone text-primary me-3 fs-5"></i>
-                          <div>
-                            <span className="d-block small text-muted">Telefon</span>
-                            <a href={`tel:${club.contact.phone}`} className="text-decoration-none">
-                              {club.contact.phone}
-                            </a>
+                    {clubIsPremium ? (
+                      // Premium clubs: Show all contact info
+                      <div className="d-flex flex-column gap-3">
+                        {club.contact.phone && (
+                          <div className="d-flex align-items-center">
+                            <i className="fa-regular fa-phone text-primary me-3 fs-5"></i>
+                            <div>
+                              <span className="d-block small text-muted">Telefon</span>
+                              <a
+                                href={`tel:${club.contact.phone}`}
+                                className="text-decoration-none"
+                              >
+                                {club.contact.phone}
+                              </a>
+                            </div>
                           </div>
-                        </div>
-                      )}
-                      {club.contact.email && (
-                        <div className="d-flex align-items-center">
-                          <i className="fa-regular fa-envelope text-primary me-3 fs-5"></i>
-                          <div>
-                            <span className="d-block small text-muted">Email</span>
-                            <a
-                              href={`mailto:${club.contact.email}`}
-                              className="text-decoration-none"
-                            >
-                              {club.contact.email}
-                            </a>
+                        )}
+                        {club.contact.email && (
+                          <div className="d-flex align-items-center">
+                            <i className="fa-regular fa-envelope text-primary me-3 fs-5"></i>
+                            <div>
+                              <span className="d-block small text-muted">Email</span>
+                              <a
+                                href={`mailto:${club.contact.email}`}
+                                className="text-decoration-none"
+                              >
+                                {club.contact.email}
+                              </a>
+                            </div>
                           </div>
-                        </div>
-                      )}
-                      {club.contact.website && (
-                        <div className="d-flex align-items-center">
-                          <i className="fa-regular fa-globe text-primary me-3 fs-5"></i>
-                          <div>
-                            <span className="d-block small text-muted">Website</span>
-                            <a
-                              href={club.contact.website}
-                              target="_blank"
-                              rel="noopener noreferrer"
-                              className="text-decoration-none"
-                            >
-                              {club.contact.website.replace(/^https?:\/\//, "")}
-                            </a>
+                        )}
+                        {club.contact.website && (
+                          <div className="d-flex align-items-center">
+                            <i className="fa-regular fa-globe text-primary me-3 fs-5"></i>
+                            <div>
+                              <span className="d-block small text-muted">Website</span>
+                              <a
+                                href={club.contact.website}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="text-decoration-none"
+                              >
+                                {club.contact.website.replace(/^https?:\/\//, "")}
+                              </a>
+                            </div>
                           </div>
-                        </div>
-                      )}
-                    </div>
+                        )}
+                      </div>
+                    ) : (
+                      // Non-premium clubs: Show lead submission button instead of contact info
+                      <div className="d-flex flex-column gap-3">
+                        <p className="text-muted mb-3">
+                          Pentru a contacta acest club, te rugăm să trimiți un mesaj prin platformă.
+                        </p>
+                        <LeadSubmissionButton
+                          clubId={club.id}
+                          clubName={club.name}
+                          sportType={club.sportName || null}
+                          locationId={club.location.cityId || null}
+                        />
+                      </div>
+                    )}
                   </div>
                 )}
             </div>

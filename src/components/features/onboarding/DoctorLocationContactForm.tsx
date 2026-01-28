@@ -18,7 +18,7 @@
 
 "use client";
 
-import { useEffect, useMemo } from "react";
+import { useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { updateDoctorLocationContact } from "@/app/actions/onboarding";
@@ -32,8 +32,7 @@ import { OnboardingNavigation } from "./OnboardingNavigation";
 import { InfoTooltip } from "@/components/shared/InfoTooltip";
 import { ServerErrorAlert } from "./components/ServerErrorAlert";
 import { BootstrapInput } from "@/components/UI/bootstrap-index";
-import LocationDropdown from "@/components/shared/LocationDropdown";
-import { allLocations } from "@/lib/db/locations-data";
+import { LocationSelector } from "@/components/shared/LocationSelector";
 import { useOnboardingForm } from "./hooks/useOnboardingForm";
 import { saveFormData, getFormData } from "./hooks/useOnboardingLocalStorage";
 
@@ -47,8 +46,8 @@ export function DoctorLocationContactForm() {
   } = useForm<DoctorLocationContactInput>({
     resolver: zodResolver(doctorLocationContactSchema),
     defaultValues: {
-      city: "",
-      district: "",
+      cityId: "",
+      sectorId: "",
       address: "",
       phone: "",
       email: "",
@@ -95,56 +94,60 @@ export function DoctorLocationContactForm() {
     }),
   });
 
-  // Get current city value
-  const currentCity = watch("city");
-
-  // Reconstruct location string from city name for LocationDropdown
-  // Handles both cities and Bucharest sectors
-  const locationValue = useMemo(() => {
-    if (!currentCity) return "";
-
-    // Check if it's a Bucharest sector (format: "Sector X")
-    if (currentCity.startsWith("Sector ")) {
-      return `${currentCity}, București`;
-    }
-
-    // Try to find the city in location data and reconstruct "City, County" format
-    const city = allLocations.find((loc) => loc.type === "city" && loc.name === currentCity);
-    if (city && city.parentId) {
-      const county = allLocations.find((loc) => loc.id === city.parentId);
-      if (county) {
-        return `${city.name}, ${county.name}`;
-      }
-    }
-    return "";
-  }, [currentCity]);
-
   return (
     <form onSubmit={rhfHandleSubmit(handleSubmit)} className="px-3 px-sm-0">
       {/* Server error */}
       <ServerErrorAlert error={serverError} className="mb-4" />
 
-      {/* Location (County → City/Sector) */}
+      {/* City */}
       <div className="mb-4">
-        <LocationDropdown
-          value={locationValue}
-          onChange={(locationString) => {
-            // Extract city/sector name from "City Name, County Name" or "Sector X, București" format
-            // Store the full location string in the city field (includes sector info for Bucharest)
-            const locationName = locationString.split(",")[0]?.trim() || "";
-            setValue("city", locationName, { shouldValidate: true });
+        <LocationSelector
+          type="city"
+          value={watch("cityId")}
+          onChange={(cityId) => {
+            setValue("cityId", cityId || "", { shouldValidate: true });
+            // Clear sector when city changes
+            if (!cityId) {
+              setValue("sectorId", "");
+            }
           }}
-          label="Locație"
-          required
+          label={
+            <>
+              Oraș <span className="text-danger">*</span>
+            </>
+          }
+          id="cityId"
           disabled={isLoading}
-          error={errors.city?.message || null}
-          id="location"
-          name="location"
-          showHelpText={true}
-          helpText="Selectează județul și orașul (sau sectorul pentru București)"
-          className="w-100"
+          placeholder="Selectează orașul"
+          error={errors.cityId?.message || null}
+          required
         />
+        <p className="mt-1 text-xs text-secondary">Selectează orașul unde se află cabinetul tău</p>
       </div>
+
+      {/* Sector (Optional - only shows when city is selected) */}
+      {watch("cityId") && (
+        <div className="mb-4">
+          <LocationSelector
+            type="sector"
+            value={watch("sectorId")}
+            onChange={(sectorId) => setValue("sectorId", sectorId || "", { shouldValidate: true })}
+            parentId={watch("cityId")}
+            label={
+              <>
+                Sector <span className="text-secondary text-xs">(opțional)</span>
+              </>
+            }
+            id="sectorId"
+            disabled={isLoading}
+            placeholder="Selectează sectorul (opțional)"
+            error={errors.sectorId?.message || null}
+          />
+          <p className="mt-1 text-xs text-secondary">
+            Selectează sectorul dacă cabinetul se află în București
+          </p>
+        </div>
+      )}
 
       {/* Address */}
       <div className="mb-4">

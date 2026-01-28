@@ -11,35 +11,13 @@ import React, { useState, useTransition } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { routes } from "@/lib/routes";
 import { SPORT_TYPES } from "@/lib/utils/constants";
+import { normalizeSportName, getSportDisplayName } from "@/lib/utils/sport-normalization";
 import type { ClubSearchFilters } from "@/modules/clubs/clubs.types";
+import { LocationSelector } from "@/components/shared/LocationSelector";
 
 interface ClubSearchFiltersProps {
   initialFilters?: Partial<ClubSearchFilters>;
 }
-
-// Romanian cities (main cities in Romania)
-const ROMANIAN_CITIES = [
-  "București",
-  "Cluj-Napoca",
-  "Timișoara",
-  "Iași",
-  "Constanța",
-  "Craiova",
-  "Brașov",
-  "Galați",
-  "Ploiești",
-  "Oradea",
-  "Brăila",
-  "Arad",
-  "Pitești",
-  "Sibiu",
-  "Bacău",
-  "Târgu Mureș",
-  "Baia Mare",
-  "Buzău",
-  "Botoșani",
-  "Satu Mare",
-] as const;
 
 // Age groups for filtering
 const AGE_GROUPS = [4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14] as const;
@@ -52,7 +30,7 @@ const SKILL_LEVELS = [
 ] as const;
 
 // Sort options
-const SORT_OPTIONS = [
+const _SORT_OPTIONS = [
   { value: "name", label: "Nume (A-Z)" },
   { value: "verified", label: "Verificate" },
   { value: "rating", label: "Rating" },
@@ -64,11 +42,16 @@ const ClubSearchFiltersComponent: React.FC<ClubSearchFiltersProps> = ({ initialF
   const [isPending, startTransition] = useTransition();
 
   // Initialize state from URL params or initial filters
+  // Normalize sport ID from URL to match database format
+  const sportParam = searchParams.get("sport");
+  const normalizedSportId = sportParam ? normalizeSportName(sportParam) : undefined;
+
   const [filters, setFilters] = useState<Partial<ClubSearchFilters>>({
-    sportId: searchParams.get("sport") || initialFilters?.sportId || "",
+    sportId: normalizedSportId || initialFilters?.sportId || "",
     age: searchParams.get("age") ? parseInt(searchParams.get("age")!) : initialFilters?.age,
-    city: searchParams.get("city") || initialFilters?.city || "",
-    district: searchParams.get("district") || initialFilters?.district || "",
+    countyId: searchParams.get("countyId") || initialFilters?.countyId || "",
+    cityId: searchParams.get("cityId") || initialFilters?.cityId || "",
+    sectorId: searchParams.get("sectorId") || initialFilters?.sectorId || "",
     level: searchParams.get("level") || initialFilters?.level || "",
     verified: searchParams.get("verified") === "true" || initialFilters?.verified || false,
     featured: searchParams.get("featured") === "true" || initialFilters?.featured || false,
@@ -80,15 +63,22 @@ const ClubSearchFiltersComponent: React.FC<ClubSearchFiltersProps> = ({ initialF
 
   // Update URL with new filters
   const updateFilters = (newFilters: Partial<ClubSearchFilters>) => {
-    const updatedFilters = { ...filters, ...newFilters };
+    // Normalize sport ID if provided
+    const normalizedNewFilters = { ...newFilters };
+    if (normalizedNewFilters.sportId) {
+      normalizedNewFilters.sportId = normalizeSportName(normalizedNewFilters.sportId);
+    }
+
+    const updatedFilters = { ...filters, ...normalizedNewFilters };
     setFilters(updatedFilters);
 
     // Build URL search params
     const params = new URLSearchParams();
     if (updatedFilters.sportId) params.set("sport", updatedFilters.sportId);
     if (updatedFilters.age) params.set("age", updatedFilters.age.toString());
-    if (updatedFilters.city) params.set("city", updatedFilters.city);
-    if (updatedFilters.district) params.set("district", updatedFilters.district);
+    if (updatedFilters.countyId) params.set("countyId", updatedFilters.countyId);
+    if (updatedFilters.cityId) params.set("cityId", updatedFilters.cityId);
+    if (updatedFilters.sectorId) params.set("sectorId", updatedFilters.sectorId);
     if (updatedFilters.level) params.set("level", updatedFilters.level);
     if (updatedFilters.verified) params.set("verified", "true");
     if (updatedFilters.featured) params.set("featured", "true");
@@ -111,8 +101,9 @@ const ClubSearchFiltersComponent: React.FC<ClubSearchFiltersProps> = ({ initialF
     setFilters({
       sportId: "",
       age: undefined,
-      city: "",
-      district: "",
+      countyId: "",
+      cityId: "",
+      sectorId: "",
       level: "",
       verified: false,
       featured: false,
@@ -133,8 +124,9 @@ const ClubSearchFiltersComponent: React.FC<ClubSearchFiltersProps> = ({ initialF
   const activeFiltersCount = [
     filters.sportId,
     filters.age,
-    filters.city,
-    filters.district,
+    filters.countyId,
+    filters.cityId,
+    filters.sectorId,
     filters.level,
     filters.verified,
     filters.featured,
@@ -142,15 +134,15 @@ const ClubSearchFiltersComponent: React.FC<ClubSearchFiltersProps> = ({ initialF
   ].filter(Boolean).length;
 
   return (
-    <section className="bd-club-filters-area pt-70 pb-50">
+    <section className="bd-club-filters-area pb-50">
       <div className="container">
         <div className="row">
           <div className="col-12">
             <div className="bd-club-filters-wrapper">
-              <div className="bd-club-filters-header mb-4">
-                <h3 className="bd-section-title mb-3">Filtrează Cluburile</h3>
+              <div className="bd-club-filters-header">
+                <h3 className="bd-section-title">Filtrează Cluburile</h3>
                 {activeFiltersCount > 0 && (
-                  <div className="d-flex align-items-center gap-3 mb-3">
+                  <div className="d-flex align-items-center gap-3">
                     <span className="text-muted">
                       {activeFiltersCount}{" "}
                       {activeFiltersCount === 1 ? "filtru activ" : "filtre active"}
@@ -170,7 +162,7 @@ const ClubSearchFiltersComponent: React.FC<ClubSearchFiltersProps> = ({ initialF
 
               <div className="row g-3">
                 {/* Sport Filter */}
-                <div className="col-lg-3 col-md-6">
+                <div className="col-lg-2 col-md-6">
                   <label htmlFor="filter-sport" className="form-label">
                     <i className="flaticon-sports me-2"></i>
                     Sport
@@ -185,14 +177,14 @@ const ClubSearchFiltersComponent: React.FC<ClubSearchFiltersProps> = ({ initialF
                     <option value="">Toate sporturile</option>
                     {SPORT_TYPES.map((sport) => (
                       <option key={sport} value={sport}>
-                        {sport.charAt(0).toUpperCase() + sport.slice(1)}
+                        {getSportDisplayName(sport)}
                       </option>
                     ))}
                   </select>
                 </div>
 
                 {/* Age Filter */}
-                <div className="col-lg-3 col-md-6">
+                <div className="col-lg-2 col-md-6">
                   <label htmlFor="filter-age" className="form-label">
                     <i className="flaticon-calendar me-2"></i>
                     Vârstă
@@ -215,30 +207,81 @@ const ClubSearchFiltersComponent: React.FC<ClubSearchFiltersProps> = ({ initialF
                   </select>
                 </div>
 
-                {/* City Filter */}
-                <div className="col-lg-3 col-md-6">
-                  <label htmlFor="filter-city" className="form-label">
-                    <i className="flaticon-location me-2"></i>
-                    Oraș
-                  </label>
-                  <select
-                    id="filter-city"
-                    className="form-select"
-                    value={filters.city || ""}
-                    onChange={(e) => updateFilters({ city: e.target.value || undefined })}
+                {/* County Filter */}
+                <div className="col-lg-2 col-md-6">
+                  <LocationSelector
+                    type="county"
+                    value={filters.countyId}
+                    onChange={(countyId) => {
+                      // Clear city and sector when county changes
+                      updateFilters({
+                        countyId: countyId || undefined,
+                        cityId: undefined,
+                        sectorId: undefined,
+                      });
+                    }}
+                    label={
+                      <>
+                        <i className="flaticon-location me-2"></i>
+                        Județ
+                      </>
+                    }
+                    id="filter-county"
                     disabled={isPending}
-                  >
-                    <option value="">Toate orașele</option>
-                    {ROMANIAN_CITIES.map((city) => (
-                      <option key={city} value={city}>
-                        {city}
-                      </option>
-                    ))}
-                  </select>
+                    placeholder="Toate județele"
+                  />
                 </div>
 
+                {/* City Filter */}
+                {filters.countyId !== "loc_county_bucuresti" && (
+                  <div className="col-lg-2 col-md-6">
+                    <LocationSelector
+                      type="city"
+                      value={filters.cityId}
+                      onChange={(cityId) => {
+                        // Clear sector when city changes
+                        updateFilters({
+                          cityId: cityId || undefined,
+                          sectorId: undefined,
+                        });
+                      }}
+                      parentId={filters.countyId}
+                      label={
+                        <>
+                          <i className="flaticon-location me-2"></i>
+                          Oraș
+                        </>
+                      }
+                      id="filter-city"
+                      disabled={isPending}
+                      placeholder="Toate orașele"
+                    />
+                  </div>
+                )}
+
+                {/* Sector Filter (only for Bucharest) */}
+                {filters.countyId === "loc_county_bucuresti" && (
+                  <div className="col-lg-2 col-md-6">
+                    <LocationSelector
+                      type="sector"
+                      value={filters.sectorId}
+                      onChange={(sectorId) => updateFilters({ sectorId: sectorId || undefined })}
+                      parentId={filters.cityId}
+                      label={
+                        <>
+                          <i className="flaticon-location me-2"></i>
+                          Sector
+                        </>
+                      }
+                      id="filter-sector"
+                      disabled={isPending}
+                      placeholder="Toate sectoarele"
+                    />
+                  </div>
+                )}
+
                 {/* Level Filter */}
-                <div className="col-lg-3 col-md-6">
+                <div className="col-lg-2 col-md-6">
                   <label htmlFor="filter-level" className="form-label">
                     <i className="flaticon-star me-2"></i>
                     Nivel
@@ -260,7 +303,7 @@ const ClubSearchFiltersComponent: React.FC<ClubSearchFiltersProps> = ({ initialF
                 </div>
 
                 {/* Sort By */}
-                <div className="col-lg-3 col-md-6">
+                {/* <div className="col-lg-3 col-md-6">
                   <label htmlFor="filter-sort" className="form-label">
                     <i className="flaticon-sort me-2"></i>
                     Sortează după
@@ -282,10 +325,10 @@ const ClubSearchFiltersComponent: React.FC<ClubSearchFiltersProps> = ({ initialF
                       </option>
                     ))}
                   </select>
-                </div>
+                </div> */}
 
                 {/* Verified Checkbox */}
-                <div className="col-lg-3 col-md-6">
+                {/* <div className="col-lg-3 col-md-6">
                   <div className="form-check mt-4">
                     <input
                       className="form-check-input"
@@ -300,10 +343,10 @@ const ClubSearchFiltersComponent: React.FC<ClubSearchFiltersProps> = ({ initialF
                       Doar cluburi verificate
                     </label>
                   </div>
-                </div>
+                </div> */}
 
                 {/* Featured Checkbox */}
-                <div className="col-lg-3 col-md-6">
+                {/* <div className="col-lg-3 col-md-6">
                   <div className="form-check mt-4">
                     <input
                       className="form-check-input"
@@ -318,7 +361,7 @@ const ClubSearchFiltersComponent: React.FC<ClubSearchFiltersProps> = ({ initialF
                       Doar cluburi recomandate
                     </label>
                   </div>
-                </div>
+                </div> */}
               </div>
 
               {isPending && (

@@ -11,6 +11,7 @@ import Link from "next/link";
 import { routes } from "@/lib/routes";
 import type { Club } from "@/modules/clubs/clubs.types";
 import VerificationBadge from "./VerificationBadge";
+import PremiumBadge from "./PremiumBadge";
 import { isPlaceholderUrl } from "@/lib/utils/image-helpers";
 
 interface ClubCardProps {
@@ -31,23 +32,28 @@ const ClubCard: React.FC<ClubCardProps> = ({
   delay,
 }) => {
   const mainImage = club.images?.[0] || "/assets/img/placeholder-club.jpg";
+
+  // Find the lowest price and format it with "de la"
   const pricingDisplay =
     club.pricing && club.pricing.length > 0
-      ? club.pricing.length === 1
-        ? `${club.pricing[0].amount} ${club.pricing[0].currency || "RON"}/${club.pricing[0].type === "monthly" ? "lună" : club.pricing[0].type === "per_class" ? "ședință" : "semestru"}`
-        : club.pricing
-            .map(
-              (p) =>
-                `${p.amount} ${p.currency || "RON"}/${p.type === "monthly" ? "lună" : p.type === "per_class" ? "ședință" : "semestru"}`
-            )
-            .join(", ")
+      ? (() => {
+          // Find the lowest price
+          const lowestPrice = [...club.pricing].sort((a, b) => a.amount - b.amount)[0];
+          const priceTypeLabel =
+            lowestPrice.type === "monthly"
+              ? "lună"
+              : lowestPrice.type === "per_class"
+                ? "ședință"
+                : "semestru";
+          return `de la ${lowestPrice.amount} ${lowestPrice.currency || "RON"}/${priceTypeLabel}`;
+        })()
       : "Contactează pentru preț";
 
   // Listing variant matches bd-class-3 structure from ClassesMain
   if (variant === "listing") {
     return (
       <div
-        className={`bd-club-3 fix radius-24 p-relative mb-50 ${className}`}
+        className={`bd-club-3 fix radius-24 p-relative mb-50 d-flex flex-column h-100 ${className}`}
         data-wow-duration="1s"
         data-wow-delay={delay}
       >
@@ -64,18 +70,21 @@ const ClubCard: React.FC<ClubCardProps> = ({
               unoptimized={isPlaceholderUrl(mainImage)}
             />
           )}
-          {/* Badges: Recommended (from quiz) and Verified */}
+          {/* Badges: Premium, Recommended (from quiz), and Verified */}
           <div className="position-absolute top-0 end-0 m-3 d-flex flex-column gap-2">
+            {club.isPremium && <PremiumBadge variant="compact" size="sm" />}
             {recommended && (
               <span className="badge bg-warning text-dark">
                 <i className="bi bi-star-fill me-1"></i>
                 Recomandat
               </span>
             )}
-            {club.verified && <VerificationBadge verified={club.verified} />}
+            {club.verified && (
+              <VerificationBadge verified={club.verified} variant="compact" size="sm" />
+            )}
           </div>
         </div>
-        <div className="bd-club-content-3 theme-bg-6">
+        <div className="bd-club-content-3 theme-bg-6 d-flex flex-column flex-grow-1">
           <h3 className="bd-club-title-3">
             <Link href={routes.clubs.detail(club.slug)}>{club.name}</Link>
           </h3>

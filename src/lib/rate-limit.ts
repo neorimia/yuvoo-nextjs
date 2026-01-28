@@ -148,6 +148,11 @@ export const RATE_LIMIT_CONFIGS = {
   },
   // Quiz (already defined, but exported for consistency)
   QUIZ: DEFAULT_QUIZ_CONFIG,
+  // Guest Payments
+  GUEST_PAYMENT: {
+    maxAttempts: 5, // 5 payment attempts
+    windowMs: 60 * 60 * 1000, // per hour (prevent abuse)
+  },
 } as const;
 
 /**

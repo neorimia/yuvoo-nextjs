@@ -8,6 +8,7 @@
 import { db } from "@/lib/db";
 import { doctors } from "@/lib/db/schema";
 import { eq, desc, asc, inArray } from "drizzle-orm";
+import { getLocationNamesByIds } from "@/lib/db/location-helpers";
 import type { Doctor } from "./doctors.types";
 
 /**
@@ -29,20 +30,33 @@ function generateSlug(firstName: string, lastName: string): string {
 /**
  * Map database doctor record to Doctor type
  * Maps all fields from schema to Doctor interface, handling optional fields and defaults.
+ * Phase 5: Now populates location names from foreign keys when available.
  */
-function mapDbDoctorToDoctor(dbDoctor: typeof doctors.$inferSelect): Doctor {
+async function mapDbDoctorToDoctor(dbDoctor: typeof doctors.$inferSelect): Promise<Doctor> {
   // Use slug from database, or generate it if not present (backward compatibility)
   // Schema: slug (unique, optional)
   const slug = dbDoctor.slug || generateSlug(dbDoctor.firstName, dbDoctor.lastName);
 
   // Build location with coordinates (if available in future)
+  // Phase 5: Populate location names from foreign keys when available, fallback to text fields
   // Schema: city (notNull), district (optional), address (optional)
+  // Schema: cityId (notNull), sectorId (optional), countyId (notNull) - Phase 3
+  const locationIds = [dbDoctor.cityId, dbDoctor.sectorId, dbDoctor.countyId].filter(
+    (id): id is string => !!id
+  );
+  const locationNames = await getLocationNamesByIds(locationIds);
+
   const location: Doctor["location"] = {
-    city: dbDoctor.city, // Schema: notNull
-    district: dbDoctor.district || undefined, // Schema: optional
+    // Phase 6: Location names are now always fetched from foreign keys (no text fallback)
+    city: locationNames.get(dbDoctor.cityId || "") || "", // Required - must have cityId
+    district: dbDoctor.sectorId ? locationNames.get(dbDoctor.sectorId) || undefined : undefined, // Optional
     address: dbDoctor.address || undefined, // Schema: optional
     // TODO: Add coordinates when latitude/longitude fields are added to schema
     coordinates: undefined,
+    // Phase 5: Include location IDs for filtering and joins
+    cityId: dbDoctor.cityId || undefined,
+    sectorId: dbDoctor.sectorId || undefined,
+    countyId: dbDoctor.countyId || undefined,
   };
 
   // Build contact info
@@ -128,7 +142,7 @@ export async function findBySlug(slug: string): Promise<Doctor | null> {
     return null;
   }
 
-  return mapDbDoctorToDoctor(doctor);
+  return await mapDbDoctorToDoctor(doctor);
 }
 
 /**
@@ -143,7 +157,7 @@ export async function getDoctorById(id: string): Promise<Doctor | null> {
     return null;
   }
 
-  return mapDbDoctorToDoctor(doctor);
+  return await mapDbDoctorToDoctor(doctor);
 }
 
 /**
@@ -155,7 +169,7 @@ export async function findBySpecialty(specialty: string): Promise<Doctor[]> {
     orderBy: [desc(doctors.verified), asc(doctors.firstName), asc(doctors.lastName)],
   });
 
-  return results.map(mapDbDoctorToDoctor);
+  return Promise.all(results.map(mapDbDoctorToDoctor));
 }
 
 /**
@@ -166,7 +180,7 @@ export async function findAll(): Promise<Doctor[]> {
     orderBy: [desc(doctors.verified), asc(doctors.firstName), asc(doctors.lastName)],
   });
 
-  return results.map(mapDbDoctorToDoctor);
+  return Promise.all(results.map(mapDbDoctorToDoctor));
 }
 
 /**
@@ -180,7 +194,7 @@ export async function getDoctorsByVerificationStatus(
     orderBy: [asc(doctors.createdAt)], // Oldest first (FIFO for review queue)
   });
 
-  return results.map(mapDbDoctorToDoctor);
+  return Promise.all(results.map(mapDbDoctorToDoctor));
 }
 
 /**
@@ -192,7 +206,7 @@ export async function getDoctorsPendingVerification(): Promise<Doctor[]> {
     orderBy: [asc(doctors.createdAt)], // Oldest first
   });
 
-  return results.map(mapDbDoctorToDoctor);
+  return Promise.all(results.map(mapDbDoctorToDoctor));
 }
 
 /**
@@ -207,7 +221,7 @@ export async function findByUserId(userId: string): Promise<Doctor | null> {
     return null;
   }
 
-  return mapDbDoctorToDoctor(doctor);
+  return await mapDbDoctorToDoctor(doctor);
 }
 
 export const doctorsRepository = {

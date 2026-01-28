@@ -25,43 +25,10 @@ import { routes } from "@/lib/routes";
 import { SPORT_TYPES } from "@/lib/utils/constants";
 import { OnboardingNavigation } from "./OnboardingNavigation";
 import { BootstrapAlert, BootstrapInput, BootstrapSelect } from "@/components/UI/bootstrap-index";
+import { LocationSelector } from "@/components/shared/LocationSelector";
 import { CharacterCounterTextarea } from "./components";
 import { useOnboardingForm } from "./hooks/useOnboardingForm";
 import { saveFormData, getFormData } from "./hooks/useOnboardingLocalStorage";
-
-// Romanian cities (major cities)
-const ROMANIAN_CITIES = [
-  "București",
-  "Cluj-Napoca",
-  "Timișoara",
-  "Iași",
-  "Constanța",
-  "Craiova",
-  "Brașov",
-  "Galați",
-  "Ploiești",
-  "Oradea",
-  "Brăila",
-  "Arad",
-  "Pitești",
-  "Sibiu",
-  "Bacău",
-  "Târgu Mureș",
-  "Baia Mare",
-  "Buzău",
-  "Satu Mare",
-  "Botoșani",
-  "Râmnicu Vâlcea",
-  "Suceava",
-  "Piatra Neamț",
-  "Drobeta-Turnu Severin",
-  "Focșani",
-  "Târgu Jiu",
-  "Tulcea",
-  "Târgoviște",
-  "Reșița",
-  "Călărași",
-] as const;
 
 export function ClubBasicInfoForm() {
   const {
@@ -202,61 +169,49 @@ export function ClubBasicInfoForm() {
 
       {/* City */}
       <div className="bd-onboarding-form-group">
-        <label htmlFor="city" className="bd-onboarding-form-label">
-          Oraș <span className="text-danger">*</span>
-        </label>
-        <Controller
-          name="city"
-          control={control}
-          render={({ field }) => (
-            <BootstrapSelect
-              id="city"
-              value={field.value || ""}
-              onChange={(e) => field.onChange(e.target.value)}
-              disabled={isLoading}
-              error={!!errors.city}
-              className="w-100"
-              options={[
-                { value: "", label: "Selectează orașul" },
-                ...ROMANIAN_CITIES.map((city) => ({
-                  value: city,
-                  label: city,
-                })),
-              ]}
-              aria-invalid={errors.city ? "true" : "false"}
-              aria-describedby={errors.city ? "city-error" : undefined}
-            />
-          )}
+        <LocationSelector
+          type="city"
+          value={watch("cityId")}
+          onChange={(cityId) => {
+            setValue("cityId", cityId || "");
+            // Clear sector when city changes
+            if (!cityId) {
+              setValue("sectorId", "");
+            }
+          }}
+          label={
+            <>
+              Oraș <span className="text-danger">*</span>
+            </>
+          }
+          id="cityId"
+          disabled={isLoading}
+          placeholder="Selectează orașul"
+          error={errors.cityId?.message || null}
+          required
         />
-        {errors.city && (
-          <p id="city-error" className="bd-onboarding-form-error">
-            {errors.city.message}
-          </p>
-        )}
       </div>
 
-      {/* District (Optional) */}
-      <div className="bd-onboarding-form-group">
-        <label htmlFor="district" className="bd-onboarding-form-label">
-          District/Sector <span className="text-secondary small">(opțional)</span>
-        </label>
-        <BootstrapInput
-          id="district"
-          type="text"
-          {...register("district")}
-          disabled={isLoading}
-          error={!!errors.district}
-          className="w-100"
-          placeholder="ex. Sector 1, Sector 2, etc."
-          aria-invalid={errors.district ? "true" : "false"}
-          aria-describedby={errors.district ? "district-error" : undefined}
-        />
-        {errors.district && (
-          <p id="district-error" className="bd-onboarding-form-error">
-            {errors.district.message}
-          </p>
-        )}
-      </div>
+      {/* Sector (Optional - only shows when city is selected) */}
+      {watch("cityId") && (
+        <div className="bd-onboarding-form-group">
+          <LocationSelector
+            type="sector"
+            value={watch("sectorId")}
+            onChange={(sectorId) => setValue("sectorId", sectorId || "")}
+            parentId={watch("cityId")}
+            label={
+              <>
+                Sector <span className="text-secondary small">(opțional)</span>
+              </>
+            }
+            id="sectorId"
+            disabled={isLoading}
+            placeholder="Selectează sectorul (opțional)"
+            error={errors.sectorId?.message || null}
+          />
+        </div>
+      )}
 
       {/* Address */}
       <div className="bd-onboarding-form-group">

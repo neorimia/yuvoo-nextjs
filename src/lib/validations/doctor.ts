@@ -62,9 +62,9 @@ export const doctorBioExperienceSchema = z.object({
  * Doctor Location & Contact Schema (Doctor Onboarding - Step 4)
  */
 export const doctorLocationContactSchema = z.object({
-  city: z.string(zodRomanianErrors).min(1, "Locația este obligatorie"),
-
-  district: z.string().optional(),
+  // Phase 6: Only location IDs (text columns removed)
+  cityId: z.string(zodRomanianErrors).min(1, "Selectează orașul"),
+  sectorId: z.string().optional(), // For Bucharest sectors
 
   address: z
     .string(zodRomanianErrors)
@@ -176,12 +176,9 @@ export const doctorProfileUpdateSchema = z.object({
   languages: z.array(z.string()).optional(),
 
   // Location
-  city: z.string(zodRomanianErrors).min(1, "Orașul este obligatoriu").optional(),
-
-  district: z
-    .string()
-    .optional()
-    .transform((val) => (val && val.trim() !== "" ? val.trim() : undefined)),
+  // Phase 6: Only location IDs (text columns removed)
+  cityId: z.string(zodRomanianErrors).min(1, "Selectează orașul").optional(),
+  sectorId: z.string().optional(), // For Bucharest sectors
 
   address: z
     .string(zodRomanianErrors)

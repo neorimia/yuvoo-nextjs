@@ -3,25 +3,18 @@
  *
  * React Email template for payment confirmation email.
  * Sent after successful payment with report access link.
+ * Follows Yuvoo branding: professional and helpful.
  */
 
-import {
-  Body,
-  Button,
-  Container,
-  Head,
-  Heading,
-  Hr,
-  Html,
-  Link,
-  Preview,
-  Section,
-  Text,
-} from "@react-email/components";
+import { Body, Container, Head, Heading, Html, Link, Preview, Text } from "@react-email/components";
 import * as React from "react";
 import { EmailFooter } from "./components/EmailFooter";
 import { EmailHeader } from "./components/EmailHeader";
 import { EmailSection } from "./components/EmailSection";
+import { EmailButton } from "./components/EmailButton";
+import { EmailDivider } from "./components/EmailDivider";
+import { SectionHeading } from "./components/SectionHeading";
+import { InfoCard } from "./components/InfoCard";
 import { YuvooColors, EmailTypography } from "./utils/email-types";
 
 interface PaymentSuccessEmailProps {
@@ -50,22 +43,18 @@ export const PaymentSuccessEmail = ({
         <Container style={container}>
           <EmailHeader />
 
-          {/* Success Message Section */}
           <EmailSection>
-            <Heading style={heading}>Plata confirmată!</Heading>
+            <Heading style={heading}>✅ Plata confirmată!</Heading>
             <Text style={body}>
               Mulțumim pentru plata ta. Poți acum accesa raportul complet cu recomandările
               personalizate pentru copilul tău.
             </Text>
           </EmailSection>
 
-          <Hr style={divider} />
+          <EmailDivider />
 
-          {/* Report Content Section */}
-          <EmailSection backgroundColor={YuvooColors.backgroundWhite}>
-            <Heading as="h2" style={sectionHeading}>
-              Raportul tău este gata
-            </Heading>
+          <EmailSection>
+            <SectionHeading>Raportul tău este gata</SectionHeading>
             <Text style={body}>Raportul complet include:</Text>
             <ul style={listStyle}>
               <li style={listItem}>Top 2-3 sporturi recomandate cu scoruri de potrivire</li>
@@ -80,31 +69,30 @@ export const PaymentSuccessEmail = ({
             </ul>
           </EmailSection>
 
-          {/* CTA Section */}
           <EmailSection>
-            <Section style={ctaSection}>
-              <Button href={reportUrl} style={buttonPrimary}>
+            <div style={ctaSection}>
+              <EmailButton href={reportUrl} variant="primary">
                 Vezi Raportul Complet
-              </Button>
-            </Section>
+              </EmailButton>
+            </div>
           </EmailSection>
 
-          {/* Permanent Link Section */}
           <EmailSection backgroundColor={YuvooColors.backgroundLight}>
-            <Text style={smallText}>
-              <strong>Link permanent:</strong> Poți accesa raportul oricând folosind acest link.
-              Linkul nu expiră.
-            </Text>
-            <Text style={smallText}>
-              <Link href={reportUrl} style={linkStyle}>
-                {reportUrl}
-              </Link>
-            </Text>
+            <InfoCard variant="subtle">
+              <Text style={smallText}>
+                <strong>Link permanent:</strong> Poți accesa raportul oricând folosind acest link.
+                Linkul nu expiră.
+              </Text>
+              <Text style={smallText}>
+                <Link href={reportUrl} style={linkStyle}>
+                  {reportUrl}
+                </Link>
+              </Text>
+            </InfoCard>
           </EmailSection>
 
-          <Hr style={divider} />
+          <EmailDivider />
 
-          {/* Support Section */}
           <EmailSection>
             <Text style={{ ...smallText, textAlign: "center" }}>
               Dacă ai întrebări, te rugăm să ne contactezi la{" "}
@@ -145,16 +133,6 @@ const heading = {
   color: YuvooColors.primary,
 };
 
-const sectionHeading = {
-  fontSize: "20px",
-  fontWeight: "600",
-  lineHeight: "28px",
-  color: YuvooColors.textPrimary,
-  marginTop: "0",
-  marginBottom: "16px",
-  fontFamily: EmailTypography.heading.fontFamily,
-};
-
 const body = {
   ...EmailTypography.body,
   marginBottom: "12px",
@@ -163,11 +141,6 @@ const body = {
 const smallText = {
   ...EmailTypography.small,
   marginBottom: "8px",
-};
-
-const divider = {
-  borderColor: YuvooColors.borderGrey,
-  margin: "30px 0",
 };
 
 const listStyle = {
@@ -186,17 +159,6 @@ const ctaSection = {
   textAlign: "center" as const,
   marginTop: "24px",
   marginBottom: "16px",
-};
-
-const buttonPrimary = {
-  backgroundColor: YuvooColors.primary,
-  color: "#FFFFFF",
-  padding: "12px 32px",
-  borderRadius: "6px",
-  textDecoration: "none",
-  fontWeight: "600",
-  fontSize: "16px",
-  display: "inline-block",
 };
 
 const linkStyle = {

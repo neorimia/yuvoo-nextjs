@@ -28,12 +28,12 @@ export default function AgeGuidanceSection({ quizResult, quizAnswers }: AgeGuida
   }
 
   return (
-    <section className="mb-5">
+    <section className="mb-4">
       <div className="card shadow-sm border-0">
         <div className="card-header bg-light">
           <h2 className="h4 mb-0">
-            <i className="bi bi-calendar-check-fill me-2 text-primary"></i>
-            Vârsta Ideală pentru Început
+            <i className="bi bi-calendar-check-fill me-2 text-warning"></i>
+            Vârsta ideală pentru început
           </h2>
         </div>
         <div className="card-body p-4">
@@ -44,14 +44,14 @@ export default function AgeGuidanceSection({ quizResult, quizAnswers }: AgeGuida
                 momentul potrivit de început:
               </p>
 
-              <div className="row g-4">
+              <div className="row">
                 {topRecommendations.map((recommendation) => {
                   // Determine start timing based on age and sport
                   const canStart = childAge >= 5;
                   const waitMonths = childAge < 5 ? 6 : 0;
 
                   return (
-                    <div key={recommendation.sportId} className="col-12 col-md-6">
+                    <div key={recommendation.sportId} className="col-12">
                       <div className="card border-0" style={{ borderLeft: "4px solid #00BBAE" }}>
                         <div className="card-body p-4">
                           <h3 className="h5 fw-bold mb-3">{recommendation.sportName}</h3>

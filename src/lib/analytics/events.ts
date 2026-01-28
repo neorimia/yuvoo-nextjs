@@ -36,6 +36,12 @@ export const PostHogEvents = {
   CLUB_BOOKING_CONFIRMED: "club_booking_confirmed",
   CLUB_BOOKING_CANCELLED: "club_booking_cancelled",
   CLUBS_LANDING_CTA_CLICKED: "clubs_landing_cta_clicked",
+  CLUBS_LANDING_VARIANT_SHOWN: "clubs_landing_variant_shown",
+  CLUBS_LANDING_VARIANT_CLICKED: "clubs_landing_variant_clicked",
+  CLUBS_LANDING_PAGE_VIEWED: "clubs_landing_page_viewed",
+  CLUBS_CONTACT_MODAL_OPENED: "clubs_contact_modal_opened",
+  CLUBS_CONTACT_FORM_SUBMITTED: "clubs_contact_form_submitted",
+  CLUBS_CONTACT_FORM_ERROR: "clubs_contact_form_error",
 
   // Doctor Events
   DOCTOR_VIEWED: "doctor_viewed",
@@ -64,6 +70,9 @@ export const PostHogEvents = {
   EMAIL_UNSUBSCRIBED: "email_unsubscribed",
   EMAIL_PREFERENCES_UPDATED: "email_preferences_updated",
   EMAIL_RESUBSCRIBED: "email_resubscribed",
+  EMAIL_VARIANT_SENT: "email_variant_sent",
+  EMAIL_VARIANT_OPENED: "email_variant_opened",
+  EMAIL_OPENED: "email_opened",
 
   // Payment Events
   PAYMENT_CREATED: "payment_created",
@@ -72,6 +81,15 @@ export const PostHogEvents = {
   PAYMENT_VERIFIED: "payment_verified",
   PAYWALL_VIEWED: "paywall_viewed",
   REPORT_ACCESSED: "report_accessed",
+
+  // Lead Events
+  LEAD_SUBMITTED: "lead_submitted",
+  LEAD_VIEWED: "lead_viewed",
+  LEAD_PAYMENT_INITIATED: "lead_payment_initiated",
+  LEAD_PAYMENT_COMPLETED: "lead_payment_completed",
+  LEAD_EXPIRED: "lead_expired",
+  PREMIUM_UPGRADE_INITIATED: "premium_upgrade_initiated",
+  PREMIUM_UPGRADE_COMPLETED: "premium_upgrade_completed",
 } as const;
 
 /**
@@ -136,6 +154,30 @@ export const PostHogProperties = {
   REVIEW_ID: "reviewId",
   REVIEW_RATING: "reviewRating",
   REVIEW_TYPE: "reviewType", // "club" | "doctor"
+
+  // Lead Properties
+  LEAD_ID: "leadId",
+  LEAD_STATUS: "leadStatus",
+  LEAD_PAYMENT_METHOD: "leadPaymentMethod", // "pay_per_lead" | "premium"
+
+  // A/B Testing Properties
+  VARIANT_NAME: "variant_name",
+  VARIANT_VALUE: "variant_value",
+  VARIANT_LOCATION: "variant_location", // "hero" | "final_cta" | "email" | etc.
+  CTA_TEXT: "cta_text",
+
+  // Conversion Tracking Properties
+  PAGE_URL: "page_url",
+  REFERRER: "referrer",
+  UTM_SOURCE: "utm_source",
+  UTM_MEDIUM: "utm_medium",
+  UTM_CAMPAIGN: "utm_campaign",
+  FORM_TYPE: "form_type",
+  TIME_TO_SUBMIT: "time_to_submit", // seconds
+  TIME_TO_OPEN: "time_to_open", // minutes
+  TIME_FROM_EMAIL: "time_from_email", // minutes
+  EMAIL_TYPE: "email_type",
+  ERROR_MESSAGE: "error_message",
 } as const;
 
 /**

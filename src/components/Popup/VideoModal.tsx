@@ -1,10 +1,10 @@
 import React from "react";
 
- interface IProps {
+interface IProps {
   isOpen: boolean;
   videoUrl: string;
   onClose: () => void;
-};
+}
 
 const VideoModal: React.FC<IProps> = ({ isOpen, videoUrl, onClose }) => {
   if (!isOpen) return null;

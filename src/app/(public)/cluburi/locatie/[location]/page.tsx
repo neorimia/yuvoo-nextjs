@@ -17,6 +17,7 @@ import {
   generateLocationSlug,
   getLocationDisplayName,
 } from "@/lib/utils/location";
+import { getCityIdByName, getSectorIdByName } from "@/lib/db/location-helpers";
 import { cacheTag } from "next/cache";
 import { PRE_LAUNCH_RESTRICTIONS_ENABLED } from "@/lib/config/pre-launch";
 import PreLaunchPage from "@/components/features/early-access/PreLaunchPage";
@@ -133,10 +134,20 @@ export default async function LocationClubsPage({ params }: LocationPageProps) {
   // Check if we're in production build phase
   const isProductionBuild = process.env.NEXT_PHASE === "phase-production-build";
 
-  // Build filters for this location
+  // Convert city/district names to IDs for filtering
+  const cityId = await getCityIdByName(city);
+  let sectorId: string | undefined = undefined;
+
+  // If district is provided and we have a cityId, try to get sectorId
+  if (district && cityId) {
+    const foundSectorId = await getSectorIdByName(district, cityId);
+    sectorId = foundSectorId || undefined;
+  }
+
+  // Build filters for this location using IDs
   const filters: ClubSearchFiltersType = {
-    city,
-    district: district || undefined,
+    cityId: cityId || undefined,
+    sectorId,
     sortBy: "verified",
   };
 
@@ -176,7 +187,7 @@ export default async function LocationClubsPage({ params }: LocationPageProps) {
           { name: locationDisplayName, url: routes.clubs.location(location) }, // Current page
         ]}
       />
-      <section className="bd-clubs-intro-area pt-120 pb-70">
+      <section className="bd-clubs-intro-area pt-70">
         <div className="container">
           <div className="row">
             <div className="col-lg-10 mx-auto">

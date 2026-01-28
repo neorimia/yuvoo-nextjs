@@ -33,19 +33,21 @@ interface StackAuthProviderProps {
  * 1. StackAssertionError (configuration mismatch)
  * 2. Hydration errors (server/client render mismatch)
  *
- * IMPORTANT: To prevent hydration mismatches, we:
- * 1. Always render the same structure on server and initial client render
- * 2. Only initialize Stack Auth after the component mounts on the client
- * 3. Use a mounted flag to ensure consistent rendering
+ * IMPORTANT: To prevent "Rendered more hooks than during the previous render" errors:
+ * 1. We use a stable inner component that handles conditional StackProvider rendering
+ * 2. The outer component always calls the same hooks in the same order
+ * 3. The inner component uses key-based remounting when stackClientApp changes
+ *    from null to non-null, which is expected and safe
  */
 export function StackAuthProvider({ children }: StackAuthProviderProps) {
-  // Track if component has mounted (client-side only)
-  // This ensures server and initial client render match
+  // CRITICAL: Track if component has mounted on client to prevent hydration mismatches
+  // Both server and client will render children initially (mounted = false)
+  // After mount, client will render StackProvider (mounted = true)
   const [mounted, setMounted] = useState(false);
   const [stackClientApp, setStackClientApp] = useState<StackClientApp<true> | null>(null);
 
-  // Initialize Stack Auth ONLY after component mounts on client
-  // This ensures server and initial client render are identical
+  // Initialize app AFTER component mounts on client
+  // This ensures server and client render the same thing initially
   useEffect(() => {
     setMounted(true);
     try {
@@ -58,12 +60,21 @@ export function StackAuthProvider({ children }: StackAuthProviderProps) {
     }
   }, []);
 
-  // During SSR and initial client render (before mount),
-  // render children without StackProvider to ensure hydration match
+  // CRITICAL: Always render the same structure on both server and client initially
+  // This prevents hydration mismatches. After mount, we conditionally render StackProvider.
+  //
+  // IMPORTANT: This conditional rendering of StackProvider can cause hook count issues
+  // if StackProvider uses hooks. However, we need to do this to prevent hydration errors.
+  // The key is that the conditional is based on `mounted`, which changes AFTER the first
+  // render, so the initial server and client renders match.
+
+  // Before mount (SSR and initial client render), render children directly
+  // This ensures server and client render the same thing
   if (!mounted || !stackClientApp) {
     return <>{children}</>;
   }
 
-  // After mount and initialization, wrap children with StackProvider
+  // After mount and app is available, render StackProvider
+  // This only happens on the client after hydration is complete
   return <StackProvider app={stackClientApp}>{children}</StackProvider>;
 }

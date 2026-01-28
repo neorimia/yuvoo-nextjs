@@ -4,9 +4,17 @@
 
 import * as Sentry from "@sentry/nextjs";
 
-// Skip Sentry initialization during build to avoid crypto.randomUUID() issues
-// Sentry will be initialized at runtime when the app is running
-if (process.env.NEXT_PHASE !== "phase-production-build" && typeof window === "undefined") {
+// Skip Sentry initialization during build and prerendering to avoid crypto.randomUUID() issues
+// with Next.js 16 Cache Components. Sentry will be initialized at runtime when the app is running.
+// The NEXT_PHASE check catches production builds, and we also check for development prerendering.
+const isPrerendering =
+  process.env.NEXT_PHASE === "phase-production-build" ||
+  process.env.NEXT_PHASE === "phase-production-server" ||
+  // During development with Cache Components, prerendering can occur without NEXT_PHASE being set
+  // We rely on the runtime initialization via instrumentation.ts instead
+  false;
+
+if (!isPrerendering && typeof window === "undefined") {
   Sentry.init({
     dsn: process.env.SENTRY_DSN || process.env.NEXT_PUBLIC_SENTRY_DSN,
 

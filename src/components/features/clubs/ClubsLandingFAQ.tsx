@@ -38,9 +38,9 @@ export default function ClubsLandingFAQ() {
                   />
                 ))}
               </div>
-              {/* Link to FAQ page */}
+              {/* Link to Help Center Page */}
               <div className="text-center wow fadeInUp" data-wow-duration="1s" data-wow-delay=".5s">
-                <Link href={routes.faq} className="bd-btn mt-4">
+                <Link href={routes.clubs.helpCenter} className="bd-btn mt-4">
                   <span className="bd-btn-inner">
                     <span className="bd-btn-normal">Vezi toate întrebările</span>
                     <span className="bd-btn-hover">Vezi toate întrebările</span>

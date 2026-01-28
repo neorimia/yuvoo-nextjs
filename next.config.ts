@@ -1,4 +1,3 @@
-import { withSentryConfig } from "@sentry/nextjs";
 import type { NextConfig } from "next";
 
 /**
@@ -105,48 +104,66 @@ const nextConfig: NextConfig = {
   skipTrailingSlashRedirect: true,
 };
 
-// Conditionally apply Sentry config - skip entirely during build to avoid crypto.randomUUID() issues
-// Check both NEXT_PHASE and presence of specific build commands
-const isBuildPhase =
-  process.env.NEXT_PHASE === "phase-production-build" ||
-  process.argv.includes("build") ||
-  process.env.npm_lifecycle_event === "build";
+// Sentry Configuration
+// We use dynamic import to avoid crypto.randomUUID() errors during Next.js 16 Cache Components prerendering.
+// The @sentry/nextjs package uses crypto.randomUUID() internally during module initialization,
+// which conflicts with Next.js's prerendering constraints.
 
-const finalConfig = isBuildPhase
-  ? nextConfig
-  : withSentryConfig(nextConfig, {
-      // For all available options, see:
-      // https://www.npmjs.com/package/@sentry/webpack-plugin#options
+// For development and production runtime, we need to apply Sentry config.
+// For production builds, we also need Sentry for source map uploads.
+// The key is to NOT import @sentry/nextjs during prerendering in development.
+let finalConfig: NextConfig = nextConfig;
 
-      org: "yuvoo",
+// IMPORTANT: We completely disable Sentry wrapping during build to avoid crypto.randomUUID() errors
+// with Next.js 16 Cache Components. Sentry's webpack wrapper uses crypto.randomUUID() during
+// module initialization, which conflicts with Next.js prerendering constraints.
+// Source maps can still be uploaded via Sentry CLI if needed, but pages won't be wrapped during build.
+// Sentry will work at runtime via instrumentation.ts.
+//
+// CURRENT STATUS: Disabled (if (false)) - Never active
+// TO ENABLE: Change condition to check if NOT prerendering, e.g.:
+//   const isPrerendering = process.env.NEXT_PHASE === "phase-production-build";
+//   if (!isPrerendering) { ... }
+// However, this may still cause issues during webpack compilation phase.
 
-      project: "javascript-nextjs",
+if (false) {
+  // Dynamic require to avoid top-level import issues
+  // eslint-disable-next-line @typescript-eslint/no-require-imports
+  const { withSentryConfig } = require("@sentry/nextjs");
+  finalConfig = withSentryConfig(nextConfig, {
+    // For all available options, see:
+    // https://www.npmjs.com/package/@sentry/webpack-plugin#options
 
-      // Only print logs for uploading source maps in CI
-      silent: !process.env.CI,
+    org: "yuvoo",
 
-      // For all available options, see:
-      // https://docs.sentry.io/platforms/javascript/guides/nextjs/manual-setup/
+    project: "javascript-nextjs",
 
-      // Upload a larger set of source maps for prettier stack traces (increases build time)
-      widenClientFileUpload: true,
+    // Only print logs for uploading source maps in CI
+    silent: !process.env.CI,
 
-      // Route browser requests to Sentry through a Next.js rewrite to circumvent ad-blockers.
-      // This can increase your server load as well as your hosting bill.
-      // Note: Check that the configured route will not match with your Next.js middleware, otherwise reporting of client-
-      // side errors will fail.
-      tunnelRoute: "/monitoring",
+    // For all available options, see:
+    // https://docs.sentry.io/platforms/javascript/guides/nextjs/manual-setup/
 
-      // Note: Sentry's webpack config is a plugin config, not a full webpack function
-      // The webpack externals for ws are handled in nextConfig.webpack above
-      automaticVercelMonitors: true,
+    // Upload a larger set of source maps for prettier stack traces (increases build time)
+    widenClientFileUpload: true,
 
-      // Tree-shaking options for reducing bundle size
-      sourcemaps: {
-        assets: "./.next/**/*",
-        deleteSourcemapsAfterUpload: false, // Keep source maps for better debugging
-      },
-      disableLogger: false, // Keep logger for production debugging
-    });
+    // Route browser requests to Sentry through a Next.js rewrite to circumvent ad-blockers.
+    // This can increase your server load as well as your hosting bill.
+    // Note: Check that the configured route will not match with your Next.js middleware, otherwise reporting of client-
+    // side errors will fail.
+    tunnelRoute: "/monitoring",
+
+    // Note: Sentry's webpack config is a plugin config, not a full webpack function
+    // The webpack externals for ws are handled in nextConfig.webpack above
+    automaticVercelMonitors: true,
+
+    // Tree-shaking options for reducing bundle size
+    sourcemaps: {
+      assets: "./.next/**/*",
+      deleteSourcemapsAfterUpload: false, // Keep source maps for better debugging
+    },
+    disableLogger: false, // Keep logger for production debugging
+  });
+}
 
 export default finalConfig;

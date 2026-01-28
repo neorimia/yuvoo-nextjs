@@ -1,0 +1,718 @@
+{
+  "summary": "The analysis reveals that clubs and doctors tables currently use text-based location fields (city, district, address) which lack referential integrity and data consistency. The locations table provides a hierarchical structure (counties → cities → sectors) with proper normalization. Recommendations include: (1) Add cityId, sectorId, and countyId foreign keys to clubs and doctors tables, (2) Keep address as text for street-level details, (3) Denormalize countyId for performance (enables county-level filtering without joins), (4) Maintain backward compatibility by keeping old columns temporarily, (5) Update all text-based indexes to foreign key indexes, (6) Add composite indexes for common query patterns (sportType + cityId, specialty + cityId). Users table currently has no location fields, but should optionally support cityId for parent location preferences. Migration requires fuzzy matching of existing text values to location IDs, with special handling for Bucharest sectors and Romanian diacritics variations.",
+  "locationsTableStructure": {
+    "columns": [
+      {
+        "name": "id",
+        "type": "text",
+        "description": "Primary key identifier for location",
+        "nullable": false
+      },
+      {
+        "name": "name",
+        "type": "text",
+        "description": "Location name in Romanian (e.g., 'București', 'Cluj-Napoca')",
+        "nullable": false
+      },
+      {
+        "name": "type",
+        "type": "locationTypeEnum",
+        "description": "Location type: 'county' (județ), 'city' (municipiu/oraș), or 'sector' (Bucharest sectors 1-6)",
+        "nullable": false
+      },
+      {
+        "name": "parentId",
+        "type": "text",
+        "description": "Self-referential foreign key: null for counties, county ID for cities, city ID for sectors",
+        "nullable": true
+      },
+      {
+        "name": "code",
+        "type": "text",
+        "description": "County code (e.g., 'B' for București, 'CJ' for Cluj, 'TM' for Timiș)",
+        "nullable": true
+      },
+      {
+        "name": "isActive",
+        "type": "boolean",
+        "description": "Soft delete flag, defaults to true",
+        "nullable": false
+      },
+      {
+        "name": "createdAt",
+        "type": "timestamp",
+        "description": "Record creation timestamp",
+        "nullable": false
+      },
+      {
+        "name": "updatedAt",
+        "type": "timestamp",
+        "description": "Record last update timestamp",
+        "nullable": false
+      }
+    ],
+    "relationships": {
+      "hierarchy": "Three-level hierarchy: Counties (top-level, parentId = null) → Cities (parentId = county.id) → Sectors (parentId = city.id, only for Bucharest). Self-referential relationship via parentId column.",
+      "types": ["county", "city", "sector"]
+    }
+  },
+  "currentState": {
+    "clubs": {
+      "locationFields": [
+        {
+          "name": "city",
+          "type": "text",
+          "nullable": false,
+          "indexed": true,
+          "description": "City name as text (notNull), indexed for filtering"
+        },
+        {
+          "name": "district",
+          "type": "text",
+          "nullable": true,
+          "indexed": false,
+          "description": "District/sector name as text (optional), used for Bucharest sectors"
+        },
+        {
+          "name": "address",
+          "type": "text",
+          "nullable": true,
+          "indexed": false,
+          "description": "Street address as text (optional)"
+        },
+        {
+          "name": "latitude",
+          "type": "text",
+          "nullable": true,
+          "indexed": false,
+          "description": "Geographic latitude for mapping (optional, clubs only)"
+        },
+        {
+          "name": "longitude",
+          "type": "text",
+          "nullable": true,
+          "indexed": false,
+          "description": "Geographic longitude for mapping (optional, clubs only)"
+        }
+      ],
+      "issues": [
+        "No referential integrity - city/district values can be misspelled or inconsistent",
+        "Text-based filtering requires case-insensitive LIKE queries (performance impact)",
+        "No validation that city/district combinations are valid (e.g., sector must belong to correct city)",
+        "Composite index on sportType + city uses text column (less efficient than foreign key)",
+        "Cannot leverage location hierarchy for county-level filtering without text matching"
+      ]
+    },
+    "doctors": {
+      "locationFields": [
+        {
+          "name": "city",
+          "type": "text",
+          "nullable": false,
+          "indexed": true,
+          "description": "City name as text (notNull), indexed for filtering"
+        },
+        {
+          "name": "district",
+          "type": "text",
+          "nullable": true,
+          "indexed": false,
+          "description": "District/sector name as text (optional), used for Bucharest sectors"
+        },
+        {
+          "name": "address",
+          "type": "text",
+          "nullable": true,
+          "indexed": false,
+          "description": "Street address as text (optional)"
+        }
+      ],
+      "issues": [
+        "No referential integrity - city/district values can be misspelled or inconsistent",
+        "Text-based filtering requires case-insensitive LIKE queries (performance impact)",
+        "No validation that city/district combinations are valid",
+        "Composite index on specialty + city uses text column (less efficient than foreign key)",
+        "Cannot leverage location hierarchy for county-level filtering without text matching"
+      ]
+    },
+    "users": {
+      "locationFields": [],
+      "issues": [
+        "No location fields currently - parents cannot specify their location preference",
+        "Cannot filter clubs/doctors by parent's location for personalized recommendations",
+        "Missing location context for analytics and user segmentation"
+      ]
+    }
+  },
+  "recommendations": {
+    "clubs": {
+      "newColumns": [
+        {
+          "name": "cityId",
+          "type": "text",
+          "nullable": false,
+          "default": null,
+          "foreignKey": {
+            "table": "locations",
+            "column": "id",
+            "onDelete": "restrict"
+          },
+          "description": "Foreign key to locations table (type='city'). Required field replacing city text column.",
+          "replaces": "city"
+        },
+        {
+          "name": "sectorId",
+          "type": "text",
+          "nullable": true,
+          "default": null,
+          "foreignKey": {
+            "table": "locations",
+            "column": "id",
+            "onDelete": "restrict"
+          },
+          "description": "Foreign key to locations table (type='sector'). Optional field for Bucharest sectors, replacing district text column.",
+          "replaces": "district"
+        },
+        {
+          "name": "countyId",
+          "type": "text",
+          "nullable": false,
+          "default": null,
+          "foreignKey": {
+            "table": "locations",
+            "column": "id",
+            "onDelete": "restrict"
+          },
+          "description": "Foreign key to locations table (type='county'). Denormalized for performance - enables county-level filtering without joins. Required field.",
+          "replaces": null
+        }
+      ],
+      "columnsToKeep": ["address", "latitude", "longitude"],
+      "columnsToDeprecate": [
+        {
+          "name": "city",
+          "reason": "Replaced by cityId foreign key for referential integrity and data consistency",
+          "migrationStrategy": "Keep column temporarily with deprecation comment. Populate cityId from city text via fuzzy matching during migration. Remove after 3 months once all queries updated."
+        },
+        {
+          "name": "district",
+          "reason": "Replaced by sectorId foreign key for referential integrity. Only applicable for Bucharest sectors.",
+          "migrationStrategy": "Keep column temporarily. Populate sectorId from district text via fuzzy matching during migration. Remove after 3 months once all queries updated."
+        }
+      ],
+      "indexesToAdd": [
+        {
+          "name": "idx_clubs_city_id",
+          "columns": ["cityId"],
+          "description": "Foreign key index for city filtering and joins"
+        },
+        {
+          "name": "idx_clubs_sector_id",
+          "columns": ["sectorId"],
+          "description": "Foreign key index for sector filtering (Bucharest)"
+        },
+        {
+          "name": "idx_clubs_county_id",
+          "columns": ["countyId"],
+          "description": "Foreign key index for county-level filtering"
+        },
+        {
+          "name": "idx_clubs_sport_city_id",
+          "columns": ["sportType", "cityId"],
+          "description": "Composite index for common query pattern: filter by sport and city"
+        },
+        {
+          "name": "idx_clubs_sport_county_id",
+          "columns": ["sportType", "countyId"],
+          "description": "Composite index for county-level sport filtering"
+        },
+        {
+          "name": "idx_clubs_city_sector_id",
+          "columns": ["cityId", "sectorId"],
+          "description": "Composite index for city + sector filtering (Bucharest)"
+        }
+      ],
+      "indexesToUpdate": [
+        {
+          "oldName": "idx_clubs_city",
+          "newName": null,
+          "oldColumns": ["city"],
+          "newColumns": ["cityId"],
+          "description": "Replace text-based city index with foreign key index. Old index removed after migration."
+        },
+        {
+          "oldName": "idx_clubs_sport_city",
+          "newName": "idx_clubs_sport_city_id",
+          "oldColumns": ["sportType", "city"],
+          "newColumns": ["sportType", "cityId"],
+          "description": "Update composite index to use cityId foreign key instead of city text"
+        }
+      ],
+      "indexesToRemove": [
+        {
+          "name": "idx_clubs_city",
+          "reason": "Replaced by idx_clubs_city_id foreign key index after migration completes"
+        }
+      ]
+    },
+    "doctors": {
+      "newColumns": [
+        {
+          "name": "cityId",
+          "type": "text",
+          "nullable": false,
+          "default": null,
+          "foreignKey": {
+            "table": "locations",
+            "column": "id",
+            "onDelete": "restrict"
+          },
+          "description": "Foreign key to locations table (type='city'). Required field replacing city text column.",
+          "replaces": "city"
+        },
+        {
+          "name": "sectorId",
+          "type": "text",
+          "nullable": true,
+          "default": null,
+          "foreignKey": {
+            "table": "locations",
+            "column": "id",
+            "onDelete": "restrict"
+          },
+          "description": "Foreign key to locations table (type='sector'). Optional field for Bucharest sectors, replacing district text column.",
+          "replaces": "district"
+        },
+        {
+          "name": "countyId",
+          "type": "text",
+          "nullable": false,
+          "default": null,
+          "foreignKey": {
+            "table": "locations",
+            "column": "id",
+            "onDelete": "restrict"
+          },
+          "description": "Foreign key to locations table (type='county'). Denormalized for performance - enables county-level filtering without joins. Required field.",
+          "replaces": null
+        }
+      ],
+      "columnsToKeep": ["address"],
+      "columnsToDeprecate": [
+        {
+          "name": "city",
+          "reason": "Replaced by cityId foreign key for referential integrity and data consistency",
+          "migrationStrategy": "Keep column temporarily with deprecation comment. Populate cityId from city text via fuzzy matching during migration. Remove after 3 months once all queries updated."
+        },
+        {
+          "name": "district",
+          "reason": "Replaced by sectorId foreign key for referential integrity. Only applicable for Bucharest sectors.",
+          "migrationStrategy": "Keep column temporarily. Populate sectorId from district text via fuzzy matching during migration. Remove after 3 months once all queries updated."
+        }
+      ],
+      "indexesToAdd": [
+        {
+          "name": "idx_doctors_city_id",
+          "columns": ["cityId"],
+          "description": "Foreign key index for city filtering and joins"
+        },
+        {
+          "name": "idx_doctors_sector_id",
+          "columns": ["sectorId"],
+          "description": "Foreign key index for sector filtering (Bucharest)"
+        },
+        {
+          "name": "idx_doctors_county_id",
+          "columns": ["countyId"],
+          "description": "Foreign key index for county-level filtering"
+        },
+        {
+          "name": "idx_doctors_specialty_city_id",
+          "columns": ["specialty", "cityId"],
+          "description": "Composite index for common query pattern: filter by specialty and city"
+        },
+        {
+          "name": "idx_doctors_specialty_county_id",
+          "columns": ["specialty", "countyId"],
+          "description": "Composite index for county-level specialty filtering"
+        },
+        {
+          "name": "idx_doctors_city_sector_id",
+          "columns": ["cityId", "sectorId"],
+          "description": "Composite index for city + sector filtering (Bucharest)"
+        }
+      ],
+      "indexesToUpdate": [
+        {
+          "oldName": "idx_doctors_city",
+          "newName": null,
+          "oldColumns": ["city"],
+          "newColumns": ["cityId"],
+          "description": "Replace text-based city index with foreign key index. Old index removed after migration."
+        },
+        {
+          "oldName": "idx_doctors_specialty_city",
+          "newName": "idx_doctors_specialty_city_id",
+          "oldColumns": ["specialty", "city"],
+          "newColumns": ["specialty", "cityId"],
+          "description": "Update composite index to use cityId foreign key instead of city text"
+        }
+      ],
+      "indexesToRemove": [
+        {
+          "name": "idx_doctors_city",
+          "reason": "Replaced by idx_doctors_city_id foreign key index after migration completes"
+        }
+      ]
+    },
+    "users": {
+      "newColumns": [
+        {
+          "name": "cityId",
+          "type": "text",
+          "nullable": true,
+          "default": null,
+          "foreignKey": {
+            "table": "locations",
+            "column": "id",
+            "onDelete": "set null"
+          },
+          "description": "Optional foreign key to locations table (type='city') for parent's location preference. Used for personalized club/doctor recommendations.",
+          "replaces": null
+        },
+        {
+          "name": "countyId",
+          "type": "text",
+          "nullable": true,
+          "default": null,
+          "foreignKey": {
+            "table": "locations",
+            "column": "id",
+            "onDelete": "set null"
+          },
+          "description": "Optional foreign key to locations table (type='county') for parent's county preference. Denormalized for performance.",
+          "replaces": null
+        }
+      ],
+      "columnsToKeep": null,
+      "columnsToDeprecate": null,
+      "indexesToAdd": [
+        {
+          "name": "idx_users_city_id",
+          "columns": ["cityId"],
+          "description": "Index for filtering users by city (analytics, recommendations)"
+        },
+        {
+          "name": "idx_users_county_id",
+          "columns": ["countyId"],
+          "description": "Index for filtering users by county (analytics, segmentation)"
+        }
+      ],
+      "indexesToUpdate": null,
+      "indexesToRemove": null
+    }
+  },
+  "migrationStrategy": {
+    "phases": [
+      {
+        "phase": 1,
+        "name": "Schema Addition",
+        "description": "Add new foreign key columns alongside existing text columns. All new columns nullable initially to allow gradual data migration.",
+        "steps": [
+          {
+            "step": 1,
+            "action": "Add cityId, sectorId, countyId columns to clubs table",
+            "description": "Add nullable foreign key columns with references to locations.id",
+            "sqlExample": "ALTER TABLE clubs ADD COLUMN city_id TEXT REFERENCES locations(id) ON DELETE RESTRICT, ADD COLUMN sector_id TEXT REFERENCES locations(id) ON DELETE RESTRICT, ADD COLUMN county_id TEXT REFERENCES locations(id) ON DELETE RESTRICT;",
+            "drizzleExample": "cityId: text('city_id').references(() => locations.id, { onDelete: 'restrict' }), sectorId: text('sector_id').references(() => locations.id, { onDelete: 'restrict' }), countyId: text('county_id').references(() => locations.id, { onDelete: 'restrict' })"
+          },
+          {
+            "step": 2,
+            "action": "Add cityId, sectorId, countyId columns to doctors table",
+            "description": "Add nullable foreign key columns with references to locations.id",
+            "sqlExample": "ALTER TABLE doctors ADD COLUMN city_id TEXT REFERENCES locations(id) ON DELETE RESTRICT, ADD COLUMN sector_id TEXT REFERENCES locations(id) ON DELETE RESTRICT, ADD COLUMN county_id TEXT REFERENCES locations(id) ON DELETE RESTRICT;",
+            "drizzleExample": "cityId: text('city_id').references(() => locations.id, { onDelete: 'restrict' }), sectorId: text('sector_id').references(() => locations.id, { onDelete: 'restrict' }), countyId: text('county_id').references(() => locations.id, { onDelete: 'restrict' })"
+          },
+          {
+            "step": 3,
+            "action": "Add cityId, countyId columns to users table",
+            "description": "Add optional foreign key columns for parent location preferences",
+            "sqlExample": "ALTER TABLE users ADD COLUMN city_id TEXT REFERENCES locations(id) ON DELETE SET NULL, ADD COLUMN county_id TEXT REFERENCES locations(id) ON DELETE SET NULL;",
+            "drizzleExample": "cityId: text('city_id').references(() => locations.id, { onDelete: 'set null' }), countyId: text('county_id').references(() => locations.id, { onDelete: 'set null' })"
+          },
+          {
+            "step": 4,
+            "action": "Create new indexes for foreign key columns",
+            "description": "Add indexes on all new foreign key columns for query performance",
+            "sqlExample": "CREATE INDEX idx_clubs_city_id ON clubs(city_id); CREATE INDEX idx_clubs_sector_id ON clubs(sector_id); CREATE INDEX idx_clubs_county_id ON clubs(county_id); CREATE INDEX idx_doctors_city_id ON doctors(city_id); CREATE INDEX idx_doctors_sector_id ON doctors(sector_id); CREATE INDEX idx_doctors_county_id ON doctors(county_id); CREATE INDEX idx_users_city_id ON users(city_id); CREATE INDEX idx_users_county_id ON users(county_id);",
+            "drizzleExample": "cityIdIdx: index('idx_clubs_city_id').on(table.cityId), sectorIdIdx: index('idx_clubs_sector_id').on(table.sectorId), countyIdIdx: index('idx_clubs_county_id').on(table.countyId)"
+          }
+        ],
+        "rollbackPlan": "Drop new columns and indexes: ALTER TABLE clubs DROP COLUMN city_id, DROP COLUMN sector_id, DROP COLUMN county_id; ALTER TABLE doctors DROP COLUMN city_id, DROP COLUMN sector_id, DROP COLUMN county_id; ALTER TABLE users DROP COLUMN city_id, DROP COLUMN county_id;"
+      },
+      {
+        "phase": 2,
+        "name": "Data Migration",
+        "description": "Populate new foreign key columns from existing text values using fuzzy matching and location lookup.",
+        "steps": [
+          {
+            "step": 1,
+            "action": "Migrate clubs.city to clubs.cityId",
+            "description": "Match existing city text values to locations table (type='city') using fuzzy matching for Romanian diacritics and variations",
+            "sqlExample": "UPDATE clubs SET city_id = (SELECT id FROM locations WHERE type = 'city' AND LOWER(UNACCENT(name)) = LOWER(UNACCENT(clubs.city)) LIMIT 1) WHERE city_id IS NULL;",
+            "drizzleExample": "const cityMatches = await db.select().from(locations).where(and(eq(locations.type, 'city'), sql`LOWER(UNACCENT(${locations.name})) = LOWER(UNACCENT(${club.city}))`));"
+          },
+          {
+            "step": 2,
+            "action": "Migrate clubs.district to clubs.sectorId",
+            "description": "Match existing district text values to locations table (type='sector') for Bucharest clubs only",
+            "sqlExample": "UPDATE clubs SET sector_id = (SELECT id FROM locations WHERE type = 'sector' AND LOWER(UNACCENT(name)) = LOWER(UNACCENT(clubs.district)) AND parent_id IN (SELECT id FROM locations WHERE name = 'București' AND type = 'city') LIMIT 1) WHERE district IS NOT NULL AND city_id IN (SELECT id FROM locations WHERE name = 'București' AND type = 'city');",
+            "drizzleExample": "const sectorMatches = await db.select().from(locations).where(and(eq(locations.type, 'sector'), sql`LOWER(UNACCENT(${locations.name})) = LOWER(UNACCENT(${club.district}))`, inArray(locations.parentId, bucharestCityIds)));"
+          },
+          {
+            "step": 3,
+            "action": "Populate clubs.countyId from cityId",
+            "description": "Derive countyId from cityId's parent relationship (cities belong to counties)",
+            "sqlExample": "UPDATE clubs SET county_id = (SELECT parent_id FROM locations WHERE id = clubs.city_id AND type = 'city') WHERE city_id IS NOT NULL AND county_id IS NULL;",
+            "drizzleExample": "const city = await db.query.locations.findFirst({ where: eq(locations.id, club.cityId) }); if (city?.parentId) { await db.update(clubs).set({ countyId: city.parentId }).where(eq(clubs.id, club.id)); }"
+          },
+          {
+            "step": 4,
+            "action": "Migrate doctors.city to doctors.cityId",
+            "description": "Match existing city text values to locations table (type='city') using fuzzy matching",
+            "sqlExample": "UPDATE doctors SET city_id = (SELECT id FROM locations WHERE type = 'city' AND LOWER(UNACCENT(name)) = LOWER(UNACCENT(doctors.city)) LIMIT 1) WHERE city_id IS NULL;",
+            "drizzleExample": "Similar to clubs migration pattern"
+          },
+          {
+            "step": 5,
+            "action": "Migrate doctors.district to doctors.sectorId",
+            "description": "Match existing district text values to locations table (type='sector') for Bucharest doctors only",
+            "sqlExample": "UPDATE doctors SET sector_id = (SELECT id FROM locations WHERE type = 'sector' AND LOWER(UNACCENT(name)) = LOWER(UNACCENT(doctors.district)) AND parent_id IN (SELECT id FROM locations WHERE name = 'București' AND type = 'city') LIMIT 1) WHERE district IS NOT NULL AND city_id IN (SELECT id FROM locations WHERE name = 'București' AND type = 'city');",
+            "drizzleExample": "Similar to clubs migration pattern"
+          },
+          {
+            "step": 6,
+            "action": "Populate doctors.countyId from cityId",
+            "description": "Derive countyId from cityId's parent relationship",
+            "sqlExample": "UPDATE doctors SET county_id = (SELECT parent_id FROM locations WHERE id = doctors.city_id AND type = 'city') WHERE city_id IS NOT NULL AND county_id IS NULL;",
+            "drizzleExample": "Similar to clubs migration pattern"
+          },
+          {
+            "step": 7,
+            "action": "Handle unmatched locations",
+            "description": "Identify and report clubs/doctors with unmatched city/district values for manual review",
+            "sqlExample": "SELECT id, name, city, district FROM clubs WHERE city_id IS NULL; SELECT id, first_name, last_name, city, district FROM doctors WHERE city_id IS NULL;",
+            "drizzleExample": "const unmatchedClubs = await db.select().from(clubs).where(isNull(clubs.cityId));"
+          }
+        ],
+        "rollbackPlan": "Set all foreign key columns to NULL: UPDATE clubs SET city_id = NULL, sector_id = NULL, county_id = NULL; UPDATE doctors SET city_id = NULL, sector_id = NULL, county_id = NULL;"
+      },
+      {
+        "phase": 3,
+        "name": "Constraint Enforcement",
+        "description": "Make foreign key columns NOT NULL and add constraints after data migration completes.",
+        "steps": [
+          {
+            "step": 1,
+            "action": "Make clubs foreign keys NOT NULL",
+            "description": "Enforce required constraints after all data migrated",
+            "sqlExample": "ALTER TABLE clubs ALTER COLUMN city_id SET NOT NULL, ALTER COLUMN county_id SET NOT NULL;",
+            "drizzleExample": "cityId: text('city_id').notNull().references(() => locations.id, { onDelete: 'restrict' })"
+          },
+          {
+            "step": 2,
+            "action": "Make doctors foreign keys NOT NULL",
+            "description": "Enforce required constraints after all data migrated",
+            "sqlExample": "ALTER TABLE doctors ALTER COLUMN city_id SET NOT NULL, ALTER COLUMN county_id SET NOT NULL;",
+            "drizzleExample": "cityId: text('city_id').notNull().references(() => locations.id, { onDelete: 'restrict' })"
+          },
+          {
+            "step": 3,
+            "action": "Add check constraints for location types",
+            "description": "Ensure cityId references type='city', sectorId references type='sector', countyId references type='county'",
+            "sqlExample": "ALTER TABLE clubs ADD CONSTRAINT chk_clubs_city_type CHECK (city_id IS NULL OR EXISTS (SELECT 1 FROM locations WHERE id = clubs.city_id AND type = 'city')); ALTER TABLE clubs ADD CONSTRAINT chk_clubs_sector_type CHECK (sector_id IS NULL OR EXISTS (SELECT 1 FROM locations WHERE id = clubs.sector_id AND type = 'sector')); ALTER TABLE clubs ADD CONSTRAINT chk_clubs_county_type CHECK (county_id IS NULL OR EXISTS (SELECT 1 FROM locations WHERE id = clubs.county_id AND type = 'county'));",
+            "drizzleExample": "Note: Drizzle doesn't support check constraints directly - use raw SQL in migration"
+          }
+        ],
+        "rollbackPlan": "Remove NOT NULL constraints: ALTER TABLE clubs ALTER COLUMN city_id DROP NOT NULL, ALTER COLUMN county_id DROP NOT NULL; ALTER TABLE doctors ALTER COLUMN city_id DROP NOT NULL, ALTER COLUMN county_id DROP NOT NULL;"
+      },
+      {
+        "phase": 4,
+        "name": "Index Updates",
+        "description": "Update composite indexes to use foreign keys and remove old text-based indexes.",
+        "steps": [
+          {
+            "step": 1,
+            "action": "Create new composite indexes with foreign keys",
+            "description": "Add composite indexes for common query patterns using foreign keys",
+            "sqlExample": "CREATE INDEX idx_clubs_sport_city_id ON clubs(sport_type, city_id); CREATE INDEX idx_clubs_sport_county_id ON clubs(sport_type, county_id); CREATE INDEX idx_doctors_specialty_city_id ON doctors(specialty, city_id); CREATE INDEX idx_doctors_specialty_county_id ON doctors(specialty, county_id);",
+            "drizzleExample": "sportCityIdIdx: index('idx_clubs_sport_city_id').on(table.sportType, table.cityId)"
+          },
+          {
+            "step": 2,
+            "action": "Drop old text-based indexes",
+            "description": "Remove deprecated indexes after new indexes created",
+            "sqlExample": "DROP INDEX idx_clubs_city; DROP INDEX idx_doctors_city;",
+            "drizzleExample": "Remove from schema definition"
+          },
+          {
+            "step": 3,
+            "action": "Update composite indexes",
+            "description": "Drop and recreate composite indexes with foreign keys",
+            "sqlExample": "DROP INDEX idx_clubs_sport_city; CREATE INDEX idx_clubs_sport_city_id ON clubs(sport_type, city_id); DROP INDEX idx_doctors_specialty_city; CREATE INDEX idx_doctors_specialty_city_id ON doctors(specialty, city_id);",
+            "drizzleExample": "Update index definitions in schema"
+          }
+        ],
+        "rollbackPlan": "Recreate old indexes: CREATE INDEX idx_clubs_city ON clubs(city); CREATE INDEX idx_doctors_city ON doctors(city); CREATE INDEX idx_clubs_sport_city ON clubs(sport_type, city); CREATE INDEX idx_doctors_specialty_city ON doctors(specialty, city);"
+      },
+      {
+        "phase": 5,
+        "name": "Code Migration",
+        "description": "Update application code to use new foreign key columns instead of text columns.",
+        "steps": [
+          {
+            "step": 1,
+            "action": "Update Drizzle schema definitions",
+            "description": "Modify clubs, doctors, users table definitions in schema.ts to use foreign keys",
+            "sqlExample": null,
+            "drizzleExample": "cityId: text('city_id').notNull().references(() => locations.id, { onDelete: 'restrict' })"
+          },
+          {
+            "step": 2,
+            "action": "Update repository layer",
+            "description": "Modify clubs.repository.ts and doctors.repository.ts to map foreign keys and join with locations table",
+            "sqlExample": null,
+            "drizzleExample": "const clubWithLocation = await db.query.clubs.findFirst({ where: eq(clubs.id, clubId), with: { city: { columns: { id: true, name: true } } } });"
+          },
+          {
+            "step": 3,
+            "action": "Update service layer",
+            "description": "Modify clubs.service.ts and doctors.service.ts to use location IDs in queries",
+            "sqlExample": null,
+            "drizzleExample": "const filteredClubs = await db.select().from(clubs).where(eq(clubs.cityId, cityId));"
+          },
+          {
+            "step": 4,
+            "action": "Update validation schemas",
+            "description": "Modify Zod schemas in lib/validations/ to accept location IDs instead of text",
+            "sqlExample": null,
+            "drizzleExample": "cityId: z.string().uuid().refine(async (id) => { const loc = await db.query.locations.findFirst({ where: and(eq(locations.id, id), eq(locations.type, 'city')) }); return !!loc; }, 'Invalid city ID')"
+          },
+          {
+            "step": 5,
+            "action": "Update components",
+            "description": "Modify LocationDropdown, ClubBasicInfoForm, DoctorLocationContactForm to use location IDs",
+            "sqlExample": null,
+            "drizzleExample": "const [selectedCityId, setSelectedCityId] = useState<string | null>(club.cityId);"
+          },
+          {
+            "step": 6,
+            "action": "Update search/filter logic",
+            "description": "Modify clubs.search.ts and doctors.search.ts to filter by location IDs",
+            "sqlExample": null,
+            "drizzleExample": "if (filters.cityId) { conditions.push(eq(clubs.cityId, filters.cityId)); }"
+          }
+        ],
+        "rollbackPlan": "Revert code changes via git. Keep database schema changes (columns remain but unused)."
+      },
+      {
+        "phase": 6,
+        "name": "Deprecation Cleanup",
+        "description": "Remove deprecated text columns after backward compatibility period (3 months).",
+        "steps": [
+          {
+            "step": 1,
+            "action": "Verify no code references old columns",
+            "description": "Search codebase for any remaining references to clubs.city, clubs.district, doctors.city, doctors.district",
+            "sqlExample": null,
+            "drizzleExample": null
+          },
+          {
+            "step": 2,
+            "action": "Drop deprecated columns",
+            "description": "Remove city and district text columns from clubs and doctors tables",
+            "sqlExample": "ALTER TABLE clubs DROP COLUMN city, DROP COLUMN district; ALTER TABLE doctors DROP COLUMN city, DROP COLUMN district;",
+            "drizzleExample": "Remove column definitions from schema.ts"
+          }
+        ],
+        "rollbackPlan": "Re-add columns: ALTER TABLE clubs ADD COLUMN city TEXT, ADD COLUMN district TEXT; ALTER TABLE doctors ADD COLUMN city TEXT, ADD COLUMN district TEXT; (data will be lost)"
+      }
+    ],
+    "dataMigration": {
+      "clubs": {
+        "strategy": "Fuzzy matching approach: (1) Normalize Romanian text (remove diacritics, lowercase) for comparison, (2) Exact match first (LOWER(UNACCENT(name)) = LOWER(UNACCENT(city))), (3) For Bucharest districts, match against sectors with parentId = Bucharest city ID, (4) Derive countyId from cityId's parent relationship, (5) Flag unmatched records for manual review. Handle special cases: 'București' vs 'Bucuresti', sector names like 'Sector 1' vs 'Sectorul 1'.",
+        "sqlExample": "UPDATE clubs SET city_id = (SELECT id FROM locations WHERE type = 'city' AND LOWER(UNACCENT(name)) = LOWER(UNACCENT(clubs.city)) LIMIT 1), county_id = (SELECT parent_id FROM locations WHERE id = (SELECT id FROM locations WHERE type = 'city' AND LOWER(UNACCENT(name)) = LOWER(UNACCENT(clubs.city)) LIMIT 1)) WHERE city_id IS NULL;",
+        "challenges": [
+          "Romanian diacritics variations (București vs Bucuresti)",
+          "Sector naming inconsistencies (Sector 1 vs Sectorul 1)",
+          "City name variations (Cluj-Napoca vs Cluj Napoca)",
+          "Unmatched locations requiring manual review",
+          "Performance of fuzzy matching on large datasets"
+        ]
+      },
+      "doctors": {
+        "strategy": "Same fuzzy matching approach as clubs: (1) Normalize Romanian text for comparison, (2) Exact match first, (3) For Bucharest districts, match against sectors, (4) Derive countyId from cityId, (5) Flag unmatched records. Doctors typically have fewer location variations than clubs.",
+        "sqlExample": "UPDATE doctors SET city_id = (SELECT id FROM locations WHERE type = 'city' AND LOWER(UNACCENT(name)) = LOWER(UNACCENT(doctors.city)) LIMIT 1), county_id = (SELECT parent_id FROM locations WHERE id = (SELECT id FROM locations WHERE type = 'city' AND LOWER(UNACCENT(name)) = LOWER(UNACCENT(doctors.city)) LIMIT 1)) WHERE city_id IS NULL;",
+        "challenges": [
+          "Romanian diacritics variations",
+          "Sector naming for Bucharest doctors",
+          "Unmatched locations requiring manual review",
+          "Smaller dataset than clubs (easier to handle)"
+        ]
+      },
+      "users": {
+        "strategy": "No existing data to migrate - new columns are optional and will be populated as users update their profiles. No migration script needed.",
+        "sqlExample": null,
+        "challenges": null
+      }
+    },
+    "backwardCompatibility": {
+      "approach": "Dual-write pattern: During transition period, write to both old text columns and new foreign key columns. Read from new columns, fallback to old columns if new columns are NULL. Deprecation markers in code comments. Gradual migration of read paths.",
+      "duration": "3 months from Phase 5 completion. Allows time for: (1) All code paths to be updated, (2) Testing in production, (3) Monitoring for issues, (4) Manual review of unmatched locations.",
+      "cleanupPlan": "After 3 months: (1) Verify no code references old columns (grep search), (2) Remove deprecated columns from schema, (3) Drop text columns from database, (4) Update documentation. Keep migration scripts for historical reference."
+    }
+  },
+  "implementationNotes": {
+    "drizzleOrmPatterns": [
+      "Use .references(() => locations.id, { onDelete: 'restrict' }) for foreign key definitions",
+      "Use db.query.clubs.findMany({ with: { city: true, sector: true, county: true } }) for eager loading location data",
+      "Use eq(clubs.cityId, cityId) for filtering by location ID instead of ilike(clubs.city, cityName)",
+      "Use inArray(clubs.cityId, cityIds) for filtering by multiple cities",
+      "Join locations table when displaying location names: const club = await db.query.clubs.findFirst({ with: { city: { columns: { name: true } } } })",
+      "Use sql`UNACCENT()` function for Romanian diacritics normalization in migrations (requires pg_trgm extension)",
+      "Validate location IDs in Zod schemas with async refine to check location exists and has correct type"
+    ],
+    "validationConsiderations": [
+      "Update club validation schema to require cityId (string UUID) instead of city (string)",
+      "Update doctor validation schema to require cityId instead of city",
+      "Add validation that cityId references type='city' location",
+      "Add validation that sectorId (if provided) references type='sector' location and belongs to same city",
+      "Add validation that countyId matches cityId's parent (data integrity check)",
+      "Update LocationDropdown component validation to return location IDs",
+      "Add async validation in Zod schemas to verify location IDs exist in database"
+    ],
+    "queryImpact": [
+      "All WHERE clauses filtering by city must change from ilike(clubs.city, cityName) to eq(clubs.cityId, cityId)",
+      "All WHERE clauses filtering by district must change to eq(clubs.sectorId, sectorId)",
+      "Composite queries like 'sportType + city' must use foreign keys: and(eq(clubs.sportType, sportType), eq(clubs.cityId, cityId))",
+      "Location name display requires JOIN with locations table or eager loading: with: { city: { columns: { name: true } } }",
+      "Search functionality must match against locations.name instead of clubs.city text field",
+      "County-level filtering now possible via countyId without joins: eq(clubs.countyId, countyId)",
+      "Bucharest sector filtering requires checking both cityId (Bucharest) and sectorId",
+      "Location-based radius search can use countyId for initial filtering before calculating distances"
+    ],
+    "componentImpact": [
+      "LocationDropdown component: Update to store/return location IDs instead of text values",
+      "ClubBasicInfoForm: Update to use cityId, sectorId fields and LocationDropdown component",
+      "DoctorLocationContactForm: Update to use cityId, sectorId fields and LocationDropdown component",
+      "ClubProfileEditForm: Update to populate LocationDropdown with current cityId/sectorId values",
+      "ClubCard, DoctorCard: Update to display location names from joined locations table",
+      "ClubDetailsMain: Update to display location hierarchy (county > city > sector) from locations table",
+      "ClubSearchFilters: Update to filter by location IDs instead of text, use LocationDropdown",
+      "SearchResults: Update search logic to match against locations.name via JOIN",
+      "ClubMap: Update to get location name from joined locations table for address display",
+      "All SEO schema components (LocalBusinessSchema, MedicalBusinessSchema, PersonSchema): Update to use location names from joined data",
+      "Sitemap generation: Update to use location IDs for generating location-based club URLs"
+    ]
+  }
+}

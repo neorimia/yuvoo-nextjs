@@ -212,7 +212,7 @@ File: ai-recommendations-cache.service.ts:26-29, src/lib/rate-limit.ts
 
 **Original Issue**: In-memory Map grows unbounded:
 const cache = new Map<string, CacheEntry>();
-const CACHE_TTL_MS = 7 _ 24 _ 60 _ 60 _ 1000;
+const CACHE*TTL_MS = 7 * 24 _ 60 _ 60 \_ 1000;
 
 Risk: Memory exhaustion in production with many unique quiz patterns.
 

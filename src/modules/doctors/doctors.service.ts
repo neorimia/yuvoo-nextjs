@@ -87,8 +87,10 @@ export async function updateDoctor(
     secondarySpecialties: string[];
     credentials: string[];
     languages: string[];
-    city: string;
-    district: string | null;
+    // Phase 6: Location foreign keys (text columns removed)
+    cityId: string;
+    sectorId: string | null;
+    countyId: string;
     address: string | null;
     phone: string | null;
     email: string | null;
@@ -116,7 +118,7 @@ export async function updateDoctor(
     throw new Error("Eroare la actualizarea profilului de doctor");
   }
 
-  return doctorsRepository.mapDbDoctorToDoctor(updatedDoctor);
+  return await doctorsRepository.mapDbDoctorToDoctor(updatedDoctor);
 }
 
 /**

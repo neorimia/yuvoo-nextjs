@@ -35,19 +35,19 @@ export const verifyPaymentSchema = z.object({
 
 /**
  * Report Access Token Schema
+ *
+ * Validates a UUID string directly (not an object)
  */
-export const reportAccessTokenSchema = z.object({
-  accessToken: z
-    .string({
-      required_error: "Token-ul de acces este obligatoriu",
-      invalid_type_error: "Token-ul de acces trebuie să fie un text",
-    })
-    .uuid("Token-ul de acces trebuie să fie un UUID valid"),
-});
+export const reportAccessTokenSchema = z
+  .string({
+    required_error: "Token-ul de acces este obligatoriu",
+    invalid_type_error: "Token-ul de acces trebuie să fie un text",
+  })
+  .uuid("Token-ul de acces trebuie să fie un UUID valid");
 
 /**
  * Type inference from schemas
  */
 export type CreatePaymentInput = z.infer<typeof createPaymentSchema>;
 export type VerifyPaymentInput = z.infer<typeof verifyPaymentSchema>;
-export type ReportAccessTokenInput = z.infer<typeof reportAccessTokenSchema>;
+export type ReportAccessTokenInput = string; // reportAccessTokenSchema is now a string schema

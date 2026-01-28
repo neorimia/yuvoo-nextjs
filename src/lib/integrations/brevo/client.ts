@@ -154,21 +154,46 @@ export async function sendEmail(
   // All retries failed
   // Extract error message with proper type checking
   let errorMessage = "Unknown error occurred";
+  let statusCode: number | undefined;
+
   if (lastError && typeof lastError === "object") {
     const errorWithResponse = lastError as {
-      response?: { body?: { message?: string } };
+      response?: {
+        body?: { message?: string };
+        status?: number;
+        statusCode?: number;
+      };
       message?: string;
     };
+
+    statusCode = errorWithResponse.response?.status || errorWithResponse.response?.statusCode;
     errorMessage =
       errorWithResponse.response?.body?.message || errorWithResponse.message || errorMessage;
+
+    // Provide helpful error messages for common status codes
+    if (statusCode === 401) {
+      errorMessage =
+        "Unauthorized: Check that BREVO_API_KEY is set correctly in your environment variables. The API key may be invalid, expired, or missing required permissions.";
+    } else if (statusCode === 403) {
+      errorMessage =
+        "Forbidden: The API key does not have permission to send emails. Check your Brevo account permissions.";
+    } else if (statusCode === 400) {
+      errorMessage = `Bad Request: ${errorMessage || "Invalid email parameters"}`;
+    } else if (statusCode === 429) {
+      errorMessage = "Rate limit exceeded: Too many requests. Please try again later.";
+    }
   }
 
-  // Log error
+  // Log error with helpful context
   console.error("[Brevo] Failed to send email:", {
     subject,
     recipients,
     error: errorMessage,
+    statusCode,
     attempts: maxRetries + 1,
+    ...(statusCode === 401 && {
+      hint: "Verify BREVO_API_KEY in .env.local matches your Brevo account API key",
+    }),
   });
 
   return {

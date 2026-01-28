@@ -1,7 +1,8 @@
 "use client";
 
-import React from "react";
-import { trackEvent, PostHogEvents } from "@/lib/analytics/tracking";
+import React, { useEffect } from "react";
+import { trackEvent, PostHogEvents, PostHogProperties } from "@/lib/analytics/tracking";
+import { useFeatureFlag, FeatureFlags, FeatureFlagVariants } from "@/lib/analytics/feature-flags";
 import { openClubsContactModal } from "@/lib/clubs-landing-modal";
 import { routes } from "@/lib/routes";
 import Link from "next/link";
@@ -23,17 +24,53 @@ export default function ClubsLandingFinalCTA({
   verifiedCount,
   remainingSpots,
 }: ClubsLandingFinalCTAProps) {
+  // A/B Testing: Final CTA Variant
+  const { value: ctaVariant } = useFeatureFlag(FeatureFlags.CLUBS_LANDING_FINAL_CTA_VARIANT);
+
+  // Get CTA text based on variant
+  const getCTAText = () => {
+    switch (ctaVariant) {
+      case FeatureFlagVariants.CTA_VARIANT_A:
+        return "Rezervă acum - 6 luni gratuite";
+      case FeatureFlagVariants.CTA_VARIANT_B:
+        return "Devino Founding Club acum";
+      default:
+        return `Nu rata șansa - Rezervă acum (doar ${remainingSpots} locuri rămase)`;
+    }
+  };
+
+  // Track variant shown when component mounts
+  useEffect(() => {
+    if (ctaVariant) {
+      trackEvent(PostHogEvents.CLUBS_LANDING_VARIANT_SHOWN, {
+        [PostHogProperties.VARIANT_NAME]: FeatureFlags.CLUBS_LANDING_FINAL_CTA_VARIANT,
+        [PostHogProperties.VARIANT_VALUE]: ctaVariant,
+        [PostHogProperties.VARIANT_LOCATION]: "final_cta",
+      });
+    }
+  }, [ctaVariant]);
+
   const handleCTAClick = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
 
-    // Track event
+    const ctaText = getCTAText();
+
+    // Track event with variant info
+    trackEvent(PostHogEvents.CLUBS_LANDING_VARIANT_CLICKED, {
+      [PostHogProperties.VARIANT_NAME]: FeatureFlags.CLUBS_LANDING_FINAL_CTA_VARIANT,
+      [PostHogProperties.VARIANT_VALUE]: ctaVariant || FeatureFlagVariants.CTA_CURRENT,
+      [PostHogProperties.VARIANT_LOCATION]: "final_cta",
+      [PostHogProperties.CTA_TEXT]: ctaText,
+    });
+
+    // Also track standard CTA click event
     trackEvent(PostHogEvents.CLUBS_LANDING_CTA_CLICKED, {
       location: "final",
-      cta_text: "Devino Founding Club Gratuit",
+      cta_text: ctaText,
     });
 
     // Open modal
-    openClubsContactModal("final", "Devino Founding Club Gratuit");
+    openClubsContactModal("final", ctaText);
   };
 
   return (
@@ -50,12 +87,6 @@ export default function ClubsLandingFinalCTA({
 
                 {/* Location & Availability Info */}
                 <div className="bd-clubs-landing-final-cta-info-wrapper mb-40">
-                  <div className="bd-clubs-landing-final-cta-info-item">
-                    <span>📍</span>
-                    <span>
-                      <strong>Oraș:</strong> București
-                    </span>
-                  </div>
                   <div className="bd-clubs-landing-final-cta-spots-counter">
                     <span>🏅</span>
                     <div className="bd-clubs-landing-final-cta-spots-counter-text">
@@ -86,24 +117,28 @@ export default function ClubsLandingFinalCTA({
                   <div className="mb-30">
                     <button type="button" className="bd-btn mx-auto" onClick={handleCTAClick}>
                       <span className="bd-btn-inner">
-                        <span className="bd-btn-normal">Devino Founding Club</span>
-                        <span className="bd-btn-hover">Devino Founding Club</span>
+                        <span className="bd-btn-normal">{getCTAText()}</span>
+                        <span className="bd-btn-hover">{getCTAText()}</span>
                       </span>
                     </button>
                   </div>
                 )}
                 {remainingSpots === 0 && (
                   <>
-                    <p className="text-center mb-30">
+                    <p className="text-center mb-3">
                       <span className="bd-clubs-landing-final-cta-subtitle-small">
-                        Nu mai sunt locuri disponibile. Vezi oferta completa aici:
+                        Nu mai sunt locuri disponibile în programul Founding Club.
                       </span>
                     </p>
+                    <p className="text-center mb-30" style={{ fontSize: "16px", color: "#424242" }}>
+                      Upgrade la Premium pentru acces nelimitat la cereri și beneficii exclusive (99
+                      lei/lună sau 990 lei/an)
+                    </p>
                     <div className="mb-30">
-                      <Link href={routes.clubs.pricing} className="bd-btn mx-auto">
+                      <Link href={routes.club.premium} className="bd-btn mx-auto">
                         <span className="bd-btn-inner">
-                          <span className="bd-btn-normal">Vezi oferta completa</span>
-                          <span className="bd-btn-hover">Vezi oferta completa</span>
+                          <span className="bd-btn-normal">Upgrade la Premium</span>
+                          <span className="bd-btn-hover">Upgrade la Premium</span>
                         </span>
                       </Link>
                     </div>

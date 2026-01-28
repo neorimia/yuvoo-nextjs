@@ -1,0 +1,207 @@
+{
+  "summary": {
+    "recommendation": "monthly_base_with_annual_discount",
+    "confidence": "high",
+    "keyReasoning": "Romanian B2B SaaS market shows strong preference for annual subscriptions with 14-20% discounts, while small businesses (including sports clubs) have significant cash flow concerns preferring lower upfront costs. Base monthly price of 99 lei/month sits below the 100 lei psychological threshold, aligns with market entry-level SaaS (Microsoft 365: 48 RON, Netart: 100 RON), and provides break-even at ~3.3 leads/month vs pay-per-lead. Annual option at 990 lei/year (17% discount, pay for 10 months get 2 months free) aligns with market standards (14-20% discounts) while providing clear value proposition. This model accommodates different cash flow preferences: monthly for flexibility, annual for value. Market data shows Romanian SMEs prefer cash payments and have payment terms averaging 36 days, suggesting monthly option reduces friction for initial adoption."
+  },
+  "marketAnalysis": {
+    "romanianB2BSaaS": {
+      "typicalPricing": "Romanian B2B SaaS platforms show tiered pricing models with clear yearly discounts. Netart.com offers 100-400 RON/month with ~14% savings for annual plans. Banqup provides 20% savings for annual vs monthly billing. Microsoft 365 ranges 48-110 RON/month or 485-1100 RON/year. BRILU (Romanian marketing SaaS) charges 99-279€/month or 790-2290€/year. Annual subscriptions consistently offer 14-20% discount over monthly rates.",
+      "yearlyVsMonthly": "Annual subscriptions are strongly preferred in Romanian B2B SaaS market, with platforms offering 14-20% discounts to incentivize yearly commitments. This pattern suggests market expectation of annual billing with cost savings. However, monthly options remain available for flexibility, particularly for smaller businesses testing services.",
+      "pricePoints": [
+        {
+          "range": "100-400 RON/month",
+          "frequency": "monthly",
+          "examples": ["Netart.com (database/infrastructure SaaS)"]
+        },
+        {
+          "range": "1,200-4,800 RON/year",
+          "frequency": "yearly",
+          "examples": ["Netart.com annual plans (~14% discount)"]
+        },
+        {
+          "range": "48-110 RON/month",
+          "frequency": "monthly",
+          "examples": ["Microsoft 365 Personal/Family/Premium"]
+        },
+        {
+          "range": "485-1,100 RON/year",
+          "frequency": "yearly",
+          "examples": ["Microsoft 365 annual plans"]
+        },
+        {
+          "range": "99-279€/month (~500-1,400 RON/month)",
+          "frequency": "monthly",
+          "examples": ["BRILU (Romanian marketing AI platform)"]
+        },
+        {
+          "range": "790-2,290€/year (~4,000-11,500 RON/year)",
+          "frequency": "yearly",
+          "examples": ["BRILU annual plans"]
+        }
+      ]
+    },
+    "sportsClubIndustry": {
+      "averageRevenue": "Top Romanian football clubs show high turnovers but low profitability. U Craiova 1948 reported 22.57% revenue growth in 2024, but most clubs face financial challenges. Many clubs are organized as NGOs relying on public budget donations, lacking long-term sustainability.",
+      "priceSensitivity": "high",
+      "spendingPatterns": "Sports clubs in Romania are typically small businesses with limited marketing budgets. They focus on social media promotion (Facebook, Instagram, TikTok) and rely heavily on sponsorships. Marketing spend is constrained by cash flow management challenges.",
+      "paymentPreferences": "Romanian small businesses show strong preference for cash payments (55% of B2B transactions). Average payment terms are 36 days. Cash flow management is critical - 85% of SMEs cite poor cash flow as cause of business failure. Businesses prefer lower upfront costs to reduce liquidity risks."
+    },
+    "competitiveLandscape": {
+      "similarPlatforms": [
+        {
+          "name": "VreaULeaduri.ro",
+          "pricing": "Contact-based pricing (not publicly listed)",
+          "model": "both",
+          "notes": "Romanian AI-first lead generation agency specializing in B2B, email outreach, LinkedIn automation"
+        },
+        {
+          "name": "Lead Mate",
+          "pricing": "15-30+ guaranteed leads/month",
+          "model": "monthly",
+          "notes": "No contract, 1 month commitment, guaranteed lead packages"
+        },
+        {
+          "name": "GIKO Romania",
+          "pricing": "14-day free trial, then subscription-based",
+          "model": "monthly",
+          "notes": "All-in-one lead management platform, used by 300+ businesses across 15+ countries"
+        },
+        {
+          "name": "SellNet (RISCO)",
+          "pricing": "Database access with free trial",
+          "model": "both",
+          "notes": "3.5M companies database, 3.2M company representatives, filtering by industry/revenue/employees"
+        }
+      ],
+      "marketGaps": "Most lead generation platforms focus on B2B sales leads rather than B2C parent leads for sports clubs. Yuvoo's focus on pre-qualified parents who already know the sport fits their child is unique. Limited direct competition in sports club lead generation space in Romania."
+    }
+  },
+  "pricingAnalysis": {
+    "yearly199Lei": {
+      "pros": [
+        "Exceptional value perception: ~16.58 lei/month equivalent",
+        "Aligns with Romanian B2B SaaS annual discount pattern (14-20%)",
+        "Reduces payment friction (single annual transaction)",
+        "Better cash flow for Yuvoo (upfront payment)",
+        "Lower churn risk (annual commitment)",
+        "Below psychological 200 lei threshold",
+        "Matches small business preference for lower recurring costs"
+      ],
+      "cons": [
+        "Very low price point may raise quality concerns",
+        "Significant discount vs monthly (82% discount - 1,089 lei/year for 11 months) may devalue service",
+        "High upfront cost for cash-strapped clubs",
+        "Lower customer lifetime value if clubs churn after year",
+        "May attract price-sensitive customers with low engagement"
+      ],
+      "conversionImpact": "neutral",
+      "retentionImpact": "positive"
+    },
+    "monthly99Lei": {
+      "pros": [
+        "Lower barrier to entry",
+        "Better cash flow for clubs (monthly payments)",
+        "Aligns with Romanian preference for cash/flexible payments",
+        "Easier to test service before annual commitment",
+        "Below 100 lei psychological threshold",
+        "Competitive with market entry-level SaaS (Microsoft 365: 48 RON, Netart: 100 RON)",
+        "Break-even at ~3.3 leads/month vs pay-per-lead (3€ = ~15 lei)",
+        "More accessible for cash-strapped clubs",
+        "No upfront commitment required"
+      ],
+      "cons": [
+        "Higher churn risk (monthly cancellations easier)",
+        "More payment processing overhead",
+        "Requires consistent monthly value delivery",
+        "Lower customer lifetime value if clubs churn quickly"
+      ],
+      "conversionImpact": "positive",
+      "retentionImpact": "negative",
+      "note": "Base price - recommended as entry point"
+    },
+    "comparison": {
+      "monthlyBasePrice": 99,
+      "monthlyAnnualCost": 1188,
+      "annualPrice": 990,
+      "annualMonthlyEquivalent": 82.5,
+      "annualMonthsPaid": 10,
+      "annualMonthsFree": 2,
+      "annualSavings": 198,
+      "discountPercentage": 17,
+      "breakEvenAnalysis": "Monthly model (99 lei/month) requires 3.3 leads/month to justify cost vs pay-per-lead (3€ = ~15 lei per lead). Annual model (990 lei/year = 82.5 lei/month) requires 2.75 leads/month to justify cost vs pay-per-lead. For clubs receiving 3+ leads/month, both models provide value, but annual provides better value (17% discount, 2 months free). Annual pricing equivalent to paying for 10 months and getting 12 months. Monthly base price (99 lei) balances accessibility (below 100 threshold) with value perception."
+    }
+  },
+  "psychologicalFactors": {
+    "99LeiThreshold": {
+      "monthlyPerception": "99 lei/month sits below 100 lei psychological threshold, creating perception of being in 'under 100' category. This threshold-crossing effect makes price appear significantly more affordable than 100+ alternatives. More powerful for conversion than 200 lei threshold.",
+      "annualPerception": "990 lei/year sits just below 1,000 lei psychological threshold, making it appear more affordable than 1,000+ alternatives. Equivalent monthly cost of 82.5 lei reinforces value perception (well below 100 threshold).",
+      "valuePerception": "high"
+    },
+    "paymentBehavior": {
+      "romanianBusinesses": "Romanian small businesses show strong preference for cash payments (55% of B2B transactions) to reduce liquidity risks. Average payment terms are 36 days. Cash flow management is critical - 85% of SMEs cite poor cash flow as cause of business failure.",
+      "cashFlowConsiderations": "Small sports clubs face significant cash flow challenges. Monthly payments (99 lei) provide low barrier to entry and flexibility. Annual payments (990 lei) require budget certainty but provide clear savings (17% discount, 2 months free). Clubs prefer lower recurring costs and flexible payment terms.",
+      "commitmentLevel": "Annual commitment (990 lei/year) requires higher initial commitment but provides clear value (17% discount). Monthly commitment (99 lei/month) reduces commitment barrier but increases cancellation risk. Romanian businesses' cash flow concerns favor monthly flexibility, but annual option provides clear value proposition."
+    }
+  },
+  "recommendations": {
+    "primary": {
+      "model": "monthly_base_with_annual_discount",
+      "monthlyPrice": 99,
+      "annualPrice": 990,
+      "rationale": "Offer monthly subscription at 99 lei/month as base price, with annual option at 990 lei/year (17% discount, pay for 10 months get 2 months free). Monthly model positioned as 'Flexible' option at 99 lei/month (below 100 lei psychological threshold) for clubs preferring lower upfront costs and flexibility. Annual model positioned as 'Best Value' / 'Recommended' with clear savings (198 lei/year, 2 months free), targeting clubs with budget certainty. This model accommodates different cash flow preferences: monthly for flexibility and testing, annual for value and retention. The 99 lei/month base price balances accessibility (below 100 threshold), market competitiveness (aligns with Microsoft 365 at 48 RON, Netart entry at 100 RON), and value perception (break-even at ~3.3 leads/month vs pay-per-lead). Annual provides clear value (17% discount) that aligns with market standards (14-20% discounts) while remaining accessible."
+    },
+    "alternative": {
+      "model": "monthly_only",
+      "price": 99,
+      "rationale": "If offering only one model, monthly at 99 lei/month is recommended. This provides maximum accessibility (below 100 lei threshold), aligns with market entry-level SaaS pricing, and requires minimal upfront commitment. However, offering both monthly and annual options maximizes conversion by accommodating different cash flow preferences while providing clear value proposition for annual commitment."
+    },
+    "implementation": {
+      "suggestions": [
+        "Display both options prominently with annual as 'Recommended' or 'Best Value'",
+        "Show annual savings calculation: 'Economisește 198 lei/an cu planul anual' (Save 198 lei/year - pay for 10 months, get 12)",
+        "Offer 7-14 day free trial for monthly plan to reduce friction",
+        "Consider 'Founding Club' discount for first 100 clubs (e.g., 149 lei/year for first year)",
+        "Add 'Most Popular' badge to yearly option",
+        "Include 'Cancel anytime' messaging for monthly plan",
+        "Show lead value calculation: 'Valoare minimă: 5 leaduri × 3€ = 15€/lună'",
+        "Consider quarterly option (e.g., 599 lei/quarter) as middle ground",
+        "Implement annual auto-renewal with email reminder 30 days before",
+        "Add social proof: 'X cluburi au ales planul anual'"
+      ],
+      "risks": [
+        "Monthly price (99 lei) may have high churn if value not immediately clear",
+        "Annual price (990 lei) may be barrier for cash-strapped clubs despite clear savings",
+        "17% discount between models (990 lei/year vs 1,188 lei/year monthly) aligns with market standards but may need clear communication",
+        "Cash flow constraints may prevent annual adoption despite clear savings (198 lei/year)",
+        "Need to clearly communicate value proposition to justify monthly cost"
+      ],
+      "testingApproach": "A/B test both models with equal promotion for 3 months. Track: conversion rates, churn rates, customer lifetime value, lead generation usage patterns, payment method preferences. Analyze which model attracts higher-quality, more engaged clubs. Consider geographic segmentation (Bucharest vs other cities) as payment preferences may vary. Monitor feedback on pricing perception and adjust positioning accordingly."
+    }
+  },
+  "sources": {
+    "websites": [
+      "https://netart.com/ro/pricing/saas-pricing",
+      "https://www.banqup.ro/en/imm/preturi",
+      "https://www.microsoft.com/ro-ro/microsoft-365/buy/compare-all-microsoft-365-products",
+      "https://brilu.ai/ro/preturi/",
+      "https://vreauleaduri.ro/",
+      "https://leadmate.io/en/",
+      "https://giko.ro/"
+    ],
+    "articles": [
+      "B2B payment practices trends Romania 2023-2024 (Atradius)",
+      "Romania: cash dominates as businesses shun trade credit (Atradius)",
+      "A Financial Analysis of the Performance Achieved by Top Romanian Football Clubs (IBIMA)",
+      "An Analysis of the Social Media Promotion Strategies of Romanian SuperLiga Football Teams (Springer)",
+      "Marketing and Management Steps to be taken in setting a Sport Club in Romania"
+    ],
+    "studies": [
+      "Psychological pricing: Myth or reality? The impact of nine-ending prices (ScienceDirect)",
+      "The Threshold-Crossing Effect: Just-Below Pricing Discourages Consumers to Upgrade (Journal of Consumer Research)",
+      "State of in-app subscriptions 2024 (Adapty.io, RevenueCat)",
+      "Statement of Cash Flows for Small and Medium-Sized Enterprises in Romania (DOAJ)"
+    ],
+    "notes": "Research conducted January 2026. Market data reflects 2023-2024 patterns. Romanian B2B SaaS market shows consistent annual discount patterns (14-20%). Sports clubs face significant cash flow challenges. Pricing structure: Monthly base at 99 lei/month (below 100 lei threshold), annual discount at 990 lei/year (17% discount, pay for 10 months get 2 months free). This aligns with market standards while providing clear value proposition. Limited direct competition in sports club lead generation space."
+  }
+}

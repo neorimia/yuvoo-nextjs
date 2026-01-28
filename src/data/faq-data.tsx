@@ -362,8 +362,8 @@ export const faqCategories: FAQCategory[] = [
             </Link>
             , primele 15 cluburi din fiecare oraș primesc profil complet gratuit pentru 6 luni
             (valoare €180). După aceea, dacă Yuvoo îți aduce părinți potriviți, vei putea continua
-            cu un abonament clar și transparent (începând de la €29/lună). Dacă nu funcționează → nu
-            plătești nimic. Nu există obligații sau contracte pe termen lung.
+            cu un abonament clar și transparent (începând de la 99 lei/lună). Dacă nu funcționează →
+            nu plătești nimic. Nu există obligații sau contracte pe termen lung.
           </>
         ),
         category: "Parteneri și Verificare",
@@ -403,11 +403,11 @@ export const faqCategories: FAQCategory[] = [
             <Link href={routes.clubs.landing} className="text-primary">
               Founding Club
             </Link>
-            , primești: profil complet gratuit 6 luni (valoare €180), badge &quot;Verified Founding
-            Club&quot; pentru încredere instant, pagină publică optimizată SEO (poți folosi ca site
-            web propriu), prioritate în rezultate la lansarea oficială, părinți pre-calificați (nu
-            lead-uri random), analiză și statistici despre vizitatori, și suport dedicat de la
-            echipa Yuvoo.
+            , primești: profil complet gratuit 6 luni (valoare echivalentă cu 594 lei), badge
+            &quot;Verified Founding Club&quot; pentru încredere instant, pagină publică optimizată
+            SEO (poți folosi ca site web propriu), prioritate în rezultate la lansarea oficială,
+            părinți pre-calificați (nu lead-uri random), analiză și statistici despre vizitatori, și
+            suport dedicat de la echipa Yuvoo.
           </>
         ),
         category: "Parteneri și Verificare",

@@ -51,5 +51,6 @@
       "source": "/robots.txt",
       "destination": "/api/robots"
     }
-  ]
+  ],
+  "crons": []
 }

@@ -19,6 +19,10 @@ export interface Club {
       lat: number;
       lng: number;
     };
+    // Phase 5: Location foreign keys (for filtering and joins)
+    cityId?: string;
+    sectorId?: string;
+    countyId?: string;
   };
   ageGroups: number[]; // e.g., [4, 5, 6, 7, 8]
   levels: string[]; // e.g., ["beginner", "intermediate", "advanced"]
@@ -49,6 +53,7 @@ export interface Club {
   verificationDocuments?: string[]; // From schema: verification_documents (text array, default '{}')
   profileComplete: boolean; // From schema: profile_complete (notNull, default false)
   rating: number; // From schema: rating (integer, default 0)
+  isPremium?: boolean; // Premium club status (from premium_club_status table)
   createdAt: Date; // From schema: created_at (notNull, defaultNow)
   updatedAt: Date; // From schema: updated_at (notNull, defaultNow)
 }
@@ -56,8 +61,10 @@ export interface Club {
 export interface ClubSearchFilters {
   sportId?: string;
   age?: number;
-  city?: string;
-  district?: string;
+  // Phase 6: Only ID-based filters (text columns removed)
+  cityId?: string; // Location ID filter (required for city filtering)
+  sectorId?: string; // Sector ID filter (for Bucharest)
+  countyId?: string; // County ID filter (for county-wide searches)
   level?: string;
   verified?: boolean;
   featured?: boolean;

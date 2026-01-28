@@ -53,6 +53,7 @@
 ### Feature Completion Status
 
 - ✅ **Quiz System**: 100% complete - All phases done, production ready
+- ✅ **Parent Pricing - Quiz Report Payment**: 100% complete - All 8 phases implemented (Email Gate, Teaser Page, Paywall, Complete Report, PDF Generation, Email Notifications, Polish & Testing), one-time payment (39 lei), persistent access, production ready
 - ✅ **Club Directory**: 100% complete - Search, filters, booking, verification
 - ✅ **Doctor Directory**: 100% complete - Search, filters, appointments, verification
 - ✅ **Booking System**: 100% complete - Club trials, doctor consultations, email notifications
@@ -69,6 +70,7 @@
 - ✅ **Phase 2 Reusable Components & Patterns**: 100% complete - 3 shared components/hooks extracted (RecentActivityFeed, AccountSettingsForm, useEntityFilters hook) - all complete, club dashboard updated, ready for doctor portal implementation
 - ✅ **Phase 3 Utilities**: 100% complete - 2 utilities extracted (status-badges, date-formatting) - all complete, all components updated to use centralized utilities, consistent Romanian formatting across app
 - ✅ **Doctor Portal Complete**: 100% complete - All 5 phases implemented (Dashboard Overview, Consultation Management, Profile Editing, Availability Calendar, Settings) - all pages use shared components, consistent UI/UX with club portal, all text in Romanian, Next.js 16 Cache Components pattern, production ready
+- ✅ **Club Monetization - Lead Generation System**: 100% complete - Phase 1-8 complete (Database Schema, Service Layer, Lead Submission Flow, Club Notification & Payment Flow, Lead Expiration & Reminder System, Premium Club Benefits, Integration & Testing, Guest Payment Flow), production ready
 - ✅ **Security Audit**: 100% complete - All security measures implemented and verified:
   - Rate limiting (auth, uploads, bookings, search)
   - Input validation (Zod schemas across all Server Actions)
@@ -118,6 +120,13 @@
 - [x] System patterns documentation
 - [x] Product context documentation
 - [x] CLAUDE.md comprehensive project guide (✅ improved with table of contents, expanded examples, testing guidelines, troubleshooting, quick reference)
+- [x] Prompt File Management System (January 2026) ✅
+  - [x] Established process for saving implementation prompts as separate files in `prompts/` folder
+  - [x] Updated `promptingSystem.md` with "Prompt File Management" section
+  - [x] Moved Guest Club Payment Flow prompt to `prompts/guest-club-payment-flow-implementation-plan.md`
+  - [x] Updated "Usage Instructions" to include prompt file saving step
+  - [x] Added prompt file references to "Example Plans" section
+  - [x] Benefits: Keeps standard focused, easier to find/reference, better version control, enables reuse
 
 ### Planning
 
@@ -2555,3 +2564,255 @@ The quiz system is production-ready with full functionality, security, optimizat
   - ✅ Components: ClubBookingList, ClubBookingCard, ClubBookingDetailModal (now use shared components)
   - ✅ All using Next.js 16 Cache Components with private cache
   - ✅ Role-based access control (club_admin only)
+- ✅ **Club Monetization - Lead Generation System**: 100% complete (January 2026)
+  - ✅ **Phase 1: Database Schema & Core Models** - Complete
+    - Leads table, premium_club_status table, lead_payments table created
+    - TypeScript types and Zod schemas implemented
+    - Migrations run successfully
+  - ✅ **Phase 2: Service Layer & Repository** - Complete
+    - Lead repository and service implemented with expiration logic
+    - Premium club repository and service implemented with date validation
+    - Lead payment service implemented with Stripe integration
+    - All business logic with proper validation
+  - ✅ **Phase 3: Lead Submission Flow (Parent Side)** - Complete
+    - Lead submission modal component created (LeadSubmissionModal.tsx)
+    - Lead submission button component created (LeadSubmissionButton.tsx)
+    - Server action implemented with PostHog tracking (LEAD_SUBMITTED event)
+    - Contact info hiding logic implemented for non-premium clubs
+  - ✅ **Phase 4: Club Notification & Payment Flow** - Complete
+    - Lead notification email templates created (lead-notification-email.tsx, lead-reminder-email.tsx, lead-expired-email.tsx, lead-accepted-email.tsx)
+    - Lead email service implemented (lead-emails.service.ts)
+    - Lead management dashboard created (`/club/dashboard/leaduri`)
+    - Lead detail page created (`/club/dashboard/leaduri/[leadId]`)
+    - Pay-per-lead payment flow implemented (3€ via Stripe Payment Intents - one-time payments)
+    - ✅ Premium upgrade page fully implemented (`/club/dashboard/premium`)
+    - ✅ Premium subscriptions migrated to Stripe Subscriptions (automatic renewals)
+      - Monthly subscription: 99 lei/month
+      - Yearly subscription: 990 lei/year (pay for 10 months, get 12)
+      - Uses Stripe Checkout Sessions for subscription creation
+      - Webhook handles subscription events (checkout.session.completed, invoice.payment_succeeded, customer.subscription.updated, customer.subscription.deleted)
+      - Dashboard displays subscription type and next billing date
+  - ✅ **Phase 5: Lead Expiration & Reminder System** - Complete
+    - Expiration service implemented with alternative club suggestions
+    - Reminder service implemented (48h after creation)
+    - Expiration cron job created (`/api/cron/expire-leads`) - runs daily at midnight
+    - Reminder cron job created (`/api/cron/send-lead-reminders`) - runs every hour
+    - Vercel cron configuration added to vercel.json
+    - Email templates integrated
+  - ✅ **Phase 6: Premium Club Benefits Implementation** - Complete
+    - Premium badge component created (PremiumBadge.tsx) with variants and sizes
+    - Club listing prioritizes premium clubs (premium first, then others)
+    - Club detail page shows premium badge and handles contact visibility
+    - ClubCard component shows premium badge
+    - Club admin dashboard shows premium status with expiration date, subscription type, and next billing date
+    - Premium status fetched and validated with date checks
+    - Subscription type tracking (MONTHLY/YEARLY) with billing period and amount
+  - ✅ **Phase 7: Integration & Testing** - Complete
+    - ✅ PostHog tracking for all events implemented
+      - ✅ Lead submission tracking (`LEAD_SUBMITTED`)
+      - ✅ Lead view tracking (`LEAD_VIEWED`)
+      - ✅ Pay-per-lead payment tracking (`LEAD_PAYMENT_INITIATED`, `LEAD_PAYMENT_COMPLETED`)
+      - ✅ Premium upgrade tracking (`PREMIUM_UPGRADE_INITIATED`, `PREMIUM_UPGRADE_COMPLETED`)
+      - ✅ Lead expiration tracking (`LEAD_EXPIRED`)
+    - ✅ Error handling reviewed and improved
+      - ✅ All error messages in Romanian
+      - ✅ Proper HTTP status codes (401, 403, 404, 500)
+      - ✅ Comprehensive logging for debugging
+      - ✅ Non-blocking error handling for tracking/emails
+    - ✅ Documentation created
+      - ✅ Complete system documentation (`docs/LEAD_SYSTEM_DOCUMENTATION.md`)
+      - ✅ Cron jobs setup documented
+      - ✅ PostHog events documented
+      - ✅ Testing checklist provided
+      - ✅ README updated with lead system feature
+  - ✅ **Phase 8: Guest Payment Flow** - Complete (January 2026)
+    - ✅ **Phase 1: Database Schema & Types** - Complete
+      - ✅ Added `isGuestPayment` boolean field to `lead_payments` table (default false)
+      - ✅ Added `guestEmail` text field to `lead_payments` table (nullable)
+      - ✅ Updated `LeadPayment` TypeScript interface
+      - ✅ Updated repository mapping functions
+      - ✅ Created database migration (`drizzle/0013_square_maria_hill.sql`)
+      - ✅ Added indexes for guest payment queries
+    - ✅ **Phase 2: Guest Payment Service Layer** - Complete
+      - ✅ Created `createGuestLeadPaymentIntent()` function
+        - Accepts leadId, clubId, guestEmail
+        - Creates Stripe Payment Intent with guest metadata
+        - Creates payment record with `isGuestPayment: true` and `guestEmail`
+      - ✅ Created `processGuestLeadPayment()` function
+        - Called by webhook when guest payment succeeds
+        - Updates payment status
+        - Sends email with parent information to guest email
+        - Unlocks lead (accepts lead with payment info)
+      - ✅ Created `sendGuestPaymentSuccessEmail()` function
+        - Sends parent contact information to guest email
+        - Uses React Email template (`guest-payment-success-email.tsx`)
+        - Includes lead details and parent contact info
+      - ✅ Updated webhook handler to detect and process guest payments
+        - Checks `isGuestPayment` flag in payment metadata
+        - Routes to `processGuestLeadPayment()` for guest payments
+    - ✅ **Phase 3: Guest Payment Pages & Components** - Complete
+      - ✅ Created guest payment page (`/cereri/[leadId]/plata-guest`)
+        - Public route (no auth required)
+        - Server Component with public cache
+        - Shows lead preview (sport, age, location, message - no contact info)
+        - Email collection form (required for guest payments)
+        - Payment form with Stripe Elements
+      - ✅ Created `GuestLeadPayment.tsx` component
+        - Client component for payment form
+        - Email input field (required)
+        - Stripe Elements integration
+        - Payment submission handling
+        - Success/error states
+      - ✅ Created guest payment success page (`/cereri/[leadId]/plata-guest/success`)
+        - Displays parent contact information
+        - Shows payment confirmation
+        - Validates payment intent ID from URL params
+        - Option to create account (optional CTA)
+      - ✅ Created guest payment email template (`guest-payment-success-email.tsx`)
+        - React Email template
+        - Includes parent contact information
+        - Lead details summary
+        - Romanian language
+    - ✅ **Phase 4: Server Actions & Routes** - Complete
+      - ✅ Created `createGuestLeadPaymentAction()` Server Action
+        - Validates lead ID and email (Zod schema)
+        - Validates lead exists and is not expired
+        - Prevents duplicate payments
+        - Creates payment intent via service layer
+        - Returns client secret
+      - ✅ Created `getGuestPaymentSuccessData()` Server Action
+        - Retrieves parent information for successful guest payment
+        - Validates payment token/session ID
+        - Returns lead and parent contact info
+      - ✅ Added routes to `lib/routes.ts`:
+        - `routes.leads.guestPayment(leadId)` → `/cereri/[leadId]/plata-guest`
+        - `routes.leads.guestPaymentSuccess(leadId)` → `/cereri/[leadId]/plata-guest/success`
+    - ✅ **Phase 5: Security & Validation** - Complete
+      - ✅ Added rate limiting for guest payment attempts
+        - 5 attempts per hour per IP/email combination
+        - Uses existing rate limiting utility (`@/lib/rate-limit`)
+        - Romanian error messages with reset time
+      - ✅ Added IP address tracking for fraud prevention
+        - Extracts client IP from headers (supports `x-forwarded-for`, `cf-connecting-ip`, `x-real-ip`)
+        - Includes IP address in PostHog tracking
+        - Tracks `clientIp` and `rateLimitRemaining` in analytics events
+      - ✅ Email validation (Zod schema) - Already implemented
+      - ✅ Lead expiration check - Already implemented
+      - ✅ Duplicate payment prevention - Already implemented
+      - ✅ Payment token/session validation for success page - Already implemented
+    - ✅ **Phase 6: Integration & Testing** - Complete
+      - ✅ Webhook handler processes guest payments correctly
+        - Detects guest payments via `isGuestPayment` metadata
+        - Routes to `processGuestLeadPayment()` for guest payments
+        - Tracks completion with `isGuestPayment` flag in PostHog
+      - ✅ PostHog tracking for guest payment events
+        - Payment initiation: `LEAD_PAYMENT_INITIATED` with `isGuestPayment: true`
+        - Payment completion: `LEAD_PAYMENT_COMPLETED` with `isGuestPayment` flag
+        - Payment failure: `PAYMENT_FAILED` with guest payment context
+        - Includes: `clientIp`, `rateLimitRemaining`, `guestEmail` (as distinctId)
+      - ✅ Error cases handled
+        - Expired lead: Checked before payment intent creation
+        - Duplicate payment: Checked before payment intent creation
+        - Invalid email: Zod validation with Romanian error messages
+        - Rate limiting: 5 attempts per hour with Romanian error message
+        - Payment failure: Webhook handles and updates status
+        - Invalid payment intent: Success page validates before displaying data
+  - **Key Features**:
+    - Parents can submit leads for non-premium clubs
+    - Clubs receive email notifications (without contact info)
+    - Clubs can pay per lead (3€) to unlock contact info (one-time Payment Intent)
+    - **Guest Payment Flow**: Clubs without accounts can pay 3€ via public URL (`/cereri/[leadId]/plata-guest`)
+      - No authentication required
+      - Email collection form (required)
+      - Stripe Elements payment form
+      - Email delivery with parent contact information after payment
+      - Success page displaying parent information (alternative to email)
+      - Rate limiting: 5 attempts per hour per IP/email
+      - IP address tracking for fraud prevention
+    - Clubs can upgrade to Premium (99 lei/month or 990 lei/year) for unlimited leads
+    - Premium subscriptions use Stripe Subscriptions for automatic renewals
+    - Pay-per-lead remains as one-time Payment Intents (no subscription)
+    - Leads expire after 5 days with alternative club suggestions
+    - Reminders sent after 48h
+    - Premium clubs show badge and contact info
+    - Premium clubs appear first in listings
+    - Dashboard displays subscription type (monthly/yearly) and next billing date
+  - **Files Created/Modified**:
+    - New: PremiumBadge.tsx, expire-leads cron route, send-lead-reminders cron route, LEAD_SYSTEM_DOCUMENTATION.md, migrate-existing-premium-subscriptions.ts, guest-lead-payments.ts (server actions), GuestLeadPayment.tsx, guest-payment-success-email.tsx, guest payment pages (plata-guest/page.tsx, success/page.tsx), drizzle/0013_square_maria_hill.sql (guest payment fields migration)
+    - Modified: clubs.service.ts, clubs.repository.ts, clubs.search.ts, clubs.types.ts, leads.service.ts, leads.repository.ts, lead-payment.service.ts, premium-club.service.ts, premium-club.repository.ts, ClubCard.tsx, ClubDetailsMain.tsx, ClubDashboardContent.tsx, PremiumUpgrade.tsx, ClubsLandingPricing.tsx, lead-payments.ts (server actions), webhook/route.ts, vercel.json, lead detail page (PostHog tracking), README.md, schema.ts (subscription_type enum, billing fields, guest payment fields), lead-emails.service.ts, lead-payment.repository.ts, types/leads.ts, routes.ts, rate-limit.ts
+  - **Status**: Phase 1-8 Complete ✅ | Stripe Subscriptions Implementation Complete ✅ | Guest Payment Flow Complete ✅ | Ready for Production ✅
+- ✅ **Parent Pricing - Quiz Report Payment System**: 100% complete (January 2026)
+  - ✅ **Phase 1: Analysis & Architecture Design** - Complete
+    - Architecture document created (`docs/PRICING_PARENTS_PHASE1_ANALYSIS.md`)
+    - Payment flow architecture designed
+    - Stripe selected as payment provider
+    - Report structure designed
+  - ✅ **Phase 2: Database Schema & Payment Integration** - Complete
+    - `payments` table created (id, userId, quizId, amount, currency, status, paymentProvider, paymentId)
+    - `report_access` table created (id, userId, quizId, paymentId, accessToken, expiresAt)
+    - `email` and `location` fields added to `quizzes` table
+    - Stripe integration complete (payment service, repository, webhook handler)
+    - Payment Server Actions created with Zod validation
+  - ✅ **Phase 3: Email Gate & Teaser Page** - Complete
+    - Email collection page created (`/chestionar/email/[quizId]`)
+    - EmailCollectionForm component created
+    - Teaser page created (`/chestionar/teaser/[quizId]`)
+    - Single sport recommendation displayed (minimal details)
+    - Email collection Server Action created
+    - Teaser email sent via Brevo (React Email template)
+  - ✅ **Phase 4: Paywall & Payment Flow** - Complete
+    - Paywall page created (`/chestionar/paywall/[quizId]`)
+    - Stripe Elements integration (PaymentFormWrapper, PaymentForm)
+    - Payment success page (`/chestionar/payment/success/[quizId]`)
+    - Payment failure page (`/chestionar/payment/failure/[quizId]`)
+    - Payment status management (webhook updates)
+    - Access token generation and storage
+    - Payment success email (React Email template)
+  - ✅ **Phase 5: Complete Report Page** - Complete
+    - Report page created (`/chestionar/raport/[accessToken]`)
+    - Access token verification implemented
+    - All 7 content sections implemented:
+      1. Top 2-3 sport recommendations (with compatibility scores)
+      2. Why these sports are suitable
+      3. Physical and emotional benefits
+      4. Sports to avoid
+      5. Ideal age for starting
+      6. Next steps
+      7. Local club suggestions
+    - All report components created (ReportHeader, SportRecommendationsSection, SportExplanationsSection, SportBenefitsSection, SportsToAvoidSection, AgeGuidanceSection, NextStepsSection, LocalClubsSection)
+    - Professional styling (Bootstrap 5.3.3 + SCSS)
+    - Print styles for PDF generation
+  - ✅ **Phase 6: PDF Generation** - Complete
+    - PDF generation service created (Puppeteer with @sparticuz/chromium)
+    - PDF download endpoint (`/api/reports/[accessToken]/download`)
+    - PDF template matches report page layout
+    - Romanian fonts supported
+    - PDF download button on report page
+  - ✅ **Phase 7: Email Integration & Notifications** - Complete
+    - Teaser email template (React Email)
+    - Payment success email template (React Email)
+    - Email service integration complete
+    - Email triggers implemented (teaser after email collection, payment success after payment)
+  - ✅ **Phase 8: Polish, Testing & Optimization** - Complete
+    - UI/UX polished (responsive, accessible, consistent)
+    - Performance optimized (Cache Components, optimized queries)
+    - PostHog tracking implemented (quiz completion, email collection, teaser view, paywall view, payment initiated/completed, report viewed, PDF downloaded)
+    - Error handling reviewed (Romanian messages, error boundaries)
+    - Complete flow tested end-to-end
+    - Documentation created (11 documentation files)
+  - **Key Features**:
+    - One-time payment (39 lei, no subscription)
+    - Free quiz completion
+    - Email collection gate
+    - Teaser page (single sport)
+    - Complete report (2-3 sports, 7 sections)
+    - PDF download
+    - Persistent access (10-year tokens)
+    - Email notifications at all key points
+  - **Files Created/Modified**:
+    - Pages: email/[quizId], teaser/[quizId], paywall/[quizId], raport/[accessToken], payment/success/[quizId], payment/failure/[quizId]
+    - Components: EmailCollectionForm, PaymentFormWrapper, PaymentForm, ReportContent, all report sections
+    - Services: payments.service.ts, payments.repository.ts, pdf-generation.service.ts
+    - API Routes: /api/payments/webhook, /api/reports/[accessToken]/download
+    - Email Templates: quiz-teaser-email.tsx, payment-success-email.tsx
+  - **Status**: All 8 Phases Complete ✅ | Production Ready ✅

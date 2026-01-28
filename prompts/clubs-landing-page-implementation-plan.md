@@ -678,7 +678,7 @@ export default function ClubsLandingBenefits() {
    - [x] Use Bootstrap accordion pattern
    - [x] Include FAQs from brief:
      - ❓ Cât costă după cele 6 luni gratuite?
-       - Answer: "Dacă Yuvoo îți aduce părinți potriviți, vei putea continua cu un abonament clar și transparent (începând de la €29/lună). Dacă nu funcționează → nu plătești nimic."
+       - Answer: "Dacă Yuvoo îți aduce părinți potriviți, vei putea continua cu un abonament clar și transparent (începând de la 99 lei/lună). Dacă nu funcționează → nu plătești nimic."
      - ❓ Trebuie să intru zilnic pe platformă?
        - Answer: "Nu. Primești notificări când un părinte te contactează. Yuvoo este un canal suplimentar, nu o obligație."
      - ❓ De ce este diferit de Google/Facebook?
@@ -710,7 +710,7 @@ export default function ClubsLandingFAQ() {
   const faqs: FAQItem[] = [
     {
       question: "Cât costă după cele 6 luni gratuite?",
-      answer: "Dacă Yuvoo îți aduce părinți potriviți, vei putea continua cu un abonament clar și transparent (începând de la €29/lună). Dacă nu funcționează → nu plătești nimic.",
+      answer: "Dacă Yuvoo îți aduce părinți potriviți, vei putea continua cu un abonament clar și transparent (începând de la 99 lei/lună). Dacă nu funcționează → nu plătești nimic.",
     },
     {
       question: "Trebuie să intru zilnic pe platformă?",
@@ -1101,7 +1101,7 @@ NOTES
 ### Content Considerations
 
 - All emoji usage from brief should be preserved for visual interest
-- Numbers (€180, 6 luni, 15 cluburi, €29/lună) should be highlighted
+- Numbers (€180, 6 luni, 15 cluburi, 99 lei/lună) should be highlighted
 - Urgency messaging ("limită de 15 cluburi") should be emphasized
 - Trust-building elements (GDPR, verification) should be prominent
 

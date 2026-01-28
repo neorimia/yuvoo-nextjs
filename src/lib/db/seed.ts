@@ -18,6 +18,7 @@ import * as dotenv from "dotenv";
 import { db } from "./index";
 import { clubs, doctors, users } from "./schema";
 import { CLUBS_SEED_DATA } from "./seed-data/clubs";
+import { getCityLocationId, getSectorLocationId, getCountyLocationId } from "./seed-data/helpers";
 import { DOCTORS_SEED_DATA } from "./seed-data/doctors";
 import { CLUBS_RESEARCH_BUCHAREST } from "./seed-data/clubs-research-bucuresti";
 import { CLUBS_RESEARCH_CLUJ_NAPOCA } from "./seed-data/clubs-research-cluj-napoca";
@@ -126,9 +127,24 @@ async function _seedClubs() {
 
   for (const club of CLUBS_SEED_DATA) {
     try {
+      // Convert city/district to location IDs (if not already present)
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      const clubWithIds = club as any;
+      const cityId = clubWithIds.cityId || getCityLocationId(club.city);
+      const sectorId =
+        clubWithIds.sectorId || (club.district ? getSectorLocationId(club.district) : undefined);
+      const countyId = clubWithIds.countyId || (cityId ? getCountyLocationId(cityId) : undefined);
+
+      // Remove city and district fields (they don't exist in schema anymore)
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      const { city: _city, district: _district, ...clubWithoutCityDistrict } = club as any;
+
       await db.insert(clubs).values({
         id: crypto.randomUUID(),
-        ...club,
+        ...clubWithoutCityDistrict,
+        cityId: cityId!,
+        sectorId,
+        countyId: countyId!,
         createdAt: new Date(),
         updatedAt: new Date(),
       });
@@ -195,9 +211,21 @@ async function seedResearchClubs() {
 
   for (const club of allResearchClubs) {
     try {
+      // Research clubs already have cityId, sectorId, countyId from createClubFromResearch
+      // But we need to ensure they're present and remove city/district if they exist
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      const { city: _city, district: _district, ...clubWithoutCityDistrict } = club as any;
+      const cityId = club.cityId || getCityLocationId(club.city);
+      const sectorId =
+        club.sectorId || (club.district ? getSectorLocationId(club.district) : undefined);
+      const countyId = club.countyId || (cityId ? getCountyLocationId(cityId) : undefined);
+
       await db.insert(clubs).values({
         id: crypto.randomUUID(),
-        ...club,
+        ...clubWithoutCityDistrict,
+        cityId: cityId!,
+        sectorId,
+        countyId: countyId!,
         createdAt: new Date(),
         updatedAt: new Date(),
       });
@@ -262,9 +290,25 @@ async function _seedDoctors() {
 
   for (const doctor of DOCTORS_SEED_DATA) {
     try {
+      // Convert city/district to location IDs (if not already present)
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      const doctorWithIds = doctor as any;
+      const cityId = doctorWithIds.cityId || getCityLocationId(doctor.city);
+      const sectorId =
+        doctorWithIds.sectorId ||
+        (doctor.district ? getSectorLocationId(doctor.district) : undefined);
+      const countyId = doctorWithIds.countyId || (cityId ? getCountyLocationId(cityId) : undefined);
+
+      // Remove city and district fields (they don't exist in schema anymore)
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      const { city: _city, district: _district, ...doctorWithoutCityDistrict } = doctor as any;
+
       await db.insert(doctors).values({
         id: crypto.randomUUID(),
-        ...doctor,
+        ...doctorWithoutCityDistrict,
+        cityId: cityId!,
+        sectorId,
+        countyId: countyId!,
         createdAt: new Date(),
         updatedAt: new Date(),
       });

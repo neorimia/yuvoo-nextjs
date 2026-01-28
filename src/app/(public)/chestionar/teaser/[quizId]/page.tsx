@@ -8,7 +8,8 @@
 import React from "react";
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
-import { cookies } from "next/headers";
+import { cookies, headers } from "next/headers";
+import { connection } from "next/server";
 import BreadcrumbOne from "@/components/Breadcrumb/BreadcrumbOne";
 import { getQuizResultAction } from "@/app/actions/quiz";
 import { routes } from "@/lib/routes";
@@ -21,6 +22,13 @@ interface TeaserPageProps {
 }
 
 /**
+ * Note: With Cache Components enabled, routes are dynamic by default.
+ * We access dynamic data sources (connection, cookies, headers, params) at the
+ * start of both generateMetadata and the component to mark this route as dynamic
+ * and prevent crypto.randomUUID() errors.
+ */
+
+/**
  * Generate static params for Cache Components compatibility
  */
 export async function generateStaticParams() {
@@ -31,7 +39,27 @@ export async function generateStaticParams() {
  * Generate metadata for teaser page
  */
 export async function generateMetadata({ params }: TeaserPageProps): Promise<Metadata> {
-  const { quizId: _quizId } = await params;
+  // Access params first to mark route as dynamic
+  const { quizId } = await params;
+  const isProductionBuild = process.env.NEXT_PHASE === "phase-production-build";
+
+  // During build with placeholder, return static metadata
+  if (isProductionBuild && quizId === "placeholder") {
+    return {
+      title: "Recomandarea ta personalizată | Yuvoo",
+      description:
+        "Vezi recomandarea noastră personalizată de sport pentru copilul tău. Deblochează raportul complet pentru detalii și plan de acțiune.",
+      robots: {
+        index: false,
+        follow: false,
+      },
+    };
+  }
+
+  // At runtime, access dynamic data sources to mark route as dynamic
+  await connection();
+  await cookies();
+  await headers();
 
   return {
     title: "Recomandarea ta personalizată | Yuvoo",
@@ -51,9 +79,39 @@ export async function generateMetadata({ params }: TeaserPageProps): Promise<Met
  * Includes CTA to unlock full report.
  */
 export default async function TeaserPage({ params }: TeaserPageProps) {
-  // Access dynamic data sources first to mark route as dynamic
-  const _cookies = await cookies();
+  // Access params first
   const { quizId } = await params;
+  const isProductionBuild = process.env.NEXT_PHASE === "phase-production-build";
+
+  // During build, render placeholder for placeholder quiz ID
+  if (isProductionBuild && quizId === "placeholder") {
+    return (
+      <>
+        <BreadcrumbOne
+          title="Recomandarea ta personalizată"
+          subTitle="Chestionar"
+          items={[
+            { name: "Yuvoo", url: routes.home },
+            { name: "Chestionar", url: routes.quiz.intro },
+            { name: "Recomandare", url: routes.quiz.teaser(quizId) },
+          ]}
+        />
+        <section className="teaser-section py-5">
+          <div className="container">
+            <div className="text-center">
+              <h1 className="display-5 fw-bold mb-3">Recomandarea ta personalizată</h1>
+              <p className="text-muted">Build placeholder</p>
+            </div>
+          </div>
+        </section>
+      </>
+    );
+  }
+
+  // At runtime, access dynamic data sources to mark route as dynamic
+  await connection();
+  await cookies();
+  await headers();
 
   // Fetch quiz results
   const quizResult = await getQuizResultAction(quizId);
@@ -111,11 +169,11 @@ export default async function TeaserPage({ params }: TeaserPageProps) {
               </div>
 
               {/* Top Recommendation Card */}
-              <div className="card shadow-lg border-0 mb-4 border-top border-5 border-primary">
+              <div className="card shadow-lg border-0 mb-4 border-top border-5 border-yuvoo-primary">
                 <div className="card-body p-4 p-md-5">
                   <div className="d-flex justify-content-between align-items-start mb-3">
                     <div>
-                      <span className="badge bg-primary fs-6 mb-2">
+                      <span className="badge bg-yuvoo-primary fs-6 mb-2">
                         {topRecommendation.matchScore}% potrivire
                       </span>
                       <h2 className="h3 fw-bold mb-2">{topRecommendation.sportName}</h2>
@@ -148,7 +206,7 @@ export default async function TeaserPage({ params }: TeaserPageProps) {
                 </p>
                 <Link
                   href={routes.quiz.paywall(quizId)}
-                  className="btn btn-primary btn-lg px-5 py-3"
+                  className="btn btn-yuvoo-primary  px-5 py-3 mb-4"
                   aria-label="Deblochează raportul complet pentru a vedea toate recomandările"
                 >
                   <i className="bi bi-unlock-fill me-2" aria-hidden="true"></i>
@@ -160,7 +218,7 @@ export default async function TeaserPage({ params }: TeaserPageProps) {
               <div className="card bg-light border-0 mb-4">
                 <div className="card-body p-4">
                   <h4 className="h5 mb-3">Ce include raportul complet:</h4>
-                  <div className="row g-3">
+                  <div className="row g-md-3">
                     <div className="col-12 col-md-6">
                       <ul className="list-unstyled mb-0">
                         <li className="mb-2">

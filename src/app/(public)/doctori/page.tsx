@@ -35,8 +35,9 @@ export async function generateMetadata(): Promise<Metadata> {
 interface DoctorsPageProps {
   searchParams: Promise<{
     specialty?: string;
-    city?: string;
-    district?: string;
+    cityId?: string;
+    sectorId?: string;
+    countyId?: string;
     verified?: string;
     acceptingNewPatients?: string;
     onlineConsultations?: string;
@@ -57,14 +58,23 @@ export default async function DoctorsPage({ searchParams }: DoctorsPageProps) {
   }
 
   const params = await searchParams;
-  const { specialty, city, district, verified, acceptingNewPatients, onlineConsultations, sortBy } =
-    params;
+  const {
+    specialty,
+    cityId,
+    sectorId,
+    countyId,
+    verified,
+    acceptingNewPatients,
+    onlineConsultations,
+    sortBy,
+  } = params;
 
   // Build filters object from search params
   const filters: DoctorSearchFiltersType = {
     specialty: specialty as DoctorSearchFiltersType["specialty"] | undefined,
-    city: city || undefined,
-    district: district || undefined,
+    cityId: cityId || undefined,
+    sectorId: sectorId || undefined,
+    countyId: countyId || undefined,
     verified: verified === "true" ? true : undefined,
     acceptingNewPatients: acceptingNewPatients === "true" ? true : undefined,
     onlineConsultations: onlineConsultations === "true" ? true : undefined,

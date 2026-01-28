@@ -82,7 +82,7 @@ Program limitat – doar 15 cluburi / oraș
 
 ❓ Cât costă după cele 6 luni gratuite?
 
-Dacă Yuvoo îți aduce părinți potriviți, vei putea continua cu un abonament clar și transparent (începând de la €29/lună).
+Dacă Yuvoo îți aduce părinți potriviți, vei putea continua cu un abonament clar și transparent (începând de la 99 lei/lună).
 Dacă nu funcționează → nu plătești nimic.
 
 ❓ Trebuie să intru zilnic pe platformă?

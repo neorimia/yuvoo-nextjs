@@ -112,7 +112,7 @@ export default function ReportDownloadButton({ accessToken, quizId }: ReportDown
       )}
       <button
         type="button"
-        className="btn btn-outline-primary btn-lg"
+        className="btn btn-yuvoo-primary btn-lg"
         onClick={handleDownload}
         disabled={isLoading}
       >
