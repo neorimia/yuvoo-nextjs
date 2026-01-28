@@ -12,6 +12,25 @@ interface SportsToAvoidSectionProps {
   topRecommendations: SportRecommendation[];
 }
 
+const MAX_AVOID_TEXT = 200;
+
+function avoidExplanation(rec: SportRecommendation): string | null {
+  if (rec.reasoning && rec.reasoning.trim().length > 0) {
+    return rec.reasoning.length > MAX_AVOID_TEXT
+      ? rec.reasoning.substring(0, MAX_AVOID_TEXT).trim() + "..."
+      : rec.reasoning;
+  }
+  if (rec.considerations && rec.considerations.length > 0) {
+    const joined = rec.considerations.join(" ").trim();
+    return joined.length > MAX_AVOID_TEXT
+      ? joined.substring(0, MAX_AVOID_TEXT).trim() + "..."
+      : joined;
+  }
+  return null;
+}
+
+const headingId = "sporturi-de-evitata-heading";
+
 /**
  * Sports to Avoid Section
  *
@@ -21,24 +40,23 @@ export default function SportsToAvoidSection({
   recommendations,
   topRecommendations,
 }: SportsToAvoidSectionProps) {
-  // Get sports with low match scores (below 50%) or not in top recommendations
   const sportsToAvoid = recommendations
     .filter(
       (rec) => rec.matchScore < 50 || !topRecommendations.some((top) => top.sportId === rec.sportId)
     )
     .sort((a, b) => a.matchScore - b.matchScore)
-    .slice(0, 3); // Show top 3 to avoid
+    .slice(0, 3);
 
   if (sportsToAvoid.length === 0) {
     return null;
   }
 
   return (
-    <section className="mb-4">
+    <section id="sporturi-de-evitata" className="mb-4" aria-labelledby={headingId}>
       <div className="card shadow-sm border-0">
         <div className="card-header bg-light">
-          <h2 className="h4 mb-0">
-            <i className="bi bi-exclamation-triangle-fill me-2 text-warning"></i>
+          <h2 id={headingId} className="h4 mb-0">
+            <i className="bi bi-exclamation-triangle-fill me-2 text-warning" aria-hidden="true"></i>
             Ce sporturi ar trebui evitate momentan
           </h2>
         </div>
@@ -50,36 +68,36 @@ export default function SportsToAvoidSection({
           </p>
 
           <div className="row">
-            {sportsToAvoid.map((recommendation) => (
-              <div key={recommendation.sportId} className="col-12">
-                <div className="card border-0 bg-light">
-                  <div className="card-body p-3">
-                    <div className="d-flex align-items-start">
-                      <i
-                        className="bi bi-x-circle-fill text-muted me-3 mt-1"
-                        style={{ fontSize: "1.25rem" }}
-                      ></i>
-                      <div className="flex-grow-1">
-                        <h4 className="h6 fw-bold mb-2">{recommendation.sportName}</h4>
-                        {recommendation.considerations &&
-                        recommendation.considerations.length > 0 ? (
+            {sportsToAvoid.map((rec) => {
+              const text = avoidExplanation(rec);
+              return (
+                <div key={rec.sportId} className="col-12">
+                  <div className="card border-0 bg-light">
+                    <div className="card-body p-3">
+                      <div className="d-flex align-items-start">
+                        <i
+                          className="bi bi-x-circle-fill text-muted me-3 mt-1 report-icon-avoid"
+                          aria-hidden="true"
+                        ></i>
+                        <div className="flex-grow-1">
+                          <h4 className="h6 fw-bold mb-2">{rec.sportName}</h4>
                           <p className="text-muted small mb-0">
-                            {recommendation.considerations[0]}
+                            {text ?? (
+                              <>
+                                Acest sport necesită abilități sau nivel de dezvoltare care nu sunt
+                                încă potrivite pentru profilul completat. Recomandăm să revii la
+                                acest sport peste 6-12 luni, după ce copilul tău va avea ocazia să
+                                se dezvolte mai mult.
+                              </>
+                            )}
                           </p>
-                        ) : (
-                          <p className="text-muted small mb-0">
-                            Acest sport necesită abilități sau nivel de dezvoltare care nu sunt încă
-                            potrivite pentru profilul completat. Recomandăm să revii la acest sport
-                            peste 6-12 luni, după ce copilul tău va avea ocazia să se dezvolte mai
-                            mult.
-                          </p>
-                        )}
+                        </div>
                       </div>
                     </div>
                   </div>
                 </div>
-              </div>
-            ))}
+              );
+            })}
           </div>
         </div>
       </div>

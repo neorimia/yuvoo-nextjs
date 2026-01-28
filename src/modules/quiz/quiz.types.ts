@@ -26,14 +26,33 @@ export interface QuizAnswers {
   interests: string[]; // Current interests
   previousSports: string[]; // Previously tried sports
   whyStoppedSports?: string[]; // Optional: reasons for stopping previous sports
+  injuryDetails?: {
+    // Optional: detailed information about injury (shown when "injury" selected in whyStoppedSports)
+    type?: "fracture" | "growth-plate" | "dislocation" | "sprain" | "concussion" | "other";
+    when?: "<1month" | "1-3months" | "3-6months" | "6-12months" | ">1year";
+    healed?: boolean | null; // null = unknown/not sure
+    restrictions?: boolean; // Current medical restrictions
+  };
 
-  // Question 5: Physical Build, Coordination & Health
+  // Question 5: Critical Health Screening (NEW)
+  criticalHealth?: {
+    cardiacSymptoms?: boolean; // Has cardiac symptoms during exercise
+    cardiacFamilyHistory?: boolean; // Family history of sudden cardiac death under 50
+    recentConcussion?: boolean; // Concussion in last 3 months
+    multipleConcussions?: boolean; // 2+ concussions in last 2 years
+  };
+
+  // Question 6: Physical Build, Coordination & Health
   physicalBuild: "slim" | "average" | "athletic";
   coordinationLevel: "excellent" | "good" | "developing" | "challenges";
-  healthConditions?: string[]; // Optional: medical conditions or safety concerns
+  healthConditions?: string[]; // Optional: medical conditions or safety concerns (kept for backward compatibility)
+  // Enhanced health condition severity levels
+  asthmaSeverity?: "none" | "mild" | "moderate" | "severe";
+  inhalerUse?: "yes" | "no" | "sometimes"; // Follow-up question for asthma
+  jointPainSeverity?: "none" | "mild" | "moderate" | "severe";
   physicalConsiderations?: string; // Optional notes about physical considerations
 
-  // Question 6: Preferences
+  // Question 7: Preferences
   preferences: {
     indoor: boolean; // Prefers indoor activities
     outdoor: boolean; // Prefers outdoor activities
@@ -55,7 +74,14 @@ export interface SportRecommendation {
 }
 
 export interface SpecialistRecommendation {
-  specialty: "orthopedist" | "nutritionist" | "psychologist" | "general";
+  specialty:
+    | "orthopedist"
+    | "nutritionist"
+    | "psychologist"
+    | "cardiologist"
+    | "neurologist"
+    | "pulmonologist" // Added in Task 1.4.2 for respiratory conditions
+    | "general";
   needed: boolean;
   reason: string; // AI-generated explanation in Romanian
   priority?: "high" | "medium" | "low"; // Priority level for consultation

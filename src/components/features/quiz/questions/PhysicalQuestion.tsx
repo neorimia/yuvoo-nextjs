@@ -6,7 +6,7 @@
 
 "use client";
 
-import React, { memo } from "react";
+import React, { memo, useEffect } from "react";
 import { useQuiz } from "../QuizContext";
 import QuestionWrapper from "../QuestionWrapper";
 
@@ -82,6 +82,11 @@ const PhysicalQuestion = memo(function PhysicalQuestion() {
   };
 
   const toggleHealthCondition = (condition: string) => {
+    // Prevent manual toggling of asthma and joint-pain (handled by severity dropdowns)
+    if (condition === "asthma" || condition === "joint-pain") {
+      return;
+    }
+
     const current = answers.healthConditions || [];
     const updated = current.includes(condition)
       ? current.filter((c) => c !== condition)
@@ -96,6 +101,40 @@ const PhysicalQuestion = memo(function PhysicalQuestion() {
 
   const healthConditions = answers.healthConditions || [];
   const hasHealthConditions = healthConditions.length > 0;
+
+  // Sync severity levels with healthConditions array for backward compatibility
+  useEffect(() => {
+    const currentConditions = answers.healthConditions || [];
+    const newConditions = [...currentConditions];
+
+    // Sync asthma severity
+    const hasAsthmaInConditions = newConditions.includes("asthma");
+    const shouldHaveAsthma = answers.asthmaSeverity && answers.asthmaSeverity !== "none";
+
+    if (shouldHaveAsthma && !hasAsthmaInConditions) {
+      newConditions.push("asthma");
+    } else if (!shouldHaveAsthma && hasAsthmaInConditions) {
+      const index = newConditions.indexOf("asthma");
+      if (index > -1) newConditions.splice(index, 1);
+    }
+
+    // Sync joint pain severity
+    const hasJointPainInConditions = newConditions.includes("joint-pain");
+    const shouldHaveJointPain = answers.jointPainSeverity && answers.jointPainSeverity !== "none";
+
+    if (shouldHaveJointPain && !hasJointPainInConditions) {
+      newConditions.push("joint-pain");
+    } else if (!shouldHaveJointPain && hasJointPainInConditions) {
+      const index = newConditions.indexOf("joint-pain");
+      if (index > -1) newConditions.splice(index, 1);
+    }
+
+    // Only update if there's a change to avoid infinite loops
+    if (JSON.stringify(newConditions.sort()) !== JSON.stringify(currentConditions.sort())) {
+      setAnswer("healthConditions", newConditions.length > 0 ? newConditions : undefined);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [answers.asthmaSeverity, answers.jointPainSeverity]);
 
   return (
     <QuestionWrapper
@@ -190,36 +229,149 @@ const PhysicalQuestion = memo(function PhysicalQuestion() {
           Selectează dacă copilul are una dintre aceste condiții. Dacă medicul a recomandat
           restricții pentru activități fizice, te rugăm să menționezi mai jos.
         </p>
-        <div className="row g-2">
-          {[
-            { value: "asthma", label: "Astm sau probleme respiratorii" },
-            { value: "allergies", label: "Alergii severe (poți specifica mai jos)" },
-            { value: "vision", label: "Probleme de vedere (necesită ochelari)" },
-            { value: "hearing", label: "Probleme de auz" },
-            { value: "joint-pain", label: "Dureri articulare sau osoase persistente" },
-            { value: "recent-injury", label: "Accidentare recentă (ultimele 3 luni)" },
-            { value: "chronic-condition", label: "Condiție cronică (diabet, epilepsie, etc.)" },
-            { value: "doctor-restrictions", label: "Medicul a recomandat restricții" },
-          ].map((condition) => {
-            const isSelected = healthConditions.includes(condition.value);
-            return (
-              <div key={condition.value} className="col-12 col-md-6">
+
+        {/* Asthma Severity Dropdown */}
+        <div className="mb-3">
+          <label htmlFor="asthmaSeverity" className="form-label fw-semibold">
+            Astm sau probleme respiratorii
+          </label>
+          <select
+            className="form-select"
+            id="asthmaSeverity"
+            value={answers.asthmaSeverity || "none"}
+            onChange={(e) =>
+              setAnswer("asthmaSeverity", e.target.value as "none" | "mild" | "moderate" | "severe")
+            }
+          >
+            <option value="none">Fără astm</option>
+            <option value="mild">Astm ușor (controlat cu medicație, fără simptome zilnice)</option>
+            <option value="moderate">
+              Astm moderat (simptome ocazionale, folosește inhaler înainte de sport)
+            </option>
+            <option value="severe">
+              Astm sever (spitalizare în ultimul an sau simptome frecvente)
+            </option>
+          </select>
+
+          {/* Follow-up question for inhaler use */}
+          {answers.asthmaSeverity && answers.asthmaSeverity !== "none" && (
+            <div className="mt-3">
+              <label className="form-label fw-semibold">
+                Copilul folosește inhaler înainte de activități fizice?
+              </label>
+              <div className="d-flex gap-2 flex-wrap">
                 <button
                   type="button"
-                  className={`btn w-100 text-start btn-sm ${
-                    isSelected ? "btn-warning" : "btn-outline-secondary"
+                  className={`btn ${
+                    answers.inhalerUse === "yes" ? "btn-success" : "btn-outline-success"
                   }`}
-                  style={{ minHeight: "40px" }}
-                  onClick={() => toggleHealthCondition(condition.value)}
-                  aria-pressed={isSelected}
+                  onClick={() => setAnswer("inhalerUse", "yes")}
+                  aria-pressed={answers.inhalerUse === "yes"}
                 >
-                  <i className={`bi ${isSelected ? "bi-check-square-fill" : "bi-square"} me-2`}></i>
-                  {condition.label}
+                  <i className="bi bi-check-circle me-2"></i>
+                  Da
+                </button>
+                <button
+                  type="button"
+                  className={`btn ${
+                    answers.inhalerUse === "no" ? "btn-danger" : "btn-outline-danger"
+                  }`}
+                  onClick={() => setAnswer("inhalerUse", "no")}
+                  aria-pressed={answers.inhalerUse === "no"}
+                >
+                  <i className="bi bi-x-circle me-2"></i>
+                  Nu
+                </button>
+                <button
+                  type="button"
+                  className={`btn ${
+                    answers.inhalerUse === "sometimes" ? "btn-warning" : "btn-outline-warning"
+                  }`}
+                  onClick={() => setAnswer("inhalerUse", "sometimes")}
+                  aria-pressed={answers.inhalerUse === "sometimes"}
+                >
+                  <i className="bi bi-question-circle me-2"></i>
+                  Ocazional
                 </button>
               </div>
-            );
-          })}
+              <div className="form-text mt-1">
+                <i className="bi bi-info-circle me-1"></i>
+                Această informație ne ajută să recomandăm sporturi potrivite și să asigurăm că
+                copilul are acces la medicație când este necesar.
+              </div>
+            </div>
+          )}
         </div>
+
+        {/* Joint Pain Severity Dropdown */}
+        <div className="mb-3">
+          <label htmlFor="jointPainSeverity" className="form-label fw-semibold">
+            Dureri articulare sau osoase
+          </label>
+          <select
+            className="form-select"
+            id="jointPainSeverity"
+            value={answers.jointPainSeverity || "none"}
+            onChange={(e) =>
+              setAnswer(
+                "jointPainSeverity",
+                e.target.value as "none" | "mild" | "moderate" | "severe"
+              )
+            }
+          >
+            <option value="none">Fără dureri articulare</option>
+            <option value="mild">Dureri ușoare ocazionale (după efort intens)</option>
+            <option value="moderate">
+              Dureri moderate frecvente (afectează activitățile zilnice ocazional)
+            </option>
+            <option value="severe">
+              Dureri severe persistente (afectează activitățile zilnice)
+            </option>
+          </select>
+          {answers.jointPainSeverity && answers.jointPainSeverity !== "none" && (
+            <div className="form-text mt-1">
+              <i className="bi bi-info-circle me-1"></i>
+              Durerile articulare pot indica nevoia de evaluare ortopedică pentru a identifica
+              sporturile potrivite.
+            </div>
+          )}
+        </div>
+
+        {/* Other health conditions (checkboxes) */}
+        <div className="mb-2">
+          <label className="form-label fw-semibold">Alte condiții medicale</label>
+          <div className="row g-2">
+            {[
+              { value: "allergies", label: "Alergii severe (poți specifica mai jos)" },
+              { value: "vision", label: "Probleme de vedere (necesită ochelari)" },
+              { value: "hearing", label: "Probleme de auz" },
+              { value: "recent-injury", label: "Accidentare recentă (ultimele 3 luni)" },
+              { value: "chronic-condition", label: "Condiție cronică (diabet, epilepsie, etc.)" },
+              { value: "doctor-restrictions", label: "Medicul a recomandat restricții" },
+            ].map((condition) => {
+              const isSelected = healthConditions.includes(condition.value);
+              return (
+                <div key={condition.value} className="col-12 col-md-6">
+                  <button
+                    type="button"
+                    className={`btn w-100 text-start btn-sm ${
+                      isSelected ? "btn-warning" : "btn-outline-secondary"
+                    }`}
+                    style={{ minHeight: "40px" }}
+                    onClick={() => toggleHealthCondition(condition.value)}
+                    aria-pressed={isSelected}
+                  >
+                    <i
+                      className={`bi ${isSelected ? "bi-check-square-fill" : "bi-square"} me-2`}
+                    ></i>
+                    {condition.label}
+                  </button>
+                </div>
+              );
+            })}
+          </div>
+        </div>
+
         {hasHealthConditions && (
           <div className="alert alert-info d-flex align-items-start gap-2 mt-3 mb-0 py-2">
             <i className="bi bi-info-circle-fill flex-shrink-0 mt-1"></i>

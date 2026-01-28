@@ -3,13 +3,35 @@
  *
  * Print styles for PDF generation.
  * Optimized for A4 format.
+ * Report layout utilities use design tokens (--yuvoo-primary, --yuvoo-accent).
  */
+
+/* Report layout utilities (design tokens) */
+.report-header-card {
+  border-top: 4px solid var(--yuvoo-primary, #00bbae);
+}
+.report-card-accent {
+  border-left: 4px solid var(--yuvoo-primary, #00bbae);
+}
+.report-card-accent-alt {
+  border-left: 4px solid var(--bd-theme-10, #7c81ff);
+}
+.report-badge {
+  font-size: 1rem;
+}
+.report-progress {
+  height: 8px;
+}
+.report-icon-avoid {
+  font-size: 1.25rem;
+}
 
 @media print {
   /* Hide elements not needed in PDF */
   .breadcrumb-area,
+  .bd-breadcrumb-area,
   .report-section .btn,
-  .report-section .alert:not(.alert-info),
+  .report-section .alert.alert-danger,
   .report-section .card-header .btn,
   nav,
   footer,
@@ -40,7 +62,6 @@
 
   /* Cards */
   .card {
-    page-break-inside: avoid;
     border: 1px solid #ddd !important;
     box-shadow: none !important;
     margin-bottom: 20px;
@@ -165,11 +186,8 @@
     margin-top: 24px !important;
   }
 
-  /* Page breaks */
-  .card {
-    page-break-inside: avoid;
-  }
-
+  /* Page breaks - single rule for card and section */
+  .card,
   section {
     page-break-inside: avoid;
   }
@@ -181,6 +199,7 @@
   background: #fff !important;
 
   .breadcrumb-area,
+  .bd-breadcrumb-area,
   .btn,
   nav,
   footer {

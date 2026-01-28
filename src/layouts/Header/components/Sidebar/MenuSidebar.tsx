@@ -70,15 +70,15 @@ const MenuSidebar: React.FC<MenuSidebarProps> = ({ sideMenuOpen, setSideMenuOpen
                       <i className="fal fa-map-marker-alt"></i>
                     </a>
                   </div>
-                  <div className="offcanvas__contact-text">
+                  {/* <div className="offcanvas__contact-text">
                     <a
                       target="_blank"
                       rel="noreferrer"
-                      href="https://www.google.com/maps/place/Bucharest"
+                      href="https://www.google.com/maps/place/Mun.%20Focsani"
                     >
-                      București, România
+                      Mun. Focsani, România
                     </a>
-                  </div>
+                  </div> */}
                 </li>
                 <li className="d-flex align-items-center gap-2">
                   <div className="offcanvas__contact-icon">

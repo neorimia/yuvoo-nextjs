@@ -1,0 +1,227 @@
+{
+  "summary": "The raport page and report components deliver a clear, Romanian-language structure with seven sections and PDF download. Main improvement areas: (1) accessibility—multiple h1s (Breadcrumb + ReportHeader), no section ids or aria-labelledby, decorative icons missing aria-hidden; (2) UX redundancy—Section 1 (truncated reasoning) and Section 2 (full reasoning) repeat the same content; (3) code—topRecommendations computed in four places, inline styles instead of design tokens; (4) PDF—breadcrumb selector mismatch (`.breadcrumb-area` vs `bd-breadcrumb-area`), and AgeGuidance alerts (success/warning) hidden by `.alert:not(.alert-info)`; (5) copy—CTAs should align with COPY_LIBRARY.",
+  "page": {
+    "issues": [
+      "Build placeholder renders user-visible 'Build placeholder' text; consider hiding or using neutral message.",
+      "Main report content wrapper has no semantic <main> landmark or aria-label for screen readers.",
+      "BreadcrumbOne renders h1 ('Raport Complet'); ReportHeader also renders h1 ('Raport Complet Personalizat')—multiple h1s violate a11y best practices."
+    ],
+    "improvements": [
+      "Wrap report <section> in <main> with aria-label='Conținut raport' and ensure single h1 per page (e.g. demote Breadcrumb title to p or use ReportHeader as sole h1).",
+      "Change build placeholder text to something non-user-facing or remove it from production build output."
+    ]
+  },
+  "sections": {
+    "ReportHeader": {
+      "issues": [
+        "No child name or personalization; header feels generic despite 'Personalizat'.",
+        "Inline style borderTop: '4px solid #00BBAE'—should use CSS class or design token.",
+        "Icons (bi-calendar3, bi-check-circle) lack aria-hidden; they are decorative.",
+        "Shows total quiz recommendations count (e.g. 7) while only top 3 are displayed in sections—potentially confusing."
+      ],
+      "improvements": [
+        "Replace inline border with utility/SCSS class using --yuvoo-primary; add aria-hidden='true' to decorative icons.",
+        "Clarify header copy (e.g. 'Top 3 recomandări afișate' or show top count) or add child name when available from quiz/child data.",
+        "Ensure single h1 on page: either Breadcrumb title is not h1 on report route, or ReportHeader uses h2."
+      ]
+    },
+    "SportRecommendationsSection": {
+      "issues": [
+        "Reasoning truncated at 120 chars with '...'; can cut mid-word and feels arbitrary.",
+        "minHeight: 60px on preview creates empty space when reasoning is short or missing.",
+        "Inline styles (fontSize, height, width) instead of CSS classes.",
+        "Progress bar has role='progressbar' but represents match score, not loading; consider aria-valuetext for clarity.",
+        "No section id for in-page navigation or aria-labelledby."
+      ],
+      "improvements": [
+        "Truncate at word boundary (e.g. last space before 120 chars) or use CSS line-clamp; remove fixed minHeight.",
+        "Move inline styles to report-pdf.scss or utility classes; use design tokens.",
+        "Add id='sporturi-recomandate', aria-labelledby on section linking to h2.",
+        "Add aria-valuetext='{matchScore}% potrivire' to progress bar for screen readers."
+      ]
+    },
+    "SportExplanationsSection": {
+      "issues": [
+        "Duplicates reasoning already shown in SportRecommendationsSection (Section 1 truncates, Section 2 shows full)—redundant.",
+        "Generic fallback 'Acest sport este potrivit...' is identical for every sport when reasoning missing.",
+        "No section id for in-page nav."
+      ],
+      "improvements": [
+        "Consider merging with Section 1 (show full reasoning in one place) or reframe Section 2 to add unique value (e.g. 'Ce spune profilul' vs 'De ce potrivit') to avoid pure duplication.",
+        "If keeping both, add id='de-ce-potrivite', aria-labelledby; improve fallback to reference sport name."
+      ]
+    },
+    "SportBenefitsSection": {
+      "issues": [
+        "Generic fallback benefits (Dezvoltare Fizică/Emoțională lists) are identical for every sport when AI provides no benefits.",
+        "Considerations use key={index}; prefer stable key if available.",
+        "Inline style borderLeft: '4px solid #00BBAE'.",
+        "No section id."
+      ],
+      "improvements": [
+        "Replace inline border with CSS class; add id='ce-dezvolta', aria-labelledby.",
+        "When using fallback benefits, consider at least varying order or one sport-specific line if possible; use key from benefit text or sportId+index to avoid React key warnings."
+      ]
+    },
+    "SportsToAvoidSection": {
+      "issues": [
+        "Uses only first consideration; reasoning or multiple considerations could be more informative.",
+        "Filter excludes top recommendations AND matchScore < 50; 'avoid' list is low-match sports only—logic is fine but could be documented.",
+        "No section id."
+      ],
+      "improvements": [
+        "When showing 'sports to avoid', use reasoning or concatenate multiple considerations (with length limit) when available; fallback to current generic copy.",
+        "Add id='sporturi-de-evitata', aria-labelledby."
+      ]
+    },
+    "AgeGuidanceSection": {
+      "issues": [
+        "canStart = childAge >= 5, waitMonths = childAge < 5 ? 6 : 0—same rule for all sports; no per-sport age logic.",
+        "'Semne de urmărit' list is generic for every sport; not personalized.",
+        "Recomputes topRecommendations (sort + slice); duplicated in ReportContent, NextSteps, LocalClubs.",
+        "No section id."
+      ],
+      "improvements": [
+        "Add id='varsta-ideala', aria-labelledby. Pass topRecommendations as prop from ReportContent to avoid recomputation.",
+        "Keep age logic as-is unless product requests per-sport rules; optionally add brief comment documenting that age guidance is global."
+      ]
+    },
+    "NextStepsSection": {
+      "issues": [
+        "Recomputes topRecommendations; duplicated logic.",
+        "'Explorează Cluburi Locale' vs COPY_LIBRARY 'Explorează toate cluburile' / 'Explorează cluburile'—minor alignment.",
+        "Uses row gap-4; Bootstrap row gap utilities may vary—verify layout.",
+        "No section id."
+      ],
+      "improvements": [
+        "Receive topRecommendations as prop; add id='pasi-urmatori', aria-labelledby.",
+        "Align CTA with COPY_LIBRARY: e.g. 'Explorează cluburile' or 'Explorează toate cluburile'."
+      ]
+    },
+    "LocalClubsSection": {
+      "issues": [
+        "getCityIdByName can fail; no try/catch or error handling.",
+        "Recomputes topRecommendations; location parsing (split by comma) is fragile for unusual formats.",
+        "'Vezi Toate Cluburile' vs COPY_LIBRARY 'Vezi cluburile' / 'Explorează toate cluburile'.",
+        "No section id."
+      ],
+      "improvements": [
+        "Wrap getCityIdByName in try/catch; log and degrade gracefully (cityId null) on failure.",
+        "Pass topRecommendations as prop; add id='cluburi-locale', aria-labelledby.",
+        "Align CTAs with COPY_LIBRARY."
+      ]
+    },
+    "ReportDownloadButton": {
+      "issues": [
+        "Button has no explicit aria-label (relies on visible text—acceptable but could improve).",
+        "Loading state uses role='status'; error alert could use aria-live or aria-describedby for dynamic updates.",
+        "Spinner has aria-hidden='true'; ensure 'Se pregătește...' is announced (e.g. aria-live on wrapper)."
+      ],
+      "improvements": [
+        "Add aria-busy when loading; ensure error alert has role='alert' (already has role='alert') and consider aria-live='polite' for error region so SR users hear updates.",
+        "Optional: aria-label='Descarcă raportul în format PDF' for clarity when icon+text might be unclear."
+      ]
+    },
+    "ClientRedirect": {
+      "issues": [
+        "Returns null; users relying on screen readers get no feedback during redirect.",
+        "No visible or announced 'Redirecting...' state."
+      ],
+      "improvements": [
+        "Add visually hidden, aria-live='polite' element with text 'Se redirecționează...' before redirect, or a minimal skip-link placeholder so SR users know navigation is in progress."
+      ]
+    }
+  },
+  "footerNote": {
+    "issues": [
+      "Footer note is a div with card classes, not semantic <footer>.",
+      "No explicit medical/non-diagnostic disclaimer (raport is recommendations, not medical advice)—could strengthen clarity."
+    ],
+    "improvements": [
+      "Use <footer> with aria-label='Informații raport' or similar; keep existing copy.",
+      "Optional: add one short sentence that recommendations are informative only and not a substitute for professional advice, in Romanian—align with legal/medical guidelines."
+    ]
+  },
+  "reportPdfStyles": {
+    "issues": [
+      "Print hides .breadcrumb-area; BreadcrumbOne uses .bd-breadcrumb-area—selector mismatch, breadcrumb may not hide in PDF.",
+      ".report-section .alert:not(.alert-info) hidden—AgeGuidance uses alert-success and alert-warning; those alerts are hidden in PDF, removing 'Poate începe acum' / 'Recomandăm să aștepți' content.",
+      "Duplicate page-break rules for .card and section.",
+      ".pdf-mode hides .btn globally; download button already hidden via d-none when isPdfMode—redundant but not harmful."
+    ],
+    "improvements": [
+      "Add .bd-breadcrumb-area to print hide list (or fix selector) so breadcrumb is hidden in PDF.",
+      "Narrow alert hiding: hide only alerts that are purely UI (e.g. error alerts), not AgeGuidance content. Use a specific class for 'hide-in-pdf' on optional UI alerts, or exclude .alert-success and .alert-warning from the rule in report context.",
+      "Deduplicate page-break rules; keep single source."
+    ]
+  },
+  "accessibility": {
+    "issues": [
+      "Two h1s on page: Breadcrumb 'Raport Complet' and ReportHeader 'Raport Complet Personalizat'.",
+      "No section ids or aria-labelledby; in-page navigation (e.g. 'on this page') not possible.",
+      "Decorative icons (bi-*) often lack aria-hidden.",
+      "Progress bar in SportRecommendationsSection represents match score, not progress; could use aria-valuetext.",
+      "ClientRedirect renders nothing; no SR feedback during redirect.",
+      "Main content has no <main> landmark."
+    ],
+    "improvements": [
+      "Ensure single h1: use ReportHeader as primary h1; Breadcrumb title as p or span on report route.",
+      "Add id and aria-labelledby to each report section; consistent heading hierarchy (h1 → h2 → h3).",
+      "Add aria-hidden='true' to all decorative icons in report components.",
+      "Add <main> wrapper with aria-label; add 'Se redirecționează...' for ClientRedirect."
+    ]
+  },
+  "uxAndContent": {
+    "issues": [
+      "Section 1 (top sports + truncated reasoning) and Section 2 (full reasoning) duplicate content; second section adds little.",
+      "'Top X sporturi recomandate'—when X=1, 'sporturi' is plural; consider 'sport' for singular.",
+      "CTAs 'Explorează Cluburi Locale', 'Vezi Toate Cluburile' slightly differ from COPY_LIBRARY.",
+      "NextSteps 'Cum să începi' is generic; not tailored to recommended sports.",
+      "LocalClubs generic copy per sport; no sport-specific nuance."
+    ],
+    "improvements": [
+      "Reduce redundancy: merge reasoning into one section or reframe Section 2 to add distinct value.",
+      "Use 'sport' when recommendations.length === 1, 'sporturi' otherwise.",
+      "Align CTAs with COPY_LIBRARY ('Explorează cluburile', 'Vezi cluburile' / 'Explorează toate cluburile').",
+      "Keep NextSteps/LocalClubs copy as-is unless product requests more personalization; document as future improvement."
+    ]
+  },
+  "codeQuality": {
+    "issues": [
+      "topRecommendations computed in ReportContent, AgeGuidance, NextSteps, LocalClubs (each sort+slice); DRY violation.",
+      "Inline styles (borderTop, borderLeft, fontSize, height, width, minHeight) across components; prefer CSS/design tokens.",
+      "LocalClubsSection: no try/catch around getCityIdByName.",
+      "Key=index in benefits/considerations lists; use sportId+index or stable key where possible.",
+      "ReportContent passes both sortedRecommendations and topRecommendations; some sections only need top."
+    ],
+    "improvements": [
+      "Compute topRecommendations once in ReportContent; pass as prop to AgeGuidance, NextSteps, LocalClubs. Keep SportsToAvoidSection filter logic there but receive topRecommendations.",
+      "Replace inline styles with utility classes or report-specific SCSS using design tokens.",
+      "Add try/catch in LocalClubsSection for getCityIdByName; log and use cityId=null on failure.",
+      "Use key={sportId}-benefit-{index} or similar where sportId available."
+    ]
+  },
+  "priorityOrder": [
+    "reportPdfStyles.breadcrumbSelector",
+    "reportPdfStyles.alertHideFix",
+    "a11y.singleH1",
+    "a11y.sectionIds",
+    "a11y.ariaHiddenIcons",
+    "a11y.mainLandmark",
+    "codeQuality.topRecommendationsDRY",
+    "codeQuality.inlineStyles",
+    "ReportHeader.borderAndIcons",
+    "SportRecommendationsSection.truncateAndA11y",
+    "SportBenefitsSection.borderAndKeys",
+    "SportsToAvoidSection.considerations",
+    "LocalClubsSection.getCityIdAndProps",
+    "NextStepsSection.propsAndCTA",
+    "AgeGuidanceSection.propsAndId",
+    "footerNote.semanticFooter",
+    "ReportDownloadButton.ariaBusy",
+    "ClientRedirect.redirectAnnounce",
+    "uxAndContent.singularPlural",
+    "uxAndContent.ctaAlign",
+    "uxAndContent.redundancySection1Section2"
+  ]
+}

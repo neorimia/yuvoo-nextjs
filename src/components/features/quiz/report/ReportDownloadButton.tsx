@@ -105,8 +105,8 @@ export default function ReportDownloadButton({ accessToken, quizId }: ReportDown
   return (
     <div>
       {error && (
-        <div className="alert alert-danger mb-3" role="alert">
-          <i className="bi bi-exclamation-triangle me-2"></i>
+        <div className="alert alert-danger mb-3" role="alert" aria-live="polite" aria-atomic="true">
+          <i className="bi bi-exclamation-triangle me-2" aria-hidden="true"></i>
           {error}
         </div>
       )}
@@ -115,6 +115,8 @@ export default function ReportDownloadButton({ accessToken, quizId }: ReportDown
         className="btn btn-yuvoo-primary btn-lg"
         onClick={handleDownload}
         disabled={isLoading}
+        aria-busy={isLoading}
+        aria-label="Descarcă raportul în format PDF"
       >
         {isLoading ? (
           <>
@@ -127,7 +129,7 @@ export default function ReportDownloadButton({ accessToken, quizId }: ReportDown
           </>
         ) : (
           <>
-            <i className="bi bi-download me-2"></i>
+            <i className="bi bi-download me-2" aria-hidden="true"></i>
             Descarcă Raportul PDF
           </>
         )}

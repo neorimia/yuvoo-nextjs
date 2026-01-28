@@ -11,7 +11,7 @@ import React from "react";
 import Link from "next/link";
 import { routes } from "@/lib/routes";
 
-export default function QuizIntroContent() {
+export default function QuizIntroContent({ quizCount }: { quizCount: number }) {
   return (
     <div className="quiz-intro-content">
       {/* Hero Section */}
@@ -211,10 +211,12 @@ export default function QuizIntroContent() {
                     Algoritm bazat pe mii de profiluri analizate pentru recomandări precise și
                     personalizate
                   </li>
-                  <li>
-                    Peste 1,000 de părinți au folosit deja chestionarul nostru și au primit
-                    recomandări relevante
-                  </li>
+                  {quizCount >= 100 && (
+                    <li>
+                      Peste {quizCount.toLocaleString("ro-RO")} părinți au folosit deja chestionarul
+                      nostru și au primit recomandări relevante
+                    </li>
+                  )}
                 </ul>
               </div>
             </div>

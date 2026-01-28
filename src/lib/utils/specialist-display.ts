@@ -18,6 +18,9 @@ export function getSpecialtyDisplayName(specialty: SpecialistRecommendation["spe
     orthopedist: "Ortopedie pediatrică",
     nutritionist: "Nutriție pediatrică",
     psychologist: "Psihologie pediatrică",
+    cardiologist: "Cardiologie pediatrică", // Added in Task 1.4.1
+    neurologist: "Neurologie pediatrică", // Added in Task 1.4.1
+    pulmonologist: "Pneumologie pediatrică", // Added in Task 1.4.2
     general: "Medic pediatru",
   };
 

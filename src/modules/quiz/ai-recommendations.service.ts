@@ -44,6 +44,30 @@ CRITERII DE RECOMANDARE:
 - **Preferințe**: Respectă preferințele pentru interior/exterior, echipă/individual
 - **Experiență anterioară**: Ia în considerare sporturile încercate anterior
 
+SEVERITATEA CONDIȚIILOR MEDICALE:
+Adaptează recomandările în funcție de severitatea condițiilor medicale:
+
+- Condiții ușoare/controlate: Majoritatea sporturilor sunt potrivite cu precauții minime
+- Condiții moderate: Alege sporturi specifice potrivite, evită sporturi de risc crescut, asigură acces la medicație (ex: inhalator)
+- Condiții severe/necontrolate: Necesită evaluare medicală înainte de ORICE sport, recomandă DOAR sporturi de impact redus după evaluare (ex: înot, ciclism ușor)
+
+Exemple:
+- Astm ușor: Majoritatea sporturilor sunt potrivite, înotul este de obicei benefic
+- Astm moderat: Sporturi potrivite cu precauții, evită condițiile extreme (frig intens, polen ridicat)
+- Astm sever: Evaluare pulmonară necesară, sporturile de intensitate ridicată sunt CONTRAINDICATE până la control
+
+VÂRSTE MINIME PENTRU SPORTURI COMPETITIVE (orientativ, pe baza practicii curente în România):
+- Gimnastică: 6 ani (recreativ: de la 4 ani)
+- Înot: 5 ani (recreativ: de la 4 ani)
+- Fotbal: 6 ani (recreativ: de la 5 ani)
+- Tenis: 6 ani (recreativ: de la 5 ani)
+- Baschet: 8 ani (recreativ: de la 6 ani)
+- Handbal: 8 ani (recreativ: de la 6 ani)
+- Volei: 9 ani (recreativ: de la 7 ani)
+- Atletism: 10 ani (recreativ: de la 7 ani)
+
+Dacă copilul are vârsta sub minimul competitiv pentru un sport, recomandă VARIANTA RECREATIVĂ și menționează clar că poate trece la nivel competitiv când atinge vârsta minimă.
+
 SCORUL DE POTRIVIRE (0-100):
 - **90-100**: Potrivire excelentă - sportul se aliniază perfect cu toate caracteristicile copilului
 - **80-89**: Potrivire foarte bună - sportul se aliniază cu majoritatea caracteristicilor
@@ -59,12 +83,43 @@ STIL DE COMUNICARE:
 - Considerente: 1-3 aspecte practice de luat în considerare
 
 IDENTIFICAREA SEMNALELOR DE RISC ȘI RECOMANDAREA SPECIALIȘTILOR:
+
+CONTRAINDICAȚII ABSOLUTE - EXCLUDERE SPORTURI:
+Dacă observi următoarele condiții sau mențiuni, NU recomanda sporturi competitive sau de intensitate ridicată până la evaluare medicală:
+
+- Simptome cardiace la efort (durere în piept, palpitații, leșin) → Exclude: sporturi competitive, sporturi de intensitate ridicată, sporturi de contact
+- Istoric familial de moarte cardiacă sub 50 ani → Exclude: sporturi competitive, sporturi de intensitate ridicată
+- Contuzie recentă (<3 luni) → Exclude: sporturi de contact, sporturi cu risc de impact la cap
+- Contuzii multiple (2+ în 2 ani) → Exclude: sporturi de contact, recomandă evaluare neurologică
+- Accidentare placă de creștere (fractură de cartilaj de creștere) recentă → Exclude: sporturi de impact și sărituri până la vindecare completă
+
+În aceste cazuri, întotdeauna:
+1. Recomandă consultare specialist (cardiolog / neurolog / ortoped) înainte de ORICE sport nou
+2. Dacă menționezi sporturi de impact redus (ex: înot, ciclism ușor), specifică clar că sunt potrivite DOAR după evaluare medicală
+3. Explică CLAR de ce este necesară evaluarea medicală
+4. NU recomanda sporturi de contact sau de intensitate ridicată
+
 Dacă observi urmatoarele semnale în răspunsuri, recomandă consultarea unui specialist:
+
+**Cardiologie pediatrică** (cardiologist) - CRITICĂ:
+- Simptome cardiace la efort (dureri piept, palpitații, leșin)
+- Istoric familial de moarte cardiacă subită sub 50 ani
+- Mențiuni despre aritmii sau probleme cardiace
+
+**Neurologie pediatrică** (neurologist) - CRITICĂ:
+- Contuzie recentă sau multiple contuzii
+- Simptome post-contuzionale (dureri de cap, amețeli, confuzie)
+- Mențiuni despre traumatisme craniene
+
+**Pneumologie pediatrică** (pulmonologist):
+- Astm sever sau necontrolat
+- Dificultăți respiratorii la efort
+- Mențiuni despre bronșită cronică sau probleme respiratorii
 
 **Ortopedie pediatrică** (orthopedist):
 - Mențiuni despre limitări fizice, probleme de coordonare sau dezvoltare motorie
-- Dureri articulare sau probleme de postură
-- Accidentări anterioare care necesită monitorizare
+- Dureri articulare moderate sau severe
+- Accidentări anterioare care necesită monitorizare (fracturi, entorse, luxații)
 - Probleme de echilibru sau mobilitate
 
 **Nutriție pediatrică** (nutritionist):
@@ -78,6 +133,7 @@ Dacă observi urmatoarele semnale în răspunsuri, recomandă consultarea unui s
 - Probleme de motivație sau încredere în sine
 - Dificultăți de concentrare sau comportament
 - Frică excesivă sau rezistență față de activități fizice
+- Experiențe negative anterioare în sport (bullying, hărțuire)
 
 **Medic pediatru general** (general):
 - Copil foarte inactiv sau cu nivel de energie extrem de scăzut
@@ -107,7 +163,7 @@ Returnează DOAR un obiect JSON valid (fără text suplimentar) în următorul f
   ],
   "specialistRecommendation": {
     "needed": false,
-    "specialty": "orthopedist" | "nutritionist" | "psychologist" | "general",
+    "specialty": "orthopedist" | "nutritionist" | "psychologist" | "cardiologist" | "neurologist" | "pulmonologist" | "general",
     "reason": "Explicație detaliată în română despre de ce este recomandat acest specialist (sau null dacă nu este necesar)",
     "priority": "high" | "medium" | "low"
   }
@@ -180,6 +236,67 @@ function buildUserPrompt(answers: QuizAnswers): string {
     athletic: "Atletic",
   };
 
+  const asthmaSeverityMap = {
+    none: "Fără astm",
+    mild: "Astm ușor (controlat)",
+    moderate: "Astm moderat",
+    severe: "Astm sever",
+  };
+
+  const jointPainSeverityMap = {
+    none: "Fără dureri articulare",
+    mild: "Dureri ușoare ocazionale",
+    moderate: "Dureri moderate frecvente",
+    severe: "Dureri severe persistente",
+  };
+
+  const inhalerUseMap = {
+    yes: "Da",
+    no: "Nu",
+    sometimes: "Ocazional",
+  };
+
+  // Build critical health section
+  const criticalHealthSection = answers.criticalHealth
+    ? `
+⚠️ SCREENING MEDICAL CRITIC:
+${answers.criticalHealth.cardiacSymptoms ? "- Simptome cardiace la efort detectate" : ""}
+${answers.criticalHealth.cardiacFamilyHistory ? "- Istoric familial moarte cardiacă sub 50 ani" : ""}
+${answers.criticalHealth.recentConcussion ? "- Contuzie recentă (<3 luni)" : ""}
+${answers.criticalHealth.multipleConcussions ? "- Contuzii multiple (2+ în 2 ani)" : ""}
+`
+    : "";
+
+  // Build health conditions section with severity
+  const healthConditionsSection = `
+CONDIȚII MEDICALE:
+${answers.asthmaSeverity && answers.asthmaSeverity !== "none" ? `- ${asthmaSeverityMap[answers.asthmaSeverity]}` : "- Fără astm"}
+${answers.asthmaSeverity && answers.asthmaSeverity !== "none" && answers.inhalerUse ? `  Folosește inhaler: ${inhalerUseMap[answers.inhalerUse]}` : ""}
+${answers.jointPainSeverity && answers.jointPainSeverity !== "none" ? `- ${jointPainSeverityMap[answers.jointPainSeverity]}` : "- Fără dureri articulare"}
+${answers.healthConditions && answers.healthConditions.length > 0 ? `- Alte condiții: ${answers.healthConditions.filter((c) => c !== "asthma" && c !== "joint-pain").join(", ") || "Niciuna"}` : ""}
+${answers.physicalConsiderations ? `- Considerații fizice: ${answers.physicalConsiderations}` : ""}
+`;
+
+  // Build injury details section
+  const injuryDetailsSection =
+    answers.injuryDetails && answers.injuryDetails.type
+      ? `
+ISTORIC ACCIDENTARE:
+- Tip: ${answers.injuryDetails.type}
+${answers.injuryDetails.when ? `- Când: ${answers.injuryDetails.when}` : ""}
+${
+  answers.injuryDetails.healed !== undefined && answers.injuryDetails.healed !== null
+    ? `- Rezolvată complet: ${answers.injuryDetails.healed ? "Da" : "Nu"}`
+    : "- Rezolvată complet: Neclar"
+}
+${
+  answers.injuryDetails.restrictions !== undefined
+    ? `- Restricții medicale curente: ${answers.injuryDetails.restrictions ? "Da" : "Nu"}`
+    : ""
+}
+`
+      : "";
+
   return `
 ANALIZA COPILULUI:
 
@@ -193,9 +310,14 @@ Trăsături de personalitate: ${answers.personality.join(", ")}
 Interese și hobby-uri: ${answers.interests.join(", ")}
 
 Sporturi încercate anterior: ${answers.previousSports.length > 0 ? answers.previousSports.join(", ") : "Niciunul"}
+${answers.whyStoppedSports && answers.whyStoppedSports.length > 0 ? `Motiv oprire: ${answers.whyStoppedSports.join(", ")}` : ""}
+${injuryDetailsSection}
 
 Constituție fizică: ${physicalBuildMap[answers.physicalBuild]}
-${answers.physicalConsiderations ? `Considerații fizice: ${answers.physicalConsiderations}` : ""}
+Nivel coordonare: ${answers.coordinationLevel === "excellent" ? "Foarte bine coordonat" : answers.coordinationLevel === "good" ? "Coordonare bună" : answers.coordinationLevel === "developing" ? "Încă dezvoltă coordonarea" : "Dificultăți de coordonare"}
+
+${criticalHealthSection}
+${healthConditionsSection}
 
 Preferințe:
 - Activități interioare: ${answers.preferences.indoor ? "Da" : "Nu"}
@@ -219,7 +341,14 @@ interface AIResponse {
   specialistRecommendation?: {
     needed: boolean;
     reason?: string;
-    specialty?: "orthopedist" | "nutritionist" | "psychologist" | "general";
+    specialty?:
+      | "orthopedist"
+      | "nutritionist"
+      | "psychologist"
+      | "cardiologist"
+      | "neurologist"
+      | "pulmonologist" // Added in Task 1.4.2
+      | "general";
     priority?: "high" | "medium" | "low";
   };
 }
@@ -307,8 +436,16 @@ export async function generateRecommendations(answers: QuizAnswers): Promise<Rec
       const specialty = aiResponse.specialistRecommendation.specialty || "general";
       const priority = aiResponse.specialistRecommendation.priority || "medium";
 
-      // Validate specialty
-      const validSpecialties = ["orthopedist", "nutritionist", "psychologist", "general"];
+      // Validate specialty (updated in Task 1.4.2 to include all specialists)
+      const validSpecialties = [
+        "orthopedist",
+        "nutritionist",
+        "psychologist",
+        "cardiologist",
+        "neurologist",
+        "pulmonologist",
+        "general",
+      ];
       const validatedSpecialty = validSpecialties.includes(specialty)
         ? (specialty as SpecialistRecommendation["specialty"])
         : "general";

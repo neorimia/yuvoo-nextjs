@@ -111,6 +111,15 @@ Yuvoo provides a unified platform that:
 - Human-readable explanations
 - **Language**: All AI-generated recommendations, explanations, and reasoning must be in Romanian language
 
+**Medical Safety (Phase 1 – Implemented)**:
+
+- **Critical screening** (step 5): Cardiac symptoms, cardiac family history, recent/multiple concussion; warning alert when detected; user can continue quiz.
+- **Severity levels**: Asthma (dropdown + inhaler follow-up), joint pain (dropdown); injury follow-up (type, when, healed, restrictions) when "injury" selected in why stopped.
+- **Sport exclusion**: Programmatic exclusion of contraindicated sports (contact, high-impact, endurance) by condition; fallback (e.g. Înot) when all excluded.
+- **Risk detection**: Cardiac, concussion, orthopedist, pulmonologist, nutritionist, psychologist, general; programmatic recommendation takes precedence over AI.
+- **AI prompt**: Absolute contraindications, severity-based recommendations, Romanian age minimums for sports; user prompt includes critical health and severity data.
+- **Documentation**: `docs/MEDICAL_SAFETY.md`; medical expert review checklist: `docs/MEDICAL_EXPERT_REVIEW_CHECKLIST.md`.
+
 **Future Enhancement**: ML models for improved recommendations
 
 ### 2. Club Directory
