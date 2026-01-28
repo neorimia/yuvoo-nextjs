@@ -57,11 +57,36 @@ The Lead Generation System enables parents to express interest in clubs, with cl
 
 ## Cron Jobs
 
+### Vercel Plan Limitations
+
+**Important**: Vercel cron job precision depends on your plan:
+
+- **Hobby Plan**:
+  - 100 cron jobs per project
+  - **Hourly precision** - Cron jobs can trigger anywhere within the scheduled hour
+  - Example: A cron job scheduled for `0 0 * * *` (midnight) may trigger anywhere between 00:00 and 00:59
+  - Example: A cron job scheduled for `0 * * * *` (every hour) may trigger anywhere within that hour window
+- **Pro Plan**:
+  - 100 cron jobs per project
+  - **Per-minute precision** - Cron jobs trigger at the exact scheduled minute
+- **Enterprise Plan**:
+  - 100 cron jobs per project
+  - **Per-minute precision** - Cron jobs trigger at the exact scheduled minute
+
+**Impact on Yuvoo Cron Jobs**:
+
+- `expire-leads` (daily at midnight): On Hobby plan, may run anywhere between 00:00-00:59
+- `send-lead-reminders` (hourly): On Hobby plan, may run anywhere within each hour window
+
+**Recommendation**: For production use, consider upgrading to Pro plan for precise timing, especially if lead expiration timing is critical.
+
 ### Expire Leads Cron Job
 
 **Route**: `/api/cron/expire-leads`  
 **Schedule**: Daily at midnight (`0 0 * * *`)  
 **Purpose**: Expire leads that have passed their 5-day expiration date
+
+**Note**: On Hobby plan, this may execute anywhere between 00:00 and 00:59
 
 **Process**:
 
@@ -101,6 +126,8 @@ The Lead Generation System enables parents to express interest in clubs, with cl
 **Route**: `/api/cron/send-lead-reminders`  
 **Schedule**: Every hour (`0 * * * *`)  
 **Purpose**: Send reminder emails to clubs about pending leads (48h after creation)
+
+**Note**: On Hobby plan, this may execute anywhere within each hour window (e.g., scheduled for 1:00 PM may run between 1:00 PM and 1:59 PM)
 
 **Process**:
 

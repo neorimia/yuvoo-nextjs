@@ -4,9 +4,9 @@
  * Public page for clubs without accounts to pay for lead access.
  * No authentication required.
  * Route: /cereri/[leadId]/plata-guest
+ *
+ * Note: This is a dynamic route that depends on params, so we don't use "use cache" directive.
  */
-
-"use cache";
 
 import React from "react";
 import type { Metadata } from "next";
@@ -15,7 +15,6 @@ import { leadsRepository } from "@/modules/leads/leads.repository";
 import { clubsRepository } from "@/modules/clubs/clubs.repository";
 import { getLocationNameById } from "@/lib/db/location-helpers";
 import GuestLeadPayment from "@/components/features/clubs/GuestLeadPayment";
-import { cacheLife, cacheTag } from "next/cache";
 
 interface GuestPaymentPageProps {
   params: Promise<{
@@ -23,7 +22,17 @@ interface GuestPaymentPageProps {
   }>;
 }
 
-export async function generateMetadata(): Promise<Metadata> {
+/**
+ * Generate static params - returns placeholder to satisfy Cache Components requirement
+ * This route is dynamic and will be generated at runtime, but we need at least one value for build validation
+ */
+export async function generateStaticParams() {
+  return [{ leadId: "placeholder-lead-id" }];
+}
+
+export async function generateMetadata({ params }: GuestPaymentPageProps): Promise<Metadata> {
+  // Access params to mark as dynamic
+  await params;
   return {
     title: `Plată cerere - Yuvoo`,
     description: "Plătește pentru a accesa informațiile de contact ale părintelui.",
@@ -31,11 +40,26 @@ export async function generateMetadata(): Promise<Metadata> {
 }
 
 export default async function GuestPaymentPage({ params }: GuestPaymentPageProps) {
-  // Cache configuration for public cache
-  cacheLife("minutes");
-  cacheTag(`lead-${(await params).leadId}`);
-
   const { leadId } = await params;
+  const isProductionBuild = process.env.NEXT_PHASE === "phase-production-build";
+
+  // During build, render placeholder for placeholder lead ID
+  if (isProductionBuild && leadId === "placeholder-lead-id") {
+    return (
+      <div className="container py-5">
+        <div className="row justify-content-center">
+          <div className="col-lg-8">
+            <div className="card">
+              <div className="card-body text-center py-5">
+                <h2 className="mb-3">Plată Cerere</h2>
+                <p className="text-muted">Build placeholder</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    );
+  }
 
   // Fetch lead (no authentication required)
   const lead = await leadsRepository.findById(leadId);

@@ -39,12 +39,27 @@ export async function generateStaticParams() {
  * Generate metadata for teaser page
  */
 export async function generateMetadata({ params }: TeaserPageProps): Promise<Metadata> {
-  // CRITICAL: Access dynamic data sources FIRST, before any other operations
-  // This must be the very first thing to prevent crypto.randomUUID() errors
+  // Access params first to mark route as dynamic
+  const { quizId } = await params;
+  const isProductionBuild = process.env.NEXT_PHASE === "phase-production-build";
+
+  // During build with placeholder, return static metadata
+  if (isProductionBuild && quizId === "placeholder") {
+    return {
+      title: "Recomandarea ta personalizată | Yuvoo",
+      description:
+        "Vezi recomandarea noastră personalizată de sport pentru copilul tău. Deblochează raportul complet pentru detalii și plan de acțiune.",
+      robots: {
+        index: false,
+        follow: false,
+      },
+    };
+  }
+
+  // At runtime, access dynamic data sources to mark route as dynamic
   await connection();
   await cookies();
   await headers();
-  await params; // Access params to mark as dynamic
 
   return {
     title: "Recomandarea ta personalizată | Yuvoo",
@@ -64,12 +79,39 @@ export async function generateMetadata({ params }: TeaserPageProps): Promise<Met
  * Includes CTA to unlock full report.
  */
 export default async function TeaserPage({ params }: TeaserPageProps) {
-  // CRITICAL: Access dynamic data sources FIRST, before any other operations
-  // This must be the very first thing to prevent crypto.randomUUID() errors
+  // Access params first
+  const { quizId } = await params;
+  const isProductionBuild = process.env.NEXT_PHASE === "phase-production-build";
+
+  // During build, render placeholder for placeholder quiz ID
+  if (isProductionBuild && quizId === "placeholder") {
+    return (
+      <>
+        <BreadcrumbOne
+          title="Recomandarea ta personalizată"
+          subTitle="Chestionar"
+          items={[
+            { name: "Yuvoo", url: routes.home },
+            { name: "Chestionar", url: routes.quiz.intro },
+            { name: "Recomandare", url: routes.quiz.teaser(quizId) },
+          ]}
+        />
+        <section className="teaser-section py-5">
+          <div className="container">
+            <div className="text-center">
+              <h1 className="display-5 fw-bold mb-3">Recomandarea ta personalizată</h1>
+              <p className="text-muted">Build placeholder</p>
+            </div>
+          </div>
+        </section>
+      </>
+    );
+  }
+
+  // At runtime, access dynamic data sources to mark route as dynamic
   await connection();
   await cookies();
   await headers();
-  const { quizId } = await params;
 
   // Fetch quiz results
   const quizResult = await getQuizResultAction(quizId);

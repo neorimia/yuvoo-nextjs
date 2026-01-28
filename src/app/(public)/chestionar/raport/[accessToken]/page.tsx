@@ -47,12 +47,27 @@ export async function generateStaticParams() {
  * This must be the very first operation in this function.
  */
 export async function generateMetadata({ params }: ReportPageProps): Promise<Metadata> {
-  // CRITICAL: Access dynamic data sources FIRST, before any other operations
-  // This must be the very first thing to prevent crypto.randomUUID() errors
+  // Access params first to mark route as dynamic
+  const { accessToken } = await params;
+  const isProductionBuild = process.env.NEXT_PHASE === "phase-production-build";
+
+  // During build with placeholder, return static metadata
+  if (isProductionBuild && accessToken === "placeholder") {
+    return {
+      title: "Raport Complet - Recomandări Personalizate | Yuvoo",
+      description:
+        "Raport complet cu recomandări personalizate de sporturi pentru copilul tău, bazat pe profilul completat în chestionar.",
+      robots: {
+        index: false,
+        follow: false,
+      },
+    };
+  }
+
+  // At runtime, access dynamic data sources to mark route as dynamic
   await connection();
   await cookies();
   await headers();
-  await params; // Access params to mark as dynamic
 
   return {
     title: "Raport Complet - Recomandări Personalizate | Yuvoo",
@@ -75,12 +90,39 @@ export async function generateMetadata({ params }: ReportPageProps): Promise<Met
  * This must be the very first operation in this function.
  */
 export default async function ReportPage({ params, searchParams }: ReportPageProps) {
-  // CRITICAL: Access dynamic data sources FIRST, before any other operations
-  // This must be the very first thing to prevent crypto.randomUUID() errors
+  // Access params first
+  const { accessToken } = await params;
+  const isProductionBuild = process.env.NEXT_PHASE === "phase-production-build";
+
+  // During build, render placeholder for placeholder access token
+  if (isProductionBuild && accessToken === "placeholder") {
+    return (
+      <>
+        <BreadcrumbOne
+          title="Raport Complet"
+          subTitle="Chestionar"
+          items={[
+            { name: "Yuvoo", url: routes.home },
+            { name: "Chestionar", url: routes.quiz.intro },
+            { name: "Raport", url: routes.quiz.report(accessToken) },
+          ]}
+        />
+        <section className="report-section py-5">
+          <div className="container">
+            <div className="text-center">
+              <h1 className="display-5 fw-bold mb-3">Raport Complet</h1>
+              <p className="text-muted">Build placeholder</p>
+            </div>
+          </div>
+        </section>
+      </>
+    );
+  }
+
+  // At runtime, access dynamic data sources to mark route as dynamic
   await connection();
   await cookies();
   await headers();
-  const { accessToken } = await params;
   const { pdf } = await searchParams;
 
   // If PDF mode, add print styles class

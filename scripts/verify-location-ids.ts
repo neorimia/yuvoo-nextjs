@@ -28,8 +28,6 @@ async function verify() {
   const sample = await db
     .select({
       name: clubs.name,
-      city: clubs.city,
-      district: clubs.district,
       cityId: clubs.cityId,
       sectorId: clubs.sectorId,
       countyId: clubs.countyId,
@@ -40,36 +38,35 @@ async function verify() {
   console.log("\n📋 Sample clubs:");
   sample.forEach((c) => {
     console.log(`   - ${c.name}`);
-    console.log(`     city: "${c.city}", district: "${c.district || "N/A"}"`);
     console.log(
       `     cityId: ${c.cityId || "NULL"}, sectorId: ${c.sectorId || "NULL"}, countyId: ${c.countyId || "NULL"}`
     );
   });
 
   // Check Bucharest clubs specifically (should have sectorId)
+  // Note: We need to check by cityId pointing to Bucharest location
   const bucharestClubs = await db
     .select({
       name: clubs.name,
-      district: clubs.district,
       sectorId: clubs.sectorId,
+      cityId: clubs.cityId,
     })
     .from(clubs)
-    .where(sql`city = 'București'`)
+    .where(sql`city_id IN (SELECT id FROM locations WHERE name = 'București' AND type = 'city')`)
     .limit(5);
 
   console.log("\n🏛️  Bucharest clubs (should have sectorId):");
   bucharestClubs.forEach((c) => {
-    console.log(
-      `   - ${c.name}: district="${c.district || "N/A"}", sectorId=${c.sectorId || "NULL"}`
-    );
+    console.log(`   - ${c.name}: cityId=${c.cityId || "NULL"}, sectorId=${c.sectorId || "NULL"}`);
   });
 
   // Check for clubs missing cityId
   const missingCityId = await db
     .select({
       name: clubs.name,
-      city: clubs.city,
-      district: clubs.district,
+      cityId: clubs.cityId,
+      sectorId: clubs.sectorId,
+      countyId: clubs.countyId,
     })
     .from(clubs)
     .where(sql`city_id IS NULL`)
@@ -79,7 +76,9 @@ async function verify() {
     console.log("\n⚠️  Clubs missing cityId:");
     missingCityId.forEach((c) => {
       console.log(`   - ${c.name}`);
-      console.log(`     city: "${c.city}", district: "${c.district || "N/A"}"`);
+      console.log(
+        `     cityId: ${c.cityId || "NULL"}, sectorId: ${c.sectorId || "NULL"}, countyId: ${c.countyId || "NULL"}`
+      );
     });
   } else {
     console.log("\n✅ All clubs have cityId!");
