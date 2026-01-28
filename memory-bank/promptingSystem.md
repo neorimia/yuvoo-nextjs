@@ -931,6 +931,7 @@ This template ensures all feature implementations:
   - `prompts/guest-club-payment-flow-implementation-plan.md` - Guest payment flow example
   - `prompts/clubs-landing-email-copy-analysis-prompt.md` - Sales director copy analysis prompt (clubs landing page + emails)
   - `prompts/raport-quality-analysis-and-improvement-prompt.md` - Raport page + report components analysis and quality improvement
+  - `prompts/quiz-container-page-analysis-prompt.md` - Quiz container page analysis prompt (code paths, test scenarios, edge cases)
 
 ---
 
