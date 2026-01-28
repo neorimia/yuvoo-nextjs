@@ -126,21 +126,57 @@ export async function getDoctorsBySpecialtyAction(specialty: string): Promise<Do
 }
 
 /**
+ * Quiz Specialist to Doctor Platform Specialty Mapping
+ *
+ * The quiz can recommend specialists that may not be available on the Yuvoo platform.
+ * This maps quiz recommendations to the closest available specialty on the platform.
+ *
+ * - Specialists in platform: orthopedist, nutritionist, psychologist, general
+ * - External specialists (quiz only): cardiologist, neurologist, pulmonologist
+ */
+type QuizSpecialty =
+  | "orthopedist"
+  | "nutritionist"
+  | "psychologist"
+  | "cardiologist"
+  | "neurologist"
+  | "pulmonologist"
+  | "general";
+
+const QUIZ_TO_PLATFORM_SPECIALTY: Record<QuizSpecialty, DoctorSearchFilters["specialty"]> = {
+  orthopedist: "orthopedist",
+  nutritionist: "nutritionist",
+  psychologist: "psychologist",
+  general: "general",
+  // External specialists map to general (pediatrician) for platform search
+  // The UI will show a message that these require external referral
+  cardiologist: "general",
+  neurologist: "general",
+  pulmonologist: "general",
+};
+
+/**
  * Get recommended doctors based on specialist recommendation
  *
- * @param specialty - Medical specialty (orthopedist, nutritionist, psychologist, general)
- * @param city - Optional city filter
+ * @param specialty - Medical specialty from quiz recommendation
+ * @param cityId - Optional city ID filter
  * @param limit - Maximum number of doctors to return (default: 5)
  * @returns List of recommended doctors
+ *
+ * Note: For cardiologist, neurologist, and pulmonologist recommendations,
+ * this returns general pediatricians as these specialists are external referrals.
  */
 export async function getRecommendedDoctorsAction(
-  specialty: "orthopedist" | "nutritionist" | "psychologist" | "general",
+  specialty: QuizSpecialty,
   cityId?: string, // Phase 6: Changed from city (string) to cityId (string)
   limit: number = 5
 ): Promise<DoctorSearchResult> {
   try {
+    // Map quiz specialty to platform specialty
+    const platformSpecialty = QUIZ_TO_PLATFORM_SPECIALTY[specialty];
+
     const filters: DoctorSearchFilters = {
-      specialty,
+      specialty: platformSpecialty,
       verified: true, // Only show verified doctors
       acceptingNewPatients: true, // Only show doctors accepting new patients
       page: 1,

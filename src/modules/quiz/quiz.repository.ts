@@ -7,7 +7,7 @@
 
 import { db } from "@/lib/db";
 import { quizzes } from "@/lib/db/schema";
-import { eq, desc } from "drizzle-orm";
+import { eq, desc, sql } from "drizzle-orm";
 import type {
   QuizSubmission,
   QuizResult,
@@ -221,6 +221,20 @@ export async function updateQuizLocation(quizId: string, location: string): Prom
     .where(eq(quizzes.id, quizId));
 }
 
+/**
+ * Get total quiz count
+ *
+ * Returns the total number of quiz submissions in the database.
+ * Used for social proof messaging.
+ *
+ * @returns Total number of quizzes
+ */
+export async function getQuizCount(): Promise<number> {
+  const result = await db.select({ count: sql<number>`count(*)` }).from(quizzes);
+
+  return Number(result[0]?.count ?? 0);
+}
+
 export const quizRepository = {
   create,
   saveResults,
@@ -229,4 +243,5 @@ export const quizRepository = {
   getQuizAnswers,
   updateQuizEmail,
   updateQuizLocation,
+  getQuizCount,
 };

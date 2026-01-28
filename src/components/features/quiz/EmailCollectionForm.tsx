@@ -114,7 +114,7 @@ export default function EmailCollectionForm({ quizId }: EmailCollectionFormProps
           </div>
         )}
         <div id="email-help" className="form-text">
-          Vom trimite recomandarea personalizată la această adresă.
+          Vei vedea recomandarea personalizată imediat după introducerea email-ului.
         </div>
       </div>
 

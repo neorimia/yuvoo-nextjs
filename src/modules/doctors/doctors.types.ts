@@ -4,6 +4,14 @@
  * TypeScript types for pediatric specialist domain.
  */
 
+/**
+ * Doctor specialties available in the Yuvoo platform
+ *
+ * These are the specialties that doctors can register with on the platform.
+ * Note: The quiz system may recommend other specialists (cardiologist, neurologist,
+ * pulmonologist) which would be external referrals, not in the Yuvoo directory.
+ * See SpecialistRecommendation in quiz.types.ts for all quiz-recommended specialties.
+ */
 export type DoctorSpecialty = "orthopedist" | "nutritionist" | "psychologist" | "general";
 
 export interface Doctor {

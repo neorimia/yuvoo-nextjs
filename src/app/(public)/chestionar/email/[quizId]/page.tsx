@@ -13,6 +13,7 @@ import BreadcrumbOne from "@/components/Breadcrumb/BreadcrumbOne";
 import { getQuizResultAction } from "@/app/actions/quiz";
 import { routes } from "@/lib/routes";
 import EmailCollectionForm from "@/components/features/quiz/EmailCollectionForm";
+import { getQuizCount } from "@/modules/quiz/quiz.repository";
 
 interface EmailCollectionPageProps {
   params: Promise<{ quizId: string }>;
@@ -32,9 +33,9 @@ export async function generateMetadata({ params }: EmailCollectionPageProps): Pr
   const { quizId: _quizId } = await params;
 
   return {
-    title: "Completează pentru a vedea recomandarea | Yuvoo",
+    title: "Vezi recomandarea personalizată pentru copilul tău | Yuvoo",
     description:
-      "Introdu email-ul tău pentru a primi recomandarea personalizată de sport pentru copilul tău.",
+      "Pe baza răspunsurilor tale, am identificat sportul cel mai potrivit. Introdu email-ul pentru a vedea imediat recomandarea personalizată.",
     robots: {
       index: false,
       follow: false,
@@ -60,6 +61,9 @@ export default async function EmailCollectionPage({ params }: EmailCollectionPag
     notFound();
   }
 
+  // Get quiz count for social proof
+  const quizCount = await getQuizCount();
+
   // Check if quiz already has email (already collected)
   // If email exists, redirect to teaser page
   // Note: We'll check this in the form component or handle redirect here
@@ -67,7 +71,7 @@ export default async function EmailCollectionPage({ params }: EmailCollectionPag
   return (
     <>
       <BreadcrumbOne
-        title="Completează pentru a vedea recomandarea"
+        title="Vezi recomandarea personalizată pentru copilul tău"
         subTitle="Email"
         items={[
           { name: "Yuvoo", url: routes.home },
@@ -90,10 +94,13 @@ export default async function EmailCollectionPage({ params }: EmailCollectionPag
                         aria-hidden="true"
                       ></i>
                     </div>
-                    <h1 className="h3 fw-bold mb-3">Completează pentru a vedea recomandarea</h1>
+                    <h1 className="h3 fw-bold mb-3">
+                      Vezi recomandarea personalizată pentru copilul tău
+                    </h1>
                     <p className="text-muted mb-0">
-                      Am analizat răspunsurile tale și am identificat sportul potrivit pentru
-                      copilul tău. Introdu email-ul tău pentru a primi recomandarea personalizată.
+                      Pe baza răspunsurilor tale, am identificat sportul cel mai potrivit pentru
+                      copilul tău. Introdu email-ul tău pentru a vedea imediat recomandarea
+                      personalizată.
                     </p>
                   </div>
 
@@ -110,7 +117,7 @@ export default async function EmailCollectionPage({ params }: EmailCollectionPag
                             style={{ fontSize: "1.5rem" }}
                             aria-hidden="true"
                           ></i>
-                          <small className="text-muted">Confidențialitate garantată</small>
+                          <small className="text-muted">Date protejate, nu partajăm cu terți</small>
                         </div>
                       </div>
                       <div className="col-12 col-md-4">
@@ -130,11 +137,22 @@ export default async function EmailCollectionPage({ params }: EmailCollectionPag
                             style={{ fontSize: "1.5rem" }}
                             aria-hidden="true"
                           ></i>
-                          <small className="text-muted">Recomandare gratuită</small>
+                          <small className="text-muted">Previzualizare gratuită</small>
                         </div>
                       </div>
                     </div>
                   </div>
+
+                  {/* Social Proof */}
+                  {quizCount >= 100 && (
+                    <div className="text-center mb-3 mt-3">
+                      <p className="text-muted small mb-0">
+                        <i className="bi bi-people-fill text-primary me-2" aria-hidden="true"></i>
+                        Peste {quizCount.toLocaleString("ro-RO")} părinți au folosit deja serviciul
+                        nostru pentru a găsi sportul potrivit
+                      </p>
+                    </div>
+                  )}
                 </div>
               </div>
             </div>

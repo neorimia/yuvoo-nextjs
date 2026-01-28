@@ -22,11 +22,12 @@ import AgeQuestion from "./questions/AgeQuestion";
 import EnergyQuestion from "./questions/EnergyQuestion";
 import PersonalityQuestion from "./questions/PersonalityQuestion";
 import InterestsQuestion from "./questions/InterestsQuestion";
+import CriticalHealthScreeningQuestion from "./questions/CriticalHealthScreeningQuestion";
 import PhysicalQuestion from "./questions/PhysicalQuestion";
 import PreferencesQuestion from "./questions/PreferencesQuestion";
 import QuizLoadingOverlay from "./QuizLoadingOverlay";
 
-const TOTAL_STEPS = 6;
+const TOTAL_STEPS = 7;
 
 interface QuizContainerProps {
   childId: string; // Required: child ID for quiz submission
@@ -219,8 +220,10 @@ function QuizContent({ childId }: { childId: string }) {
       case 4:
         return <InterestsQuestion />;
       case 5:
-        return <PhysicalQuestion />;
+        return <CriticalHealthScreeningQuestion />;
       case 6:
+        return <PhysicalQuestion />;
+      case 7:
         return <PreferencesQuestion />;
       default:
         return null;

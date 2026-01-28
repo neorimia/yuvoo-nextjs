@@ -1,0 +1,447 @@
+{
+  "summary": {
+    "overallAssessment": "Analiza paginilor de conversie arată un potențial solid de îmbunătățire prin clarificarea valorii, reducerea fricțiunii și construirea încrederii. Paginile actuale sunt funcționale și respectă brandul, dar pot beneficia de optimizări strategice care să crească rata de conversie fără să compromită tonul calm și ghidant. Principalele oportunități includ: (1) clarificarea valorii personalizate înainte de colectarea email-ului, (2) creșterea curiozității pe pagina teaser prin evidențierea gap-ului între preview și raport complet, (3) reducerea anxietății legate de plată prin evidențierea clară a beneficiilor și a securității, și (4) îmbunătățirea experienței post-plată prin anticipare și claritate.",
+    "conversionFunnelAnalysis": {
+      "emailCollection": {
+        "currentConversionRate": "unknown",
+        "bottlenecks": [
+          "Headline-ul nu evidențiază suficient personalizarea și valoarea",
+          "Lipsă de claritate despre ce vor primi exact după introducerea email-ului",
+          "Trust indicators sunt generice și nu construiesc suficientă încredere",
+          "Formularele pot crea fricțiune (două câmpuri obligatorii)"
+        ],
+        "opportunities": [
+          "Evidențierea personalizării bazate pe răspunsurile date",
+          "Clarificarea că vor vedea imediat recomandarea (nu doar primi email)",
+          "Adăugarea de social proof subtil (număr de părinți care au folosit serviciul)",
+          "Reducerea fricțiunii prin mesaje de încurajare"
+        ]
+      },
+      "teaserToPaywall": {
+        "currentConversionRate": "unknown",
+        "bottlenecks": [
+          "Preview-ul sportului este prea scurt (300 caractere) și poate părea insuficient",
+          "Mesajul despre ce include raportul complet este listă, nu beneficii clare",
+          "Lipsă de urgență legitimă (nu dark pattern, ci claritate despre valoare)",
+          "CTA-ul nu evidențiază suficient ce vor pierde dacă nu continuă"
+        ],
+        "opportunities": [
+          "Evidențierea clară a gap-ului între preview și raport complet",
+          "Transformarea listei în beneficii concrete pentru copil",
+          "Adăugarea de anticipare pozitivă despre ce vor descoperi",
+          "Clarificarea că raportul este permanent și accesibil oricând"
+        ]
+      },
+      "paywallToPayment": {
+        "currentConversionRate": "unknown",
+        "bottlenecks": [
+          "Prețul este clar, dar nu este contextualizat suficient (39 lei = ce valoare concretă?)",
+          "Lipsă de comparație cu alternative (consultații, cercetare manuală)",
+          "Mesajul despre 'ce include' este repetitiv cu teaser-ul",
+          "Trust indicators sunt generice și nu construiesc suficientă încredere",
+          "Lipsă de claritate despre ce se întâmplă după plată"
+        ],
+        "opportunities": [
+          "Contextualizarea prețului prin comparație cu alternative",
+          "Evidențierea economiei de timp și bani",
+          "Clarificarea procesului post-plată (email automat, acces instant)",
+          "Adăugarea de garanție sau policy de returnare dacă există",
+          "Evidențierea că este investiție unică, nu abonament"
+        ]
+      }
+    },
+    "keyFindings": [
+      "Personalizarea nu este suficient de evidențiată - părinții trebuie să înțeleagă că recomandarea este bazată pe răspunsurile lor specifice",
+      "Valoarea concretă nu este clarificată - lipsă de comparație cu alternative și de evidențiere a economiei de timp",
+      "Trust building este generic - trust indicators nu sunt suficient de specifice și credibile",
+      "Gap-ul între teaser și raport complet nu este suficient de clar - părinții pot crede că au deja informațiile necesare",
+      "Experiența post-plată nu construiește anticipare - pagina de succes este funcțională dar nu maximizează satisfacția"
+    ],
+    "priorityImprovements": [
+      "Clarificarea valorii personalizate înainte de colectarea email-ului (headline și subheadline)",
+      "Evidențierea gap-ului între preview și raport complet pe pagina teaser",
+      "Contextualizarea prețului prin comparație cu alternative și evidențierea economiei"
+    ]
+  },
+  "pageAnalysis": {
+    "emailCollection": {
+      "currentStrengths": [
+        "Design curat și profesional",
+        "Trust indicators vizibile",
+        "Formular simplu cu doar două câmpuri",
+        "Mesaj clar despre confidențialitate"
+      ],
+      "weaknesses": [
+        "Headline-ul este generic și nu evidențiază personalizarea",
+        "Subheadline-ul nu clarifică suficient valoarea",
+        "Trust indicators sunt generice și nu construiesc încredere specifică",
+        "Lipsă de anticipare despre ce vor vedea imediat",
+        "Mesajul 'Recomandare gratuită' poate crea confuzie (nu este clar că doar preview-ul este gratuit)"
+      ],
+      "suggestions": [
+        {
+          "priority": "high",
+          "impact": "high",
+          "effort": "low",
+          "title": "Evidențierea personalizării în headline",
+          "description": "Headline-ul actual este generic și nu evidențiază că recomandarea este personalizată bazată pe răspunsurile date. Evidențierea personalizării crește valoarea percepută și reduce scepticismul.",
+          "psychologicalReasoning": "Personalizarea crește valoarea percepută și reduce scepticismul. Părinții sunt mai dispuși să ofere email-ul dacă înțeleg că recomandarea este bazată pe răspunsurile lor specifice, nu pe un template generic.",
+          "before": "Completează pentru a vedea recomandarea",
+          "after": "Vezi recomandarea personalizată pentru copilul tău",
+          "location": "headline"
+        },
+        {
+          "priority": "high",
+          "impact": "high",
+          "effort": "low",
+          "title": "Clarificarea valorii în subheadline",
+          "description": "Subheadline-ul actual nu clarifică suficient ce vor primi exact și când. Clarificarea că vor vedea imediat recomandarea (nu doar primi email) reduce fricțiunea și crește anticiparea.",
+          "psychologicalReasoning": "Claritatea despre ce vor primi și când reduce anxietatea și fricțiunea. Părinții sunt mai dispuși să acționeze când înțeleg exact ce se întâmplă după ce introduc email-ul.",
+          "before": "Am analizat răspunsurile tale și am identificat sportul potrivit pentru copilul tău. Introdu email-ul tău pentru a primi recomandarea personalizată.",
+          "after": "Pe baza răspunsurilor tale, am identificat sportul cel mai potrivit pentru copilul tău. Introdu email-ul tău pentru a vedea imediat recomandarea personalizată.",
+          "location": "subheadline"
+        },
+        {
+          "priority": "medium",
+          "impact": "medium",
+          "effort": "low",
+          "title": "Îmbunătățirea trust indicator-ului 'Confidențialitate garantată'",
+          "description": "Trust indicator-ul actual este generic. Specificarea că datele sunt protejate și nu sunt partajate cu terți construiește mai multă încredere.",
+          "psychologicalReasoning": "Specificitatea construiește mai multă încredere decât afirmații generice. Părinții români sunt precauți cu datele personale și apreciază transparența.",
+          "before": "Confidențialitate garantată",
+          "after": "Date protejate, nu partajăm cu terți",
+          "location": "trustIndicator"
+        },
+        {
+          "priority": "medium",
+          "impact": "medium",
+          "effort": "low",
+          "title": "Clarificarea mesajului 'Recomandare gratuită'",
+          "description": "Mesajul 'Recomandare gratuită' poate crea confuzie - nu este clar că doar preview-ul este gratuit. Clarificarea că vor vedea o previzualizare gratuită reduce confuzia.",
+          "psychologicalReasoning": "Claritatea despre ce este gratuit și ce nu reduce confuzia și frustrarea ulterioară. Părinții apreciază transparența despre costuri și valoare.",
+          "before": "Recomandare gratuită",
+          "after": "Previzualizare gratuită",
+          "location": "trustIndicator"
+        },
+        {
+          "priority": "low",
+          "impact": "low",
+          "effort": "low",
+          "title": "Îmbunătățirea help text-ului pentru email",
+          "description": "Help text-ul actual este funcțional dar poate fi mai clar despre ce vor primi exact. Clarificarea că vor vedea recomandarea imediat după introducerea email-ului crește anticiparea.",
+          "psychologicalReasoning": "Claritatea despre ce vor primi reduce anxietatea și crește anticiparea. Părinții sunt mai dispuși să acționeze când înțeleg exact ce se întâmplă.",
+          "before": "Vom trimite recomandarea personalizată la această adresă.",
+          "after": "Vei vedea recomandarea personalizată imediat după introducerea email-ului.",
+          "location": "helpText"
+        }
+      ]
+    },
+    "teaser": {
+      "currentStrengths": [
+        "Design atractiv cu card pentru recomandare",
+        "Match score vizibil și credibil",
+        "Listă clară despre ce include raportul complet",
+        "CTA prominent și clar"
+      ],
+      "weaknesses": [
+        "Headline-ul nu construiește suficientă anticipare",
+        "Preview-ul este prea scurt (300 caractere) și poate părea insuficient",
+        "Mesajul despre ce include raportul complet este listă, nu beneficii concrete",
+        "Lipsă de claritate despre gap-ul între preview și raport complet",
+        "Trust message-ul este generic și nu construiește suficientă încredere"
+      ],
+      "suggestions": [
+        {
+          "priority": "high",
+          "impact": "high",
+          "effort": "low",
+          "title": "Construirea anticipării în headline",
+          "description": "Headline-ul actual este factual dar nu construiește suficientă anticipare. Evidențierea că aceasta este doar începutul și că raportul complet dezvăluie mult mai mult crește curiozitatea.",
+          "psychologicalReasoning": "Anticiparea pozitivă crește curiozitatea și motivația de a continua. Părinții sunt mai dispuși să plătească când înțeleg că aceasta este doar o previzualizare și că raportul complet oferă mult mai multă valoare.",
+          "before": "Am identificat sportul potrivit!",
+          "after": "Am identificat sportul potrivit! Descoperă de ce și ce urmează",
+          "location": "headline"
+        },
+        {
+          "priority": "high",
+          "impact": "high",
+          "effort": "low",
+          "title": "Evidențierea gap-ului între preview și raport complet",
+          "description": "Mesajul actual despre 'recomandare parțială' este clar dar nu evidențiază suficient ce vor pierde dacă nu continuă. Evidențierea clară a gap-ului crește valoarea percepută a raportului complet.",
+          "psychologicalReasoning": "Loss aversion - evidențierea a ceea ce vor pierde dacă nu continuă crește motivația de a acționa. Părinții sunt mai dispuși să plătească când înțeleg clar ce vor pierde dacă nu continuă.",
+          "before": "Recomandare parțială: Aceasta este doar o previzualizare. Raportul complet include explicații detaliate, beneficiile fizice și emoționale, sporturi de evitat, vârsta ideală pentru început, pașii următori și sugestii de cluburi locale.",
+          "after": "Aceasta este doar o previzualizare. Raportul complet îți dezvăluie: de ce acest sport este potrivit pentru copilul tău (explicații detaliate), beneficiile concrete pe care le va avea, sporturile de evitat momentan și de ce, vârsta ideală pentru început și pașii următori recomandați, plus sugestii de cluburi locale verificate.",
+          "location": "other"
+        },
+        {
+          "priority": "medium",
+          "impact": "medium",
+          "effort": "low",
+          "title": "Transformarea listei în beneficii concrete",
+          "description": "Lista actuală despre ce include raportul complet este factuală dar nu evidențiază beneficii concrete pentru copil. Transformarea listei în beneficii concrete crește valoarea percepută.",
+          "psychologicalReasoning": "Beneficiile concrete rezonează mai mult decât caracteristicile abstracte. Părinții sunt mai dispuși să plătească când înțeleg clar cum va beneficia copilul lor.",
+          "before": "Top 2-3 sporturi recomandate cu scoruri de potrivire",
+          "after": "Top 2-3 sporturi potrivite pentru copilul tău, cu explicații despre de ce fiecare este o alegere bună",
+          "location": "other"
+        },
+        {
+          "priority": "medium",
+          "impact": "medium",
+          "effort": "low",
+          "title": "Îmbunătățirea CTA-ului pentru a evidenția valoarea",
+          "description": "CTA-ul actual este clar dar nu evidențiază suficient valoarea. Adăugarea de context despre ce vor descoperi crește motivația de a acționa.",
+          "psychologicalReasoning": "CTA-urile care evidențiază valoarea și beneficii concrete rezultă în rate de conversie mai mari. Părinții sunt mai dispuși să acționeze când înțeleg clar ce vor obține.",
+          "before": "Deblochează Raportul Complet",
+          "after": "Deblochează Raportul Complet - Descoperă tot ce trebuie să știi",
+          "location": "cta"
+        },
+        {
+          "priority": "low",
+          "impact": "low",
+          "effort": "low",
+          "title": "Îmbunătățirea trust message-ului",
+          "description": "Trust message-ul actual este generic. Specificarea că raportul este permanent și accesibil oricând construiește mai multă încredere.",
+          "psychologicalReasoning": "Specificitatea construiește mai multă încredere decât afirmații generice. Părinții apreciază claritatea despre acces permanent și lipsa abonamentului.",
+          "before": "Acces permanent • Fără abonament • Raport complet personalizat",
+          "after": "Acces permanent (10 ani) • Fără abonament • Raport complet personalizat pentru copilul tău",
+          "location": "trustIndicator"
+        }
+      ]
+    },
+    "paywall": {
+      "currentStrengths": [
+        "Preț clar și vizibil",
+        "Value props evidențiate (plată unică, fără abonament, acces permanent)",
+        "Listă detaliată despre ce include raportul",
+        "Trust indicators vizibile",
+        "Formular de plată integrat"
+      ],
+      "weaknesses": [
+        "Prețul nu este contextualizat suficient (39 lei = ce valoare concretă?)",
+        "Lipsă de comparație cu alternative (consultații, cercetare manuală)",
+        "Mesajul despre ce include este repetitiv cu teaser-ul",
+        "Trust indicators sunt generice și nu construiesc suficientă încredere",
+        "Lipsă de claritate despre ce se întâmplă după plată",
+        "Headline-ul nu evidențiază suficient valoarea"
+      ],
+      "suggestions": [
+        {
+          "priority": "high",
+          "impact": "high",
+          "effort": "low",
+          "title": "Contextualizarea prețului prin comparație cu alternative",
+          "description": "Prețul actual este clar dar nu este contextualizat. Adăugarea unei comparații subtile cu alternative (consultații, cercetare manuală) evidențiază valoarea și economia.",
+          "psychologicalReasoning": "Comparația cu alternative evidențiază valoarea și economia. Părinții sunt mai dispuși să plătească când înțeleg că 39 lei este o investiție mică comparativ cu alternative (consultații la 200-300 lei, timp petrecut cercetând manual).",
+          "before": "39 lei",
+          "after": "39 lei (echivalentul unei cărți sau a unei ore de activitate)",
+          "location": "other"
+        },
+        {
+          "priority": "high",
+          "impact": "high",
+          "effort": "low",
+          "title": "Evidențierea economiei de timp și bani",
+          "description": "Adăugarea unui mesaj subtil despre economia de timp și bani evidențiază valoarea. Părinții apreciază claritatea despre ce economisesc.",
+          "psychologicalReasoning": "Evidențierea economiei de timp și bani crește valoarea percepută. Părinții sunt mai dispuși să plătească când înțeleg că economisesc timp și bani comparativ cu alternative.",
+          "before": null,
+          "after": "Economisește timp și bani: evită consultații costisitoare și ore de cercetare manuală",
+          "location": "other"
+        },
+        {
+          "priority": "high",
+          "impact": "high",
+          "effort": "low",
+          "title": "Clarificarea procesului post-plată",
+          "description": "Adăugarea unui mesaj clar despre ce se întâmplă după plată reduce anxietatea și crește încrederea. Părinții apreciază claritatea despre proces.",
+          "psychologicalReasoning": "Claritatea despre proces reduce anxietatea și crește încrederea. Părinții sunt mai dispuși să plătească când înțeleg exact ce se întâmplă după plată (email automat, acces instant, raport permanent).",
+          "before": null,
+          "after": "După plată, vei primi imediat accesul la raportul complet + un email cu link permanent. Raportul este tău pentru 10 ani.",
+          "location": "other"
+        },
+        {
+          "priority": "medium",
+          "impact": "medium",
+          "effort": "low",
+          "title": "Îmbunătățirea headline-ului pentru a evidenția valoarea",
+          "description": "Headline-ul actual este clar dar nu evidențiază suficient valoarea. Evidențierea că raportul complet oferă tot ce trebuie să știe crește valoarea percepută.",
+          "psychologicalReasoning": "Headline-urile care evidențiază valoarea și beneficii concrete rezultă în rate de conversie mai mari. Părinții sunt mai dispuși să plătească când înțeleg clar ce vor obține.",
+          "before": "Deblochează Raportul Complet",
+          "after": "Obține Raportul Complet - Tot ce trebuie să știi pentru a alege sportul potrivit",
+          "location": "headline"
+        },
+        {
+          "priority": "medium",
+          "impact": "medium",
+          "effort": "low",
+          "title": "Transformarea listei în beneficii concrete pentru copil",
+          "description": "Lista actuală despre ce include raportul este factuală dar nu evidențiază beneficii concrete pentru copil. Transformarea listei în beneficii concrete crește valoarea percepută.",
+          "psychologicalReasoning": "Beneficiile concrete rezonează mai mult decât caracteristicile abstracte. Părinții sunt mai dispuși să plătească când înțeleg clar cum va beneficia copilul lor.",
+          "before": "Top 2-3 sporturi recomandate cu scoruri de potrivire",
+          "after": "Top 2-3 sporturi potrivite pentru copilul tău, cu explicații detaliate despre de ce fiecare este o alegere bună",
+          "location": "other"
+        },
+        {
+          "priority": "medium",
+          "impact": "medium",
+          "effort": "low",
+          "title": "Îmbunătățirea trust indicator-ului 'Plată securizată'",
+          "description": "Trust indicator-ul actual este generic. Specificarea că plata este procesată prin Stripe (sau alt procesor de plăți cunoscut) construiește mai multă încredere.",
+          "psychologicalReasoning": "Specificitatea construiește mai multă încredere decât afirmații generice. Părinții apreciază claritatea despre securitatea plății și procesul de procesare.",
+          "before": "Plată securizată",
+          "after": "Plată securizată prin Stripe (standard industrie)",
+          "location": "trustIndicator"
+        },
+        {
+          "priority": "low",
+          "impact": "low",
+          "effort": "low",
+          "title": "Clarificarea mesajului despre termeni și condiții",
+          "description": "Mesajul actual despre termeni și condiții este clar dar poate fi mai concis. Clarificarea că este doar o confirmare legală standard reduce fricțiunea.",
+          "psychologicalReasoning": "Claritatea despre termeni și condiții reduce anxietatea și fricțiunea. Părinții apreciază transparența despre termeni și condiții.",
+          "before": "Prin continuare, confirmi că ai citit și ești de acord cu Termenii și condițiile și Politica de confidențialitate.",
+          "after": "Prin continuare, confirmi că ai citit Termenii și condițiile și Politica de confidențialitate.",
+          "location": "other"
+        }
+      ]
+    },
+    "paymentSuccess": {
+      "currentStrengths": [
+        "Design curat și profesional",
+        "Mesaj clar despre succes",
+        "Polling component pentru verificarea accesului",
+        "Instrucțiuni clare despre ce urmează"
+      ],
+      "weaknesses": [
+        "Mesajul nu construiește suficientă anticipare",
+        "Lipsă de claritate despre valoarea obținută",
+        "Lipsă de mesaj de mulțumire personalizat",
+        "CTA-ul 'Înapoi la Chestionar' nu este optim (ar trebui să fie despre raport)"
+      ],
+      "suggestions": [
+        {
+          "priority": "medium",
+          "impact": "medium",
+          "effort": "low",
+          "title": "Construirea anticipării pentru raport",
+          "description": "Mesajul actual este funcțional dar nu construiește suficientă anticipare. Evidențierea că raportul este în curs de pregătire și că va fi disponibil imediat crește satisfacția.",
+          "psychologicalReasoning": "Anticiparea pozitivă crește satisfacția și reduce anxietatea. Părinții apreciază claritatea despre când vor primi raportul și ce va conține.",
+          "before": "Mulțumim pentru plata ta. Raportul complet este în curs de pregătire.",
+          "after": "Mulțumim pentru plata ta! Raportul complet personalizat pentru copilul tău este în curs de pregătire și va fi disponibil imediat.",
+          "location": "subheadline"
+        },
+        {
+          "priority": "medium",
+          "impact": "medium",
+          "effort": "low",
+          "title": "Evidențierea valorii obținute",
+          "description": "Adăugarea unui mesaj subtil despre valoarea obținută (raport complet, acces permanent, PDF descărcabil) construiește satisfacția și justifică investiția.",
+          "psychologicalReasoning": "Evidențierea valorii obținute construiește satisfacția și justifică investiția. Părinții apreciază claritatea despre ce au obținut și valoarea acestuia.",
+          "before": null,
+          "after": "Ai acces la raportul complet personalizat, acces permanent pentru 10 ani și opțiunea de a descărca PDF-ul.",
+          "location": "other"
+        },
+        {
+          "priority": "low",
+          "impact": "low",
+          "effort": "low",
+          "title": "Îmbunătățirea instrucțiunilor despre email",
+          "description": "Instrucțiunile actuale sunt clare dar pot fi mai specifice despre când vor primi email-ul și ce va conține.",
+          "psychologicalReasoning": "Specificitatea despre proces reduce anxietatea și crește încrederea. Părinții apreciază claritatea despre când vor primi email-ul și ce va conține.",
+          "before": "Vei primi un email cu link-ul către raportul complet în câteva momente. Poți accesa raportul oricând folosind link-ul din email.",
+          "after": "Vei primi un email cu link-ul permanent către raportul complet în câteva momente. Poți accesa raportul oricând folosind link-ul din email - este tău pentru 10 ani.",
+          "location": "other"
+        },
+        {
+          "priority": "low",
+          "impact": "low",
+          "effort": "low",
+          "title": "Îmbunătățirea CTA-ului",
+          "description": "CTA-ul actual 'Înapoi la Chestionar' nu este optim. Ar trebui să fie despre raport sau să fie eliminat dacă polling-ul redirecționează automat.",
+          "psychologicalReasoning": "CTA-urile care sunt relevante pentru acțiunea următoare rezultă în rate de conversie mai mari. Părinții apreciază claritatea despre ce urmează.",
+          "before": "Înapoi la Chestionar",
+          "after": "Accesează Raportul Complet",
+          "location": "cta"
+        }
+      ]
+    }
+  },
+  "crossPageSuggestions": {
+    "urgency": [
+      {
+        "title": "Evidențierea accesului permanent (nu urgență falsă)",
+        "description": "În loc de urgență falsă, evidențiem că raportul este permanent și accesibil oricând. Aceasta construiește încredere și reduce presiunea, respectând brandul calm și ghidant.",
+        "pages": ["teaser", "paywall"],
+        "before": null,
+        "after": "Raportul este permanent și accesibil oricând - nu trebuie să te grăbești",
+        "priority": "low"
+      }
+    ],
+    "socialProof": [
+      {
+        "title": "Adăugarea subtilă de social proof",
+        "description": "Adăugarea unui mesaj subtil despre numărul de părinți care au folosit serviciul (dacă este disponibil) construiește încredere și reduce scepticismul. Trebuie să fie autentic și nu exagerat.",
+        "pages": ["emailCollection", "paywall"],
+        "before": null,
+        "after": "Peste [X] părinți au folosit deja serviciul nostru pentru a găsi sportul potrivit",
+        "priority": "medium"
+      }
+    ],
+    "valueClarification": [
+      {
+        "title": "Clarificarea valorii personalizate în toate paginile",
+        "description": "Evidențierea consistentă că recomandarea este personalizată bazată pe răspunsurile date construiește valoarea și reduce scepticismul. Aceasta trebuie să fie prezentă în toate paginile de conversie.",
+        "pages": ["emailCollection", "teaser", "paywall"],
+        "before": null,
+        "after": "Recomandare personalizată bazată pe răspunsurile tale",
+        "priority": "high"
+      },
+      {
+        "title": "Evidențierea economiei de timp și bani",
+        "description": "Evidențierea consistentă a economiei de timp și bani comparativ cu alternative (consultații, cercetare manuală) construiește valoarea și justifică investiția. Aceasta trebuie să fie prezentă în paginile de conversie.",
+        "pages": ["paywall"],
+        "before": null,
+        "after": "Economisește timp și bani: evită consultații costisitoare și ore de cercetare manuală",
+        "priority": "high"
+      }
+    ]
+  },
+  "implementationPriority": {
+    "phase1": {
+      "title": "Optimizări de impact ridicat, efort redus",
+      "description": "Aceste optimizări pot fi implementate rapid și au potențial ridicat de a crește rata de conversie. Focus pe clarificarea valorii și reducerea fricțiunii.",
+      "suggestions": [
+        "Evidențierea personalizării în headline (email collection)",
+        "Clarificarea valorii în subheadline (email collection)",
+        "Evidențierea gap-ului între preview și raport complet (teaser)",
+        "Contextualizarea prețului prin comparație cu alternative (paywall)",
+        "Clarificarea procesului post-plată (paywall)"
+      ],
+      "estimatedImpact": "high",
+      "estimatedEffort": "low"
+    },
+    "phase2": {
+      "title": "Optimizări de impact mediu, efort redus",
+      "description": "Aceste optimizări pot fi implementate rapid și au potențial mediu de a crește rata de conversie. Focus pe construirea încrederii și clarificarea beneficiilor.",
+      "suggestions": [
+        "Îmbunătățirea trust indicators (toate paginile)",
+        "Transformarea listei în beneficii concrete (teaser, paywall)",
+        "Construirea anticipării pentru raport (payment success)",
+        "Adăugarea subtilă de social proof (email collection, paywall)"
+      ],
+      "estimatedImpact": "medium",
+      "estimatedEffort": "low"
+    },
+    "phase3": {
+      "title": "Optimizări de impact redus, efort redus",
+      "description": "Aceste optimizări pot fi implementate rapid și au potențial redus de a crește rata de conversie. Focus pe îmbunătățiri subtile și clarificări minore.",
+      "suggestions": [
+        "Îmbunătățirea help text-urilor (email collection)",
+        "Îmbunătățirea trust message-urilor (teaser)",
+        "Clarificarea mesajelor despre termeni și condiții (paywall)",
+        "Îmbunătățirea instrucțiunilor despre email (payment success)"
+      ],
+      "estimatedImpact": "low",
+      "estimatedEffort": "low"
+    }
+  }
+}

@@ -118,26 +118,35 @@ export default async function PaymentSuccessPage({ params }: PaymentSuccessPageP
                   {/* Success Message */}
                   <h1 className="h3 fw-bold mb-3">Plată Reușită!</h1>
                   <p className="lead text-muted mb-4">
-                    Mulțumim pentru plata ta. Raportul complet este în curs de pregătire.
+                    Mulțumim pentru plata ta! Raportul complet personalizat pentru copilul tău este
+                    în curs de pregătire și va fi disponibil imediat.
                   </p>
+
+                  {/* Value Obtained */}
+                  <div className="alert alert-info mb-4" role="alert">
+                    <i className="bi bi-check-circle-fill me-2" aria-hidden="true"></i>
+                    <strong>Ai acces la:</strong> Raportul complet personalizat, acces permanent
+                    pentru 10 ani și opțiunea de a descărca PDF-ul.
+                  </div>
 
                   {/* Polling Component - Checks for access token availability */}
                   <PaymentSuccessPolling quizId={quizId} paymentId={payment.id} />
 
                   {/* Instructions */}
                   <p className="text-muted small mb-4">
-                    Vei primi un email cu link-ul către raportul complet în câteva momente. Poți
-                    accesa raportul oricând folosind link-ul din email.
+                    Vei primi un email cu link-ul permanent către raportul complet în câteva
+                    momente. Poți accesa raportul oricând folosind link-ul din email - este tău
+                    pentru 10 ani.
                   </p>
 
                   {/* Back to Quiz Link */}
                   <Link
                     href={routes.quiz.intro}
                     className="btn btn-outline-primary"
-                    aria-label="Înapoi la pagina de start a chestionarului"
+                    aria-label="Accesează raportul complet"
                   >
-                    <i className="bi bi-arrow-left me-2" aria-hidden="true"></i>
-                    Înapoi la Chestionar
+                    <i className="bi bi-arrow-right me-2" aria-hidden="true"></i>
+                    Accesează Raportul Complet
                   </Link>
                 </div>
               </div>

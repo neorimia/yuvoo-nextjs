@@ -1,0 +1,793 @@
+{
+  "summary": {
+    "overallAssessment": "Implementarea actuală a chestionarului AI Coach este solidă la nivel de bază, cu 6 întrebări bine structurate și un sistem de recomandări AI funcțional. Totuși, există gap-uri critice de siguranță medicală care necesită atenție imediată. Sistemul actual permite recomandări de sporturi fără verificarea contraindicațiilor medicale, ceea ce poate pune copiii în situații de risc. De asemenea, screening-ul medical actual este prea simplu (8 condiții binare) și nu capturează severitatea sau nu oferă întrebări de urmărire. Sistemul de detectare a riscurilor bazat pe cuvinte cheie funcționează, dar necesită îmbunătățiri pentru a reduce fals pozitive și pentru a adăuga logică medicală structurată. Prioritatea imediată ar trebui să fie adăugarea logicii de excludere a sporturilor pentru condiții critice și îmbunătățirea screening-ului medical existent cu niveluri de severitate.",
+    "currentStrengths": [
+      "Structură clară cu 6 întrebări esențiale care capturează profilul copilului",
+      "Sistem AI robust cu fallback mechanism pentru fiabilitate",
+      "Detectare programmatică a riscurilor care validează recomandările AI",
+      "Interfață utilizator intuitivă cu validare și feedback clar",
+      "Toate textele în limba română, respectând contextul cultural"
+    ],
+    "criticalGaps": [
+      "Lipsă logică de excludere a sporturilor - AI poate recomanda sporturi de risc înalt pentru copiii cu contraindicații",
+      "Lipsă detectare contraindicații absolute (cardiac, concuzie) - risc potențial de viață",
+      "Screening medical prea simplu - condiții binare fără niveluri de severitate sau întrebări de urmărire",
+      "Lipsă validare vârstă minimă conform Federației Române pentru sporturi competitive",
+      "Detectare risc bazată doar pe cuvinte cheie - poate genera fals pozitive și ratează cazuri subtile"
+    ],
+    "priorityImprovements": [
+      "Adăugare logică de excludere a sporturilor pentru condiții critice (Phase 1 Critical)",
+      "Îmbunătățire screening medical cu niveluri de severitate și întrebări de urmărire (Phase 1 High)",
+      "Adăugare detectare contraindicații absolute (cardiac, concuzie) (Phase 1 Critical)",
+      "Validare vârstă minimă Federație Română în prompt AI (Phase 1 Medium)",
+      "Îmbunătățire detectare risc cu logică medicală structurată (Phase 1 High)"
+    ]
+  },
+  "questionAnalysis": {
+    "question1_age": {
+      "currentStrengths": [
+        "Interfață intuitivă cu slider pentru vârstă (4-14 ani)",
+        "Gen opțional bine implementat cu opțiuni clare",
+        "Validare corectă a intervalului de vârstă",
+        "Text descriptiv clar despre importanța vârstei"
+      ],
+      "weaknesses": [
+        "Lipsă validare vârstă minimă conform Federației Române pentru sporturi competitive",
+        "Nu capturează informații despre creșterea rapidă (PHV) pentru vârstele 10-14",
+        "Nu diferențiază între vârsta pentru sporturi recreative vs competitive"
+      ],
+      "medicalConcerns": [
+        "Copiii cu vârste sub minimul Federației Române pot primi recomandări pentru sporturi competitive fără a fi eligibili",
+        "Lipsă identificare PHV (Peak Height Velocity) pentru vârstele 10-14, perioadă cu risc crescut de accidentări"
+      ],
+      "suggestions": [
+        {
+          "priority": "medium",
+          "impact": "medium",
+          "effort": "low",
+          "title": "Adăugare validare vârstă minimă Federație Română în prompt AI",
+          "description": "Adăugă în prompt-ul AI informații despre vârstele minime pentru sporturi competitive conform Federației Române. AI-ul ar trebui să verifice vârsta înainte de a recomanda sporturi competitive și să sugereze alternative recreative pentru copiii sub vârsta minimă.",
+          "medicalReasoning": "Federațiile sportive române au vârste minime pentru înscrierea la competiții pentru a proteja dezvoltarea copiilor și pentru a respecta regulamentele oficiale. Recomandarea sporturilor competitive pentru copiii sub vârsta minimă poate crea frustrare și așteptări nerealiste.",
+          "before": "AI nu verifică vârsta minimă pentru sporturi competitive",
+          "after": "AI verifică vârsta și recomandă variante recreative pentru copiii sub vârsta minimă competitivă, menționând că pot trece la nivel competitiv când ating vârsta minimă",
+          "codeExample": "// În SYSTEM_PROMPT, adaugă:\n\nVÂRSTE MINIME PENTRU SPORTURI COMPETITIVE (Federația Română):\n- Gimnastică: 6 ani (recreativ: 4 ani)\n- Înot: 5 ani (recreativ: 4 ani)\n- Fotbal: 6 ani (recreativ: 5 ani)\n- Tenis: 6 ani (recreativ: 5 ani)\n- Baschet: 8 ani (recreativ: 6 ani)\n- Handbal: 8 ani (recreativ: 6 ani)\n- Volei: 9 ani (recreativ: 7 ani)\n- Atletism: 10 ani (recreativ: 7 ani)\n\nDacă copilul are vârstă sub minimul competitiv pentru un sport, recomandă varianta recreativă și menționează că poate trece la nivel competitiv când atinge vârsta minimă."
+        }
+      ]
+    },
+    "question2_energy": {
+      "currentStrengths": [
+        "4 niveluri clare de energie cu descrieri intuitive",
+        "Indicatori vizuali (emoji) care ajută la înțelegere",
+        "Validare corectă și feedback vizual",
+        "Text de ajutor menționează consultarea pediatrului pentru energie foarte scăzută"
+      ],
+      "weaknesses": [
+        "Nu diferențiază între energie scăzută cronică vs temporară",
+        "Nu capturează cauzele posibile ale energiei scăzute",
+        "Nu oferă întrebări de urmărire pentru energie foarte scăzută"
+      ],
+      "medicalConcerns": [
+        "Energie foarte scăzută poate indica probleme medicale (anemie, probleme cardiace, probleme de somn) care necesită investigație",
+        "Nu se face distincție între oboseală normală și oboseală patologică"
+      ],
+      "suggestions": [
+        {
+          "priority": "low",
+          "impact": "low",
+          "effort": "medium",
+          "title": "Adăugare întrebare de urmărire pentru energie scăzută",
+          "description": "Când utilizatorul selectează 'Scăzut' pentru nivel de energie, afișează o întrebare condițională care întreabă dacă energia scăzută este persistentă sau doar temporară, și dacă afectează activitățile zilnice.",
+          "medicalReasoning": "Energia scăzută persistentă care afectează activitățile zilnice poate indica probleme medicale subiacente care necesită evaluare. Distingerea între oboseală normală și patologică ajută la identificarea corectă a riscurilor.",
+          "before": "Doar selecție binară: Scăzut/Mediu/Ridicat/Foarte ridicat",
+          "after": "Dacă 'Scăzut' este selectat, apare întrebare: 'Energia scăzută este persistentă și afectează activitățile zilnice ale copilului?' (Da/Nu/Occazional)",
+          "codeExample": "// În EnergyQuestion.tsx, adaugă logică condițională:\n\n{answers.energyLevel === 'low' && (\n  <div className=\"mt-3\">\n    <label className=\"form-label fw-semibold\">\n      Energia scăzută este persistentă și afectează activitățile zilnice?\n    </label>\n    <div className=\"d-flex gap-2\">\n      <button type=\"button\" onClick={() => setAnswer('lowEnergyPersistent', true)}>\n        Da, persistentă\n      </button>\n      <button type=\"button\" onClick={() => setAnswer('lowEnergyPersistent', false)}>\n        Nu, doar ocazional\n      </button>\n    </div>\n  </div>\n)}"
+        }
+      ]
+    },
+    "question3_personality": {
+      "currentStrengths": [
+        "10 trăsături bine definite cu descrieri clare",
+        "Selecție multiplă permite combinații complexe",
+        "Interfață intuitivă cu feedback vizual",
+        "Text de ajutor explică că trăsăturile contradictorii sunt normale"
+      ],
+      "weaknesses": [
+        "Nu capturează intensitatea trăsăturilor (de exemplu, anxietate ușoară vs severă)",
+        "Nu oferă context despre situații specifice (școală vs acasă)",
+        "Nu diferențiază între trăsături normale și cele care pot indica nevoie de suport psihologic"
+      ],
+      "medicalConcerns": [
+        "Trăsăturile precum 'sensibil' sau 'prudent' pot indica anxietate sau frică excesivă care necesită atenție, dar nu sunt capturate suficient de detaliat",
+        "Nu se face distincție între personalitate normală și comportament care necesită suport profesional"
+      ],
+      "suggestions": [
+        {
+          "priority": "low",
+          "impact": "low",
+          "effort": "low",
+          "title": "Îmbunătățire descrieri pentru trăsături sensibile",
+          "description": "Adaugă note suplimentare în textul de ajutor care explică când trăsăturile precum 'sensibil' sau 'prudent' pot indica nevoia de suport psihologic, fără a crea alarmă inutilă.",
+          "medicalReasoning": "Trăsăturile de personalitate pot varia de la normale la indicatoare de nevoie de suport. O clarificare subtilă ajută părinții să înțeleagă când ar trebui să consulte un specialist, fără a crea frică inutilă.",
+          "before": "Descriere simplă: 'Simte lucrurile intens, sensibil la critici'",
+          "after": "Descriere îmbunătățită: 'Simte lucrurile intens, sensibil la critici. Notă: Dacă sensibilitatea afectează semnificativ participarea la activități, poate fi util să consultați un psiholog pediatric.'",
+          "codeExample": null
+        }
+      ]
+    },
+    "question4_interests": {
+      "currentStrengths": [
+        "Listă completă de interese comune și sporturi",
+        "Secțiune 'De ce a încetat sporturile anterioare' capturează informații valoroase",
+        "Logică condițională bine implementată (întrebarea despre oprire apare doar dacă sunt sporturi anterioare)",
+        "Interfață clară cu categorii distincte"
+      ],
+      "weaknesses": [
+        "Nu capturează detalii despre accidentările menționate în 'De ce a încetat'",
+        "Nu diferențiază între oprire temporară vs permanentă",
+        "Nu capturează intensitatea intereselor (foarte pasionat vs moderat)"
+      ],
+      "medicalConcerns": [
+        "Când utilizatorul selectează 'Accidentare' ca motiv pentru oprirea sportului, nu se colectează informații despre tipul de accidentare, severitatea sau dacă a fost rezolvată medical",
+        "Nu se face legătura între accidentările anterioare și recomandările viitoare"
+      ],
+      "suggestions": [
+        {
+          "priority": "high",
+          "impact": "high",
+          "effort": "medium",
+          "title": "Adăugare întrebări de urmărire pentru accidentări anterioare",
+          "description": "Când utilizatorul selectează 'Accidentare' ca motiv pentru oprirea sportului, afișează întrebări de urmărire: tipul accidentării (fractură, luxație, concuzie, etc.), când s-a întâmplat, dacă a fost rezolvată complet, și dacă există restricții medicale curente.",
+          "medicalReasoning": "Accidentările anterioare, în special concuziile, fracturile la placa de creștere, și luxațiile recurente, pot indica contraindicații pentru anumite sporturi sau necesită evaluare medicală înainte de a recomanda sporturi similare. Informațiile despre accidentări sunt critice pentru siguranță.",
+          "before": "Doar checkbox: 'Accidentare' în lista de motive pentru oprirea sportului",
+          "after": "Dacă 'Accidentare' este selectat, apare formular cu întrebări: Tip accidentare (dropdown: Fractură, Luxație, Concuzie, Altele), Când s-a întâmplat (dropdown: <3 luni, 3-6 luni, 6-12 luni, >1 an), A fost rezolvată complet? (Da/Nu/Neclar), Există restricții medicale curente? (Da/Nu)",
+          "codeExample": "// În InterestsQuestion.tsx, adaugă logică condițională:\n\n{whyStoppedSports.includes('injury') && (\n  <div className=\"mt-3 p-3 bg-light rounded\">\n    <h5>Detalii despre accidentare</h5>\n    <select onChange={(e) => setAnswer('injuryType', e.target.value)}>\n      <option value=\"\">Selectează tipul...</option>\n      <option value=\"fracture\">Fractură</option>\n      <option value=\"dislocation\">Luxație</option>\n      <option value=\"concussion\">Concuzie</option>\n      <option value=\"sprain\">Entorsă</option>\n      <option value=\"other\">Altele</option>\n    </select>\n    {/* Alte câmpuri pentru detalii */}\n  </div>\n)}"
+        }
+      ]
+    },
+    "question5_physical": {
+      "currentStrengths": [
+        "3 opțiuni clare pentru constituție fizică",
+        "4 niveluri de coordonare bine definite",
+        "8 condiții medicale de bază acoperite",
+        "Câmp text opțional pentru considerații fizice suplimentare",
+        "Alert informativ când sunt condiții medicale selectate"
+      ],
+      "weaknesses": [
+        "Condițiile medicale sunt binare (are/nu are) fără niveluri de severitate",
+        "Nu există întrebări de urmărire pentru condițiile selectate",
+        "Nu capturează informații critice despre accidentări (tip, severitate, când)",
+        "Nu diferențiază între condiții controlate vs necontrolate",
+        "Nu capturează contraindicații absolute (cardiac, concuzie)"
+      ],
+      "medicalConcerns": [
+        "Lipsă screening pentru simptome cardiace (durere în piept, palpitații, sincopă) - risc potențial de viață",
+        "Lipsă screening pentru istoric de concuzie - risc crescut pentru sporturi de contact",
+        "Condițiile medicale nu sunt evaluate pentru severitate - astm ușor vs sever necesită recomandări diferite",
+        "Nu se face distincție între accidentări recente (<3 luni) vs vechi - impact diferit asupra recomandărilor",
+        "Nu capturează informații despre placa de creștere sau fracturi recente"
+      ],
+      "suggestions": [
+        {
+          "priority": "critical",
+          "impact": "critical",
+          "effort": "high",
+          "title": "Adăugare screening pentru contraindicații absolute (cardiac, concuzie)",
+          "description": "Adaugă o secțiune nouă înainte de condițiile medicale generale care întreabă despre simptome cardiace (durere în piept la efort, palpitații, sincopă, istoric familial de moarte cardiacă sub 50 ani) și istoric de concuzie (concuzie recentă <3 luni, concuzii multiple în ultimii 2 ani). Acestea sunt contraindicații absolute care necesită evaluare medicală înainte de orice recomandare de sport.",
+          "medicalReasoning": "Simptomele cardiace la efort și istoricul de concuzie sunt contraindicații absolute pentru multe sporturi și pot reprezenta risc de viață dacă nu sunt evaluate corect. Screening-ul acestor condiții este esențial pentru siguranța copilului și trebuie să fie prioritar față de alte condiții medicale.",
+          "before": "Doar condiții medicale generale: astm, alergii, vedere, auz, dureri articulare, accidentare recentă, condiție cronică, restricții doctor",
+          "after": "Secțiune nouă 'Screening medical critic' înainte de condițiile generale:\n- Simptome cardiace la efort? (durere piept, palpitații, sincopă)\n- Istoric familial moarte cardiacă sub 50 ani?\n- Concuzie recentă (<3 luni)?\n- Concuzii multiple (2+) în ultimii 2 ani?\nDacă da la oricare, mesaj clar: 'Înainte de a continua, vă recomandăm consultarea unui cardiolog/neurolog pediatric pentru evaluare.'",
+          "codeExample": "// În PhysicalQuestion.tsx, adaugă secțiune nouă:\n\n<div className=\"mb-4 p-3 border border-warning rounded\">\n  <h5 className=\"text-warning\">⚠️ Screening medical critic</h5>\n  <p className=\"small\">Aceste întrebări ne ajută să identificăm condiții care necesită evaluare medicală înainte de recomandări sportive.</p>\n  \n  <div className=\"mb-2\">\n    <label>Copilul a avut vreodată durere în piept, palpitații sau leșin la efort?</label>\n    <RadioGroup options={[\n      {value: 'yes', label: 'Da'},\n      {value: 'no', label: 'Nu'},\n      {value: 'unknown', label: 'Nu sunt sigur/ă'}\n    ]} />\n  </div>\n  \n  {/* Alte întrebări pentru cardiac și concuzie */}\n  \n  {hasCriticalConditions && (\n    <Alert variant=\"warning\">\n      ⚠️ Înainte de a continua, vă recomandăm consultarea unui specialist pentru evaluare medicală.\n    </Alert>\n  )}\n</div>"
+        },
+        {
+          "priority": "high",
+          "impact": "high",
+          "effort": "medium",
+          "title": "Adăugare niveluri de severitate pentru condiții medicale existente",
+          "description": "Transformă condițiile medicale binare în selecții cu niveluri de severitate (ușor/moderat/sever) pentru condițiile critice precum astm, alergii, și dureri articulare. Fiecare nivel de severitate ar trebui să aibă o descriere clară și implicații medicale specifice.",
+          "medicalReasoning": "Severitatea condițiilor medicale determină recomandările sportive. Astm ușor controlat permite majoritatea sporturilor cu precauții, în timp ce astm sever necontrolat necesită evaluare pulmonară înainte de orice sport. Similar, durerile articulare ușoare vs severe necesită abordări diferite.",
+          "before": "Checkbox binar: 'Astm sau probleme respiratorii' (are/nu are)",
+          "after": "Dropdown cu niveluri:\n- Fără astm\n- Astm ușor (controlat cu medicație, fără simptome zilnice)\n- Astm moderat (simptome ocazionale, folosește inhaler înainte de sport)\n- Astm sever (spitalizare în ultimul an sau simptome frecvente)\nFiecare nivel are descriere și implicații medicale",
+          "codeExample": "// Înlocuiește checkbox-urile cu dropdown-uri pentru condiții critice:\n\n<select \n  value={answers.asthmaSeverity || 'none'} \n  onChange={(e) => setAnswer('asthmaSeverity', e.target.value)}\n>\n  <option value=\"none\">Fără astm</option>\n  <option value=\"mild\">Astm ușor (controlat)</option>\n  <option value=\"moderate\">Astm moderat</option>\n  <option value=\"severe\">Astm sever</option>\n</select>\n\n{answers.asthmaSeverity && answers.asthmaSeverity !== 'none' && (\n  <div className=\"mt-2\">\n    <label>Folosește inhaler înainte de activități fizice?</label>\n    <RadioGroup options={[\n      {value: 'yes', label: 'Da'},\n      {value: 'no', label: 'Nu'},\n      {value: 'sometimes', label: 'Ocazional'}\n    ]} />\n  </div>\n)}"
+        },
+        {
+          "priority": "high",
+          "impact": "high",
+          "effort": "medium",
+          "title": "Îmbunătățire screening accidentări recente cu detalii specifice",
+          "description": "Transformă checkbox-ul generic 'Accidentare recentă (ultimele 3 luni)' într-un formular detaliat care capturează: tipul accidentării (fractură, luxație, entorsă, etc.), localizarea (membru superior/inferior, coloană), dacă a implicat placa de creștere, și dacă există restricții medicale curente.",
+          "medicalReasoning": "Accidentările recente, în special cele care implică placa de creștere sau fracturile netratate complet, necesită restricții specifice pentru sporturi de impact. Informațiile detaliate despre accidentări sunt esențiale pentru recomandări sigure.",
+          "before": "Checkbox simplu: 'Accidentare recentă (ultimele 3 luni)'",
+          "after": "Dacă selectat, apare formular:\n- Tip accidentare: Fractură / Luxație / Entorsă / Altele\n- Localizare: Membru superior / Membru inferior / Coloană / Altele\n- A implicat placa de creștere? Da/Nu/Neclar\n- Când s-a întâmplat: <1 lună / 1-3 luni\n- Există restricții medicale curente? Da/Nu",
+          "codeExample": "// Înlocuiește checkbox cu logică condițională:\n\n<Checkbox \n  label=\"Accidentare recentă (ultimele 3 luni)\"\n  checked={hasRecentInjury}\n  onChange={(checked) => {\n    setAnswer('hasRecentInjury', checked);\n    if (!checked) {\n      setAnswer('injuryDetails', undefined);\n    }\n  }}\n/>\n\n{hasRecentInjury && (\n  <div className=\"mt-3 p-3 bg-light rounded\">\n    <h6>Detalii despre accidentare</h6>\n    <select onChange={(e) => setAnswer('injuryType', e.target.value)}>\n      <option value=\"fracture\">Fractură</option>\n      <option value=\"growth-plate\">Fractură placa de creștere</option>\n      <option value=\"dislocation\">Luxație</option>\n      {/* etc */}\n    </select>\n    {/* Alte câmpuri */}\n  </div>\n)}"
+        },
+        {
+          "priority": "medium",
+          "impact": "medium",
+          "effort": "low",
+          "title": "Adăugare întrebări de urmărire pentru condiții cronice",
+          "description": "Când utilizatorul selectează 'Condiție cronică', afișează un dropdown cu condiții comune (diabet, epilepsie, boli cardiace congenitale, etc.) și o întrebare despre controlul condiției (bine controlată vs necesită monitorizare constantă).",
+          "medicalReasoning": "Condițiile cronice au implicații diferite pentru sporturi în funcție de tip și control. Diabetul bine controlat permite majoritatea sporturilor cu precauții, în timp ce epilepsia necontrolată necesită restricții specifice. Informațiile detaliate ajută la recomandări precise.",
+          "before": "Checkbox generic: 'Condiție cronică (diabet, epilepsie, etc.)'",
+          "after": "Dacă selectat, apare dropdown:\n- Tip condiție: Diabet / Epilepsie / Boală cardiacă / Altele\n- Control: Bine controlată / Necesită monitorizare / Necontrolată\n- Există restricții medicale specifice? Da/Nu",
+          "codeExample": "// Logică similară cu accidentările, pentru condiții cronice"
+        }
+      ]
+    },
+    "question6_preferences": {
+      "currentStrengths": [
+        "Preferințe clare pentru locație (interior/exterior) și tip (echipă/individual)",
+        "Câmpuri opționale pentru disponibilitate timp și buget",
+        "Opțiuni clare pentru implicarea părinților",
+        "Validare corectă pentru câmpurile obligatorii"
+      ],
+      "weaknesses": [
+        "Nu capturează preferințe specifice legate de siguranță (de exemplu, preferință pentru sporturi fără contact)",
+        "Nu diferențiază între preferințe absolute vs flexibile",
+        "Nu capturează restricții de accesibilitate (mobilitate redusă, nevoie de echipament special)"
+      ],
+      "medicalConcerns": null,
+      "suggestions": [
+        {
+          "priority": "low",
+          "impact": "low",
+          "effort": "low",
+          "title": "Adăugare opțiune pentru preferințe de siguranță",
+          "description": "Adaugă o întrebare opțională care întreabă dacă părintele preferă sporturi cu risc redus de accidentare sau fără contact, care poate fi utilă pentru copiii cu istoric de accidentări sau părinți foarte precauți.",
+          "medicalReasoning": "Preferințele părinților pentru siguranță pot reflecta preocupări legitime despre riscul de accidentare. Capturarea acestor preferințe ajută la personalizarea recomandărilor.",
+          "before": "Doar preferințe pentru locație și tip de activitate",
+          "after": "Adaugă întrebare opțională: 'Preferi sporturi cu risc redus de accidentare sau fără contact?' (Da/Nu/Flexibil)",
+          "codeExample": null
+        }
+      ]
+    }
+  },
+  "newQuestionSuggestions": {
+    "suggestedQuestions": [
+      {
+        "priority": "high",
+        "questionName": "Screening Cardiac și Concuzie",
+        "purpose": "Identifică contraindicații absolute care necesită evaluare medicală înainte de orice recomandare de sport. Aceste condiții reprezintă risc potențial de viață dacă nu sunt evaluate corect.",
+        "medicalReasoning": "Simptomele cardiace la efort (durere în piept, palpitații, sincopă) și istoricul de concuzie sunt contraindicații absolute pentru multe sporturi. Screening-ul acestor condiții este esențial pentru siguranța copilului și trebuie să fie prioritar.",
+        "targetAgeGroup": "all",
+        "questionType": "conditional",
+        "romanianText": "Înainte de a continua, vă rugăm să răspundeți la câteva întrebări importante despre sănătatea copilului:",
+        "options": [
+          {
+            "value": "cardiac_symptoms",
+            "label": "Copilul a avut vreodată durere în piept, palpitații sau leșin la efort fizic?",
+            "medicalFlag": "absolute_contraindication"
+          },
+          {
+            "value": "cardiac_family",
+            "label": "Există istoric familial de moarte cardiacă sub 50 ani?",
+            "medicalFlag": "absolute_contraindication"
+          },
+          {
+            "value": "concussion_recent",
+            "label": "Copilul a avut concuzie în ultimele 3 luni?",
+            "medicalFlag": "absolute_contraindication"
+          },
+          {
+            "value": "concussion_multiple",
+            "label": "Copilul a avut 2 sau mai multe concuzii în ultimii 2 ani?",
+            "medicalFlag": "absolute_contraindication"
+          }
+        ],
+        "conditionalLogic": "Afișează întotdeauna înainte de întrebarea despre condiții medicale generale (Question 5)",
+        "codeExample": "// Nou component: CriticalHealthScreeningQuestion.tsx\n// Se afișează înainte de PhysicalQuestion\n// Dacă oricare răspuns este 'Da', afișează alertă și recomandă consultare specialist înainte de continuare"
+      }
+    ]
+  },
+  "healthConditionEnhancements": {
+    "currentConditions": [
+      "asthma",
+      "allergies",
+      "vision",
+      "hearing",
+      "joint-pain",
+      "recent-injury",
+      "chronic-condition",
+      "doctor-restrictions"
+    ],
+    "missingCriticalConditions": [
+      {
+        "condition": "cardiac_symptoms",
+        "priority": "critical",
+        "medicalReasoning": "Simptomele cardiace la efort (durere în piept, palpitații, sincopă) sunt contraindicații absolute pentru sporturi competitive și de intensitate ridicată. Necesită evaluare cardiologică înainte de orice recomandare.",
+        "romanianLabel": "Simptome cardiace la efort (durere în piept, palpitații, leșin)",
+        "triggerAction": "absolute_contraindication"
+      },
+      {
+        "condition": "concussion_history",
+        "priority": "critical",
+        "medicalReasoning": "Istoricul de concuzie, în special concuziile recente sau multiple, necesită evaluare neurologică și restricții pentru sporturi de contact. Riscul de sindrom post-concuzional sau de concuzie secundară este crescut.",
+        "romanianLabel": "Istoric de concuzie (recentă sau multiple)",
+        "triggerAction": "absolute_contraindication"
+      },
+      {
+        "condition": "growth_plate_injury",
+        "priority": "high",
+        "medicalReasoning": "Accidentările la placa de creștere necesită evaluare ortopedică și restricții pentru sporturi de impact până la vindecare completă. Vindecarea incompletă poate duce la probleme de dezvoltare.",
+        "romanianLabel": "Accidentare recentă la placa de creștere (ultimele 6 luni)",
+        "triggerAction": "relative_contraindication"
+      },
+      {
+        "condition": "severe_uncontrolled_asthma",
+        "priority": "high",
+        "medicalReasoning": "Astmul sever necontrolat (spitalizare în ultimul an) necesită evaluare pulmonară înainte de sporturi. Riscul de criză asmatică severă la efort este crescut.",
+        "romanianLabel": "Astm sever necontrolat (spitalizare în ultimul an)",
+        "triggerAction": "specialist_flag"
+      }
+    ],
+    "severityEnhancements": [
+      {
+        "existingCondition": "asthma",
+        "currentImplementation": "Binary checkbox: 'Astm sau probleme respiratorii'",
+        "improvedImplementation": {
+          "severityLevels": [
+            {
+              "level": "mild",
+              "romanianLabel": "Astm ușor (controlat cu medicație, fără simptome zilnice)",
+              "medicalImplication": "Majoritatea sporturilor sunt potrivite cu management adecvat al medicației și protocoale de încălzire. Înotul este de obicei benefic."
+            },
+            {
+              "level": "moderate",
+              "romanianLabel": "Astm moderat (simptome ocazionale, folosește inhaler înainte de sport)",
+              "medicalImplication": "Sporturile sunt potrivite cu precauții: asigurare acces la inhaler în timpul activității, evitare sporturi în condiții extreme (frig extrem, polen ridicat). Înotul este de obicei benefic."
+            },
+            {
+              "level": "severe",
+              "romanianLabel": "Astm sever (spitalizare în ultimul an sau simptome frecvente)",
+              "medicalImplication": "Necesită evaluare pulmonară înainte de orice sport. Sporturile de intensitate ridicată pot fi contraindicare până la control adecvat. Înotul cu supraveghere poate fi benefic."
+            }
+          ],
+          "followUpQuestion": "Copilul folosește inhaler înainte de activități fizice? (Da/Nu/Ocazional)"
+        },
+        "codeExample": "// Vezi exemplul din question5_physical suggestions"
+      },
+      {
+        "existingCondition": "joint-pain",
+        "currentImplementation": "Binary checkbox: 'Dureri articulare sau osoase persistente'",
+        "improvedImplementation": {
+          "severityLevels": [
+            {
+              "level": "mild",
+              "romanianLabel": "Dureri ușoare ocazionale (după efort intens)",
+              "medicalImplication": "Majoritatea sporturilor sunt potrivite cu precauții: încălzire adecvată, evitare suprasolicitare. Sporturile de impact redus sunt preferate."
+            },
+            {
+              "level": "moderate",
+              "romanianLabel": "Dureri moderate frecvente (afectează activitățile zilnice ocazional)",
+              "medicalImplication": "Necesită evaluare ortopedică înainte de sporturi de impact. Sporturile de impact redus (înot, ciclism) sunt preferate până la evaluare."
+            },
+            {
+              "level": "severe",
+              "romanianLabel": "Dureri severe persistente (afectează activitățile zilnice)",
+              "medicalImplication": "Necesită evaluare ortopedică urgentă înainte de orice sport. Sporturile de impact sunt contraindicare până la diagnostic și tratament."
+            }
+          ],
+          "followUpQuestion": "Durerile afectează activitățile zilnice ale copilului? (Da/Nu/Ocazional)"
+        },
+        "codeExample": "// Similar cu astm, transformă checkbox în dropdown cu niveluri"
+      }
+    ]
+  },
+  "aiPromptAnalysis": {
+    "currentStrengths": [
+      "Prompt clar și structurat cu instrucțiuni detaliate",
+      "Enforțare strictă a limbii române",
+      "Criterii de recomandare bine definite",
+      "Sistem de scoring clar (0-100)",
+      "Identificare de semnale de risc pentru specialiști"
+    ],
+    "weaknesses": [
+      "Lipsă logică de excludere a sporturilor pentru condiții critice",
+      "Nu diferențiază între contraindicații absolute vs relative",
+      "Nu include vârstele minime ale Federației Române",
+      "Nu oferă ghidare specifică pentru severitatea condițiilor medicale",
+      "Nu include considerații despre PHV sau dezvoltare fizică",
+      "Nu menționează restricții pentru sporturi de contact în cazul concuziilor"
+    ],
+    "suggestions": [
+      {
+        "priority": "critical",
+        "impact": "critical",
+        "effort": "medium",
+        "title": "Adăugare logică de excludere a sporturilor pentru contraindicații absolute",
+        "description": "Adaugă în prompt-ul AI instrucțiuni clare despre când să NU recomande anumite sporturi. De exemplu: nu recomanda sporturi de contact pentru copiii cu istoric de concuzie recentă, nu recomanda sporturi competitive de intensitate ridicată pentru copiii cu simptome cardiace, etc.",
+        "medicalReasoning": "Recomandarea sporturilor de risc pentru copiii cu contraindicații absolute poate pune viața în pericol. AI-ul trebuie să aibă instrucțiuni clare despre când să excludă anumite categorii de sporturi și să recomande în schimb evaluare medicală.",
+        "before": "AI nu are instrucțiuni despre excluderea sporturilor pentru condiții critice",
+        "after": "Adaugă secțiune în SYSTEM_PROMPT:\n\nCONTRAINDICAȚII ABSOLUTE - EXCLUDERE SPORTURI:\nDacă copilul are următoarele condiții, NU recomanda sporturi competitive sau de intensitate ridicată până la evaluare medicală:\n- Simptome cardiace la efort → Exclude: sporturi competitive, sporturi de intensitate ridicată, sporturi de contact\n- Concuzie recentă (<3 luni) → Exclude: sporturi de contact, sporturi cu risc de impact la cap\n- Concuzii multiple (2+ în 2 ani) → Exclude: sporturi de contact, recomandă evaluare neurologică\n- Accidentare placa de creștere recentă → Exclude: sporturi de impact până la vindecare completă\n\nÎn aceste cazuri, recomandă:\n1. Consultare specialist (cardiolog/neurolog/ortoped) înainte de orice sport\n2. Sporturi de impact redus doar după evaluare medicală\n3. Explică clar de ce este necesară evaluarea medicală",
+        "location": "systemPrompt"
+      },
+      {
+        "priority": "high",
+        "impact": "high",
+        "effort": "low",
+        "title": "Adăugare vârste minime Federație Română în prompt",
+        "description": "Adaugă în prompt informații despre vârstele minime pentru sporturi competitive conform Federației Române. AI-ul ar trebui să verifice vârsta înainte de a recomanda sporturi competitive și să sugereze variante recreative pentru copiii sub vârsta minimă.",
+        "medicalReasoning": "Recomandarea sporturilor competitive pentru copiii sub vârsta minimă poate crea frustrare și așteptări nerealiste. Respectarea vârstelor minime oficiale este importantă pentru dezvoltarea corectă a copilului.",
+        "before": "AI nu verifică vârstele minime pentru sporturi competitive",
+        "after": "Adaugă secțiune în SYSTEM_PROMPT cu vârstele minime (vezi exemplul din question1_age)",
+        "location": "criteria"
+      },
+      {
+        "priority": "high",
+        "impact": "high",
+        "effort": "medium",
+        "title": "Îmbunătățire ghidare pentru severitatea condițiilor medicale",
+        "description": "Adaugă în prompt instrucțiuni despre cum să trateze diferit condițiile medicale în funcție de severitate. De exemplu: astm ușor vs sever necesită recomandări diferite, dureri articulare ușoare vs severe necesită abordări diferite.",
+        "medicalReasoning": "Severitatea condițiilor medicale determină recomandările sportive. AI-ul trebuie să aibă ghidare clară despre cum să adapteze recomandările în funcție de severitate.",
+        "before": "AI tratează toate condițiile medicale la fel, indiferent de severitate",
+        "after": "Adaugă secțiune în SYSTEM_PROMPT:\n\nSEVERITATEA CONDIȚIILOR MEDICALE:\n- Condiții ușoare/controlate: Majoritatea sporturilor sunt potrivite cu precauții minime\n- Condiții moderate: Sporturi specifice potrivite, evită sporturi de risc, asigură acces la medicație\n- Condiții severe/necontrolate: Necesită evaluare medicală înainte de orice sport, recomandă sporturi de impact redus doar după evaluare",
+        "location": "criteria"
+      },
+      {
+        "priority": "medium",
+        "impact": "medium",
+        "effort": "low",
+        "title": "Adăugare considerații despre dezvoltare fizică și coordonare",
+        "description": "Îmbunătățește instrucțiunile despre cum să trateze nivelul de coordonare în recomandări. Copiii cu coordonare în dezvoltare sau provocări ar trebui să primească recomandări pentru sporturi care dezvoltă coordonarea progresiv.",
+        "medicalReasoning": "Nivelul de coordonare este un factor important în alegerea sporturilor potrivite. Sporturile care cer coordonare complexă pot fi frustrante pentru copiii cu coordonare în dezvoltare.",
+        "before": "AI menționează coordonarea dar nu oferă ghidare specifică",
+        "after": "Adaugă în CRITERII DE RECOMANDARE:\n- Coordonare excelentă: Toate sporturile sunt potrivite, inclusiv cele care cer coordonare complexă\n- Coordonare bună: Majoritatea sporturilor sunt potrivite\n- Coordonare în dezvoltare: Recomandă sporturi care dezvoltă coordonarea progresiv (gimnastică, înot, atletism), evită sporturi cu coordonare complexă până la dezvoltare\n- Provocări de coordonare: Recomandă evaluare ortopedică, sporturi de coordonare simplă (alergare, ciclism), evită sporturi cu coordonare complexă",
+        "location": "criteria"
+      }
+    ]
+  },
+  "riskDetectionAnalysis": {
+    "currentStrengths": [
+      "Detectare programmatică independentă de AI pentru validare",
+      "Acoperă 4 tipuri de specialiști (ortoped, nutriționist, psiholog, pediatru general)",
+      "Logică de prioritate bine implementată (programmatic > AI)",
+      "Severitate bine definită (high/medium/low)"
+    ],
+    "weaknesses": [
+      "Bazat doar pe cuvinte cheie - poate genera fals pozitive",
+      "Nu detectează contraindicații absolute (cardiac, concuzie)",
+      "Nu are logică de excludere a sporturilor",
+      "Nu diferențiază între severitatea condițiilor (toate sunt tratate la fel)",
+      "Nu capturează contextul (de exemplu, 'dureri' poate fi normal după efort vs patologic)"
+    ],
+    "medicalConcerns": [
+      "Lipsă detectare pentru simptome cardiace - risc potențial de viață",
+      "Lipsă detectare pentru concuzie recentă - risc crescut pentru sporturi de contact",
+      "Fals pozitive posibile (de exemplu, 'dureri' menționat în context normal poate declanșa alertă ortopedică)",
+      "Nu face legătura între condiții și recomandări de sporturi"
+    ],
+    "suggestions": [
+      {
+        "priority": "critical",
+        "impact": "critical",
+        "effort": "high",
+        "title": "Adăugare detectare contraindicații absolute (cardiac, concuzie)",
+        "description": "Adaugă funcții noi în risk-signal-detection.service.ts care detectează simptome cardiace și istoric de concuzie. Acestea ar trebui să returneze un flag special 'absolute_contraindication' care blochează recomandările de sporturi până la evaluare medicală.",
+        "medicalReasoning": "Contraindicațiile absolute necesită evaluare medicală înainte de orice recomandare de sport. Detectarea acestora trebuie să fie prioritară și să blocheze recomandările nesigure.",
+        "before": "Nu există detectare pentru cardiac sau concuzie",
+        "after": "Adaugă funcții:\n- detectCardiacRisks(answers): Verifică pentru simptome cardiace, istoric familial\n- detectConcussionRisks(answers): Verifică pentru concuzie recentă, concuzii multiple\nAcestea returnează flag 'absolute_contraindication: true' care blochează recomandările",
+        "codeExample": "// În risk-signal-detection.service.ts:\n\nfunction detectCardiacRisks(answers: QuizAnswers): RiskSignal[] {\n  const signals: RiskSignal[] = [];\n  \n  // Verifică în physicalConsiderations pentru cuvinte cheie cardiace\n  if (answers.physicalConsiderations) {\n    const cardiacKeywords = ['durere piept', 'palpitații', 'leșin', 'sincopă', 'cardiac'];\n    if (cardiacKeywords.some(kw => answers.physicalConsiderations.toLowerCase().includes(kw))) {\n      signals.push({\n        specialty: 'cardiologist',\n        severity: 'high',\n        reason: 'Simptome cardiace detectate necesită evaluare cardiologică înainte de orice sport.',\n        indicators: ['Simptome cardiace menționate'],\n        absoluteContraindication: true // NOU\n      });\n    }\n  }\n  \n  return signals;\n}\n\n// Similar pentru concuzie"
+      },
+      {
+        "priority": "high",
+        "impact": "high",
+        "effort": "medium",
+        "title": "Îmbunătățire detectare cu context și severitate",
+        "description": "Îmbunătățește detectarea existentă pentru a lua în considerare contextul și severitatea. De exemplu, 'dureri' menționat cu 'după efort intens' ar trebui să fie tratat diferit de 'dureri persistente zilnice'.",
+        "medicalReasoning": "Contextul și severitatea determină nivelul de risc. Detectarea bazată doar pe cuvinte cheie poate genera fals pozitive și ratează cazuri subtile dar importante.",
+        "before": "Detectare simplă bazată pe cuvinte cheie fără context",
+        "after": "Îmbunătățește detectarea pentru a analiza contextul:\n- Verifică dacă cuvintele cheie apar în contexte normale vs patologice\n- Adaugă scoring de severitate bazat pe frecvența și contextul mențiunilor\n- Reduce fals pozitive prin verificare de context",
+        "codeExample": "// Îmbunătățește detectOrthopedistRisks:\n\nfunction detectOrthopedistRisks(answers: QuizAnswers): RiskSignal[] {\n  // ... cod existent ...\n  \n  // Îmbunătățire: verifică contextul\n  if (answers.physicalConsiderations) {\n    const considerations = answers.physicalConsiderations.toLowerCase();\n    \n    // Verifică dacă 'dureri' apare în context normal (după efort) vs patologic (persistente)\n    const normalContexts = ['după efort', 'ocazional', 'după antrenament'];\n    const pathologicalContexts = ['zilnic', 'persistente', 'constant', 'noaptea'];\n    \n    const hasNormalContext = normalContexts.some(ctx => considerations.includes(ctx));\n    const hasPathologicalContext = pathologicalContexts.some(ctx => considerations.includes(ctx));\n    \n    if (considerations.includes('durere') || considerations.includes('dureri')) {\n      if (hasPathologicalContext && !hasNormalContext) {\n        // Risc ridicat - dureri patologice\n        signals.push({ severity: 'high', ... });\n      } else if (hasNormalContext && !hasPathologicalContext) {\n        // Risc scăzut - dureri normale după efort\n        signals.push({ severity: 'low', ... });\n      }\n    }\n  }\n}"
+      },
+      {
+        "priority": "medium",
+        "impact": "medium",
+        "effort": "medium",
+        "title": "Adăugare logică de excludere a sporturilor în detectare",
+        "description": "Extinde risk-signal-detection.service.ts pentru a include logică care determină ce sporturi ar trebui excluse bazat pe condițiile detectate. De exemplu, concuzie recentă → exclude sporturi de contact.",
+        "medicalReasoning": "Detectarea riscurilor ar trebui să fie conectată cu recomandările de sporturi. Anumite condiții necesită excluderea anumitor categorii de sporturi pentru siguranță.",
+        "before": "Detectare returnează doar recomandare de specialist, nu exclude sporturi",
+        "after": "Extinde RiskSignal interface pentru a include 'excludedSportCategories' și 'allowedSportCategories' bazate pe condiție",
+        "codeExample": "// Extinde RiskSignal interface:\n\ninterface RiskSignal {\n  // ... câmpuri existente ...\n  excludedSportCategories?: string[]; // ['contact_sports', 'high_impact']\n  allowedSportCategories?: string[]; // ['low_impact', 'swimming']\n  absoluteContraindication?: boolean;\n}\n\n// În detectConcussionRisks:\nif (hasRecentConcussion) {\n  signals.push({\n    // ...\n    excludedSportCategories: ['contact_sports', 'high_impact_sports'],\n    allowedSportCategories: ['low_impact', 'swimming'],\n    absoluteContraindication: true\n  });\n}"
+      }
+    ]
+  },
+  "sportExclusionLogic": {
+    "currentImplementation": null,
+    "gaps": [
+      "Nu există logică de excludere a sporturilor pentru condiții critice",
+      "AI poate recomanda orice sport indiferent de contraindicații",
+      "Nu există categorizare a sporturilor după risc (contact, impact, etc.)",
+      "Nu există validare înainte de generarea recomandărilor"
+    ],
+    "absoluteExclusionRules": [
+      {
+        "triggerConditions": [
+          "cardiac_symptoms_during_exercise",
+          "family_history_sudden_cardiac_death"
+        ],
+        "excludedSportCategories": ["all_competitive", "high_intensity", "contact_sports"],
+        "requiredSpecialist": "cardiologist",
+        "romanianMessage": "⚠️ Înainte de a începe orice activitate sportivă, vă recomandăm cu tărie o evaluare cardiologică pediatrică. Simptomele raportate necesită investigații suplimentare pentru siguranța copilului. Nu recomandăm sporturi competitive sau de intensitate ridicată până la evaluare medicală.",
+        "medicalReasoning": "Simptomele cardiace la efort și istoricul familial de moarte cardiacă sunt semne de alarmă majore pentru condiții cardiace potențial letale. Niciun sport nu ar trebui recomandat până la evaluare cardiologică completă."
+      },
+      {
+        "triggerConditions": ["recent_concussion_3_months", "multiple_concussions_2_years"],
+        "excludedSportCategories": [
+          "contact_sports",
+          "high_impact_sports",
+          "sports_with_head_impact_risk"
+        ],
+        "requiredSpecialist": "neurologist",
+        "romanianMessage": "⚠️ Istoricul de concuzie necesită evaluare neurologică înainte de a continua cu activități sportive. Nu recomandăm sporturi de contact sau cu risc de impact la cap până la evaluare medicală și vindecare completă.",
+        "medicalReasoning": "Concuziile recente și concuziile multiple cresc semnificativ riscul de sindrom post-concuzional și de concuzie secundară, care poate fi fatală. Sporturile de contact trebuie evitate până la evaluare și vindecare completă."
+      },
+      {
+        "triggerConditions": ["recent_growth_plate_injury_6_months", "active_bone_fracture"],
+        "excludedSportCategories": ["high_impact_sports", "contact_sports"],
+        "requiredSpecialist": "orthopedist",
+        "romanianMessage": "⚠️ Accidentarea la placa de creștere sau fractura activă necesită evaluare ortopedică și vindecare completă înainte de a continua cu activități sportive. Nu recomandăm sporturi de impact până la evaluare medicală.",
+        "medicalReasoning": "Accidentările la placa de creștere și fracturile active necesită vindecare completă înainte de a relua activitățile sportive. Sporturile de impact pot agrava leziunea și pot afecta dezvoltarea normală."
+      }
+    ],
+    "relativeExclusionRules": [
+      {
+        "triggerConditions": ["moderate_asthma", "severe_asthma_without_clearance"],
+        "highRiskSports": ["endurance_sports_cold_weather", "high_intensity_competitive"],
+        "allowedWithModifications": [
+          {
+            "sportId": "inot",
+            "modifications": "Înotul este de obicei benefic pentru astm, dar asigură-te că copilul are acces la inhaler și că antrenorul este informat despre condiție."
+          },
+          {
+            "sportId": "ciclism",
+            "modifications": "Ciclismul poate fi potrivit cu precauții: evită condiții extreme (frig, polen ridicat), asigură acces la inhaler."
+          }
+        ],
+        "specialistRecommendation": "pulmonologist",
+        "romanianMessage": "Astmul moderat sau sever necesită evaluare pulmonară înainte de sporturi de intensitate ridicată. Sporturile de impact redus pot fi potrivite cu precauții și acces la medicație."
+      },
+      {
+        "triggerConditions": ["moderate_joint_pain", "developing_coordination"],
+        "highRiskSports": ["high_impact_sports", "complex_coordination_sports"],
+        "allowedWithModifications": [
+          {
+            "sportId": "inot",
+            "modifications": "Înotul este excelent pentru dezvoltarea coordonării și este de impact redus."
+          },
+          {
+            "sportId": "atletism",
+            "modifications": "Atletismul poate dezvolta coordonarea progresiv, începând cu activități simple."
+          }
+        ],
+        "specialistRecommendation": "orthopedist",
+        "romanianMessage": "Durerile articulare moderate și coordonarea în dezvoltare pot beneficia de evaluare ortopedică pentru a identifica sporturi potrivite. Sporturile de impact redus sunt preferate."
+      }
+    ],
+    "codeExample": "// Nou serviciu: sport-exclusion.service.ts\n\ninterface SportCategory {\n  id: string;\n  name: string;\n  sports: string[];\n}\n\nconst SPORT_CATEGORIES: SportCategory[] = [\n  { id: 'contact_sports', name: 'Sporturi de contact', sports: ['fotbal', 'handbal', 'baschet', 'arte-martiale'] },\n  { id: 'high_impact', name: 'Sporturi de impact ridicat', sports: ['gimnastica', 'atletism', 'volei'] },\n  { id: 'low_impact', name: 'Sporturi de impact redus', sports: ['inot', 'ciclism'] },\n  // etc.\n];\n\nfunction shouldExcludeSport(\n  sportId: string,\n  answers: QuizAnswers,\n  riskSignals: RiskSignal[]\n): { exclude: boolean; reason: string } {\n  // Verifică contraindicații absolute\n  const absoluteContraindications = riskSignals.filter(s => s.absoluteContraindication);\n  \n  if (absoluteContraindications.length > 0) {\n    // Verifică dacă sportul este în categoriile excluse\n    const sportCategory = getSportCategory(sportId);\n    const excludedCategories = absoluteContraindications.flatMap(s => s.excludedSportCategories || []);\n    \n    if (excludedCategories.includes(sportCategory)) {\n      return {\n        exclude: true,\n        reason: 'Sportul este contraindicat din cauza condițiilor medicale detectate.'\n      };\n    }\n  }\n  \n  return { exclude: false, reason: '' };\n}\n\n// Folosit în quiz.analyzer.ts înainte de generarea recomandărilor"
+  },
+  "ageAppropriatenessAnalysis": {
+    "currentStrengths": [
+      "Validare corectă a intervalului de vârstă (4-14 ani)",
+      "AI primește vârsta ca input și o folosește în recomandări",
+      "Fallback recommendations sunt bazate pe vârstă"
+    ],
+    "weaknesses": [
+      "Nu verifică vârstele minime ale Federației Române pentru sporturi competitive",
+      "Nu diferențiază între vârsta pentru sporturi recreative vs competitive",
+      "Nu include considerații despre PHV (Peak Height Velocity) pentru vârstele 10-14",
+      "Nu adaptează recomandările pentru perioada de creștere rapidă"
+    ],
+    "suggestions": [
+      {
+        "priority": "medium",
+        "impact": "medium",
+        "effort": "low",
+        "title": "Adăugare validare vârstă minimă Federație Română",
+        "description": "Adaugă validare înainte de generarea recomandărilor care verifică dacă copilul are vârsta minimă pentru sporturi competitive. Pentru copiii sub vârsta minimă, recomandă variante recreative.",
+        "medicalReasoning": "Vârstele minime pentru sporturi competitive sunt stabilite pentru a proteja dezvoltarea copiilor și pentru a respecta regulamentele oficiale. Recomandarea sporturilor competitive pentru copiii sub vârsta minimă poate crea frustrare.",
+        "ageGroup": "all",
+        "before": "AI nu verifică vârstele minime, poate recomanda sporturi competitive pentru copiii sub vârsta minimă",
+        "after": "Adaugă validare care verifică vârsta minimă înainte de recomandare. Dacă copilul este sub vârsta minimă competitivă, recomandă varianta recreativă și menționează că poate trece la nivel competitiv când atinge vârsta minimă.",
+        "codeExample": "// Vezi exemplul din question1_age suggestions"
+      }
+    ],
+    "phvConsiderations": {
+      "currentImplementation": null,
+      "suggestedImplementation": "Adaugă întrebare condițională pentru vârstele 10-14 care întreabă despre creșterea în înălțime în ultimul an. Dacă creșterea este >7cm/an, identifică perioada PHV și adaptează recomandările pentru a evita sporturile de impact repetitiv și specializarea timpurie.",
+      "detectionMethod": "Întrebare directă: 'În ultimul an, copilul a crescut semnificativ în înălțime?' cu opțiuni: Nu (<5cm), Da moderat (5-7cm), Da rapid (>7cm), Nu sunt sigur/ă. Creșterea >7cm/an indică PHV probabil.",
+      "trainingModifications": [
+        {
+          "phvPhase": "pre",
+          "recommendations": [
+            "Expoziție multi-sport pentru dezvoltare echilibrată",
+            "Dezvoltare abilități fundamentale de mișcare (FMS)",
+            "Focus pe achiziție de abilități, nu specializare"
+          ]
+        },
+        {
+          "phvPhase": "during",
+          "recommendations": [
+            "Reduce intensitatea/volumul antrenamentului cu 20-30%",
+            "Evită activități de impact repetitiv",
+            "Crește antrenamentul de flexibilitate",
+            "Monitorizează simptome de accidentare de suprasolicitare",
+            "Nu este momentul ideal pentru specializare în sport"
+          ]
+        },
+        {
+          "phvPhase": "post",
+          "recommendations": [
+            "Revenire graduală la intensitate mai ridicată",
+            "Specializarea în sport este acceptabilă",
+            "Continuă monitorizarea pentru accidentări de suprasolicitare"
+          ]
+        }
+      ],
+      "codeExample": "// Nou component: PHVQuestion.tsx (afișat condițional pentru vârstele 10-14)\n// Vezi exemplul din prompt pentru Growth Spurt Assessment"
+    }
+  },
+  "sexSpecificAnalysis": {
+    "currentImplementation": null,
+    "gaps": [
+      "Nu există screening pentru Female Athlete Triad (FAT)",
+      "Nu se fac distincții între recomandări pentru băieți vs fete",
+      "Nu se capturează informații despre sănătatea menstruală pentru fetele 11+",
+      "Nu se identifică sporturi de risc pentru FAT (gimnastică, dans, sporturi cu categorii de greutate)"
+    ],
+    "femaleAthleteConsiderations": {
+      "targetAgeGroup": "10-14",
+      "screeningQuestions": [
+        {
+          "question": "Pentru fetele de 11+ ani: Ciclul menstrual a început? Dacă da, este regulat?",
+          "purpose": "Screen pentru disfuncție menstruală, componentă cheie a Female Athlete Triad",
+          "triggerAction": "Dacă neregulat + sport estetic/categorie greutate → recomandare nutriționist"
+        },
+        {
+          "question": "Copilul a avut vreodată o fractură de stres?",
+          "purpose": "Fracturile de stres la fetele tinere pot indica densitate osoasă scăzută din FAT",
+          "triggerAction": "Dacă da → flag pentru screening sănătate osoasă + nutriționist"
+        },
+        {
+          "question": "Există restricții alimentare autoimpuse sau îngrijorări legate de greutate?",
+          "purpose": "Screen pentru pattern-uri de alimentație dezordonată, componentă a FAT",
+          "triggerAction": "Dacă da → recomandare psiholog + nutriționist, evită sporturi estetice"
+        }
+      ],
+      "highRiskSportFlags": [
+        {
+          "sportId": "gimnastica",
+          "riskFactor": "Sport estetic cu presiune asupra greutății",
+          "additionalScreening": "Pentru fetele care aleg gimnastică de performanță, recomandăm evaluare nutriționist pentru monitorizare sănătate și prevenire FAT"
+        },
+        {
+          "sportId": "dans",
+          "riskFactor": "Sport estetic, accent pe imaginea corporală",
+          "additionalScreening": "Pentru dans competițional, recomandăm monitorizare sănătate mintală și nutrițională"
+        },
+        {
+          "sportId": "arte-martiale",
+          "riskFactor": "Sporturi cu categorii de greutate pot încuraja manipularea greutății",
+          "additionalScreening": "Pentru fetele sub 14 ani, recomandăm evitarea categoriilor de greutate"
+        }
+      ],
+      "codeExample": "// Vezi exemplul din prompt pentru Female Athlete Screening Format"
+    },
+    "maleAthleteConsiderations": {
+      "targetAgeGroup": "10-14",
+      "screeningQuestions": null,
+      "codeExample": null
+    }
+  },
+  "motorDevelopmentAssessment": {
+    "currentImplementation": null,
+    "suggestedAssessment": {
+      "name": "Fundamental Movement Skills (FMS) Screening",
+      "purpose": "Evaluează nivelul de dezvoltare a abilităților motorii fundamentale pentru a identifica sporturi potrivite nivelului de pregătire motorie al copilului. Ajută la identificarea copiilor cu dezvoltare motorie întârziată care ar putea beneficia de evaluare specializată.",
+      "medicalReasoning": "Abilitățile motorii fundamentale (FMS) sunt baza pentru participarea la sporturi. Copiii cu FMS dezvoltate pot participa la o gamă largă de sporturi, în timp ce cei cu FMS în dezvoltare ar trebui să se concentreze pe sporturi care dezvoltă aceste abilități progresiv.",
+      "questions": [
+        {
+          "id": "fms_catch",
+          "romanianText": "Poate copilul să prindă o minge aruncată de la 2 metri distanță?",
+          "ageAppropriate": "all",
+          "skillAssessed": "Object control - catching"
+        },
+        {
+          "id": "fms_hop",
+          "romanianText": "Poate să sară pe un picior de cel puțin 5 ori fără să piardă echilibrul?",
+          "ageAppropriate": "6-14",
+          "skillAssessed": "Locomotor - hopping, Stability - balance"
+        },
+        {
+          "id": "fms_run_direction",
+          "romanianText": "Poate să alerge și să schimbe direcția rapid fără să cadă?",
+          "ageAppropriate": "all",
+          "skillAssessed": "Locomotor - running, Stability - dynamic balance"
+        },
+        {
+          "id": "fms_throw_target",
+          "romanianText": "Poate să arunce o minge la o țintă de la 3 metri distanță?",
+          "ageAppropriate": "6-14",
+          "skillAssessed": "Object control - throwing"
+        }
+      ],
+      "scoringLogic": {
+        "levels": [
+          {
+            "score": "0-1",
+            "label": "Developing",
+            "romanianLabel": "În dezvoltare",
+            "sportRecommendations": "Focus pe activități bazate pe joc care dezvoltă FMS (gimnastică de bază, jocuri cu mingea simple), evită sporturi cu coordonare complexă până la dezvoltare"
+          },
+          {
+            "score": "2",
+            "label": "Good",
+            "romanianLabel": "Bun",
+            "sportRecommendations": "Majoritatea sporturilor recreative sunt potrivite, sporturi competitive pot fi încercate cu progresie graduală"
+          },
+          {
+            "score": "3-4",
+            "label": "Excellent",
+            "romanianLabel": "Excelent",
+            "sportRecommendations": "Gamă largă de sporturi potrivite, inclusiv sporturi competitive și cu coordonare complexă"
+          }
+        ]
+      },
+      "codeExample": "// Nou component: FMSAssessmentQuestion.tsx\n// Se afișează condițional pentru copiii cu coordonare 'developing' sau 'challenges'\n// Sau pentru toți copiii ca întrebare opțională de screening"
+    }
+  },
+  "implementationPriority": {
+    "phase1_critical": {
+      "title": "Siguranță Medicală Critică - Excludere Sporturi și Contraindicații Absolute",
+      "description": "Aceste îmbunătățiri sunt critice pentru siguranța copiilor și trebuie implementate imediat. Ele prevîn recomandările nesigure de sporturi pentru copiii cu contraindicații absolute.",
+      "suggestions": [
+        "Adăugare screening pentru contraindicații absolute (cardiac, concuzie)",
+        "Implementare logică de excludere a sporturilor pentru condiții critice",
+        "Adăugare întrebări de urmărire pentru accidentări anterioare",
+        "Îmbunătățire screening accidentări recente cu detalii specifice"
+      ],
+      "estimatedImpact": "high",
+      "estimatedEffort": "high",
+      "medicalSafetyImpact": "critical"
+    },
+    "phase2_high": {
+      "title": "Îmbunătățiri Screening Medical și Detectare Risc",
+      "description": "Aceste îmbunătățiri îmbunătățesc calitatea datelor colectate și acuratețea recomandărilor prin adăugarea nivelurilor de severitate și a logicii medicale structurate.",
+      "suggestions": [
+        "Adăugare niveluri de severitate pentru condiții medicale existente",
+        "Îmbunătățire detectare risc cu context și severitate",
+        "Adăugare logică de excludere a sporturilor în detectare",
+        "Adăugare validare vârstă minimă Federație Română",
+        "Îmbunătățire ghidare AI pentru severitatea condițiilor"
+      ],
+      "estimatedImpact": "high",
+      "estimatedEffort": "medium",
+      "medicalSafetyImpact": "high"
+    },
+    "phase3_medium": {
+      "title": "Evaluări Avansate și Personalizare",
+      "description": "Aceste funcționalități adaugă evaluări avansate pentru dezvoltare fizică și considerații specifice pe sex care îmbunătățesc acuratețea recomandărilor pentru grupuri specifice.",
+      "suggestions": [
+        "Adăugare evaluare PHV pentru vârstele 10-14",
+        "Adăugare screening Female Athlete Triad pentru fetele 10-14",
+        "Adăugare evaluare FMS (Fundamental Movement Skills)",
+        "Îmbunătățire considerații despre dezvoltare fizică în prompt AI"
+      ],
+      "estimatedImpact": "medium",
+      "estimatedEffort": "high",
+      "medicalSafetyImpact": "medium"
+    },
+    "phase4_enhancements": {
+      "title": "Optimizări și Polish",
+      "description": "Aceste îmbunătățiri adaugă funcționalități opționale și optimizări care îmbunătățesc experiența utilizatorului și acuratețea recomandărilor, dar nu sunt critice pentru siguranță.",
+      "suggestions": [
+        "Adăugare întrebări de urmărire pentru energie scăzută",
+        "Îmbunătățire descrieri pentru trăsături sensibile",
+        "Adăugare opțiune pentru preferințe de siguranță",
+        "Adăugare întrebări de urmărire pentru condiții cronice"
+      ],
+      "estimatedImpact": "low",
+      "estimatedEffort": "low",
+      "medicalSafetyImpact": "low"
+    }
+  }
+}

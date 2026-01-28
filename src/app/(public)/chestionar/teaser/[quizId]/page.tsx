@@ -48,7 +48,7 @@ export async function generateMetadata({ params }: TeaserPageProps): Promise<Met
     return {
       title: "Recomandarea ta personalizată | Yuvoo",
       description:
-        "Vezi recomandarea noastră personalizată de sport pentru copilul tău. Deblochează raportul complet pentru detalii și plan de acțiune.",
+        "Am identificat sportul potrivit pentru copilul tău. Descoperă de ce este potrivit și ce urmează - deblochează raportul complet pentru detalii și plan de acțiune.",
       robots: {
         index: false,
         follow: false,
@@ -161,7 +161,9 @@ export default async function TeaserPage({ params }: TeaserPageProps) {
             <div className="col-12 col-lg-10 col-xl-8">
               {/* Header */}
               <div className="text-center mb-5">
-                <h1 className="display-5 fw-bold mb-3">Am identificat sportul potrivit!</h1>
+                <h1 className="display-5 fw-bold mb-3">
+                  Am identificat sportul potrivit! Descoperă de ce și ce urmează
+                </h1>
                 <p className="lead text-muted">
                   Pe baza răspunsurilor tale, iată recomandarea noastră principală pentru copilul
                   tău.
@@ -190,9 +192,10 @@ export default async function TeaserPage({ params }: TeaserPageProps) {
                   <div className="alert alert-info mb-0" role="alert">
                     <i className="bi bi-info-circle me-2" aria-hidden="true"></i>
                     <strong>Recomandare parțială:</strong> Aceasta este doar o previzualizare.
-                    Raportul complet include explicații detaliate, beneficiile fizice și emoționale,
-                    sporturi de evitat, vârsta ideală pentru început, pașii următori și sugestii de
-                    cluburi locale.
+                    Raportul complet îți dezvăluie: de ce acest sport este potrivit pentru copilul
+                    tău (explicații detaliate), beneficiile concrete pe care le va avea, sporturile
+                    de evitat momentan și de ce, vârsta ideală pentru început și pașii următori
+                    recomandați, plus sugestii de cluburi locale verificate.
                   </div>
                 </div>
               </div>
@@ -210,7 +213,7 @@ export default async function TeaserPage({ params }: TeaserPageProps) {
                   aria-label="Deblochează raportul complet pentru a vedea toate recomandările"
                 >
                   <i className="bi bi-unlock-fill me-2" aria-hidden="true"></i>
-                  Deblochează Raportul Complet
+                  Deblochează Raportul Complet - Descoperă tot ce trebuie să știi
                 </Link>
               </div>
 
@@ -226,7 +229,8 @@ export default async function TeaserPage({ params }: TeaserPageProps) {
                             className="bi bi-check-circle-fill text-success me-2"
                             aria-hidden="true"
                           ></i>
-                          Top 2-3 sporturi recomandate cu scoruri de potrivire
+                          Top 2-3 sporturi potrivite pentru copilul tău, cu explicații despre de ce
+                          fiecare este o alegere bună
                         </li>
                         <li className="mb-2">
                           <i
@@ -284,7 +288,8 @@ export default async function TeaserPage({ params }: TeaserPageProps) {
               <div className="text-center">
                 <p className="text-muted small mb-0">
                   <i className="bi bi-shield-check text-success me-2" aria-hidden="true"></i>
-                  Acces permanent • Fără abonament • Raport complet personalizat
+                  Acces permanent (10 ani) • Fără abonament • Raport complet personalizat pentru
+                  copilul tău
                 </p>
               </div>
             </div>
