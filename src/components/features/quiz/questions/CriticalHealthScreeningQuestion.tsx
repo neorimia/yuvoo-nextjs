@@ -184,16 +184,16 @@ const CriticalHealthScreeningQuestion = memo(function CriticalHealthScreeningQue
       <div className="mb-4">
         <div className="d-flex align-items-center gap-2 mb-3">
           <i className="bi bi-shield-exclamation text-warning fs-4"></i>
-          <h5 className="mb-0 fw-semibold">Screening concuzie</h5>
+          <h5 className="mb-0 fw-semibold">Screening contuzie</h5>
         </div>
 
         {/* Recent Concussion Question */}
         <div className="mb-3">
           <label className="form-label fw-semibold mb-2">
-            Copilul a avut concuzie în ultimele 3 luni?
+            Copilul a avut contuzie în ultimele 3 luni?
           </label>
           <p className="text-muted small mb-2">
-            Concuziile recente necesită vindecare completă înainte de sporturi de contact.
+            Contuziile recente necesită vindecare completă înainte de sporturi de contact.
           </p>
           <div className="d-flex gap-2 flex-wrap">
             {renderAnswerButton(
@@ -220,10 +220,10 @@ const CriticalHealthScreeningQuestion = memo(function CriticalHealthScreeningQue
         {/* Multiple Concussions Question */}
         <div className="mb-3">
           <label className="form-label fw-semibold mb-2">
-            Copilul a avut 2 sau mai multe concuzii în ultimii 2 ani?
+            Copilul a avut 2 sau mai multe contuzii în ultimii 2 ani?
           </label>
           <p className="text-muted small mb-2">
-            Concuziile multiple cresc riscul de probleme neurologice și necesită evaluare
+            Contuziile multiple cresc riscul de probleme neurologice și necesită evaluare
             specializată.
           </p>
           <div className="d-flex gap-2 flex-wrap">
@@ -275,7 +275,7 @@ const CriticalHealthScreeningQuestion = memo(function CriticalHealthScreeningQue
               )}
               {requiredSpecialist === "neurolog" && (
                 <>
-                  Istoricul de concuzie necesită evaluare neurologică pediatrică înainte de a
+                  Istoricul de contuzie necesită evaluare neurologică pediatrică înainte de a
                   continua cu activități sportive. Vindecarea completă este esențială pentru
                   siguranță.
                 </>

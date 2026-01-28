@@ -86,7 +86,7 @@ Successfully added critical condition detection (cardiac and concussion) to the 
    - `type === "concussion"` + `when === "3-6months"` → Medium severity, neurologist
 
 3. **Physical Considerations Text**:
-   - Keywords: "concuzie", "traumatism cranian", "amnezie", "confuzie", "dureri cap", "cefalee", "vertij", "sensibilitate lumină/sunet"
+   - Keywords: "contuzie", "traumatism cranian", "amnezie", "confuzie", "dureri cap", "cefalee", "vertij", "sensibilitate lumină/sunet"
    - Case-insensitive detection
    - High severity, neurologist
 
@@ -176,7 +176,7 @@ Successfully added critical condition detection (cardiac and concussion) to the 
 **Result**:
 
 - **Risk Signal**: High severity, neurologist
-- **Reason**: "Concuzii multiple cresc semnificativ riscul de sindrom post-concuzional și necesită evaluare neurologică specializată înainte de orice sport."
+- **Reason**: "Contuzii multiple cresc semnificativ riscul de sindrom post-contuzional și necesită evaluare neurologică specializată înainte de orice sport."
 - **Priority**: High (neurologist)
 - **Sport Exclusions**: Contact sports, high-impact excluded
 
@@ -212,8 +212,8 @@ Successfully added critical condition detection (cardiac and concussion) to the 
 **Result**:
 
 - **Risk Signal**: High severity, neurologist
-- **Reason**: "Concuzie recentă în istoricul de accidentări necesită evaluare neurologică înainte de sporturi de contact."
-- **Indicators**: "Concuzie în istoricul de accidentări (recentă)"
+- **Reason**: "Contuzie recentă în istoricul de accidentări necesită evaluare neurologică înainte de sporturi de contact."
+- **Indicators**: "Contuzie în istoricul de accidentări (recentă)"
 
 ---
 

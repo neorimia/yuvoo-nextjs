@@ -72,7 +72,7 @@ Successfully implemented the Sport Exclusion Service that categorizes sports by 
 
 - **Excludes**: Contact sports, high-impact sports
 - **Allows with modifications**: Low-impact sports
-- **Reason**: "Istoric de concuzie. Consultare neurologică necesară..."
+- **Reason**: "Istoric de contuzie. Consultare neurologică necesară..."
 - **Required specialist**: Neurologist
 
 ### ✅ Integration with Quiz Analyzer

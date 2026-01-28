@@ -6,7 +6,7 @@ Documentație pentru mecanismele de siguranță medicală integrate în chestion
 
 ## Prezentare generală
 
-- **Screening în chestionar**: întrebări explicite pentru condiții critice (cardiac, concuzie) și condiții cu severitate (astm, dureri articulare, accidentări).
+- **Screening în chestionar**: întrebări explicite pentru condiții critice (cardiac, contuzie) și condiții cu severitate (astm, dureri articulare, accidentări).
 - **Excludere sporturi**: reguli programatice care exclud sporturi nepotrivite din recomandări în funcție de răspunsuri.
 - **Detectare semnale de risc**: identificare programatică a nevoii de specialist (cardiolog, neurolog, ortoped, pneumolog, nutriționist, psiholog, general).
 - **Reguli în promptul AI**: instrucțiuni explicite în system prompt pentru contraindicații absolute, severitate și vârste minime, în română.
@@ -27,7 +27,7 @@ Toate textele afișate utilizatorului sunt în **limba română**.
 | `cardiacSymptoms`      | boolean | Simptome cardiace la efort (dureri în piept, palpitații, leșin) |
 | `cardiacFamilyHistory` | boolean | Istoric familial moarte cardiacă sub 50 ani                     |
 | `recentConcussion`     | boolean | Concuzie în ultimele 3 luni                                     |
-| `multipleConcussions`  | boolean | 2+ concuzii în ultimii 2 ani                                    |
+| `multipleConcussions`  | boolean | 2+ contuzii în ultimii 2 ani                                    |
 
 - Dacă utilizatorul declară orice condiție critică, se afișează un **alert de avertizare** cu recomandarea de a consulta un specialist înainte de sporturi noi; utilizatorul poate continua chestionarul.
 
@@ -96,7 +96,7 @@ Dacă toate recomandările (inclusiv fallback) sunt eliminate, se returnează o 
 
 ### 3.1 Ordine și priorități
 
-1. **Condiții critice** (cel mai prioritar): cardiac, concuzie
+1. **Condiții critice** (cel mai prioritar): cardiac, contuzie
 2. Ortoped
 3. Nutriționist
 4. Psiholog
@@ -107,7 +107,7 @@ Specialist recomandat: se alege cel cu **severitate cea mai mare**, iar la egali
 ### 3.2 Tipuri de semnale
 
 - **Cardiac**: din `criticalHealth` (simptome, istoric familial) și din cuvinte cheie în `physicalConsiderations` (ex. durere piept, palpitații, leșin, sincopă, cardiac, inimă, aritmie).
-- **Concuzie**: din `criticalHealth` (recentă, multiple), din `injuryDetails` (tip concuzie + perioadă), din cuvinte cheie în `physicalConsiderations` (concuzie, traumatism cranian, amnezie, confuzie, dureri cap, vertij, sensibilitate lumină/sunet).
+- **Concuzie**: din `criticalHealth` (recentă, multiple), din `injuryDetails` (tip contuzie + perioadă), din cuvinte cheie în `physicalConsiderations` (contuzie, traumatism cranian, amnezie, confuzie, dureri cap, vertij, sensibilitate lumină/sunet).
 - **Ortoped**: coordonare „challenges”, dureri articulare (severitate moderate/severe), accidentări/placa de creștere, cuvinte cheie în `physicalConsiderations`.
 - **Pneumolog**: astm sever/moderat (din `asthmaSeverity`).
 - **Nutriționist / Psiholog / General**: conform logicii existente (greutate, personalitate, motive oprire sporturi, nivel energie scăzut etc.).
@@ -147,7 +147,7 @@ Promptul conține indicații pentru vârste minime competitive vs. recreative (e
 
 ### 4.4 Date trimise către AI (user prompt)
 
-- **Screening critic**: `criticalHealth` (cardiac, concuzie) – secțiune „SCREENING MEDICAL CRITIC”.
+- **Screening critic**: `criticalHealth` (cardiac, contuzie) – secțiune „SCREENING MEDICAL CRITIC”.
 - **Condiții medicale**: astm (severitate + inhaler), dureri articulare (severitate), alte condiții, `physicalConsiderations`.
 - **Accidentări**: `injuryDetails` (tip, când, vindecare, restricții).
 - Vârstă, gen, energie, personalitate, interese, sporturi anterioare, motive oprire, constituție, coordonare, preferințe.

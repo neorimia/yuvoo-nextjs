@@ -45,11 +45,11 @@ const ContactInfoArea = () => {
                   </div>
                   <h6>
                     <a
-                      href="https://www.google.com/maps/place/București"
+                      href="https://www.google.com/maps/place/Mun.%20Focsani"
                       target="_blank"
                       rel="noreferrer"
                     >
-                      București, România
+                      Mun. Focsani, România
                     </a>
                   </h6>
                 </div>

@@ -363,24 +363,24 @@ function detectConcussionRisks(answers: QuizAnswers): RiskSignal[] {
 
   // Check critical health screening for recent concussion
   if (answers.criticalHealth?.recentConcussion === true) {
-    indicators.push("Concuzie recentă (<3 luni)");
+    indicators.push("Contuzie recentă (<3 luni)");
     signals.push({
       specialty: "neurologist",
       severity: "high",
       reason:
-        "Concuzie recentă necesită evaluare neurologică și vindecare completă înainte de sporturi de contact sau cu risc de impact la cap.",
+        "Contuzie recentă necesită evaluare neurologică și vindecare completă înainte de sporturi de contact sau cu risc de impact la cap.",
       indicators: [...indicators],
     });
   }
 
   // Check critical health screening for multiple concussions
   if (answers.criticalHealth?.multipleConcussions === true) {
-    indicators.push("Concuzii multiple (2+ în 2 ani)");
+    indicators.push("Contuzii multiple (2+ în 2 ani)");
     signals.push({
       specialty: "neurologist",
       severity: "high",
       reason:
-        "Concuzii multiple cresc semnificativ riscul de sindrom post-concuzional și necesită evaluare neurologică specializată înainte de orice sport.",
+        "Contuzii multiple cresc semnificativ riscul de sindrom post-contuzional și necesită evaluare neurologică specializată înainte de orice sport.",
       indicators: [...indicators],
     });
   }
@@ -389,21 +389,21 @@ function detectConcussionRisks(answers: QuizAnswers): RiskSignal[] {
   if (answers.injuryDetails?.type === "concussion") {
     const when = answers.injuryDetails.when;
     if (when === "<1month" || when === "1-3months") {
-      indicators.push("Concuzie în istoricul de accidentări (recentă)");
+      indicators.push("Contuzie în istoricul de accidentări (recentă)");
       signals.push({
         specialty: "neurologist",
         severity: "high",
         reason:
-          "Concuzie recentă în istoricul de accidentări necesită evaluare neurologică înainte de sporturi de contact.",
+          "Contuzie recentă în istoricul de accidentări necesită evaluare neurologică înainte de sporturi de contact.",
         indicators: [...indicators],
       });
     } else if (when === "3-6months") {
-      indicators.push("Concuzie în istoricul de accidentări (3-6 luni)");
+      indicators.push("Contuzie în istoricul de accidentări (3-6 luni)");
       signals.push({
         specialty: "neurologist",
         severity: "medium",
         reason:
-          "Concuzie în ultimele 3-6 luni necesită evaluare neurologică pentru a confirma vindecarea completă înainte de sporturi de contact.",
+          "Contuzie în ultimele 3-6 luni necesită evaluare neurologică pentru a confirma vindecarea completă înainte de sporturi de contact.",
         indicators: [...indicators],
       });
     }
@@ -412,8 +412,8 @@ function detectConcussionRisks(answers: QuizAnswers): RiskSignal[] {
   // Check physical considerations text for concussion keywords
   if (answers.physicalConsiderations) {
     const concussionKeywords = [
-      "concuzie",
-      "concuzii",
+      "contuzie",
+      "contuzii",
       "traumatism cranian",
       "traumatism cap",
       "amnezie",
@@ -428,12 +428,12 @@ function detectConcussionRisks(answers: QuizAnswers): RiskSignal[] {
     const considerations = answers.physicalConsiderations.toLowerCase();
 
     if (concussionKeywords.some((kw) => considerations.includes(kw))) {
-      indicators.push("Mențiuni despre concuzie în considerații fizice");
+      indicators.push("Mențiuni despre contuzie în considerații fizice");
       signals.push({
         specialty: "neurologist",
         severity: "high",
         reason:
-          "Mențiuni despre concuzie sau simptome post-concuzionale necesită evaluare neurologică înainte de sporturi de contact.",
+          "Mențiuni despre contuzie sau simptome post-contuzionale necesită evaluare neurologică înainte de sporturi de contact.",
         indicators: [...indicators],
       });
     }
@@ -1086,7 +1086,7 @@ function detectGeneralPediatricianRisks(answers: QuizAnswers): RiskSignal[] {
         lower.includes("inima") ||
         lower.includes("astm") ||
         lower.includes("respirator") ||
-        lower.includes("concuzie");
+        lower.includes("contuzie");
 
       return !handledByOthers;
     });

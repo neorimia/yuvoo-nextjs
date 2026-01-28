@@ -18,7 +18,7 @@ Successfully enhanced the Interests Question with detailed injury follow-up form
 
 - **Added injury details form** that appears conditionally when "injury" is selected
 - **4 form fields**:
-  - Injury type (dropdown: Fractură, Fractură placa de creștere, Luxație, Entorsă, Concuzie, Altele)
+  - Injury type (dropdown: Fractură, Fractură placa de creștere, Luxație, Entorsă, Contuzie, Altele)
   - When it happened (dropdown: <1 month, 1-3 months, 3-6 months, 6-12 months, >1 year)
   - Fully healed (buttons: Da/Nu/Neclar)
   - Current restrictions (buttons: Da/Nu)
@@ -66,7 +66,7 @@ Successfully enhanced the Interests Question with detailed injury follow-up form
   - Fractură placa de creștere (Growth plate fracture) ⚠️ Critical
   - Luxație (Dislocation)
   - Entorsă (Sprain)
-  - Concuzie (Concussion) ⚠️ Critical
+  - Contuzie (Concussion) ⚠️ Critical
   - Altele (Other)
 
 ### ✅ Timing Selection
@@ -211,7 +211,7 @@ Successfully enhanced the Interests Question with detailed injury follow-up form
 
 ### Scenario 3: Recent Concussion from Injury History
 
-- **Input**: Injury type = "Concuzie", When = "<1 lună"
+- **Input**: Injury type = "Contuzie", When = "<1 lună"
 - **Result**: Contact sports excluded (supplements critical health screening)
 
 ---

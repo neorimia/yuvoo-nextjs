@@ -1,8 +1,8 @@
 /**
  * Email Collection Page
  *
- * Collects email address after quiz completion.
- * Redirects to teaser page after email submission.
+ * Collects email address and location after quiz completion.
+ * On submit, shows next-steps UI (check email, etc.) with CTAs to view teaser or home.
  */
 
 import React from "react";
@@ -61,12 +61,7 @@ export default async function EmailCollectionPage({ params }: EmailCollectionPag
     notFound();
   }
 
-  // Get quiz count for social proof
   const quizCount = await getQuizCount();
-
-  // Check if quiz already has email (already collected)
-  // If email exists, redirect to teaser page
-  // Note: We'll check this in the form component or handle redirect here
 
   return (
     <>
@@ -85,74 +80,7 @@ export default async function EmailCollectionPage({ params }: EmailCollectionPag
             <div className="col-12 col-lg-8 col-xl-6">
               <div className="card shadow-sm border-0">
                 <div className="card-body p-4 p-md-5">
-                  {/* Header */}
-                  <div className="text-center mb-4">
-                    <div className="mb-3">
-                      <i
-                        className="bi bi-envelope-check text-success"
-                        style={{ fontSize: "3rem" }}
-                        aria-hidden="true"
-                      ></i>
-                    </div>
-                    <h1 className="h3 fw-bold mb-3">
-                      Vezi recomandarea personalizată pentru copilul tău
-                    </h1>
-                    <p className="text-muted mb-0">
-                      Pe baza răspunsurilor tale, am identificat sportul cel mai potrivit pentru
-                      copilul tău. Introdu email-ul tău pentru a vedea imediat recomandarea
-                      personalizată.
-                    </p>
-                  </div>
-
-                  {/* Email Collection Form */}
-                  <EmailCollectionForm quizId={quizId} />
-
-                  {/* Trust Indicators */}
-                  <div className="mt-4 pt-4 border-top">
-                    <div className="row g-3 text-center">
-                      <div className="col-12 col-md-4">
-                        <div className="d-flex flex-column align-items-center">
-                          <i
-                            className="bi bi-shield-check text-success mb-2"
-                            style={{ fontSize: "1.5rem" }}
-                            aria-hidden="true"
-                          ></i>
-                          <small className="text-muted">Date protejate, nu partajăm cu terți</small>
-                        </div>
-                      </div>
-                      <div className="col-12 col-md-4">
-                        <div className="d-flex flex-column align-items-center">
-                          <i
-                            className="bi bi-clock text-primary mb-2"
-                            style={{ fontSize: "1.5rem" }}
-                            aria-hidden="true"
-                          ></i>
-                          <small className="text-muted">Rezultate instant</small>
-                        </div>
-                      </div>
-                      <div className="col-12 col-md-4">
-                        <div className="d-flex flex-column align-items-center">
-                          <i
-                            className="bi bi-gift text-warning mb-2"
-                            style={{ fontSize: "1.5rem" }}
-                            aria-hidden="true"
-                          ></i>
-                          <small className="text-muted">Previzualizare gratuită</small>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-
-                  {/* Social Proof */}
-                  {quizCount >= 100 && (
-                    <div className="text-center mb-3 mt-3">
-                      <p className="text-muted small mb-0">
-                        <i className="bi bi-people-fill text-primary me-2" aria-hidden="true"></i>
-                        Peste {quizCount.toLocaleString("ro-RO")} părinți au folosit deja serviciul
-                        nostru pentru a găsi sportul potrivit
-                      </p>
-                    </div>
-                  )}
+                  <EmailCollectionForm quizId={quizId} quizCount={quizCount} />
                 </div>
               </div>
             </div>

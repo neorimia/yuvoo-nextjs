@@ -11,11 +11,11 @@ Checklist pentru validarea implementării de siguranță medicală a chestionaru
 | #   | Verificare                                                                                                    | Notă (da/nu/observații) |
 | --- | ------------------------------------------------------------------------------------------------------------- | ----------------------- |
 | 1.1 | Întrebările de screening cardiac (simptome la efort, istoric familial) sunt clare și adecvate pentru părinți? |                         |
-| 1.2 | Întrebările despre concuzie (recentă, multiple) sunt corecte din punct de vedere medical?                     |                         |
+| 1.2 | Întrebările despre contuzie (recentă, multiple) sunt corecte din punct de vedere medical?                     |                         |
 | 1.3 | Opțiunile de severitate pentru astm (ușor/moderat/sever) sunt corecte?                                        |                         |
 | 1.4 | Întrebarea despre folosirea inhalatorului înainte de sport este potrivită?                                    |                         |
 | 1.5 | Opțiunile de severitate pentru dureri articulare sunt adecvate?                                               |                         |
-| 1.6 | Tipurile de accidentare (fractură, placă de creștere, luxație, entorsă, concuzie) acoperă cazurile relevante? |                         |
+| 1.6 | Tipurile de accidentare (fractură, placă de creștere, luxație, entorsă, contuzie) acoperă cazurile relevante? |                         |
 | 1.7 | Perioadele „când s-a întâmplat” (<1 lună, 1–3 luni, etc.) sunt utile pentru decizie?                          |                         |
 | 1.8 | Textul de avertizare afișat la condiții critice este corect și nu induce frică excesivă?                      |                         |
 
@@ -27,7 +27,7 @@ Checklist pentru validarea implementării de siguranță medicală a chestionaru
 | --- | ------------------------------------------------------------------------------------------------------------- | ----------------------- |
 | 2.1 | Excluderea sporturilor de contact / intensitate ridicată la **simptome cardiace** este corectă?               |                         |
 | 2.2 | Excluderea la **istoric familial moarte cardiacă sub 50** este adecvată?                                      |                         |
-| 2.3 | Excluderea sporturilor de contact la **concuzie recentă** și **concuzii multiple** este corectă?              |                         |
+| 2.3 | Excluderea sporturilor de contact la **contuzie recentă** și **contuzii multiple** este corectă?              |                         |
 | 2.4 | Regulile pentru **accidentare placă de creștere** (excludere impact/sărituri până la vindecare) sunt corecte? |                         |
 | 2.5 | Regulile pentru **astm sever** (evitare endurance/intensitate ridicată) sunt adecvate?                        |                         |
 | 2.6 | Regulile pentru **dureri articulare severe/moderate** sunt rezonabile?                                        |                         |
@@ -41,7 +41,7 @@ Checklist pentru validarea implementării de siguranță medicală a chestionaru
 | #   | Verificare                                                                                     | Notă (da/nu/observații) |
 | --- | ---------------------------------------------------------------------------------------------- | ----------------------- |
 | 3.1 | Recomandarea de **cardiolog** la simptome/istoric cardiac este corectă?                        |                         |
-| 3.2 | Recomandarea de **neurolog** la concuzie recentă/multiple este corectă?                        |                         |
+| 3.2 | Recomandarea de **neurolog** la contuzie recentă/multiple este corectă?                        |                         |
 | 3.3 | Recomandarea de **ortoped** la dureri articulare severe/moderate și accidentări este adecvată? |                         |
 | 3.4 | Recomandarea de **pneumolog** la astm sever este potrivită?                                    |                         |
 | 3.5 | Prioritatea specialiștilor (cardiolog/neurolog > ortoped > etc.) este rezonabilă?              |                         |
@@ -53,7 +53,7 @@ Checklist pentru validarea implementării de siguranță medicală a chestionaru
 
 | #   | Verificare                                                                                              | Notă (da/nu/observații) |
 | --- | ------------------------------------------------------------------------------------------------------- | ----------------------- |
-| 4.1 | Contraindicațiile absolute descrise în prompt (cardiac, concuzie, placă de creștere) sunt corecte?      |                         |
+| 4.1 | Contraindicațiile absolute descrise în prompt (cardiac, contuzie, placă de creștere) sunt corecte?      |                         |
 | 4.2 | Instrucțiunile de severitate (ușor/moderat/sever) pentru condiții medicale sunt adecvate?               |                         |
 | 4.3 | Exemplele pentru astm (ușor vs moderat vs sever) sunt corecte?                                          |                         |
 | 4.4 | Vârstele minime pentru sporturi competitive/recreative sunt rezonabile (sau ce ajustări sunt necesare)? |                         |

@@ -1,5 +1,6 @@
 import React from "react";
 import type { Metadata } from "next";
+import { cookies } from "next/headers";
 import BreadcrumbOne from "@/components/Breadcrumb/BreadcrumbOne";
 import QuizIntroContent from "@/components/features/quiz/QuizIntroContent";
 import { routes } from "@/lib/routes";
@@ -53,8 +54,12 @@ export const metadata: Metadata = {
  *
  * Public page introducing the AI Coach Quiz.
  * SEO-friendly route: /chestionar
+ *
+ * Access cookies first so the route is dynamic (avoids crypto.randomBytes-before-dynamic-data error
+ * when getQuizCount hits the DB).
  */
 export default async function QuizIntroPage() {
+  const _cookies = await cookies();
   const quizCount = await getQuizCount();
   return (
     <>

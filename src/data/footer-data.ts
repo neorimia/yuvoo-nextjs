@@ -165,12 +165,12 @@ const footerData: IFooterData = {
     id: 4,
     title: "Contactează-ne",
     infos: [
-      {
-        id: 1,
-        icon: "fa-light fa-location-dot",
-        url: "#",
-        title: "București, România",
-      },
+      // {
+      //   id: 1,
+      //   icon: "fa-light fa-location-dot",
+      //   url: "#",
+      //   title: "România",
+      // },
       {
         id: 2,
         icon: "fa-light fa-phone",

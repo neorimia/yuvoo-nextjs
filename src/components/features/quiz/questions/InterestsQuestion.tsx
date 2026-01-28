@@ -301,7 +301,7 @@ const InterestsQuestion = memo(function InterestsQuestion() {
               <option value="growth-plate">Fractură placa de creștere</option>
               <option value="dislocation">Luxație</option>
               <option value="sprain">Entorsă</option>
-              <option value="concussion">Concuzie</option>
+              <option value="concussion">Contuzie</option>
               <option value="other">Altele</option>
             </select>
           </div>

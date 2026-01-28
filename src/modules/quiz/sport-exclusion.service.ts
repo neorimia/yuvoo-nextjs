@@ -183,7 +183,7 @@ export function shouldExcludeSport(
       return {
         exclude: true,
         reason:
-          "Istoric de concuzie. Consultare neurologică necesară înainte de sporturi de contact sau impact ridicat.",
+          "Istoric de contuzie. Consultare neurologică necesară înainte de sporturi de contact sau impact ridicat.",
         requiredSpecialist: "neurologist",
       };
     }
@@ -192,7 +192,7 @@ export function shouldExcludeSport(
     if (isInCategory(sportId, ["low_impact"])) {
       return {
         exclude: true,
-        reason: "Istoric de concuzie. Consultare neurologică recomandată înainte de începere.",
+        reason: "Istoric de contuzie. Consultare neurologică recomandată înainte de începere.",
         allowedWithModifications: true,
         requiredSpecialist: "neurologist",
       };

@@ -89,8 +89,8 @@ Dacă observi următoarele condiții sau mențiuni, NU recomanda sporturi compet
 
 - Simptome cardiace la efort (durere în piept, palpitații, leșin) → Exclude: sporturi competitive, sporturi de intensitate ridicată, sporturi de contact
 - Istoric familial de moarte cardiacă sub 50 ani → Exclude: sporturi competitive, sporturi de intensitate ridicată
-- Concuzie recentă (<3 luni) → Exclude: sporturi de contact, sporturi cu risc de impact la cap
-- Concuzii multiple (2+ în 2 ani) → Exclude: sporturi de contact, recomandă evaluare neurologică
+- Contuzie recentă (<3 luni) → Exclude: sporturi de contact, sporturi cu risc de impact la cap
+- Contuzii multiple (2+ în 2 ani) → Exclude: sporturi de contact, recomandă evaluare neurologică
 - Accidentare placă de creștere (fractură de cartilaj de creștere) recentă → Exclude: sporturi de impact și sărituri până la vindecare completă
 
 În aceste cazuri, întotdeauna:
@@ -107,8 +107,8 @@ Dacă observi urmatoarele semnale în răspunsuri, recomandă consultarea unui s
 - Mențiuni despre aritmii sau probleme cardiace
 
 **Neurologie pediatrică** (neurologist) - CRITICĂ:
-- Concuzie recentă sau multiple concuzii
-- Simptome post-concuzionale (dureri de cap, amețeli, confuzie)
+- Contuzie recentă sau multiple contuzii
+- Simptome post-contuzionale (dureri de cap, amețeli, confuzie)
 - Mențiuni despre traumatisme craniene
 
 **Pneumologie pediatrică** (pulmonologist):
@@ -262,8 +262,8 @@ function buildUserPrompt(answers: QuizAnswers): string {
 ⚠️ SCREENING MEDICAL CRITIC:
 ${answers.criticalHealth.cardiacSymptoms ? "- Simptome cardiace la efort detectate" : ""}
 ${answers.criticalHealth.cardiacFamilyHistory ? "- Istoric familial moarte cardiacă sub 50 ani" : ""}
-${answers.criticalHealth.recentConcussion ? "- Concuzie recentă (<3 luni)" : ""}
-${answers.criticalHealth.multipleConcussions ? "- Concuzii multiple (2+ în 2 ani)" : ""}
+${answers.criticalHealth.recentConcussion ? "- Contuzie recentă (<3 luni)" : ""}
+${answers.criticalHealth.multipleConcussions ? "- Contuzii multiple (2+ în 2 ani)" : ""}
 `
     : "";
 

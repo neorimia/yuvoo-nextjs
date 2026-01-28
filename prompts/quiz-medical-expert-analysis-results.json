@@ -10,7 +10,7 @@
     ],
     "criticalGaps": [
       "Lipsă logică de excludere a sporturilor - AI poate recomanda sporturi de risc înalt pentru copiii cu contraindicații",
-      "Lipsă detectare contraindicații absolute (cardiac, concuzie) - risc potențial de viață",
+      "Lipsă detectare contraindicații absolute (cardiac, contuzie) - risc potențial de viață",
       "Screening medical prea simplu - condiții binare fără niveluri de severitate sau întrebări de urmărire",
       "Lipsă validare vârstă minimă conform Federației Române pentru sporturi competitive",
       "Detectare risc bazată doar pe cuvinte cheie - poate genera fals pozitive și ratează cazuri subtile"
@@ -18,7 +18,7 @@
     "priorityImprovements": [
       "Adăugare logică de excludere a sporturilor pentru condiții critice (Phase 1 Critical)",
       "Îmbunătățire screening medical cu niveluri de severitate și întrebări de urmărire (Phase 1 High)",
-      "Adăugare detectare contraindicații absolute (cardiac, concuzie) (Phase 1 Critical)",
+      "Adăugare detectare contraindicații absolute (cardiac, contuzie) (Phase 1 Critical)",
       "Validare vârstă minimă Federație Română în prompt AI (Phase 1 Medium)",
       "Îmbunătățire detectare risc cu logică medicală structurată (Phase 1 High)"
     ]
@@ -136,11 +136,11 @@
           "impact": "high",
           "effort": "medium",
           "title": "Adăugare întrebări de urmărire pentru accidentări anterioare",
-          "description": "Când utilizatorul selectează 'Accidentare' ca motiv pentru oprirea sportului, afișează întrebări de urmărire: tipul accidentării (fractură, luxație, concuzie, etc.), când s-a întâmplat, dacă a fost rezolvată complet, și dacă există restricții medicale curente.",
-          "medicalReasoning": "Accidentările anterioare, în special concuziile, fracturile la placa de creștere, și luxațiile recurente, pot indica contraindicații pentru anumite sporturi sau necesită evaluare medicală înainte de a recomanda sporturi similare. Informațiile despre accidentări sunt critice pentru siguranță.",
+          "description": "Când utilizatorul selectează 'Accidentare' ca motiv pentru oprirea sportului, afișează întrebări de urmărire: tipul accidentării (fractură, luxație, contuzie, etc.), când s-a întâmplat, dacă a fost rezolvată complet, și dacă există restricții medicale curente.",
+          "medicalReasoning": "Accidentările anterioare, în special contuziile, fracturile la placa de creștere, și luxațiile recurente, pot indica contraindicații pentru anumite sporturi sau necesită evaluare medicală înainte de a recomanda sporturi similare. Informațiile despre accidentări sunt critice pentru siguranță.",
           "before": "Doar checkbox: 'Accidentare' în lista de motive pentru oprirea sportului",
-          "after": "Dacă 'Accidentare' este selectat, apare formular cu întrebări: Tip accidentare (dropdown: Fractură, Luxație, Concuzie, Altele), Când s-a întâmplat (dropdown: <3 luni, 3-6 luni, 6-12 luni, >1 an), A fost rezolvată complet? (Da/Nu/Neclar), Există restricții medicale curente? (Da/Nu)",
-          "codeExample": "// În InterestsQuestion.tsx, adaugă logică condițională:\n\n{whyStoppedSports.includes('injury') && (\n  <div className=\"mt-3 p-3 bg-light rounded\">\n    <h5>Detalii despre accidentare</h5>\n    <select onChange={(e) => setAnswer('injuryType', e.target.value)}>\n      <option value=\"\">Selectează tipul...</option>\n      <option value=\"fracture\">Fractură</option>\n      <option value=\"dislocation\">Luxație</option>\n      <option value=\"concussion\">Concuzie</option>\n      <option value=\"sprain\">Entorsă</option>\n      <option value=\"other\">Altele</option>\n    </select>\n    {/* Alte câmpuri pentru detalii */}\n  </div>\n)}"
+          "after": "Dacă 'Accidentare' este selectat, apare formular cu întrebări: Tip accidentare (dropdown: Fractură, Luxație, Contuzie, Altele), Când s-a întâmplat (dropdown: <3 luni, 3-6 luni, 6-12 luni, >1 an), A fost rezolvată complet? (Da/Nu/Neclar), Există restricții medicale curente? (Da/Nu)",
+          "codeExample": "// În InterestsQuestion.tsx, adaugă logică condițională:\n\n{whyStoppedSports.includes('injury') && (\n  <div className=\"mt-3 p-3 bg-light rounded\">\n    <h5>Detalii despre accidentare</h5>\n    <select onChange={(e) => setAnswer('injuryType', e.target.value)}>\n      <option value=\"\">Selectează tipul...</option>\n      <option value=\"fracture\">Fractură</option>\n      <option value=\"dislocation\">Luxație</option>\n      <option value=\"concussion\">Contuzie</option>\n      <option value=\"sprain\">Entorsă</option>\n      <option value=\"other\">Altele</option>\n    </select>\n    {/* Alte câmpuri pentru detalii */}\n  </div>\n)}"
         }
       ]
     },
@@ -157,11 +157,11 @@
         "Nu există întrebări de urmărire pentru condițiile selectate",
         "Nu capturează informații critice despre accidentări (tip, severitate, când)",
         "Nu diferențiază între condiții controlate vs necontrolate",
-        "Nu capturează contraindicații absolute (cardiac, concuzie)"
+        "Nu capturează contraindicații absolute (cardiac, contuzie)"
       ],
       "medicalConcerns": [
         "Lipsă screening pentru simptome cardiace (durere în piept, palpitații, sincopă) - risc potențial de viață",
-        "Lipsă screening pentru istoric de concuzie - risc crescut pentru sporturi de contact",
+        "Lipsă screening pentru istoric de contuzie - risc crescut pentru sporturi de contact",
         "Condițiile medicale nu sunt evaluate pentru severitate - astm ușor vs sever necesită recomandări diferite",
         "Nu se face distincție între accidentări recente (<3 luni) vs vechi - impact diferit asupra recomandărilor",
         "Nu capturează informații despre placa de creștere sau fracturi recente"
@@ -171,12 +171,12 @@
           "priority": "critical",
           "impact": "critical",
           "effort": "high",
-          "title": "Adăugare screening pentru contraindicații absolute (cardiac, concuzie)",
-          "description": "Adaugă o secțiune nouă înainte de condițiile medicale generale care întreabă despre simptome cardiace (durere în piept la efort, palpitații, sincopă, istoric familial de moarte cardiacă sub 50 ani) și istoric de concuzie (concuzie recentă <3 luni, concuzii multiple în ultimii 2 ani). Acestea sunt contraindicații absolute care necesită evaluare medicală înainte de orice recomandare de sport.",
-          "medicalReasoning": "Simptomele cardiace la efort și istoricul de concuzie sunt contraindicații absolute pentru multe sporturi și pot reprezenta risc de viață dacă nu sunt evaluate corect. Screening-ul acestor condiții este esențial pentru siguranța copilului și trebuie să fie prioritar față de alte condiții medicale.",
+          "title": "Adăugare screening pentru contraindicații absolute (cardiac, contuzie)",
+          "description": "Adaugă o secțiune nouă înainte de condițiile medicale generale care întreabă despre simptome cardiace (durere în piept la efort, palpitații, sincopă, istoric familial de moarte cardiacă sub 50 ani) și istoric de contuzie (contuzie recentă <3 luni, contuzii multiple în ultimii 2 ani). Acestea sunt contraindicații absolute care necesită evaluare medicală înainte de orice recomandare de sport.",
+          "medicalReasoning": "Simptomele cardiace la efort și istoricul de contuzie sunt contraindicații absolute pentru multe sporturi și pot reprezenta risc de viață dacă nu sunt evaluate corect. Screening-ul acestor condiții este esențial pentru siguranța copilului și trebuie să fie prioritar față de alte condiții medicale.",
           "before": "Doar condiții medicale generale: astm, alergii, vedere, auz, dureri articulare, accidentare recentă, condiție cronică, restricții doctor",
-          "after": "Secțiune nouă 'Screening medical critic' înainte de condițiile generale:\n- Simptome cardiace la efort? (durere piept, palpitații, sincopă)\n- Istoric familial moarte cardiacă sub 50 ani?\n- Concuzie recentă (<3 luni)?\n- Concuzii multiple (2+) în ultimii 2 ani?\nDacă da la oricare, mesaj clar: 'Înainte de a continua, vă recomandăm consultarea unui cardiolog/neurolog pediatric pentru evaluare.'",
-          "codeExample": "// În PhysicalQuestion.tsx, adaugă secțiune nouă:\n\n<div className=\"mb-4 p-3 border border-warning rounded\">\n  <h5 className=\"text-warning\">⚠️ Screening medical critic</h5>\n  <p className=\"small\">Aceste întrebări ne ajută să identificăm condiții care necesită evaluare medicală înainte de recomandări sportive.</p>\n  \n  <div className=\"mb-2\">\n    <label>Copilul a avut vreodată durere în piept, palpitații sau leșin la efort?</label>\n    <RadioGroup options={[\n      {value: 'yes', label: 'Da'},\n      {value: 'no', label: 'Nu'},\n      {value: 'unknown', label: 'Nu sunt sigur/ă'}\n    ]} />\n  </div>\n  \n  {/* Alte întrebări pentru cardiac și concuzie */}\n  \n  {hasCriticalConditions && (\n    <Alert variant=\"warning\">\n      ⚠️ Înainte de a continua, vă recomandăm consultarea unui specialist pentru evaluare medicală.\n    </Alert>\n  )}\n</div>"
+          "after": "Secțiune nouă 'Screening medical critic' înainte de condițiile generale:\n- Simptome cardiace la efort? (durere piept, palpitații, sincopă)\n- Istoric familial moarte cardiacă sub 50 ani?\n- Contuzie recentă (<3 luni)?\n- Contuzii multiple (2+) în ultimii 2 ani?\nDacă da la oricare, mesaj clar: 'Înainte de a continua, vă recomandăm consultarea unui cardiolog/neurolog pediatric pentru evaluare.'",
+          "codeExample": "// În PhysicalQuestion.tsx, adaugă secțiune nouă:\n\n<div className=\"mb-4 p-3 border border-warning rounded\">\n  <h5 className=\"text-warning\">⚠️ Screening medical critic</h5>\n  <p className=\"small\">Aceste întrebări ne ajută să identificăm condiții care necesită evaluare medicală înainte de recomandări sportive.</p>\n  \n  <div className=\"mb-2\">\n    <label>Copilul a avut vreodată durere în piept, palpitații sau leșin la efort?</label>\n    <RadioGroup options={[\n      {value: 'yes', label: 'Da'},\n      {value: 'no', label: 'Nu'},\n      {value: 'unknown', label: 'Nu sunt sigur/ă'}\n    ]} />\n  </div>\n  \n  {/* Alte întrebări pentru cardiac și contuzie */}\n  \n  {hasCriticalConditions && (\n    <Alert variant=\"warning\">\n      ⚠️ Înainte de a continua, vă recomandăm consultarea unui specialist pentru evaluare medicală.\n    </Alert>\n  )}\n</div>"
         },
         {
           "priority": "high",
@@ -245,9 +245,9 @@
     "suggestedQuestions": [
       {
         "priority": "high",
-        "questionName": "Screening Cardiac și Concuzie",
+        "questionName": "Screening Cardiac și Contuzie",
         "purpose": "Identifică contraindicații absolute care necesită evaluare medicală înainte de orice recomandare de sport. Aceste condiții reprezintă risc potențial de viață dacă nu sunt evaluate corect.",
-        "medicalReasoning": "Simptomele cardiace la efort (durere în piept, palpitații, sincopă) și istoricul de concuzie sunt contraindicații absolute pentru multe sporturi. Screening-ul acestor condiții este esențial pentru siguranța copilului și trebuie să fie prioritar.",
+        "medicalReasoning": "Simptomele cardiace la efort (durere în piept, palpitații, sincopă) și istoricul de contuzie sunt contraindicații absolute pentru multe sporturi. Screening-ul acestor condiții este esențial pentru siguranța copilului și trebuie să fie prioritar.",
         "targetAgeGroup": "all",
         "questionType": "conditional",
         "romanianText": "Înainte de a continua, vă rugăm să răspundeți la câteva întrebări importante despre sănătatea copilului:",
@@ -264,12 +264,12 @@
           },
           {
             "value": "concussion_recent",
-            "label": "Copilul a avut concuzie în ultimele 3 luni?",
+            "label": "Copilul a avut contuzie în ultimele 3 luni?",
             "medicalFlag": "absolute_contraindication"
           },
           {
             "value": "concussion_multiple",
-            "label": "Copilul a avut 2 sau mai multe concuzii în ultimii 2 ani?",
+            "label": "Copilul a avut 2 sau mai multe contuzii în ultimii 2 ani?",
             "medicalFlag": "absolute_contraindication"
           }
         ],
@@ -300,8 +300,8 @@
       {
         "condition": "concussion_history",
         "priority": "critical",
-        "medicalReasoning": "Istoricul de concuzie, în special concuziile recente sau multiple, necesită evaluare neurologică și restricții pentru sporturi de contact. Riscul de sindrom post-concuzional sau de concuzie secundară este crescut.",
-        "romanianLabel": "Istoric de concuzie (recentă sau multiple)",
+        "medicalReasoning": "Istoricul de contuzie, în special contuziile recente sau multiple, necesită evaluare neurologică și restricții pentru sporturi de contact. Riscul de sindrom post-contuzional sau de contuzie secundară este crescut.",
+        "romanianLabel": "Istoric de contuzie (recentă sau multiple)",
         "triggerAction": "absolute_contraindication"
       },
       {
@@ -386,7 +386,7 @@
       "Nu include vârstele minime ale Federației Române",
       "Nu oferă ghidare specifică pentru severitatea condițiilor medicale",
       "Nu include considerații despre PHV sau dezvoltare fizică",
-      "Nu menționează restricții pentru sporturi de contact în cazul concuziilor"
+      "Nu menționează restricții pentru sporturi de contact în cazul contuziilor"
     ],
     "suggestions": [
       {
@@ -394,10 +394,10 @@
         "impact": "critical",
         "effort": "medium",
         "title": "Adăugare logică de excludere a sporturilor pentru contraindicații absolute",
-        "description": "Adaugă în prompt-ul AI instrucțiuni clare despre când să NU recomande anumite sporturi. De exemplu: nu recomanda sporturi de contact pentru copiii cu istoric de concuzie recentă, nu recomanda sporturi competitive de intensitate ridicată pentru copiii cu simptome cardiace, etc.",
+        "description": "Adaugă în prompt-ul AI instrucțiuni clare despre când să NU recomande anumite sporturi. De exemplu: nu recomanda sporturi de contact pentru copiii cu istoric de contuzie recentă, nu recomanda sporturi competitive de intensitate ridicată pentru copiii cu simptome cardiace, etc.",
         "medicalReasoning": "Recomandarea sporturilor de risc pentru copiii cu contraindicații absolute poate pune viața în pericol. AI-ul trebuie să aibă instrucțiuni clare despre când să excludă anumite categorii de sporturi și să recomande în schimb evaluare medicală.",
         "before": "AI nu are instrucțiuni despre excluderea sporturilor pentru condiții critice",
-        "after": "Adaugă secțiune în SYSTEM_PROMPT:\n\nCONTRAINDICAȚII ABSOLUTE - EXCLUDERE SPORTURI:\nDacă copilul are următoarele condiții, NU recomanda sporturi competitive sau de intensitate ridicată până la evaluare medicală:\n- Simptome cardiace la efort → Exclude: sporturi competitive, sporturi de intensitate ridicată, sporturi de contact\n- Concuzie recentă (<3 luni) → Exclude: sporturi de contact, sporturi cu risc de impact la cap\n- Concuzii multiple (2+ în 2 ani) → Exclude: sporturi de contact, recomandă evaluare neurologică\n- Accidentare placa de creștere recentă → Exclude: sporturi de impact până la vindecare completă\n\nÎn aceste cazuri, recomandă:\n1. Consultare specialist (cardiolog/neurolog/ortoped) înainte de orice sport\n2. Sporturi de impact redus doar după evaluare medicală\n3. Explică clar de ce este necesară evaluarea medicală",
+        "after": "Adaugă secțiune în SYSTEM_PROMPT:\n\nCONTRAINDICAȚII ABSOLUTE - EXCLUDERE SPORTURI:\nDacă copilul are următoarele condiții, NU recomanda sporturi competitive sau de intensitate ridicată până la evaluare medicală:\n- Simptome cardiace la efort → Exclude: sporturi competitive, sporturi de intensitate ridicată, sporturi de contact\n- Contuzie recentă (<3 luni) → Exclude: sporturi de contact, sporturi cu risc de impact la cap\n- Contuzii multiple (2+ în 2 ani) → Exclude: sporturi de contact, recomandă evaluare neurologică\n- Accidentare placa de creștere recentă → Exclude: sporturi de impact până la vindecare completă\n\nÎn aceste cazuri, recomandă:\n1. Consultare specialist (cardiolog/neurolog/ortoped) înainte de orice sport\n2. Sporturi de impact redus doar după evaluare medicală\n3. Explică clar de ce este necesară evaluarea medicală",
         "location": "systemPrompt"
       },
       {
@@ -444,14 +444,14 @@
     ],
     "weaknesses": [
       "Bazat doar pe cuvinte cheie - poate genera fals pozitive",
-      "Nu detectează contraindicații absolute (cardiac, concuzie)",
+      "Nu detectează contraindicații absolute (cardiac, contuzie)",
       "Nu are logică de excludere a sporturilor",
       "Nu diferențiază între severitatea condițiilor (toate sunt tratate la fel)",
       "Nu capturează contextul (de exemplu, 'dureri' poate fi normal după efort vs patologic)"
     ],
     "medicalConcerns": [
       "Lipsă detectare pentru simptome cardiace - risc potențial de viață",
-      "Lipsă detectare pentru concuzie recentă - risc crescut pentru sporturi de contact",
+      "Lipsă detectare pentru contuzie recentă - risc crescut pentru sporturi de contact",
       "Fals pozitive posibile (de exemplu, 'dureri' menționat în context normal poate declanșa alertă ortopedică)",
       "Nu face legătura între condiții și recomandări de sporturi"
     ],
@@ -460,12 +460,12 @@
         "priority": "critical",
         "impact": "critical",
         "effort": "high",
-        "title": "Adăugare detectare contraindicații absolute (cardiac, concuzie)",
-        "description": "Adaugă funcții noi în risk-signal-detection.service.ts care detectează simptome cardiace și istoric de concuzie. Acestea ar trebui să returneze un flag special 'absolute_contraindication' care blochează recomandările de sporturi până la evaluare medicală.",
+        "title": "Adăugare detectare contraindicații absolute (cardiac, contuzie)",
+        "description": "Adaugă funcții noi în risk-signal-detection.service.ts care detectează simptome cardiace și istoric de contuzie. Acestea ar trebui să returneze un flag special 'absolute_contraindication' care blochează recomandările de sporturi până la evaluare medicală.",
         "medicalReasoning": "Contraindicațiile absolute necesită evaluare medicală înainte de orice recomandare de sport. Detectarea acestora trebuie să fie prioritară și să blocheze recomandările nesigure.",
-        "before": "Nu există detectare pentru cardiac sau concuzie",
-        "after": "Adaugă funcții:\n- detectCardiacRisks(answers): Verifică pentru simptome cardiace, istoric familial\n- detectConcussionRisks(answers): Verifică pentru concuzie recentă, concuzii multiple\nAcestea returnează flag 'absolute_contraindication: true' care blochează recomandările",
-        "codeExample": "// În risk-signal-detection.service.ts:\n\nfunction detectCardiacRisks(answers: QuizAnswers): RiskSignal[] {\n  const signals: RiskSignal[] = [];\n  \n  // Verifică în physicalConsiderations pentru cuvinte cheie cardiace\n  if (answers.physicalConsiderations) {\n    const cardiacKeywords = ['durere piept', 'palpitații', 'leșin', 'sincopă', 'cardiac'];\n    if (cardiacKeywords.some(kw => answers.physicalConsiderations.toLowerCase().includes(kw))) {\n      signals.push({\n        specialty: 'cardiologist',\n        severity: 'high',\n        reason: 'Simptome cardiace detectate necesită evaluare cardiologică înainte de orice sport.',\n        indicators: ['Simptome cardiace menționate'],\n        absoluteContraindication: true // NOU\n      });\n    }\n  }\n  \n  return signals;\n}\n\n// Similar pentru concuzie"
+        "before": "Nu există detectare pentru cardiac sau contuzie",
+        "after": "Adaugă funcții:\n- detectCardiacRisks(answers): Verifică pentru simptome cardiace, istoric familial\n- detectConcussionRisks(answers): Verifică pentru contuzie recentă, contuzii multiple\nAcestea returnează flag 'absolute_contraindication: true' care blochează recomandările",
+        "codeExample": "// În risk-signal-detection.service.ts:\n\nfunction detectCardiacRisks(answers: QuizAnswers): RiskSignal[] {\n  const signals: RiskSignal[] = [];\n  \n  // Verifică în physicalConsiderations pentru cuvinte cheie cardiace\n  if (answers.physicalConsiderations) {\n    const cardiacKeywords = ['durere piept', 'palpitații', 'leșin', 'sincopă', 'cardiac'];\n    if (cardiacKeywords.some(kw => answers.physicalConsiderations.toLowerCase().includes(kw))) {\n      signals.push({\n        specialty: 'cardiologist',\n        severity: 'high',\n        reason: 'Simptome cardiace detectate necesită evaluare cardiologică înainte de orice sport.',\n        indicators: ['Simptome cardiace menționate'],\n        absoluteContraindication: true // NOU\n      });\n    }\n  }\n  \n  return signals;\n}\n\n// Similar pentru contuzie"
       },
       {
         "priority": "high",
@@ -483,7 +483,7 @@
         "impact": "medium",
         "effort": "medium",
         "title": "Adăugare logică de excludere a sporturilor în detectare",
-        "description": "Extinde risk-signal-detection.service.ts pentru a include logică care determină ce sporturi ar trebui excluse bazat pe condițiile detectate. De exemplu, concuzie recentă → exclude sporturi de contact.",
+        "description": "Extinde risk-signal-detection.service.ts pentru a include logică care determină ce sporturi ar trebui excluse bazat pe condițiile detectate. De exemplu, contuzie recentă → exclude sporturi de contact.",
         "medicalReasoning": "Detectarea riscurilor ar trebui să fie conectată cu recomandările de sporturi. Anumite condiții necesită excluderea anumitor categorii de sporturi pentru siguranță.",
         "before": "Detectare returnează doar recomandare de specialist, nu exclude sporturi",
         "after": "Extinde RiskSignal interface pentru a include 'excludedSportCategories' și 'allowedSportCategories' bazate pe condiție",
@@ -518,8 +518,8 @@
           "sports_with_head_impact_risk"
         ],
         "requiredSpecialist": "neurologist",
-        "romanianMessage": "⚠️ Istoricul de concuzie necesită evaluare neurologică înainte de a continua cu activități sportive. Nu recomandăm sporturi de contact sau cu risc de impact la cap până la evaluare medicală și vindecare completă.",
-        "medicalReasoning": "Concuziile recente și concuziile multiple cresc semnificativ riscul de sindrom post-concuzional și de concuzie secundară, care poate fi fatală. Sporturile de contact trebuie evitate până la evaluare și vindecare completă."
+        "romanianMessage": "⚠️ Istoricul de contuzie necesită evaluare neurologică înainte de a continua cu activități sportive. Nu recomandăm sporturi de contact sau cu risc de impact la cap până la evaluare medicală și vindecare completă.",
+        "medicalReasoning": "Contuziile recente și contuziile multiple cresc semnificativ riscul de sindrom post-contuzional și de contuzie secundară, care poate fi fatală. Sporturile de contact trebuie evitate până la evaluare și vindecare completă."
       },
       {
         "triggerConditions": ["recent_growth_plate_injury_6_months", "active_bone_fracture"],
@@ -740,7 +740,7 @@
       "title": "Siguranță Medicală Critică - Excludere Sporturi și Contraindicații Absolute",
       "description": "Aceste îmbunătățiri sunt critice pentru siguranța copiilor și trebuie implementate imediat. Ele prevîn recomandările nesigure de sporturi pentru copiii cu contraindicații absolute.",
       "suggestions": [
-        "Adăugare screening pentru contraindicații absolute (cardiac, concuzie)",
+        "Adăugare screening pentru contraindicații absolute (cardiac, contuzie)",
         "Implementare logică de excludere a sporturilor pentru condiții critice",
         "Adăugare întrebări de urmărire pentru accidentări anterioare",
         "Îmbunătățire screening accidentări recente cu detalii specifice"

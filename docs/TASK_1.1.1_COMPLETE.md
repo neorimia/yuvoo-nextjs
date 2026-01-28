@@ -80,8 +80,8 @@ Successfully implemented the Critical Health Screening Component that screens fo
 
 ### ✅ Concussion Screening
 
-- Question: "Copilul a avut concuzie în ultimele 3 luni?"
-- Question: "Copilul a avut 2 sau mai multe concuzii în ultimii 2 ani?"
+- Question: "Copilul a avut contuzie în ultimele 3 luni?"
+- Question: "Copilul a avut 2 sau mai multe contuzii în ultimii 2 ani?"
 - Both questions have yes/no/unknown options
 - Visual icon (shield exclamation) for concussion section
 

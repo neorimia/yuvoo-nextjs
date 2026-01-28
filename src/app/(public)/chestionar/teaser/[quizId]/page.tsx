@@ -222,7 +222,7 @@ export default async function TeaserPage({ params }: TeaserPageProps) {
                 <div className="card-body p-4">
                   <h4 className="h5 mb-3">Ce include raportul complet:</h4>
                   <div className="row g-md-3">
-                    <div className="col-12 col-md-6">
+                    <div className="col-12">
                       <ul className="list-unstyled mb-0">
                         <li className="mb-2">
                           <i
@@ -246,10 +246,6 @@ export default async function TeaserPage({ params }: TeaserPageProps) {
                           ></i>
                           Beneficii fizice și emoționale pentru fiecare sport
                         </li>
-                      </ul>
-                    </div>
-                    <div className="col-12 col-md-6">
-                      <ul className="list-unstyled mb-0">
                         <li className="mb-2">
                           <i
                             className="bi bi-check-circle-fill text-success me-2"

@@ -67,8 +67,8 @@ This plan implements **Phase 1 Critical Safety** improvements to the AI Coach Qu
    - Options: Da / Nu / Nu sunt sigur/ă
 
 3. **Add Concussion Screening Questions**
-   - "Copilul a avut concuzie în ultimele 3 luni?"
-   - "Copilul a avut 2 sau mai multe concuzii în ultimii 2 ani?"
+   - "Copilul a avut contuzie în ultimele 3 luni?"
+   - "Copilul a avut 2 sau mai multe contuzii în ultimii 2 ani?"
    - Options: Da / Nu / Nu sunt sigur/ă
 
 4. **Add Alert Logic**
@@ -236,7 +236,7 @@ This plan implements **Phase 1 Critical Safety** improvements to the AI Coach Qu
        allowedCategories: ["low_impact"],
        requiredSpecialist: "neurologist",
        message:
-         "⚠️ Istoric de concuzie. Consultare neurologică necesară înainte de sporturi de contact.",
+         "⚠️ Istoric de contuzie. Consultare neurologică necesară înainte de sporturi de contact.",
      },
      // ... more rules
    ];
@@ -275,7 +275,7 @@ This plan implements **Phase 1 Critical Safety** improvements to the AI Coach Qu
      if (hasConcussionRisk && isInCategory(sportId, ["contact_sports", "high_impact"])) {
        return {
          exclude: true,
-         reason: "Istoric de concuzie. Consultare neurologică necesară.",
+         reason: "Istoric de contuzie. Consultare neurologică necesară.",
          allowedWithModifications: isInCategory(sportId, ["low_impact"]),
        };
      }
@@ -388,8 +388,8 @@ This plan implements **Phase 1 Critical Safety** improvements to the AI Coach Qu
    Dacă copilul are următoarele condiții, NU recomanda sporturi competitive sau de intensitate ridicată până la evaluare medicală:
 
    - Simptome cardiace la efort → Exclude: sporturi competitive, sporturi de intensitate ridicată, sporturi de contact
-   - Concuzie recentă (<3 luni) → Exclude: sporturi de contact, sporturi cu risc de impact la cap
-   - Concuzii multiple (2+ în 2 ani) → Exclude: sporturi de contact, recomandă evaluare neurologică
+   - Contuzie recentă (<3 luni) → Exclude: sporturi de contact, sporturi cu risc de impact la cap
+   - Contuzii multiple (2+ în 2 ani) → Exclude: sporturi de contact, recomandă evaluare neurologică
 
    În aceste cazuri, recomandă:
    1. Consultare specialist (cardiolog/neurolog/ortoped) înainte de orice sport
@@ -564,7 +564,7 @@ This plan implements **Phase 1 Critical Safety** improvements to the AI Coach Qu
            <option value="growth-plate">Fractură placa de creștere</option>
            <option value="dislocation">Luxație</option>
            <option value="sprain">Entorsă</option>
-           <option value="concussion">Concuzie</option>
+           <option value="concussion">Contuzie</option>
            <option value="other">Altele</option>
          </select>
        </div>
@@ -726,12 +726,12 @@ This plan implements **Phase 1 Critical Safety** improvements to the AI Coach Qu
 
      // Check critical health screening
      if (answers.criticalHealth?.recentConcussion) {
-       indicators.push("Concuzie recentă (<3 luni)");
+       indicators.push("Contuzie recentă (<3 luni)");
        signals.push({
          specialty: "neurologist",
          severity: "high",
          reason:
-           "Concuzie recentă necesită evaluare neurologică și vindecare completă înainte de sporturi de contact.",
+           "Contuzie recentă necesită evaluare neurologică și vindecare completă înainte de sporturi de contact.",
          indicators: [...indicators],
          absoluteContraindication: true,
          excludedSportCategories: ["contact_sports", "high_impact"],
@@ -740,12 +740,12 @@ This plan implements **Phase 1 Critical Safety** improvements to the AI Coach Qu
      }
 
      if (answers.criticalHealth?.multipleConcussions) {
-       indicators.push("Concuzii multiple (2+ în 2 ani)");
+       indicators.push("Contuzii multiple (2+ în 2 ani)");
        signals.push({
          specialty: "neurologist",
          severity: "high",
          reason:
-           "Concuzii multiple cresc semnificativ riscul de sindrom post-concuzional. Evaluare neurologică necesară.",
+           "Contuzii multiple cresc semnificativ riscul de sindrom post-contuzional. Evaluare neurologică necesară.",
          indicators: [...indicators],
          absoluteContraindication: true,
          excludedSportCategories: ["contact_sports", "high_impact"],
@@ -757,11 +757,11 @@ This plan implements **Phase 1 Critical Safety** improvements to the AI Coach Qu
      if (answers.injuryDetails?.type === "concussion") {
        const when = answers.injuryDetails.when;
        if (when === "<1month" || when === "1-3months") {
-         indicators.push("Concuzie în istoricul de accidentări");
+         indicators.push("Contuzie în istoricul de accidentări");
          signals.push({
            specialty: "neurologist",
            severity: "high",
-           reason: "Concuzie recentă în istoricul de accidentări necesită evaluare neurologică.",
+           reason: "Contuzie recentă în istoricul de accidentări necesită evaluare neurologică.",
            indicators: [...indicators],
            absoluteContraindication: true,
            excludedSportCategories: ["contact_sports", "high_impact"],
@@ -999,8 +999,8 @@ This plan implements **Phase 1 Critical Safety** improvements to the AI Coach Qu
 
    - Simptome cardiace la efort (durere în piept, palpitații, leșin) → Exclude: sporturi competitive, sporturi de intensitate ridicată, sporturi de contact
    - Istoric familial de moarte cardiacă sub 50 ani → Exclude: sporturi competitive, sporturi de intensitate ridicată
-   - Concuzie recentă (<3 luni) → Exclude: sporturi de contact, sporturi cu risc de impact la cap
-   - Concuzii multiple (2+ în 2 ani) → Exclude: sporturi de contact, recomandă evaluare neurologică
+   - Contuzie recentă (<3 luni) → Exclude: sporturi de contact, sporturi cu risc de impact la cap
+   - Contuzii multiple (2+ în 2 ani) → Exclude: sporturi de contact, recomandă evaluare neurologică
    - Accidentare placa de creștere recentă → Exclude: sporturi de impact până la vindecare completă
 
    În aceste cazuri, recomandă:
@@ -1053,8 +1053,8 @@ This plan implements **Phase 1 Critical Safety** improvements to the AI Coach Qu
 
    ${answers.criticalHealth?.cardiacSymptoms ? '⚠️ Simptome cardiace la efort detectate' : ''}
    ${answers.criticalHealth?.cardiacFamilyHistory ? '⚠️ Istoric familial moarte cardiacă sub 50 ani' : ''}
-   ${answers.criticalHealth?.recentConcussion ? '⚠️ Concuzie recentă (<3 luni)' : ''}
-   ${answers.criticalHealth?.multipleConcussions ? '⚠️ Concuzii multiple (2+ în 2 ani)' : ''}
+   ${answers.criticalHealth?.recentConcussion ? '⚠️ Contuzie recentă (<3 luni)' : ''}
+   ${answers.criticalHealth?.multipleConcussions ? '⚠️ Contuzii multiple (2+ în 2 ani)' : ''}
 
    ${answers.asthmaSeverity ? `Severitate astm: ${answers.asthmaSeverity}` : ''}
    ${answers.jointPainSeverity ? `Severitate dureri articulare: ${answers.jointPainSeverity}` : ''}

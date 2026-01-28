@@ -120,7 +120,7 @@ export default function NextStepsSection({ quizResult }: NextStepsSectionProps) 
                       </li>
                       <li className="mb-2">
                         <i className="bi bi-dot text-yuvoo-primary me-2"></i>
-                        Câte copii sunt într-un grup și câți antrenori?
+                        Câți copii sunt într-un grup și câți antrenori?
                       </li>
                       <li className="mb-2">
                         <i className="bi bi-dot text-yuvoo-primary me-2"></i>
