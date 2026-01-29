@@ -34,6 +34,9 @@ export const metadata: Metadata = {
     "sport pentru copii România",
     "specialiști pediatri sport",
     "recomandări sport AI",
+    "cluburi sport bucuresti",
+    "sport copii bucuresti",
+    "recomandare sport copil",
   ],
   authors: [{ name: "Yuvoo" }],
   creator: "Yuvoo",
@@ -46,6 +49,17 @@ export const metadata: Metadata = {
   metadataBase: new URL(process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000"),
   alternates: {
     canonical: "/",
+  },
+  // Google Search Console verification
+  // Set GOOGLE_SITE_VERIFICATION in environment variables
+  // You can get this code from Google Search Console > Settings > Ownership verification
+  verification: {
+    google: process.env.GOOGLE_SITE_VERIFICATION || undefined,
+    // Bing Webmaster Tools verification (optional)
+    // Get from Bing Webmaster Tools > Configure My Site > Verify Ownership
+    other: process.env.BING_SITE_VERIFICATION
+      ? { "msvalidate.01": process.env.BING_SITE_VERIFICATION }
+      : undefined,
   },
   openGraph: {
     title: "Yuvoo - Descoperă sportul potrivit copilului tău",

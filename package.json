@@ -25,7 +25,11 @@
     "db:seed:locations": "tsx src/lib/db/seed-locations.ts",
     "db:migrate:locations": "tsx scripts/migrate-location-foreign-keys.ts",
     "test:posthog": "tsx scripts/test-posthog-events.ts",
-    "email:dev": "email dev --port=3001"
+    "email:dev": "email dev --port=3001",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "test:ui": "vitest --ui",
+    "test:coverage": "vitest run --coverage"
   },
   "dependencies": {
     "@getbrevo/brevo": "^3.0.1",
@@ -81,6 +85,8 @@
     "@types/react": "^19.2.7",
     "@types/react-dom": "^19.2.3",
     "@types/ws": "^8.18.1",
+    "@vitest/coverage-v8": "^4.0.18",
+    "@vitest/ui": "^4.0.18",
     "dotenv": "^17.2.3",
     "drizzle-kit": "^0.31.8",
     "eslint": "^9",
@@ -91,6 +97,7 @@
     "prettier": "^3.7.4",
     "puppeteer": "^24.35.0",
     "react-email": "^5.1.0",
-    "typescript": "^5"
+    "typescript": "^5",
+    "vitest": "^4.0.18"
   }
 }
