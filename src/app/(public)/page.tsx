@@ -78,6 +78,11 @@ const Home = async (): Promise<React.ReactNode> => {
 
   return (
     <>
+      {/* SEO: Single H1 in body, reinforces title and primary keywords (Bing/Google). Max ~150 chars. */}
+      <h1 className="visually-hidden">
+        Yuvoo – Descoperă sportul potrivit copilului tău. Recomandări personalizate, cluburi sport
+        copii, chestionar AI.
+      </h1>
       <HeroYuvoo />
       <HowItWorks />
       <HomePromotionArea promo_space="pt-120 pb-60" />

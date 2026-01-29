@@ -12,6 +12,11 @@ import { z } from "zod";
  * Question 1: Age & Basic Info
  */
 export const ageQuestionSchema = z.object({
+  childName: z
+    .string()
+    .max(100, "Numele nu poate depăși 100 caractere")
+    .optional()
+    .or(z.literal("")),
   age: z
     .number({
       required_error: "Vârsta este obligatorie",
@@ -145,6 +150,7 @@ export const preferencesQuestionSchema = z.object({
  */
 export const quizAnswersSchema = z.object({
   // Question 1: Age & Basic Info
+  childName: ageQuestionSchema.shape.childName,
   age: ageQuestionSchema.shape.age,
   gender: ageQuestionSchema.shape.gender,
 
