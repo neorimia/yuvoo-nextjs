@@ -25,6 +25,26 @@ const AgeQuestion = memo(function AgeQuestion() {
       helpText="Acceptăm copii cu vârste între 4 și 14 ani."
       error={errors.age}
     >
+      {/* Child name (optional) - for personalization in report */}
+      <div className="mb-4">
+        <label htmlFor="childName" className="form-label fw-semibold">
+          Numele copilului (opțional)
+        </label>
+        <input
+          id="childName"
+          type="text"
+          className="form-control"
+          placeholder="Ex: Maria, Andrei"
+          maxLength={100}
+          value={answers.childName ?? ""}
+          onChange={(e) => setAnswer("childName", e.target.value.trim() || undefined)}
+          aria-describedby="childNameHelp"
+        />
+        <div id="childNameHelp" className="form-text">
+          Folosim numele doar pentru a personaliza raportul (ex: „Recomandări pentru Maria”).
+        </div>
+      </div>
+
       {/* Age input - Range slider */}
       <RangeInput
         id="age"
