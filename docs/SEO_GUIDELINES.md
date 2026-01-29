@@ -612,6 +612,72 @@ Sitemap: https://yuvoo.ro/sitemap.xml
 
 ---
 
+## Google Search Console Setup
+
+### Initial Setup
+
+1. **Go to Google Search Console**: https://search.google.com/search-console
+
+2. **Add Property**:
+   - Click "Add property"
+   - Choose "URL prefix" method
+   - Enter: `https://yuvoo.ro`
+
+3. **Verify Ownership** (recommended: HTML meta tag method):
+   - Select "HTML tag" verification method
+   - Copy the verification code (content value only)
+   - Add to `.env.local`: `GOOGLE_SITE_VERIFICATION="your-code"`
+   - Deploy and verify
+
+4. **Submit Sitemap**:
+   - Go to Sitemaps section
+   - Enter: `sitemap.xml`
+   - Click Submit
+
+### Post-Setup Tasks
+
+1. **Request Indexing**:
+   - Use URL Inspection tool for key pages
+   - Request indexing for: `/`, `/cluburi`, `/sporturi`, `/doctori`, `/chestionar`
+
+2. **Monitor Coverage**:
+   - Check "Coverage" report weekly
+   - Fix any errors or warnings
+   - Monitor "Excluded" pages (should be protected routes)
+
+3. **Performance Monitoring**:
+   - Review "Performance" report weekly
+   - Track impressions, clicks, CTR, and position
+   - Identify top-performing pages and queries
+
+### Sitemap Structure
+
+The sitemap (`/sitemap.xml`) includes:
+
+| Category         | Priority | Change Frequency | Notes                                |
+| ---------------- | -------- | ---------------- | ------------------------------------ |
+| Homepage         | 1.0      | daily            | Highest priority                     |
+| Core directories | 0.9      | daily/weekly     | `/cluburi`, `/sporturi`, `/doctori`  |
+| AI Quiz          | 0.9      | monthly          | `/chestionar`                        |
+| B2B Landing      | 0.85     | monthly          | `/pentru-cluburi`, `/pentru-doctori` |
+| Detail pages     | 0.8      | weekly           | Individual club/doctor/sport pages   |
+| Location pages   | 0.75     | weekly           | `/cluburi/locatie/*`                 |
+| Info pages       | 0.6-0.7  | monthly          | About, FAQ, Contact, Help            |
+| Legal pages      | 0.3      | yearly           | Privacy, Terms, GDPR                 |
+
+### robots.txt Configuration
+
+The robots.txt blocks:
+
+- Authentication routes (`/auth/`, `/login`, `/register`)
+- Protected dashboards (`/parent/`, `/club/`, `/doctor/`, `/admin/`)
+- Internal flows (`/onboarding/`, quiz internals)
+- API routes (`/api/`)
+- Tracking paths (`/ingest/`, `/monitoring`)
+- AI crawlers (GPTBot, CCBot, etc.)
+
+---
+
 ## Monitoring & Analytics
 
 ### Key Metrics
@@ -626,9 +692,9 @@ Sitemap: https://yuvoo.ro/sitemap.xml
 
 ### Tools
 
-- Google Search Console
-- Google Analytics
-- Bing Webmaster Tools
+- Google Search Console (primary)
+- Google Analytics (PostHog alternative in use)
+- Bing Webmaster Tools (optional)
 - SEO monitoring tools
 
 ---

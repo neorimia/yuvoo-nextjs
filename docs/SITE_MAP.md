@@ -458,6 +458,53 @@ These routes are NOT indexed and use English:
 
 ---
 
+## SEO Files
+
+### Sitemap (`/sitemap.xml`)
+
+Auto-generated sitemap for Google Search Console indexing.
+
+**Included Pages** (indexed):
+| Category | Example Routes | Priority | Change Frequency |
+|----------|----------------|----------|------------------|
+| Homepage | `/` | 1.0 | daily |
+| Core Directories | `/sporturi`, `/cluburi`, `/doctori` | 0.9 | daily/weekly |
+| AI Quiz | `/chestionar` | 0.9 | monthly |
+| B2B Landing | `/pentru-cluburi`, `/pentru-doctori` | 0.85 | monthly |
+| B2B Sub-pages | `/pentru-cluburi/cum-functioneaza`, etc. | 0.65-0.7 | monthly |
+| Detail Pages | `/cluburi/[slug]`, `/doctori/[slug]` | 0.7-0.8 | weekly |
+| Location Pages | `/cluburi/locatie/[location]` | 0.75 | weekly |
+| Info Pages | `/despre-noi`, `/contact`, `/ajutor` | 0.6-0.7 | monthly |
+| Search | `/cautare` | 0.7 | weekly |
+| Legal Pages | `/confidentialitate`, `/termeni`, etc. | 0.3 | yearly |
+
+**Excluded Pages** (not indexed):
+
+- Authentication routes (`/login`, `/register`, `/auth/*`)
+- Protected dashboards (`/parent/*`, `/club/*`, `/doctor/*`, `/admin/*`)
+- Internal quiz flows (`/chestionar/rezultate/*`, `/chestionar/container`)
+- Payment flows (`/chestionar/payment/*`, `/cereri/*`)
+- Onboarding flows (`/onboarding/*`)
+- API routes (`/api/*`)
+
+### Robots.txt (`/robots.txt`)
+
+Auto-generated robots.txt with comprehensive crawler rules.
+
+**Allowed**:
+
+- All public pages for search engine crawlers
+- Image crawlers for club/doctor/sport images
+
+**Blocked**:
+
+- Authentication and protected routes
+- API endpoints
+- Analytics/tracking paths (`/ingest/`, `/monitoring`)
+- AI crawlers (GPTBot, ChatGPT-User, CCBot, anthropic-ai)
+
+---
+
 ## API Routes
 
 ### Public API
