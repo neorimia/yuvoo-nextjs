@@ -57,16 +57,16 @@ const footerData: IFooterData = {
         menu: "Pentru Cluburi",
         path: "/pentru-cluburi",
       },
-      // {
-      //   id: 5,
-      //   menu: "Doctori",
-      //   path: "/doctori",
-      // },
-      // {
-      //   id: 6,
-      //   menu: "Pentru Doctori",
-      //   path: "/pentru-doctori",
-      // },
+      {
+        id: 5,
+        menu: "Doctori",
+        path: "/doctori",
+      },
+      {
+        id: 6,
+        menu: "Pentru Doctori",
+        path: "/pentru-doctori",
+      },
       {
         id: 7,
         menu: "Chestionar",
@@ -113,6 +113,16 @@ const footerData: IFooterData = {
         menu: "Gimnastică",
         path: "/sporturi/gimnastica",
       },
+      {
+        id: 7,
+        menu: "Atletism",
+        path: "/sporturi/atletism",
+      },
+      {
+        id: 8,
+        menu: "Karate",
+        path: "/sporturi/karate",
+      },
     ],
   },
   customer_services: {
@@ -134,16 +144,16 @@ const footerData: IFooterData = {
         menu: "Pentru Cluburi",
         path: "/pentru-cluburi",
       },
-      // {
-      //   id: 4,
-      //   menu: "Specialiști pediatri",
-      //   path: "/doctori",
-      // },
-      // {
-      //   id: 5,
-      //   menu: "Pentru Doctori",
-      //   path: "/pentru-doctori",
-      // },
+      {
+        id: 4,
+        menu: "Specialiști pediatri",
+        path: "/doctori",
+      },
+      {
+        id: 5,
+        menu: "Pentru Doctori",
+        path: "/pentru-doctori",
+      },
       {
         id: 6,
         menu: "Întrebări frecvente",

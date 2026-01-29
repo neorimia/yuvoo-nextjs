@@ -26,7 +26,7 @@ const ContactInfoArea = () => {
               </div>
             </div>
           </div>
-          <div className="col-lg-4 col-md-4 col-sm-12">
+          {/* <div className="col-lg-4 col-md-4 col-sm-12">
             <div
               className="bd-contact-info-wrap mb-30 wow fadeInUp"
               data-wow-duration="1s"
@@ -55,7 +55,7 @@ const ContactInfoArea = () => {
                 </div>
               </div>
             </div>
-          </div>
+          </div> */}
           <div className="col-lg-4 col-md-4 col-sm-12">
             <div
               className="bd-contact-info-wrap mb-30 wow fadeInUp"

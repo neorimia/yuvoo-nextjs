@@ -120,6 +120,12 @@ Yuvoo provides a unified platform that:
 - **AI prompt**: Absolute contraindications, severity-based recommendations, Romanian age minimums for sports; user prompt includes critical health and severity data.
 - **Documentation**: `docs/MEDICAL_SAFETY.md`; medical expert review checklist: `docs/MEDICAL_EXPERT_REVIEW_CHECKLIST.md`.
 
+**Quiz Report – Parent Pricing**:
+
+- **Teaser**: Free for everyone (with or without account); preview of recommendations after completing the quiz.
+- **Full report**: One-time payment of 39 lei. Includes detailed recommendations, explanations, and persistent access link. **The full report is NOT free with account**; creating an account allows saving results and quiz history, but full report access always requires the 39 lei payment.
+- **Account (free)**: Save results, quiz history, favorites, notifications; does not unlock the full report without payment.
+
 **Future Enhancement**: ML models for improved recommendations
 
 ### 2. Club Directory
