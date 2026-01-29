@@ -115,3 +115,33 @@ export function isClubsLandingSubmenuActive(pathname: string): boolean {
   // Sub-routes
   return isSubRoute(pathname, landingRoute);
 }
+
+/**
+ * Special handling for Doctors menu
+ *
+ * The "Doctori" parent menu should only be active on:
+ * - /doctori (exact match)
+ * - NOT on /pentru-doctori or its sub-routes
+ */
+export function isDoctorsMenuActive(pathname: string): boolean {
+  return isExactMatch(pathname, routes.doctors.list);
+}
+
+/**
+ * Check if "Pentru Doctori" submenu item should be active
+ *
+ * Active on:
+ * - /pentru-doctori (exact match)
+ * - /pentru-doctori/* (sub-routes if any)
+ */
+export function isDoctorsLandingSubmenuActive(pathname: string): boolean {
+  const landingRoute = routes.doctors.landing;
+
+  // Exact match
+  if (isExactMatch(pathname, landingRoute)) {
+    return true;
+  }
+
+  // Sub-routes
+  return isSubRoute(pathname, landingRoute);
+}

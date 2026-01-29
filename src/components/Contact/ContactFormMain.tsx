@@ -49,7 +49,7 @@ const ContactFormMain = () => {
               <ContactForm />
             </div>
           </div>
-          <div className="col-xl-10 mx-auto">
+          {/* <div className="col-xl-10 mx-auto">
             <div
               className="bd-contact-map wow fadeInUp"
               data-wow-duration="1s"
@@ -66,7 +66,7 @@ const ContactFormMain = () => {
                 title="Yuvoo - Mun. Focsani, România"
               ></iframe>
             </div>
-          </div>
+          </div> */}
         </div>
       </div>
     </section>

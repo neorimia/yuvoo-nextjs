@@ -39,12 +39,13 @@ export const faqCategories: FAQCategory[] = [
             </Link>
             ,{" "}
             <Link href={routes.clubs.list} className="text-primary">
-              listă de cluburi sportive
-            </Link>{" "}
-            {/*și{" "}*/}
-            {/*<Link href={routes.doctors.list} className="text-primary">*/}
-            {/*  acces la specialiști pediatri relevanți pentru sport*/}
-            {/*</Link>*/}.
+              director de cluburi sportive verificate
+            </Link>
+            , și{" "}
+            <Link href={routes.doctors.list} className="text-primary">
+              acces la specialiști pediatri relevanți pentru sport
+            </Link>
+            .
           </>
         ),
         category: "Despre Platformă",
@@ -52,7 +53,7 @@ export const faqCategories: FAQCategory[] = [
       {
         question: "Este Yuvoo gratuit pentru părinți?",
         answer:
-          "Da. Yuvoo este 100% gratuit pentru părinți. Vrem să alegi sportul potrivit pentru copilul tău fără presiune financiară. Cluburile pot avea taxe proprii, dar platforma Yuvoo și chestionarul AI sunt complet gratuite.",
+          "Da. Platforma Yuvoo este gratuită pentru părinți: contul, descoperirea cluburilor și a specialiștilor, și chestionarul AI (cu previzualizare gratuită). Singura opțiune plătită este raportul complet al quiz-ului (39 lei, plată unică), opțional. Cluburile și specialiștii pot avea taxe proprii; noi vrem să alegi sportul potrivit fără presiune financiară.",
         category: "Despre Platformă",
       },
       {
@@ -67,14 +68,12 @@ export const faqCategories: FAQCategory[] = [
             <Link href={routes.clubs.list} className="text-primary">
               Directorul de Cluburi
             </Link>{" "}
-            unde găsești cluburi sportive și calificate.
-            {/*și{" "}*/}
-            {/*<Link href={routes.doctors.list} className="text-primary">*/}
-            {/*  Rețeaua de Specialiști Pediatri*/}
-            {/*</Link>{" "}*/}
-            {/*pentru consultații medicale legate de sport. */}
-            Toate aceste servicii sunt integrate pentru a te ajuta să alegi cel mai bun sport pentru
-            copilul tău.
+            unde găsești cluburi sportive verificate, și{" "}
+            <Link href={routes.doctors.list} className="text-primary">
+              Rețeaua de Specialiști Pediatri
+            </Link>{" "}
+            pentru consultații medicale legate de sport. Toate aceste servicii sunt integrate pentru
+            a te ajuta să alegi cel mai bun sport pentru copilul tău.
           </>
         ),
         category: "Despre Platformă",
@@ -82,7 +81,7 @@ export const faqCategories: FAQCategory[] = [
       {
         question: "Yuvoo funcționează doar în București?",
         answer:
-          "Momentan, ne concentrăm pe București și împrejurimi, dar planificăm să extindem platforma în toată România. Dacă ești dintr-un alt oraș, poți încă să folosești chestionarul AI pentru recomandări generale despre sporturi potrivite și pentru a explora informații despre diferite sporturi pentru copii.",
+          "Nu. Yuvoo este activ în toate orașele din România. Poți folosi chestionarul AI, descoperi cluburi și specialiști pediatri indiferent de localitatea ta. Căutarea și filtrele te ajută să găsești opțiuni în orașul tău sau în apropiere.",
         category: "Despre Platformă",
       },
     ],
@@ -98,11 +97,12 @@ export const faqCategories: FAQCategory[] = [
               Chestionarul AI
             </Link>{" "}
             ia în considerare vârsta copilului, interesele, nivelul de activitate, preferințele
-            fizice și multe alte criterii pentru a recomanda cele mai potrivite sporturi.
-            Răspunsurile sunt analizate de un sistem AI care generează recomandări personalizate cu
-            explicații detaliate despre de ce fiecare sport este potrivit pentru copilul tău.{" "}
+            fizice și criterii de sănătate pentru a recomanda cele mai potrivite sporturi. După ce
+            răspunzi la întrebări, primești o previzualizare gratuită; poți apoi să accesezi
+            raportul complet (recomandări detaliate, explicații și link permanent) prin plata unică
+            (39 lei).{" "}
             <Link href={routes.sports.list} className="text-primary">
-              Explorează toate sporturile disponibile
+              Explorează toate sporturile
             </Link>{" "}
             pentru a înțelege mai bine opțiunile.
           </>
@@ -152,12 +152,28 @@ export const faqCategories: FAQCategory[] = [
             <Link href={routes.quiz.intro} className="text-primary">
               chestionarul AI
             </Link>{" "}
-            și obține recomandări fără să te înregistrezi. Totuși, dacă te{" "}
+            fără cont și vei primi o previzualizare a recomandărilor. Raportul complet (recomandări
+            detaliate, explicații și link de acces persistent) necesită plată unică (39 lei). Te
+            poți{" "}
             <Link href={routes.register} className="text-primary">
-              înregistrezi
-            </Link>
-            , poți salva rezultatele în profilul tău, să accesezi istoricul recomandărilor și să
-            primești notificări despre cluburi și evenimente relevante.
+              înregistra
+            </Link>{" "}
+            gratuit pentru a salva rezultatele în profil, istoricul quiz-urilor și notificări despre
+            cluburi și evenimente; raportul complet rămâne plătit.
+          </>
+        ),
+        category: "Chestionarul AI",
+      },
+      {
+        question: "Ce include raportul complet al quiz-ului și cât costă?",
+        answer: (
+          <>
+            Raportul complet include recomandările AI detaliate, explicațiile pentru fiecare sport,
+            beneficii și considerații, plus link de acces persistent (poți reveni oricând la
+            rezultate). Costă 39 lei (plată unică). După plată primești email cu link către raport;
+            nu expiră. Raportul complet nu este gratuit nici cu cont: contul gratuit îți permite să
+            salvezi rezultatele și istoricul quiz-urilor; accesul la raportul complet necesită
+            plată.
           </>
         ),
         category: "Chestionarul AI",
@@ -240,6 +256,21 @@ export const faqCategories: FAQCategory[] = [
         category: "Specialiști Pediatri",
       },
       {
+        question: "Pot rezerva o consultație direct din platformă?",
+        answer: (
+          <>
+            Da. Pe{" "}
+            <Link href={routes.doctors.list} className="text-primary">
+              pagina fiecărui specialist
+            </Link>{" "}
+            poți vedea disponibilitatea și rezerva direct o consultație. Cererea ajunge la
+            specialist, care te va contacta pentru confirmare. Mulți specialiști oferă și
+            consultații online — verifică pe profil dacă sunt disponibile.
+          </>
+        ),
+        category: "Specialiști Pediatri",
+      },
+      {
         question: "Pot consulta un specialist online?",
         answer:
           "Da, mulți specialiști pediatri de pe platformă oferă consultații online pentru comoditatea ta și a copilului tău. Consultațiile online sunt ideale pentru consultații inițiale, urmărire, sau pentru părinții care nu pot ajunge fizic la cabinet. Verifică pe profilul fiecărui specialist dacă oferă consultații online.",
@@ -315,9 +346,16 @@ export const faqCategories: FAQCategory[] = [
               crea un cont rapid
             </Link>{" "}
             folosind adresa ta de email și o parolă sigură. Procesul este simplu și gratuit. După
-            înregistrare, vei primi un email de confirmare. Odată confirmat, poți completa profilul
-            copilului tău și începe să folosești toate funcțiile platformei, inclusiv salvarea
-            recomandărilor AI și rezervarea probelor la cluburi.
+            confirmarea emailului poți completa profilul copilului și folosi toate funcțiile:
+            salvarea recomandărilor AI, rezervarea probelor la{" "}
+            <Link href={routes.clubs.list} className="text-primary">
+              cluburi
+            </Link>
+            , programarea consultațiilor la{" "}
+            <Link href={routes.doctors.list} className="text-primary">
+              specialiști
+            </Link>
+            , favorite și dashboard personalizat.
           </>
         ),
         category: "Cont și Profil",
@@ -331,12 +369,16 @@ export const faqCategories: FAQCategory[] = [
             <Link href={routes.quiz.intro} className="text-primary">
               recomandări AI personalizate
             </Link>
-            , istoricul quiz-urilor și lista de{" "}
+            , istoricul quiz-urilor,{" "}
             <Link href={routes.clubs.list} className="text-primary">
               cluburi favorite
+            </Link>{" "}
+            și{" "}
+            <Link href={routes.doctors.list} className="text-primary">
+              specialiști salvați
             </Link>
-            . Acest lucru te ajută să gestionezi mai ușor activitățile sportive pentru toți copiii
-            din familie dintr-un singur cont.
+            . Din dashboard poți gestiona toate activitățile sportive și programările pentru toți
+            copiii din familie dintr-un singur cont.
           </>
         ),
         category: "Cont și Profil",
@@ -376,15 +418,37 @@ export const faqCategories: FAQCategory[] = [
             <Link href={routes.clubs.landing} className="text-primary">
               programul Founding Club gratuit
             </Link>
-            . Procesul include un call de 15 minute pentru configurarea profilului, verificarea
-            documentelor (identitate legală, calificări antrenori, protocoluri de siguranță) și
-            verificarea finală care durează 1-2 săptămâni. După aprobare, vei primi badge-ul de
-            verificat și vei apărea în rezultatele de căutare relevante. Pentru mai multe
-            informații, poți{" "}
+            . Specialiștii pediatri pot aplica pentru{" "}
+            <Link href={routes.doctors.landing} className="text-primary">
+              programul Expert Pediatric Verificat
+            </Link>
+            . Procesul include un call scurt pentru configurarea profilului, verificarea
+            documentelor (identitate legală, calificări, protocoluri) și verificarea finală (1-2
+            săptămâni). După aprobare, vei primi badge-ul de verificat și vei apărea în rezultatele
+            relevante. Pentru detalii,{" "}
             <Link href={routes.contact} className="text-primary">
-              contacta echipa noastră prin formularul de contact
+              contactează echipa Yuvoo
             </Link>
             .
+          </>
+        ),
+        category: "Parteneri și Verificare",
+      },
+      {
+        question: "Cum pot deveni Expert Pediatric Verificat?",
+        answer: (
+          <>
+            Medici pediatri, ortopezi pediatrici, nutriționiști și psihologi copii pot aplica pe{" "}
+            <Link href={routes.doctors.landing} className="text-primary">
+              Pentru Doctori
+            </Link>
+            . Yuvoo nu este marketplace medical: oferim un strat de validare pentru părinți care
+            aleg sportul potrivit. Procesul include verificarea calificărilor și un profil public
+            optimizat. Nu există promovare agresivă; controlul editorial rămâne la tine.{" "}
+            <Link href={routes.contact} className="text-primary">
+              Contactează-ne
+            </Link>{" "}
+            pentru pașii următori.
           </>
         ),
         category: "Parteneri și Verificare",

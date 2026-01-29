@@ -53,10 +53,9 @@ const BetaBanner = () => {
                   </div>
                   <div className="bd-beta-banner-text">
                     <p className="mb-0">
-                      <strong>Versiune Beta:</strong> Yuvoo este în dezvoltare activă.{" "}
                       <span className="d-none d-md-inline">
-                        Descoperă funcționalitățile noastre și ajută-ne să îmbunătățim platforma cu
-                        feedback-ul tău.
+                        Descoperă sporturile potrivite, cluburi verificate și specialiști pediatri.
+                        Feedback-ul tău ne ajută să îmbunătățim continuu experiența.
                       </span>
                     </p>
                   </div>
@@ -75,7 +74,7 @@ const BetaBanner = () => {
                   <button
                     className="bd-beta-banner-close"
                     onClick={handleDismiss}
-                    aria-label="Închide banner-ul beta"
+                    aria-label="Închide banner-ul"
                     type="button"
                   >
                     <i className="fas fa-times"></i>

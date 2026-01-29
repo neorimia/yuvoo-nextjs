@@ -64,7 +64,7 @@ export const metadata: Metadata = {
  * Uses Next.js 16 Cache Components with "use cache" directive.
  * SEO-friendly route: /
  */
-const Home = async () => {
+const Home = async (): Promise<React.ReactNode> => {
   // Cache configuration for home page
   // Cache for 1 hour - home page content changes infrequently
   cacheLife("hours");
@@ -74,6 +74,8 @@ const Home = async () => {
   cacheTag("home-featured-clubs");
   cacheTag("home-featured-doctors");
 
+  // const clubs = await getAllClubs();
+
   return (
     <>
       <HeroYuvoo />
@@ -82,9 +84,8 @@ const Home = async () => {
       <HomeTrustSignals />
       {/* <HomeStats /> */}
       <FeaturedSports />
-      {/* <FeaturedClubs /> */}
-      {/* <FeaturedDoctors /> */}
-      {/* <HomeTestimonial /> */}
+      {/* <HomeClubArea clubs={clubs} /> */}
+      {/* <HomeTestimonialArea /> */}
       <HomeFaq />
     </>
   );

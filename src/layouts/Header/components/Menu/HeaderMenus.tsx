@@ -9,6 +9,8 @@ import {
   isSubmenuLinkActive,
   isClubsMenuActive,
   isClubsLandingSubmenuActive,
+  isDoctorsMenuActive,
+  isDoctorsLandingSubmenuActive,
 } from "@/lib/navigation-utils";
 import { routes } from "@/lib/routes";
 
@@ -30,6 +32,16 @@ const HeaderMenus = () => {
     // Special handling for "Pentru Cluburi" submenu
     if (link === routes.clubs.landing) {
       return isClubsLandingSubmenuActive(pathname);
+    }
+
+    // Special handling for Doctors menu
+    if (link === routes.doctors.list) {
+      return isDoctorsMenuActive(pathname);
+    }
+
+    // Special handling for "Pentru Doctori" submenu
+    if (link === routes.doctors.landing) {
+      return isDoctorsLandingSubmenuActive(pathname);
     }
 
     // For submenus, allow sub-routes
