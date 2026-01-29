@@ -140,7 +140,7 @@ export default function QuizIntroContent({ quizCount }: { quizCount: number }) {
                 >
                   <span className="fs-3 fw-bold text-white">1</span>
                 </div>
-                <h3 className="h6 fw-semibold mb-2">Răspunde la 6 întrebări</h3>
+                <h3 className="h6 fw-semibold mb-2">Răspunde la 7 întrebări</h3>
                 <p className="text-muted small mb-0">
                   Despre vârsta, energia, personalitatea și interesele copilului tău
                 </p>

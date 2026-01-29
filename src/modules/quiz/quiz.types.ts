@@ -13,6 +13,7 @@ export interface QuizSubmission {
 
 export interface QuizAnswers {
   // Question 1: Age & Basic Info
+  childName?: string; // Optional: child's first name for personalization (e.g. in report)
   age: number; // 4-14 years
   gender?: "male" | "female" | "other"; // Optional
 

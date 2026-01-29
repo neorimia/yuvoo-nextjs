@@ -335,30 +335,6 @@ export async function sendQuizResults(
     const { generateEmailToken } = await import("@/lib/utils/email-tokens");
     const unsubscribeToken = generateEmailToken(userEmail);
 
-    // Fetch clubs for recommended sports (top 3)
-    const topRecommendations = [...quizResult.recommendations]
-      .sort((a, b) => b.matchScore - a.matchScore)
-      .slice(0, 3);
-
-    const { getClubsBySport } = await import("@/modules/clubs/clubs.service");
-    // Type will be inferred from getClubsBySport return type (Club[])
-    const clubsBySport = new Map<string, Awaited<ReturnType<typeof getClubsBySport>>>();
-
-    // Fetch clubs for each recommended sport (limit to verified clubs, max 3 per sport)
-    for (const rec of topRecommendations) {
-      try {
-        const clubs = await getClubsBySport(rec.sportId);
-        // Filter for verified clubs and limit to 3
-        const verifiedClubs = clubs.filter((club) => club.verified).slice(0, 3);
-        if (verifiedClubs.length > 0) {
-          clubsBySport.set(rec.sportId, verifiedClubs);
-        }
-      } catch (error) {
-        // Log but don't fail - clubs are optional
-        console.error(`[Email Service] Error fetching clubs for sport ${rec.sportId}:`, error);
-      }
-    }
-
     // Render React Email component - child is guaranteed to be valid at this point
     const React = await import("react");
     const { QuizResultsEmail } = await import("../../../../emails/quiz-results-email");
@@ -386,7 +362,6 @@ export async function sendQuizResults(
       userEmail,
       user,
       unsubscribeToken,
-      clubsBySport,
     });
 
     // Render email with error handling

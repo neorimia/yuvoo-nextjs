@@ -56,7 +56,11 @@ export default function ReportContent({
   return (
     <>
       {/* Report Header */}
-      <ReportHeader quizResult={quizResult} topRecommendations={topRecommendations} />
+      <ReportHeader
+        quizResult={quizResult}
+        topRecommendations={topRecommendations}
+        quizAnswers={quizAnswers}
+      />
 
       {/* Download PDF Button - Always render to maintain consistent hook order */}
       {/* Use CSS class instead of inline style to prevent hooks errors */}
