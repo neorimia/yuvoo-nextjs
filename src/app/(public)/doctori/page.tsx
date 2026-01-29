@@ -101,7 +101,7 @@ export default async function DoctorsPage({ searchParams }: DoctorsPageProps) {
           <div className="row">
             <div className="col-lg-10 mx-auto">
               <SectionTitle
-                title="Specialiști Pediatri Verificați"
+                title="Specialiști Pediatri"
                 subtitle={
                   <>
                     Găsește specialiști pediatri verificați pentru consultații despre activitățile

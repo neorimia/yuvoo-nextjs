@@ -40,6 +40,16 @@ const MobileMenu: React.FC<MobileMenuProps> = ({ onClose }) => {
       return pathname === link || pathname === `${link}/` || pathname.startsWith(`${link}/`);
     }
 
+    // Special handling for Doctors menu
+    if (link === routes.doctors.list) {
+      return pathname === routes.doctors.list || pathname === `${routes.doctors.list}/`;
+    }
+
+    // Special handling for "Pentru Doctori" submenu
+    if (link === routes.doctors.landing) {
+      return pathname === link || pathname === `${link}/` || pathname.startsWith(`${link}/`);
+    }
+
     // For submenus, allow sub-routes
     if (isSubmenu) {
       return pathname === link || pathname === `${link}/` || pathname.startsWith(`${link}/`);
