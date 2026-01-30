@@ -1,10 +1,8 @@
 "use client";
 
 import React from "react";
-import Link from "next/link";
-import { routes } from "@/lib/routes";
 import { trackEvent, PostHogEvents } from "@/lib/analytics/tracking";
-import { CLUBS_CONTACT_MODAL_ID, openClubsContactModal } from "@/lib/clubs-landing-modal";
+import { openClubsPremiumMailto } from "@/lib/clubs-landing-modal";
 
 /**
  * Case Studies CTA Component
@@ -17,13 +15,10 @@ export default function CaseStudiesCTA() {
 
     trackEvent(PostHogEvents.CLUBS_LANDING_CTA_CLICKED, {
       location: "case_studies_cta",
-      cta_text: "Vrei să fii următorul success story? Rezervă call-ul",
+      cta_text: "Rezervă call-ul",
     });
 
-    openClubsContactModal(
-      "case_studies_cta",
-      "Vrei să fii următorul success story? Rezervă call-ul"
-    );
+    openClubsPremiumMailto("case_studies_cta", "Rezervă call-ul");
   };
 
   return (
@@ -44,24 +39,18 @@ export default function CaseStudiesCTA() {
               gratuite) sau upgrade la Premium pentru acces imediat la lead-uri pre-calificate.
             </p>
             <div className="d-flex flex-wrap justify-content-center gap-3">
-              <button
-                type="button"
-                className="bd-btn"
-                onClick={handleCTAClick}
-                data-bs-toggle="modal"
-                data-bs-target={`#${CLUBS_CONTACT_MODAL_ID}`}
-              >
+              <button type="button" className="bd-btn" onClick={handleCTAClick}>
                 <span className="bd-btn-inner">
                   <span className="bd-btn-normal">Rezervă call-ul</span>
                   <span className="bd-btn-hover">Rezervă call-ul</span>
                 </span>
               </button>
-              <Link href={routes.club.premium} className="bd-btn bd-btn-border">
+              {/* <Link href={routes.club.premium} className="bd-btn bd-btn-border">
                 <span className="bd-btn-inner">
                   <span className="bd-btn-normal">Upgrade la Premium</span>
                   <span className="bd-btn-hover">Upgrade la Premium</span>
                 </span>
-              </Link>
+              </Link> */}
             </div>
             <p
               style={{

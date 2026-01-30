@@ -2,7 +2,7 @@
 
 import React from "react";
 import { trackEvent, PostHogEvents } from "@/lib/analytics/tracking";
-import { DOCTORS_CONTACT_MODAL_ID, openDoctorsContactModal } from "@/lib/doctors-landing-modal";
+import { openDoctorsContactModal } from "@/lib/doctors-landing-modal";
 
 /**
  * Doctors Landing Hero Section
@@ -138,13 +138,7 @@ export default function DoctorsLandingHero() {
                   data-wow-duration="1s"
                   data-wow-delay=".8s"
                 >
-                  <button
-                    type="button"
-                    className="bd-btn mx-auto"
-                    onClick={handlePrimaryCTAClick}
-                    data-bs-toggle="modal"
-                    data-bs-target={`#${DOCTORS_CONTACT_MODAL_ID}`}
-                  >
+                  <button type="button" className="bd-btn mx-auto" onClick={handlePrimaryCTAClick}>
                     <span className="bd-btn-inner">
                       <span className="bd-btn-normal">Devino Expert Pediatric Verificat</span>
                       <span className="bd-btn-hover">Devino Expert Pediatric Verificat</span>
