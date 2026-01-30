@@ -55,13 +55,13 @@ const ChildDetailsMain: React.FC<ChildDetailsMainProps> = ({ child, quizzes, boo
               </h2>
               <div className="d-flex flex-wrap gap-3 mb-3">
                 <div className="d-flex align-items-center">
-                  <i className="bi bi-calendar-event text-primary me-2"></i>
+                  <i className="bi bi-calendar-event text-yuvoo-primary me-2"></i>
                   <span className="text-muted">
                     <strong>{child.age} ani</strong> • {formatDate(child.dateOfBirth)}
                   </span>
                 </div>
                 <div className="d-flex align-items-center">
-                  <i className="bi bi-person text-primary me-2"></i>
+                  <i className="bi bi-person text-yuvoo-primary me-2"></i>
                   <span className="text-muted">{genderLabel}</span>
                 </div>
               </div>

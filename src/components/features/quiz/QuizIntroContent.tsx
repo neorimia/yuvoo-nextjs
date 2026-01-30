@@ -91,11 +91,11 @@ export default function QuizIntroContent({ quizCount }: { quizCount: number }) {
                       </h3>
                       <p className="text-muted small mb-0">
                         Acces direct la{" "}
-                        <Link href={routes.clubs.list} className="text-primary">
+                        <Link href={routes.clubs.list} className="text-yuvoo-primary">
                           cluburi sportive
                         </Link>{" "}
                         care oferă sporturile recomandate. Explorează{" "}
-                        <Link href={routes.sports.list} className="text-primary">
+                        <Link href={routes.sports.list} className="text-yuvoo-primary">
                           toate sporturile disponibile
                         </Link>
                         .

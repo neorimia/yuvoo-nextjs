@@ -202,7 +202,7 @@ export default async function GuestPaymentSuccessPage({
                   <div className="card-body">
                     <ul className="list-unstyled mb-0">
                       <li className="mb-3">
-                        <i className="bi bi-envelope-fill text-primary me-2"></i>
+                        <i className="bi bi-envelope-fill text-yuvoo-primary me-2"></i>
                         Contactează părintele pe email sau telefon
                       </li>
                       <li className="mb-3">

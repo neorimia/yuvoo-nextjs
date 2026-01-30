@@ -27,7 +27,7 @@ export const metadata: Metadata = {
 };
 
 export default function CookiePolicyPage() {
-  const lastUpdated = new Date("2024-12-15").toLocaleDateString("ro-RO", {
+  const lastUpdated = new Date("2026-01-30").toLocaleDateString("ro-RO", {
     year: "numeric",
     month: "long",
     day: "numeric",
@@ -139,6 +139,10 @@ export default function CookiePolicyPage() {
                         <strong>Cloudinary:</strong> Cookie-uri pentru optimizarea și livrarea
                         imaginilor
                       </li>
+                      <li>
+                        <strong>Stripe:</strong> Cookie-uri necesare pentru procesarea în siguranță
+                        a plăților pe platformă (ex.: deblocare rezultate quiz, plăți cluburi)
+                      </li>
                     </ul>
                     <p className="mb-20">
                       Aceste servicii au propriile politici de confidențialitate și cookie-uri. Te
@@ -164,6 +168,10 @@ export default function CookiePolicyPage() {
                     <h2 className="bd-legal-section-title mb-20">
                       5. Cum poți gestiona cookie-urile
                     </h2>
+                    <p className="mb-20">
+                      Nu folosim cookie-uri de publicitate sau marketing. Poți gestiona sau șterge
+                      cookie-urile prin setările browserului (vezi mai jos).
+                    </p>
                     <h3 className="bd-legal-subsection-title mb-15">5.1. Setările browserului</h3>
                     <p className="mb-15">
                       Poți controla și șterge cookie-urile prin setările browserului tău. Iată cum
@@ -224,13 +232,13 @@ export default function CookiePolicyPage() {
                     <ul className="mb-0">
                       <li>
                         <strong>Email:</strong>{" "}
-                        <a href="mailto:contact@yuvoo.ro" className="text-primary">
+                        <a href="mailto:contact@yuvoo.ro" className="text-yuvoo-primary">
                           contact@yuvoo.ro
                         </a>
                       </li>
                       <li>
                         <strong>Telefon:</strong>{" "}
-                        <a href="tel:+40746385038" className="text-primary">
+                        <a href="tel:+40746385038" className="text-yuvoo-primary">
                           +40 746 385 038
                         </a>
                       </li>

@@ -75,23 +75,29 @@ const FeaturedDoctors = () => {
                   Conectează-te cu{" "}
                   <Link
                     href={routes.doctors.list}
-                    className="text-primary text-decoration-underline"
+                    className="text-yuvoo-primary text-decoration-underline"
                   >
                     doctori pediatri verificați
                   </Link>
                   , specializați în dezvoltarea și sănătatea copiilor care practică sport.{" "}
-                  <Link href={routes.quiz.intro} className="text-primary text-decoration-underline">
+                  <Link
+                    href={routes.quiz.intro}
+                    className="text-yuvoo-primary text-decoration-underline"
+                  >
                     Chestionarul AI
                   </Link>{" "}
                   îți va recomanda specialiști când este necesar. Explorează și{" "}
                   <Link
                     href={routes.sports.list}
-                    className="text-primary text-decoration-underline"
+                    className="text-yuvoo-primary text-decoration-underline"
                   >
                     sporturile disponibile
                   </Link>{" "}
                   și{" "}
-                  <Link href={routes.clubs.list} className="text-primary text-decoration-underline">
+                  <Link
+                    href={routes.clubs.list}
+                    className="text-yuvoo-primary text-decoration-underline"
+                  >
                     cluburile
                   </Link>
                   .

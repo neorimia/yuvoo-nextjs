@@ -103,7 +103,7 @@ const SearchResults: React.FC = () => {
   if (isLoading) {
     return (
       <div className="text-center py-5">
-        <div className="spinner-border text-primary" role="status">
+        <div className="spinner-border text-yuvoo-primary" role="status">
           <span className="visually-hidden">Se caută...</span>
         </div>
         <p className="mt-3 text-muted">Se caută rezultate pentru &quot;{query}&quot;...</p>

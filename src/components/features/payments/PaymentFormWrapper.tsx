@@ -74,7 +74,7 @@ export default function PaymentFormWrapper({ quizId }: PaymentFormWrapperProps) 
   if (isLoading) {
     return (
       <div className="text-center py-4">
-        <div className="spinner-border text-primary" role="status">
+        <div className="spinner-border text-yuvoo-primary" role="status">
           <span className="visually-hidden">Se încarcă...</span>
         </div>
         <p className="mt-2 text-muted">Se pregătește plata...</p>

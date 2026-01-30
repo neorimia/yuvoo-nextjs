@@ -336,7 +336,7 @@ export default function ClubsContactModal({ modalId }: ClubsContactModalProps) {
                     />
                     <label htmlFor="privacy-check" className="bd-contact-agree-label">
                       Accept{" "}
-                      <Link href={routes.privacy} className="text-primary">
+                      <Link href={routes.privacy} className="text-yuvoo-primary">
                         politica de confidențialitate
                       </Link>{" "}
                       și sunt de acord cu procesarea datelor mele conform GDPR.

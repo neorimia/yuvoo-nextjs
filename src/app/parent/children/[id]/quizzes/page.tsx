@@ -68,7 +68,7 @@ export default async function ChildQuizzesPage({ params }: ChildQuizzesPageProps
                 <div className="mb-4">
                   <div className="d-flex justify-content-between align-items-center mb-3">
                     <h1 className="h3 mb-0">
-                      <i className="bi bi-clipboard-check me-2 text-primary"></i>
+                      <i className="bi bi-clipboard-check me-2 text-yuvoo-primary"></i>
                       Istoric Chestionare
                     </h1>
                     <Link href={routes.quiz.intro} className="btn btn-primary">
@@ -117,7 +117,7 @@ export default async function ChildQuizzesPage({ params }: ChildQuizzesPageProps
               <div className="mb-4">
                 <div className="d-flex justify-content-between align-items-center mb-3">
                   <h1 className="h3 mb-0">
-                    <i className="bi bi-clipboard-check me-2 text-primary"></i>
+                    <i className="bi bi-clipboard-check me-2 text-yuvoo-primary"></i>
                     Istoric Chestionare
                   </h1>
                   <Link href={routes.quiz.intro} className="btn btn-primary">

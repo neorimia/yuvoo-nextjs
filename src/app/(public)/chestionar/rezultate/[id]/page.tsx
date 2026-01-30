@@ -131,7 +131,7 @@ export default async function QuizResultsPage({ params }: QuizResultsPageProps) 
               {quizResult.specialistRecommendation && (
                 <div className="specialist-recommendation-section mb-5">
                   <h2 className="h4 mb-4">
-                    <i className="bi bi-stethoscope text-primary me-2"></i>
+                    <i className="bi bi-stethoscope text-yuvoo-primary me-2"></i>
                     Recomandare Specialist Medical
                   </h2>
                   <SpecialistRecommendationCard
@@ -184,7 +184,7 @@ export default async function QuizResultsPage({ params }: QuizResultsPageProps) 
                   <div className="col-12 col-md-6">
                     <div className="d-flex align-items-start">
                       <div className="flex-shrink-0">
-                        <i className="bi bi-arrow-repeat text-primary fs-4"></i>
+                        <i className="bi bi-arrow-repeat text-yuvoo-primary fs-4"></i>
                       </div>
                       <div className="flex-grow-1 ms-3">
                         <h5 className="h6 mb-2">Vrei să repeți chestionarul?</h5>

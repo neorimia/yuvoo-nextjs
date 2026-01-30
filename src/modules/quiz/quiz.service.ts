@@ -10,7 +10,7 @@ import { children, users } from "@/lib/db/schema";
 import { eq } from "drizzle-orm";
 import { quizRepository } from "./quiz.repository";
 import { quizAnalyzer } from "./quiz.analyzer";
-import type { QuizResult, CreateQuizInput, QuizAnswers } from "./quiz.types";
+import type { QuizResult, CreateQuizInput } from "./quiz.types";
 import type { AnalysisResult } from "./quiz.analyzer";
 
 /**
@@ -94,22 +94,31 @@ export async function getQuizHistory(childId: string): Promise<QuizResult[]> {
 }
 
 /**
+ * Minimal child info for creating temporary child before quiz
+ */
+export interface TempChildInput {
+  age: number;
+  gender?: "male" | "female" | "other";
+  childName?: string;
+}
+
+/**
  * Create temporary child for quiz (unauthenticated users)
  *
  * Creates a temporary child record for quiz submission when user is not authenticated
- * or when using a placeholder child ID. Uses quiz answers to populate basic info.
+ * or when using a placeholder child ID. Uses minimal child info.
  *
- * @param answers - Quiz answers containing age and gender
+ * @param childInfo - Minimal child information (age, optional gender and name)
  * @param parentId - Optional parent ID (null for anonymous users)
  * @returns Child ID for quiz submission
  */
 export async function createTemporaryChildForQuiz(
-  answers: QuizAnswers,
+  childInfo: TempChildInput,
   parentId: string | null
 ): Promise<string> {
   // Calculate date of birth from age (approximate - use January 1st of birth year)
   const currentYear = new Date().getFullYear();
-  const birthYear = currentYear - answers.age;
+  const birthYear = currentYear - childInfo.age;
   const dateOfBirth = new Date(birthYear, 0, 1); // January 1st
 
   let actualParentId: string;
@@ -148,10 +157,10 @@ export async function createTemporaryChildForQuiz(
   await db.insert(children).values({
     id: childId,
     parentId: actualParentId,
-    firstName: "Copil", // Generic name
+    firstName: childInfo.childName || "Copil", // Use provided name or generic
     lastName: "Temporar",
     dateOfBirth,
-    gender: answers.gender || "other",
+    gender: childInfo.gender || "other",
   });
 
   return childId;

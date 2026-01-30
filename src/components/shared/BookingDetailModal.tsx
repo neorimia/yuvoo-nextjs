@@ -229,7 +229,7 @@ const BookingDetailModal: React.FC<BookingDetailModalProps> = ({
               <div className="row g-3">
                 <div className="col-md-6">
                   <div className="d-flex align-items-start">
-                    <i className="bi bi-tag text-primary me-2 mt-1"></i>
+                    <i className="bi bi-tag text-yuvoo-primary me-2 mt-1"></i>
                     <div>
                       <small className="text-muted d-block">Tip</small>
                       <strong>{getBookingTypeLabel()}</strong>
@@ -238,7 +238,7 @@ const BookingDetailModal: React.FC<BookingDetailModalProps> = ({
                 </div>
                 <div className="col-md-6">
                   <div className="d-flex align-items-start">
-                    <i className="bi bi-calendar-event text-primary me-2 mt-1"></i>
+                    <i className="bi bi-calendar-event text-yuvoo-primary me-2 mt-1"></i>
                     <div>
                       <small className="text-muted d-block">Data</small>
                       <strong>{formatDate(booking.scheduledAt)}</strong>
@@ -247,7 +247,7 @@ const BookingDetailModal: React.FC<BookingDetailModalProps> = ({
                 </div>
                 <div className="col-md-6">
                   <div className="d-flex align-items-start">
-                    <i className="bi bi-clock text-primary me-2 mt-1"></i>
+                    <i className="bi bi-clock text-yuvoo-primary me-2 mt-1"></i>
                     <div>
                       <small className="text-muted d-block">Ora</small>
                       <strong>{formatTime(booking.scheduledAt)}</strong>
@@ -256,7 +256,7 @@ const BookingDetailModal: React.FC<BookingDetailModalProps> = ({
                 </div>
                 <div className="col-md-6">
                   <div className="d-flex align-items-start">
-                    <i className="bi bi-hourglass-split text-primary me-2 mt-1"></i>
+                    <i className="bi bi-hourglass-split text-yuvoo-primary me-2 mt-1"></i>
                     <div>
                       <small className="text-muted d-block">Tip</small>
                       <strong>{isUpcoming ? "Viitoare" : "Trecută"}</strong>
@@ -279,7 +279,7 @@ const BookingDetailModal: React.FC<BookingDetailModalProps> = ({
                   <div className="row g-3">
                     <div className="col-md-6">
                       <div className="d-flex align-items-start">
-                        <i className="bi bi-person-badge text-primary me-2 mt-1"></i>
+                        <i className="bi bi-person-badge text-yuvoo-primary me-2 mt-1"></i>
                         <div>
                           <small className="text-muted d-block">Nume complet</small>
                           <strong>
@@ -290,7 +290,7 @@ const BookingDetailModal: React.FC<BookingDetailModalProps> = ({
                     </div>
                     <div className="col-md-6">
                       <div className="d-flex align-items-start">
-                        <i className="bi bi-calendar3 text-primary me-2 mt-1"></i>
+                        <i className="bi bi-calendar3 text-yuvoo-primary me-2 mt-1"></i>
                         <div>
                           <small className="text-muted d-block">Vârstă</small>
                           <strong>{child.age} ani</strong>
@@ -300,7 +300,7 @@ const BookingDetailModal: React.FC<BookingDetailModalProps> = ({
                     {child.gender && (
                       <div className="col-md-6">
                         <div className="d-flex align-items-start">
-                          <i className="bi bi-gender-ambiguous text-primary me-2 mt-1"></i>
+                          <i className="bi bi-gender-ambiguous text-yuvoo-primary me-2 mt-1"></i>
                           <div>
                             <small className="text-muted d-block">Gen</small>
                             <strong>
@@ -317,7 +317,7 @@ const BookingDetailModal: React.FC<BookingDetailModalProps> = ({
                     {child.dateOfBirth && (
                       <div className="col-md-6">
                         <div className="d-flex align-items-start">
-                          <i className="bi bi-calendar-date text-primary me-2 mt-1"></i>
+                          <i className="bi bi-calendar-date text-yuvoo-primary me-2 mt-1"></i>
                           <div>
                             <small className="text-muted d-block">Data nașterii</small>
                             <strong>
@@ -344,7 +344,7 @@ const BookingDetailModal: React.FC<BookingDetailModalProps> = ({
                   <div className="row g-3">
                     <div className="col-md-6">
                       <div className="d-flex align-items-start">
-                        <i className="bi bi-person text-primary me-2 mt-1"></i>
+                        <i className="bi bi-person text-yuvoo-primary me-2 mt-1"></i>
                         <div>
                           <small className="text-muted d-block">Nume</small>
                           <strong>
@@ -357,7 +357,7 @@ const BookingDetailModal: React.FC<BookingDetailModalProps> = ({
                     </div>
                     <div className="col-md-6">
                       <div className="d-flex align-items-start">
-                        <i className="bi bi-envelope text-primary me-2 mt-1"></i>
+                        <i className="bi bi-envelope text-yuvoo-primary me-2 mt-1"></i>
                         <div>
                           <small className="text-muted d-block">Email</small>
                           <strong>
@@ -371,7 +371,7 @@ const BookingDetailModal: React.FC<BookingDetailModalProps> = ({
                     {parent.phone && (
                       <div className="col-md-6">
                         <div className="d-flex align-items-start">
-                          <i className="bi bi-telephone text-primary me-2 mt-1"></i>
+                          <i className="bi bi-telephone text-yuvoo-primary me-2 mt-1"></i>
                           <div>
                             <small className="text-muted d-block">Telefon</small>
                             <strong>
@@ -414,7 +414,7 @@ const BookingDetailModal: React.FC<BookingDetailModalProps> = ({
               <div className="row g-3">
                 <div className="col-md-6">
                   <div className="d-flex align-items-start">
-                    <i className="bi bi-plus-circle text-primary me-2 mt-1"></i>
+                    <i className="bi bi-plus-circle text-yuvoo-primary me-2 mt-1"></i>
                     <div>
                       <small className="text-muted d-block">Creată</small>
                       <strong>{formatDateTime(booking.createdAt)}</strong>
@@ -424,7 +424,7 @@ const BookingDetailModal: React.FC<BookingDetailModalProps> = ({
                 {booking.updatedAt.getTime() !== booking.createdAt.getTime() && (
                   <div className="col-md-6">
                     <div className="d-flex align-items-start">
-                      <i className="bi bi-pencil text-primary me-2 mt-1"></i>
+                      <i className="bi bi-pencil text-yuvoo-primary me-2 mt-1"></i>
                       <div>
                         <small className="text-muted d-block">Actualizată</small>
                         <strong>{formatDateTime(booking.updatedAt)}</strong>

@@ -233,7 +233,7 @@ export default async function PaywallPage({ params }: PaywallPageProps) {
               {quizCount >= 100 && (
                 <div className="text-center mb-4">
                   <p className="text-muted small mb-0">
-                    <i className="bi bi-people-fill text-primary me-2" aria-hidden="true"></i>
+                    <i className="bi bi-people-fill text-yuvoo-primary me-2" aria-hidden="true"></i>
                     Peste {quizCount.toLocaleString("ro-RO")} părinți au folosit deja serviciul
                     nostru pentru a găsi sportul potrivit
                   </p>
@@ -345,7 +345,7 @@ export default async function PaywallPage({ params }: PaywallPageProps) {
                   <div className="col-12 col-md-4">
                     <div className="d-flex flex-column align-items-center">
                       <i
-                        className="bi bi-arrow-counterclockwise text-primary mb-2"
+                        className="bi bi-arrow-counterclockwise text-yuvoo-primary mb-2"
                         style={{ fontSize: "1.5rem" }}
                         aria-hidden="true"
                       ></i>

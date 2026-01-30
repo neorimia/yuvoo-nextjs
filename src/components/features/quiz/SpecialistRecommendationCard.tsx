@@ -114,7 +114,7 @@ export default function SpecialistRecommendationCard({
           <div className="flex-shrink-0 me-3">
             <div className="bd-specialist-icon-wrapper bg-primary bg-opacity-10 rounded-circle p-3">
               <i
-                className={`bi ${getSpecialtyIcon(recommendation.specialty)} text-primary fs-3`}
+                className={`bi ${getSpecialtyIcon(recommendation.specialty)} text-yuvoo-primary fs-3`}
               ></i>
             </div>
           </div>
@@ -202,7 +202,7 @@ export default function SpecialistRecommendationCard({
         {!isExternal && showDoctors && recommendedDoctors.length > 0 && (
           <div className="mt-4 pt-4 border-top">
             <h6 className="mb-3">
-              <i className="bi bi-heart-pulse-fill text-primary me-2"></i>
+              <i className="bi bi-heart-pulse-fill text-yuvoo-primary me-2"></i>
               {specialtyName} Recomandați ({recommendedDoctors.length})
             </h6>
             <div className="row g-3">

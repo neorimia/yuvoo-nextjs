@@ -200,14 +200,14 @@ export default async function LocationClubsPage({ params }: LocationPageProps) {
                     potrivește copilului tău, încearcă{" "}
                     <Link
                       href={routes.quiz.intro}
-                      className="text-primary text-decoration-underline"
+                      className="text-yuvoo-primary text-decoration-underline"
                     >
                       chestionarul AI
                     </Link>{" "}
                     pentru recomandări personalizate. Explorează și{" "}
                     <Link
                       href={routes.sports.list}
-                      className="text-primary text-decoration-underline"
+                      className="text-yuvoo-primary text-decoration-underline"
                     >
                       toate sporturile disponibile
                     </Link>{" "}
