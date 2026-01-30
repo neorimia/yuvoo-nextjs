@@ -16,6 +16,10 @@ import {
   verifyReportAccess,
 } from "@/modules/payments/payments.service";
 import {
+  getPaymentByQuizId,
+  getReportAccessByPaymentId,
+} from "@/modules/payments/payments.repository";
+import {
   createPaymentSchema,
   verifyPaymentSchema,
   reportAccessTokenSchema,
@@ -31,20 +35,26 @@ import type { Payment, ReportAccess } from "@/modules/payments/payments.types";
  * Creates a payment record and Stripe payment intent.
  * Returns client secret for frontend payment processing.
  */
-export async function createPaymentAction(
-  input: unknown
-): Promise<{ success: boolean; payment?: Payment; clientSecret?: string; error?: string }> {
-  try {
-    // Step 1: Validate input
-    const validationResult = createPaymentSchema.safeParse(input);
-    if (!validationResult.success) {
-      const firstError = validationResult.error.errors[0];
-      return {
-        success: false,
-        error: firstError?.message || "Date invalide. Te rugăm să verifici inputul.",
-      };
-    }
+export async function createPaymentAction(input: unknown): Promise<{
+  success: boolean;
+  payment?: Payment;
+  clientSecret?: string;
+  error?: string;
+  redirectToResults?: boolean;
+  quizId?: string;
+  /** When payment already completed, redirect to report using this token. */
+  reportAccessToken?: string;
+}> {
+  const validationResult = createPaymentSchema.safeParse(input);
+  if (!validationResult.success) {
+    const firstError = validationResult.error.errors[0];
+    return {
+      success: false,
+      error: firstError?.message || "Date invalide. Te rugăm să verifici inputul.",
+    };
+  }
 
+  try {
     const { quizId, userId: providedUserId } = validationResult.data;
 
     // Step 2: Get user (if authenticated)
@@ -96,12 +106,27 @@ export async function createPaymentAction(
 
     // Handle specific errors
     if (error instanceof Error) {
-      // Check if error message is already in Romanian
+      const isAlreadyCompleted = error.message.includes(
+        "Plata pentru acest chestionar a fost deja finalizată"
+      );
       const isRomanianError =
         error.message.includes("Chestionarul") ||
         error.message.includes("Plata") ||
         error.message.includes("Eroare") ||
         error.message.includes("Te rugăm");
+
+      if (isAlreadyCompleted && validationResult.success) {
+        const quizId = validationResult.data.quizId;
+        const payment = await getPaymentByQuizId(quizId);
+        const reportAccess =
+          payment?.status === "completed" ? await getReportAccessByPaymentId(payment.id) : null;
+        const reportAccessToken = reportAccess?.accessToken;
+        return {
+          success: false,
+          error: error.message,
+          ...(reportAccessToken ? { reportAccessToken } : { redirectToResults: true, quizId }),
+        };
+      }
 
       return {
         success: false,

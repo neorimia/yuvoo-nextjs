@@ -291,13 +291,15 @@ export async function sendBookingReminder(
  * @param child - Child who took the quiz
  * @param userEmail - Email address to send to (can be from user or provided during quiz)
  * @param user - Optional authenticated user
+ * @param childDisplayName - Optional name from quiz answers (overrides "Copil Temporar" in email)
  * @returns Promise that resolves when email is sent (or fails silently)
  */
 export async function sendQuizResults(
   quizResult: QuizResult,
   child: Child,
   userEmail: string,
-  user?: AuthUser
+  user?: AuthUser,
+  childDisplayName?: string
 ): Promise<void> {
   try {
     // Validate email
@@ -362,6 +364,7 @@ export async function sendQuizResults(
       userEmail,
       user,
       unsubscribeToken,
+      childDisplayName,
     });
 
     // Render email with error handling

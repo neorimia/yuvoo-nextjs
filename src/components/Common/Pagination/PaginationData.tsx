@@ -6,7 +6,16 @@ interface PaginationProps {
   onPageChange: (page: number) => void;
 }
 
+const MAX_VISIBLE_PAGES = 4;
+
 const PaginationData: React.FC<PaginationProps> = ({ currentPage, totalPages, onPageChange }) => {
+  const start =
+    totalPages <= MAX_VISIBLE_PAGES
+      ? 1
+      : Math.max(1, Math.min(currentPage - 2, totalPages - MAX_VISIBLE_PAGES + 1));
+  const end = Math.min(totalPages, start + MAX_VISIBLE_PAGES - 1);
+  const pagesToShow = Array.from({ length: end - start + 1 }, (_, i) => start + i);
+
   return (
     <div className="row">
       <div className="col-12">
@@ -16,35 +25,39 @@ const PaginationData: React.FC<PaginationProps> = ({ currentPage, totalPages, on
           data-wow-delay=".3s"
         >
           <ul className="justify-content-center">
-            <li className={`page-item`}>
-              <button
-                type="button"
-                className={`page-numbers ${currentPage === 1 ? "disabled" : ""}`}
-                onClick={() => onPageChange(currentPage - 1)}
-              >
-                <i className="fa-sharp fa-solid fa-angle-left"></i>
-              </button>
-            </li>
-            {Array.from({ length: totalPages }, (_, index) => (
-              <li key={index + 1} className={`page-item`}>
+            {currentPage !== 1 && (
+              <li className={`page-item`}>
                 <button
                   type="button"
-                  className={`page-numbers ${currentPage === index + 1 ? "current" : ""}`}
-                  onClick={() => onPageChange(index + 1)}
+                  className={`page-numbers ${currentPage === 1 ? "disabled" : ""}`}
+                  onClick={() => onPageChange(currentPage - 1)}
                 >
-                  {index + 1}
+                  <i className="fa-sharp fa-solid fa-angle-left"></i>
+                </button>
+              </li>
+            )}
+            {pagesToShow.map((page) => (
+              <li key={page} className="page-item">
+                <button
+                  type="button"
+                  className={`page-numbers ${currentPage === page ? "current" : ""}`}
+                  onClick={() => onPageChange(page)}
+                >
+                  {page}
                 </button>
               </li>
             ))}
-            <li className={`page-item`}>
-              <button
-                type="button"
-                className={`page-numbers ${currentPage === totalPages ? "disabled" : ""}`}
-                onClick={() => onPageChange(currentPage + 1)}
-              >
-                <i className="fa-sharp fa-solid fa-angle-right"></i>
-              </button>
-            </li>
+            {totalPages > MAX_VISIBLE_PAGES && currentPage !== totalPages && (
+              <li className={`page-item`}>
+                <button
+                  type="button"
+                  className={`page-numbers ${currentPage === totalPages ? "disabled" : ""}`}
+                  onClick={() => onPageChange(currentPage + 1)}
+                >
+                  <i className="fa-sharp fa-solid fa-angle-right"></i>
+                </button>
+              </li>
+            )}
           </ul>
         </div>
       </div>

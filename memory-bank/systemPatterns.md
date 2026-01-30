@@ -791,6 +791,10 @@ Quiz Results → "Vezi cluburi" button → /cluburi?sport={sportId}&quiz=true
                                     Shows recommended badge
 ```
 
+**Quiz report – LocalClubsSection** (`components/features/quiz/report/LocalClubsSection.tsx`): "Caută cluburi" links include location filters. For Bucharest, sector is extracted from location (e.g. "Sector 1, București" → `sectorId` via `getSectorIdByName`); `countyId` from `quizResult.countyId` or `getCountyIdByCityId(cityId)` (`lib/db/location-helpers.ts`). Link params: `countyId`, `cityId`, `sectorId` when available.
+
+**Club detail – ClubClaimProfile** (`components/features/clubs/ClubClaimProfile.tsx`): In-flow section at bottom of club detail (not sticky/fixed). Single responsive card (max-width 420px); "Revendică profilul" CTA. Renders only for unverified clubs.
+
 ### Quiz History Pattern
 
 **Location**: `components/features/quiz/QuizHistory.tsx`
@@ -834,6 +838,10 @@ Parent Dashboard → getQuizHistoryAction(childId) → Quiz Repository
 - Creates or reuses anonymous system user (`anonymous@yuvoo.local`)
 - Generic child name: "Copil Temporar"
 - Date of birth calculated from age (January 1st of birth year)
+
+**Quiz results email – child display**: Emails avoid showing "Copil Temporar"; prefer `childDisplayName` from quiz answers (user-typed name); fallback "copilul tău". `quiz.email.ts` fetches quiz answers and passes `childDisplayName` to Brevo; `QuizResultsEmail` accepts optional `childDisplayName` and treats "Copil Temporar" as placeholder.
+
+**Payment already completed**: When user opens paywall for an already-paid quiz, `createPaymentAction` returns `reportAccessToken` (from existing payment's report access); client redirects to `routes.quiz.report(accessToken)`. Fallback: `redirectToResults` + `quizId` → `routes.quiz.paymentSuccess(quizId)`. See `app/actions/payments.ts`, `PaymentFormWrapper.tsx`, `PaymentForm.tsx`.
 
 **Validation Flow**:
 
@@ -1491,7 +1499,7 @@ await deleteImageAction(imageUrl);
 - `FAQ/` - Frequently asked questions
 - `Contact/` - Contact forms
 - `Auth/` - Login, Register, Forgot Password
-- `Common/` - Breadcrumb, Pagination, Preloader, etc.
+- `Common/` - Breadcrumb, Pagination, Preloader, etc. `PaginationData` shows max 4 visible page buttons (sliding window around current page; `MAX_VISIBLE_PAGES = 4`).
 
 **Layout Components** (adapt branding only):
 

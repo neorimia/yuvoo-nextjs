@@ -8,9 +8,11 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import { useRouter } from "next/navigation";
 import { StripeProvider } from "@/components/providers/StripeProvider";
 import PaymentForm from "./PaymentForm";
 import { createPaymentAction } from "@/app/actions/payments";
+import { routes } from "@/lib/routes";
 import { trackEvent } from "@/lib/analytics/tracking";
 import { PostHogEvents, PostHogProperties } from "@/lib/analytics/events";
 
@@ -24,6 +26,7 @@ interface PaymentFormWrapperProps {
  * Creates payment intent and provides StripeProvider with clientSecret.
  */
 export default function PaymentFormWrapper({ quizId }: PaymentFormWrapperProps) {
+  const router = useRouter();
   const [clientSecret, setClientSecret] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -38,6 +41,14 @@ export default function PaymentFormWrapper({ quizId }: PaymentFormWrapperProps) 
         const result = await createPaymentAction({ quizId });
 
         if (!result.success) {
+          if ("reportAccessToken" in result && result.reportAccessToken) {
+            router.replace(routes.quiz.report(result.reportAccessToken));
+            return;
+          }
+          if ("redirectToResults" in result && result.redirectToResults && result.quizId) {
+            router.replace(routes.quiz.paymentSuccess(result.quizId));
+            return;
+          }
           setError(result.error || "Eroare la inițializarea plății. Te rugăm să încerci din nou.");
           setIsLoading(false);
           return;
@@ -68,7 +79,7 @@ export default function PaymentFormWrapper({ quizId }: PaymentFormWrapperProps) 
     }
 
     initializePayment();
-  }, [quizId]);
+  }, [quizId, router]);
 
   // Show loading state
   if (isLoading) {

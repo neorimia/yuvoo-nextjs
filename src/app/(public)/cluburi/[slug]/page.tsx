@@ -161,8 +161,8 @@ export default async function ClubDetailPage({ params }: ClubDetailPageProps) {
       {/* Expanded Content Section for SEO (600-900 words) */}
       <ClubContentExpanded content={expandedContent} />
       {/*<BookingFormSection club={club!} />*/}
-      {/* Sticky button for club representatives to claim profile */}
-      <ClubClaimProfile clubId={club!.id} clubSlug={slug} />
+      {/* Section at bottom for club representatives to claim profile */}
+      {!club!.verified && <ClubClaimProfile clubId={club!.id} clubSlug={slug} />}
     </>
   );
 }

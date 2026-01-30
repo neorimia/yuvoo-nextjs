@@ -27,6 +27,8 @@ interface QuizResultsEmailProps {
   unsubscribeToken?: string;
   /** Optional: full report URL (e.g. with access token). If not set, uses results page. */
   reportUrl?: string;
+  /** Optional: name from quiz answers (e.g. "Alex"). Overrides child first+last when set; "Copil Temporar" is replaced by "copilul tău". */
+  childDisplayName?: string;
 }
 
 /**
@@ -35,6 +37,8 @@ interface QuizResultsEmailProps {
  * Teaser only: notifies that results are ready and links to the full report.
  * Full report (recommendations, explanations, clubs) is only on the site.
  */
+const TEMP_CHILD_PLACEHOLDER = "Copil Temporar";
+
 export const QuizResultsEmail = ({
   quizResult,
   child,
@@ -42,6 +46,7 @@ export const QuizResultsEmail = ({
   user,
   unsubscribeToken,
   reportUrl,
+  childDisplayName,
 }: QuizResultsEmailProps) => {
   const appUrl = process.env.NEXT_PUBLIC_APP_URL || "https://yuvoo.ro";
   const userName = user?.firstName || user?.name?.split(" ")[0] || "Utilizator";
@@ -76,7 +81,7 @@ export const QuizResultsEmail = ({
     );
   }
 
-  if (!child || !child.firstName || !child.lastName) {
+  if (!child) {
     return (
       <Html lang="ro">
         <Head>
@@ -104,7 +109,10 @@ export const QuizResultsEmail = ({
     );
   }
 
-  const childName = `${child.firstName} ${child.lastName}`;
+  const rawChildName = [child.firstName, child.lastName].filter(Boolean).join(" ").trim();
+  const isPlaceholderName = rawChildName === TEMP_CHILD_PLACEHOLDER || !rawChildName;
+  const childName =
+    childDisplayName?.trim() || (isPlaceholderName ? "copilul tău" : rawChildName) || "copilul tău";
   const primaryRecommendation = [...(quizResult.recommendations || [])].sort(
     (a, b) => b.matchScore - a.matchScore
   )[0];
