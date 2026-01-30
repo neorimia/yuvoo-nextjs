@@ -116,7 +116,7 @@ const ClubMap: React.FC<ClubMapProps> = ({ club }) => {
         {/*      >*/}
         {/*        <div className="d-flex align-items-center justify-content-center flex-wrap gap-3">*/}
         {/*          <div className="d-flex align-items-center">*/}
-        {/*            <i className="flaticon-location text-primary me-2 fs-5"></i>*/}
+        {/*            <i className="flaticon-location text-yuvoo-primary me-2 fs-5"></i>*/}
         {/*            <div className="text-start">*/}
         {/*              <span className="d-block small text-muted">Adresă</span>*/}
         {/*              <strong>*/}

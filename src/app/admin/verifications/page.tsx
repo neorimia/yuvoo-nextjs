@@ -69,7 +69,7 @@ export default async function AdminVerificationsPage() {
           <div className="col-md-3">
             <div className="card text-center">
               <div className="card-body">
-                <h3 className="text-primary">{totalPending}</h3>
+                <h3 className="text-yuvoo-primary">{totalPending}</h3>
                 <p className="text-muted mb-0">În așteptare</p>
               </div>
             </div>

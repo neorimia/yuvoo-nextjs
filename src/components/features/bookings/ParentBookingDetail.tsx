@@ -105,7 +105,7 @@ const ParentBookingDetail: React.FC<ParentBookingDetailProps> = ({ booking, enti
             {/* Status */}
             <div className="col-md-6">
               <div className="d-flex align-items-center">
-                <i className="bi bi-info-circle text-primary me-2"></i>
+                <i className="bi bi-info-circle text-yuvoo-primary me-2"></i>
                 <div>
                   <small className="text-muted d-block">Status</small>
                   <span
@@ -121,7 +121,7 @@ const ParentBookingDetail: React.FC<ParentBookingDetailProps> = ({ booking, enti
             {/* Booking Type */}
             <div className="col-md-6">
               <div className="d-flex align-items-center">
-                <i className="bi bi-tag text-primary me-2"></i>
+                <i className="bi bi-tag text-yuvoo-primary me-2"></i>
                 <div>
                   <small className="text-muted d-block">Tip Rezervare</small>
                   <strong>{getBookingTypeLabel()}</strong>
@@ -132,7 +132,7 @@ const ParentBookingDetail: React.FC<ParentBookingDetailProps> = ({ booking, enti
             {/* Scheduled Date */}
             <div className="col-md-6">
               <div className="d-flex align-items-center">
-                <i className="bi bi-calendar-event text-primary me-2"></i>
+                <i className="bi bi-calendar-event text-yuvoo-primary me-2"></i>
                 <div>
                   <small className="text-muted d-block">Data</small>
                   <strong>{formatDate(booking.scheduledAt)}</strong>
@@ -143,7 +143,7 @@ const ParentBookingDetail: React.FC<ParentBookingDetailProps> = ({ booking, enti
             {/* Scheduled Time */}
             <div className="col-md-6">
               <div className="d-flex align-items-center">
-                <i className="bi bi-clock text-primary me-2"></i>
+                <i className="bi bi-clock text-yuvoo-primary me-2"></i>
                 <div>
                   <small className="text-muted d-block">Ora</small>
                   <strong>{formatTime(booking.scheduledAt)}</strong>
@@ -154,7 +154,7 @@ const ParentBookingDetail: React.FC<ParentBookingDetailProps> = ({ booking, enti
             {/* Created Date */}
             <div className="col-md-6">
               <div className="d-flex align-items-center">
-                <i className="bi bi-calendar-plus text-primary me-2"></i>
+                <i className="bi bi-calendar-plus text-yuvoo-primary me-2"></i>
                 <div>
                   <small className="text-muted d-block">Creată la</small>
                   <strong>{formatDateTime(booking.createdAt)}</strong>
@@ -166,7 +166,7 @@ const ParentBookingDetail: React.FC<ParentBookingDetailProps> = ({ booking, enti
             {booking.updatedAt && booking.updatedAt.getTime() !== booking.createdAt.getTime() && (
               <div className="col-md-6">
                 <div className="d-flex align-items-center">
-                  <i className="bi bi-calendar-check text-primary me-2"></i>
+                  <i className="bi bi-calendar-check text-yuvoo-primary me-2"></i>
                   <div>
                     <small className="text-muted d-block">Actualizată la</small>
                     <strong>{formatDateTime(booking.updatedAt)}</strong>
@@ -180,7 +180,7 @@ const ParentBookingDetail: React.FC<ParentBookingDetailProps> = ({ booking, enti
           {booking.notes && (
             <div className="mt-4 pt-4 border-top">
               <h5 className="mb-3">
-                <i className="bi bi-sticky text-primary me-2"></i>
+                <i className="bi bi-sticky text-yuvoo-primary me-2"></i>
                 Observații
               </h5>
               <p className="mb-0">{booking.notes}</p>
@@ -216,7 +216,7 @@ const ParentBookingDetail: React.FC<ParentBookingDetailProps> = ({ booking, enti
                   {entity.contact.phone && (
                     <div className="col-md-6">
                       <div className="d-flex align-items-center">
-                        <i className="bi bi-telephone text-primary me-2"></i>
+                        <i className="bi bi-telephone text-yuvoo-primary me-2"></i>
                         <div>
                           <small className="text-muted d-block">Telefon</small>
                           <a href={`tel:${entity.contact.phone}`} className="text-decoration-none">
@@ -230,7 +230,7 @@ const ParentBookingDetail: React.FC<ParentBookingDetailProps> = ({ booking, enti
                   {entity.contact.email && (
                     <div className="col-md-6">
                       <div className="d-flex align-items-center">
-                        <i className="bi bi-envelope text-primary me-2"></i>
+                        <i className="bi bi-envelope text-yuvoo-primary me-2"></i>
                         <div>
                           <small className="text-muted d-block">Email</small>
                           <a
@@ -250,7 +250,7 @@ const ParentBookingDetail: React.FC<ParentBookingDetailProps> = ({ booking, enti
               {booking.entityType === "club" && (entity as Club).location && (
                 <div className="col-12">
                   <div className="d-flex align-items-start">
-                    <i className="bi bi-geo-alt text-primary me-2 mt-1"></i>
+                    <i className="bi bi-geo-alt text-yuvoo-primary me-2 mt-1"></i>
                     <div>
                       <small className="text-muted d-block">Locație</small>
                       <strong>
@@ -266,7 +266,7 @@ const ParentBookingDetail: React.FC<ParentBookingDetailProps> = ({ booking, enti
               {booking.entityType === "doctor" && (entity as Doctor).specialty && (
                 <div className="col-12">
                   <div className="d-flex align-items-center">
-                    <i className="bi bi-heart-pulse text-primary me-2"></i>
+                    <i className="bi bi-heart-pulse text-yuvoo-primary me-2"></i>
                     <div>
                       <small className="text-muted d-block">Specialitate</small>
                       <strong>{(entity as Doctor).specialty}</strong>
@@ -292,7 +292,7 @@ const ParentBookingDetail: React.FC<ParentBookingDetailProps> = ({ booking, enti
         <div className="card shadow-sm mb-4">
           <div className="card-header bg-light">
             <h3 className="card-title mb-0">
-              <i className="bi bi-person text-primary me-2"></i>
+              <i className="bi bi-person text-yuvoo-primary me-2"></i>
               Informații Copil
             </h3>
           </div>
@@ -300,7 +300,7 @@ const ParentBookingDetail: React.FC<ParentBookingDetailProps> = ({ booking, enti
             <div className="row g-4">
               <div className="col-md-6">
                 <div className="d-flex align-items-center">
-                  <i className="bi bi-person-badge text-primary me-2"></i>
+                  <i className="bi bi-person-badge text-yuvoo-primary me-2"></i>
                   <div>
                     <small className="text-muted d-block">Nume</small>
                     <strong>
@@ -312,7 +312,7 @@ const ParentBookingDetail: React.FC<ParentBookingDetailProps> = ({ booking, enti
 
               <div className="col-md-6">
                 <div className="d-flex align-items-center">
-                  <i className="bi bi-calendar text-primary me-2"></i>
+                  <i className="bi bi-calendar text-yuvoo-primary me-2"></i>
                   <div>
                     <small className="text-muted d-block">Vârstă</small>
                     <strong>{child.age} ani</strong>

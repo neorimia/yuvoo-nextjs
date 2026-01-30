@@ -111,7 +111,10 @@ const ParentDashboardContent: React.FC<ParentDashboardContentProps> = ({
         <div className="col-md-3 col-sm-6">
           <div className="card border-0 shadow-sm h-100">
             <div className="card-body text-center">
-              <i className="bi bi-people-fill text-primary" style={{ fontSize: "2.5rem" }}></i>
+              <i
+                className="bi bi-people-fill text-yuvoo-primary"
+                style={{ fontSize: "2.5rem" }}
+              ></i>
               <h3 className="mt-3 mb-0">{childrenList.length}</h3>
               <p className="text-muted mb-0">Copii înregistrați</p>
               <Link
@@ -215,7 +218,7 @@ const ParentDashboardContent: React.FC<ParentDashboardContentProps> = ({
               <div className="card-body">
                 <div className="d-flex justify-content-between align-items-center mb-3">
                   <h5 className="mb-0">
-                    <i className="bi bi-person-check me-2 text-primary"></i>
+                    <i className="bi bi-person-check me-2 text-yuvoo-primary"></i>
                     Completarea profilului
                   </h5>
                   <span className="badge bg-primary">{profileCompleteness.percentage}%</span>
@@ -389,7 +392,7 @@ const ParentDashboardContent: React.FC<ParentDashboardContentProps> = ({
               <div className="row g-3 text-center">
                 <div className="col-6">
                   <div className="border-end">
-                    <div className="h4 mb-0 text-primary">{upcomingBookings.length}</div>
+                    <div className="h4 mb-0 text-yuvoo-primary">{upcomingBookings.length}</div>
                     <small className="text-muted d-block">Rezervări viitoare</small>
                   </div>
                 </div>

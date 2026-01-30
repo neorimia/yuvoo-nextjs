@@ -27,7 +27,7 @@ export const metadata: Metadata = {
 };
 
 export default function PrivacyPolicyPage() {
-  const lastUpdated = new Date("2024-12-15").toLocaleDateString("ro-RO", {
+  const lastUpdated = new Date("2026-01-30").toLocaleDateString("ro-RO", {
     year: "numeric",
     month: "long",
     day: "numeric",
@@ -65,10 +65,10 @@ export default function PrivacyPolicyPage() {
                     </p>
                     <p className="mb-20">
                       Yuvoo este un proiect operat de <strong>Neorimia SRL</strong>, societate
-                      comercială înregistrată în România cu CUI 51196719, J2025005816003. Respectăm
-                      Regulamentul General privind Protecția Datelor (GDPR) și legislația română
-                      privind protecția datelor personale. Această politică se aplică tuturor
-                      utilizatorilor platformei Yuvoo.
+                      comercială înregistrată în România cu CUI 51196719, Reg. Comerțului:
+                      J2025005816003. Respectăm Regulamentul General privind Protecția Datelor
+                      (GDPR) și legislația română privind protecția datelor personale. Această
+                      politică se aplică tuturor utilizatorilor platformei Yuvoo.
                     </p>
                   </div>
 
@@ -111,13 +111,21 @@ export default function PrivacyPolicyPage() {
                     </ul>
 
                     <h3 className="bd-legal-subsection-title mb-15">2.4. Cookie-uri</h3>
-                    <p className="mb-20">
+                    <p className="mb-15">
                       Folosim cookie-uri pentru a îmbunătăți experiența ta pe platformă. Pentru
                       detalii complete, vezi{" "}
-                      <a href="/cookies" className="text-primary">
+                      <a href="/cookies" className="text-yuvoo-primary">
                         Politica noastră de Cookie-uri
                       </a>
                       .
+                    </p>
+
+                    <h3 className="bd-legal-subsection-title mb-15">2.5. Date legate de plăți</h3>
+                    <p className="mb-20">
+                      Pentru plăți pe platformă (deblocare rezultate quiz, plăți la cluburi,
+                      abonamente) colectăm doar date necesare procesării (identificator tranzacție,
+                      sumă, dată). Detaliile cardului sunt introduse direct în Stripe și nu le
+                      stocăm.
                     </p>
                   </div>
 
@@ -150,7 +158,35 @@ export default function PrivacyPolicyPage() {
                   </div>
 
                   <div className="bd-legal-section mb-40">
-                    <h2 className="bd-legal-section-title mb-20">4. Partajarea datelor</h2>
+                    <h2 className="bd-legal-section-title mb-20">4. Baza legală a prelucrării</h2>
+                    <p className="mb-15">Prelucrăm datele tale pe baza:</p>
+                    <ul className="mb-15">
+                      <li>
+                        <strong>Executarea contractului</strong> – pentru crearea și gestionarea
+                        contului tău, livrarea serviciilor (recomandări, cluburi, specialiști),
+                        procesarea plăților și comunicarea cu tine în legătură cu serviciul.
+                      </li>
+                      <li>
+                        <strong>Consimțământul tău</strong> – pentru datele despre copii și pentru
+                        generarea recomandărilor personalizate prin AI Coach (inclusiv trimiterea
+                        răspunsurilor la OpenAI). Poți retrage consimțământul oricând.
+                      </li>
+                      <li>
+                        <strong>Interesul nostru legitim</strong> – pentru securitatea platformei,
+                        prevenirea fraudelor, îmbunătățirea funcționalităților și analiza utilizării
+                        (în formă agregată, fără identificare individuală), în măsura în care
+                        drepturile tale nu au prioritate.
+                      </li>
+                    </ul>
+                    <p className="mb-20">
+                      În cazul în care baza legală este consimțământul, ai dreptul să retragi
+                      consimțământul oricând, fără a afecta legalitatea prelucrării efectuate
+                      înainte de retragere.
+                    </p>
+                  </div>
+
+                  <div className="bd-legal-section mb-40">
+                    <h2 className="bd-legal-section-title mb-20">5. Partajarea datelor</h2>
                     <p className="mb-20">
                       Nu vindem datele tale. Partajăm datele doar cu servicii terțe necesare pentru
                       funcționarea platformei:
@@ -176,6 +212,12 @@ export default function PrivacyPolicyPage() {
                         <strong>Brevo:</strong> Trimitera email-urilor transacționale (confirmări,
                         rezultate quiz)
                       </li>
+                      <li>
+                        <strong>Stripe:</strong> Procesarea plăților (carduri) pentru deblocarea
+                        rezultatelor quiz, plăți la cluburi (pay-per-lead, abonamente Premium) și
+                        alte tranzacții pe platformă. Nu stocăm datele tale de card; Stripe
+                        procesează plățile în conformitate cu GDPR.
+                      </li>
                     </ul>
                     <p className="mb-20">
                       Toate aceste servicii respectă GDPR și au măsuri de securitate adecvate. Nu
@@ -184,7 +226,7 @@ export default function PrivacyPolicyPage() {
                   </div>
 
                   <div className="bd-legal-section mb-40">
-                    <h2 className="bd-legal-section-title mb-20">5. Drepturile tale</h2>
+                    <h2 className="bd-legal-section-title mb-20">6. Drepturile tale</h2>
                     <p className="mb-20">
                       Conform GDPR, ai următoarele drepturi privind datele tale personale:
                     </p>
@@ -216,7 +258,7 @@ export default function PrivacyPolicyPage() {
                     </ul>
                     <p className="mb-20">
                       Pentru a exercita aceste drepturi, trimite un email la{" "}
-                      <a href="mailto:gdpr@yuvoo.ro" className="text-primary">
+                      <a href="mailto:gdpr@yuvoo.ro" className="text-yuvoo-primary">
                         gdpr@yuvoo.ro
                       </a>
                       . Vom răspunde în termen de 30 de zile.
@@ -224,7 +266,7 @@ export default function PrivacyPolicyPage() {
                   </div>
 
                   <div className="bd-legal-section mb-40">
-                    <h2 className="bd-legal-section-title mb-20">6. Păstrarea datelor</h2>
+                    <h2 className="bd-legal-section-title mb-20">7. Păstrarea datelor</h2>
                     <p className="mb-15">Păstrăm datele tale personale pentru:</p>
                     <ul className="mb-20">
                       <li>
@@ -250,7 +292,7 @@ export default function PrivacyPolicyPage() {
                   </div>
 
                   <div className="bd-legal-section mb-40">
-                    <h2 className="bd-legal-section-title mb-20">7. Securitatea datelor</h2>
+                    <h2 className="bd-legal-section-title mb-20">8. Securitatea datelor</h2>
                     <p className="mb-15">
                       Implementăm măsuri tehnice și organizatorice pentru protejarea datelor tale:
                     </p>
@@ -279,7 +321,7 @@ export default function PrivacyPolicyPage() {
                   </div>
 
                   <div className="bd-legal-section mb-40">
-                    <h2 className="bd-legal-section-title mb-20">8. Modificări ale politicii</h2>
+                    <h2 className="bd-legal-section-title mb-20">9. Modificări ale politicii</h2>
                     <p className="mb-20">
                       Ne rezervăm dreptul de a actualiza această politică de confidențialitate. Te
                       vom notifica despre modificări importante prin email sau prin notificare pe
@@ -289,7 +331,7 @@ export default function PrivacyPolicyPage() {
                   </div>
 
                   <div className="bd-legal-section">
-                    <h2 className="bd-legal-section-title mb-20">9. Contact</h2>
+                    <h2 className="bd-legal-section-title mb-20">10. Contact</h2>
                     <p className="mb-15">
                       Pentru întrebări despre această politică de confidențialitate sau pentru a
                       exercita drepturile tale GDPR, contactează-ne:
@@ -301,13 +343,13 @@ export default function PrivacyPolicyPage() {
                     <ul className="mb-0">
                       <li>
                         <strong>Email:</strong>{" "}
-                        <a href="mailto:gdpr@yuvoo.ro" className="text-primary">
+                        <a href="mailto:gdpr@yuvoo.ro" className="text-yuvoo-primary">
                           gdpr@yuvoo.ro
                         </a>
                       </li>
                       <li>
                         <strong>Telefon:</strong>{" "}
-                        <a href="tel:+40746385038" className="text-primary">
+                        <a href="tel:+40746385038" className="text-yuvoo-primary">
                           +40 746 385 038
                         </a>
                       </li>

@@ -15,20 +15,20 @@ const ContactFormMain = () => {
               subtitle={
                 <>
                   Ai întrebări despre Yuvoo,{" "}
-                  <Link href={routes.quiz.intro} className="text-primary">
+                  <Link href={routes.quiz.intro} className="text-yuvoo-primary">
                     chestionarul AI
                   </Link>{" "}
                   sau{" "}
-                  <Link href={routes.clubs.list} className="text-primary">
+                  <Link href={routes.clubs.list} className="text-yuvoo-primary">
                     cluburile
                   </Link>
                   ? Completează formularul de mai jos și te vom contacta în cel mai scurt timp. Sau
                   verifică{" "}
-                  <Link href={routes.faq} className="text-primary">
+                  <Link href={routes.faq} className="text-yuvoo-primary">
                     întrebările frecvente
                   </Link>{" "}
                   și{" "}
-                  <Link href={routes.help} className="text-primary">
+                  <Link href={routes.help} className="text-yuvoo-primary">
                     pagina de ajutor
                   </Link>
                   .

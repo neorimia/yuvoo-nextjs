@@ -108,7 +108,7 @@ export default async function DoctorsPage({ searchParams }: DoctorsPageProps) {
                     sportive ale copilului tău. Dacă{" "}
                     <Link
                       href={routes.quiz.intro}
-                      className="text-primary text-decoration-underline"
+                      className="text-yuvoo-primary text-decoration-underline"
                     >
                       chestionarul AI
                     </Link>{" "}
@@ -116,14 +116,14 @@ export default async function DoctorsPage({ searchParams }: DoctorsPageProps) {
                     rezultate. Explorează și{" "}
                     <Link
                       href={routes.sports.list}
-                      className="text-primary text-decoration-underline"
+                      className="text-yuvoo-primary text-decoration-underline"
                     >
                       sporturile disponibile
                     </Link>{" "}
                     și{" "}
                     <Link
                       href={routes.clubs.list}
-                      className="text-primary text-decoration-underline"
+                      className="text-yuvoo-primary text-decoration-underline"
                     >
                       cluburile verificate
                     </Link>

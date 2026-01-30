@@ -27,7 +27,7 @@ export const metadata: Metadata = {
 };
 
 export default function TermsOfServicePage() {
-  const lastUpdated = new Date("2024-12-15").toLocaleDateString("ro-RO", {
+  const lastUpdated = new Date("2026-01-30").toLocaleDateString("ro-RO", {
     year: "numeric",
     month: "long",
     day: "numeric",
@@ -65,7 +65,7 @@ export default function TermsOfServicePage() {
                     </p>
                     <p className="mb-20">
                       Yuvoo este un proiect operat de <strong>Neorimia SRL</strong>, societate
-                      comercială înregistrată în România cu CUI 51196719, Reg. Comerțului
+                      comercială înregistrată în România cu CUI 51196719, Reg. Comerțului:
                       J2025005816003. Pentru a crea un cont și a folosi serviciile Yuvoo, trebuie să
                       ai cel puțin 18 ani sau să ai consimțământul părinților/tutorelor legali.
                       Platforma este destinată părinților care caută activități sportive pentru
@@ -94,6 +94,13 @@ export default function TermsOfServicePage() {
                       Yuvoo nu este un furnizor direct de servicii sportive sau medicale. Platforma
                       doar facilitează conexiunea între părinți, cluburi și specialiști. Yuvoo nu
                       garantează calitatea serviciilor oferite de cluburi sau specialiști.
+                    </p>
+                    <p className="mb-20">
+                      Rezervările și plățile pentru încercări la cluburi sau consultații la
+                      specialiști sunt facilitate prin platformă. Contractul pentru serviciul
+                      sportiv sau medical este încheiat între tine și clubul sau specialistul
+                      respectiv. Yuvoo nu este furnizorul acestor servicii și nu răspunde pentru
+                      obligațiile cluburilor sau ale specialiștilor.
                     </p>
                   </div>
 
@@ -209,10 +216,33 @@ export default function TermsOfServicePage() {
                       consecvențiale, speciale sau punitive rezultate din utilizarea sau
                       imposibilitatea de a utiliza platforma.
                     </p>
+
+                    <h3 className="bd-legal-subsection-title mb-15">6.5. Indemnizare</h3>
+                    <p className="mb-20">
+                      În măsura permisă de legea română, accepti să răspunderi și să despăgubești
+                      Neorimia SRL și Yuvoo pentru daune, reclamante, costuri și cheltuieli
+                      (inclusiv onorarii rezonabile de avocat) cauzate de încălcarea acestor termeni
+                      sau a legilor aplicabile de către tine sau de utilizarea contului tău.
+                    </p>
                   </div>
 
                   <div className="bd-legal-section mb-40">
-                    <h2 className="bd-legal-section-title mb-20">7. Rezolvarea disputelor</h2>
+                    <h2 className="bd-legal-section-title mb-20">7. Încetarea contului</h2>
+                    <p className="mb-20">
+                      Poți încheia contul oricând din setările contului sau prin contactarea noastră
+                      la{" "}
+                      <a href="mailto:contact@yuvoo.ro" className="text-yuvoo-primary">
+                        contact@yuvoo.ro
+                      </a>
+                      . La încetare, încetăm accesul tău la servicii și procesăm datele tale
+                      personale conform Politicii de Confidențialitate (inclusiv ștergerea, în
+                      termenul acolo prevăzut). Unele date pot fi păstrate dacă legea o impune (ex.:
+                      evidență contabilă, litigii).
+                    </p>
+                  </div>
+
+                  <div className="bd-legal-section mb-40">
+                    <h2 className="bd-legal-section-title mb-20">8. Rezolvarea disputelor</h2>
                     <p className="mb-15">
                       Acești termeni sunt guvernați de legea română. Orice dispută legată de acești
                       termeni sau de utilizarea platformei va fi rezolvată de instanțele competente
@@ -220,7 +250,7 @@ export default function TermsOfServicePage() {
                     </p>
                     <p className="mb-20">
                       Înainte de a iniția o acțiune în instanță, te încurajăm să ne contactezi la{" "}
-                      <a href="mailto:contact@yuvoo.ro" className="text-primary">
+                      <a href="mailto:contact@yuvoo.ro" className="text-yuvoo-primary">
                         contact@yuvoo.ro
                       </a>{" "}
                       pentru a rezolva disputa amiabil.
@@ -228,7 +258,7 @@ export default function TermsOfServicePage() {
                   </div>
 
                   <div className="bd-legal-section mb-40">
-                    <h2 className="bd-legal-section-title mb-20">8. Modificări ale termenilor</h2>
+                    <h2 className="bd-legal-section-title mb-20">9. Modificări ale termenilor</h2>
                     <p className="mb-20">
                       Ne rezervăm dreptul de a modifica acești termeni și condiții oricând. Te vom
                       notifica despre modificări importante prin email sau prin notificare pe
@@ -239,7 +269,7 @@ export default function TermsOfServicePage() {
                   </div>
 
                   <div className="bd-legal-section">
-                    <h2 className="bd-legal-section-title mb-20">9. Contact</h2>
+                    <h2 className="bd-legal-section-title mb-20">10. Contact</h2>
                     <p className="mb-15">
                       Pentru întrebări despre acești termeni și condiții, contactează-ne:
                     </p>
@@ -250,13 +280,13 @@ export default function TermsOfServicePage() {
                     <ul className="mb-0">
                       <li>
                         <strong>Email:</strong>{" "}
-                        <a href="mailto:contact@yuvoo.ro" className="text-primary">
+                        <a href="mailto:contact@yuvoo.ro" className="text-yuvoo-primary">
                           contact@yuvoo.ro
                         </a>
                       </li>
                       <li>
                         <strong>Telefon:</strong>{" "}
-                        <a href="tel:+40746385038" className="text-primary">
+                        <a href="tel:+40746385038" className="text-yuvoo-primary">
                           +40 746 385 038
                         </a>
                       </li>

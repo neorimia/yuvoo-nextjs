@@ -130,23 +130,23 @@ This document outlines the plan to remove Tailwind CSS v4 and shadcn/ui componen
 
 ### Tailwind → Bootstrap Utilities
 
-| Tailwind Class     | Bootstrap Equivalent                     | Notes                                         |
-| ------------------ | ---------------------------------------- | --------------------------------------------- |
-| `bg-primary`       | `.bg-primary` or `.bg-yuvoo-primary`     | Use Bootstrap Utility API for custom colors   |
-| `text-primary`     | `.text-primary` or `.text-yuvoo-primary` | Use Bootstrap Utility API                     |
-| `flex`             | `.d-flex`                                | Bootstrap display utility                     |
-| `grid`             | `.d-grid`                                | Bootstrap display utility                     |
-| `flex-col`         | `.flex-column`                           | Bootstrap flex direction                      |
-| `items-center`     | `.align-items-center`                    | Bootstrap alignment                           |
-| `justify-center`   | `.justify-content-center`                | Bootstrap justification                       |
-| `gap-4`            | `.gap-4`                                 | Bootstrap gap utility (5.3+)                  |
-| `p-4`              | `.p-4`                                   | Bootstrap padding                             |
-| `m-4`              | `.m-4`                                   | Bootstrap margin                              |
-| `rounded-lg`       | `.rounded` or `.rounded-3`               | Bootstrap border radius                       |
-| `shadow-md`        | `.shadow`                                | Bootstrap shadow utility                      |
-| `hover:bg-primary` | `.bg-primary-hover:hover`                | Use Bootstrap Utility API with `state: hover` |
-| `md:flex`          | `.d-md-flex`                             | Bootstrap responsive utilities                |
-| `min-w-[120px]`    | Custom utility or inline style           | Use Bootstrap Utility API or inline style     |
+| Tailwind Class       | Bootstrap Equivalent                           | Notes                                         |
+| -------------------- | ---------------------------------------------- | --------------------------------------------- |
+| `bg-primary`         | `.bg-primary` or `.bg-yuvoo-primary`           | Use Bootstrap Utility API for custom colors   |
+| `text-yuvoo-primary` | `.text-yuvoo-primary` or `.text-yuvoo-primary` | Use Bootstrap Utility API                     |
+| `flex`               | `.d-flex`                                      | Bootstrap display utility                     |
+| `grid`               | `.d-grid`                                      | Bootstrap display utility                     |
+| `flex-col`           | `.flex-column`                                 | Bootstrap flex direction                      |
+| `items-center`       | `.align-items-center`                          | Bootstrap alignment                           |
+| `justify-center`     | `.justify-content-center`                      | Bootstrap justification                       |
+| `gap-4`              | `.gap-4`                                       | Bootstrap gap utility (5.3+)                  |
+| `p-4`                | `.p-4`                                         | Bootstrap padding                             |
+| `m-4`                | `.m-4`                                         | Bootstrap margin                              |
+| `rounded-lg`         | `.rounded` or `.rounded-3`                     | Bootstrap border radius                       |
+| `shadow-md`          | `.shadow`                                      | Bootstrap shadow utility                      |
+| `hover:bg-primary`   | `.bg-primary-hover:hover`                      | Use Bootstrap Utility API with `state: hover` |
+| `md:flex`            | `.d-md-flex`                                   | Bootstrap responsive utilities                |
+| `min-w-[120px]`      | Custom utility or inline style                 | Use Bootstrap Utility API or inline style     |
 
 **Reference**: [Bootstrap Utilities Documentation](https://getbootstrap.com/docs/5.3/utilities/)
 

@@ -27,7 +27,7 @@ export const metadata: Metadata = {
 };
 
 export default function GDPRForParentsPage() {
-  const lastUpdated = new Date("2024-12-15").toLocaleDateString("ro-RO", {
+  const lastUpdated = new Date("2026-01-30").toLocaleDateString("ro-RO", {
     year: "numeric",
     month: "long",
     day: "numeric",
@@ -65,7 +65,7 @@ export default function GDPRForParentsPage() {
                     </p>
                     <p className="mb-20">
                       Yuvoo este un proiect operat de <strong>Neorimia SRL</strong>, societate
-                      comercială înregistrată în România cu CUI 51196719, Reg. Comerțului
+                      comercială înregistrată în România cu CUI 51196719, Reg. Comerțului:
                       J2025005816003. GDPR oferă protecție specială pentru datele copiilor sub 16
                       ani. Neorimia SRL, ca operator de date personale pentru platforma Yuvoo,
                       respectă aceste reguli și lucrează doar cu consimțământul părinților sau
@@ -123,7 +123,7 @@ export default function GDPRForParentsPage() {
                       părinților sau tutorelor legali înainte de a procesa datele personale. Când
                       adaugi un copil pe platformă, confirmi că ești părinte sau tutore legal și
                       accepți procesarea datelor copilului conform{" "}
-                      <a href="/confidentialitate" className="text-primary">
+                      <a href="/confidentialitate" className="text-yuvoo-primary">
                         Politicii noastre de Confidențialitate
                       </a>
                       .
@@ -135,7 +135,7 @@ export default function GDPRForParentsPage() {
                     <p className="mb-20">
                       Poți retrage consimțământul oricând prin ștergerea profilului copilului din
                       contul tău sau prin contactarea noastră la{" "}
-                      <a href="mailto:gdpr@yuvoo.ro" className="text-primary">
+                      <a href="mailto:gdpr@yuvoo.ro" className="text-yuvoo-primary">
                         gdpr@yuvoo.ro
                       </a>
                       . La retragerea consimțământului, vom șterge datele copilului, cu excepția
@@ -170,10 +170,13 @@ export default function GDPRForParentsPage() {
                     <h3 className="bd-legal-subsection-title mb-15">4.2. Servicii terțe</h3>
                     <p className="mb-20">
                       Pentru funcționarea platformei, partajăm datele copiilor doar cu servicii
-                      terțe necesare (Stack Auth pentru autentificare, Neon pentru stocare, OpenAI
-                      pentru recomandări AI). Toate aceste servicii respectă GDPR și au măsuri de
-                      securitate adecvate. Pentru detalii complete, vezi{" "}
-                      <a href="/confidentialitate" className="text-primary">
+                      terțe necesare: Stack Auth (autentificare), Neon (stocare), OpenAI
+                      (recomandări AI), Cloudinary (imagini), Brevo (emailuri). Toate aceste
+                      servicii respectă GDPR și au măsuri de securitate adecvate. Plățile efectuate
+                      de părinți (ex.: pentru rezultate quiz) sunt procesate prin alți procesatori
+                      (ex.: Stripe), conform politicii noastre de confidențialitate; datele copiilor
+                      nu sunt transmise pentru procesarea plăților. Pentru detalii complete, vezi{" "}
+                      <a href="/confidentialitate" className="text-yuvoo-primary">
                         Politica noastră de Confidențialitate
                       </a>
                       .
@@ -214,7 +217,7 @@ export default function GDPRForParentsPage() {
                     </ul>
                     <p className="mb-20">
                       Pentru a exercita aceste drepturi, trimite un email la{" "}
-                      <a href="mailto:gdpr@yuvoo.ro" className="text-primary">
+                      <a href="mailto:gdpr@yuvoo.ro" className="text-yuvoo-primary">
                         gdpr@yuvoo.ro
                       </a>{" "}
                       cu numele copilului și detaliile solicitării. Vom răspunde în termen de 30 de
@@ -286,7 +289,7 @@ export default function GDPRForParentsPage() {
                     <ul className="mb-20">
                       <li>
                         <strong>Email:</strong>{" "}
-                        <a href="mailto:gdpr@yuvoo.ro" className="text-primary">
+                        <a href="mailto:gdpr@yuvoo.ro" className="text-yuvoo-primary">
                           gdpr@yuvoo.ro
                         </a>
                       </li>
@@ -316,7 +319,7 @@ export default function GDPRForParentsPage() {
                           href="https://www.dataprotection.ro"
                           target="_blank"
                           rel="noopener noreferrer"
-                          className="text-primary"
+                          className="text-yuvoo-primary"
                         >
                           www.dataprotection.ro
                         </a>
@@ -343,13 +346,13 @@ export default function GDPRForParentsPage() {
                     <ul className="mb-0">
                       <li>
                         <strong>Email:</strong>{" "}
-                        <a href="mailto:gdpr@yuvoo.ro" className="text-primary">
+                        <a href="mailto:gdpr@yuvoo.ro" className="text-yuvoo-primary">
                           gdpr@yuvoo.ro
                         </a>
                       </li>
                       <li>
                         <strong>Telefon:</strong>{" "}
-                        <a href="tel:+40746385038" className="text-primary">
+                        <a href="tel:+40746385038" className="text-yuvoo-primary">
                           +40 746 385 038
                         </a>
                       </li>
