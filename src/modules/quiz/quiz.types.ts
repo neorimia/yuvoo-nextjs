@@ -94,6 +94,7 @@ export interface QuizResult {
   recommendations: SportRecommendation[];
   specialistRecommendation?: SpecialistRecommendation;
   location?: string | null; // City/location for local club recommendations
+  countyId?: string; // County ID for local club recommendations
   createdAt: Date;
 }
 

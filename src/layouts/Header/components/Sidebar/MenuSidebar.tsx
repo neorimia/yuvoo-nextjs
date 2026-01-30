@@ -60,7 +60,7 @@ const MenuSidebar: React.FC<MenuSidebarProps> = ({ sideMenuOpen, setSideMenuOpen
             <div className="offcanvas__contact mb-30">
               <h4>Informații de contact</h4>
               <ul>
-                <li className="d-flex align-items-center gap-2">
+                {/* <li className="d-flex align-items-center gap-2">
                   <div className="offcanvas__contact-icon">
                     <a
                       target="_blank"
@@ -70,7 +70,7 @@ const MenuSidebar: React.FC<MenuSidebarProps> = ({ sideMenuOpen, setSideMenuOpen
                       <i className="fal fa-map-marker-alt"></i>
                     </a>
                   </div>
-                  {/* <div className="offcanvas__contact-text">
+                  <div className="offcanvas__contact-text">
                     <a
                       target="_blank"
                       rel="noreferrer"
@@ -78,8 +78,8 @@ const MenuSidebar: React.FC<MenuSidebarProps> = ({ sideMenuOpen, setSideMenuOpen
                     >
                       Mun. Focsani, România
                     </a>
-                  </div> */}
-                </li>
+                  </div>
+                </li> */}
                 <li className="d-flex align-items-center gap-2">
                   <div className="offcanvas__contact-icon">
                     <a href="tel:+40746385038">

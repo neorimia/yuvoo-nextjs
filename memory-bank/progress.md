@@ -6,7 +6,7 @@
 **Timeline**: 16 weeks (3 months)
 **Start Date**: 2024
 **Target Launch**: Q1 2025
-**Last Updated**: 2026-01-30 (Legal Pages Implementation Phases 1-5)
+**Last Updated**: 2026-01-30 (Quiz/Payment/Club UX fixes + Memory Bank Update)
 
 ### Current Status Summary
 
@@ -55,8 +55,8 @@
 
 - ✅ **Quiz System**: 100% complete - All phases done, production ready
 - ✅ **Quiz Medical Safety (Phase 1)**: 100% complete - Critical screening (cardiac, concussion), sport exclusion service, severity levels (asthma, joint pain), injury follow-up, risk detection (cardiac, concussion, orthopedist, pulmonologist, etc.), AI prompt medical rules and age minimums, MEDICAL_SAFETY.md, MEDICAL_EXPERT_REVIEW_CHECKLIST.md; 67% checklist (10/15 tasks); remaining: unit/integration tests, code review, medical expert review, deployment
-- ✅ **Parent Pricing - Quiz Report Payment**: 100% complete - All 8 phases implemented (Email Gate, Teaser Page, Paywall, Complete Report, PDF Generation, Email Notifications, Polish & Testing), one-time payment (39 lei), persistent access, production ready
-- ✅ **Club Directory**: 100% complete - Search, filters, booking, verification
+- ✅ **Parent Pricing - Quiz Report Payment**: 100% complete - All 8 phases implemented (Email Gate, Teaser Page, Paywall, Complete Report, PDF Generation, Email Notifications, Polish & Testing), one-time payment (39 lei), persistent access, production ready; payment-already-completed redirect to report (`/chestionar/raport/[accessToken]`) when user re-opens paywall
+- ✅ **Club Directory**: 100% complete - Search, filters, booking, verification; ClubClaimProfile is in-flow section at bottom of club detail (not sticky/fixed); PaginationData shows 4 visible page buttons (sliding window)
 - ✅ **Doctor Directory**: 100% complete - Search, filters, appointments, verification
 - ✅ **Booking System**: 100% complete - Club trials, doctor consultations, email notifications
 - ✅ **Onboarding**: 100% complete - All 3 user types, all steps implemented
@@ -64,7 +64,7 @@
 - ✅ **Authentication**: 100% complete - Stack Auth, all flows working
 - ✅ **Admin Panel**: 100% complete - Verification dashboard, approve/reject actions
 - ✅ **Email System**: 100% complete - All templates, all integrations
-- ✅ **React Email Integration (All Phases)**: 100% complete - Phase 1 (infrastructure, base components, unsubscribe system), Phase 2 (quiz results email template with all content sections), Phase 3 (Brevo integration with clubs data), Phase 4 (reusable components: SportCard, ClubPreview, CTASection), Phase 5 (preview data for testing)
+- ✅ **React Email Integration (All Phases)**: 100% complete - Phase 1 (infrastructure, base components, unsubscribe system), Phase 2 (quiz results email template with all content sections), Phase 3 (Brevo integration with clubs data), Phase 4 (reusable components: SportCard, ClubPreview, CTASection), Phase 5 (preview data for testing); quiz results email shows "copilul tău" when child is "Copil Temporar", prefers childDisplayName from quiz answers
 - ✅ **Child Management**: 100% complete - Full CRUD operations (Create, Read, Update, Delete) with list, detail, edit pages
 - ✅ **User Settings**: 100% complete - Profile editing with validation
 - ✅ **Favorites System**: 100% complete - Add, remove, list favorites for clubs and doctors

@@ -73,7 +73,7 @@ const ClubCard: React.FC<ClubCardProps> = ({
           {/* Badges: Premium, Recommended (from quiz), and Verified */}
           <div className="position-absolute top-0 end-0 m-3 d-flex flex-column gap-2">
             {club.isPremium && <PremiumBadge variant="compact" size="sm" />}
-            {recommended && (
+            {recommended && club.verified && (
               <span className="badge bg-warning text-dark">
                 <i className="bi bi-star-fill me-1"></i>
                 Recomandat

@@ -66,6 +66,23 @@ export async function getCityIdByName(cityName: string): Promise<string | null> 
 }
 
 /**
+ * Get county ID (parent) for a city ID
+ * Cities have parentId pointing to their county
+ */
+export async function getCountyIdByCityId(
+  cityId: string | null | undefined
+): Promise<string | null> {
+  if (!cityId) return null;
+
+  const city = await db.query.locations.findFirst({
+    where: and(eq(locations.id, cityId), eq(locations.type, "city")),
+    columns: { parentId: true },
+  });
+
+  return city?.parentId ?? null;
+}
+
+/**
  * Get location IDs for a sector name within a city
  */
 export async function getSectorIdByName(

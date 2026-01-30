@@ -172,8 +172,12 @@ export async function sendQuizResultsEmail(
       return;
     }
 
+    // Prefer child name from quiz answers (user typed in quiz) over DB child (e.g. "Copil Temporar")
+    const quizAnswers = await quizRepository.getQuizAnswers(quizResult.id);
+    const childDisplayName = quizAnswers?.childName?.trim() || undefined;
+
     // Send email
-    await sendQuizResults(quizResult, child, userEmail, user);
+    await sendQuizResults(quizResult, child, userEmail, user, childDisplayName);
   } catch (error) {
     // Don't throw - email failures shouldn't block quiz operations
     console.error("[Quiz Email] Error sending quiz results email:", error);
