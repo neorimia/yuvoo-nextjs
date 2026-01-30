@@ -113,6 +113,8 @@ export const GuestPaymentSuccessEmail = ({
                 <a href={clubsUrl} style={linkButton}>
                   Explorează platforma Yuvoo
                 </a>
+                <br />
+                <br />
                 <a href={howItWorksUrl} style={linkButton}>
                   Cum funcționează Yuvoo pentru cluburi?
                 </a>

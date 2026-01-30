@@ -162,7 +162,7 @@ function LeadSummaryAndSidebar({
 const GuestLeadPaymentEmailStep: React.FC<
   GuestLeadPaymentProps & { onClientSecretReady: (clientSecret: string) => void }
 > = ({ lead, club, onClientSecretReady }) => {
-  const [email, setEmail] = useState("");
+  const [email, setEmail] = useState(club?.contact?.email?.trim() ?? "");
   const [isInitializing, setIsInitializing] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
@@ -299,7 +299,7 @@ const GuestLeadPaymentPaymentStep: React.FC<GuestLeadPaymentProps & { clientSecr
         elements,
         clientSecret,
         confirmParams: {
-          return_url: `${window.location.origin}${routes.leads.guestPaymentSuccess(lead.id)}?payment_intent={PAYMENT_INTENT_ID}`,
+          return_url: `${window.location.origin}${routes.leads.guestPaymentSuccess(lead.id)}`,
         },
         redirect: "if_required",
       });

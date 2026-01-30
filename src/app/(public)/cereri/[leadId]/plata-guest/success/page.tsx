@@ -22,7 +22,7 @@ interface GuestPaymentSuccessPageProps {
     leadId: string;
   }>;
   searchParams: Promise<{
-    payment_intent?: string;
+    payment_intent?: string | string[];
   }>;
 }
 
@@ -69,15 +69,27 @@ export default async function GuestPaymentSuccessPage({
     );
   }
 
-  const { payment_intent } = await searchParams;
+  const raw = await searchParams;
+  const payment_intentParam = raw.payment_intent;
 
-  // Require payment intent ID
-  if (!payment_intent) {
+  // Normalize: Next.js may give string | string[] for duplicate query params.
+  // Stripe appends payment_intent=pi_xxx; our return_url may also have payment_intent={PAYMENT_INTENT_ID}.
+  // Pick the value that looks like a real Stripe Payment Intent ID (starts with pi_).
+  const paymentIntentId =
+    typeof payment_intentParam === "string"
+      ? payment_intentParam.startsWith("pi_")
+        ? payment_intentParam
+        : undefined
+      : Array.isArray(payment_intentParam)
+        ? payment_intentParam.find((v) => typeof v === "string" && v.startsWith("pi_"))
+        : undefined;
+
+  if (!paymentIntentId) {
     redirect(routes.leads.guestPayment(leadId));
   }
 
   // Fetch payment success data
-  const result = await getGuestPaymentSuccessData(leadId, payment_intent);
+  const result = await getGuestPaymentSuccessData(leadId, paymentIntentId);
 
   if (!result.success || !result.lead || !result.club) {
     return (
@@ -162,8 +174,8 @@ export default async function GuestPaymentSuccessPage({
                   {/* Parent Contact Information */}
                   <div className="col-lg-8">
                     <div className="card mb-4">
-                      <div className="card-header bg-primary text-white">
-                        <h5 className="mb-0">
+                      <div className="card-header bg-yuvoo-primary text-white">
+                        <h5 className="mb-0 text-white">
                           <i className="bi bi-person-circle me-2"></i>
                           Informații părinte
                         </h5>
@@ -229,7 +241,7 @@ export default async function GuestPaymentSuccessPage({
                   <div className="col-lg-4">
                     <div className="card">
                       <div className="card-header bg-success text-white">
-                        <h5 className="mb-0">
+                        <h5 className="mb-0 text-white">
                           <i className="bi bi-check-circle me-2"></i>
                           Ce să faci acum?
                         </h5>
