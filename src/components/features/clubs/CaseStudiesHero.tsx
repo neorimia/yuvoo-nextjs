@@ -2,7 +2,7 @@
 
 import React from "react";
 import SectionTitle from "@/components/shared/SectionTitle";
-import { CLUBS_CONTACT_MODAL_ID, openClubsContactModal } from "@/lib/clubs-landing-modal";
+import { openClubsPremiumMailto } from "@/lib/clubs-landing-modal";
 import { trackEvent, PostHogEvents } from "@/lib/analytics/tracking";
 
 /**
@@ -16,13 +16,10 @@ export default function CaseStudiesHero() {
 
     trackEvent(PostHogEvents.CLUBS_LANDING_CTA_CLICKED, {
       location: "case_studies_hero",
-      cta_text: "Vrei să fii următorul success story? Rezervă call-ul",
+      cta_text: "Rezervă call-ul",
     });
 
-    openClubsContactModal(
-      "case_studies_hero",
-      "Vrei să fii următorul success story? Rezervă call-ul"
-    );
+    openClubsPremiumMailto("case_studies_hero", "Rezervă call-ul");
   };
 
   return (
@@ -49,20 +46,10 @@ export default function CaseStudiesHero() {
                   Aceste case studies prezintă rezultate reale de la cluburi care folosesc Yuvoo.
                   Toate metricile sunt verificate și aprobate de cluburi.
                 </p>
-                <button
-                  type="button"
-                  className="bd-btn"
-                  onClick={handleCTAClick}
-                  data-bs-toggle="modal"
-                  data-bs-target={`#${CLUBS_CONTACT_MODAL_ID}`}
-                >
+                <button type="button" className="bd-btn" onClick={handleCTAClick}>
                   <span className="bd-btn-inner">
-                    <span className="bd-btn-normal">
-                      Vrei să fii următorul success story? Rezervă call-ul
-                    </span>
-                    <span className="bd-btn-hover">
-                      Vrei să fii următorul success story? Rezervă call-ul
-                    </span>
+                    <span className="bd-btn-normal">Rezervă call-ul</span>
+                    <span className="bd-btn-hover">Rezervă call-ul</span>
                   </span>
                 </button>
               </div>

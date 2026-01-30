@@ -4,7 +4,7 @@ import Link from "next/link";
 import SectionTitle from "@/components/shared/SectionTitle";
 import StepCard from "@/components/shared/StepCard";
 import { trackEvent, PostHogEvents } from "@/lib/analytics/tracking";
-import { CLUBS_CONTACT_MODAL_ID, openClubsContactModal } from "@/lib/clubs-landing-modal";
+import { openClubsPremiumMailto } from "@/lib/clubs-landing-modal";
 import { routes } from "@/lib/routes";
 
 /**
@@ -57,11 +57,11 @@ export default function ClubsLandingSolution() {
     // Track event
     trackEvent(PostHogEvents.CLUBS_LANDING_CTA_CLICKED, {
       location: "solution",
-      cta_text: "Vrei mai multe lead-uri calificate? Rezervă call-ul",
+      cta_text: "Rezervă call-ul",
     });
 
     // Open modal
-    openClubsContactModal("solution", "Devino Founding Club Gratuit");
+    openClubsPremiumMailto("solution", "Rezervă call-ul");
   };
 
   return (
@@ -131,13 +131,7 @@ export default function ClubsLandingSolution() {
                 data-wow-duration="1s"
                 data-wow-delay=".8s"
               >
-                <button
-                  type="button"
-                  className="bd-btn mx-auto"
-                  onClick={handleCTAClick}
-                  data-bs-toggle="modal"
-                  data-bs-target={`#${CLUBS_CONTACT_MODAL_ID}`}
-                >
+                <button type="button" className="bd-btn mx-auto" onClick={handleCTAClick}>
                   <span className="bd-btn-inner">
                     <span className="bd-btn-normal">
                       Vrei mai multe lead-uri calificate? Rezervă call-ul

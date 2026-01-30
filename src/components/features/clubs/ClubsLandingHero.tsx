@@ -3,7 +3,7 @@
 import React, { useEffect } from "react";
 import { trackEvent, PostHogEvents, PostHogProperties } from "@/lib/analytics/tracking";
 import { useFeatureFlag, FeatureFlags, FeatureFlagVariants } from "@/lib/analytics/feature-flags";
-import { CLUBS_CONTACT_MODAL_ID, openClubsContactModal } from "@/lib/clubs-landing-modal";
+import { openClubsPremiumMailto } from "@/lib/clubs-landing-modal";
 import Link from "next/link";
 import { routes } from "@/lib/routes";
 
@@ -90,7 +90,7 @@ export default function ClubsLandingHero({ verifiedCount, remainingSpots }: Club
     });
 
     // Open modal
-    openClubsContactModal("hero", "Devino Founding Club Gratuit");
+    openClubsPremiumMailto("hero", ctaText);
   };
 
   return (
@@ -227,13 +227,7 @@ export default function ClubsLandingHero({ verifiedCount, remainingSpots }: Club
                   data-wow-delay=".8s"
                 >
                   {remainingSpots > 0 && (
-                    <button
-                      type="button"
-                      className="bd-btn mx-auto"
-                      onClick={handleCTAClick}
-                      data-bs-toggle="modal"
-                      data-bs-target={`#${CLUBS_CONTACT_MODAL_ID}`}
-                    >
+                    <button type="button" className="bd-btn mx-auto" onClick={handleCTAClick}>
                       <span className="bd-btn-inner">
                         <span className="bd-btn-normal">{getCTAText()}</span>
                         <span className="bd-btn-hover">{getCTAText()}</span>

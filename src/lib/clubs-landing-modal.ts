@@ -1,13 +1,63 @@
 /**
- * Clubs Landing Modal Utilities
+ * Clubs Landing Modal & Contact Utilities
  *
- * Shared utilities for opening the contact modal from any section
- * on the clubs landing page (/pentru-cluburi).
+ * - CLUBS_CONTACT_MODAL_ID: used by page that renders ClubsContactModal (if kept).
+ * - openClubsPremiumMailto: opens default mail client with preconfigured email/subject for Premium enquiries.
  */
 
 import { trackEvent, PostHogEvents, PostHogProperties } from "@/lib/analytics/tracking";
 
 export const CLUBS_CONTACT_MODAL_ID = "clubsContactModal";
+
+/** Email for Premium / club contact enquiries */
+export const CLUBS_PREMIUM_CONTACT_EMAIL = "contact@yuvoo.ro";
+
+/** Default subject for Premium contact mailto */
+export const CLUBS_PREMIUM_MAILTO_SUBJECT = "Informații despre abonament Premium - Yuvoo";
+
+/** Optional default body for Premium mailto */
+const CLUBS_PREMIUM_MAILTO_BODY = [
+  "Bună ziua,",
+  "",
+  "Sunt interesat de abonamentul Premium pentru clubul meu.",
+  "",
+  "Nume club:",
+  "Sport oferit:",
+  "Locație:",
+  "",
+  "Mulțumesc,",
+].join("\n");
+
+/**
+ * Returns mailto URL for Premium contact (preconfigured email and subject).
+ * @param body - Optional body text (default: short template)
+ */
+export function getClubsPremiumMailtoUrl(body?: string): string {
+  const subject = encodeURIComponent(CLUBS_PREMIUM_MAILTO_SUBJECT);
+  const bodyEncoded = encodeURIComponent(body ?? CLUBS_PREMIUM_MAILTO_BODY);
+  return `mailto:${CLUBS_PREMIUM_CONTACT_EMAIL}?subject=${subject}&body=${bodyEncoded}`;
+}
+
+/**
+ * Opens default mail client with preconfigured Premium contact email/subject and tracks the event.
+ * Use this instead of opening the contact modal for Premium enquiries.
+ */
+export function openClubsPremiumMailto(location: string, ctaText: string): void {
+  if (typeof window === "undefined") return;
+
+  trackEvent(PostHogEvents.CLUBS_CONTACT_FORM_SUBMITTED, {
+    [PostHogProperties.VARIANT_LOCATION]: location,
+    [PostHogProperties.CTA_TEXT]: ctaText,
+    formType: "premium_mailto",
+  });
+
+  trackEvent(PostHogEvents.CLUBS_LANDING_CTA_CLICKED, {
+    location,
+    cta_text: ctaText,
+  });
+
+  window.location.href = getClubsPremiumMailtoUrl();
+}
 
 /**
  * Cleans up any leftover modal styles and backdrops

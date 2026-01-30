@@ -120,7 +120,11 @@ export default function DoctorsContactModal({ modalId }: DoctorsContactModalProp
               // Get or create modal instance
               let modal = Bootstrap.Modal.getInstance(modalElement);
               if (!modal) {
-                modal = new Bootstrap.Modal(modalElement);
+                modal = new Bootstrap.Modal(modalElement, {
+                  backdrop: true,
+                  keyboard: true,
+                  focus: true,
+                });
               }
 
               // Hide the modal (backdrop cleanup is handled by useEffect event listener)

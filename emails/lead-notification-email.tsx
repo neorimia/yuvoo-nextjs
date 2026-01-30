@@ -15,6 +15,7 @@ import { EmailSection } from "./components/EmailSection";
 import { EmailButton } from "./components/EmailButton";
 import { EmailDivider } from "./components/EmailDivider";
 import { YuvooColors, EmailTypography } from "./utils/email-types";
+import { routes } from "@/lib/routes";
 
 interface LeadNotificationEmailProps {
   clubName: string;
@@ -32,7 +33,7 @@ export const LeadNotificationEmail = ({
   leadId,
 }: LeadNotificationEmailProps) => {
   const appUrl = process.env.NEXT_PUBLIC_APP_URL || "https://yuvoo.ro";
-  const leadUrl = `${appUrl}/club/dashboard/leaduri/${leadId}`;
+  const leadUrl = `${appUrl}${routes.leads.guestPayment(leadId)}`;
 
   return (
     <Html lang="ro">

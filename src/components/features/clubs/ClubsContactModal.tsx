@@ -23,8 +23,7 @@ interface ClubsContactModalProps {
 /**
  * Clubs Contact Modal
  *
- * Contact form modal for clubs landing page.
- * Allows clubs to express interest in the Founding Club program.
+ * Contact form modal for clubs to request information about Premium (abonament Premium).
  */
 export default function ClubsContactModal({ modalId }: ClubsContactModalProps) {
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -42,7 +41,7 @@ export default function ClubsContactModal({ modalId }: ClubsContactModalProps) {
     reset,
   } = useForm<FormData>({
     defaultValues: {
-      subject: "Interesat în programul Founding Club",
+      subject: "Informații despre abonament Premium",
     },
   });
 
@@ -125,14 +124,14 @@ export default function ClubsContactModal({ modalId }: ClubsContactModalProps) {
         // Track successful form submission
         trackEvent(PostHogEvents.CLUBS_CONTACT_FORM_SUBMITTED, {
           [PostHogProperties.VARIANT_LOCATION]: modalLocationRef.current,
-          [PostHogProperties.FORM_TYPE]: "founding_club",
+          [PostHogProperties.FORM_TYPE]: "premium_contact",
           ...(timeToSubmit !== null && { [PostHogProperties.TIME_TO_SUBMIT]: timeToSubmit }),
         });
 
         setSubmitStatus({
           type: "success",
           message:
-            "Mesajul tău a fost trimis cu succes! Te vom contacta în cel mai scurt timp pentru a discuta despre programul Founding Club.",
+            "Mesajul tău a fost trimis cu succes! Te vom contacta în cel mai scurt timp cu informații despre Premium.",
         });
         reset();
         // Auto-close modal after 3 seconds on success
@@ -145,7 +144,11 @@ export default function ClubsContactModal({ modalId }: ClubsContactModalProps) {
               // Get or create modal instance
               let modal = Bootstrap.Modal.getInstance(modalElement);
               if (!modal) {
-                modal = new Bootstrap.Modal(modalElement);
+                modal = new Bootstrap.Modal(modalElement, {
+                  backdrop: true,
+                  keyboard: true,
+                  focus: true,
+                });
               }
 
               // Hide the modal (backdrop cleanup is handled by useEffect event listener)
@@ -157,7 +160,7 @@ export default function ClubsContactModal({ modalId }: ClubsContactModalProps) {
         // Track form error
         trackEvent(PostHogEvents.CLUBS_CONTACT_FORM_ERROR, {
           [PostHogProperties.VARIANT_LOCATION]: modalLocationRef.current,
-          [PostHogProperties.FORM_TYPE]: "founding_club",
+          [PostHogProperties.FORM_TYPE]: "premium_contact",
           [PostHogProperties.ERROR_MESSAGE]: result.error || "Unknown error",
         });
 
@@ -172,7 +175,7 @@ export default function ClubsContactModal({ modalId }: ClubsContactModalProps) {
       // Track unexpected error
       trackEvent(PostHogEvents.CLUBS_CONTACT_FORM_ERROR, {
         [PostHogProperties.VARIANT_LOCATION]: modalLocationRef.current,
-        [PostHogProperties.FORM_TYPE]: "founding_club",
+        [PostHogProperties.FORM_TYPE]: "premium_contact",
         [PostHogProperties.ERROR_MESSAGE]:
           error instanceof Error ? error.message : "Unexpected error",
       });
@@ -194,12 +197,15 @@ export default function ClubsContactModal({ modalId }: ClubsContactModalProps) {
       tabIndex={-1}
       aria-labelledby={`${modalId}Label`}
       aria-hidden="true"
+      data-bs-backdrop="true"
+      data-bs-keyboard="true"
+      data-bs-focus="true"
     >
       <div className="modal-dialog modal-dialog-centered modal-lg">
         <div className="modal-content">
           <div className="modal-header">
             <h5 className="modal-title" id={`${modalId}Label`}>
-              Devino Founding Club Gratuit
+              Informații despre Premium
             </h5>
             <button
               type="button"
@@ -211,27 +217,9 @@ export default function ClubsContactModal({ modalId }: ClubsContactModalProps) {
           <div className="modal-body">
             <div className="mb-4">
               <p style={{ fontSize: "16px", color: "#424242", marginBottom: "20px" }}>
-                Completează formularul de mai jos și te vom contacta în cel mai scurt timp pentru a
-                discuta despre programul Founding Club.
+                Completează formularul de mai jos și te vom contacta în cel mai scurt timp cu
+                informații despre abonamentul Premium (prețuri, beneficii, activare).
               </p>
-              <div
-                style={{
-                  fontSize: "14px",
-                  color: "#6B6B6B",
-                  backgroundColor: "#EBFFFE",
-                  padding: "15px",
-                  borderRadius: "8px",
-                  marginBottom: "20px",
-                }}
-              >
-                <strong>Ce primești:</strong>
-                <ul style={{ marginBottom: 0, paddingLeft: "20px", marginTop: "10px" }}>
-                  <li>Profil complet GRATUIT – 6 luni (valoare echivalentă cu 594 lei)</li>
-                  <li>Badge &quot;Verified Founding Club&quot;</li>
-                  <li>Prioritate în rezultate la lansarea oficială</li>
-                  <li>Părinți pre-calificați</li>
-                </ul>
-              </div>
             </div>
 
             <form id="clubs-contact-form" onSubmit={handleSubmit(onSubmit)}>
@@ -369,13 +357,13 @@ export default function ClubsContactModal({ modalId }: ClubsContactModalProps) {
                           <i
                             className={`fa-solid ${isSubmitting ? "fa-spinner fa-spin" : "fa-paper-plane"} me-2`}
                           ></i>
-                          {isSubmitting ? "Se trimite..." : "Trimite cererea"}
+                          {isSubmitting ? "Se trimite..." : "Solicită informații"}
                         </span>
                         <span className="bd-btn-hover">
                           <i
                             className={`fa-solid ${isSubmitting ? "fa-spinner fa-spin" : "fa-paper-plane"} me-2`}
                           ></i>
-                          {isSubmitting ? "Se trimite..." : "Trimite cererea"}
+                          {isSubmitting ? "Se trimite..." : "Solicită informații"}
                         </span>
                       </span>
                     </button>

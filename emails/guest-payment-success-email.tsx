@@ -40,7 +40,7 @@ export const GuestPaymentSuccessEmail = ({
 }: GuestPaymentSuccessEmailProps) => {
   const appUrl = process.env.NEXT_PUBLIC_APP_URL || "https://yuvoo.ro";
   const clubsUrl = `${appUrl}${routes.clubs.list}`;
-  const premiumUrl = `${appUrl}${routes.clubs.premium}`;
+  const howItWorksUrl = `${appUrl}${routes.clubs.howItWorks}`;
   return (
     <Html lang="ro">
       <Head>
@@ -113,8 +113,8 @@ export const GuestPaymentSuccessEmail = ({
                 <a href={clubsUrl} style={linkButton}>
                   Explorează platforma Yuvoo
                 </a>
-                <a href={premiumUrl} style={linkButton}>
-                  Detalii abonare Premium
+                <a href={howItWorksUrl} style={linkButton}>
+                  Cum funcționează Yuvoo pentru cluburi?
                 </a>
               </div>
             </div>
@@ -123,7 +123,7 @@ export const GuestPaymentSuccessEmail = ({
           <EmailSection>
             <Text style={footerNote}>
               <strong>Notă:</strong> Această plată este pentru o singură cerere. Pentru acces
-              nelimitat la cereri, consideră un abonament Premium.
+              nelimitat la cereri, consideră să te abonezi la planul Premium.
             </Text>
           </EmailSection>
 

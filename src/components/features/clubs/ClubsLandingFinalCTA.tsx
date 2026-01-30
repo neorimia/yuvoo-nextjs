@@ -3,7 +3,7 @@
 import React, { useEffect } from "react";
 import { trackEvent, PostHogEvents, PostHogProperties } from "@/lib/analytics/tracking";
 import { useFeatureFlag, FeatureFlags, FeatureFlagVariants } from "@/lib/analytics/feature-flags";
-import { openClubsContactModal } from "@/lib/clubs-landing-modal";
+import { openClubsPremiumMailto } from "@/lib/clubs-landing-modal";
 import { routes } from "@/lib/routes";
 import Link from "next/link";
 
@@ -70,7 +70,7 @@ export default function ClubsLandingFinalCTA({
     });
 
     // Open modal
-    openClubsContactModal("final", ctaText);
+    openClubsPremiumMailto("final", ctaText);
   };
 
   return (
