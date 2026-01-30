@@ -106,7 +106,7 @@ export default function ClubClaimProfile({ clubId, clubSlug }: ClubClaimProfileP
           <div className="card-body p-3">
             {/* Primary Message */}
             <p className="small mb-3 fw-semibold text-dark" style={{ lineHeight: "1.4" }}>
-              <i className="fa-regular fa-building me-2 text-primary"></i>
+              <i className="fa-regular fa-building me-2 text-yuvoo-primary"></i>
               Ești reprezentantul acestui club? Revendică profilul
             </p>
 
@@ -174,7 +174,7 @@ export default function ClubClaimProfile({ clubId, clubSlug }: ClubClaimProfileP
             className="small mb-2 fw-semibold text-dark text-center"
             style={{ lineHeight: "1.4", fontSize: "0.75rem" }}
           >
-            <i className="fa-regular fa-building me-1 text-primary"></i>
+            <i className="fa-regular fa-building me-1 text-yuvoo-primary"></i>
             Ești reprezentantul acestui club?
           </p>
           <div className="d-flex flex-column gap-1">

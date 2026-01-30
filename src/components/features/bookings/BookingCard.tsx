@@ -101,7 +101,7 @@ const BookingCard: React.FC<BookingCardProps> = ({
         <div className="row g-3 mb-3">
           <div className="col-md-6">
             <div className="d-flex align-items-center">
-              <i className="bi bi-calendar-event text-primary me-2"></i>
+              <i className="bi bi-calendar-event text-yuvoo-primary me-2"></i>
               <div>
                 <small className="text-muted d-block">Data</small>
                 <strong>{formatDate(booking.scheduledAt)}</strong>
@@ -110,7 +110,7 @@ const BookingCard: React.FC<BookingCardProps> = ({
           </div>
           <div className="col-md-6">
             <div className="d-flex align-items-center">
-              <i className="bi bi-clock text-primary me-2"></i>
+              <i className="bi bi-clock text-yuvoo-primary me-2"></i>
               <div>
                 <small className="text-muted d-block">Ora</small>
                 <strong>{formatTime(booking.scheduledAt)}</strong>
@@ -122,7 +122,7 @@ const BookingCard: React.FC<BookingCardProps> = ({
         {child && (
           <div className="mb-3">
             <div className="d-flex align-items-center">
-              <i className="bi bi-person text-primary me-2"></i>
+              <i className="bi bi-person text-yuvoo-primary me-2"></i>
               <div>
                 <small className="text-muted d-block">Copil</small>
                 <strong>
@@ -144,7 +144,7 @@ const BookingCard: React.FC<BookingCardProps> = ({
           <div className="mb-3">
             {entity.contact?.phone && (
               <div className="d-flex align-items-center mb-2">
-                <i className="bi bi-telephone text-primary me-2"></i>
+                <i className="bi bi-telephone text-yuvoo-primary me-2"></i>
                 <small>
                   <a href={`tel:${entity.contact.phone}`} className="text-decoration-none">
                     {entity.contact.phone}
@@ -154,7 +154,7 @@ const BookingCard: React.FC<BookingCardProps> = ({
             )}
             {entity.contact?.email && (
               <div className="d-flex align-items-center">
-                <i className="bi bi-envelope text-primary me-2"></i>
+                <i className="bi bi-envelope text-yuvoo-primary me-2"></i>
                 <small>
                   <a href={`mailto:${entity.contact.email}`} className="text-decoration-none">
                     {entity.contact.email}

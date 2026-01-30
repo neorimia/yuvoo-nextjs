@@ -316,7 +316,7 @@ const PremiumUpgradeContent: React.FC<PremiumUpgradeProps> = ({
                             </span>
                           </div>
                           <div className="mb-2">
-                            <span className="h4 mb-0 text-primary">990</span>
+                            <span className="h4 mb-0 text-yuvoo-primary">990</span>
                             <span className="text-muted"> lei/an</span>
                           </div>
                           <small className="text-success d-block fw-semibold mb-1">

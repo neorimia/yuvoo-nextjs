@@ -151,14 +151,14 @@ All utilities use CSS variables defined in `_root.scss`:
 
 When migrating from Tailwind classes, use these mappings:
 
-| Tailwind Class       | Yuvoo Utility                         |
-| -------------------- | ------------------------------------- |
-| `bg-primary`         | `bg-yuvoo-primary`                    |
-| `bg-secondary`       | `bg-yuvoo-secondary`                  |
-| `text-primary`       | `text-yuvoo-primary`                  |
-| `text-secondary`     | `text-yuvoo-secondary`                |
-| `hover:bg-primary`   | `bg-yuvoo-primary-hover` (on hover)   |
-| `hover:text-primary` | `text-yuvoo-primary-hover` (on hover) |
+| Tailwind Class             | Yuvoo Utility                         |
+| -------------------------- | ------------------------------------- |
+| `bg-primary`               | `bg-yuvoo-primary`                    |
+| `bg-secondary`             | `bg-yuvoo-secondary`                  |
+| `text-yuvoo-primary`       | `text-yuvoo-primary`                  |
+| `text-secondary`           | `text-yuvoo-secondary`                |
+| `hover:bg-primary`         | `bg-yuvoo-primary-hover` (on hover)   |
+| `hover:text-yuvoo-primary` | `text-yuvoo-primary-hover` (on hover) |
 
 ## Reference
 

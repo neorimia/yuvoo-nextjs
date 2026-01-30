@@ -2204,6 +2204,7 @@ Club Directory (pre-filtered by sport)
 - **Site Map**: `docs/SITE_MAP.md` - Complete application structure, all routes, user flows, and navigation patterns
 - **Wireframes**: `docs/WIREFRAMES.md` - Detailed page structures, component placement, and layout specifications for all major pages
 - **Legal Pages Plan**: `docs/LEGAL_PAGES_DEVELOPMENT_PLAN.md` - Comprehensive legal pages development plan, content templates, SEO guidelines, and implementation checklist
+- **Legal Pages Analysis & Implementation**: `docs/LEGAL_ANALYSIS_REPORT.md` (structured analysis, GDPR/product alignment), `docs/LEGAL_PAGES_IMPLEMENTATION_PLAN.md` (5-phase implementation; Phases 1-5 completed January 2026: baza legală, Stripe, date plăți, rezervări/încetare/indemnizare, cookie-uri, listă terți, consistență transversală)
 - **Authentication Integration Plan**: `docs/AUTH_INTEGRATION_PLAN.md` - Complete authentication system integration details, Stack Auth setup, Romanian localization, and implementation checklist
 - **Stack Auth Server Migration**: `docs/STACK_AUTH_SERVER_MIGRATION_PLAN.md` - Migration plan and implementation details for server-side authentication
 - **Security Audit Reports**: Comprehensive security audit covering all security measures:

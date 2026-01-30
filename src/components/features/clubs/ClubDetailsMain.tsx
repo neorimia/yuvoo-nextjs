@@ -199,7 +199,7 @@ const ClubDetailsMain: React.FC<ClubDetailsMainProps> = ({ club, isPremium = fal
                       <div className="d-flex flex-column gap-3">
                         {club.contact.phone && (
                           <div className="d-flex align-items-center">
-                            <i className="fa-regular fa-phone text-primary me-3 fs-5"></i>
+                            <i className="fa-regular fa-phone text-yuvoo-primary me-3 fs-5"></i>
                             <div>
                               <span className="d-block small text-muted">Telefon</span>
                               <a
@@ -213,7 +213,7 @@ const ClubDetailsMain: React.FC<ClubDetailsMainProps> = ({ club, isPremium = fal
                         )}
                         {club.contact.email && (
                           <div className="d-flex align-items-center">
-                            <i className="fa-regular fa-envelope text-primary me-3 fs-5"></i>
+                            <i className="fa-regular fa-envelope text-yuvoo-primary me-3 fs-5"></i>
                             <div>
                               <span className="d-block small text-muted">Email</span>
                               <a
@@ -227,7 +227,7 @@ const ClubDetailsMain: React.FC<ClubDetailsMainProps> = ({ club, isPremium = fal
                         )}
                         {club.contact.website && (
                           <div className="d-flex align-items-center">
-                            <i className="fa-regular fa-globe text-primary me-3 fs-5"></i>
+                            <i className="fa-regular fa-globe text-yuvoo-primary me-3 fs-5"></i>
                             <div>
                               <span className="d-block small text-muted">Website</span>
                               <a

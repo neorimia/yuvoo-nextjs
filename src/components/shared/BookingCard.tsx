@@ -153,7 +153,7 @@ const BookingCard: React.FC<BookingCardProps> = ({
         <div className="row g-3 mb-3">
           <div className="col-md-6">
             <div className="d-flex align-items-center">
-              <i className="bi bi-calendar-event text-primary me-2"></i>
+              <i className="bi bi-calendar-event text-yuvoo-primary me-2"></i>
               <div>
                 <small className="text-muted d-block">Data</small>
                 <strong>{formatDate(scheduledAt)}</strong>
@@ -162,7 +162,7 @@ const BookingCard: React.FC<BookingCardProps> = ({
           </div>
           <div className="col-md-6">
             <div className="d-flex align-items-center">
-              <i className="bi bi-clock text-primary me-2"></i>
+              <i className="bi bi-clock text-yuvoo-primary me-2"></i>
               <div>
                 <small className="text-muted d-block">Ora</small>
                 <strong>{formatTime(scheduledAt)}</strong>
@@ -174,7 +174,7 @@ const BookingCard: React.FC<BookingCardProps> = ({
         {child && (
           <div className="mb-3">
             <div className="d-flex align-items-center">
-              <i className="bi bi-person text-primary me-2"></i>
+              <i className="bi bi-person text-yuvoo-primary me-2"></i>
               <div>
                 <small className="text-muted d-block">Copil</small>
                 <strong>

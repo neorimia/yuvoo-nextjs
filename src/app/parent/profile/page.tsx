@@ -63,7 +63,7 @@ export default async function ProfilePage() {
                       {initialData && (
                         <div className="mb-4 pb-4 border-bottom">
                           <div className="d-flex align-items-center">
-                            <i className="bi bi-envelope text-primary me-2"></i>
+                            <i className="bi bi-envelope text-yuvoo-primary me-2"></i>
                             <div>
                               <small className="text-muted d-block">Email</small>
                               <strong>{initialData.email}</strong>

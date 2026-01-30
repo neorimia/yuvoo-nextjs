@@ -89,7 +89,7 @@ const SettingsForm: React.FC<SettingsFormProps> = ({ initialData }) => {
   if (isLoading) {
     return (
       <div className="text-center py-5">
-        <div className="spinner-border text-primary" role="status">
+        <div className="spinner-border text-yuvoo-primary" role="status">
           <span className="visually-hidden">Se încarcă...</span>
         </div>
       </div>

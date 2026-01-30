@@ -48,7 +48,7 @@ export default function UnsubscribeTokenHandler({ token }: UnsubscribeTokenHandl
   if (status.loading) {
     return (
       <div className="text-center py-4">
-        <div className="spinner-border text-primary" role="status">
+        <div className="spinner-border text-yuvoo-primary" role="status">
           <span className="visually-hidden">Se procesează...</span>
         </div>
         <p className="mt-3" style={{ color: "#424242" }}>

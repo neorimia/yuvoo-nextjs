@@ -57,7 +57,7 @@ const helpSections: HelpSection[] = [
       <>
         Află cum să începi să folosești platforma Yuvoo pentru a găsi activitățile sportive
         potrivite pentru copilul tău. Începe cu{" "}
-        <Link href={routes.quiz.intro} className="text-primary text-decoration-underline">
+        <Link href={routes.quiz.intro} className="text-yuvoo-primary text-decoration-underline">
           chestionarul AI
         </Link>{" "}
         pentru recomandări personalizate.
@@ -78,11 +78,11 @@ const helpSections: HelpSection[] = [
     description: (
       <>
         Descoperă cum să căuți și să filtrezi{" "}
-        <Link href={routes.clubs.list} className="text-primary text-decoration-underline">
+        <Link href={routes.clubs.list} className="text-yuvoo-primary text-decoration-underline">
           cluburile sportive verificate
         </Link>{" "}
         pentru a găsi cea mai bună opțiune. Explorează și{" "}
-        <Link href={routes.sports.list} className="text-primary text-decoration-underline">
+        <Link href={routes.sports.list} className="text-yuvoo-primary text-decoration-underline">
           toate sporturile disponibile
         </Link>
         .
@@ -103,7 +103,7 @@ const helpSections: HelpSection[] = [
     description: (
       <>
         Află cum să contactezi și să programezi consultații cu{" "}
-        <Link href={routes.doctors.list} className="text-primary text-decoration-underline">
+        <Link href={routes.doctors.list} className="text-yuvoo-primary text-decoration-underline">
           specialiștii pediatri verificați
         </Link>{" "}
         de pe platformă. Recomandările AI te vor ghida când este necesar.

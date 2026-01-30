@@ -34,15 +34,15 @@ export const faqCategories: FAQCategory[] = [
           <>
             Yuvoo este o platformă AI care ajută părinții din România să găsească activitățile
             sportive potrivite pentru copiii lor (vârste 4-14 ani). Oferim{" "}
-            <Link href={routes.quiz.intro} className="text-primary">
+            <Link href={routes.quiz.intro} className="text-yuvoo-primary">
               recomandări personalizate bazate pe profilul copilului
             </Link>
             ,{" "}
-            <Link href={routes.clubs.list} className="text-primary">
+            <Link href={routes.clubs.list} className="text-yuvoo-primary">
               director de cluburi sportive verificate
             </Link>
             , și{" "}
-            <Link href={routes.doctors.list} className="text-primary">
+            <Link href={routes.doctors.list} className="text-yuvoo-primary">
               acces la specialiști pediatri relevanți pentru sport
             </Link>
             .
@@ -61,15 +61,15 @@ export const faqCategories: FAQCategory[] = [
         answer: (
           <>
             Yuvoo conectează trei servicii principale:{" "}
-            <Link href={routes.quiz.intro} className="text-primary">
+            <Link href={routes.quiz.intro} className="text-yuvoo-primary">
               Chestionarul AI
             </Link>{" "}
             pentru recomandări personalizate de sporturi,{" "}
-            <Link href={routes.clubs.list} className="text-primary">
+            <Link href={routes.clubs.list} className="text-yuvoo-primary">
               Directorul de Cluburi
             </Link>{" "}
             unde găsești cluburi sportive verificate, și{" "}
-            <Link href={routes.doctors.list} className="text-primary">
+            <Link href={routes.doctors.list} className="text-yuvoo-primary">
               Rețeaua de Specialiști Pediatri
             </Link>{" "}
             pentru consultații medicale legate de sport. Toate aceste servicii sunt integrate pentru
@@ -93,7 +93,7 @@ export const faqCategories: FAQCategory[] = [
         question: "Cum funcționează chestionarul AI?",
         answer: (
           <>
-            <Link href={routes.quiz.intro} className="text-primary">
+            <Link href={routes.quiz.intro} className="text-yuvoo-primary">
               Chestionarul AI
             </Link>{" "}
             ia în considerare vârsta copilului, interesele, nivelul de activitate, preferințele
@@ -101,7 +101,7 @@ export const faqCategories: FAQCategory[] = [
             răspunzi la întrebări, primești o previzualizare gratuită; poți apoi să accesezi
             raportul complet (recomandări detaliate, explicații și link permanent) prin plata unică
             (39 lei).{" "}
-            <Link href={routes.sports.list} className="text-primary">
+            <Link href={routes.sports.list} className="text-yuvoo-primary">
               Explorează toate sporturile
             </Link>{" "}
             pentru a înțelege mai bine opțiunile.
@@ -114,7 +114,7 @@ export const faqCategories: FAQCategory[] = [
         answer: (
           <>
             Da, poți repeta{" "}
-            <Link href={routes.quiz.intro} className="text-primary">
+            <Link href={routes.quiz.intro} className="text-yuvoo-primary">
               chestionarul AI
             </Link>{" "}
             oricând. Copiii cresc, preferințele se schimbă și interesele evoluează. Este normal să
@@ -132,11 +132,11 @@ export const faqCategories: FAQCategory[] = [
             factori relevanți pentru dezvoltarea copiilor prin sport. Însă, recomandările sunt doar
             ghiduri - cel mai bun indicator este copilul tău însuși. Îți recomandăm să testezi mai
             multe{" "}
-            <Link href={routes.sports.list} className="text-primary">
+            <Link href={routes.sports.list} className="text-yuvoo-primary">
               sporturi
             </Link>{" "}
             pentru a vedea ce îi place realmente copilului tău și să explorezi{" "}
-            <Link href={routes.clubs.list} className="text-primary">
+            <Link href={routes.clubs.list} className="text-yuvoo-primary">
               cluburi
             </Link>{" "}
             care oferă aceste sporturi.
@@ -149,13 +149,13 @@ export const faqCategories: FAQCategory[] = [
         answer: (
           <>
             Da, poți completa{" "}
-            <Link href={routes.quiz.intro} className="text-primary">
+            <Link href={routes.quiz.intro} className="text-yuvoo-primary">
               chestionarul AI
             </Link>{" "}
             fără cont și vei primi o previzualizare a recomandărilor. Raportul complet (recomandări
             detaliate, explicații și link de acces persistent) necesită plată unică (39 lei). Te
             poți{" "}
-            <Link href={routes.register} className="text-primary">
+            <Link href={routes.register} className="text-yuvoo-primary">
               înregistra
             </Link>{" "}
             gratuit pentru a salva rezultatele în profil, istoricul quiz-urilor și notificări despre
@@ -194,7 +194,7 @@ export const faqCategories: FAQCategory[] = [
         answer: (
           <>
             După ce{" "}
-            <Link href={routes.clubs.list} className="text-primary">
+            <Link href={routes.clubs.list} className="text-yuvoo-primary">
               găsești un club care te interesează
             </Link>
             , poți folosi formularul de rezervare direct de pe pagina clubului. Clubul va primi
@@ -233,11 +233,11 @@ export const faqCategories: FAQCategory[] = [
         answer: (
           <>
             Dacă{" "}
-            <Link href={routes.quiz.intro} className="text-primary">
+            <Link href={routes.quiz.intro} className="text-yuvoo-primary">
               recomandările AI indică nevoia de consultare medicală
             </Link>
             , vei vedea o listă de{" "}
-            <Link href={routes.doctors.list} className="text-primary">
+            <Link href={routes.doctors.list} className="text-yuvoo-primary">
               specialiști pediatri recomandați
             </Link>{" "}
             pe pagina de rezultate a quiz-ului. Pe pagina fiecărui specialist pediatru găsești
@@ -260,7 +260,7 @@ export const faqCategories: FAQCategory[] = [
         answer: (
           <>
             Da. Pe{" "}
-            <Link href={routes.doctors.list} className="text-primary">
+            <Link href={routes.doctors.list} className="text-yuvoo-primary">
               pagina fiecărui specialist
             </Link>{" "}
             poți vedea disponibilitatea și rezerva direct o consultație. Cererea ajunge la
@@ -295,11 +295,11 @@ export const faqCategories: FAQCategory[] = [
             sensibile cu terți și nu publicăm date personale. Toate datele sunt criptate și stocate
             în siguranță. Poți șterge contul și datele oricând din setările contului. Pentru mai
             multe detalii, consultă{" "}
-            <Link href={routes.privacy} className="text-primary">
+            <Link href={routes.privacy} className="text-yuvoo-primary">
               politica noastră de confidențialitate
             </Link>{" "}
             și{" "}
-            <Link href={routes.gdpr} className="text-primary">
+            <Link href={routes.gdpr} className="text-yuvoo-primary">
               ghidul GDPR pentru părinți
             </Link>
             .
@@ -312,11 +312,11 @@ export const faqCategories: FAQCategory[] = [
         answer: (
           <>
             Pentru a folosi{" "}
-            <Link href={routes.quiz.intro} className="text-primary">
+            <Link href={routes.quiz.intro} className="text-yuvoo-primary">
               chestionarul AI
             </Link>
             , ai nevoie doar de informații de bază despre copil (vârstă, interese). Pentru a{" "}
-            <Link href={routes.register} className="text-primary">
+            <Link href={routes.register} className="text-yuvoo-primary">
               crea un cont
             </Link>{" "}
             și a beneficia de toate funcțiile, vei completa nume, email și date despre copil. Nu
@@ -342,17 +342,17 @@ export const faqCategories: FAQCategory[] = [
         answer: (
           <>
             Poți{" "}
-            <Link href={routes.register} className="text-primary">
+            <Link href={routes.register} className="text-yuvoo-primary">
               crea un cont rapid
             </Link>{" "}
             folosind adresa ta de email și o parolă sigură. Procesul este simplu și gratuit. După
             confirmarea emailului poți completa profilul copilului și folosi toate funcțiile:
             salvarea recomandărilor AI, rezervarea probelor la{" "}
-            <Link href={routes.clubs.list} className="text-primary">
+            <Link href={routes.clubs.list} className="text-yuvoo-primary">
               cluburi
             </Link>
             , programarea consultațiilor la{" "}
-            <Link href={routes.doctors.list} className="text-primary">
+            <Link href={routes.doctors.list} className="text-yuvoo-primary">
               specialiști
             </Link>
             , favorite și dashboard personalizat.
@@ -366,15 +366,15 @@ export const faqCategories: FAQCategory[] = [
           <>
             Da, poți adăuga mai mulți copii în profilul tău. Fiecare copil poate avea propriul
             profil cu{" "}
-            <Link href={routes.quiz.intro} className="text-primary">
+            <Link href={routes.quiz.intro} className="text-yuvoo-primary">
               recomandări AI personalizate
             </Link>
             , istoricul quiz-urilor,{" "}
-            <Link href={routes.clubs.list} className="text-primary">
+            <Link href={routes.clubs.list} className="text-yuvoo-primary">
               cluburi favorite
             </Link>{" "}
             și{" "}
-            <Link href={routes.doctors.list} className="text-primary">
+            <Link href={routes.doctors.list} className="text-yuvoo-primary">
               specialiști salvați
             </Link>
             . Din dashboard poți gestiona toate activitățile sportive și programările pentru toți
@@ -399,7 +399,7 @@ export const faqCategories: FAQCategory[] = [
         answer: (
           <>
             În perioada{" "}
-            <Link href={routes.clubs.landing} className="text-primary">
+            <Link href={routes.clubs.landing} className="text-yuvoo-primary">
               programului Founding Club
             </Link>
             , primele 15 cluburi din fiecare oraș primesc profil complet gratuit pentru 6 luni
@@ -415,18 +415,18 @@ export const faqCategories: FAQCategory[] = [
         answer: (
           <>
             Cluburile pot aplica pentru{" "}
-            <Link href={routes.clubs.landing} className="text-primary">
+            <Link href={routes.clubs.landing} className="text-yuvoo-primary">
               programul Founding Club gratuit
             </Link>
             . Specialiștii pediatri pot aplica pentru{" "}
-            <Link href={routes.doctors.landing} className="text-primary">
+            <Link href={routes.doctors.landing} className="text-yuvoo-primary">
               programul Expert Pediatric Verificat
             </Link>
             . Procesul include un call scurt pentru configurarea profilului, verificarea
             documentelor (identitate legală, calificări, protocoluri) și verificarea finală (1-2
             săptămâni). După aprobare, vei primi badge-ul de verificat și vei apărea în rezultatele
             relevante. Pentru detalii,{" "}
-            <Link href={routes.contact} className="text-primary">
+            <Link href={routes.contact} className="text-yuvoo-primary">
               contactează echipa Yuvoo
             </Link>
             .
@@ -439,13 +439,13 @@ export const faqCategories: FAQCategory[] = [
         answer: (
           <>
             Medici pediatri, ortopezi pediatrici, nutriționiști și psihologi copii pot aplica pe{" "}
-            <Link href={routes.doctors.landing} className="text-primary">
+            <Link href={routes.doctors.landing} className="text-yuvoo-primary">
               Pentru Doctori
             </Link>
             . Yuvoo nu este marketplace medical: oferim un strat de validare pentru părinți care
             aleg sportul potrivit. Procesul include verificarea calificărilor și un profil public
             optimizat. Nu există promovare agresivă; controlul editorial rămâne la tine.{" "}
-            <Link href={routes.contact} className="text-primary">
+            <Link href={routes.contact} className="text-yuvoo-primary">
               Contactează-ne
             </Link>{" "}
             pentru pașii următori.
@@ -464,7 +464,7 @@ export const faqCategories: FAQCategory[] = [
         answer: (
           <>
             Ca{" "}
-            <Link href={routes.clubs.landing} className="text-primary">
+            <Link href={routes.clubs.landing} className="text-yuvoo-primary">
               Founding Club
             </Link>
             , primești: profil complet gratuit 6 luni (valoare echivalentă cu 594 lei), badge

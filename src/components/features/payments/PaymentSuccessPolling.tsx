@@ -130,7 +130,7 @@ export default function PaymentSuccessPolling({
     return (
       <div className="alert alert-info mb-4" role="alert">
         <div className="d-flex align-items-center justify-content-center">
-          <div className="spinner-border spinner-border-sm text-primary me-2" role="status">
+          <div className="spinner-border spinner-border-sm text-yuvoo-primary me-2" role="status">
             <span className="visually-hidden">Se procesează...</span>
           </div>
           <span>

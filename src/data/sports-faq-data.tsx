@@ -22,16 +22,16 @@ export const sportsFaqItems: FAQItem[] = [
     answer: (
       <>
         Yuvoo oferă un{" "}
-        <Link href={routes.quiz.intro} className="text-primary">
+        <Link href={routes.quiz.intro} className="text-yuvoo-primary">
           chestionar AI personalizat
         </Link>{" "}
         care analizează profilul copilului tău (vârstă, interese, nivel de activitate, preferințe
         fizice) și generează recomandări personalizate. Poți explora și manual{" "}
-        <Link href={routes.sports.list} className="text-primary">
+        <Link href={routes.sports.list} className="text-yuvoo-primary">
           toate sporturile disponibile
         </Link>
         , citi descrierile detaliate și{" "}
-        <Link href={routes.clubs.list} className="text-primary">
+        <Link href={routes.clubs.list} className="text-yuvoo-primary">
           găsi cluburi
         </Link>{" "}
         care oferă programe pentru vârsta copilului tău.
@@ -43,7 +43,7 @@ export const sportsFaqItems: FAQItem[] = [
     answer: (
       <>
         Costurile variază în funcție de sport și club. Majoritatea{" "}
-        <Link href={routes.clubs.list} className="text-primary">
+        <Link href={routes.clubs.list} className="text-yuvoo-primary">
           cluburilor
         </Link>{" "}
         oferă probe gratuite sau la preț redus pentru a permite copiilor să încerce sportul înainte

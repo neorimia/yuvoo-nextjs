@@ -151,7 +151,7 @@ const DoctorAppointmentForm: React.FC<DoctorAppointmentFormProps> = ({
     return (
       <div className="bd-booking-form">
         <div className="text-center py-5">
-          <div className="spinner-border text-primary" role="status">
+          <div className="spinner-border text-yuvoo-primary" role="status">
             <span className="visually-hidden">Se încarcă...</span>
           </div>
           <p className="mt-3 text-muted">Se încarcă datele...</p>

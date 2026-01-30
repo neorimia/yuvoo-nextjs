@@ -1,6 +1,22 @@
+/**
+ * Quiz Container Page
+ *
+ * Main quiz flow page with 7 questions.
+ * Route: /chestionar/container
+ *
+ * Flow:
+ * - Authenticated users with children: Start at Step 0 (child selection)
+ * - Authenticated users without children: Create temp child, start at Step 1
+ * - Guest users: Create temp child, start at Step 1
+ */
+
 import React from "react";
 import type { Metadata } from "next";
+import { cookies } from "next/headers";
 import QuizContainer from "@/components/features/quiz/QuizContainer";
+import { getSession } from "@/lib/auth/session";
+import { getChildrenByParentId } from "@/modules/children/children.service";
+import { createTemporaryChildForQuiz } from "@/modules/quiz/quiz.service";
 
 // Optimized timeout for quiz submission with GPT-3.5-turbo (typically 2-8 seconds)
 // Set to 30 seconds to allow for network latency and potential retries
@@ -16,23 +32,42 @@ export const metadata: Metadata = {
   },
 };
 
-/**
- * Quiz Container Page
- *
- * Main quiz flow page with 6 questions.
- * Route: /chestionar/container
- *
- * TODO: Add child selection/creation flow before starting quiz
- * For now, using placeholder childId
- */
-export default function QuizContainerPage() {
-  // TODO: Get child ID from user session or child selection
-  // For now, using a placeholder ID
-  const childId = "placeholder-child-id";
+interface QuizContainerPageProps {
+  searchParams: Promise<{ childId?: string }>;
+}
+
+export default async function QuizContainerPage({ searchParams }: QuizContainerPageProps) {
+  // Access cookies first to make the route dynamic
+  const _cookies = await cookies();
+
+  // Get childId from URL params (if provided)
+  const params = await searchParams;
+  let childId = params.childId;
+
+  // Check authentication
+  const session = await getSession();
+
+  // Fetch children for authenticated users
+  let childProfiles: Awaited<ReturnType<typeof getChildrenByParentId>> = [];
+  if (session) {
+    childProfiles = await getChildrenByParentId(session.dbUser.id);
+  }
+
+  // If no childId provided and no children to select from, create a temp child
+  if (!childId && childProfiles.length === 0) {
+    childId = await createTemporaryChildForQuiz(
+      {
+        age: 4, // Default placeholder age (will be overwritten by quiz answers in Q1)
+        gender: undefined,
+        childName: undefined,
+      },
+      session?.dbUser.id || null
+    );
+  }
 
   return (
     <div className="quiz-container-page">
-      <QuizContainer childId={childId} />
+      <QuizContainer childId={childId} childProfiles={childProfiles} />
     </div>
   );
 }

@@ -401,6 +401,8 @@ This contact information is displayed in:
 
 **Note**: All legal pages must include complete company information including Neorimia SRL registration details (CUI, Reg. Comerțului) and contact information for GDPR compliance and legal transparency. Yuvoo is operated as a project under Neorimia SRL.
 
+**Legal pages implementation (January 2026)**: Îmbunătățirile conform raportului de analiză și planului de implementare sunt finalizate: Confidențialitate (baza legală, Stripe, date plăți), Termeni (rezervări/plăți, încetare, indemnizare), Cookies (Stripe, fără marketing), GDPR părinți (listă terți aliniată), consistență transversală. Referințe: `docs/LEGAL_ANALYSIS_REPORT.md`, `docs/LEGAL_PAGES_IMPLEMENTATION_PLAN.md`.
+
 ## Future Vision (Post-Phase 1)
 
 - Payment-enabled bookings

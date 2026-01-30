@@ -113,7 +113,7 @@ const BookingList: React.FC = () => {
   if (isLoading) {
     return (
       <div className="text-center py-5">
-        <div className="spinner-border text-primary" role="status">
+        <div className="spinner-border text-yuvoo-primary" role="status">
           <span className="visually-hidden">Se încarcă...</span>
         </div>
         <p className="mt-3 text-muted">Se încarcă rezervările...</p>
@@ -165,7 +165,7 @@ const BookingList: React.FC = () => {
       {upcomingBookings.length > 0 && (
         <div className="mb-5">
           <h3 className="h5 mb-4">
-            <i className="bi bi-calendar-check text-primary me-2"></i>
+            <i className="bi bi-calendar-check text-yuvoo-primary me-2"></i>
             Rezervări viitoare ({upcomingBookings.length})
           </h3>
           {upcomingBookings.map((booking) => (

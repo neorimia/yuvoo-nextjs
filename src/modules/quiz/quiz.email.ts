@@ -12,6 +12,7 @@ import { eq } from "drizzle-orm";
 import * as React from "react";
 import { renderEmail } from "../../../emails/utils/render-email";
 import QuizTeaserEmail from "../../../emails/quiz-teaser-email";
+import { quizRepository } from "./quiz.repository";
 import type { QuizResult } from "./quiz.types";
 import type { Child } from "@/modules/children/children.types";
 import type { AuthUser } from "@/modules/auth/auth.types";
@@ -108,22 +109,27 @@ export async function sendTeaserEmail(quizResult: QuizResult, userEmail: string)
       return;
     }
 
+    // Prefer childName from quiz answers (user typed in quiz) over DB child.firstName (e.g. "Copil" for temp child)
+    const quizAnswers = await quizRepository.getQuizAnswers(quizResult.id);
+    const displayName = quizAnswers?.childName?.trim() || child.firstName || "Copil";
+
     // Send teaser email via Brevo using React Email
     const { sendEmail } = await import("@/lib/integrations/brevo");
     const appUrl = process.env.NEXT_PUBLIC_APP_URL || "https://yuvoo.ro";
     const teaserUrl = `${appUrl}/chestionar/teaser/${quizResult.id}`;
 
-    // Render React Email component to HTML
+    // Render React Email component to HTML (pass displayName for subject/heading)
     const emailComponent = React.createElement(QuizTeaserEmail, {
       quizResult,
       child,
       teaserUrl,
+      childDisplayName: displayName,
     });
     const { html, text } = await renderEmail(emailComponent);
 
     await sendEmail({
       to: userEmail,
-      subject: `Recomandarea noastră pentru ${child.firstName} - ${topRecommendation.sportName}`,
+      subject: `Recomandarea noastră pentru ${displayName} - ${topRecommendation.sportName}`,
       htmlContent: html,
       textContent: text,
       tags: ["quiz-teaser", "sport-recommendation"],

@@ -627,7 +627,7 @@ export default async function EmailCollectionPage({ params }: EmailCollectionPag
       {quizCount > 0 && (
         <div className="text-center mb-3">
           <p className="text-muted small mb-0">
-            <i className="bi bi-people-fill text-primary me-2" aria-hidden="true"></i>
+            <i className="bi bi-people-fill text-yuvoo-primary me-2" aria-hidden="true"></i>
             Peste {quizCount.toLocaleString('ro-RO')} părinți au folosit deja serviciul nostru pentru a găsi sportul potrivit
           </p>
         </div>
@@ -688,7 +688,7 @@ export default async function PaywallPage({ params }: PaywallPageProps) {
       {quizCount > 0 && (
         <div className="text-center mb-4">
           <p className="text-muted small mb-0">
-            <i className="bi bi-people-fill text-primary me-2" aria-hidden="true"></i>
+            <i className="bi bi-people-fill text-yuvoo-primary me-2" aria-hidden="true"></i>
             Peste {quizCount.toLocaleString('ro-RO')} părinți au folosit deja serviciul nostru pentru a găsi sportul potrivit
           </p>
         </div>

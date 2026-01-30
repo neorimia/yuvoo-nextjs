@@ -22,6 +22,8 @@ interface QuizTeaserEmailProps {
   quizResult: QuizResult;
   child: Child;
   teaserUrl: string;
+  /** Prefer name from quiz (e.g. "Alex") over child.firstName (e.g. "Copil" for temp child). */
+  childDisplayName?: string;
 }
 
 /**
@@ -29,7 +31,15 @@ interface QuizTeaserEmailProps {
  *
  * Email sent after email collection with single sport recommendation.
  */
-export const QuizTeaserEmail = ({ quizResult, child, teaserUrl }: QuizTeaserEmailProps) => {
+export const QuizTeaserEmail = ({
+  quizResult,
+  child,
+  teaserUrl,
+  childDisplayName,
+}: QuizTeaserEmailProps) => {
+  // Use name from quiz answers (e.g. "Alex") when provided, else child.firstName (e.g. "Copil")
+  const displayName = childDisplayName?.trim() || child?.firstName || "Copil";
+
   // Get top recommendation (highest match score)
   const sortedRecommendations = [...(quizResult.recommendations || [])].sort(
     (a, b) => b.matchScore - a.matchScore
@@ -74,17 +84,17 @@ export const QuizTeaserEmail = ({ quizResult, child, teaserUrl }: QuizTeaserEmai
   return (
     <Html lang="ro">
       <Head>
-        <title>{`Recomandarea noastră pentru ${child.firstName} - Yuvoo`}</title>
+        <title>{`Recomandarea noastră pentru ${displayName} - Yuvoo`}</title>
       </Head>
       <Preview>
-        {`Recomandarea noastră pentru ${child.firstName}: ${topRecommendation.sportName} - ${String(topRecommendation.matchScore)}% potrivire`}
+        {`Recomandarea noastră pentru ${displayName}: ${topRecommendation.sportName} - ${String(topRecommendation.matchScore)}% potrivire`}
       </Preview>
       <Body style={main}>
         <Container style={container}>
           <EmailHeader />
 
           <EmailSection>
-            <Heading style={heading}>Recomandarea noastră pentru {child.firstName}</Heading>
+            <Heading style={heading}>Recomandarea noastră pentru {displayName}</Heading>
             <Text style={body}>
               Mulțumim că ai completat chestionarul! Am analizat răspunsurile și am identificat un
               sport care se potrivește perfect profilului copilului tău.

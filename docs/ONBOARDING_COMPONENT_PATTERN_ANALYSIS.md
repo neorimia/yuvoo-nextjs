@@ -1605,7 +1605,7 @@ export function getFileIcon(url: string): ReactNode {
     return <FileText className="w-8 h-8 text-danger" />;
   }
   if (url.toLowerCase().match(/\.(doc|docx)$/)) {
-    return <File className="w-8 h-8 text-primary" />;
+    return <File className="w-8 h-8 text-yuvoo-primary" />;
   }
   return <File className="w-8 h-8 text-secondary" />;
 }

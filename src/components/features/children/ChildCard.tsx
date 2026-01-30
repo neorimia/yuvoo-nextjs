@@ -95,7 +95,7 @@ const ChildCard: React.FC<ChildCardProps> = ({ child, onDelete }) => {
         <div className="row g-3 mb-3">
           <div className="col-md-6">
             <div className="d-flex align-items-center">
-              <i className="bi bi-calendar-event text-primary me-2"></i>
+              <i className="bi bi-calendar-event text-yuvoo-primary me-2"></i>
               <div>
                 <small className="text-muted d-block">Data nașterii</small>
                 <strong>{formatDate(child.dateOfBirth)}</strong>
@@ -104,7 +104,7 @@ const ChildCard: React.FC<ChildCardProps> = ({ child, onDelete }) => {
           </div>
           <div className="col-md-6">
             <div className="d-flex align-items-center">
-              <i className="bi bi-person text-primary me-2"></i>
+              <i className="bi bi-person text-yuvoo-primary me-2"></i>
               <div>
                 <small className="text-muted d-block">Vârstă</small>
                 <strong>{child.age} ani</strong>
