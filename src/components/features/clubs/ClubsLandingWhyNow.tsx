@@ -3,7 +3,7 @@
 import React from "react";
 import SectionTitle from "@/components/shared/SectionTitle";
 import TrustCard, { TrustCardProps } from "@/components/shared/TrustCard";
-import { CLUBS_CONTACT_MODAL_ID, openClubsContactModal } from "@/lib/clubs-landing-modal";
+import { openClubsPremiumMailto } from "@/lib/clubs-landing-modal";
 import { PostHogEvents, trackEvent } from "@/lib/analytics/tracking";
 
 /**
@@ -68,7 +68,7 @@ export default function ClubsLandingWhyNow({ remainingSpots }: ClubsLandingWhyNo
     });
 
     // Open modal
-    openClubsContactModal("why-now", "Rezervă locul tău acum");
+    openClubsPremiumMailto("why-now", "Rezervă locul tău acum");
   };
 
   return (
@@ -161,13 +161,7 @@ export default function ClubsLandingWhyNow({ remainingSpots }: ClubsLandingWhyNo
                   data-wow-duration="1s"
                   data-wow-delay=".8s"
                 >
-                  <button
-                    type="button"
-                    className="bd-btn mx-auto"
-                    onClick={handleCTAClick}
-                    data-bs-toggle="modal"
-                    data-bs-target={`#${CLUBS_CONTACT_MODAL_ID}`}
-                  >
+                  <button type="button" className="bd-btn mx-auto" onClick={handleCTAClick}>
                     <span className="bd-btn-inner">
                       <span className="bd-btn-normal">
                         Rezervă locul tău acum ({remainingSpots} locuri rămase)

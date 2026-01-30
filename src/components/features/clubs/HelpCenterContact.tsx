@@ -2,7 +2,7 @@
 
 import React from "react";
 import SectionTitle from "@/components/shared/SectionTitle";
-import { CLUBS_CONTACT_MODAL_ID, openClubsContactModal } from "@/lib/clubs-landing-modal";
+import { openClubsPremiumMailto } from "@/lib/clubs-landing-modal";
 import { trackEvent, PostHogEvents } from "@/lib/analytics/tracking";
 
 /**
@@ -16,10 +16,10 @@ export default function HelpCenterContact() {
 
     trackEvent(PostHogEvents.CLUBS_LANDING_CTA_CLICKED, {
       location: "help_center",
-      cta_text: "Contactează-ne",
+      cta_text: "Rezervă call-ul",
     });
 
-    openClubsContactModal("help_center", "Contactează-ne");
+    openClubsPremiumMailto("help_center", "Rezervă call-ul");
   };
 
   return (
@@ -163,13 +163,7 @@ export default function HelpCenterContact() {
                 Rezervă un call de 15 minute pentru a discuta despre programul gratuit de 6 luni sau
                 upgrade la Premium.
               </p>
-              <button
-                type="button"
-                className="bd-btn"
-                onClick={handleContactClick}
-                data-bs-toggle="modal"
-                data-bs-target={`#${CLUBS_CONTACT_MODAL_ID}`}
-              >
+              <button type="button" className="bd-btn" onClick={handleContactClick}>
                 <span className="bd-btn-inner">
                   <span className="bd-btn-normal">Rezervă call-ul</span>
                   <span className="bd-btn-hover">Rezervă call-ul</span>

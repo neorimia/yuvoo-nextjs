@@ -3,7 +3,7 @@ import React from "react";
 import Link from "next/link";
 import SectionTitle from "@/components/shared/SectionTitle";
 import TrustCard, { TrustCardProps } from "@/components/shared/TrustCard";
-import { CLUBS_CONTACT_MODAL_ID, openClubsContactModal } from "@/lib/clubs-landing-modal";
+import { openClubsPremiumMailto } from "@/lib/clubs-landing-modal";
 import { PostHogEvents, trackEvent } from "@/lib/analytics/tracking";
 import { routes } from "@/lib/routes";
 
@@ -103,7 +103,7 @@ export default function ClubsLandingBenefits() {
     });
 
     // Open modal
-    openClubsContactModal("benefits", "Devino Founding Club Gratuit");
+    openClubsPremiumMailto("benefits", "Începe acum - 6 luni gratuite");
   };
 
   return (
@@ -249,13 +249,7 @@ export default function ClubsLandingBenefits() {
                   data-wow-duration="1s"
                   data-wow-delay=".8s"
                 >
-                  <button
-                    type="button"
-                    className="bd-btn mx-auto"
-                    onClick={handleCTAClick}
-                    data-bs-toggle="modal"
-                    data-bs-target={`#${CLUBS_CONTACT_MODAL_ID}`}
-                  >
+                  <button type="button" className="bd-btn mx-auto" onClick={handleCTAClick}>
                     <span className="bd-btn-inner">
                       <span className="bd-btn-normal">Începe acum - 6 luni gratuite</span>
                       <span className="bd-btn-hover">Începe acum - 6 luni gratuite</span>
