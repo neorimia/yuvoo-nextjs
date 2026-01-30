@@ -56,6 +56,14 @@ export default function PaymentForm({
         const result = await createPaymentAction({ quizId });
 
         if (!result.success) {
+          if ("reportAccessToken" in result && result.reportAccessToken) {
+            router.replace(routes.quiz.report(result.reportAccessToken));
+            return;
+          }
+          if ("redirectToResults" in result && result.redirectToResults && result.quizId) {
+            router.replace(routes.quiz.paymentSuccess(result.quizId));
+            return;
+          }
           setError(result.error || "Eroare la inițializarea plății. Te rugăm să încerci din nou.");
           setIsLoading(false);
           return;
@@ -94,7 +102,7 @@ export default function PaymentForm({
     }
 
     initializePayment();
-  }, [quizId, initialClientSecret, onPaymentCreated]);
+  }, [quizId, initialClientSecret, onPaymentCreated, router]);
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();

@@ -192,7 +192,10 @@ export default async function QuizResultsPage({ params }: QuizResultsPageProps) 
                           Poți completa chestionarul din nou oricând pentru a obține recomandări
                           actualizate sau pentru un alt copil.
                         </p>
-                        <a href={routes.quiz.intro} className="btn btn-sm btn-outline-primary mt-2">
+                        <a
+                          href={routes.quiz.intro}
+                          className="btn btn-sm btn-yuvoo-outline-primary mt-2"
+                        >
                           Repetă Chestionarul
                         </a>
                       </div>

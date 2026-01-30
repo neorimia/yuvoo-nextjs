@@ -16,6 +16,8 @@ import { getReportAccessByPaymentId } from "@/modules/payments/payments.reposito
 import { routes } from "@/lib/routes";
 import Link from "next/link";
 import PaymentSuccessPolling from "@/components/features/payments/PaymentSuccessPolling";
+import { ErrorBoundary } from "@/components/shared/ErrorBoundary";
+import StripStripeParamsFromUrl from "@/components/features/payments/StripStripeParamsFromUrl";
 
 interface PaymentSuccessPageProps {
   params: Promise<{ quizId: string }>;
@@ -81,9 +83,39 @@ export default async function PaymentSuccessPage({ params }: PaymentSuccessPageP
     redirect(routes.quiz.report(reportAccess.accessToken));
   }
 
+  // Fallback when React error occurs (e.g. hook mismatch after Stripe redirect)
+  const paymentSuccessFallback = (
+    <div className="card-body p-5 text-center">
+      <div className="mb-4">
+        <div
+          className="rounded-circle bg-success bg-opacity-10 d-inline-flex align-items-center justify-content-center"
+          style={{ width: "80px", height: "80px" }}
+          role="img"
+          aria-label="Plată reușită"
+        >
+          <i
+            className="bi bi-check-circle-fill text-success"
+            style={{ fontSize: "3rem" }}
+            aria-hidden="true"
+          />
+        </div>
+      </div>
+      <h1 className="h3 fw-bold mb-3">Plată Reușită!</h1>
+      <p className="lead text-muted mb-4">
+        Mulțumim pentru plata ta! Verifică email-ul pentru link-ul permanent către raportul complet.
+        Poți accesa raportul oricând folosind link-ul din email.
+      </p>
+      <Link href={routes.quiz.intro} className="btn btn-primary">
+        <i className="bi bi-arrow-right me-2" aria-hidden="true" />
+        Înapoi la Chestionar
+      </Link>
+    </div>
+  );
+
   // Otherwise, show success message (webhook may still be processing)
   return (
     <>
+      <StripStripeParamsFromUrl />
       <BreadcrumbOne
         title="Plată Reușită"
         subTitle="Succes"
@@ -98,57 +130,59 @@ export default async function PaymentSuccessPage({ params }: PaymentSuccessPageP
           <div className="row justify-content-center">
             <div className="col-12 col-lg-8 col-xl-6">
               <div className="card shadow-lg border-0 text-center">
-                <div className="card-body p-5">
-                  {/* Success Icon */}
-                  <div className="mb-4">
-                    <div
-                      className="rounded-circle bg-success bg-opacity-10 d-inline-flex align-items-center justify-content-center"
-                      style={{ width: "80px", height: "80px" }}
-                      role="img"
-                      aria-label="Plată reușită"
-                    >
-                      <i
-                        className="bi bi-check-circle-fill text-success"
-                        style={{ fontSize: "3rem" }}
-                        aria-hidden="true"
-                      ></i>
+                <ErrorBoundary fallback={paymentSuccessFallback}>
+                  <div className="card-body p-5">
+                    {/* Success Icon */}
+                    <div className="mb-4">
+                      <div
+                        className="rounded-circle bg-success bg-opacity-10 d-inline-flex align-items-center justify-content-center"
+                        style={{ width: "80px", height: "80px" }}
+                        role="img"
+                        aria-label="Plată reușită"
+                      >
+                        <i
+                          className="bi bi-check-circle-fill text-success"
+                          style={{ fontSize: "3rem" }}
+                          aria-hidden="true"
+                        />
+                      </div>
                     </div>
+
+                    {/* Success Message */}
+                    <h1 className="h3 fw-bold mb-3">Plată Reușită!</h1>
+                    <p className="lead text-muted mb-4">
+                      Mulțumim pentru plata ta! Raportul complet personalizat pentru copilul tău
+                      este în curs de pregătire și va fi disponibil imediat.
+                    </p>
+
+                    {/* Value Obtained */}
+                    <div className="alert alert-info mb-4" role="alert">
+                      <i className="bi bi-check-circle-fill me-2" aria-hidden="true" />
+                      <strong>Ai acces la:</strong> Raportul complet personalizat, acces permanent
+                      pentru 10 ani și opțiunea de a descărca PDF-ul.
+                    </div>
+
+                    {/* Polling Component - Checks for access token availability */}
+                    <PaymentSuccessPolling quizId={quizId} paymentId={payment.id} />
+
+                    {/* Instructions */}
+                    <p className="text-muted small mb-4">
+                      Vei primi un email cu link-ul permanent către raportul complet în câteva
+                      momente. Poți accesa raportul oricând folosind link-ul din email - este tău
+                      pentru 10 ani.
+                    </p>
+
+                    {/* Back to Quiz Link */}
+                    <Link
+                      href={routes.quiz.intro}
+                      className="btn btn-outline-primary"
+                      aria-label="Accesează raportul complet"
+                    >
+                      <i className="bi bi-arrow-right me-2" aria-hidden="true" />
+                      Accesează Raportul Complet
+                    </Link>
                   </div>
-
-                  {/* Success Message */}
-                  <h1 className="h3 fw-bold mb-3">Plată Reușită!</h1>
-                  <p className="lead text-muted mb-4">
-                    Mulțumim pentru plata ta! Raportul complet personalizat pentru copilul tău este
-                    în curs de pregătire și va fi disponibil imediat.
-                  </p>
-
-                  {/* Value Obtained */}
-                  <div className="alert alert-info mb-4" role="alert">
-                    <i className="bi bi-check-circle-fill me-2" aria-hidden="true"></i>
-                    <strong>Ai acces la:</strong> Raportul complet personalizat, acces permanent
-                    pentru 10 ani și opțiunea de a descărca PDF-ul.
-                  </div>
-
-                  {/* Polling Component - Checks for access token availability */}
-                  <PaymentSuccessPolling quizId={quizId} paymentId={payment.id} />
-
-                  {/* Instructions */}
-                  <p className="text-muted small mb-4">
-                    Vei primi un email cu link-ul permanent către raportul complet în câteva
-                    momente. Poți accesa raportul oricând folosind link-ul din email - este tău
-                    pentru 10 ani.
-                  </p>
-
-                  {/* Back to Quiz Link */}
-                  <Link
-                    href={routes.quiz.intro}
-                    className="btn btn-outline-primary"
-                    aria-label="Accesează raportul complet"
-                  >
-                    <i className="bi bi-arrow-right me-2" aria-hidden="true"></i>
-                    Accesează Raportul Complet
-                  </Link>
-                </div>
+                </ErrorBoundary>
               </div>
             </div>
           </div>

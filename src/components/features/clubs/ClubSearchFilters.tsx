@@ -23,7 +23,7 @@ interface ClubSearchFiltersProps {
 const AGE_GROUPS = [4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14] as const;
 
 // Skill levels
-const SKILL_LEVELS = [
+const _SKILL_LEVELS = [
   { value: "beginner", label: "Începător" },
   { value: "intermediate", label: "Intermediar" },
   { value: "advanced", label: "Avansat" },
@@ -216,7 +216,8 @@ const ClubSearchFiltersComponent: React.FC<ClubSearchFiltersProps> = ({ initialF
                       // Clear city and sector when county changes
                       updateFilters({
                         countyId: countyId || undefined,
-                        cityId: undefined,
+                        cityId:
+                          countyId === "loc_county_bucuresti" ? "loc_city_bucuresti" : undefined,
                         sectorId: undefined,
                       });
                     }}
@@ -281,7 +282,7 @@ const ClubSearchFiltersComponent: React.FC<ClubSearchFiltersProps> = ({ initialF
                 )}
 
                 {/* Level Filter */}
-                <div className="col-lg-2 col-md-6">
+                {/* <div className="col-lg-2 col-md-6">
                   <label htmlFor="filter-level" className="form-label">
                     <i className="flaticon-star me-2"></i>
                     Nivel
@@ -300,7 +301,7 @@ const ClubSearchFiltersComponent: React.FC<ClubSearchFiltersProps> = ({ initialF
                       </option>
                     ))}
                   </select>
-                </div>
+                </div> */}
 
                 {/* Sort By */}
                 {/* <div className="col-lg-3 col-md-6">
