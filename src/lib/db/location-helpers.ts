@@ -102,3 +102,54 @@ export async function getSectorIdByName(
 
   return location?.id || null;
 }
+
+/** Normalize city name for comparison (București, Bucharest). */
+function isBucharestCity(cityName: string): boolean {
+  const normalized = cityName.trim().toLowerCase().replace(/ș/g, "s").replace(/ț/g, "t");
+  return normalized === "bucuresti" || normalized === "bucharest";
+}
+
+/**
+ * Resolve a quiz/location string to location IDs for filtering (e.g. clubs list URL).
+ *
+ * Supports formats:
+ * - "City, County" (e.g. "Focșani, Vrancea") → countyId, cityId
+ * - "Sector N, București" (Bucharest) → countyId, cityId, sectorId
+ *
+ * @param location - Location string from quiz or form (e.g. "Focșani, Vrancea" or "Sector 1, București")
+ * @returns Object with countyId, cityId, sectorId (only set when resolved); empty object on parse failure
+ */
+export async function resolveLocationToIds(
+  location: string | null | undefined
+): Promise<{ countyId?: string; cityId?: string; sectorId?: string }> {
+  const result: { countyId?: string; cityId?: string; sectorId?: string } = {};
+  if (!location?.trim()) return result;
+
+  try {
+    const locationParts = location.split(",").map((p) => p.trim());
+    if (locationParts.length < 2) return result;
+
+    const firstPart = locationParts[0];
+    const secondPart = locationParts[1];
+    // Bucharest: "Sector 1, București" → city is second part, sector is first part
+    // Other: "Focșani, Vrancea" → city is first part, county is second part
+    const isBucharestSector = isBucharestCity(secondPart) && /^Sector\s+\d$/i.test(firstPart);
+    const cityName = isBucharestSector ? secondPart : firstPart;
+    const cityId = await getCityIdByName(cityName);
+    if (!cityId) return result;
+
+    result.cityId = cityId;
+    const countyId = await getCountyIdByCityId(cityId);
+    if (countyId) result.countyId = countyId;
+
+    if (isBucharestSector) {
+      const sectorId = await getSectorIdByName(firstPart, cityId);
+      if (sectorId) result.sectorId = sectorId;
+    }
+
+    return result;
+  } catch (e) {
+    console.warn("[resolveLocationToIds] location lookup failed:", e);
+    return result;
+  }
+}

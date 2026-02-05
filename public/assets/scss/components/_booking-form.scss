@@ -110,3 +110,7 @@
 }
 
 // BOOKING FORM CSS END HERE
+.form-check-input:checked {
+  background-color: var(--bd-theme-1);
+  border-color: var(--bd-theme-1);
+}

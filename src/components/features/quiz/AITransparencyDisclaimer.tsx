@@ -54,27 +54,27 @@ export function AITransparencyDisclaimer({
   return (
     <div className={`ai-transparency-disclaimer ${className}`}>
       {/* Main AI Disclosure Card */}
-      <div className="card border-info bg-info bg-opacity-10 mb-4">
+      <div className="card border-yuvoo-primary bg-yuvoo-primary-light mb-4">
         <div className="card-body">
           <div className="d-flex align-items-start gap-3">
             <div className="flex-shrink-0">
-              <i className="bi bi-robot fs-3 text-info" />
+              <i className="bi bi-robot fs-3 text-yuvoo-primary" />
             </div>
             <div className="flex-grow-1">
               <h5 className="card-title h6 mb-2 d-flex align-items-center gap-2">
                 <span>Recomandări Generate cu Inteligență Artificială</span>
-                <span className="badge bg-info text-dark">AI</span>
+                <span className="badge bg-yuvoo-primary text-white">AI</span>
               </h5>
               <p className="card-text text-muted mb-2">
-                Aceste recomandări au fost generate automat de un sistem de inteligență artificială
-                (AI) pe baza răspunsurilor tale din chestionar. Sistemul analizează profilul
-                copilului tău pentru a sugera sporturi potrivite.
+                Recomandările au fost generate de un sistem AI pe baza răspunsurilor tale din
+                chestionar. Sistemul analizează profilul copilului tău pentru a sugera sporturi
+                potrivite.
               </p>
 
               {/* Toggle for detailed info */}
               <button
                 type="button"
-                className="btn btn-sm btn-link text-info p-0 text-decoration-none"
+                className="btn btn-sm btn-link text-yuvoo-primary p-0 text-decoration-none"
                 onClick={() => setIsExpanded(!isExpanded)}
                 aria-expanded={isExpanded}
                 aria-controls="ai-transparency-details"
@@ -89,7 +89,7 @@ export function AITransparencyDisclaimer({
                   {/* How AI works */}
                   <div className="mb-3">
                     <h6 className="fw-semibold mb-2">
-                      <i className="bi bi-gear me-2 text-info" />
+                      <i className="bi bi-gear me-2 text-yuvoo-primary" />
                       Cum funcționează recomandările
                     </h6>
                     <p className="small text-muted mb-0">
@@ -123,14 +123,14 @@ export function AITransparencyDisclaimer({
                   {/* Data processing info */}
                   <div className="mb-3">
                     <h6 className="fw-semibold mb-2">
-                      <i className="bi bi-shield-check me-2 text-info" />
+                      <i className="bi bi-shield-check me-2 text-yuvoo-primary" />
                       Protecția datelor
                     </h6>
                     <p className="small text-muted mb-0">
                       Datele copilului tău sunt procesate în conformitate cu GDPR. Folosim doar
                       informațiile necesare pentru a genera recomandări și nu partajăm date cu terți
                       fără consimțământul tău explicit. Citește{" "}
-                      <Link href={routes.privacy} className="text-info">
+                      <Link href={routes.privacy} className="text-yuvoo-primary">
                         Politica de Confidențialitate
                       </Link>{" "}
                       pentru detalii complete.
@@ -140,7 +140,7 @@ export function AITransparencyDisclaimer({
                   {/* Limitations */}
                   <div className="mb-0">
                     <h6 className="fw-semibold mb-2">
-                      <i className="bi bi-exclamation-triangle me-2 text-warning" />
+                      <i className="bi bi-exclamation-triangle me-2 text-yuvoo-secondary" />
                       Limitări importante
                     </h6>
                     <ul className="small text-muted mb-0">
@@ -169,15 +169,15 @@ export function AITransparencyDisclaimer({
 
       {/* Medical Disclaimer */}
       {showMedicalDisclaimer && (
-        <div className="card border-warning bg-warning bg-opacity-10 mb-4">
+        <div className="card border-yuvoo-secondary bg-yuvoo-secondary-very-light mb-4">
           <div className="card-body">
             <div className="d-flex align-items-start gap-3">
               <div className="flex-shrink-0">
-                <i className="bi bi-heart-pulse fs-3 text-warning" />
+                <i className="bi bi-heart-pulse fs-3 text-yuvoo-secondary" />
               </div>
               <div className="flex-grow-1">
                 <h5 className="card-title h6 mb-2">
-                  <i className="bi bi-exclamation-triangle-fill text-warning me-2" />
+                  <i className="bi bi-exclamation-triangle-fill text-yuvoo-secondary me-2" />
                   Disclaimer Medical
                 </h5>
                 <p className="card-text text-muted small mb-2">
@@ -206,11 +206,11 @@ export function AITransparencyDisclaimer({
 
       {/* Human Review CTA */}
       {showHumanReviewCTA && (
-        <div className="card border-secondary bg-secondary bg-opacity-5 mb-4">
+        <div className="card border-yuvoo-primary bg-yuvoo-primary-light mb-4">
           <div className="card-body">
             <div className="d-flex align-items-start gap-3">
               <div className="flex-shrink-0">
-                <i className="bi bi-person-check fs-3 text-secondary" />
+                <i className="bi bi-person-check fs-3 text-yuvoo-primary" />
               </div>
               <div className="flex-grow-1">
                 <h5 className="card-title h6 mb-2">Dreptul la Revizuire Umană (GDPR Art. 22)</h5>
@@ -222,7 +222,7 @@ export function AITransparencyDisclaimer({
                 {quizId && onHumanReviewRequest && (
                   <button
                     type="button"
-                    className="btn btn-sm btn-outline-secondary"
+                    className="btn btn-sm btn-yuvoo-outline-primary"
                     onClick={onHumanReviewRequest}
                   >
                     <i className="bi bi-person-lines-fill me-2" />
@@ -232,7 +232,7 @@ export function AITransparencyDisclaimer({
                 {!onHumanReviewRequest && (
                   <a
                     href={`mailto:gdpr@yuvoo.ro?subject=Solicitare revizuire umană - Quiz ${quizId || ""}&body=Doresc să solicit revizuirea umană a recomandărilor generate pentru chestionarul cu ID: ${quizId || "[ID chestionar]"}%0A%0AMotivul solicitării:%0A%0A`}
-                    className="btn btn-sm btn-outline-secondary"
+                    className="btn btn-sm btn-yuvoo-outline-primary"
                   >
                     <i className="bi bi-envelope me-2" />
                     Solicită Revizuire Umană
@@ -248,15 +248,15 @@ export function AITransparencyDisclaimer({
       <div className="text-center">
         <small className="text-muted">
           Pentru informații complete despre drepturile tale, consultă{" "}
-          <Link href={routes.privacy} className="text-decoration-none">
+          <Link href={routes.privacy} className="text-yuvoo-primary text-decoration-none">
             Politica de Confidențialitate
           </Link>
           ,{" "}
-          <Link href={routes.gdpr} className="text-decoration-none">
+          <Link href={routes.gdpr} className="text-yuvoo-primary text-decoration-none">
             GDPR pentru Părinți
           </Link>{" "}
           și{" "}
-          <Link href={routes.terms} className="text-decoration-none">
+          <Link href={routes.terms} className="text-yuvoo-primary text-decoration-none">
             Termeni și Condiții
           </Link>
           .

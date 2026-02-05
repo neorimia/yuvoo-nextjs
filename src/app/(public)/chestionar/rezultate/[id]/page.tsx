@@ -122,19 +122,19 @@ export default async function QuizResultsPage({ params }: QuizResultsPageProps) 
                 </p>
               </div>
 
+              {/* Results Actions - above the fold so CTAs are dominant */}
+              <ResultsActions
+                quizId={quizResult.id}
+                className="mb-5"
+                isAuthenticated={isAuthenticated}
+              />
+
               {/* AI Transparency Disclaimer - GDPR Art. 22 & EU AI Act Compliance */}
               <AITransparencyDisclaimer
                 quizId={quizResult.id}
                 showMedicalDisclaimer={true}
-                showHumanReviewCTA={false} // Separate button below
+                showHumanReviewCTA={false} // Separate card below
                 className="mb-5"
-              />
-
-              {/* Results Actions */}
-              <ResultsActions
-                quizId={quizResult.id}
-                className="mb-4"
-                isAuthenticated={isAuthenticated}
               />
 
               {/* Specialist Recommendation */}
@@ -153,7 +153,7 @@ export default async function QuizResultsPage({ params }: QuizResultsPageProps) 
               {/* Sport Recommendations */}
               <div className="recommendations-list">
                 <h2 className="h4 mb-4">
-                  <i className="bi bi-star-fill text-warning me-2"></i>
+                  <i className="bi bi-star-fill text-yuvoo-secondary me-2"></i>
                   Sporturi Recomandate
                 </h2>
 
@@ -176,11 +176,11 @@ export default async function QuizResultsPage({ params }: QuizResultsPageProps) 
               {/* Human Review Request - GDPR Art. 22 */}
               {isAuthenticated && (
                 <div className="mt-5 pt-4 border-top">
-                  <div className="card border-secondary bg-light">
+                  <div className="card border-yuvoo-primary bg-yuvoo-primary-light">
                     <div className="card-body">
                       <div className="d-flex align-items-start gap-3">
                         <div className="flex-shrink-0">
-                          <i className="bi bi-person-check fs-3 text-secondary" />
+                          <i className="bi bi-person-check fs-3 text-yuvoo-primary" />
                         </div>
                         <div className="flex-grow-1">
                           <h5 className="card-title h6 mb-2">
@@ -191,7 +191,11 @@ export default async function QuizResultsPage({ params }: QuizResultsPageProps) 
                             umană. Echipa noastră va analiza profilul copilului tău și va oferi
                             clarificări sau recomandări suplimentare.
                           </p>
-                          <HumanReviewRequestButton quizId={quizResult.id} variant="outline" />
+                          <HumanReviewRequestButton
+                            quizId={quizResult.id}
+                            variant="outline"
+                            className="btn-yuvoo-outline-primary"
+                          />
                         </div>
                       </div>
                     </div>

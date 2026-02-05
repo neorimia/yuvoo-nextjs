@@ -8,23 +8,8 @@ import React from "react";
 import type { QuizResult, SportRecommendation } from "@/modules/quiz/quiz.types";
 import { routes } from "@/lib/routes";
 import Link from "next/link";
-import { getCityIdByName, getSectorIdByName, getCountyIdByCityId } from "@/lib/db/location-helpers";
+import { resolveLocationToIds } from "@/lib/db/location-helpers";
 import { normalizeSportName } from "@/lib/utils/sport-normalization";
-
-/** Normalize city name for comparison (București, Bucharest). */
-function isBucharest(cityName: string): boolean {
-  const normalized = cityName.trim().toLowerCase().replace(/ș/g, "s").replace(/ț/g, "t");
-  return normalized === "bucuresti" || normalized === "bucharest";
-}
-
-/** Extract sector part from location when city is Bucharest (e.g. "Sector 1, București" → "Sector 1"). */
-function extractSectorForBucharest(location: string): string | null {
-  const parts = location.split(",").map((p) => p.trim());
-  if (parts.length < 2) return null;
-  const firstPart = parts[0];
-  if (/^Sector\s+\d$/i.test(firstPart)) return firstPart;
-  return null;
-}
 
 interface LocalClubsSectionProps {
   quizResult: QuizResult;
@@ -51,27 +36,10 @@ export default async function LocalClubsSection({
     return null;
   }
 
-  let cityId: string | null = null;
-  let sectorId: string | null = null;
-  let countyId: string | null = quizResult.countyId ?? null;
-  if (quizResult.location) {
-    try {
-      const locationParts = quizResult.location.split(",").map((part) => part.trim());
-      const cityName = locationParts[locationParts.length - 1];
-      cityId = await getCityIdByName(cityName);
-      if (cityId && isBucharest(cityName)) {
-        const sectorName = extractSectorForBucharest(quizResult.location);
-        if (sectorName) {
-          sectorId = await getSectorIdByName(sectorName, cityId);
-        }
-      }
-      if (!countyId && cityId) {
-        countyId = await getCountyIdByCityId(cityId);
-      }
-    } catch (e) {
-      console.warn("[LocalClubsSection] location lookup failed:", e);
-    }
-  }
+  const locationIds = await resolveLocationToIds(quizResult.location ?? null);
+  const countyId = locationIds.countyId ?? quizResult.countyId ?? null;
+  const cityId = locationIds.cityId ?? null;
+  const sectorId = locationIds.sectorId ?? null;
 
   return (
     <section id="cluburi-locale" className="mb-4" aria-labelledby={headingId}>

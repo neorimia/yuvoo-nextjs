@@ -408,7 +408,7 @@ export function QuizConsentSection({
           ref={continueButtonRef}
           id="consent-continue-btn"
           type="button"
-          className="btn btn-primary btn-lg"
+          className={`btn btn-yuvoo-primary btn-lg ${disabled ? "btn-disabled" : ""}`}
           onClick={handleContinue}
           disabled={disabled}
           aria-describedby={showErrors && !allRequiredGranted ? "consent-error-summary" : undefined}
@@ -508,7 +508,7 @@ function ConsentCheckboxItem({
 
   return (
     <div
-      className={`consent-checkbox-item border rounded p-3 mb-3 ${error ? "border-danger" : ""} ${checked ? "border-success bg-success bg-opacity-5" : ""}`}
+      className={`consent-checkbox-item border rounded p-3 mb-3 ${error ? "border-danger" : ""} ${checked ? "border-success bg-opacity-5" : ""}`}
       style={{
         transition: "border-color 0.2s ease, background-color 0.2s ease, box-shadow 0.2s ease",
       }}
@@ -519,7 +519,7 @@ function ConsentCheckboxItem({
           type="checkbox"
           id={id}
           name={id}
-          className={`form-check-input mt-1 ${error ? "is-invalid" : ""} ${checked ? "bg-success border-success" : ""}`}
+          className={`form-check-input mt-1 ${error ? "is-invalid" : ""} ${checked ? " border-success" : ""}`}
           checked={checked}
           onChange={(e) => onChange(e.target.checked)}
           disabled={disabled}
@@ -529,6 +529,8 @@ function ConsentCheckboxItem({
           style={{
             cursor: disabled ? "not-allowed" : "pointer",
             transition: "background-color 0.2s ease, border-color 0.2s ease",
+            minHeight: "20px",
+            minWidth: "20px",
           }}
         />
         <div className="ms-2 flex-grow-1">

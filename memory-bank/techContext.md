@@ -93,6 +93,7 @@
   - Preview server for development (`npm run email:dev` on port 3001)
   - Type-safe email components
   - Renders to HTML strings for Brevo integration
+  - Lead submission internal notification: `emails/lead-submission-internal-email.tsx` (to clubs-lead@yuvoo.ro); leads action uses `renderEmail(LeadSubmissionInternalEmail({...}))` and Brevo `htmlContent`/`textContent`/`replyTo`/`tags`
 - **PostHog**: `posthog-js@^1.309.1`, `posthog-node@^5.17.4` - Analytics & product analytics
   - User analytics and event tracking
   - Session recordings (privacy-first configuration)

@@ -792,7 +792,11 @@ Quiz Results → "Vezi cluburi" button → /cluburi?sport={sportId}&quiz=true
                                     Shows recommended badge
 ```
 
-**Quiz report – LocalClubsSection** (`components/features/quiz/report/LocalClubsSection.tsx`): "Caută cluburi" links include location filters. For Bucharest, sector is extracted from location (e.g. "Sector 1, București" → `sectorId` via `getSectorIdByName`); `countyId` from `quizResult.countyId` or `getCountyIdByCityId(cityId)` (`lib/db/location-helpers.ts`). Link params: `countyId`, `cityId`, `sectorId` when available.
+**Location resolution for clubs link** (`lib/db/location-helpers.ts`): Reusable `resolveLocationToIds(location)` parses quiz/form location string and returns `{ countyId?, cityId?, sectorId? }`. Supports "City, County" (e.g. Focșani, Vrancea → city = first part) and "Sector N, București" (city = second part, sector = first part). Uses `getCityIdByName`, `getSectorIdByName`, `getCountyIdByCityId`. Used by teaser page and LocalClubsSection.
+
+**Quiz report – LocalClubsSection** (`components/features/quiz/report/LocalClubsSection.tsx`): "Caută cluburi" links include location filters via `resolveLocationToIds(quizResult.location)`; fallback to `quizResult.countyId` for countyId. Link params: `countyId`, `cityId`, `sectorId` when available.
+
+**Teaser page – "Vezi cluburile din …"** (`app/(public)/chestionar/teaser/[quizId]/page.tsx`): Clubs link built from `resolveLocationToIds(quizResult.location)`; URL `/cluburi?countyId=...&cityId=...&sectorId=...&sport=...`. Clubs page (`cluburi/page.tsx`) accepts `countyId`, `cityId`, `sectorId` in searchParams and passes them to filters.
 
 **Club detail – ClubClaimProfile** (`components/features/clubs/ClubClaimProfile.tsx`): In-flow section at bottom of club detail (not sticky/fixed). Single responsive card (max-width 420px); "Revendică profilul" CTA. Renders only for unverified clubs.
 
