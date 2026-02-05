@@ -4,8 +4,16 @@
  * Main quiz component that orchestrates the quiz flow.
  * Renders appropriate question based on current step.
  *
- * Step 0: Child selection (for authenticated users with existing children)
- * Steps 1-7: Quiz questions
+ * GDPR Compliance Flow:
+ * - Step 0: Child selection (for authenticated users with existing children)
+ * - Step 0.5: Consent collection (GDPR Art. 6, 7, 9, 22)
+ * - Steps 1-7: Quiz questions
+ *
+ * The consent step ensures:
+ * - Art. 6(1)(a): Consent as legal basis for processing
+ * - Art. 7(1): Demonstrable consent with audit trail
+ * - Art. 9(2)(a): Explicit consent for health data
+ * - Art. 22: Consent for AI-generated recommendations
  */
 
 "use client";
@@ -31,6 +39,10 @@ import CriticalHealthScreeningQuestion from "./questions/CriticalHealthScreening
 import PhysicalQuestion from "./questions/PhysicalQuestion";
 import PreferencesQuestion from "./questions/PreferencesQuestion";
 import QuizLoadingOverlay from "./QuizLoadingOverlay";
+
+// GDPR Consent components
+import QuizConsentSection, { type QuizConsents } from "./QuizConsentSection";
+import { recordQuizConsentsAction } from "@/app/actions/quiz-consent";
 
 const TOTAL_STEPS = 7;
 
@@ -63,9 +75,24 @@ function QuizContent({
   const showChildSelection = !initialChildId && childProfiles.length > 0;
   const [childSelectionComplete, setChildSelectionComplete] = useState(!showChildSelection);
 
-  // Effective step: 0 for child selection, 1-7 for quiz questions
-  const effectiveStep = !childSelectionComplete ? 0 : currentStep;
-  const effectiveTotalSteps = showChildSelection ? TOTAL_STEPS + 1 : TOTAL_STEPS;
+  // GDPR Consent state
+  const [consents, setConsents] = useState<QuizConsents>({
+    childDataRecommendations: false,
+    healthDataRecommendations: false,
+    shareWithClubs: false,
+    specialistSuggestions: false,
+    marketingCommunications: false,
+  });
+  const [consentsComplete, setConsentsComplete] = useState(false);
+  const [consentError, setConsentError] = useState<string | null>(null);
+  const [isRecordingConsent, setIsRecordingConsent] = useState(false);
+
+  // Effective step calculation:
+  // - Step 0: Child selection (if applicable)
+  // - Step 0.5: Consent collection (always required)
+  // - Steps 1-7: Quiz questions
+  const effectiveStep = !childSelectionComplete ? 0 : !consentsComplete ? 0.5 : currentStep;
+  const effectiveTotalSteps = showChildSelection ? TOTAL_STEPS + 2 : TOTAL_STEPS + 1; // +1 for consent, +1 for child selection if applicable
 
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitError, setSubmitError] = useState<string | null>(null);
@@ -87,8 +114,57 @@ function QuizContent({
   const handleChildSelected = (childId: string) => {
     setSelectedChildId(childId);
     setChildSelectionComplete(true);
-    goToStep(1);
+    // Don't go to step 1 yet - go to consent step first
     window.scrollTo({ top: 0, behavior: "smooth" });
+  };
+
+  // Handle consent changes
+  const handleConsentsChange = (newConsents: QuizConsents, allRequiredGranted: boolean) => {
+    setConsents(newConsents);
+    // Clear error if user is making progress
+    if (allRequiredGranted) {
+      setConsentError(null);
+    }
+  };
+
+  // Handle consent submission
+  const handleConsentContinue = async () => {
+    setIsRecordingConsent(true);
+    setConsentError(null);
+
+    try {
+      // Record consents via server action
+      const result = await recordQuizConsentsAction({
+        childId: selectedChildId,
+        consents,
+      });
+
+      if (!result.success) {
+        setConsentError(result.error || "Eroare la înregistrarea consimțămintelor.");
+        return;
+      }
+
+      // Track consent granted
+      const grantedConsents = Object.entries(consents)
+        .filter(([, granted]) => granted)
+        .map(([type]) => type);
+
+      trackEvent(PostHogEvents.QUIZ_STEP_COMPLETED, {
+        [PostHogProperties.QUIZ_STEP]: "consent",
+        consent_types_granted: grantedConsents.join(","),
+        consent_count: grantedConsents.length,
+      });
+
+      // Move to first quiz question
+      setConsentsComplete(true);
+      goToStep(1);
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    } catch (error) {
+      console.error("Failed to record consents:", error);
+      setConsentError("Eroare la înregistrarea consimțămintelor. Te rugăm să încerci din nou.");
+    } finally {
+      setIsRecordingConsent(false);
+    }
   };
 
   // Wrapper for nextStep with loading state and tracking
@@ -104,15 +180,23 @@ function QuizContent({
 
   // Wrapper for prevStep with loading state
   const handlePrevStep = React.useCallback(() => {
-    // If at step 1 and child selection was shown, go back to step 0
-    if (currentStep === 1 && showChildSelection) {
-      setChildSelectionComplete(false);
+    // If at step 1, go back to consent step
+    if (currentStep === 1) {
+      setConsentsComplete(false);
       window.scrollTo({ top: 0, behavior: "smooth" });
       return;
     }
     setIsTransitioning(true);
     contextPrevStep();
-  }, [contextPrevStep, currentStep, showChildSelection]);
+  }, [contextPrevStep, currentStep]);
+
+  // Handle going back from consent step to child selection
+  const handleConsentBack = () => {
+    if (showChildSelection) {
+      setChildSelectionComplete(false);
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    }
+  };
 
   const questionContentRef = useRef<HTMLDivElement>(null);
   const prevStepRef = useRef(effectiveStep);
@@ -208,6 +292,11 @@ function QuizContent({
           return;
         }
 
+        // Don't handle Enter for consent step (has its own button)
+        if (!consentsComplete) {
+          return;
+        }
+
         if (currentStep < TOTAL_STEPS && canGoNext && !isTransitioning) {
           handleNextStep();
         } else if (
@@ -231,6 +320,7 @@ function QuizContent({
     isComplete,
     isTransitioning,
     childSelectionComplete,
+    consentsComplete,
     handleNextStep,
     handleSubmit,
   ]);
@@ -244,6 +334,43 @@ function QuizContent({
           childProfiles={childProfiles}
           onChildSelected={handleChildSelected}
         />
+      );
+    }
+
+    // Step 0.5: Consent collection (GDPR compliance)
+    if (!consentsComplete) {
+      return (
+        <div className="quiz-consent-wrapper">
+          <QuizConsentSection
+            onConsentsChange={handleConsentsChange}
+            onContinue={handleConsentContinue}
+            initialConsents={consents}
+            disabled={isRecordingConsent}
+          />
+
+          {/* Consent error message */}
+          {consentError && (
+            <div className="alert alert-danger mt-3" role="alert">
+              <i className="bi bi-exclamation-triangle me-2" />
+              {consentError}
+            </div>
+          )}
+
+          {/* Back button if child selection was shown */}
+          {showChildSelection && (
+            <div className="text-center mt-3">
+              <button
+                type="button"
+                className="btn btn-link text-muted"
+                onClick={handleConsentBack}
+                disabled={isRecordingConsent}
+              >
+                <i className="bi bi-arrow-left me-2" />
+                Înapoi la selectarea copilului
+              </button>
+            </div>
+          )}
+        </div>
       );
     }
 
@@ -307,8 +434,8 @@ function QuizContent({
                 )}
 
                 <div className="card-body">
-                  {/* Progress indicator - only show for quiz questions, not child selection */}
-                  {childSelectionComplete && (
+                  {/* Progress indicator - only show for quiz questions, not child selection or consent */}
+                  {childSelectionComplete && consentsComplete && (
                     <QuizProgress
                       currentStep={currentStep}
                       totalSteps={TOTAL_STEPS}
@@ -320,6 +447,16 @@ function QuizContent({
                   {!childSelectionComplete && (
                     <div className="text-center mb-4">
                       <span className="badge bg-yuvoo-primary px-3 py-2">Înainte de a începe</span>
+                    </div>
+                  )}
+
+                  {/* Step indicator for consent collection */}
+                  {childSelectionComplete && !consentsComplete && (
+                    <div className="text-center mb-4">
+                      <span className="badge bg-yuvoo-primary px-3 py-2">
+                        <i className="bi bi-shield-lock me-2" />
+                        Protecția datelor
+                      </span>
                     </div>
                   )}
 
@@ -353,12 +490,12 @@ function QuizContent({
                     </div>
                   )}
 
-                  {/* Navigation - only show for quiz questions, child selection has its own buttons */}
-                  {childSelectionComplete && (
+                  {/* Navigation - only show for quiz questions, child selection and consent have their own buttons */}
+                  {childSelectionComplete && consentsComplete && (
                     <QuizNavigation
                       currentStep={currentStep}
                       totalSteps={TOTAL_STEPS}
-                      canGoBack={(currentStep > 1 || showChildSelection) && !isTransitioning}
+                      canGoBack={currentStep >= 1 && !isTransitioning}
                       canGoNext={canGoNext && !isTransitioning}
                       isLastStep={currentStep === TOTAL_STEPS}
                       onBack={handlePrevStep}

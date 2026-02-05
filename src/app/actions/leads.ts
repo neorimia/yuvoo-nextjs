@@ -15,6 +15,9 @@ import type { CreateLeadInput } from "@/types/leads";
 import { trackEventServer } from "@/lib/analytics/tracking-server";
 import { PostHogEvents, PostHogProperties } from "@/lib/analytics/events";
 import { rateLimit, getClientIdentifierFromHeaders, RATE_LIMIT_CONFIGS } from "@/lib/rate-limit";
+import { sendEmail } from "@/lib/integrations/brevo";
+import { renderEmail } from "../../../emails/utils/render-email";
+import LeadSubmissionInternalEmail from "../../../emails/lead-submission-internal-email";
 
 /**
  * Get client IP address from headers
@@ -86,6 +89,27 @@ export async function submitLeadAction(
       ipAddress: ipAddress || null,
     };
 
+    // Send email to clubs-lead@yuvoo.ro with the lead details (React Email template)
+    const { html, text } = await renderEmail(
+      LeadSubmissionInternalEmail({
+        parentEmail: leadInput.parentEmail,
+        parentName: leadInput.parentName,
+        parentPhone: leadInput.parentPhone ?? undefined,
+        childAge: leadInput.childAge,
+        sportType: leadInput.sportType ?? undefined,
+        locationId: leadInput.locationId ?? undefined,
+        message: leadInput.message ?? undefined,
+        clubId: leadInput.clubId,
+      })
+    );
+    await sendEmail({
+      to: "clubs-lead@yuvoo.ro",
+      subject: "Cerere lead nou – " + leadInput.parentName,
+      htmlContent: html,
+      textContent: text,
+      replyTo: leadInput.parentEmail,
+      tags: ["lead", "submission", "internal"],
+    });
     // Create lead
     const lead = await createLead(leadInput);
 

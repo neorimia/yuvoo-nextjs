@@ -933,6 +933,7 @@ This template ensures all feature implementations:
   - `prompts/raport-quality-analysis-and-improvement-prompt.md` - Raport page + report components analysis and quality improvement
   - `prompts/quiz-container-page-analysis-prompt.md` - Quiz container page analysis prompt (code paths, test scenarios, edge cases)
   - `prompts/legal-pages-analysis-prompt.md` - Legal agent prompt: analyze `src/app/(legal)` pages and suggest improvements (GDPR, Romanian law, Yuvoo brand/product alignment)
+  - `prompts/quiz-results-ai-disclaimer-design-analysis-prompt.md` - Quiz results page + AITransparencyDisclaimer: design analysis for Yuvoo branding and churn-friendly UX (GDPR/EU AI Act preserved)
 
 ---
 

@@ -55,6 +55,7 @@ yuvoo-nextjs/
 ├── modules/                      # Backend Business Logic (Service Layer)
 │   ├── auth/
 │   ├── children/
+│   ├── consent/                  # Consent & GDPR (feat/legal): consent.service.ts
 │   ├── quiz/                     # AI Coach Quiz logic
 │   │   ├── quiz.service.ts       # Quiz orchestration
 │   │   ├── quiz.repository.ts    # Data access layer
@@ -303,7 +304,7 @@ Client Component → Server Action → Service → Repository → Database
 
 **Location**: `modules/`
 
-Each feature module contains:
+Each feature module contains (e.g. quiz, clubs, consent):
 
 - `*.service.ts` - Business logic
 - `*.repository.ts` - Data access
@@ -791,7 +792,11 @@ Quiz Results → "Vezi cluburi" button → /cluburi?sport={sportId}&quiz=true
                                     Shows recommended badge
 ```
 
-**Quiz report – LocalClubsSection** (`components/features/quiz/report/LocalClubsSection.tsx`): "Caută cluburi" links include location filters. For Bucharest, sector is extracted from location (e.g. "Sector 1, București" → `sectorId` via `getSectorIdByName`); `countyId` from `quizResult.countyId` or `getCountyIdByCityId(cityId)` (`lib/db/location-helpers.ts`). Link params: `countyId`, `cityId`, `sectorId` when available.
+**Location resolution for clubs link** (`lib/db/location-helpers.ts`): Reusable `resolveLocationToIds(location)` parses quiz/form location string and returns `{ countyId?, cityId?, sectorId? }`. Supports "City, County" (e.g. Focșani, Vrancea → city = first part) and "Sector N, București" (city = second part, sector = first part). Uses `getCityIdByName`, `getSectorIdByName`, `getCountyIdByCityId`. Used by teaser page and LocalClubsSection.
+
+**Quiz report – LocalClubsSection** (`components/features/quiz/report/LocalClubsSection.tsx`): "Caută cluburi" links include location filters via `resolveLocationToIds(quizResult.location)`; fallback to `quizResult.countyId` for countyId. Link params: `countyId`, `cityId`, `sectorId` when available.
+
+**Teaser page – "Vezi cluburile din …"** (`app/(public)/chestionar/teaser/[quizId]/page.tsx`): Clubs link built from `resolveLocationToIds(quizResult.location)`; URL `/cluburi?countyId=...&cityId=...&sectorId=...&sport=...`. Clubs page (`cluburi/page.tsx`) accepts `countyId`, `cityId`, `sectorId` in searchParams and passes them to filters.
 
 **Club detail – ClubClaimProfile** (`components/features/clubs/ClubClaimProfile.tsx`): In-flow section at bottom of club detail (not sticky/fixed). Single responsive card (max-width 420px); "Revendică profilul" CTA. Renders only for unverified clubs.
 
@@ -1958,6 +1963,40 @@ Club Directory (pre-filtered by sport)
 - **Navigation**: Links to full directories with pre-applied filters
 - **Empty States**: Graceful handling when no recommendations found
 - **Loading States**: Spinner and disabled state during data fetching
+
+## Consent & GDPR Compliance Pattern (feat/legal – February 2026)
+
+**Purpose**: GDPR, Romanian law, EU AI Act compliance for child + health data + AI recommendations.
+
+**Architecture**:
+
+```
+Quiz Flow
+  ↓
+QuizConsentSection (health data consent before step with health questions)
+  ↓
+HealthDataConsentForm / ConsentCheckbox
+  ↓
+quiz-consent.ts action → consent.service.ts → user_consents + consent_audit_log
+
+Quiz Results Page
+  ↓
+AITransparencyDisclaimer (AI-generated content notice)
+  ↓
+HumanReviewRequestButton (Art. 22 human intervention request)
+
+Parent Settings
+  ↓
+/parent/settings/privacy (PrivacySettingsClient)
+  ↓
+consent.ts, data-export.ts, data-erasure.ts, human-review.ts actions
+```
+
+**Key Components**: ConsentCheckbox, HealthDataConsentForm, QuizConsentSection, AITransparencyDisclaimer, HumanReviewRequestButton, DataSharingNotice (clubs)
+
+**Consent Types**: child_data_recommendations, health_data_recommendations, share_with_clubs, specialist_suggestions, marketing_communications
+
+**Documentation**: `docs/LEGAL_COMPLIANCE_CHECKLIST_YUVOO_ONE_PAGE.md`, `docs/LEGAL_COMPLIANCE_IMPLEMENTATION_WORKFLOW.md`
 
 ## Contact Form Pattern
 

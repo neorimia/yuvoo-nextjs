@@ -12,6 +12,7 @@ import { cookies, headers } from "next/headers";
 import { connection } from "next/server";
 import BreadcrumbOne from "@/components/Breadcrumb/BreadcrumbOne";
 import { getQuizResultAction } from "@/app/actions/quiz";
+import { resolveLocationToIds } from "@/lib/db/location-helpers";
 import { routes } from "@/lib/routes";
 import Link from "next/link";
 import { trackEventServer } from "@/lib/analytics/tracking-server";
@@ -144,6 +145,17 @@ export default async function TeaserPage({ params }: TeaserPageProps) {
     console.error("[Teaser Page] Error tracking event:", error);
   }
 
+  // Resolve location to countyId, cityId, sectorId for clubs link (reusable helper)
+  const locationIds = await resolveLocationToIds(quizResult.location ?? null);
+  const clubsListParams = new URLSearchParams();
+  if (locationIds.countyId) clubsListParams.set("countyId", locationIds.countyId);
+  if (locationIds.cityId) clubsListParams.set("cityId", locationIds.cityId);
+  if (locationIds.sectorId) clubsListParams.set("sectorId", locationIds.sectorId);
+  if (topRecommendation.sportId) clubsListParams.set("sport", topRecommendation.sportId);
+  const clubsListHref = clubsListParams.toString()
+    ? `${routes.clubs.list}?${clubsListParams.toString()}`
+    : routes.clubs.list;
+
   return (
     <>
       <BreadcrumbOne
@@ -191,11 +203,12 @@ export default async function TeaserPage({ params }: TeaserPageProps) {
                   {/* Info box */}
                   <div className="alert alert-info mb-0" role="alert">
                     <i className="bi bi-info-circle me-2" aria-hidden="true"></i>
-                    <strong>Recomandare parțială:</strong> Aceasta este doar o previzualizare.
-                    Raportul complet îți dezvăluie: de ce acest sport este potrivit pentru copilul
-                    tău (explicații detaliate), beneficiile concrete pe care le va avea, sporturile
-                    de evitat momentan și de ce, vârsta ideală pentru început și pașii următori
-                    recomandați, plus sugestii de cluburi locale verificate.
+                    <strong>Recomandare parțială:</strong>
+                    <br /> Aceasta este doar o previzualizare. Raportul complet îți dezvăluie: de ce
+                    acest sport este potrivit pentru copilul tău (explicații detaliate), beneficiile
+                    concrete pe care le va avea, sporturile de evitat momentan și de ce, vârsta
+                    ideală pentru început și pașii următori recomandați, plus sugestii de cluburi
+                    locale verificate.
                   </div>
                 </div>
               </div>
@@ -213,7 +226,16 @@ export default async function TeaserPage({ params }: TeaserPageProps) {
                   aria-label="Deblochează raportul complet pentru a vedea toate recomandările"
                 >
                   <i className="bi bi-unlock-fill me-2" aria-hidden="true"></i>
-                  Deblochează Raportul Complet - Descoperă tot ce trebuie să știi
+                  Deblochează Raportul Complet
+                </Link>
+                {/* CTA: local clubs – Bucharest uses countyId + cityId + sectorId; other cities use countyId + cityId */}
+                <Link
+                  href={clubsListHref}
+                  className="btn btn-yuvoo-primary px-5 py-3 mb-4"
+                  aria-label="Vezi cluburile locale pentru copilul tău"
+                >
+                  <i className="bi bi-map me-2" aria-hidden="true"></i> Vezi cluburile din{" "}
+                  {quizResult.location ?? "zona ta"}
                 </Link>
               </div>
 

@@ -403,6 +403,25 @@ This contact information is displayed in:
 
 **Legal pages implementation (January 2026)**: Îmbunătățirile conform raportului de analiză și planului de implementare sunt finalizate: Confidențialitate (baza legală, Stripe, date plăți), Termeni (rezervări/plăți, încetare, indemnizare), Cookies (Stripe, fără marketing), GDPR părinți (listă terți aliniată), consistență transversală. Referințe: `docs/LEGAL_ANALYSIS_REPORT.md`, `docs/LEGAL_PAGES_IMPLEMENTATION_PLAN.md`.
 
+### Consent & GDPR Compliance (feat/legal – February 2026)
+
+**Purpose**: GDPR, Romanian law, EU AI Act compliance for child + health data + AI recommendations.
+
+**Consent Infrastructure (Implemented)**:
+
+- **Consent types**: child_data_recommendations, health_data_recommendations, share_with_clubs, specialist_suggestions, marketing_communications
+- **Consent recording**: user_consents table, consent_audit_log, privacy_policy_versions
+- **Quiz consent**: QuizConsentSection, HealthDataConsentForm — explicit consent before health data use
+- **AI transparency**: AITransparencyDisclaimer on quiz results; HumanReviewRequestButton for Art. 22 rights
+- **Clubs**: DataSharingNotice when sharing child profile with clubs
+
+**Data Subject Rights (Implemented)**:
+
+- **Parent Privacy Settings** (`/parent/settings/privacy`): Consent management, data export request, account deletion (erasure)
+- **Server Actions**: consent.ts, quiz-consent.ts, data-export.ts, data-erasure.ts, human-review.ts
+
+**Documentation**: `docs/LEGAL_COMPLIANCE_CHECKLIST_YUVOO_ONE_PAGE.md`, `docs/LEGAL_COMPLIANCE_IMPLEMENTATION_WORKFLOW.md`, `docs/compliance/` (DPIA, DPA_TRACKER, RECORDS_OF_PROCESSING, LAUNCH_CHECKLIST, AI_ACT_CLASSIFICATION_MEMO).
+
 ## Future Vision (Post-Phase 1)
 
 - Payment-enabled bookings
