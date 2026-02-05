@@ -55,6 +55,7 @@ yuvoo-nextjs/
 ├── modules/                      # Backend Business Logic (Service Layer)
 │   ├── auth/
 │   ├── children/
+│   ├── consent/                  # Consent & GDPR (feat/legal): consent.service.ts
 │   ├── quiz/                     # AI Coach Quiz logic
 │   │   ├── quiz.service.ts       # Quiz orchestration
 │   │   ├── quiz.repository.ts    # Data access layer
@@ -303,7 +304,7 @@ Client Component → Server Action → Service → Repository → Database
 
 **Location**: `modules/`
 
-Each feature module contains:
+Each feature module contains (e.g. quiz, clubs, consent):
 
 - `*.service.ts` - Business logic
 - `*.repository.ts` - Data access
@@ -1958,6 +1959,40 @@ Club Directory (pre-filtered by sport)
 - **Navigation**: Links to full directories with pre-applied filters
 - **Empty States**: Graceful handling when no recommendations found
 - **Loading States**: Spinner and disabled state during data fetching
+
+## Consent & GDPR Compliance Pattern (feat/legal – February 2026)
+
+**Purpose**: GDPR, Romanian law, EU AI Act compliance for child + health data + AI recommendations.
+
+**Architecture**:
+
+```
+Quiz Flow
+  ↓
+QuizConsentSection (health data consent before step with health questions)
+  ↓
+HealthDataConsentForm / ConsentCheckbox
+  ↓
+quiz-consent.ts action → consent.service.ts → user_consents + consent_audit_log
+
+Quiz Results Page
+  ↓
+AITransparencyDisclaimer (AI-generated content notice)
+  ↓
+HumanReviewRequestButton (Art. 22 human intervention request)
+
+Parent Settings
+  ↓
+/parent/settings/privacy (PrivacySettingsClient)
+  ↓
+consent.ts, data-export.ts, data-erasure.ts, human-review.ts actions
+```
+
+**Key Components**: ConsentCheckbox, HealthDataConsentForm, QuizConsentSection, AITransparencyDisclaimer, HumanReviewRequestButton, DataSharingNotice (clubs)
+
+**Consent Types**: child_data_recommendations, health_data_recommendations, share_with_clubs, specialist_suggestions, marketing_communications
+
+**Documentation**: `docs/LEGAL_COMPLIANCE_CHECKLIST_YUVOO_ONE_PAGE.md`, `docs/LEGAL_COMPLIANCE_IMPLEMENTATION_WORKFLOW.md`
 
 ## Contact Form Pattern
 

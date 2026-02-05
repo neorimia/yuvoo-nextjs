@@ -27,7 +27,7 @@ export const metadata: Metadata = {
 };
 
 export default function TermsOfServicePage() {
-  const lastUpdated = new Date("2026-01-30").toLocaleDateString("ro-RO", {
+  const lastUpdated = new Date("2026-02-05").toLocaleDateString("ro-RO", {
     year: "numeric",
     month: "long",
     day: "numeric",

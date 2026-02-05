@@ -741,6 +741,40 @@ await deleteImageAction(imageUrl);
 - Comprehensive error logging for debugging ✅
 - Email validation before sending ✅
 
+## Consent & GDPR Compliance Module (feat/legal – February 2026)
+
+**Purpose**: GDPR, Romanian law, EU AI Act compliance for child + health data + AI recommendations.
+
+**Database Schema (Migration 0014)**:
+
+- `user_consents` — Granular consent per purpose (child_data_recommendations, health_data_recommendations, share_with_clubs, specialist_suggestions, marketing_communications)
+- `consent_audit_log` — Who, when, what, policy version; retention for compliance
+- `privacy_policy_versions` — Version tracking for consent records
+- `data_export_requests` — Access, portability, erasure requests
+- `breach_register` — Breach tracking (ANSPDCP notification, severity)
+
+**Module & Actions**:
+
+- `src/modules/consent/` — consent.service.ts, index.ts
+- `src/lib/consent/` — Consent utilities
+- `src/app/actions/consent.ts` — Consent grant/withdraw
+- `src/app/actions/quiz-consent.ts` — Quiz-specific consent
+- `src/app/actions/data-export.ts` — Data access/portability
+- `src/app/actions/data-erasure.ts` — Right to erasure
+- `src/app/actions/human-review.ts` — Art. 22 human intervention
+
+**Components**:
+
+- `src/components/Consent/` — ConsentCheckbox, HealthDataConsentForm
+- `src/components/features/quiz/` — QuizConsentSection, AITransparencyDisclaimer, HumanReviewRequestButton
+- `src/components/features/clubs/DataSharingNotice.tsx`
+
+**Routes**:
+
+- `routes.parent.settings.privacy` → `/parent/settings/privacy` (consent management, data export, account deletion)
+
+**Documentation**: `docs/LEGAL_COMPLIANCE_CHECKLIST_YUVOO_ONE_PAGE.md`, `docs/LEGAL_COMPLIANCE_IMPLEMENTATION_WORKFLOW.md`, `docs/compliance/`
+
 ## TypeScript Configuration
 
 ### tsconfig.json
