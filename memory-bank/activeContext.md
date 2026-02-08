@@ -223,7 +223,7 @@
 ### Previous Completions (January 2026)
 
 - **Parent Pricing - Quiz Report Payment System Complete** ✅ (January 2026)
-  - **Problem Solved**: Need to monetize quiz results with one-time payment (39 lei) for complete personalized report
+  - **Problem Solved**: Need to monetize quiz results with one-time payment (9,99 lei) for complete personalized report
   - **Solution Implemented**: Complete payment flow from quiz completion to report delivery with PDF download
   - **Implementation Details**:
     - ✅ **Phase 1-8: Complete Implementation** ✅
@@ -231,7 +231,7 @@
       - Stripe integration complete (payment service, repository, webhook)
       - Email collection gate after quiz completion
       - Teaser page with single sport recommendation
-      - Paywall page with Stripe Elements (39 lei one-time payment)
+      - Paywall page with Stripe Elements (9,99 lei one-time payment)
       - Complete report page with all 7 content sections
       - PDF generation using Puppeteer (serverless-compatible)
       - Email notifications (teaser email, payment success email)
@@ -242,7 +242,7 @@
       - Free quiz completion
       - Email and location collection
       - Teaser with single sport (minimal details)
-      - One-time payment (39 lei, no subscription)
+      - One-time payment (9,99 lei, no subscription)
       - Complete report (2-3 sports, 7 sections)
       - PDF download
       - Persistent access (10-year tokens)
@@ -333,8 +333,8 @@
       - Shows billing amount (Suma plătită)
       - "Gestionează abonamentul" button for subscription management
   - **Pricing Model**:
-    - Monthly: 99 lei/month (automatic monthly renewal)
-    - Yearly: 990 lei/year (automatic yearly renewal, pay for 10 months, get 12)
+    - Monthly: 99,99 RON/month (automatic monthly renewal)
+    - Yearly: 999,99 RON/year (automatic yearly renewal)
     - Pay-per-lead: 3€ per lead (one-time payment, unchanged)
   - **Files Created**:
     - `src/lib/db/migrations/migrate-existing-premium-subscriptions.ts`

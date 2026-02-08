@@ -19,7 +19,7 @@ export default function ClubsLandingBenefits() {
       id: 1,
       icon: "fa-solid fa-gift",
       title: "Profil complet GRATUIT – 6 luni",
-      description: "valoare echivalentă cu 594 lei (99 lei/lună × 6 luni)",
+      description: "valoare echivalentă cu 599,94 RON (99,99 RON/lună × 6 luni)",
     },
     {
       id: 2,
@@ -240,8 +240,8 @@ export default function ClubsLandingBenefits() {
                   >
                     Upgrade la Premium
                   </Link>{" "}
-                  pentru acces nelimitat la cereri de părinți pre-calificați (99 lei/lună sau 990
-                  lei/an)
+                  pentru acces nelimitat la cereri de părinți pre-calificați (99,99 RON/lună sau
+                  999,99 RON/an)
                 </p>
                 {/* Primary CTA Button */}
                 <div

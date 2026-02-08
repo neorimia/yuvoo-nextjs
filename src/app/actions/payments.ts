@@ -73,7 +73,7 @@ export async function createPaymentAction(input: unknown): Promise<{
     const { payment, clientSecret } = await createStripePaymentIntent({
       quizId,
       userId,
-      amount: 3900, // Will be overridden by service (PAYMENT_AMOUNT_BANI), but required by type
+      amount: 999, // Will be overridden by service (PAYMENT_AMOUNT_BANI), but required by type
       currency: "RON", // Will be overridden by service, but required by type
       paymentProvider: "stripe", // Will be overridden by service, but required by type
     });

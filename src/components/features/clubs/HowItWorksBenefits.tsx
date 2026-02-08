@@ -25,7 +25,7 @@ export default function HowItWorksBenefits() {
     {
       title: "Costuri Predictibile",
       description:
-        "Fie plătești 3€ per lead (pay-per-lead), fie 99 lei/lună pentru Premium (acces nelimitat). Fără surprize, fără costuri ascunse.",
+        "Fie plătești 3€ per lead (pay-per-lead), fie 99,99 RON/lună pentru Premium (acces nelimitat). Fără surprize, fără costuri ascunse.",
       icon: "💰",
     },
     {

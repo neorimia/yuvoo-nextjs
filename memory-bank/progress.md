@@ -55,7 +55,7 @@
 
 - ✅ **Quiz System**: 100% complete - All phases done, production ready
 - ✅ **Quiz Medical Safety (Phase 1)**: 100% complete - Critical screening (cardiac, concussion), sport exclusion service, severity levels (asthma, joint pain), injury follow-up, risk detection (cardiac, concussion, orthopedist, pulmonologist, etc.), AI prompt medical rules and age minimums, MEDICAL_SAFETY.md, MEDICAL_EXPERT_REVIEW_CHECKLIST.md; 67% checklist (10/15 tasks); remaining: unit/integration tests, code review, medical expert review, deployment
-- ✅ **Parent Pricing - Quiz Report Payment**: 100% complete - All 8 phases implemented (Email Gate, Teaser Page, Paywall, Complete Report, PDF Generation, Email Notifications, Polish & Testing), one-time payment (39 lei), persistent access, production ready; payment-already-completed redirect to report (`/chestionar/raport/[accessToken]`) when user re-opens paywall
+- ✅ **Parent Pricing - Quiz Report Payment**: 100% complete - All 8 phases implemented (Email Gate, Teaser Page, Paywall, Complete Report, PDF Generation, Email Notifications, Polish & Testing), one-time payment (9,99 lei), persistent access, production ready; payment-already-completed redirect to report (`/chestionar/raport/[accessToken]`) when user re-opens paywall
 - ✅ **Club Directory**: 100% complete - Search, filters, booking, verification; ClubClaimProfile is in-flow section at bottom of club detail (not sticky/fixed); PaginationData shows 4 visible page buttons (sliding window)
 - ✅ **Doctor Directory**: 100% complete - Search, filters, appointments, verification
 - ✅ **Booking System**: 100% complete - Club trials, doctor consultations, email notifications
@@ -2599,8 +2599,8 @@ The quiz system is production-ready with full functionality, security, optimizat
     - Pay-per-lead payment flow implemented (3€ via Stripe Payment Intents - one-time payments)
     - ✅ Premium upgrade page fully implemented (`/club/dashboard/premium`)
     - ✅ Premium subscriptions migrated to Stripe Subscriptions (automatic renewals)
-      - Monthly subscription: 99 lei/month
-      - Yearly subscription: 990 lei/year (pay for 10 months, get 12)
+      - Monthly subscription: 99,99 RON/month
+      - Yearly subscription: 999,99 RON/year
       - Uses Stripe Checkout Sessions for subscription creation
       - Webhook handles subscription events (checkout.session.completed, invoice.payment_succeeded, customer.subscription.updated, customer.subscription.deleted)
       - Dashboard displays subscription type and next billing date
@@ -2741,7 +2741,7 @@ The quiz system is production-ready with full functionality, security, optimizat
       - Success page displaying parent information (alternative to email)
       - Rate limiting: 5 attempts per hour per IP/email
       - IP address tracking for fraud prevention
-    - Clubs can upgrade to Premium (99 lei/month or 990 lei/year) for unlimited leads
+    - Clubs can upgrade to Premium (99,99 RON/month or 999,99 RON/year) for unlimited leads
     - Premium subscriptions use Stripe Subscriptions for automatic renewals
     - Pay-per-lead remains as one-time Payment Intents (no subscription)
     - Leads expire after 5 days with alternative club suggestions
@@ -2813,7 +2813,7 @@ The quiz system is production-ready with full functionality, security, optimizat
     - Complete flow tested end-to-end
     - Documentation created (11 documentation files)
   - **Key Features**:
-    - One-time payment (39 lei, no subscription)
+    - One-time payment (9,99 lei, no subscription)
     - Free quiz completion
     - Email collection gate
     - Teaser page (single sport)

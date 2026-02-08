@@ -219,7 +219,7 @@ export default function PaymentForm({
             ) : (
               <>
                 <i className="bi bi-lock-fill me-2"></i>
-                Plătește 39 lei
+                Plătește 9,99 lei
               </>
             )}
           </button>

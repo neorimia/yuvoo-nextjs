@@ -21,10 +21,10 @@ import type Stripe from "stripe";
 
 /**
  * Payment amount configuration
- * 39-49 lei (one-time payment)
+ * 9.99 lei (one-time payment)
  */
-export const PAYMENT_AMOUNT_LEI = 39; // Can be adjusted to 49
-export const PAYMENT_AMOUNT_BANI = PAYMENT_AMOUNT_LEI * 100; // Convert to smallest currency unit
+export const PAYMENT_AMOUNT_LEI = 9.99;
+export const PAYMENT_AMOUNT_BANI = 999; // 9.99 lei in bani (smallest currency unit)
 
 /**
  * Create payment intent with Stripe

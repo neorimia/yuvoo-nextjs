@@ -13,7 +13,7 @@ import ClubsLandingROICalculator from "./ClubsLandingROICalculator";
  *
  * Displays Premium subscription pricing and benefits.
  * Part of the clubs landing page (/pentru-cluburi).
- * Promotes Premium subscription with both monthly (99 lei/month) and yearly (990 lei/year) options.
+ * Promotes Premium subscription with both monthly (99.99 RON/month) and yearly (999.99 RON/year) options.
  */
 export default function ClubsLandingPricing() {
   const premiumBenefits: TrustCardProps[] = [
@@ -78,8 +78,8 @@ export default function ClubsLandingPricing() {
                 <>
                   Acces nelimitat la cereri și beneficii exclusive. Alege planul care ți se
                   potrivește:
-                  <strong style={{ color: "var(--bd-theme-1)" }}> 99 lei/lună</strong> sau{" "}
-                  <strong style={{ color: "var(--bd-theme-1)" }}>990 lei/an</strong>
+                  <strong style={{ color: "var(--bd-theme-1)" }}> 99,99 RON/lună</strong> sau{" "}
+                  <strong style={{ color: "var(--bd-theme-1)" }}>999,99 RON/an</strong>
                 </>
               }
               className="mb-50"
@@ -126,7 +126,7 @@ export default function ClubsLandingPricing() {
                         marginBottom: "8px",
                       }}
                     >
-                      99
+                      99,99
                     </div>
                     <div
                       style={{
@@ -136,7 +136,7 @@ export default function ClubsLandingPricing() {
                         marginBottom: "20px",
                       }}
                     >
-                      lei/lună
+                      RON/lună
                     </div>
                     <p
                       style={{
@@ -238,7 +238,7 @@ export default function ClubsLandingPricing() {
                         marginBottom: "8px",
                       }}
                     >
-                      990
+                      999,99
                     </div>
                     <div
                       style={{
@@ -248,7 +248,7 @@ export default function ClubsLandingPricing() {
                         marginBottom: "8px",
                       }}
                     >
-                      lei/an
+                      RON/an
                     </div>
                     <div
                       style={{
@@ -258,7 +258,7 @@ export default function ClubsLandingPricing() {
                         marginBottom: "20px",
                       }}
                     >
-                      Doar 82.5 lei/lună echivalent
+                      Doar 83,33 RON/lună echivalent
                     </div>
                     <p
                       style={{
@@ -288,7 +288,7 @@ export default function ClubsLandingPricing() {
                           marginBottom: "4px",
                         }}
                       >
-                        💡 Economisești 198 lei/an
+                        💡 Economisești 199,89 RON/an
                       </p>
                       <p
                         style={{
@@ -298,7 +298,7 @@ export default function ClubsLandingPricing() {
                           lineHeight: "1.5",
                         }}
                       >
-                        vs planul lunar (1,188 lei/an)
+                        vs planul lunar (1.199,88 RON/an)
                       </p>
                     </div>
                   </div>
@@ -370,9 +370,9 @@ export default function ClubsLandingPricing() {
                     }}
                   >
                     Fără Premium: plătești 3€ per cerere (plată unică prin Stripe Payment Intents).
-                    Cu Premium: acces nelimitat pentru doar 99 lei/lună sau 990 lei/an (abonament cu
-                    reînnoire automată prin Stripe Subscriptions). Dacă primești mai mult de 3
-                    cereri pe lună, Premium se plătește singur.
+                    Cu Premium: acces nelimitat pentru doar 99,99 RON/lună sau 999,99 RON/an
+                    (abonament cu reînnoire automată prin Stripe Subscriptions). Dacă primești mai
+                    mult de 3 cereri pe lună, Premium se plătește singur.
                   </p>
                 </div>
               </div>
@@ -463,9 +463,9 @@ export default function ClubsLandingPricing() {
                             lineHeight: "1.6",
                           }}
                         >
-                          Premium se plătește lunar (99 lei/lună) sau anual (990 lei/an). Poți face
-                          upgrade oricând din dashboard-ul clubului tău. Planul anual oferă economii
-                          de 198 lei/an.
+                          Premium se plătește lunar (99,99 RON/lună) sau anual (999,99 RON/an). Poți
+                          face upgrade oricând din dashboard-ul clubului tău. Planul anual oferă
+                          economii de 199,89 RON/an.
                         </p>
                       </div>
                     </div>
