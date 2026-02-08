@@ -932,6 +932,7 @@ This template ensures all feature implementations:
   - `prompts/clubs-landing-email-copy-analysis-prompt.md` - Sales director copy analysis prompt (clubs landing page + emails)
   - `prompts/raport-quality-analysis-and-improvement-prompt.md` - Raport page + report components analysis and quality improvement
   - `prompts/pricing-search-and-modify-prompt.md` - Search and modify pricing: raport (39→9.99 lei), clubs monthly (99→99.99 RON), clubs yearly (990→999.99 RON)
+  - `prompts/openai-finetuning-setup-guide-prompt.md` - Analyze project and create docs/OPENAI_FINETUNING_SETUP_GUIDE.md for OpenAI supervised fine-tuning (Method, Base Model, Suffix, Seed, Training/Validation JSONL, hyperparameters)
   - `prompts/quiz-container-page-analysis-prompt.md` - Quiz container page analysis prompt (code paths, test scenarios, edge cases)
   - `prompts/legal-pages-analysis-prompt.md` - Legal agent prompt: analyze `src/app/(legal)` pages and suggest improvements (GDPR, Romanian law, Yuvoo brand/product alignment)
 
