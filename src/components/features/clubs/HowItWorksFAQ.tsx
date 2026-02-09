@@ -26,7 +26,7 @@ const faqData = [
     id: "how3",
     question: "Cum funcționează sistemul de plată?",
     answer:
-      "Ai două opțiuni: Pay-per-lead (3€ per cerere, plată unică prin Stripe) sau Premium (99 lei/lună sau 990 lei/an pentru acces nelimitat). Dacă primești mai mult de 3 cereri pe lună, Premium este mai avantajos. Toate plățile sunt procesate securizat prin Stripe.",
+      "Ai două opțiuni: Pay-per-lead (3€ per cerere, plată unică prin Stripe) sau Premium (99,99 RON/lună sau 999,99 RON/an pentru acces nelimitat). Dacă primești mai mult de 3 cereri pe lună, Premium este mai avantajos. Toate plățile sunt procesate securizat prin Stripe.",
   },
   {
     id: "how4",

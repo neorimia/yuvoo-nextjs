@@ -2,7 +2,7 @@
  * Lead Payment Service
  *
  * Business logic for lead payment processing.
- * Handles pay-per-lead payments (3€) and premium upgrades (99 lei/month or 990 lei/year).
+ * Handles pay-per-lead payments (3€) and premium upgrades (99.99 RON/month or 999.99 RON/year).
  */
 
 import { stripe } from "@/lib/integrations/stripe/client";
@@ -23,11 +23,11 @@ export const PAY_PER_LEAD_AMOUNT_EUR = 3; // 3€ per lead
 export const PAY_PER_LEAD_AMOUNT_CENTS = PAY_PER_LEAD_AMOUNT_EUR * 100; // 300 cents
 
 // Premium subscription pricing
-export const PREMIUM_MONTHLY_AMOUNT_LEI = 99; // 99 lei/month
-export const PREMIUM_MONTHLY_AMOUNT_BANI = PREMIUM_MONTHLY_AMOUNT_LEI * 100; // 9900 bani
+export const PREMIUM_MONTHLY_AMOUNT_LEI = 99.99; // 99.99 RON/month
+export const PREMIUM_MONTHLY_AMOUNT_BANI = 9999; // 99.99 RON in bani
 
-export const PREMIUM_YEARLY_AMOUNT_LEI = 990; // 990 lei/year (pay for 10 months, get 12)
-export const PREMIUM_YEARLY_AMOUNT_BANI = PREMIUM_YEARLY_AMOUNT_LEI * 100; // 99000 bani
+export const PREMIUM_YEARLY_AMOUNT_LEI = 999.99; // 999.99 RON/year (discounted yearly plan)
+export const PREMIUM_YEARLY_AMOUNT_BANI = 99999; // 999.99 RON in bani
 
 // Legacy constant for backward compatibility (deprecated - use PREMIUM_YEARLY_AMOUNT_LEI)
 export const PREMIUM_AMOUNT_LEI = PREMIUM_YEARLY_AMOUNT_LEI;
@@ -139,7 +139,7 @@ export async function createGuestLeadPaymentIntent(
  * Creates Stripe Checkout Session for premium subscription (monthly or yearly)
  * Uses Stripe Subscriptions for automatic renewals
  * @param clubId - Club ID
- * @param subscriptionType - Subscription type: MONTHLY (99 lei) or YEARLY (990 lei)
+ * @param subscriptionType - Subscription type: MONTHLY (99.99 RON) or YEARLY (999.99 RON)
  * @param successUrl - URL to redirect after successful payment
  * @param cancelUrl - URL to redirect if payment is cancelled
  */

@@ -6,7 +6,7 @@
 **Timeline**: 16 weeks (3 months)
 **Start Date**: 2024
 **Target Launch**: Q1 2025
-**Last Updated**: 2026-01-30 (Guest Payment UX fixes, Bootstrap Modal fixes, Clubs CTA → mailto)
+**Last Updated**: 2026-02-08 (AI Coach Quiz fine-tuning data pipeline, memory bank update)
 
 ### Current Status Summary
 
@@ -14,6 +14,7 @@
 ✅ **Core Features Complete**: Quiz System, Club Directory, Doctor Directory, Bookings, Onboarding
 ✅ **Admin Features**: Verification system implemented with admin dashboard
 ✅ **Integrations**: Stack Auth, OpenAI, Cloudinary, Brevo (email), PostHog (Phase 1 & 2 Complete, Person Properties Complete), Sentry (Error Tracking Complete), Performance Monitoring (Web Vitals + API Performance Complete) - All integrated and working
+✅ **AI Coach Quiz Fine-tuning Data Pipeline**: Scripts in `data/finetuning/` for generating, splitting (under 500 MB), stripping empty lines, uploading to OpenAI Files API, and train/val split; `validate_data.py` for schema check; `docs/FINETUNING_DATA_RESEARCH.md`; small dataset `file-training-data-1000.jsonl` + validation; large training/validation JSONL excluded from repo
 ✅ **Legal Pages Implementation (Phases 1-5) Complete**: Analysis report (`docs/LEGAL_ANALYSIS_REPORT.md`), implementation plan (`docs/LEGAL_PAGES_IMPLEMENTATION_PLAN.md`); Confidențialitate (baza legală, Stripe, date plăți, 10 secțiuni); Termeni (rezervări/plăți, încetare, indemnizare, 10 secțiuni); Cookies (Stripe, fără marketing); GDPR părinți (listă terți aliniată); consistență transversală (Reg. Comerțului, adresă)
 ✅ **Onboarding**: Parent (5 steps), Club Admin (7 steps), Doctor (8 steps) - All complete, all pages aligned with consistent structural pattern
 ✅ **Email System**: All templates created, booking/quiz/verification emails integrated
@@ -54,8 +55,9 @@
 ### Feature Completion Status
 
 - ✅ **Quiz System**: 100% complete - All phases done, production ready
+- ✅ **AI Coach Quiz Fine-tuning Data Pipeline**: 100% complete — Generation scripts (batch3/4/5, generate_new_examples), split (split-training-data.mjs), strip empty lines (strip-empty-lines.mjs), upload (upload-training-file.mjs), train/val split (split-train-val.mjs), validate_data.py; docs FINETUNING_DATA_RESEARCH; file-training-data-1000 + validation; workflow: strip → split if needed → upload → use file IDs in fine-tuning job
 - ✅ **Quiz Medical Safety (Phase 1)**: 100% complete - Critical screening (cardiac, concussion), sport exclusion service, severity levels (asthma, joint pain), injury follow-up, risk detection (cardiac, concussion, orthopedist, pulmonologist, etc.), AI prompt medical rules and age minimums, MEDICAL_SAFETY.md, MEDICAL_EXPERT_REVIEW_CHECKLIST.md; 67% checklist (10/15 tasks); remaining: unit/integration tests, code review, medical expert review, deployment
-- ✅ **Parent Pricing - Quiz Report Payment**: 100% complete - All 8 phases implemented (Email Gate, Teaser Page, Paywall, Complete Report, PDF Generation, Email Notifications, Polish & Testing), one-time payment (39 lei), persistent access, production ready; payment-already-completed redirect to report (`/chestionar/raport/[accessToken]`) when user re-opens paywall
+- ✅ **Parent Pricing - Quiz Report Payment**: 100% complete - All 8 phases implemented (Email Gate, Teaser Page, Paywall, Complete Report, PDF Generation, Email Notifications, Polish & Testing), one-time payment (9,99 lei), persistent access, production ready; payment-already-completed redirect to report (`/chestionar/raport/[accessToken]`) when user re-opens paywall
 - ✅ **Club Directory**: 100% complete - Search, filters, booking, verification; ClubClaimProfile is in-flow section at bottom of club detail (not sticky/fixed); PaginationData shows 4 visible page buttons (sliding window)
 - ✅ **Doctor Directory**: 100% complete - Search, filters, appointments, verification
 - ✅ **Booking System**: 100% complete - Club trials, doctor consultations, email notifications
@@ -129,6 +131,11 @@
   - [x] Updated "Usage Instructions" to include prompt file saving step
   - [x] Added prompt file references to "Example Plans" section
   - [x] Benefits: Keeps standard focused, easier to find/reference, better version control, enables reuse
+- [x] AI Coach Quiz Fine-tuning Data Pipeline (February 2026) ✅
+  - [x] Generation scripts: generate_batch3/4/5, generate_new_examples.py (offset support for no-repeat runs)
+  - [x] split-training-data.mjs (parts under 500 MB, skip empty lines), strip-empty-lines.mjs (parts or files), upload-training-file.mjs (single/parts/dir), split-train-val.mjs (validation holdout)
+  - [x] validate_data.py (schema, sport IDs, specialist fields), docs/FINETUNING_DATA_RESEARCH.md, prompts for training data and OpenAI setup
+  - [x] file-training-data-1000.jsonl + file-training-data-1000-validation.jsonl; large training/validation JSONL not in repo
 
 ### Planning
 
@@ -2599,8 +2606,8 @@ The quiz system is production-ready with full functionality, security, optimizat
     - Pay-per-lead payment flow implemented (3€ via Stripe Payment Intents - one-time payments)
     - ✅ Premium upgrade page fully implemented (`/club/dashboard/premium`)
     - ✅ Premium subscriptions migrated to Stripe Subscriptions (automatic renewals)
-      - Monthly subscription: 99 lei/month
-      - Yearly subscription: 990 lei/year (pay for 10 months, get 12)
+      - Monthly subscription: 99,99 RON/month
+      - Yearly subscription: 999,99 RON/year
       - Uses Stripe Checkout Sessions for subscription creation
       - Webhook handles subscription events (checkout.session.completed, invoice.payment_succeeded, customer.subscription.updated, customer.subscription.deleted)
       - Dashboard displays subscription type and next billing date
@@ -2741,7 +2748,7 @@ The quiz system is production-ready with full functionality, security, optimizat
       - Success page displaying parent information (alternative to email)
       - Rate limiting: 5 attempts per hour per IP/email
       - IP address tracking for fraud prevention
-    - Clubs can upgrade to Premium (99 lei/month or 990 lei/year) for unlimited leads
+    - Clubs can upgrade to Premium (99,99 RON/month or 999,99 RON/year) for unlimited leads
     - Premium subscriptions use Stripe Subscriptions for automatic renewals
     - Pay-per-lead remains as one-time Payment Intents (no subscription)
     - Leads expire after 5 days with alternative club suggestions
@@ -2813,7 +2820,7 @@ The quiz system is production-ready with full functionality, security, optimizat
     - Complete flow tested end-to-end
     - Documentation created (11 documentation files)
   - **Key Features**:
-    - One-time payment (39 lei, no subscription)
+    - One-time payment (9,99 lei, no subscription)
     - Free quiz completion
     - Email collection gate
     - Teaser page (single sport)

@@ -53,7 +53,7 @@ export const faqCategories: FAQCategory[] = [
       {
         question: "Este Yuvoo gratuit pentru părinți?",
         answer:
-          "Da. Platforma Yuvoo este gratuită pentru părinți: contul, descoperirea cluburilor și a specialiștilor, și chestionarul AI (cu previzualizare gratuită). Singura opțiune plătită este raportul complet al quiz-ului (39 lei, plată unică), opțional. Cluburile și specialiștii pot avea taxe proprii; noi vrem să alegi sportul potrivit fără presiune financiară.",
+          "Da. Platforma Yuvoo este gratuită pentru părinți: contul, descoperirea cluburilor și a specialiștilor, și chestionarul AI (cu previzualizare gratuită). Singura opțiune plătită este raportul complet al quiz-ului (9,99 lei, plată unică), opțional. Cluburile și specialiștii pot avea taxe proprii; noi vrem să alegi sportul potrivit fără presiune financiară.",
         category: "Despre Platformă",
       },
       {
@@ -100,7 +100,7 @@ export const faqCategories: FAQCategory[] = [
             fizice și criterii de sănătate pentru a recomanda cele mai potrivite sporturi. După ce
             răspunzi la întrebări, primești o previzualizare gratuită; poți apoi să accesezi
             raportul complet (recomandări detaliate, explicații și link permanent) prin plata unică
-            (39 lei).{" "}
+            (9,99 lei).{" "}
             <Link href={routes.sports.list} className="text-yuvoo-primary">
               Explorează toate sporturile
             </Link>{" "}
@@ -153,7 +153,7 @@ export const faqCategories: FAQCategory[] = [
               chestionarul AI
             </Link>{" "}
             fără cont și vei primi o previzualizare a recomandărilor. Raportul complet (recomandări
-            detaliate, explicații și link de acces persistent) necesită plată unică (39 lei). Te
+            detaliate, explicații și link de acces persistent) necesită plată unică (9,99 lei). Te
             poți{" "}
             <Link href={routes.register} className="text-yuvoo-primary">
               înregistra
@@ -170,10 +170,10 @@ export const faqCategories: FAQCategory[] = [
           <>
             Raportul complet include recomandările AI detaliate, explicațiile pentru fiecare sport,
             beneficii și considerații, plus link de acces persistent (poți reveni oricând la
-            rezultate). Costă 39 lei (plată unică). După plată primești email cu link către raport;
-            nu expiră. Raportul complet nu este gratuit nici cu cont: contul gratuit îți permite să
-            salvezi rezultatele și istoricul quiz-urilor; accesul la raportul complet necesită
-            plată.
+            rezultate). Costă 9,99 lei (plată unică). După plată primești email cu link către
+            raport; nu expiră. Raportul complet nu este gratuit nici cu cont: contul gratuit îți
+            permite să salvezi rezultatele și istoricul quiz-urilor; accesul la raportul complet
+            necesită plată.
           </>
         ),
         category: "Chestionarul AI",
@@ -404,8 +404,8 @@ export const faqCategories: FAQCategory[] = [
             </Link>
             , primele 15 cluburi din fiecare oraș primesc profil complet gratuit pentru 6 luni
             (valoare €180). După aceea, dacă Yuvoo îți aduce părinți potriviți, vei putea continua
-            cu un abonament clar și transparent (începând de la 99 lei/lună). Dacă nu funcționează →
-            nu plătești nimic. Nu există obligații sau contracte pe termen lung.
+            cu un abonament clar și transparent (începând de la 99,99 RON/lună). Dacă nu
+            funcționează → nu plătești nimic. Nu există obligații sau contracte pe termen lung.
           </>
         ),
         category: "Parteneri și Verificare",

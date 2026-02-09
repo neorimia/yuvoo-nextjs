@@ -358,7 +358,7 @@ export default function ClubsLandingROICalculator() {
         }}
       >
         <p style={{ fontSize: "14px", color: "#6B6B6B", marginBottom: 0 }}>
-          <strong>Break-even:</strong> Cu Yuvoo Premium (99 lei/lună), ai nevoie de doar{" "}
+          <strong>Break-even:</strong> Cu Yuvoo Premium (99,99 RON/lună), ai nevoie de doar{" "}
           <strong style={{ color: "var(--bd-theme-1)" }}>~3-4 leaduri/lună</strong> pentru ca
           investiția să se plătească singură.
         </p>

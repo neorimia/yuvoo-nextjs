@@ -100,6 +100,15 @@
   - Feature flags support (for future use)
   - GDPR-compliant (cookie consent integration)
 
+**Fine-tuning Data Pipeline** (AI Coach Quiz supervised fine-tuning, e.g. gpt-4.1-mini):
+
+- **Location**: `data/finetuning/`
+- **Generation**: Python scripts (`generate_new_examples.py`, `generate_batch3_cover_all.py`, `generate_batch4_1000_no_repeat.py`, `generate_batch5_5000_no_repeat.py`, `generate_batch5_topup.py`) produce JSONL with system/user/assistant messages (Romanian, schema-aligned). Batch5 supports offset for no-repeat runs.
+- **Processing**: `split-training-data.mjs` — split JSONL into parts under 500 MB (default 450 MB), skip empty lines; `strip-empty-lines.mjs` — remove empty lines (required: OpenAI rejects "Example N is not a valid JSON object" otherwise); `split-train-val.mjs` — create validation file (last N%, default 10%).
+- **Upload**: `upload-training-file.mjs` — upload file(s) to OpenAI Files API (single file, `parts`, or all `training_data_part_*.jsonl`); writes `uploaded-file-ids.txt` for fine-tuning job config. Use file IDs (e.g. `file-...`) in job, not paths.
+- **Validation**: `validate_data.py` — schema check (3 messages, valid assistant JSON, sport IDs, matchScore 60–100, specialist fields).
+- **Docs**: `docs/FINETUNING_DATA_RESEARCH.md` (dataset size guidance); prompts in `prompts/` for training data generation and OpenAI setup. Large `training_data.jsonl` / `validation_data.jsonl` are not in repo; use split parts and re-upload after strip.
+
 ### Utility Functions
 
 - **Slug Generation**: `generateSlug()` in `src/lib/utils.ts` ✅

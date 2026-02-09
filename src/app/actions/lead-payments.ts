@@ -83,9 +83,9 @@ export async function createPayPerLeadPaymentAction(
 
 /**
  * Create premium upgrade checkout session
- * Creates Stripe Checkout Session for premium subscription (99 lei/month or 990 lei/year)
+ * Creates Stripe Checkout Session for premium subscription (99.99 RON/month or 999.99 RON/year)
  * Uses Stripe Subscriptions for automatic renewals
- * @param subscriptionType - MONTHLY (99 lei) or YEARLY (990 lei), defaults to MONTHLY
+ * @param subscriptionType - MONTHLY (99.99 RON) or YEARLY (999.99 RON), defaults to MONTHLY
  */
 export async function createPremiumUpgradeCheckoutAction(
   subscriptionType: SubscriptionType = SubscriptionType.MONTHLY

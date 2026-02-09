@@ -34,7 +34,7 @@ export default function ROICalculatorComparison() {
                   <strong>Cost lunar</strong>
                 </td>
                 <td style={{ backgroundColor: "#EBFFFE" }}>
-                  <strong style={{ color: "var(--bd-theme-1)" }}>99 lei/lună</strong>
+                  <strong style={{ color: "var(--bd-theme-1)" }}>99,99 RON/lună</strong>
                 </td>
                 <td>Variabil (500-2000+ lei/lună)</td>
               </tr>
@@ -63,7 +63,7 @@ export default function ROICalculatorComparison() {
                 <td style={{ backgroundColor: "#EBFFFE" }}>
                   <strong style={{ color: "var(--bd-theme-1)" }}>~10 lei</strong>
                   <br />
-                  <small>(99 lei / 10 lead-uri)</small>
+                  <small>(99,99 RON / 10 lead-uri)</small>
                 </td>
                 <td>50-200 lei/lead</td>
               </tr>

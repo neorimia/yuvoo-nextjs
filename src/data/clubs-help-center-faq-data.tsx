@@ -30,21 +30,21 @@ export const helpCenterFaqItems: HelpCenterFAQItem[] = [
     category: "pricing",
     question: "Cât costă după cele 6 luni gratuite?",
     answer:
-      "Dacă Yuvoo îți aduce părinți potriviți, vei putea continua cu un abonament clar și transparent (începând de la 99 lei/lună). Dacă nu funcționează → nu plătești nimic.",
+      "Dacă Yuvoo îți aduce părinți potriviți, vei putea continua cu un abonament clar și transparent (începând de la 99,99 RON/lună). Dacă nu funcționează → nu plătești nimic.",
   },
   {
     id: "pricing2",
     category: "pricing",
     question: "Ce se întâmplă dacă nu sunt eligibil pentru Founding Club?",
     answer:
-      "Dacă nu mai sunt locuri disponibile în programul Founding Club sau nu îndeplinești criteriile de eligibilitate, poți upgrade direct la Premium (99 lei/lună sau 990 lei/an). Premium oferă aceleași beneficii ca Founding Club (acces nelimitat la cereri, badge verificat, afișare prioritară) și poți începe imediat. Sau poți plăti 3€ per cerere individuală dacă primești rar cereri.",
+      "Dacă nu mai sunt locuri disponibile în programul Founding Club sau nu îndeplinești criteriile de eligibilitate, poți upgrade direct la Premium (99,99 RON/lună sau 999,99 RON/an). Premium oferă aceleași beneficii ca Founding Club (acces nelimitat la cereri, badge verificat, afișare prioritară) și poți începe imediat. Sau poți plăti 3€ per cerere individuală dacă primești rar cereri.",
   },
   {
     id: "pricing3",
     category: "pricing",
     question: "Cât ROI pot obține cu Yuvoo vs. Google/Facebook ads?",
     answer:
-      "Cu Yuvoo Premium (99 lei/lună), primești lead-uri pre-calificate care au deja completat quiz-ul AI și știu că sportul tău este potrivit. Break-even-ul este la ~3-4 leaduri/lună. Comparativ cu Google/Facebook ads unde plătești sute de lei pentru lead-uri necalificate, Yuvoo oferă o conversie mult mai mare și economisire de timp. Dacă primești mai mult de 3-4 leaduri pe lună, Premium se plătește singur.",
+      "Cu Yuvoo Premium (99,99 RON/lună), primești lead-uri pre-calificate care au deja completat quiz-ul AI și știu că sportul tău este potrivit. Break-even-ul este la ~3-4 leaduri/lună. Comparativ cu Google/Facebook ads unde plătești sute de lei pentru lead-uri necalificate, Yuvoo oferă o conversie mult mai mare și economisire de timp. Dacă primești mai mult de 3-4 leaduri pe lună, Premium se plătește singur.",
   },
   {
     id: "pricing4",
@@ -159,7 +159,7 @@ export const helpCenterFaqItems: HelpCenterFAQItem[] = [
     category: "billing",
     question: "Cum funcționează sistemul de plată?",
     answer:
-      "Ai două opțiuni: Pay-per-lead (3€ per cerere, plată unică prin Stripe Payment Intents) sau Premium (99 lei/lună sau 990 lei/an pentru acces nelimitat). Dacă primești mai mult de 3 cereri pe lună, Premium este mai avantajos. Toate plățile sunt procesate securizat prin Stripe.",
+      "Ai două opțiuni: Pay-per-lead (3€ per cerere, plată unică prin Stripe Payment Intents) sau Premium (99,99 RON/lună sau 999,99 RON/an pentru acces nelimitat). Dacă primești mai mult de 3 cereri pe lună, Premium este mai avantajos. Toate plățile sunt procesate securizat prin Stripe.",
   },
   {
     id: "billing2",

@@ -51,3 +51,17 @@ Thumbs.db
 
 # Sentry Config File
 .env.sentry-build-plugin
+/data/finetuning/training_data_part_001.jsonl
+/data/finetuning/training_data_part_002.jsonl
+/data/finetuning/training_data_part_003.jsonl
+/data/finetuning/training_data_part_004.jsonl
+/data/finetuning/training_data_part_005.jsonl
+/data/finetuning/training_data_part_006.jsonl
+/data/finetuning/training_data_part_007.jsonl
+/data/finetuning/training_data_part_008.jsonl
+/data/finetuning/training_data_part_009.jsonl
+/data/finetuning/training_data_part_010.jsonl
+/data/finetuning/training_data_part_011.jsonl
+/data/finetuning/training_data_part_012.jsonl
+/data/finetuning/validation_data.jsonl
+/data/finetuning/training_data.jsonl
