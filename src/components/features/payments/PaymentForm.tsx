@@ -7,7 +7,7 @@
 
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo, useCallback } from "react";
 import { useRouter } from "next/navigation";
 import {
   PaymentElement,
@@ -110,57 +110,75 @@ export default function PaymentForm({
     initializePayment();
   }, [quizId, initialClientSecret, onPaymentCreated, router]);
 
+  const expressCheckoutOptions = useMemo(
+    () => ({
+      buttonTheme: {
+        applePay: "black" as const,
+        googlePay: "black" as const,
+      },
+      buttonType: {
+        applePay: "buy" as const,
+        googlePay: "pay" as const,
+      },
+      buttonHeight: 48,
+    }),
+    []
+  );
+
   /**
    * Handle Express Checkout (Apple Pay / Google Pay) confirmation
    */
-  const handleExpressCheckoutConfirm = async (_event: StripeExpressCheckoutElementConfirmEvent) => {
-    if (!stripe || !elements || !clientSecret) return;
+  const handleExpressCheckoutConfirm = useCallback(
+    async (_event: StripeExpressCheckoutElementConfirmEvent) => {
+      if (!stripe || !elements || !clientSecret) return;
 
-    setIsLoading(true);
-    setError(null);
+      setIsLoading(true);
+      setError(null);
 
-    try {
-      const { error: confirmError, paymentIntent } = await stripe.confirmPayment({
-        elements,
-        clientSecret,
-        confirmParams: {
-          return_url: `${window.location.origin}${routes.quiz.paymentSuccess(quizId)}`,
-        },
-        redirect: "if_required",
-      });
+      try {
+        const { error: confirmError, paymentIntent } = await stripe.confirmPayment({
+          elements,
+          clientSecret,
+          confirmParams: {
+            return_url: `${window.location.origin}${routes.quiz.paymentSuccess(quizId)}`,
+          },
+          redirect: "if_required",
+        });
 
-      if (confirmError) {
-        setError(confirmError.message || "Plata a eșuat. Te rugăm să încerci din nou.");
+        if (confirmError) {
+          setError(confirmError.message || "Plata a eșuat. Te rugăm să încerci din nou.");
+          setIsLoading(false);
+
+          trackEvent(PostHogEvents.PAYMENT_FAILED, {
+            [PostHogProperties.QUIZ_ID]: quizId,
+            [PostHogProperties.PAYMENT_ID]: paymentId || "unknown",
+            error: confirmError.message || "Unknown error",
+          });
+          return;
+        }
+
+        if (paymentIntent?.status === "succeeded") {
+          trackEvent(PostHogEvents.PAYMENT_COMPLETED, {
+            [PostHogProperties.QUIZ_ID]: quizId,
+            [PostHogProperties.PAYMENT_ID]: paymentId || paymentIntent.id,
+            [PostHogProperties.PAYMENT_AMOUNT]: paymentIntent.amount,
+          });
+          router.push(routes.quiz.paymentSuccess(quizId));
+        } else {
+          setError("Plata necesită verificare suplimentară. Vei fi redirecționat automat.");
+        }
+      } catch (err) {
+        console.error("[Payment Form] Express checkout error:", err);
+        setError(
+          err instanceof Error
+            ? err.message
+            : "Eroare la procesarea plății. Te rugăm să încerci din nou."
+        );
         setIsLoading(false);
-
-        trackEvent(PostHogEvents.PAYMENT_FAILED, {
-          [PostHogProperties.QUIZ_ID]: quizId,
-          [PostHogProperties.PAYMENT_ID]: paymentId || "unknown",
-          error: confirmError.message || "Unknown error",
-        });
-        return;
       }
-
-      if (paymentIntent?.status === "succeeded") {
-        trackEvent(PostHogEvents.PAYMENT_COMPLETED, {
-          [PostHogProperties.QUIZ_ID]: quizId,
-          [PostHogProperties.PAYMENT_ID]: paymentId || paymentIntent.id,
-          [PostHogProperties.PAYMENT_AMOUNT]: paymentIntent.amount,
-        });
-        router.push(routes.quiz.paymentSuccess(quizId));
-      } else {
-        setError("Plata necesită verificare suplimentară. Vei fi redirecționat automat.");
-      }
-    } catch (err) {
-      console.error("[Payment Form] Express checkout error:", err);
-      setError(
-        err instanceof Error
-          ? err.message
-          : "Eroare la procesarea plății. Te rugăm să încerci din nou."
-      );
-      setIsLoading(false);
-    }
-  };
+    },
+    [stripe, elements, clientSecret, quizId, paymentId, router]
+  );
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -260,11 +278,7 @@ export default function PaymentForm({
           <div className="mb-3">
             <ExpressCheckoutElement
               onConfirm={handleExpressCheckoutConfirm}
-              options={{
-                buttonTheme: { applePay: "black", googlePay: "black" },
-                buttonType: { applePay: "buy", googlePay: "pay" },
-                buttonHeight: 48,
-              }}
+              options={expressCheckoutOptions}
             />
           </div>
 
