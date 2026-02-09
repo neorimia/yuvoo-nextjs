@@ -91,8 +91,8 @@ export const leadPaymentStatusEnum = pgEnum("lead_payment_status", [
 
 // Subscription type enum for premium clubs
 export const subscriptionTypeEnum = pgEnum("subscription_type", [
-  "MONTHLY", // Monthly subscription (99 lei/month)
-  "YEARLY", // Yearly subscription (990 lei/year)
+  "MONTHLY", // Monthly subscription (99.99 RON/month)
+  "YEARLY", // Yearly subscription (999.99 RON/year)
 ]);
 
 // Location type enum for Romania locations table

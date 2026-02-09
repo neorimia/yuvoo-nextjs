@@ -27,8 +27,8 @@ export enum LeadPaymentStatus {
 
 // Subscription type enum for premium clubs
 export enum SubscriptionType {
-  MONTHLY = "MONTHLY", // Monthly subscription (99 lei/month)
-  YEARLY = "YEARLY", // Yearly subscription (990 lei/year)
+  MONTHLY = "MONTHLY", // Monthly subscription (99.99 RON/month)
+  YEARLY = "YEARLY", // Yearly subscription (999.99 RON/year)
 }
 
 // Lead interface (matches database schema)
@@ -82,7 +82,7 @@ export interface PremiumClubStatus {
   subscriptionType: SubscriptionType | null; // MONTHLY or YEARLY
   billingPeriod: number | null; // Number of months (1 for monthly, 12 for yearly)
   nextBillingDate: Date | null; // When next payment is due
-  billingAmount: number | null; // Amount paid in bani (9900 for monthly, 99000 for yearly)
+  billingAmount: number | null; // Amount paid in bani (9999 for monthly, 99999 for yearly)
   stripeSubscriptionId: string | null; // Stripe subscription ID
   stripeCustomerId: string | null; // Stripe customer ID
   createdAt: Date;

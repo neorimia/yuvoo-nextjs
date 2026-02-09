@@ -77,6 +77,7 @@ yuvoo-nextjs/
 │   ├── bookings/
 │   └── favorites/
 │
+├── data/finetuning/              # AI Coach Quiz fine-tuning data pipeline (generate, split, strip, upload JSONL; validate_data.py)
 ├── types/                        # Global TypeScript types
 └── styles/                       # Global styles (Bootstrap + SCSS)
 ```

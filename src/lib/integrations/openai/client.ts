@@ -77,7 +77,7 @@ export const openai = new OpenAI({
 });
 
 // Model configuration for quiz recommendations
-export const AI_MODEL = "gpt-3.5-turbo"; // GPT-3.5 Turbo for speed (2-8s response vs 10-45s for GPT-4)
+export const AI_MODEL = "ft:gpt-4.1-mini-2025-04-14:neorimia:yuvoo-quiz-v1:D72kxApp"; // GPT-3.5 Turbo for speed (2-8s response vs 10-45s for GPT-4)
 export const AI_TEMPERATURE = 0.8; // Slightly higher for creative recommendations with GPT-3.5
 export const AI_MAX_TOKENS = 2000; // Maximum tokens for response
 

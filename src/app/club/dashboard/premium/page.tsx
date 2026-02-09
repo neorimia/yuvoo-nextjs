@@ -1,7 +1,7 @@
 /**
  * Premium Upgrade Page
  *
- * Protected page for club admins to upgrade to Premium (199 lei/year).
+ * Protected page for club admins to upgrade to Premium (99.99 RON/month or 999.99 RON/year).
  * Route: /club/dashboard/premium
  */
 

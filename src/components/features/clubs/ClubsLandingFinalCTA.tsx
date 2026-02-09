@@ -132,7 +132,7 @@ export default function ClubsLandingFinalCTA({
                     </p>
                     <p className="text-center mb-30" style={{ fontSize: "16px", color: "#424242" }}>
                       Upgrade la Premium pentru acces nelimitat la cereri și beneficii exclusive (99
-                      lei/lună sau 990 lei/an)
+                      RON/lună sau 999,99 RON/an)
                     </p>
                     <div className="mb-30">
                       <Link href={routes.club.premium} className="bd-btn mx-auto">

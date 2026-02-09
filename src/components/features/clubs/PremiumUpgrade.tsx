@@ -1,7 +1,7 @@
 /**
  * Premium Upgrade Component
  *
- * Client component for processing premium upgrade payment (99 lei/month or 990 lei/year).
+ * Client component for processing premium upgrade payment (99,99 RON/month or 999,99 RON/year).
  * Uses Stripe Elements for secure payment collection.
  */
 
@@ -363,7 +363,9 @@ const PremiumUpgradeContent: React.FC<PremiumUpgradeProps> = ({
                 <div>
                   <h4 className="mb-0">
                     Total:{" "}
-                    {subscriptionType === SubscriptionType.MONTHLY ? "99 lei/lună" : "990 lei/an"}
+                    {subscriptionType === SubscriptionType.MONTHLY
+                      ? "99,99 RON/lună"
+                      : "999,99 RON/an"}
                   </h4>
                   <small className="text-muted">
                     {subscriptionType === SubscriptionType.MONTHLY
@@ -392,7 +394,9 @@ const PremiumUpgradeContent: React.FC<PremiumUpgradeProps> = ({
                   <>
                     <i className="bi bi-star-fill me-2"></i>
                     Continuă la plată -{" "}
-                    {subscriptionType === SubscriptionType.MONTHLY ? "99 lei/lună" : "990 lei/an"}
+                    {subscriptionType === SubscriptionType.MONTHLY
+                      ? "99,99 RON/lună"
+                      : "999,99 RON/an"}
                   </>
                 )}
               </button>
@@ -427,7 +431,7 @@ const PremiumUpgradeContent: React.FC<PremiumUpgradeProps> = ({
               <div className="mb-3">
                 <strong className="text-success">Premium Lunar:</strong>
                 <p className="mb-0 text-success">
-                  <strong>99 lei/lună</strong>
+                  <strong>99,99 RON/lună</strong>
                 </p>
                 <small className="text-muted">Break-even: ~3-4 leaduri/lună</small>
               </div>
@@ -435,11 +439,11 @@ const PremiumUpgradeContent: React.FC<PremiumUpgradeProps> = ({
               <div className="mb-0">
                 <strong className="text-success">Premium Anual:</strong>
                 <p className="mb-0 text-success">
-                  <strong>990 lei/an</strong>
+                  <strong>999,99 RON/an</strong>
                 </p>
-                <small className="text-muted d-block mb-1">Doar 82.5 lei/lună echivalent</small>
+                <small className="text-muted d-block mb-1">Doar 83,33 RON/lună echivalent</small>
                 <small className="text-success fw-semibold d-block">
-                  Economisești 198 lei/an vs planul lunar
+                  Economisești 199,89 RON/an vs planul lunar
                 </small>
               </div>
             </div>

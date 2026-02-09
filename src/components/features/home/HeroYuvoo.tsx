@@ -21,13 +21,18 @@ const HeroYuvoo = () => {
           </a>
         </div>
         <div className="bd-hero-social">
-          <a href={externalLinks.twitter} target="_blank" rel="noreferrer">
-            <i className="fa-brands fa-twitter"></i>twitter
+          <a href={externalLinks.instagram} target="_blank" rel="noreferrer">
+            <i className="fa-brands fa-instagram"></i>instagram
           </a>
         </div>
         <div className="bd-hero-social">
-          <a href={externalLinks.instagram} target="_blank" rel="noreferrer">
-            <i className="fa-brands fa-instagram"></i>instagram
+          <a href={externalLinks.tiktok} target="_blank" rel="noreferrer">
+            <i className="fa-brands fa-tiktok"></i>tiktok
+          </a>
+        </div>
+        <div className="bd-hero-social">
+          <a href={externalLinks.twitter} target="_blank" rel="noreferrer">
+            <i className="fa-brands fa-twitter"></i>twitter
           </a>
         </div>
       </div>

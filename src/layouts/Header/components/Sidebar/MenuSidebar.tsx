@@ -110,13 +110,18 @@ const MenuSidebar: React.FC<MenuSidebarProps> = ({ sideMenuOpen, setSideMenuOpen
                   </a>
                 </li>
                 <li>
-                  <a target="_blank" rel="noreferrer" href={externalLinks.twitter}>
-                    <i className="fa-brands fa-twitter"></i>
+                  <a target="_blank" rel="noreferrer" href={externalLinks.instagram}>
+                    <i className="fa-brands fa-instagram"></i>
                   </a>
                 </li>
                 <li>
-                  <a target="_blank" rel="noreferrer" href={externalLinks.instagram}>
-                    <i className="fa-brands fa-instagram"></i>
+                  <a target="_blank" rel="noreferrer" href={externalLinks.tiktok}>
+                    <i className="fa-brands fa-tiktok"></i>
+                  </a>
+                </li>
+                <li>
+                  <a target="_blank" rel="noreferrer" href={externalLinks.twitter}>
+                    <i className="fa-brands fa-twitter"></i>
                   </a>
                 </li>
               </ul>

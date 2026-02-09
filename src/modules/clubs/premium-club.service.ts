@@ -71,12 +71,12 @@ function calculateNextBillingDate(startDate: Date, subscriptionType: Subscriptio
  * @param subscriptionType - MONTHLY or YEARLY
  */
 function getBillingAmount(subscriptionType: SubscriptionType): number {
-  return subscriptionType === SubscriptionType.MONTHLY ? 9900 : 99000; // 99 lei or 990 lei in bani
+  return subscriptionType === SubscriptionType.MONTHLY ? 9999 : 99999; // 99.99 RON or 999.99 RON in bani
 }
 
 /**
  * Upgrade club to premium
- * Processes premium upgrade (99 lei/month or 990 lei/year)
+ * Processes premium upgrade (99.99 RON/month or 999.99 RON/year)
  * @param clubId - Club ID
  * @param data - Upgrade data including subscription type
  */

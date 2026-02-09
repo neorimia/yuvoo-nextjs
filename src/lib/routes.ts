@@ -312,7 +312,7 @@ export const externalLinks = {
   facebook: "https://facebook.com/yuvooro",
   instagram: "https://instagram.com/yuvooro",
   twitter: "https://twitter.com/yuvooro",
-  linkedin: "https://linkedin.com/company/yuvooro",
+  tiktok: "https://www.tiktok.com/@yuvooro",
 
   // Legal & Support - SEO-friendly Romanian paths
   terms: "/termeni",

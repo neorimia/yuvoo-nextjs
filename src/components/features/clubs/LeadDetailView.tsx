@@ -201,7 +201,7 @@ const LeadDetailView: React.FC<LeadDetailViewProps> = ({
                           Opțiunea B — Upgrade Premium
                         </h5>
                         <p className="card-text">
-                          <strong>99 lei/lună</strong> sau <strong>990 lei/an</strong>
+                          <strong>99,99 RON/lună</strong> sau <strong>999,99 RON/an</strong>
                         </p>
                         <p className="card-text small text-muted">
                           Acces nelimitat la toate cererile, badge &quot;Verificat Yuvoo&quot;,

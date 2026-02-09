@@ -225,9 +225,9 @@ export default function HowItWorksTechnical() {
                       unică prin Stripe Payment Intents). Ideal dacă primești rar cereri.
                     </p>
                     <p style={{ marginBottom: 0 }}>
-                      <strong>Premium:</strong> Abonament <strong>99 lei/lună</strong> sau{" "}
-                      <strong>990 lei/an</strong> pentru acces nelimitat. Dacă primești mai mult de
-                      3 cereri pe lună, Premium se plătește singur.
+                      <strong>Premium:</strong> Abonament <strong>99,99 RON/lună</strong> sau{" "}
+                      <strong>999,99 RON/an</strong> pentru acces nelimitat. Dacă primești mai mult
+                      de 3 cereri pe lună, Premium se plătește singur.
                     </p>
                   </div>
                 </div>
