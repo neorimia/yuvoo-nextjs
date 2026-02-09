@@ -1,5 +1,5 @@
 /**
- * Database Schema - UPDATED FOR CLUB MONETIZATION
+ * Database Schema - UPDATED FOR GDPR COMPLIANCE
  *
  * Drizzle ORM schema definitions for Yuvoo.
  *
@@ -18,9 +18,16 @@
  * - locations: Single source of truth for Romanian counties, cities, and sectors
  * - payments: One-time payments for quiz reports
  * - report_access: Persistent access tokens for paid reports
- * - leads: Parent interest in clubs (locked until payment) (NEW)
- * - premium_club_status: Premium club subscription tracking (NEW)
- * - lead_payments: Pay-per-lead payments (3€ per lead) (NEW)
+ * - leads: Parent interest in clubs (locked until payment)
+ * - premium_club_status: Premium club subscription tracking
+ * - lead_payments: Pay-per-lead payments (3€ per lead)
+ *
+ * GDPR Compliance Tables (Phase 1 - Legal Compliance):
+ * - user_consents: Granular consent tracking per purpose (Art. 7, Art. 9)
+ * - consent_audit_log: Immutable history of all consent changes
+ * - data_export_requests: Data subject rights requests (Art. 15, 20)
+ * - breach_register: Data breach documentation (Art. 33)
+ * - privacy_policy_versions: Version tracking for transparency (Art. 7(2))
  */
 
 import {
@@ -93,6 +100,46 @@ export const locationTypeEnum = pgEnum("location_type", [
   "county", // Județ (41 counties + Bucharest)
   "city", // Municipiu or oraș (cities)
   "sector", // Sector (Bucharest sectors 1-6)
+]);
+
+// ============================================================================
+// GDPR COMPLIANCE ENUMS (Phase 1 - Legal Compliance)
+// ============================================================================
+
+// Consent type enum - granular consent tracking per purpose
+// GDPR Art. 6, Art. 7, Art. 9(2)(a)
+export const consentTypeEnum = pgEnum("consent_type", [
+  "child_data_recommendations", // Use child data for AI sport recommendations
+  "health_data_recommendations", // Use health data for recommendations + risk flags
+  "share_with_clubs", // Share child profile with contacted clubs
+  "specialist_suggestions", // AI suggest specialist consultations (optional)
+  "marketing_communications", // Educational content + marketing (optional)
+]);
+
+// Consent status enum
+export const consentStatusEnum = pgEnum("consent_status", ["granted", "withdrawn"]);
+
+// Data export request type enum - GDPR Art. 15, 17, 20
+export const dataExportRequestTypeEnum = pgEnum("data_export_request_type", [
+  "access", // Art. 15 - Right of access
+  "portability", // Art. 20 - Right to data portability
+  "erasure", // Art. 17 - Right to erasure
+]);
+
+// Data export request status enum
+export const dataExportRequestStatusEnum = pgEnum("data_export_request_status", [
+  "pending", // Request received, not yet processed
+  "processing", // Currently generating export
+  "completed", // Export ready for download
+  "failed", // Export failed
+]);
+
+// Breach severity enum - GDPR Art. 33
+export const breachSeverityEnum = pgEnum("breach_severity", [
+  "low", // Minor impact, limited data exposure
+  "medium", // Moderate impact, some sensitive data exposed
+  "high", // Significant impact, sensitive data exposed
+  "critical", // Severe impact, large-scale or highly sensitive data breach
 ]);
 
 // Users table
@@ -775,5 +822,233 @@ export const leadPayments = pgTable(
     // Index for guest payment queries
     guestEmailIdx: index("idx_lead_payments_guest_email").on(table.guestEmail),
     isGuestPaymentIdx: index("idx_lead_payments_is_guest_payment").on(table.isGuestPayment),
+  })
+);
+
+// ============================================================================
+// GDPR COMPLIANCE TABLES (Phase 1 - Legal Compliance)
+// ============================================================================
+
+/**
+ * User Consents table - Granular consent tracking per purpose
+ *
+ * GDPR Requirements:
+ * - Art. 7(1): Demonstrate consent was given
+ * - Art. 9(2)(a): Explicit consent for special categories (health data)
+ * - Art. 7(3): Easy withdrawal of consent
+ *
+ * Each consent type is tracked separately to allow granular control.
+ * Audit trail maintained via consentAuditLog.
+ */
+export const userConsents = pgTable(
+  "user_consents",
+  {
+    id: text("id")
+      .primaryKey()
+      .default(sql`gen_random_uuid()`),
+    userId: text("user_id")
+      .notNull()
+      .references(() => users.id, { onDelete: "cascade" }),
+    childId: text("child_id").references(() => children.id, { onDelete: "cascade" }), // Optional - for child-specific consents
+    consentType: consentTypeEnum("consent_type").notNull(),
+    status: consentStatusEnum("status").notNull().default("granted"),
+
+    // Consent metadata for audit trail
+    consentVersion: text("consent_version").notNull(), // Privacy policy version (e.g., "2026.02.01")
+    consentText: text("consent_text").notNull(), // Exact text shown to user
+    ipAddress: text("ip_address"), // IP at time of consent
+    userAgent: text("user_agent"), // Browser/device info
+
+    // Timestamps
+    grantedAt: timestamp("granted_at").defaultNow().notNull(),
+    withdrawnAt: timestamp("withdrawn_at"),
+    updatedAt: timestamp("updated_at").defaultNow().notNull(),
+  },
+  (table) => ({
+    userIdIdx: index("idx_user_consents_user_id").on(table.userId),
+    childIdIdx: index("idx_user_consents_child_id").on(table.childId),
+    consentTypeIdx: index("idx_user_consents_type").on(table.consentType),
+    statusIdx: index("idx_user_consents_status").on(table.status),
+    // Composite unique: one active consent per type per user (or child)
+    userTypeUniqueIdx: uniqueIndex("idx_user_consents_user_type_unique").on(
+      table.userId,
+      table.childId,
+      table.consentType
+    ),
+  })
+);
+
+/**
+ * Consent Audit Log table - Immutable history of all consent changes
+ *
+ * GDPR Requirements:
+ * - Art. 7(1): Controller must demonstrate consent
+ * - Art. 5(2): Accountability principle
+ *
+ * This table is append-only. No updates or deletes should occur.
+ * Retention: 6 years per legal recommendations.
+ */
+export const consentAuditLog = pgTable(
+  "consent_audit_log",
+  {
+    id: text("id")
+      .primaryKey()
+      .default(sql`gen_random_uuid()`),
+    userConsentId: text("user_consent_id")
+      .notNull()
+      .references(() => userConsents.id, { onDelete: "cascade" }),
+    action: text("action").notNull(), // "granted" | "withdrawn" | "updated"
+    previousStatus: consentStatusEnum("previous_status"),
+    newStatus: consentStatusEnum("new_status").notNull(),
+
+    // Context at time of action
+    privacyPolicyVersion: text("privacy_policy_version").notNull(),
+    ipAddress: text("ip_address"),
+    userAgent: text("user_agent"),
+
+    createdAt: timestamp("created_at").defaultNow().notNull(),
+  },
+  (table) => ({
+    userConsentIdIdx: index("idx_consent_audit_log_consent_id").on(table.userConsentId),
+    createdAtIdx: index("idx_consent_audit_log_created_at").on(table.createdAt),
+    actionIdx: index("idx_consent_audit_log_action").on(table.action),
+  })
+);
+
+/**
+ * Data Export Requests table - GDPR Data Subject Rights
+ *
+ * GDPR Requirements:
+ * - Art. 15: Right of access (data copy within 30 days)
+ * - Art. 17: Right to erasure ("right to be forgotten")
+ * - Art. 20: Right to data portability (structured format)
+ *
+ * Tracks all data subject requests for compliance reporting.
+ */
+export const dataExportRequests = pgTable(
+  "data_export_requests",
+  {
+    id: text("id")
+      .primaryKey()
+      .default(sql`gen_random_uuid()`),
+    userId: text("user_id")
+      .notNull()
+      .references(() => users.id, { onDelete: "cascade" }),
+    requestType: dataExportRequestTypeEnum("request_type").notNull(), // "access" | "portability" | "erasure"
+    status: dataExportRequestStatusEnum("status").notNull().default("pending"), // "pending" | "processing" | "completed" | "failed"
+
+    // Request details
+    requestedData: text("requested_data").array(), // Specific data categories requested
+    exportFormat: text("export_format"), // "json" | "csv" | "pdf"
+    exportUrl: text("export_url"), // URL to download (if completed)
+
+    // Timestamps (GDPR requires response within 30 days)
+    requestedAt: timestamp("requested_at").defaultNow().notNull(),
+    completedAt: timestamp("completed_at"),
+    expiresAt: timestamp("expires_at"), // Export link expiration
+
+    // Processing notes
+    notes: text("notes"),
+  },
+  (table) => ({
+    userIdIdx: index("idx_data_export_requests_user_id").on(table.userId),
+    statusIdx: index("idx_data_export_requests_status").on(table.status),
+    requestTypeIdx: index("idx_data_export_requests_type").on(table.requestType),
+    requestedAtIdx: index("idx_data_export_requests_requested_at").on(table.requestedAt),
+    // Composite for compliance reporting
+    statusRequestedIdx: index("idx_data_export_requests_status_requested").on(
+      table.status,
+      table.requestedAt
+    ),
+  })
+);
+
+/**
+ * Breach Register table - Data Breach Documentation
+ *
+ * GDPR Requirements:
+ * - Art. 33: Notification to supervisory authority (ANSPDCP) within 72 hours
+ * - Art. 34: Communication to data subjects when high risk
+ * - Art. 5(2): Accountability principle
+ *
+ * All data breaches must be documented, even if not reported.
+ */
+export const breachRegister = pgTable(
+  "breach_register",
+  {
+    id: text("id")
+      .primaryKey()
+      .default(sql`gen_random_uuid()`),
+
+    // Breach details
+    title: text("title").notNull(),
+    description: text("description").notNull(),
+    severity: breachSeverityEnum("severity").notNull(), // "low" | "medium" | "high" | "critical"
+    dataCategories: text("data_categories").array().notNull(), // Affected data types
+    affectedCount: integer("affected_count"), // Number of affected individuals
+
+    // Discovery and notification
+    discoveredAt: timestamp("discovered_at").notNull(),
+    discoveredBy: text("discovered_by").notNull(), // User ID or "system"
+
+    // Regulatory notification (ANSPDCP - Romanian data protection authority)
+    anspdcpNotified: boolean("anspdcp_notified").default(false).notNull(),
+    anspdcpNotifiedAt: timestamp("anspdcp_notified_at"),
+    anspdcpReference: text("anspdcp_reference"), // Reference number from ANSPDCP
+
+    // Affected individual notification
+    individualsNotified: boolean("individuals_notified").default(false).notNull(),
+    individualsNotifiedAt: timestamp("individuals_notified_at"),
+
+    // Remediation
+    remediationSteps: jsonb("remediation_steps"), // Array of remediation actions
+    remediationCompletedAt: timestamp("remediation_completed_at"),
+
+    createdAt: timestamp("created_at").defaultNow().notNull(),
+    updatedAt: timestamp("updated_at").defaultNow().notNull(),
+  },
+  (table) => ({
+    severityIdx: index("idx_breach_register_severity").on(table.severity),
+    discoveredAtIdx: index("idx_breach_register_discovered_at").on(table.discoveredAt),
+    anspdcpNotifiedIdx: index("idx_breach_register_anspdcp_notified").on(table.anspdcpNotified),
+    // Composite for breach reporting queries
+    severityNotifiedIdx: index("idx_breach_register_severity_notified").on(
+      table.severity,
+      table.anspdcpNotified
+    ),
+  })
+);
+
+/**
+ * Privacy Policy Versions table - Version tracking for transparency
+ *
+ * GDPR Requirements:
+ * - Art. 7(2): Consent request must be distinguishable, easy to understand
+ * - Art. 13/14: Transparency requirements
+ *
+ * Track all privacy policy versions to link consents to specific policy versions.
+ */
+export const privacyPolicyVersions = pgTable(
+  "privacy_policy_versions",
+  {
+    id: text("id")
+      .primaryKey()
+      .default(sql`gen_random_uuid()`),
+    version: text("version").notNull().unique(), // e.g., "2026.02.01"
+    effectiveDate: timestamp("effective_date").notNull(),
+    contentHash: text("content_hash").notNull(), // SHA-256 of policy content
+
+    // Key changes (for transparency)
+    majorChanges: jsonb("major_changes"), // Array of change descriptions
+
+    // Status
+    isActive: boolean("is_active").default(false).notNull(),
+
+    createdAt: timestamp("created_at").defaultNow().notNull(),
+  },
+  (table) => ({
+    versionIdx: index("idx_privacy_policy_versions_version").on(table.version),
+    isActiveIdx: index("idx_privacy_policy_versions_active").on(table.isActive),
+    effectiveDateIdx: index("idx_privacy_policy_versions_effective_date").on(table.effectiveDate),
   })
 );

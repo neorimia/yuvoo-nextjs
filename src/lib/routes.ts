@@ -158,6 +158,8 @@ export const routes = {
     profile: "/parent/profile",
     bookings: "/parent/bookings",
     bookingsDetails: (id: string) => `/parent/bookings/${id}`,
+    // GDPR Privacy Settings (Phase 1 - Legal Compliance)
+    privacy: "/parent/settings/privacy", // Consent management, data export, account deletion
   },
 
   // Club Portal Routes

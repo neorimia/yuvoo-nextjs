@@ -49,16 +49,17 @@
 ✅ **Role-Based Login Redirects Complete**: Created authentication redirect proxy (`/auth/redirect`), updated sign-in action with role-based redirect logic, fixed parent layout error handling, all users now redirect to correct dashboard/onboarding based on role
 ✅ **UserRoleEnum Implementation Complete**: Created `UserRoleEnum` as single source of truth for roles, updated all role usages throughout codebase (comparisons, switch statements, assignments), type-safe enum values, better IDE support
 ✅ **Authentication Improvements Complete**: Fixed DashboardHeader signOut TypeError by adding `useUser()` check, extracted `getRoleBasedRedirect()` to shared helper file (`src/lib/auth/redirects.ts`) for better maintainability and reusability, fixed sign-in flow to use API route with proper redirect handling, fixed password reset flow (forgot password callbackUrl, reset password code/token support), improved error handling for Stack Auth errors
-🚧 **In Progress**: Comprehensive E2E testing, final polish, launch announcement content
-📋 **Remaining**: Final user acceptance testing, medium/low priority TODOs
+🚧 **In Progress**: Legal Compliance Implementation (feat/legal branch) — Consent infrastructure, data subject rights, AI transparency; comprehensive E2E testing, final polish, launch announcement content
+📋 **Remaining**: Legal Compliance Phases 3–6 (DPAs, launch validation); final user acceptance testing; medium/low priority TODOs
 
 ### Feature Completion Status
 
+- ✅ **Quiz Results Page & AI Disclaimer Design**: 100% complete - AITransparencyDisclaimer and results page rebranded to Yuvoo palette; ResultsActions above disclaimer; Human Review card aligned; Sporturi icon text-yuvoo-secondary; analysis output in `prompts/quiz-results-ai-disclaimer-analysis-output.md`
 - ✅ **Quiz System**: 100% complete - All phases done, production ready
 - ✅ **AI Coach Quiz Fine-tuning Data Pipeline**: 100% complete — Generation scripts (batch3/4/5, generate_new_examples), split (split-training-data.mjs), strip empty lines (strip-empty-lines.mjs), upload (upload-training-file.mjs), train/val split (split-train-val.mjs), validate_data.py; docs FINETUNING_DATA_RESEARCH; file-training-data-1000 + validation; workflow: strip → split if needed → upload → use file IDs in fine-tuning job
 - ✅ **Quiz Medical Safety (Phase 1)**: 100% complete - Critical screening (cardiac, concussion), sport exclusion service, severity levels (asthma, joint pain), injury follow-up, risk detection (cardiac, concussion, orthopedist, pulmonologist, etc.), AI prompt medical rules and age minimums, MEDICAL_SAFETY.md, MEDICAL_EXPERT_REVIEW_CHECKLIST.md; 67% checklist (10/15 tasks); remaining: unit/integration tests, code review, medical expert review, deployment
 - ✅ **Parent Pricing - Quiz Report Payment**: 100% complete - All 8 phases implemented (Email Gate, Teaser Page, Paywall, Complete Report, PDF Generation, Email Notifications, Polish & Testing), one-time payment (9,99 lei), persistent access, production ready; payment-already-completed redirect to report (`/chestionar/raport/[accessToken]`) when user re-opens paywall
-- ✅ **Club Directory**: 100% complete - Search, filters, booking, verification; ClubClaimProfile is in-flow section at bottom of club detail (not sticky/fixed); PaginationData shows 4 visible page buttons (sliding window)
+- ✅ **Club Directory**: 100% complete - Search, filters, booking, verification; ClubClaimProfile is in-flow section at bottom of club detail (not sticky/fixed); PaginationData shows 4 visible page buttons (sliding window); clubs list URL supports countyId, cityId, sectorId; teaser page and LocalClubsSection use `resolveLocationToIds()` from `lib/db/location-helpers.ts` for "City, County" and "Sector N, București" parsing
 - ✅ **Doctor Directory**: 100% complete - Search, filters, appointments, verification
 - ✅ **Booking System**: 100% complete - Club trials, doctor consultations, email notifications
 - ✅ **Onboarding**: 100% complete - All 3 user types, all steps implemented
@@ -66,7 +67,7 @@
 - ✅ **Authentication**: 100% complete - Stack Auth, all flows working
 - ✅ **Admin Panel**: 100% complete - Verification dashboard, approve/reject actions
 - ✅ **Email System**: 100% complete - All templates, all integrations
-- ✅ **React Email Integration (All Phases)**: 100% complete - Phase 1 (infrastructure, base components, unsubscribe system), Phase 2 (quiz results email template with all content sections), Phase 3 (Brevo integration with clubs data), Phase 4 (reusable components: SportCard, ClubPreview, CTASection), Phase 5 (preview data for testing); quiz results email shows "copilul tău" when child is "Copil Temporar", prefers childDisplayName from quiz answers
+- ✅ **React Email Integration (All Phases)**: 100% complete - Phase 1 (infrastructure, base components, unsubscribe system), Phase 2 (quiz results email template with all content sections), Phase 3 (Brevo integration with clubs data), Phase 4 (reusable components: SportCard, ClubPreview, CTASection), Phase 5 (preview data for testing); quiz results email shows "copilul tău" when child is "Copil Temporar", prefers childDisplayName from quiz answers; lead submission internal email (`emails/lead-submission-internal-email.tsx`) for clubs-lead@yuvoo.ro with parent/child/sport/location details
 - ✅ **Child Management**: 100% complete - Full CRUD operations (Create, Read, Update, Delete) with list, detail, edit pages
 - ✅ **User Settings**: 100% complete - Profile editing with validation
 - ✅ **Favorites System**: 100% complete - Add, remove, list favorites for clubs and doctors
@@ -74,7 +75,7 @@
 - ✅ **Phase 2 Reusable Components & Patterns**: 100% complete - 3 shared components/hooks extracted (RecentActivityFeed, AccountSettingsForm, useEntityFilters hook) - all complete, club dashboard updated, ready for doctor portal implementation
 - ✅ **Phase 3 Utilities**: 100% complete - 2 utilities extracted (status-badges, date-formatting) - all complete, all components updated to use centralized utilities, consistent Romanian formatting across app
 - ✅ **Doctor Portal Complete**: 100% complete - All 5 phases implemented (Dashboard Overview, Consultation Management, Profile Editing, Availability Calendar, Settings) - all pages use shared components, consistent UI/UX with club portal, all text in Romanian, Next.js 16 Cache Components pattern, production ready
-- ✅ **Club Monetization - Lead Generation System**: 100% complete - Phase 1-8 complete (Database Schema, Service Layer, Lead Submission Flow, Club Notification & Payment Flow, Lead Expiration & Reminder System, Premium Club Benefits, Integration & Testing, Guest Payment Flow), production ready
+- ✅ **Club Monetization - Lead Generation System**: 100% complete - Phase 1-8 complete (Database Schema, Service Layer, Lead Submission Flow, Club Notification & Payment Flow, Lead Expiration & Reminder System, Premium Club Benefits, Integration & Testing, Guest Payment Flow), production ready; internal lead notification uses React Email template (`emails/lead-submission-internal-email.tsx`) and Brevo htmlContent/textContent/replyTo/tags
 - ✅ **Security Audit**: 100% complete - All security measures implemented and verified:
   - Rate limiting (auth, uploads, bookings, search)
   - Input validation (Zod schemas across all Server Actions)
@@ -112,6 +113,17 @@
 - ✅ **Production Deployment Preparation**: 90% complete - Infrastructure ready, launch announcement content pending
 - 🚧 **Testing**: 70% complete - Core flows tested, E2E testing in progress
 - 📋 **Deployment**: 90% complete - Configuration ready, pending final testing
+
+### Legal Compliance Implementation (feat/legal) — In Progress
+
+- 🚧 **Phase 1 – Foundation**: ✅ Complete — Consent schema (user_consents, consent_audit_log, privacy_policy_versions, data_export_requests, breach_register); migration 0014
+- 🚧 **Phase 2 – Consent Infrastructure**: ✅ Complete — consent module, ConsentCheckbox, HealthDataConsentForm, QuizConsentSection, AITransparencyDisclaimer, HumanReviewRequestButton, DataSharingNotice; consent.ts, quiz-consent.ts actions
+- 📋 **Phase 3 – Privacy Policy & Legal Pages**: Pending alignment with comprehensive analysis
+- 📋 **Phase 4 – Third-Party Compliance**: Pending DPAs (OpenAI, Neon, Cloudinary, Brevo), SCCs
+- 🚧 **Phase 5 – Data Subject Rights**: In progress — data-export.ts, data-erasure.ts, human-review.ts actions; Parent Privacy Settings page (/parent/settings/privacy)
+- 📋 **Phase 6 – Documentation & Launch**: Compliance docs created (DPIA, DPA_TRACKER, RECORDS_OF_PROCESSING, LAUNCH_CHECKLIST, AI_ACT_CLASSIFICATION_MEMO)
+
+**Reference docs**: `docs/LEGAL_COMPLIANCE_CHECKLIST_YUVOO_ONE_PAGE.md`, `docs/LEGAL_COMPLIANCE_IMPLEMENTATION_WORKFLOW.md`, `docs/LEGAL_ANALYSIS_YUVOO_COMPREHENSIVE.md`
 
 ## What's Complete ✅
 

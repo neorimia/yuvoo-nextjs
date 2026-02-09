@@ -38,6 +38,7 @@ interface ClubsPageProps {
     sport?: string;
     quiz?: string;
     city?: string; // Legacy support
+    countyId?: string; // County location ID (e.g. Bucharest)
     cityId?: string; // Preferred: location ID
     sectorId?: string; // Sector ID (for Bucharest)
     district?: string; // Legacy support
@@ -69,6 +70,7 @@ export default async function ClubsPage({ searchParams }: ClubsPageProps) {
   const {
     sport: sportId,
     quiz: isQuizContext,
+    countyId,
     cityId,
     sectorId,
     age,
@@ -87,6 +89,7 @@ export default async function ClubsPage({ searchParams }: ClubsPageProps) {
 
   const filters: ClubSearchFiltersType = {
     sportId: sportId ? normalizeSportName(sportId) : undefined,
+    countyId: countyId || undefined,
     cityId: cityId || undefined, // Use cityId if provided
     sectorId: sectorId || undefined,
     // Legacy support: if cityId not provided but city is, we'd need to convert

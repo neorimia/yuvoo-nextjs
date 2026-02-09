@@ -27,7 +27,7 @@ export const metadata: Metadata = {
 };
 
 export default function PrivacyPolicyPage() {
-  const lastUpdated = new Date("2026-01-30").toLocaleDateString("ro-RO", {
+  const lastUpdated = new Date("2026-02-05").toLocaleDateString("ro-RO", {
     year: "numeric",
     month: "long",
     day: "numeric",
@@ -255,18 +255,134 @@ export default function PrivacyPolicyPage() {
                         <strong>Dreptul de restricționare:</strong> Poți solicita limitarea
                         prelucrării datelor tale
                       </li>
+                      <li>
+                        <strong>Dreptul de a nu fi supus deciziilor automatizate:</strong> Poți
+                        solicita intervenția umană în recomandările AI Coach și poți contesta
+                        deciziile generate automat (Art. 22 GDPR). Vezi secțiunea 7 pentru detalii.
+                      </li>
+                      <li>
+                        <strong>Dreptul de retragere a consimțământului:</strong> Poți retrage
+                        oricând consimțământul acordat pentru prelucrarea datelor copilului și
+                        generarea recomandărilor AI, din{" "}
+                        <a href="/parent/settings/privacy" className="text-yuvoo-primary">
+                          setările de confidențialitate
+                        </a>{" "}
+                        ale contului. Retragerea nu afectează legalitatea prelucrării efectuate
+                        înainte de retragere.
+                      </li>
                     </ul>
                     <p className="mb-20">
                       Pentru a exercita aceste drepturi, trimite un email la{" "}
                       <a href="mailto:gdpr@yuvoo.ro" className="text-yuvoo-primary">
                         gdpr@yuvoo.ro
-                      </a>
-                      . Vom răspunde în termen de 30 de zile.
+                      </a>{" "}
+                      sau accesează{" "}
+                      <a href="/parent/settings/privacy" className="text-yuvoo-primary">
+                        setările de confidențialitate
+                      </a>{" "}
+                      din contul tău. Vom răspunde în termen de 30 de zile.
                     </p>
                   </div>
 
                   <div className="bd-legal-section mb-40">
-                    <h2 className="bd-legal-section-title mb-20">7. Păstrarea datelor</h2>
+                    <h2 className="bd-legal-section-title mb-20">
+                      7. Decizii automatizate și profilare (Art. 22 GDPR)
+                    </h2>
+                    <p className="mb-20">
+                      Yuvoo folosește inteligență artificială (AI Coach) pentru a genera recomandări
+                      personalizate de sporturi pentru copilul tău. Este important să înțelegi cum
+                      funcționează acest sistem și ce drepturi ai.
+                    </p>
+
+                    <h3 className="bd-legal-subsection-title mb-15">
+                      7.1. Cum funcționează AI Coach
+                    </h3>
+                    <p className="mb-15">
+                      Când completezi chestionarul AI Coach, răspunsurile tale sunt analizate de un
+                      model de inteligență artificială (OpenAI GPT-4) pentru a genera recomandări de
+                      sporturi potrivite pentru copilul tău. Procesul include:
+                    </p>
+                    <ul className="mb-20">
+                      <li>
+                        <strong>Analiza profilului:</strong> Vârsta, personalitatea, interesele și
+                        nivelul de energie al copilului
+                      </li>
+                      <li>
+                        <strong>Evaluarea preferințelor:</strong> Preferințe pentru sporturi de
+                        echipă vs. individuale, indoor vs. outdoor
+                      </li>
+                      <li>
+                        <strong>Generarea scorurilor:</strong> Pentru fiecare sport, AI-ul
+                        calculează un scor de potrivire bazat pe profilul copilului
+                      </li>
+                      <li>
+                        <strong>Raționamentul:</strong> AI-ul explică de ce a recomandat fiecare
+                        sport, în limbaj accesibil
+                      </li>
+                    </ul>
+
+                    <h3 className="bd-legal-subsection-title mb-15">
+                      7.2. Transparența algoritmului
+                    </h3>
+                    <p className="mb-20">
+                      Recomandările AI Coach sunt generate pe baza unui prompt structurat care
+                      instruiește modelul să analizeze răspunsurile tale și să ofere sugestii
+                      personalizate. Factorii principali care influențează recomandările includ:
+                      trăsăturile de personalitate (introvertit/extravertit, nivel de energie),
+                      preferințele exprimate în chestionar, vârsta copilului și disponibilitatea
+                      cluburilor în zona ta. Scorurile de potrivire sunt orientative și nu trebuie
+                      interpretate ca evaluări absolute.
+                    </p>
+
+                    <h3 className="bd-legal-subsection-title mb-15">
+                      7.3. Drepturile tale privind deciziile automatizate
+                    </h3>
+                    <p className="mb-15">Conform Art. 22 GDPR, ai dreptul:</p>
+                    <ul className="mb-20">
+                      <li>
+                        <strong>Să soliciți intervenție umană:</strong> Poți solicita ca un operator
+                        uman să revizuiască recomandările AI și să ofere o a doua opinie
+                      </li>
+                      <li>
+                        <strong>Să îți exprimi punctul de vedere:</strong> Poți contesta sau
+                        clarifica orice aspect al recomandărilor primite
+                      </li>
+                      <li>
+                        <strong>Să contești decizia:</strong> Dacă consideri că recomandările nu
+                        reflectă corect profilul copilului, poți solicita o reevaluare
+                      </li>
+                      <li>
+                        <strong>Să dezactivezi recomandările AI:</strong> Poți retrage
+                        consimțământul pentru procesarea datelor prin AI oricând, din setările
+                        contului
+                      </li>
+                    </ul>
+
+                    <h3 className="bd-legal-subsection-title mb-15">7.4. Limitările AI Coach</h3>
+                    <p className="mb-20">
+                      Recomandările AI Coach sunt sugestii orientative și nu înlocuiesc consultul cu
+                      un specialist (medic, psiholog sportiv, antrenor). Decizia finală privind
+                      sportul potrivit pentru copilul tău îți aparține. AI-ul nu are acces la
+                      informații medicale detaliate și nu poate evalua aptitudinile fizice reale ale
+                      copilului.
+                    </p>
+
+                    <h3 className="bd-legal-subsection-title mb-15">
+                      7.5. Cum soliciți revizuire umană
+                    </h3>
+                    <p className="mb-20">
+                      Pentru a solicita revizuirea umană a recomandărilor AI sau pentru a contesta o
+                      decizie automatizată, trimite un email la{" "}
+                      <a href="mailto:gdpr@yuvoo.ro" className="text-yuvoo-primary">
+                        gdpr@yuvoo.ro
+                      </a>{" "}
+                      cu subiectul &quot;Revizuire recomandări AI&quot;. Vom răspunde în termen de 7
+                      zile lucrătoare.
+                    </p>
+                  </div>
+
+                  <div className="bd-legal-section mb-40">
+                    <h2 className="bd-legal-section-title mb-20">8. Păstrarea datelor</h2>
                     <p className="mb-15">Păstrăm datele tale personale pentru:</p>
                     <ul className="mb-20">
                       <li>
@@ -292,7 +408,7 @@ export default function PrivacyPolicyPage() {
                   </div>
 
                   <div className="bd-legal-section mb-40">
-                    <h2 className="bd-legal-section-title mb-20">8. Securitatea datelor</h2>
+                    <h2 className="bd-legal-section-title mb-20">9. Securitatea datelor</h2>
                     <p className="mb-15">
                       Implementăm măsuri tehnice și organizatorice pentru protejarea datelor tale:
                     </p>
@@ -321,7 +437,7 @@ export default function PrivacyPolicyPage() {
                   </div>
 
                   <div className="bd-legal-section mb-40">
-                    <h2 className="bd-legal-section-title mb-20">9. Modificări ale politicii</h2>
+                    <h2 className="bd-legal-section-title mb-20">10. Modificări ale politicii</h2>
                     <p className="mb-20">
                       Ne rezervăm dreptul de a actualiza această politică de confidențialitate. Te
                       vom notifica despre modificări importante prin email sau prin notificare pe
@@ -331,7 +447,7 @@ export default function PrivacyPolicyPage() {
                   </div>
 
                   <div className="bd-legal-section">
-                    <h2 className="bd-legal-section-title mb-20">10. Contact</h2>
+                    <h2 className="bd-legal-section-title mb-20">11. Contact</h2>
                     <p className="mb-15">
                       Pentru întrebări despre această politică de confidențialitate sau pentru a
                       exercita drepturile tale GDPR, contactează-ne:

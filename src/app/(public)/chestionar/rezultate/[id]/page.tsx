@@ -7,6 +7,8 @@ import { getQuizResultAction } from "@/app/actions/quiz";
 import SportRecommendationCard from "@/components/features/quiz/SportRecommendationCard";
 import SpecialistRecommendationCard from "@/components/features/quiz/SpecialistRecommendationCard";
 import ResultsActions from "@/components/features/quiz/ResultsActions";
+import AITransparencyDisclaimer from "@/components/features/quiz/AITransparencyDisclaimer";
+import HumanReviewRequestButton from "@/components/features/quiz/HumanReviewRequestButton";
 import { routes } from "@/lib/routes";
 import { getSession } from "@/lib/auth/session";
 
@@ -120,11 +122,19 @@ export default async function QuizResultsPage({ params }: QuizResultsPageProps) 
                 </p>
               </div>
 
-              {/* Results Actions */}
+              {/* Results Actions - above the fold so CTAs are dominant */}
               <ResultsActions
                 quizId={quizResult.id}
-                className="mb-4"
+                className="mb-5"
                 isAuthenticated={isAuthenticated}
+              />
+
+              {/* AI Transparency Disclaimer - GDPR Art. 22 & EU AI Act Compliance */}
+              <AITransparencyDisclaimer
+                quizId={quizResult.id}
+                showMedicalDisclaimer={true}
+                showHumanReviewCTA={false} // Separate card below
+                className="mb-5"
               />
 
               {/* Specialist Recommendation */}
@@ -143,7 +153,7 @@ export default async function QuizResultsPage({ params }: QuizResultsPageProps) 
               {/* Sport Recommendations */}
               <div className="recommendations-list">
                 <h2 className="h4 mb-4">
-                  <i className="bi bi-star-fill text-warning me-2"></i>
+                  <i className="bi bi-star-fill text-yuvoo-secondary me-2"></i>
                   Sporturi Recomandate
                 </h2>
 
@@ -162,6 +172,36 @@ export default async function QuizResultsPage({ params }: QuizResultsPageProps) 
                   </div>
                 )}
               </div>
+
+              {/* Human Review Request - GDPR Art. 22 */}
+              {isAuthenticated && (
+                <div className="mt-5 pt-4 border-top">
+                  <div className="card border-yuvoo-primary bg-yuvoo-primary-light">
+                    <div className="card-body">
+                      <div className="d-flex align-items-start gap-3">
+                        <div className="flex-shrink-0">
+                          <i className="bi bi-person-check fs-3 text-yuvoo-primary" />
+                        </div>
+                        <div className="flex-grow-1">
+                          <h5 className="card-title h6 mb-2">
+                            Dreptul la Revizuire Umană (GDPR Art. 22)
+                          </h5>
+                          <p className="card-text text-muted small mb-3">
+                            Ai dreptul să soliciți revizuirea recomandărilor de către o persoană
+                            umană. Echipa noastră va analiza profilul copilului tău și va oferi
+                            clarificări sau recomandări suplimentare.
+                          </p>
+                          <HumanReviewRequestButton
+                            quizId={quizResult.id}
+                            variant="outline"
+                            className="btn-yuvoo-outline-primary"
+                          />
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              )}
 
               {/* Additional Information */}
               <div className="mt-4 pt-4 border-top">
