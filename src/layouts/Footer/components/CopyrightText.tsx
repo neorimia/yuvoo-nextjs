@@ -27,10 +27,16 @@ const CopyrightText: React.FC<CopyrightTextProps> = async ({
         />
       </div>
       <div className="container">
-        <div className="bd-footer-copyright-wrap d-flex flex-column flex-md-row align-items-md-center justify-content-md-center gap-3 pb-20">
+        <div className="bd-footer-copyright-wrap d-flex flex-column flex-md-row align-items-md-center justify-content-between gap-3 pb-20">
           <div className="bd-footer-copyright-text">
             <p className="mb-0">
               &copy; {new Date().getFullYear()} Yuvoo. Toate drepturile rezervate.
+            </p>
+            <p className="mb-0 small text-body-secondary">
+              Built &amp; maintained by{" "}
+              <Link href={routes.neorimia} className="text-body-secondary">
+                Neorimia
+              </Link>
             </p>
           </div>
           <div className="bd-footer-legal-links d-flex flex-wrap align-items-center justify-content-center gap-3">

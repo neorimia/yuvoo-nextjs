@@ -14,6 +14,7 @@ const CopyrightTextTwo = async () => {
           <p className="mb-0">
             &copy; {new Date().getFullYear()} Yuvoo. Toate drepturile rezervate.
           </p>
+          <p className="mb-0 small opacity-75">Built &amp; maintained by Neorimia</p>
         </div>
         <div className="bd-footer-legal-links d-flex flex-wrap align-items-center justify-content-center gap-3 pb-20">
           <Link href={routes.privacy} className="bd-footer-legal-link is-white">
