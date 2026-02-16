@@ -18,6 +18,7 @@
  * These routes are indexed by search engines and should use Romanian keywords.
  */
 export const routes = {
+  neorimia: "https://neorimia.ro",
   // Home & Landing
   home: "/",
   home2: "/home-2",
