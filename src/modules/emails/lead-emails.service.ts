@@ -15,8 +15,7 @@ import type { Club } from "@/modules/clubs/clubs.types";
 
 /**
  * Send lead notification email to club
- * CRITICAL: NO parent contact info in email (name, email, phone)
- * Only shows: sport, child age, location
+ * Includes parent contact info — contact between parents and clubs is free
  */
 export async function sendLeadNotificationEmail(params: {
   clubEmail: string;
@@ -25,6 +24,9 @@ export async function sendLeadNotificationEmail(params: {
   childAge: number;
   locationName: string;
   leadId: string;
+  parentName: string;
+  parentEmail: string;
+  parentPhone: string | null;
 }): Promise<void> {
   try {
     // Validate email
@@ -43,6 +45,9 @@ export async function sendLeadNotificationEmail(params: {
       childAge: params.childAge,
       locationName: params.locationName,
       leadId: params.leadId,
+      parentName: params.parentName,
+      parentEmail: params.parentEmail,
+      parentPhone: params.parentPhone,
     });
 
     const { html, text } = await renderEmail(emailComponent);

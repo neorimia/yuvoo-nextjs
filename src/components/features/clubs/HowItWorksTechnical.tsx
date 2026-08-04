@@ -221,13 +221,14 @@ export default function HowItWorksTechnical() {
                   </h4>
                   <div style={{ fontSize: "14px", color: "#424242", lineHeight: "1.8" }}>
                     <p style={{ marginBottom: "15px" }}>
-                      <strong>Pay-per-lead:</strong> Plătești <strong>3€ per cerere</strong> (plată
-                      unică prin Stripe Payment Intents). Ideal dacă primești rar cereri.
+                      <strong>Contact gratuit:</strong> Toate cluburile văd datele de contact ale
+                      părinților fără plată. Părinții văd și contactul clubului direct pe pagina de
+                      profil.
                     </p>
                     <p style={{ marginBottom: 0 }}>
                       <strong>Premium:</strong> Abonament <strong>99,99 RON/lună</strong> sau{" "}
-                      <strong>999,99 RON/an</strong> pentru acces nelimitat. Dacă primești mai mult
-                      de 3 cereri pe lună, Premium se plătește singur.
+                      <strong>999,99 RON/an</strong> pentru badge verificat, afișare prioritară și
+                      profil evidențiat.
                     </p>
                   </div>
                 </div>

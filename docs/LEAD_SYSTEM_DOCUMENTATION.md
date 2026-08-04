@@ -2,9 +2,9 @@
 
 ## Overview
 
-The Lead Generation System enables parents to express interest in clubs, with clubs paying per lead (3€) or upgrading to Premium (199 lei/year) for unlimited access. This system includes automated expiration, reminders, and premium benefits.
+The Lead Generation System enables parents to express interest in clubs. **Contact between parents and clubs is free for both parties.** Clubs can optionally upgrade to Premium for increased visibility (badge, priority listing). The system includes automated expiration, reminders, and email notifications with full contact details.
 
-**Status**: Phase 1-6 Complete ✅ | Phase 7 Complete ✅
+**Status**: Phase 1-8 Complete ✅ | Free contact model active ✅
 
 ---
 

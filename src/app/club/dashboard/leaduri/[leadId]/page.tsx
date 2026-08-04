@@ -14,7 +14,6 @@ import type { Metadata } from "next";
 import { requireAuth } from "@/lib/auth/session";
 import { getClubByAdminUserId } from "@/modules/clubs/clubs.service";
 import { getLeadForClub } from "@/modules/leads/leads.service";
-import { premiumClubService } from "@/modules/clubs/premium-club.service";
 import ClubNotFoundState from "@/components/features/clubs/ClubNotFoundState";
 import LeadDetailView from "@/components/features/clubs/LeadDetailView";
 import { routes } from "@/lib/routes";
@@ -102,12 +101,6 @@ export default async function LeadDetailPage({ params }: LeadDetailPageProps) {
     notFound();
   }
 
-  // Check premium status
-  const isPremium = await premiumClubService.checkIsPremium(club.id);
-
-  // Check if contact info is visible
-  const contactVisible = isPremium || lead.paymentId !== null;
-
   // Fetch location name
   const locationName = lead.locationId ? await getLocationNameById(lead.locationId) : null;
   const leadWithLocation = {
@@ -129,13 +122,5 @@ export default async function LeadDetailPage({ params }: LeadDetailPageProps) {
     console.error("[Lead Detail Page] Error tracking lead view:", error);
   }
 
-  return (
-    <LeadDetailView
-      _club={club}
-      club={club}
-      lead={leadWithLocation}
-      isPremium={isPremium}
-      contactVisible={contactVisible}
-    />
-  );
+  return <LeadDetailView _club={club} club={club} lead={leadWithLocation} />;
 }

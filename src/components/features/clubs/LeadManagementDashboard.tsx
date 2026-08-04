@@ -75,7 +75,7 @@ const LeadManagementDashboard: React.FC<LeadManagementDashboardProps> = ({
           {!isPremium && (
             <Link href={routes.club.premium} className="btn btn-outline-primary">
               <i className="bi bi-star-fill me-2"></i>
-              Upgrade la Premium
+              Crește vizibilitatea cu Premium
             </Link>
           )}
         </div>
@@ -85,7 +85,8 @@ const LeadManagementDashboard: React.FC<LeadManagementDashboardProps> = ({
       {isPremium && (
         <div className="alert alert-info mb-4">
           <i className="bi bi-check-circle-fill me-2"></i>
-          <strong>Club Premium:</strong> Ai acces nelimitat la toate cererile.
+          <strong>Club Premium:</strong> Beneficiezi de badge verificat și afișare prioritară în
+          listări.
         </div>
       )}
 

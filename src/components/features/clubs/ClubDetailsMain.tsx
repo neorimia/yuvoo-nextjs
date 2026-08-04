@@ -194,70 +194,84 @@ const ClubDetailsMain: React.FC<ClubDetailsMainProps> = ({ club, isPremium = fal
                     <h5 className="mb-3">
                       <i className="fa-regular fa-phone me-2"></i>Informații de Contact
                     </h5>
-                    {clubIsPremium ? (
-                      // Premium clubs: Show all contact info
-                      <div className="d-flex flex-column gap-3">
-                        {club.contact.phone && (
-                          <div className="d-flex align-items-center">
-                            <i className="fa-regular fa-phone text-yuvoo-primary me-3 fs-5"></i>
-                            <div>
-                              <span className="d-block small text-muted">Telefon</span>
-                              <a
-                                href={`tel:${club.contact.phone}`}
-                                className="text-decoration-none"
-                              >
-                                {club.contact.phone}
-                              </a>
-                            </div>
+                    <div className="d-flex flex-column gap-3">
+                      {club.contact.phone && (
+                        <div className="d-flex align-items-center">
+                          <i className="fa-regular fa-phone text-yuvoo-primary me-3 fs-5"></i>
+                          <div>
+                            <span className="d-block small text-muted">Telefon</span>
+                            <a href={`tel:${club.contact.phone}`} className="text-decoration-none">
+                              {club.contact.phone}
+                            </a>
                           </div>
-                        )}
-                        {club.contact.email && (
-                          <div className="d-flex align-items-center">
-                            <i className="fa-regular fa-envelope text-yuvoo-primary me-3 fs-5"></i>
-                            <div>
-                              <span className="d-block small text-muted">Email</span>
-                              <a
-                                href={`mailto:${club.contact.email}`}
-                                className="text-decoration-none"
-                              >
-                                {club.contact.email}
-                              </a>
-                            </div>
+                        </div>
+                      )}
+                      {club.contact.email && (
+                        <div className="d-flex align-items-center">
+                          <i className="fa-regular fa-envelope text-yuvoo-primary me-3 fs-5"></i>
+                          <div>
+                            <span className="d-block small text-muted">Email</span>
+                            <a
+                              href={`mailto:${club.contact.email}`}
+                              className="text-decoration-none"
+                            >
+                              {club.contact.email}
+                            </a>
                           </div>
-                        )}
-                        {club.contact.website && (
-                          <div className="d-flex align-items-center">
-                            <i className="fa-regular fa-globe text-yuvoo-primary me-3 fs-5"></i>
-                            <div>
-                              <span className="d-block small text-muted">Website</span>
-                              <a
-                                href={club.contact.website}
-                                target="_blank"
-                                rel="noopener noreferrer"
-                                className="text-decoration-none"
-                              >
-                                {club.contact.website.replace(/^https?:\/\//, "")}
-                              </a>
-                            </div>
+                        </div>
+                      )}
+                      {club.contact.website && (
+                        <div className="d-flex align-items-center">
+                          <i className="fa-regular fa-globe text-yuvoo-primary me-3 fs-5"></i>
+                          <div>
+                            <span className="d-block small text-muted">Website</span>
+                            <a
+                              href={club.contact.website}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              className="text-decoration-none"
+                            >
+                              {club.contact.website.replace(/^https?:\/\//, "")}
+                            </a>
                           </div>
-                        )}
-                      </div>
-                    ) : (
-                      // Non-premium clubs: Show lead submission button instead of contact info
-                      <div className="d-flex flex-column gap-3">
-                        <p className="text-muted mb-3">
-                          Pentru a contacta acest club, te rugăm să trimiți un mesaj prin platformă.
-                        </p>
-                        <LeadSubmissionButton
-                          clubId={club.id}
-                          clubName={club.name}
-                          sportType={club.sportName || null}
-                          locationId={club.location.cityId || null}
-                        />
-                      </div>
-                    )}
+                        </div>
+                      )}
+                    </div>
+                    <div className="mt-4 pt-3 border-top">
+                      <p className="text-muted small mb-3">
+                        Contactul clubului este gratuit. Poți trimite și un mesaj prin Yuvoo ca să
+                        primești confirmare de la club.
+                      </p>
+                      <LeadSubmissionButton
+                        clubId={club.id}
+                        clubName={club.name}
+                        sportType={club.sportName || null}
+                        locationId={club.location.cityId || null}
+                        variant="secondary"
+                      />
+                    </div>
                   </div>
                 )}
+
+              {/* Lead form when club has no public contact info */}
+              {(!club.contact ||
+                (!club.contact.phone && !club.contact.email && !club.contact.website)) && (
+                <div className="bd-club-details-contact mt-4 pt-4 border-top">
+                  <h5 className="mb-3">
+                    <i className="fa-regular fa-paper-plane me-2"></i>Contactează clubul
+                  </h5>
+                  <p className="text-muted mb-3">
+                    Trimite un mesaj prin Yuvoo. Contactul este gratuit — clubul va primi datele
+                    tale de contact.
+                  </p>
+                  <LeadSubmissionButton
+                    clubId={club.id}
+                    clubName={club.name}
+                    sportType={club.sportName || null}
+                    locationId={club.location.cityId || null}
+                  />
+                </div>
+              )}
             </div>
           </div>
         </div>

@@ -1,43 +1,38 @@
 PARTEA 2 — MONETIZARE CLUBURI
 
-„Lead-uri de la părinți + Premium Club”
+„Cereri de la părinți + Premium Club (vizibilitate)”
 
 Context
 
-Yuvoo indexează cluburi sportive și activități pentru copii. Majoritatea cluburilor NU doresc să plătească abonamente upfront. Prin urmare, monetizarea trebuie să fie bazată pe cerere reală (lead-uri validate), nu pe promisiuni de vizibilitate.
-
-Această funcționalitate transformă interesul părintelui într-un lead blocat, pe care clubul îl poate debloca prin:
-• plată per lead
-• sau upgrade la Premium Club
+Yuvoo indexează cluburi sportive și activități pentru copii. Contactul între părinți și cluburi este **gratuit** pentru ambele părți. Monetizarea cluburilor se face prin **Premium** (vizibilitate, badge, listare prioritară), nu prin deblocarea contactului.
 
 ⸻
 
 Principii de business (obligatorii)
 • Cluburile NU plătesc ca să apară
-• Cluburile plătesc DOAR când există interes real
-• Fără abonamente forțate
-• Fără fricțiune mare la primul contact
-• Lead = cerere explicită de la un părinte real
+• Contactul părinte ↔ club este GRATUIT
+• Premium = vizibilitate și credibilitate, nu acces la date
+• Fără abonamente forțate pentru contact
+• Cerere = interes explicit de la un părinte real
 
 ⸻
 
 Flow funcțional – Părinte (B2C)
 
-1. Pagina de club (FREE sau PREMIUM)
+1. Pagina de club
 
-Pe paginile cluburilor fără premium, NU sunt afișate datele de contact directe ale clubului.
+Pe toate paginile de club sunt afișate datele de contact directe (telefon, email, website) când există în profil.
 
-Este afișat un buton clar:
+Este disponibil și un formular opțional:
 
-CTA: „Sunt interesat”
+CTA secundar: „Trimite un mesaj prin Yuvoo”
 
 ⸻
 
-2. Click pe „Sunt interesat” → Modal Lead
+2. Click pe formular → Modal cerere
 
-Modalul trebuie să conțină:
-• explicație scurtă:
-„Trimite interesul tău către acest club. Te vom anunța dacă acesta răspunde.”
+Modalul conține:
+• explicație: contactul este gratuit; formularul trimite un mesaj structurat către club
 
 Câmpuri obligatorii:
 • Nume părinte
@@ -47,30 +42,21 @@ Câmpuri obligatorii:
 • Mesaj scurt (opțional)
 
 După submit:
-• părintele vede status: „Interes trimis către club”
-• NU vede datele clubului
+• părintele vede confirmare
+• clubul primește email cu datele de contact ale părintelui
 • NU i se promite răspuns garantat
 
 ⸻
 
 Flow funcțional – Platformă (Yuvoo)
 
-3. Crearea Lead-ului (Locked Lead)
+3. Crearea cererii
 
 După submit:
-• se creează un lead blocat
-• lead-ul este asociat cu:
-• clubul
-• sportul
-• orașul
-• vârsta copilului
-• lead-ul are status:
-• „Nou”
-• „În așteptare”
-• „Acceptat”
-• „Expirat”
-
-Lead-ul are valabilitate limitată (ex: 5 zile).
+• se creează o cerere asociată cu clubul, sportul, orașul, vârsta copilului
+• clubul primește notificare email cu date de contact complete
+• cererea are status: „Nou”, „În așteptare”, „Acceptat”, „Expirat”
+• valabilitate limitată (ex: 5 zile) pentru follow-up
 
 ⸻
 
@@ -78,54 +64,36 @@ Flow funcțional – Club (B2B)
 
 4. Notificare Club (Email)
 
-Clubul primește un email automat cu conținut FOARTE CONCRET:
-
-„Un părinte caută [SPORT] pentru copil de [VÂRSTĂ] ani, în [ORAȘ].
-Vrei să vezi datele de contact?”
-
-Emailul NU conține:
-• nume părinte
-• email
-• telefon
+Clubul primește email cu:
+• sport, vârstă copil, locație
+• nume, email, telefon părinte
+• CTA: contactează părintele / vezi în dashboard
 
 ⸻
 
-5. Opțiuni Club (Paywall B2B)
+5. Premium Club (opțional)
 
-Clubul are două opțiuni clare:
-
-🟢 Opțiunea A — Pay per Lead
-• 3 € / lead
-• plată unică
-• după plată:
-• clubul vede datele părintelui
-• lead-ul devine „Acceptat”
-
-🟣 Opțiunea B — Upgrade Premium Club
-• 199 lei / an
-Include:
+Clubul poate upgrade la Premium pentru:
 • badge „Verificat Yuvoo”
-• acces nelimitat la lead-uri
 • afișare prioritară în listări
-• date de contact vizibile pentru părinți
-• notificări instant pentru lead-uri noi
+• profil evidențiat
+• notificări instant
+
+Premium NU deblochează contact — contactul este deja gratuit.
 
 ⸻
 
 UX & Copy Rules (critice)
 
 Pentru părinți:
-• NU afișa „clubul trebuie să plătească”
+• Mesaj clar: „Contactul clubului este gratuit”
 • NU afișa prețuri B2B
-• mesajul trebuie să fie:
-„Trimitem interesul tău către club”
+• Formularul Yuvoo = mesaj structurat opțional
 
 Pentru cluburi:
-• NU folosi termenul „lead”
-• folosește:
-• „cerere”
-• „părinte interesat”
-• „oportunitate”
+• NU folosi termenul „lead” în UI
+• folosește: „cerere”, „părinte interesat”
+• Mesaj clar: „Contactul cu părinții este gratuit”
 
 ⸻
 
@@ -133,28 +101,19 @@ Fallback logic (obligatoriu)
 
 Dacă clubul NU răspunde:
 • după 48h → reminder automat
-• după 5 zile → lead expirat
-• părintele primește mesaj:
-„Îți recomandăm alte cluburi similare”
-
-⸻
-
-KPI-uri de business (pentru monitorizare)
-• Lead submit rate (părinte): ≥10% din vizitatori pagină club
-• Lead accept rate (club): ≥30%
-• Time to accept: <48h
-• Conversie Pay per Lead → Premium: ≥10–15%
+• după 5 zile → cerere expirată
+• părintele primește mesaj: „Îți recomandăm alte cluburi similare”
 
 ⸻
 
 Ce NU trebuie să facă implementarea
-• NU afișa datele părintelui gratuit
+• NU bloca datele părintelui în spatele unui paywall
+• NU bloca contactul clubului pentru părinți
 • NU trimite datele părintelui fără consimțământ
-• NU promite cluburilor rezultate
-• NU bloca accesul cluburilor la platformă dacă nu plătesc
+• NU promite cluburilor rezultate garantate
 
 ⸻
 
-Rezumat pentru Cursor (1 paragraf)
+Rezumat
 
-Implementarea trebuie să creeze un sistem de lead-uri blocate: părintele trimite interes prin butonul „Sunt interesat”, Yuvoo creează un lead fără a afișa datele părintelui, clubul primește notificare și poate debloca datele prin plată per lead (3 €) sau prin upgrade la Premium Club (199 lei/an), cu logică de expirare, fallback pentru părinți și UX care protejează încrederea ambelor părți.
+Părinții văd contactul clubului direct pe pagină. Pot trimite opțional o cerere prin Yuvoo. Cluburile primesc datele părintelui gratuit (email + dashboard). Premium se vinde pe vizibilitate, nu pe deblocarea contactului.

@@ -8,9 +8,7 @@
 
 import { requireRole } from "@/modules/auth/auth.service";
 import { getClubByAdminUserId } from "@/modules/clubs/clubs.service";
-import { getLeadForClub } from "@/modules/leads/leads.service";
 import {
-  createPayPerLeadPaymentIntent,
   createPremiumUpgradeCheckoutSession,
   PREMIUM_MONTHLY_AMOUNT_BANI,
   PREMIUM_YEARLY_AMOUNT_BANI,
@@ -26,59 +24,12 @@ import { PostHogEvents, PostHogProperties } from "@/lib/analytics/events";
 export async function createPayPerLeadPaymentAction(
   leadId: string
 ): Promise<{ success: boolean; clientSecret?: string; error?: string }> {
-  try {
-    // Require club admin role
-    const user = await requireRole("club_admin");
-
-    // Get club for this admin
-    const club = await getClubByAdminUserId(user.id);
-    if (!club) {
-      return {
-        success: false,
-        error: "Clubul nu a fost găsit",
-      };
-    }
-
-    // Get lead and verify ownership
-    const lead = await getLeadForClub(leadId, club.id);
-    if (!lead) {
-      return {
-        success: false,
-        error: "Cererea nu a fost găsită",
-      };
-    }
-
-    // Check if already paid/premium
-    if (lead.paymentId) {
-      return {
-        success: false,
-        error: "Această cerere a fost deja deblocată",
-      };
-    }
-
-    // Create payment intent
-    const { clientSecret } = await createPayPerLeadPaymentIntent(leadId, club.id);
-
-    // Track payment initiation
-    await trackEventServer(PostHogEvents.LEAD_PAYMENT_INITIATED, {
-      distinctId: user.id,
-      [PostHogProperties.LEAD_ID]: leadId,
-      [PostHogProperties.CLUB_ID]: club.id,
-      [PostHogProperties.LEAD_PAYMENT_METHOD]: "pay_per_lead",
-      [PostHogProperties.PAYMENT_AMOUNT]: 300, // 3€ in cents
-    });
-
-    return {
-      success: true,
-      clientSecret,
-    };
-  } catch (error) {
-    console.error("Error creating pay-per-lead payment:", error);
-    return {
-      success: false,
-      error: error instanceof Error ? error.message : "Eroare la crearea plății",
-    };
-  }
+  void leadId;
+  return {
+    success: false,
+    error:
+      "Contactul cu părinții este gratuit. Nu mai este nevoie de plată pentru a vedea datele de contact.",
+  };
 }
 
 /**

@@ -9,7 +9,6 @@ import { leadsRepository } from "./leads.repository";
 import { createLeadSchema } from "@/lib/validations/leads";
 import type { Lead, CreateLeadInput, LeadStatus, LeadWithRelations } from "@/types/leads";
 import { LeadStatus as LeadStatusEnum } from "@/types/leads";
-import { premiumClubService } from "@/modules/clubs/premium-club.service";
 import { clubsRepository } from "@/modules/clubs/clubs.repository";
 import { suggestAlternativeClubs } from "@/modules/clubs/clubs.service";
 import {
@@ -81,6 +80,9 @@ export async function createLead(input: CreateLeadInput): Promise<Lead> {
         childAge: validated.childAge,
         locationName: locationName,
         leadId: lead.id,
+        parentName: validated.parentName,
+        parentEmail: validated.parentEmail,
+        parentPhone: validated.parentPhone ?? null,
       }).catch((error) => {
         // Log but don't throw - email failures shouldn't block lead creation
         console.error("[Lead Service] Failed to send lead notification email:", error);
@@ -98,7 +100,7 @@ export async function createLead(input: CreateLeadInput): Promise<Lead> {
 }
 
 /**
- * Get lead for club (hides contact info if not paid/premium)
+ * Get lead for club (parent contact is always visible — contact is free for clubs)
  */
 export async function getLeadForClub(
   leadId: string,
@@ -113,20 +115,6 @@ export async function getLeadForClub(
   // Verify ownership
   if (lead.clubId !== clubId) {
     throw new Error("Nu aveți acces la această cerere");
-  }
-
-  // Check if contact info should be revealed
-  const isPremium = await premiumClubService.checkIsPremium(clubId);
-  const isPaid = lead.paymentId !== null;
-
-  if (!isPremium && !isPaid) {
-    // Hide contact info
-    return {
-      ...lead,
-      parentName: "[Ascuns]",
-      parentEmail: "[Ascuns]",
-      parentPhone: null,
-    } as LeadWithRelations;
   }
 
   return lead as LeadWithRelations;

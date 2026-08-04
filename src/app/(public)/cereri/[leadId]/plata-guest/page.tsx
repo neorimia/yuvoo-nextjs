@@ -1,20 +1,18 @@
 /**
- * Guest Lead Payment Page
+ * Guest Lead Access Page
  *
- * Public page for clubs without accounts to pay for lead access.
- * No authentication required.
+ * Deprecated paywall — contact is now free.
+ * Shows parent contact info for clubs accessing old email links.
  * Route: /cereri/[leadId]/plata-guest
- *
- * Note: This is a dynamic route that depends on params, so we don't use "use cache" directive.
  */
 
-import React from "react";
 import type { Metadata } from "next";
+import Link from "next/link";
 import { notFound } from "next/navigation";
 import { leadsRepository } from "@/modules/leads/leads.repository";
 import { clubsRepository } from "@/modules/clubs/clubs.repository";
 import { getLocationNameById } from "@/lib/db/location-helpers";
-import GuestLeadPayment from "@/components/features/clubs/GuestLeadPayment";
+import { routes } from "@/lib/routes";
 
 interface GuestPaymentPageProps {
   params: Promise<{
@@ -22,20 +20,15 @@ interface GuestPaymentPageProps {
   }>;
 }
 
-/**
- * Generate static params - returns placeholder to satisfy Cache Components requirement
- * This route is dynamic and will be generated at runtime, but we need at least one value for build validation
- */
 export async function generateStaticParams() {
   return [{ leadId: "placeholder-lead-id" }];
 }
 
 export async function generateMetadata({ params }: GuestPaymentPageProps): Promise<Metadata> {
-  // Access params to mark as dynamic
   await params;
   return {
-    title: `Plată cerere - Yuvoo`,
-    description: "Plătește pentru a accesa informațiile de contact ale părintelui.",
+    title: `Cerere de la părinte - Yuvoo`,
+    description: "Date de contact părinte — contact gratuit între părinți și cluburi.",
   };
 }
 
@@ -43,32 +36,23 @@ export default async function GuestPaymentPage({ params }: GuestPaymentPageProps
   const { leadId } = await params;
   const isProductionBuild = process.env.NEXT_PHASE === "phase-production-build";
 
-  // During build, render placeholder for placeholder lead ID
   if (isProductionBuild && leadId === "placeholder-lead-id") {
-    return (
-      <div className="container py-5">
-        <div className="row justify-content-center">
-          <div className="col-lg-8">
-            <div className="card">
-              <div className="card-body text-center py-5">
-                <h2 className="mb-3">Plată Cerere</h2>
-                <p className="text-muted">Build placeholder</p>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    );
+    return null;
   }
 
-  // Fetch lead (no authentication required)
   const lead = await leadsRepository.findById(leadId);
   if (!lead) {
     notFound();
   }
 
-  // Check if lead is expired
   const isExpired = new Date(lead.expiresAt) < new Date();
+  const club = await clubsRepository.getClubById(lead.clubId);
+  if (!club) {
+    notFound();
+  }
+
+  const locationName = lead.locationId ? await getLocationNameById(lead.locationId) : null;
+
   if (isExpired) {
     return (
       <div className="container py-5">
@@ -82,7 +66,7 @@ export default async function GuestPaymentPage({ params }: GuestPaymentPageProps
                 ></i>
                 <h2 className="mt-3 mb-3">Cerere expirată</h2>
                 <p className="text-muted">
-                  Această cerere a expirat. Cererile expiră după 5 zile dacă nu sunt acceptate.
+                  Această cerere a expirat. Cererile expiră după 5 zile dacă nu sunt răspunse.
                 </p>
               </div>
             </div>
@@ -91,51 +75,62 @@ export default async function GuestPaymentPage({ params }: GuestPaymentPageProps
       </div>
     );
   }
-
-  // Check if lead is already paid (prevent duplicate payments)
-  if (lead.paymentId) {
-    return (
-      <div className="container py-5">
-        <div className="row justify-content-center">
-          <div className="col-lg-8">
-            <div className="card border-success">
-              <div className="card-body text-center py-5">
-                <i
-                  className="bi bi-check-circle-fill text-success"
-                  style={{ fontSize: "3rem" }}
-                ></i>
-                <h2 className="mt-3 mb-3">Cerere deja deblocată</h2>
-                <p className="text-muted">
-                  Această cerere a fost deja deblocată. Dacă ai plătit, vei primi informațiile de
-                  contact pe email.
-                </p>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    );
-  }
-
-  // Fetch club information
-  const club = await clubsRepository.getClubById(lead.clubId);
-  if (!club) {
-    notFound();
-  }
-
-  // Fetch location name
-  const locationName = lead.locationId ? await getLocationNameById(lead.locationId) : null;
-
-  const leadWithLocation = {
-    ...lead,
-    locationName,
-  };
 
   return (
     <div className="container py-5">
       <div className="row justify-content-center">
-        <div className="col-lg-10">
-          <GuestLeadPayment lead={leadWithLocation} club={club} />
+        <div className="col-lg-8">
+          <div className="card">
+            <div className="card-header bg-success text-white">
+              <h1 className="h4 mb-0">Contact gratuit — cerere de la părinte</h1>
+            </div>
+            <div className="card-body">
+              <p className="text-muted mb-4">
+                Nu mai este nevoie de plată. Contactul cu părinții este gratuit pe Yuvoo.
+              </p>
+              <p>
+                <strong>Club:</strong> {club.name}
+                <br />
+                <strong>Sport:</strong> {lead.sportType || club.sportName}
+                <br />
+                <strong>Vârsta copilului:</strong> {lead.childAge} ani
+                {locationName && (
+                  <>
+                    <br />
+                    <strong>Locație:</strong> {locationName}
+                  </>
+                )}
+              </p>
+              <hr />
+              <h2 className="h5 mb-3">Date de contact părinte</h2>
+              <p>
+                <strong>Nume:</strong> {lead.parentName}
+                <br />
+                <strong>Email:</strong>{" "}
+                <a href={`mailto:${lead.parentEmail}`}>{lead.parentEmail}</a>
+                {lead.parentPhone && (
+                  <>
+                    <br />
+                    <strong>Telefon:</strong>{" "}
+                    <a href={`tel:${lead.parentPhone}`}>{lead.parentPhone}</a>
+                  </>
+                )}
+              </p>
+              {lead.message && (
+                <p className="mt-3">
+                  <strong>Mesaj:</strong> {lead.message}
+                </p>
+              )}
+              <div className="d-flex gap-2 flex-wrap mt-4">
+                <a href={`mailto:${lead.parentEmail}`} className="btn btn-yuvoo-primary">
+                  Contactează părintele
+                </a>
+                <Link href={routes.login} className="btn btn-outline-secondary">
+                  Autentificare club
+                </Link>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
     </div>

@@ -21,6 +21,7 @@ interface LeadSubmissionModalProps {
   locationId?: string | null;
   isOpen: boolean;
   onClose: () => void;
+  variant?: "primary" | "secondary";
 }
 
 type LeadFormData = Omit<CreateLeadInput, "clubId" | "sportType" | "locationId" | "ipAddress">;
@@ -32,6 +33,7 @@ const LeadSubmissionModal: React.FC<LeadSubmissionModalProps> = ({
   locationId,
   isOpen,
   onClose,
+  variant = "primary",
 }) => {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitSuccess, setSubmitSuccess] = useState(false);
@@ -130,7 +132,7 @@ const LeadSubmissionModal: React.FC<LeadSubmissionModalProps> = ({
           <div className="modal-content">
             <div className="modal-header">
               <h5 className="modal-title mb-0" id="leadModalLabel">
-                Sunt interesat
+                {variant === "secondary" ? "Trimite un mesaj prin Yuvoo" : "Sunt interesat"}
               </h5>
               <button
                 type="button"
@@ -142,8 +144,17 @@ const LeadSubmissionModal: React.FC<LeadSubmissionModalProps> = ({
             </div>
             <div className="modal-body">
               <p className="mb-4 text-muted">
-                Trimite interesul tău către <strong>{clubName}</strong>. Te vom anunța dacă acesta
-                răspunde.
+                {variant === "secondary" ? (
+                  <>
+                    Trimite un mesaj către <strong>{clubName}</strong>. Contactul este gratuit —
+                    datele clubului sunt deja afișate mai sus.
+                  </>
+                ) : (
+                  <>
+                    Trimite interesul tău către <strong>{clubName}</strong>. Contactul este gratuit
+                    — clubul va primi datele tale de contact.
+                  </>
+                )}
               </p>
 
               {submitSuccess ? (
@@ -151,7 +162,10 @@ const LeadSubmissionModal: React.FC<LeadSubmissionModalProps> = ({
                   <i className="fa-regular fa-check-circle me-2 fs-5"></i>
                   <div>
                     <strong>Interes trimis către club!</strong>
-                    <p className="mb-0 mt-1 small">Te vom anunța când clubul răspunde.</p>
+                    <p className="mb-0 mt-1 small">
+                      Clubul a primit datele tale de contact. Poți contacta clubul direct folosind
+                      informațiile de mai sus.
+                    </p>
                   </div>
                 </div>
               ) : (

@@ -25,33 +25,33 @@ export default function ClubsLandingPricing() {
     },
     {
       id: 2,
-      icon: "fa-solid fa-infinity",
-      title: "Acces nelimitat la cereri",
-      description: "Vezi toate cererile fără plată suplimentară",
-    },
-    {
-      id: 3,
       icon: "fa-solid fa-star",
       title: "Afișare prioritară în listări",
       description: "Apari primul în rezultatele de căutare",
     },
     {
-      id: 4,
-      icon: "fa-solid fa-phone",
-      title: "Date de contact vizibile",
-      description: "Părinții te pot contacta direct",
+      id: 3,
+      icon: "fa-solid fa-chart-line",
+      title: "Profil evidențiat",
+      description: "Mai multă vizibilitate în directorul Yuvoo",
     },
     {
-      id: 5,
+      id: 4,
       icon: "fa-solid fa-bell",
       title: "Notificări instant",
       description: "Primești alerte imediat pentru cereri noi",
     },
     {
+      id: 5,
+      icon: "fa-solid fa-handshake",
+      title: "Contact gratuit cu părinții",
+      description: "Toate cluburile pot contacta părinții fără plată",
+    },
+    {
       id: 6,
       icon: "fa-solid fa-clock",
       title: "Abonament cu reînnoire automată",
-      description: "Plătește o singură dată și beneficiează de acces nelimitat la cereri",
+      description: "Investește în vizibilitate, nu în acces la contact",
     },
   ];
 
@@ -164,7 +164,8 @@ export default function ClubsLandingPricing() {
                           lineHeight: "1.5",
                         }}
                       >
-                        <strong>Break-even:</strong> ~3-4 leaduri/lună
+                        <strong>Contact gratuit</strong> — toate cluburile pot contacta părinții
+                        fără plată
                       </p>
                     </div>
                   </div>
@@ -369,10 +370,9 @@ export default function ClubsLandingPricing() {
                       lineHeight: "1.6",
                     }}
                   >
-                    Fără Premium: plătești 3€ per cerere (plată unică prin Stripe Payment Intents).
-                    Cu Premium: acces nelimitat pentru doar 99,99 RON/lună sau 999,99 RON/an
-                    (abonament cu reînnoire automată prin Stripe Subscriptions). Dacă primești mai
-                    mult de 3 cereri pe lună, Premium se plătește singur.
+                    Contactul cu părinții este gratuit pentru toate cluburile. Premium îți oferă
+                    badge verificat, afișare prioritară și profil evidențiat — investește în
+                    vizibilitate, nu în acces la contact.
                   </p>
                 </div>
               </div>
@@ -523,7 +523,7 @@ export default function ClubsLandingPricing() {
                             marginBottom: "10px",
                           }}
                         >
-                          Ce înseamnă &ldquo;acces nelimitat&rdquo;?
+                          Ce include Premium?
                         </h4>
                         <p
                           style={{
@@ -533,8 +533,8 @@ export default function ClubsLandingPricing() {
                             lineHeight: "1.6",
                           }}
                         >
-                          Cu Premium, poți vedea toate cererile de părinți fără să plătești 3€ per
-                          cerere. Vei avea acces complet la toate detaliile cererilor.
+                          Premium îți oferă badge verificat, afișare prioritară în listări și profil
+                          evidențiat. Contactul cu părinții rămâne gratuit pentru toate cluburile.
                         </p>
                       </div>
                     </div>
@@ -592,7 +592,7 @@ export default function ClubsLandingPricing() {
                             marginBottom: "10px",
                           }}
                         >
-                          Pot plăti doar pentru cereri individuale?
+                          Pot plăti pentru a contacta părinții?
                         </h4>
                         <p
                           style={{
@@ -602,10 +602,8 @@ export default function ClubsLandingPricing() {
                             lineHeight: "1.6",
                           }}
                         >
-                          Da, poți plăti 3€ per cerere (plată unică prin Stripe Payment Intents)
-                          pentru a vedea detaliile unei cereri specifice. Această opțiune este
-                          ideală dacă primești rar cereri. Dacă primești mai mult de 3 cereri pe
-                          lună, Premium este mai avantajos.
+                          Contactul cu părinții este gratuit pentru toate cluburile. Primești
+                          automat datele de contact în email și în dashboard, fără plată.
                         </p>
                       </div>
                     </div>
@@ -638,10 +636,10 @@ export default function ClubsLandingPricing() {
                             lineHeight: "1.6",
                           }}
                         >
-                          <strong>Pay-per-lead:</strong> Plăți unice de 3€ per cerere prin Stripe
-                          Payment Intents (fără abonament). <strong>Premium:</strong> Abonament
-                          lunar sau anual cu reînnoire automată prin Stripe Subscriptions. Toate
-                          plățile sunt procesate securizat prin Stripe.
+                          <strong>Contact gratuit:</strong> Nu este nevoie de plată pentru datele de
+                          contact. <strong>Premium:</strong> Abonament lunar sau anual pentru
+                          vizibilitate sporită (badge, listare prioritară). Plățile Premium sunt
+                          procesate securizat prin Stripe.
                         </p>
                       </div>
                     </div>
