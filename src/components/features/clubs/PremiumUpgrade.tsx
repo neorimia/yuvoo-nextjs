@@ -133,10 +133,6 @@ const PremiumUpgradeContent: React.FC<PremiumUpgradeProps> = ({
             <ul className="list-unstyled mb-0">
               <li className="mb-3">
                 <i className="bi bi-check-circle-fill text-success me-2"></i>
-                Acces nelimitat la toate cererile
-              </li>
-              <li className="mb-3">
-                <i className="bi bi-check-circle-fill text-success me-2"></i>
                 Badge &quot;Verificat Yuvoo&quot;
               </li>
               <li className="mb-3">
@@ -145,7 +141,7 @@ const PremiumUpgradeContent: React.FC<PremiumUpgradeProps> = ({
               </li>
               <li className="mb-3">
                 <i className="bi bi-check-circle-fill text-success me-2"></i>
-                Date de contact vizibile pentru părinți
+                Profil evidențiat în rezultatele de căutare
               </li>
               <li className="mb-0">
                 <i className="bi bi-check-circle-fill text-success me-2"></i>
@@ -201,11 +197,6 @@ const PremiumUpgradeContent: React.FC<PremiumUpgradeProps> = ({
               <ul className="list-unstyled mb-0">
                 <li className="mb-3">
                   <i className="bi bi-check-circle-fill text-success me-2"></i>
-                  <strong>Acces nelimitat la cereri</strong> - Vezi toate cererile fără plată
-                  suplimentară
-                </li>
-                <li className="mb-3">
-                  <i className="bi bi-check-circle-fill text-success me-2"></i>
                   <strong>Badge &quot;Verificat Yuvoo&quot;</strong> - Aumentează credibilitatea
                   clubului tău
                 </li>
@@ -216,8 +207,7 @@ const PremiumUpgradeContent: React.FC<PremiumUpgradeProps> = ({
                 </li>
                 <li className="mb-3">
                   <i className="bi bi-check-circle-fill text-success me-2"></i>
-                  <strong>Date de contact vizibile pentru părinți</strong> - Părinții pot contacta
-                  direct clubul
+                  <strong>Profil evidențiat</strong> - Mai multă vizibilitate în directorul Yuvoo
                 </li>
                 <li className="mb-0">
                   <i className="bi bi-check-circle-fill text-success me-2"></i>
@@ -415,25 +405,22 @@ const PremiumUpgradeContent: React.FC<PremiumUpgradeProps> = ({
           <div className="card border-primary">
             <div className="card-header bg-primary text-white">
               <h5 className="mb-0">
-                <i className="bi bi-calculator me-2"></i>
-                Comparație prețuri
+                <i className="bi bi-info-circle me-2"></i>
+                Contact gratuit
               </h5>
             </div>
             <div className="card-body">
-              <div className="mb-3">
-                <strong>Plată per cerere:</strong>
-                <p className="mb-0">3 € per cerere</p>
-                <small className="text-muted">
-                  Dacă primești 10 cereri/lună = 30 €/lună = 360 €/an
-                </small>
-              </div>
+              <p className="mb-3">
+                Contactul cu părinții este <strong>gratuit</strong> pentru toate cluburile. Premium
+                îți oferă vizibilitate sporită, nu deblocarea contactului.
+              </p>
               <hr />
               <div className="mb-3">
                 <strong className="text-success">Premium Lunar:</strong>
                 <p className="mb-0 text-success">
                   <strong>99,99 RON/lună</strong>
                 </p>
-                <small className="text-muted">Break-even: ~3-4 leaduri/lună</small>
+                <small className="text-muted">Badge verificat + afișare prioritară</small>
               </div>
               <hr />
               <div className="mb-0">

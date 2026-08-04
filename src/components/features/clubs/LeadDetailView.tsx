@@ -1,8 +1,8 @@
 /**
  * Lead Detail View Component
  *
- * Server component for displaying lead details.
- * Shows paywall if contact info is locked, or full details if unlocked.
+ * Server component for displaying lead details with parent contact info.
+ * Contact between parents and clubs is always free.
  */
 
 import React from "react";
@@ -22,16 +22,9 @@ interface LeadDetailViewProps {
   club: Club;
   _club: Club;
   lead: LeadWithLocationName;
-  isPremium: boolean;
-  contactVisible: boolean;
 }
 
-const LeadDetailView: React.FC<LeadDetailViewProps> = ({
-  _club,
-  lead,
-  isPremium,
-  contactVisible,
-}) => {
+const LeadDetailView: React.FC<LeadDetailViewProps> = ({ _club, lead }) => {
   // Status badge styling
   const getStatusBadge = (status: LeadWithRelations["status"]) => {
     const badges = {
@@ -119,105 +112,42 @@ const LeadDetailView: React.FC<LeadDetailViewProps> = ({
             </div>
           </div>
 
-          {/* Contact Information */}
-          {contactVisible ? (
-            <div className="card mb-4">
-              <div className="card-header bg-success text-white">
-                <h5 className="mb-0">
-                  <i className="bi bi-person-check me-2"></i>
-                  Date de contact părinte
-                </h5>
-              </div>
-              <div className="card-body">
-                <div className="row">
+          {/* Contact Information — always visible */}
+          <div className="card mb-4">
+            <div className="card-header bg-success text-white">
+              <h5 className="mb-0">
+                <i className="bi bi-person-check me-2"></i>
+                Date de contact părinte
+              </h5>
+            </div>
+            <div className="card-body">
+              <div className="row">
+                <div className="col-md-6 mb-3">
+                  <strong>Nume părinte:</strong>
+                  <p className="mb-0">{lead.parentName}</p>
+                </div>
+                <div className="col-md-6 mb-3">
+                  <strong>Email:</strong>
+                  <p className="mb-0">
+                    <a href={`mailto:${lead.parentEmail}`}>{lead.parentEmail}</a>
+                  </p>
+                </div>
+                {lead.parentPhone && (
                   <div className="col-md-6 mb-3">
-                    <strong>Nume părinte:</strong>
-                    <p className="mb-0">{lead.parentName}</p>
-                  </div>
-                  <div className="col-md-6 mb-3">
-                    <strong>Email:</strong>
+                    <strong>Telefon:</strong>
                     <p className="mb-0">
-                      <a href={`mailto:${lead.parentEmail}`}>{lead.parentEmail}</a>
+                      <a href={`tel:${lead.parentPhone}`}>{lead.parentPhone}</a>
                     </p>
                   </div>
-                  {lead.parentPhone && (
-                    <div className="col-md-6 mb-3">
-                      <strong>Telefon:</strong>
-                      <p className="mb-0">
-                        <a href={`tel:${lead.parentPhone}`}>{lead.parentPhone}</a>
-                      </p>
-                    </div>
-                  )}
-                </div>
-                <div className="alert alert-success mt-3 mb-0">
-                  <i className="bi bi-check-circle-fill me-2"></i>
-                  {isPremium
-                    ? "Ai acces la toate cererile ca membru Premium."
-                    : "Ai deblocat această cerere prin plată."}
-                </div>
+                )}
+              </div>
+              <div className="alert alert-success mt-3 mb-0">
+                <i className="bi bi-check-circle-fill me-2"></i>
+                Datele de contact sunt disponibile gratuit. Contactează părintele cât timp cererea
+                este activă.
               </div>
             </div>
-          ) : (
-            <div className="card mb-4 border-warning">
-              <div className="card-header bg-warning">
-                <h5 className="mb-0">
-                  <i className="bi bi-lock me-2"></i>
-                  Date de contact blocate
-                </h5>
-              </div>
-              <div className="card-body">
-                <p className="mb-4">
-                  Pentru a vedea datele de contact ale părintelui, ai două opțiuni:
-                </p>
-                <div className="row g-3">
-                  <div className="col-md-6">
-                    <div className="card h-100 border-primary">
-                      <div className="card-body">
-                        <h5 className="card-title">
-                          <i className="bi bi-credit-card me-2"></i>
-                          Opțiunea A — Plătește per cerere
-                        </h5>
-                        <p className="card-text">
-                          <strong>3 €</strong> pentru această cerere
-                        </p>
-                        <p className="card-text small text-muted">
-                          Plătești o singură dată pentru această cerere și vei vedea datele de
-                          contact.
-                        </p>
-                        <Link
-                          href={routes.club.leads.payment(lead.id)}
-                          className="btn btn-primary w-100"
-                        >
-                          Plătește 3 €
-                        </Link>
-                      </div>
-                    </div>
-                  </div>
-                  <div className="col-md-6">
-                    <div className="card h-100 border-success">
-                      <div className="card-body">
-                        <h5 className="card-title">
-                          <i className="bi bi-star-fill me-2"></i>
-                          Opțiunea B — Upgrade Premium
-                        </h5>
-                        <p className="card-text">
-                          <strong>99,99 RON/lună</strong> sau <strong>999,99 RON/an</strong>
-                        </p>
-                        <p className="card-text small text-muted">
-                          Acces nelimitat la toate cererile, badge &quot;Verificat Yuvoo&quot;,
-                          afișare prioritară și multe altele. Abonament cu reînnoire automată prin
-                          Stripe Subscriptions.
-                        </p>
-                        <Link href={routes.club.premium} className="btn btn-success w-100">
-                          Upgrade la Premium
-                        </Link>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          )}
+          </div>
         </div>
 
         {/* Sidebar */}
@@ -241,14 +171,6 @@ const LeadDetailView: React.FC<LeadDetailViewProps> = ({
                   <strong>Acceptată:</strong>
                   <p className="mb-0">
                     {format(lead.acceptedAt, "dd MMMM yyyy, HH:mm", { locale: ro })}
-                  </p>
-                </div>
-              )}
-              {lead.paymentMethod && (
-                <div className="mb-3">
-                  <strong>Metodă de plată:</strong>
-                  <p className="mb-0">
-                    {lead.paymentMethod === "pay_per_lead" ? "Plată per cerere" : "Premium"}
                   </p>
                 </div>
               )}

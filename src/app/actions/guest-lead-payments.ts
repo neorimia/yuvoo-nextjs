@@ -7,21 +7,10 @@
 
 "use server";
 
-import { headers } from "next/headers";
-import { z } from "zod";
-import { createGuestLeadPaymentIntent } from "@/modules/payments/lead-payment.service";
 import { leadsRepository } from "@/modules/leads/leads.repository";
 import { clubsRepository } from "@/modules/clubs/clubs.repository";
 import { leadPaymentRepository } from "@/modules/payments/lead-payment.repository";
 import { LeadPaymentStatus } from "@/types/leads";
-import { trackEventServer } from "@/lib/analytics/tracking-server";
-import { PostHogEvents, PostHogProperties } from "@/lib/analytics/events";
-import { rateLimit, getClientIdentifierFromHeaders, RATE_LIMIT_CONFIGS } from "@/lib/rate-limit";
-
-/**
- * Email validation schema
- */
-const emailSchema = z.string().email("Adresa de email nu este validă.");
 
 /**
  * Create guest lead payment intent
@@ -33,105 +22,13 @@ export async function createGuestLeadPaymentAction(
   leadId: string,
   guestEmail: string
 ): Promise<{ success: boolean; clientSecret?: string; error?: string }> {
-  try {
-    // Rate limiting: prevent abuse of guest payment flow
-    const headersList = await headers();
-    const identifier = getClientIdentifierFromHeaders(undefined, headersList);
-    const rateLimitResult = await rateLimit(
-      `guest-payment:${identifier}:${guestEmail}`,
-      RATE_LIMIT_CONFIGS.GUEST_PAYMENT
-    );
-
-    if (!rateLimitResult.success) {
-      return {
-        success: false,
-        error: `Prea multe încercări. Te rugăm să încerci din nou după ${rateLimitResult.resetTime || "un timp"}.`,
-      };
-    }
-
-    // Validate email
-    const validatedEmail = emailSchema.parse(guestEmail);
-
-    // Fetch lead
-    const lead = await leadsRepository.findById(leadId);
-    if (!lead) {
-      return {
-        success: false,
-        error: "Cererea nu a fost găsită.",
-      };
-    }
-
-    // Check if lead is expired
-    if (new Date(lead.expiresAt) < new Date()) {
-      return {
-        success: false,
-        error: "Această cerere a expirat. Cererile expiră după 5 zile.",
-      };
-    }
-
-    // Check if lead is already paid (prevent duplicate payments)
-    if (lead.paymentId) {
-      // Check if payment succeeded
-      const existingPayment = await leadPaymentRepository.findById(lead.paymentId);
-      if (existingPayment && existingPayment.status === LeadPaymentStatus.SUCCEEDED) {
-        return {
-          success: false,
-          error: "Această cerere a fost deja deblocată.",
-        };
-      }
-    }
-
-    // Fetch club to verify it exists
-    const club = await clubsRepository.getClubById(lead.clubId);
-    if (!club) {
-      return {
-        success: false,
-        error: "Clubul nu a fost găsit.",
-      };
-    }
-
-    // Extract IP address for tracking
-    const forwarded = headersList.get("x-forwarded-for");
-    const realIp = headersList.get("x-real-ip");
-    const cfConnectingIp = headersList.get("cf-connecting-ip");
-    const clientIp = forwarded?.split(",")[0].trim() || cfConnectingIp || realIp || "unknown";
-
-    // Create guest payment intent
-    const { clientSecret } = await createGuestLeadPaymentIntent(
-      leadId,
-      lead.clubId,
-      validatedEmail
-    );
-
-    // Track payment initiation (use guest email as distinct ID, include IP for fraud prevention)
-    await trackEventServer(PostHogEvents.LEAD_PAYMENT_INITIATED, {
-      distinctId: `guest-${validatedEmail}`,
-      [PostHogProperties.LEAD_ID]: leadId,
-      [PostHogProperties.CLUB_ID]: lead.clubId,
-      [PostHogProperties.LEAD_PAYMENT_METHOD]: "pay_per_lead",
-      [PostHogProperties.PAYMENT_AMOUNT]: 300, // 3€ in cents
-      isGuestPayment: true,
-      clientIp, // Track IP address for fraud prevention
-      rateLimitRemaining: rateLimitResult.remaining,
-    });
-
-    return {
-      success: true,
-      clientSecret,
-    };
-  } catch (error) {
-    console.error("Error creating guest lead payment:", error);
-    if (error instanceof z.ZodError) {
-      return {
-        success: false,
-        error: error.errors[0]?.message || "Date invalide.",
-      };
-    }
-    return {
-      success: false,
-      error: error instanceof Error ? error.message : "Eroare la crearea plății.",
-    };
-  }
+  void leadId;
+  void guestEmail;
+  return {
+    success: false,
+    error:
+      "Contactul cu părinții este gratuit. Nu mai este nevoie de plată pentru a vedea datele de contact.",
+  };
 }
 
 /**

@@ -71,7 +71,7 @@ export const LeadReminderEmail = ({
 
           <EmailSection>
             <TipBox variant="warning">
-              Această cerere expiră în 3 zile. Accesează-o acum pentru a vedea datele de contact.
+              Această cerere expiră în 3 zile. Contactează părintele cât timp cererea este activă.
             </TipBox>
           </EmailSection>
 

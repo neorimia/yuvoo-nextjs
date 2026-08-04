@@ -43,7 +43,8 @@ const CookieConsentBanner: React.FC = () => {
           </h3>
           <p className="bd-cookie-consent-description">
             Yuvoo folosește cookie-uri esențiale pentru funcționarea platformei și cookie-uri
-            opționale pentru analiză. Poți alege ce cookie-uri accepti.{" "}
+            opționale pentru analiză. Poți accepta toate cookie-urile sau respinge cookie-urile
+            opționale (analiză).{" "}
             <Link href={routes.cookies} className="bd-cookie-consent-link">
               Află mai multe
             </Link>
@@ -54,8 +55,9 @@ const CookieConsentBanner: React.FC = () => {
             type="button"
             onClick={handleRejectNonEssential}
             className="bd-cookie-consent-btn bd-cookie-consent-btn-secondary"
+            aria-label="Respinge cookie-urile opționale de analiză"
           >
-            Doar esențiale
+            Respinge cookie-urile opționale
           </button>
           <button
             type="button"

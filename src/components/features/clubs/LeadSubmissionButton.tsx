@@ -14,6 +14,7 @@ interface LeadSubmissionButtonProps {
   clubName: string;
   sportType?: string | null;
   locationId?: string | null;
+  variant?: "primary" | "secondary";
 }
 
 const LeadSubmissionButton: React.FC<LeadSubmissionButtonProps> = ({
@@ -21,18 +22,19 @@ const LeadSubmissionButton: React.FC<LeadSubmissionButtonProps> = ({
   clubName,
   sportType,
   locationId,
+  variant = "primary",
 }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const buttonClass =
+    variant === "secondary"
+      ? "btn btn-outline-yuvoo-primary w-100"
+      : "btn btn-yuvoo-primary btn-lg w-100";
 
   return (
     <>
-      <button
-        type="button"
-        className="btn btn-yuvoo-primary btn-lg w-100"
-        onClick={() => setIsModalOpen(true)}
-      >
-        <i className="fa-regular fa-hand-pointer me-2"></i>
-        Sunt interesat
+      <button type="button" className={buttonClass} onClick={() => setIsModalOpen(true)}>
+        <i className="fa-regular fa-paper-plane me-2"></i>
+        {variant === "secondary" ? "Trimite un mesaj prin Yuvoo" : "Sunt interesat"}
       </button>
       <LeadSubmissionModal
         clubId={clubId}
@@ -41,6 +43,7 @@ const LeadSubmissionButton: React.FC<LeadSubmissionButtonProps> = ({
         locationId={locationId}
         isOpen={isModalOpen}
         onClose={() => setIsModalOpen(false)}
+        variant={variant}
       />
     </>
   );

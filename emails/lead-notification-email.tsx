@@ -2,9 +2,7 @@
  * Lead Notification Email Template
  *
  * Email sent to clubs when a parent expresses interest.
- * CRITICAL: NO parent contact info (name, email, phone) in email.
- * Only shows: sport, child age, location.
- * Follows Yuvoo branding: professional and clear.
+ * Includes parent contact info — contact between parents and clubs is free.
  */
 
 import { Body, Container, Head, Heading, Html, Preview, Text } from "@react-email/components";
@@ -23,6 +21,9 @@ interface LeadNotificationEmailProps {
   childAge: number;
   locationName: string;
   leadId: string;
+  parentName: string;
+  parentEmail: string;
+  parentPhone: string | null;
 }
 
 export const LeadNotificationEmail = ({
@@ -31,20 +32,23 @@ export const LeadNotificationEmail = ({
   childAge,
   locationName,
   leadId,
+  parentName,
+  parentEmail,
+  parentPhone,
 }: LeadNotificationEmailProps) => {
   const appUrl = process.env.NEXT_PUBLIC_APP_URL || "https://yuvoo.ro";
-  const leadUrl = `${appUrl}${routes.leads.guestPayment(leadId)}`;
+  const leadUrl = `${appUrl}${routes.club.leads.detail(leadId)}`;
+  const parentMailto = `mailto:${parentEmail}?subject=${encodeURIComponent(`Re: ${sportName} pentru copil de ${childAge} ani`)}`;
 
   return (
     <Html lang="ro">
       <Head>
         <title>
-          🎯 Părinte pre-calificat caută {sportName} în {locationName} - Yuvoo
+          Nou: Cerere {sportName} în {locationName} - Yuvoo
         </title>
       </Head>
       <Preview>
-        Părinte pre-calificat prin quiz AI caută {sportName} pentru copil de {childAge.toString()}{" "}
-        ani, în {locationName}.
+        {parentName} caută {sportName} pentru copil de {childAge.toString()} ani, în {locationName}.
       </Preview>
       <Body style={main}>
         <Container style={container}>
@@ -53,14 +57,31 @@ export const LeadNotificationEmail = ({
           <EmailSection>
             <Heading style={heading}>Bună, {clubName}!</Heading>
             <Text style={body}>
-              Un <strong>părinte pre-calificat</strong> (prin quiz AI) caută{" "}
-              <strong>{sportName}</strong> pentru copil de{" "}
-              <strong>{childAge.toString()} ani</strong>, în <strong>{locationName}</strong>.
+              Un părinte a trimis o cerere pentru <strong>{sportName}</strong> (copil de{" "}
+              <strong>{childAge.toString()} ani</strong>, în <strong>{locationName}</strong>).
             </Text>
-            <Text style={body}>Vrei să vezi datele de contact?</Text>
+            <Text style={body}>
+              <strong>Date de contact părinte:</strong>
+            </Text>
+            <Text style={body}>
+              Nume: {parentName}
+              <br />
+              Email: {parentEmail}
+              {parentPhone ? (
+                <>
+                  <br />
+                  Telefon: {parentPhone}
+                </>
+              ) : null}
+            </Text>
             <div style={buttonContainer}>
-              <EmailButton href={leadUrl} variant="primary">
-                Vezi cererea
+              <EmailButton href={parentMailto} variant="primary">
+                Contactează părintele
+              </EmailButton>
+            </div>
+            <div style={buttonContainer}>
+              <EmailButton href={leadUrl} variant="secondary">
+                Vezi cererea în dashboard
               </EmailButton>
             </div>
           </EmailSection>
@@ -69,8 +90,7 @@ export const LeadNotificationEmail = ({
 
           <EmailSection>
             <Text style={footer}>
-              Această cerere expiră în 5 zile. Vei primi un reminder după 48 de ore dacă nu o
-              accesezi.
+              Contactul cu părinții este gratuit. Această cerere expiră în 5 zile dacă nu răspunzi.
             </Text>
           </EmailSection>
 
@@ -112,8 +132,8 @@ const body = {
 
 const buttonContainer = {
   textAlign: "center" as const,
-  marginTop: "24px",
-  marginBottom: "16px",
+  marginTop: "16px",
+  marginBottom: "8px",
 };
 
 const footer = {
