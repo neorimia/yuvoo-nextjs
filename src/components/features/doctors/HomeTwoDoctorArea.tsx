@@ -97,9 +97,9 @@ const HomeTwoDoctorArea: React.FC<HomeTwoDoctorAreaProps> = ({ doctors }) => {
                     </div>
                   ))}
                 </div>
-                <div className="bd-teacher-view-btn p-relative z-index-1 text-center mt-10">
+                {/* <div className="bd-teacher-view-btn p-relative z-index-1 text-center mt-10">
                   <Link href={routes.doctors.list}>Vezi toți doctorii</Link>
-                </div>
+                </div> */}
               </div>
             </div>
           </div>

@@ -50,7 +50,7 @@ const menuData: MenuItem[] = [
     title: "Doctori",
     link: routes.doctors.list,
     submenus: [
-      { title: "Toți doctorii", link: routes.doctors.list },
+      // { title: "Toți doctorii", link: routes.doctors.list },
       { title: "Pentru Doctori", link: routes.doctors.landing },
     ],
   },

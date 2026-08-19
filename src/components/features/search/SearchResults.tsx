@@ -137,10 +137,10 @@ const SearchResults: React.FC = () => {
             <i className="bi bi-building me-2"></i>
             Vezi toate cluburile
           </Link>
-          <Link href={routes.doctors.list} className="btn btn-outline-primary">
+          {/* <Link href={routes.doctors.list} className="btn btn-outline-primary">
             <i className="bi bi-person-badge me-2"></i>
             Vezi toți doctorii
-          </Link>
+          </Link> */}
           <Link href={routes.sports.list} className="btn btn-outline-primary">
             <i className="bi bi-trophy me-2"></i>
             Vezi toate sporturile
@@ -168,10 +168,10 @@ const SearchResults: React.FC = () => {
             <i className="bi bi-building me-2"></i>
             Vezi toate cluburile
           </Link>
-          <Link href={routes.doctors.list} className="btn btn-outline-primary">
+          {/* <Link href={routes.doctors.list} className="btn btn-outline-primary">
             <i className="bi bi-person-badge me-2"></i>
             Vezi toți doctorii
-          </Link>
+          </Link> */}
         </div>
       </div>
     );
@@ -228,7 +228,7 @@ const SearchResults: React.FC = () => {
               </div>
             ))}
           </div>
-          {doctors.length >= 10 && (
+          {/* {doctors.length >= 10 && (
             <div className="text-center mt-4">
               <Link
                 href={`${routes.doctors.list}?search=${encodeURIComponent(query)}`}
@@ -237,7 +237,7 @@ const SearchResults: React.FC = () => {
                 Vezi toți doctorii
               </Link>
             </div>
-          )}
+          )} */}
         </div>
       )}
 
