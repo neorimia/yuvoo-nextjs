@@ -12,6 +12,7 @@ import ItemListSchema from "@/components/SEO/ItemListSchema";
 import { PRE_LAUNCH_RESTRICTIONS_ENABLED } from "@/lib/config/pre-launch";
 import PreLaunchPage from "@/components/features/early-access/PreLaunchPage";
 import { normalizeSportName } from "@/lib/utils/sport-normalization";
+import { getSiteUrl } from "@/lib/seo/site-url";
 
 /**
  * Generate metadata for clubs listing page
@@ -21,14 +22,46 @@ import { normalizeSportName } from "@/lib/utils/sport-normalization";
  * Metadata is static and doesn't require dynamic APIs.
  */
 export async function generateMetadata(): Promise<Metadata> {
-  const baseUrl = process.env.NEXT_PUBLIC_APP_URL || "https://yuvoo.ro";
+  const baseUrl = getSiteUrl();
 
   return {
-    title: "Cluburi Sportive - Yuvoo",
+    title: "Cluburi Sportive pentru Copii - Director Verificat | Yuvoo",
     description:
-      "Descoperă cluburi sportive pentru copii. Găsește activități sportive potrivite în orașul tău.",
+      "Descoperă cluburi sportive pentru copii (4-14 ani) în România. Filtrează după sport, oraș și vârstă. Cluburile cu badge verificat au trecut procesul de validare Yuvoo.",
+    keywords: [
+      "cluburi sport copii",
+      "cluburi sportive copii bucuresti",
+      "activități sportive copii",
+      "club fotbal copii",
+      "cluburi sport romania",
+      "sport copii 4-14 ani",
+    ],
+    openGraph: {
+      title: "Cluburi Sportive pentru Copii - Director Verificat | Yuvoo",
+      description:
+        "Descoperă cluburi sportive pentru copii în România. Filtrează după sport, oraș și vârstă pe platforma Yuvoo.",
+      url: `${baseUrl}${routes.clubs.list}`,
+      siteName: "Yuvoo",
+      type: "website",
+      locale: "ro_RO",
+      images: [
+        {
+          url: `${baseUrl}/assets/img/logo/og-image.jpg`,
+          width: 1200,
+          height: 630,
+          alt: "Cluburi sportive pentru copii - Yuvoo",
+        },
+      ],
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: "Cluburi Sportive pentru Copii | Yuvoo",
+      description:
+        "Descoperă cluburi sportive pentru copii în România. Filtrează după sport, oraș și vârstă.",
+      images: [`${baseUrl}/assets/img/logo/og-image.jpg`],
+    },
     alternates: {
-      canonical: `${baseUrl}/cluburi`,
+      canonical: `${baseUrl}${routes.clubs.list}`,
     },
   };
 }

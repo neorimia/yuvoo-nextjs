@@ -1,4 +1,5 @@
 import { MetadataRoute } from "next";
+import { getSiteUrl } from "@/lib/seo/site-url";
 
 /**
  * Robots.txt Generator for Google Search Console
@@ -15,7 +16,7 @@ import { MetadataRoute } from "next";
  * @see https://developers.google.com/search/docs/crawling-indexing/robots/intro
  */
 export default function robots(): MetadataRoute.Robots {
-  const baseUrl = process.env.NEXT_PUBLIC_APP_URL || "https://yuvoo.ro";
+  const baseUrl = getSiteUrl();
 
   // Common disallow rules for all crawlers
   const commonDisallow = [
@@ -59,7 +60,6 @@ export default function robots(): MetadataRoute.Robots {
     // TECHNICAL ROUTES
     // ==========================================================================
     "/api/", // API routes
-    "/_next/", // Next.js internal routes
     "/ingest/", // PostHog analytics ingestion
     "/monitoring", // Sentry monitoring tunnel
 
@@ -69,6 +69,37 @@ export default function robots(): MetadataRoute.Robots {
     "/*?*", // Prevent crawling URL parameters (handled by canonical tags)
   ];
 
+  // Public paths allowed for indexing (shared by search and AI citation crawlers)
+  const publicAllow = [
+    "/",
+    "/sporturi",
+    "/cluburi",
+    "/doctori",
+    "/chestionar",
+    "/pentru-cluburi",
+    "/pentru-doctori",
+    "/despre-noi",
+    "/contact",
+    "/ajutor",
+    "/intrebari-frecvente",
+    "/confidentialitate",
+    "/termeni",
+    "/cookies",
+    "/gdpr-parinti",
+  ];
+
+  // AI search/citation crawlers — same public access as Googlebot; CCBot stays blocked (training datasets)
+  const aiSearchCrawlerAgents = [
+    "GPTBot",
+    "ChatGPT-User",
+    "PerplexityBot",
+    "ClaudeBot",
+    "anthropic-ai",
+    "Claude-Web",
+    "OAI-SearchBot",
+    "Google-Extended",
+  ];
+
   return {
     rules: [
       // ==========================================================================
@@ -76,24 +107,7 @@ export default function robots(): MetadataRoute.Robots {
       // ==========================================================================
       {
         userAgent: "*",
-        allow: [
-          "/", // Homepage
-          "/sporturi", // Sports directory
-          "/cluburi", // Clubs directory
-          "/doctori", // Doctors directory (public profiles)
-          "/chestionar", // Quiz intro page only
-          "/pentru-cluburi", // B2B club landing
-          "/pentru-doctori", // B2B doctor landing
-          "/despre-noi", // About
-          "/contact", // Contact
-          "/ajutor", // Help
-          "/intrebari-frecvente", // FAQ
-          "/cautare", // Search
-          "/confidentialitate", // Privacy
-          "/termeni", // Terms
-          "/cookies", // Cookies
-          "/gdpr-parinti", // GDPR
-        ],
+        allow: publicAllow,
         disallow: commonDisallow,
       },
 
@@ -102,24 +116,7 @@ export default function robots(): MetadataRoute.Robots {
       // ==========================================================================
       {
         userAgent: "Googlebot",
-        allow: [
-          "/",
-          "/sporturi",
-          "/cluburi",
-          "/doctori",
-          "/chestionar",
-          "/pentru-cluburi",
-          "/pentru-doctori",
-          "/despre-noi",
-          "/contact",
-          "/ajutor",
-          "/intrebari-frecvente",
-          "/cautare",
-          "/confidentialitate",
-          "/termeni",
-          "/cookies",
-          "/gdpr-parinti",
-        ],
+        allow: publicAllow,
         disallow: commonDisallow,
       },
 
@@ -133,7 +130,7 @@ export default function robots(): MetadataRoute.Robots {
           "/doctori/", // Doctor images
           "/sporturi/", // Sport images
         ],
-        disallow: ["/parent/", "/club/", "/doctor/", "/admin/", "/api/", "/_next/"],
+        disallow: ["/parent/", "/club/", "/doctor/", "/admin/", "/api/"],
       },
 
       // ==========================================================================
@@ -146,26 +143,17 @@ export default function robots(): MetadataRoute.Robots {
       },
 
       // ==========================================================================
-      // AI CRAWLERS - Block to prevent content scraping
+      // AI SEARCH CRAWLERS - Allow citation/indexing for GEO/AEO (not training scrapers)
       // ==========================================================================
-      {
-        userAgent: "GPTBot",
-        disallow: ["/"],
-      },
-      {
-        userAgent: "ChatGPT-User",
-        disallow: ["/"],
-      },
+      ...aiSearchCrawlerAgents.map((userAgent) => ({
+        userAgent,
+        allow: publicAllow,
+        disallow: commonDisallow,
+      })),
+
+      // Common Crawl (CCBot) — block training-dataset scraping
       {
         userAgent: "CCBot",
-        disallow: ["/"],
-      },
-      {
-        userAgent: "anthropic-ai",
-        disallow: ["/"],
-      },
-      {
-        userAgent: "Claude-Web",
         disallow: ["/"],
       },
     ],

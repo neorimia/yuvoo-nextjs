@@ -13,9 +13,12 @@
 
 import type { Club } from "@/modules/clubs/clubs.types";
 import { routes } from "@/lib/routes";
+import { getSiteUrl } from "@/lib/seo/site-url";
+import type { ClubReviewAggregate } from "@/modules/reviews/reviews.repository";
 
 interface LocalBusinessSchemaProps {
   club: Club;
+  reviewAggregate?: ClubReviewAggregate | null;
 }
 
 /**
@@ -116,8 +119,8 @@ function buildOpeningHours(
   return openingHours.length > 0 ? openingHours : undefined;
 }
 
-export default function LocalBusinessSchema({ club }: LocalBusinessSchemaProps) {
-  const baseUrl = process.env.NEXT_PUBLIC_APP_URL || "https://yuvoo.ro";
+export default function LocalBusinessSchema({ club, reviewAggregate }: LocalBusinessSchemaProps) {
+  const baseUrl = getSiteUrl();
 
   // Build address object (REQUIRED for LocalBusiness)
   const address: {
@@ -267,6 +270,16 @@ export default function LocalBusinessSchema({ club }: LocalBusinessSchemaProps) 
         value: "true",
       },
     ];
+  }
+
+  if (reviewAggregate && reviewAggregate.reviewCount >= 1) {
+    clubSchema.aggregateRating = {
+      "@type": "AggregateRating",
+      ratingValue: reviewAggregate.ratingValue,
+      reviewCount: reviewAggregate.reviewCount,
+      bestRating: 5,
+      worstRating: 1,
+    };
   }
 
   return (

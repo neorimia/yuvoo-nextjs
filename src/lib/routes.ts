@@ -30,6 +30,11 @@ export const routes = {
     list: "/sporturi",
     detail: (slug: string) => `/sporturi/${slug}`,
   },
+  // Parent guides (Ghiduri) — long-tail SEO / AEO
+  guides: {
+    list: "/ghiduri",
+    detail: (slug: string) => `/ghiduri/${slug}`,
+  },
   // Clubs (Cluburi)
   clubs: {
     list: "/cluburi",

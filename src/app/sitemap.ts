@@ -1,50 +1,63 @@
 import { MetadataRoute } from "next";
 import { routes } from "@/lib/routes";
+import { getSiteUrl } from "@/lib/seo/site-url";
 import { getAllSports } from "@/modules/sports/sports.service";
 import { getAllClubs, getUniqueLocations } from "@/modules/clubs/clubs.service";
 import { getAllDoctors } from "@/modules/doctors/doctors.service";
 import { generateLocationSlug } from "@/lib/utils/location";
+import type { Club } from "@/modules/clubs/clubs.types";
+import { GUIDE_PAGES, GUIDE_PAGES_LASTMOD } from "@/data/guide-pages-data";
 
 /**
  * Sitemap Generator for Google Search Console
  *
- * Generates sitemap.xml for SEO purposes and Google Search Console indexing.
- * Includes all public pages: static pages, dynamic sport pages, club pages, doctor pages,
- * location pages, and B2B landing pages.
- *
- * Generated at request time (dynamic) so that:
- * - lastModified reflects current dates and actual content updates
- * - Dynamic pages (clubs, doctors, sports, locations) are always included from the DB
- *
- * Google Search Console requirements:
- * - All URLs must be absolute (https://yuvoo.ro/path)
- * - lastModified should reflect actual content changes
- * - Priority 1.0 = homepage, 0.9 = core pages, 0.8 = detail pages, etc.
- * - changeFrequency guides crawl scheduling
- *
  * @see https://nextjs.org/docs/app/api-reference/file-conventions/metadata/sitemap
- * @see https://developers.google.com/search/docs/crawling-indexing/sitemaps/build-sitemap
  */
 export const dynamic = "force-dynamic";
 
+const LEGAL_PAGES_LASTMOD = new Date("2024-01-01T00:00:00.000Z");
+const INFO_PAGES_LASTMOD = new Date("2025-06-01T00:00:00.000Z");
+const SPORT_PAGES_LASTMOD = new Date("2025-06-01T00:00:00.000Z");
+
+function buildLocationLastModifiedMap(clubs: Club[]): Map<string, Date> {
+  const map = new Map<string, Date>();
+
+  for (const club of clubs) {
+    const clubDate = club.updatedAt || club.createdAt;
+    const districtSlug = generateLocationSlug(club.location.city, club.location.district);
+    const citySlug = generateLocationSlug(club.location.city);
+
+    for (const slug of [districtSlug, citySlug]) {
+      const existing = map.get(slug);
+      if (!existing || clubDate > existing) {
+        map.set(slug, clubDate);
+      }
+    }
+  }
+
+  return map;
+}
+
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
-  const baseUrl = process.env.NEXT_PUBLIC_APP_URL || "https://yuvoo.ro";
+  const baseUrl = getSiteUrl();
   const now = new Date();
 
-  // ==========================================================================
-  // STATIC PAGES - Always included, essential for Google Search Console
-  // ==========================================================================
+  let clubs: Club[] = [];
+  try {
+    clubs = await getAllClubs();
+  } catch (error) {
+    console.error("[Sitemap] Error fetching clubs:", error);
+  }
+
+  const locationLastModified = buildLocationLastModifiedMap(clubs);
 
   const staticPages: MetadataRoute.Sitemap = [
-    // Homepage - Highest priority
     {
       url: baseUrl,
       lastModified: now,
       changeFrequency: "daily",
       priority: 1.0,
     },
-
-    // Core Directory Pages - High priority, frequently updated
     {
       url: `${baseUrl}${routes.sports.list}`,
       lastModified: now,
@@ -63,133 +76,110 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       changeFrequency: "weekly",
       priority: 0.8,
     },
-
-    // AI Quiz - Core product feature
     {
       url: `${baseUrl}${routes.quiz.intro}`,
-      lastModified: now,
+      lastModified: INFO_PAGES_LASTMOD,
       changeFrequency: "monthly",
       priority: 0.9,
     },
-
-    // Search Page
     {
-      url: `${baseUrl}${routes.search}`,
-      lastModified: now,
-      changeFrequency: "weekly",
-      priority: 0.7,
+      url: `${baseUrl}${routes.guides.list}`,
+      lastModified: GUIDE_PAGES_LASTMOD,
+      changeFrequency: "monthly",
+      priority: 0.85,
     },
-
-    // B2B Landing Pages - Important for business growth
     {
       url: `${baseUrl}${routes.clubs.landing}`,
-      lastModified: now,
+      lastModified: INFO_PAGES_LASTMOD,
       changeFrequency: "monthly",
       priority: 0.85,
     },
     {
       url: `${baseUrl}${routes.clubs.howItWorks}`,
-      lastModified: now,
+      lastModified: INFO_PAGES_LASTMOD,
       changeFrequency: "monthly",
       priority: 0.7,
     },
     {
       url: `${baseUrl}${routes.clubs.caseStudies}`,
-      lastModified: now,
+      lastModified: INFO_PAGES_LASTMOD,
       changeFrequency: "monthly",
       priority: 0.7,
     },
     {
       url: `${baseUrl}${routes.clubs.roiCalculator}`,
-      lastModified: now,
+      lastModified: INFO_PAGES_LASTMOD,
       changeFrequency: "monthly",
       priority: 0.65,
     },
     {
       url: `${baseUrl}${routes.clubs.helpCenter}`,
-      lastModified: now,
+      lastModified: INFO_PAGES_LASTMOD,
       changeFrequency: "monthly",
       priority: 0.6,
     },
     {
       url: `${baseUrl}${routes.doctors.landing}`,
-      lastModified: now,
+      lastModified: INFO_PAGES_LASTMOD,
       changeFrequency: "monthly",
       priority: 0.8,
     },
-
-    // Information Pages
     {
       url: `${baseUrl}${routes.about}`,
-      lastModified: now,
+      lastModified: INFO_PAGES_LASTMOD,
       changeFrequency: "monthly",
       priority: 0.7,
     },
     {
       url: `${baseUrl}${routes.contact}`,
-      lastModified: now,
+      lastModified: INFO_PAGES_LASTMOD,
       changeFrequency: "monthly",
       priority: 0.7,
     },
     {
       url: `${baseUrl}${routes.help}`,
-      lastModified: now,
+      lastModified: INFO_PAGES_LASTMOD,
       changeFrequency: "monthly",
       priority: 0.6,
     },
     {
       url: `${baseUrl}${routes.faq}`,
-      lastModified: now,
+      lastModified: INFO_PAGES_LASTMOD,
       changeFrequency: "monthly",
       priority: 0.7,
     },
-
-    // Legal Pages - Required but low priority
     {
       url: `${baseUrl}${routes.privacy}`,
-      lastModified: now,
+      lastModified: LEGAL_PAGES_LASTMOD,
       changeFrequency: "yearly",
       priority: 0.3,
     },
     {
       url: `${baseUrl}${routes.terms}`,
-      lastModified: now,
+      lastModified: LEGAL_PAGES_LASTMOD,
       changeFrequency: "yearly",
       priority: 0.3,
     },
     {
       url: `${baseUrl}${routes.cookies}`,
-      lastModified: now,
+      lastModified: LEGAL_PAGES_LASTMOD,
       changeFrequency: "yearly",
       priority: 0.3,
     },
     {
       url: `${baseUrl}${routes.gdpr}`,
-      lastModified: now,
+      lastModified: LEGAL_PAGES_LASTMOD,
       changeFrequency: "yearly",
       priority: 0.3,
     },
-
-    // Email Management (low priority but should be accessible)
-    {
-      url: `${baseUrl}${routes.unsubscribe}`,
-      lastModified: now,
-      changeFrequency: "yearly",
-      priority: 0.2,
-    },
   ];
 
-  // ==========================================================================
-  // DYNAMIC PAGES - Fetched at runtime for fresh data
-  // ==========================================================================
-
-  // Dynamic sport pages
   let sportPages: MetadataRoute.Sitemap = [];
   try {
     const sports = await getAllSports();
     sportPages = sports.map((sport) => ({
       url: `${baseUrl}${routes.sports.detail(sport.slug)}`,
-      lastModified: now,
+      lastModified: SPORT_PAGES_LASTMOD,
       changeFrequency: "monthly" as const,
       priority: 0.8,
     }));
@@ -197,21 +187,13 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     console.error("[Sitemap] Error generating sport pages:", error);
   }
 
-  // Dynamic club pages - High priority for local SEO
-  let clubPages: MetadataRoute.Sitemap = [];
-  try {
-    const clubs = await getAllClubs();
-    clubPages = clubs.map((club) => ({
-      url: `${baseUrl}${routes.clubs.detail(club.slug)}`,
-      lastModified: club.updatedAt || club.createdAt || now,
-      changeFrequency: "weekly" as const,
-      priority: 0.8,
-    }));
-  } catch (error) {
-    console.error("[Sitemap] Error generating club pages:", error);
-  }
+  const clubPages: MetadataRoute.Sitemap = clubs.map((club) => ({
+    url: `${baseUrl}${routes.clubs.detail(club.slug)}`,
+    lastModified: club.updatedAt || club.createdAt || now,
+    changeFrequency: "weekly" as const,
+    priority: 0.8,
+  }));
 
-  // Dynamic doctor pages
   let doctorPages: MetadataRoute.Sitemap = [];
   try {
     const doctors = await getAllDoctors();
@@ -225,30 +207,42 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     console.error("[Sitemap] Error generating doctor pages:", error);
   }
 
-  // Location-specific pages - Important for local SEO
   let locationPages: MetadataRoute.Sitemap = [];
   try {
     const locations = await getUniqueLocations();
-    locationPages = locations.map((loc) => ({
-      url: `${baseUrl}${routes.clubs.location(generateLocationSlug(loc.city, loc.district))}`,
-      lastModified: now,
-      changeFrequency: "weekly" as const,
-      priority: 0.75,
-    }));
+    locationPages = locations.map((loc) => {
+      const slug = generateLocationSlug(loc.city, loc.district);
+      return {
+        url: `${baseUrl}${routes.clubs.location(slug)}`,
+        lastModified: locationLastModified.get(slug) || INFO_PAGES_LASTMOD,
+        changeFrequency: "weekly" as const,
+        priority: 0.75,
+      };
+    });
   } catch (error) {
     console.error("[Sitemap] Error generating location pages:", error);
   }
 
-  // ==========================================================================
-  // COMBINE ALL PAGES
-  // ==========================================================================
+  const guidePages: MetadataRoute.Sitemap = GUIDE_PAGES.map((guide) => ({
+    url: `${baseUrl}${routes.guides.detail(guide.slug)}`,
+    lastModified: new Date(guide.lastModified),
+    changeFrequency: "monthly" as const,
+    priority: 0.8,
+  }));
 
-  const allPages = [...staticPages, ...sportPages, ...clubPages, ...doctorPages, ...locationPages];
+  const allPages = [
+    ...staticPages,
+    ...guidePages,
+    ...sportPages,
+    ...clubPages,
+    ...doctorPages,
+    ...locationPages,
+  ];
 
-  // Log sitemap stats for debugging
   console.log(
     `[Sitemap] Generated ${allPages.length} URLs: ` +
       `${staticPages.length} static, ` +
+      `${guidePages.length} guides, ` +
       `${sportPages.length} sports, ` +
       `${clubPages.length} clubs, ` +
       `${doctorPages.length} doctors, ` +

@@ -75,11 +75,10 @@ export default async function SportDetailPage({ params }: SportDetailPageProps) 
 
   // Get expanded content for Article schema
   const expandedContent = getExpandedContentBySportId(sport!.id);
-  const baseUrl = process.env.NEXT_PUBLIC_APP_URL || "https://yuvoo.ro";
 
   return (
     <>
-      <ArticleSchema sport={sport!} expandedContent={expandedContent} baseUrl={baseUrl} />
+      <ArticleSchema sport={sport!} expandedContent={expandedContent} />
       <BreadcrumbOne
         title={sport!.name}
         subTitle="Sporturi"

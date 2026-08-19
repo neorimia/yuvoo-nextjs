@@ -8,8 +8,6 @@
 "use client";
 
 import React from "react";
-import Link from "next/link";
-import { routes } from "@/lib/routes";
 import type { Doctor } from "@/modules/doctors/doctors.types";
 import DoctorCard from "./DoctorCard";
 
@@ -35,12 +33,12 @@ const DoctorsMain: React.FC<DoctorsMainProps> = ({ doctors }) => {
                   <br />
                   Încearcă să modifici filtrele sau revino mai târziu.
                 </p>
-                <Link href={routes.doctors.list} className="bd-btn">
+                {/* <Link href={routes.doctors.list} className="bd-btn">
                   <span className="bd-btn-inner">
                     <span className="bd-btn-normal">Vezi toți doctorii</span>
                     <span className="bd-btn-hover">Vezi toți doctorii</span>
                   </span>
-                </Link>
+                </Link> */}
               </div>
             </div>
           </div>

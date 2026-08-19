@@ -29,16 +29,6 @@ const TopbarThree = () => {
                 <div className="bd-header-meta-items d-flex align-items-center">
                   <div className="bd-header-meta-item d-flex align-items-center">
                     <div className="bd-header-meta-icon">
-                      <i className="fa-solid fa-phone"></i>
-                    </div>
-                    <div className="bd-header-meta-text">
-                      <p>
-                        <a href="tel:+40746385038">+40 746 385 038</a>
-                      </p>
-                    </div>
-                  </div>
-                  <div className="bd-header-meta-item d-flex align-items-center">
-                    <div className="bd-header-meta-icon">
                       <i className="fas fa-envelope"></i>
                     </div>
                     <div className="bd-header-meta-text">

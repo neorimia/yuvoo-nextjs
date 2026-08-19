@@ -463,12 +463,7 @@ export default function PrivacyPolicyPage() {
                           gdpr@yuvoo.ro
                         </a>
                       </li>
-                      <li>
-                        <strong>Telefon:</strong>{" "}
-                        <a href="tel:+40746385038" className="text-yuvoo-primary">
-                          +40 746 385 038
-                        </a>
-                      </li>
+
                       <li>
                         <strong>Adresă:</strong> Mun. Focsani, România
                       </li>

@@ -3,7 +3,6 @@
  *
  * Generates JSON-LD structured data for Article schema (Schema.org).
  * Used for sport detail pages that contain comprehensive article-like content.
- * Helps search engines understand the content structure for rich snippets.
  *
  * @see https://schema.org/Article
  */
@@ -11,39 +10,61 @@
 import type { SportData } from "@/lib/db/seed-data/sports";
 import { getSportOGImagePath } from "@/lib/seo/sport-metadata";
 import type { SportExpandedContent } from "@/data/sport-expanded-content";
+import { getSiteUrl } from "@/lib/seo/site-url";
+
+const SPORT_ARTICLE_DATE_PUBLISHED = "2025-06-01";
+const SPORT_ARTICLE_DATE_MODIFIED = "2025-06-01";
 
 interface ArticleSchemaProps {
   sport: SportData;
   expandedContent?: SportExpandedContent;
-  baseUrl?: string;
 }
 
-export default function ArticleSchema({
-  sport,
-  expandedContent,
-  baseUrl = process.env.NEXT_PUBLIC_APP_URL || "https://yuvoo.ro",
-}: ArticleSchemaProps) {
-  // Use expanded content introduction if available, otherwise use sport description
-  const articleBody = expandedContent?.introduction || sport.description;
+function buildSportArticleBody(sport: SportData, expandedContent?: SportExpandedContent): string {
+  const parts: string[] = [];
 
-  // Build article sections if we have expanded content
-  const articleSection: string[] = [];
-  if (expandedContent) {
-    if (expandedContent.benefits) {
-      articleSection.push("Beneficii");
-    }
-    if (expandedContent.ageRecommendations) {
-      articleSection.push("Vârsta recomandată");
-    }
-    if (expandedContent.equipmentGuide) {
-      articleSection.push("Echipament");
-    }
-    if (expandedContent.faq && expandedContent.faq.length > 0) {
-      articleSection.push("Întrebări frecvente");
-    }
+  if (expandedContent?.introduction) {
+    parts.push(expandedContent.introduction);
+  } else {
+    parts.push(sport.description);
   }
 
-  // Build article schema with flexible type
+  if (expandedContent?.benefits) {
+    parts.push(
+      `${expandedContent.benefits.title}: ${expandedContent.benefits.items
+        .map((item) => `${item.title} — ${item.description}`)
+        .join(" ")}`
+    );
+  }
+
+  if (expandedContent?.ageRecommendations) {
+    parts.push(
+      `${expandedContent.ageRecommendations.title}: ${expandedContent.ageRecommendations.content}`
+    );
+  }
+
+  if (expandedContent?.equipmentGuide) {
+    parts.push(
+      `${expandedContent.equipmentGuide.title}: ${expandedContent.equipmentGuide.content}`
+    );
+  }
+
+  return parts.join("\n\n");
+}
+
+export default function ArticleSchema({ sport, expandedContent }: ArticleSchemaProps) {
+  const baseUrl = getSiteUrl();
+  const articleBody = buildSportArticleBody(sport, expandedContent);
+
+  const articleSection: string[] = [];
+  if (expandedContent) {
+    if (expandedContent.benefits) articleSection.push("Beneficii");
+    if (expandedContent.ageRecommendations) articleSection.push("Vârsta recomandată");
+    if (expandedContent.equipmentGuide) articleSection.push("Echipament");
+    if (expandedContent.faq && expandedContent.faq.length > 0)
+      articleSection.push("Întrebări frecvente");
+  }
+
   const articleSchema: Record<string, unknown> = {
     "@context": "https://schema.org",
     "@type": "Article",
@@ -51,21 +72,13 @@ export default function ArticleSchema({
     description: sport.description,
     image: getSportOGImagePath(sport.slug, baseUrl),
     author: {
-      "@type": "Organization",
-      name: "Yuvoo",
-      url: baseUrl,
+      "@id": `${baseUrl}/#organization`,
     },
     publisher: {
-      "@type": "Organization",
-      name: "Yuvoo",
-      url: baseUrl,
-      logo: {
-        "@type": "ImageObject",
-        url: `${baseUrl}/assets/img/logo/logo.svg`,
-      },
+      "@id": `${baseUrl}/#organization`,
     },
-    datePublished: "2024-01-01", // Static date for SSG pages
-    dateModified: "2024-01-01", // Static date for SSG pages
+    datePublished: SPORT_ARTICLE_DATE_PUBLISHED,
+    dateModified: SPORT_ARTICLE_DATE_MODIFIED,
     mainEntityOfPage: {
       "@type": "WebPage",
       "@id": `${baseUrl}/sporturi/${sport.slug}`,
@@ -75,8 +88,8 @@ export default function ArticleSchema({
       `${sport.name.toLowerCase()} copii`,
       `${sport.name.toLowerCase()} copii București`,
       `cluburi ${sport.name.toLowerCase()} copii`,
-      `sport pentru copii`,
-      `activități sportive copii`,
+      "sport pentru copii",
+      "activități sportive copii",
     ],
     inLanguage: "ro-RO",
     about: {
@@ -86,7 +99,6 @@ export default function ArticleSchema({
     },
   };
 
-  // Add articleSection if we have sections
   if (articleSection.length > 0) {
     articleSchema.articleSection = articleSection;
   }

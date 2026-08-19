@@ -12,6 +12,7 @@ import type { Doctor } from "@/modules/doctors/doctors.types";
 import VerificationBadge from "../clubs/VerificationBadge";
 import DoctorInfo from "./DoctorInfo";
 import DoctorSpecialties from "./DoctorSpecialties";
+import YMYLDisclaimer from "@/components/shared/YMYLDisclaimer";
 import { isPlaceholderUrl } from "@/lib/utils/image-helpers";
 
 interface DoctorDetailsMainProps {
@@ -74,6 +75,7 @@ const DoctorDetailsMain: React.FC<DoctorDetailsMainProps> = ({ doctor }) => {
             >
               <div className="bd-teacher-widget-content">
                 <h3 className="bd-teacher-widget-title">{doctor.name}</h3>
+                <YMYLDisclaimer variant="medical" />
                 <span className="bd-teacher-widget-tag">{specialtyDisplay}</span>
                 {doctor.description && (
                   <>

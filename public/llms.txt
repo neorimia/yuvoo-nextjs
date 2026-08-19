@@ -1,0 +1,30 @@
+# Yuvoo
+
+> Platformă AI din România care ajută părinții să descopere sportul potrivit pentru copiii lor (4–14 ani): chestionar personalizat, director de cluburi sportive și rețea de specialiști pediatri.
+
+## Primary
+
+- [Acasă](https://yuvoo.ro/): Pagina principală Yuvoo
+- [Chestionar AI](https://yuvoo.ro/chestionar): Quiz personalizat pentru recomandări de sport
+- [Cluburi sportive](https://yuvoo.ro/cluburi): Director de cluburi pentru copii
+- [Sporturi](https://yuvoo.ro/sporturi): Ghiduri pe sporturi disponibile
+- [Doctori](https://yuvoo.ro/doctori): Specialiști pediatri relevanți pentru sport
+- [Despre noi](https://yuvoo.ro/despre-noi): Misiunea și echipa Yuvoo
+
+## Guides
+
+- [Sport copii 6 ani](https://yuvoo.ro/ghiduri/sport-copii-6-ani): Sporturi recomandate la vârsta de 6 ani
+- [Ce sport la 8 ani](https://yuvoo.ro/ghiduri/ce-sport-la-8-ani): Alegerea sportului pentru copii de 8 ani
+- [Sport copil timid](https://yuvoo.ro/ghiduri/sport-copil-timid): Sporturi potrivite copiilor introvertiți
+- [Ce sport i se potrivește copilului](https://yuvoo.ro/ghiduri/ce-sport-potrivit-copilului): Ghid general de alegere a sportului
+
+## Tools
+
+- [Chestionar AI Yuvoo](https://yuvoo.ro/chestionar): Recomandări personalizate în 3–4 minute
+
+## Legal
+
+- [Confidențialitate](https://yuvoo.ro/confidentialitate)
+- [Termeni și condiții](https://yuvoo.ro/termeni)
+- [Politica cookies](https://yuvoo.ro/cookies)
+- [GDPR](https://yuvoo.ro/gdpr-parinti)

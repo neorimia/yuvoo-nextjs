@@ -1,0 +1,288 @@
+{
+  "summary": {
+    "health_score": 62,
+    "geo_score": 41,
+    "aeo_score": 32,
+    "business_type": "Local marketplace hybrid (clubs, doctors, AI quiz) — YMYL children/sports health",
+    "domain": "https://www.yuvoo.ro",
+    "audit_date": "2026-08-19",
+    "sitemap_urls": 888,
+    "top_findings": [
+      "www vs non-www canonical mismatch (Critical)",
+      "AI crawlers blocked — zero AI search visibility (High)",
+      "Organization schema client-side only (High)",
+      "Location pages thin content + false verified claim (High)",
+      "Zero brand citations in 15 AI query tests (High)"
+    ],
+    "quick_wins": [
+      "Set NEXT_PUBLIC_APP_URL to https://www.yuvoo.ro",
+      "Allow GPTBot, PerplexityBot, ClaudeBot in robots.txt",
+      "Move OrganizationSchema to server component",
+      "Remove noindex pages from sitemap",
+      "Add 40-60 word definition block on homepage"
+    ]
+  },
+  "categories": [
+    {
+      "name": "Technical SEO",
+      "score": 62,
+      "weight": 0.22,
+      "what_works": [
+        "robots.txt with auth/quiz protection",
+        "lang=ro, HTTPS, HSTS",
+        "Server Components on detail pages",
+        "Quiz funnel correctly noindex"
+      ],
+      "findings": [
+        {
+          "title": "www vs non-www canonical mismatch",
+          "severity": "Critical",
+          "description": "Live serves www but canonicals/sitemap declare non-www apex",
+          "recommendation": "Align NEXT_PUBLIC_APP_URL to www.yuvoo.ro"
+        },
+        {
+          "title": "/_next/ disallowed",
+          "severity": "High",
+          "description": "May block JS/CSS rendering for crawlers",
+          "recommendation": "Remove /_next/ from disallow or add Googlebot exception"
+        },
+        {
+          "title": "Disallow /*?* aggressive",
+          "severity": "High",
+          "description": "Blocks filtered listing URLs",
+          "recommendation": "Verify canonicals handle dupes; consider removing rule"
+        },
+        {
+          "title": "Noindex pages in sitemap",
+          "severity": "Medium",
+          "description": "/cautare and /dezabonare included",
+          "recommendation": "Remove from sitemap.ts"
+        }
+      ]
+    },
+    {
+      "name": "Content Quality",
+      "score": 68,
+      "weight": 0.23,
+      "what_works": [
+        "28 sports with expanded content",
+        "FAQ hub with 35+ items",
+        "AI transparency on quiz results",
+        "Complete legal pages"
+      ],
+      "findings": [
+        {
+          "title": "Missing YMYL disclaimers",
+          "severity": "High",
+          "description": "Doctor and sport pages lack medical disclaimers",
+          "recommendation": "Add disclaimer component to public YMYL pages"
+        },
+        {
+          "title": "False verified claim on location pages",
+          "severity": "High",
+          "description": "Metadata claims all clubs verified but DB shows verified:false",
+          "recommendation": "Fix copy or filter to verified-only"
+        },
+        {
+          "title": "Thin location pages",
+          "severity": "High",
+          "description": "~2 sentences unique copy per location",
+          "recommendation": "Add city-specific content, stats, cross-links"
+        }
+      ]
+    },
+    {
+      "name": "On-Page SEO",
+      "score": 72,
+      "weight": 0.2,
+      "what_works": [
+        "Title/description/OG on key pages",
+        "Romanian keywords",
+        "Breadcrumb pattern",
+        "Canonical on most pages"
+      ],
+      "findings": [
+        {
+          "title": "Incomplete /cluburi metadata",
+          "severity": "Medium",
+          "description": "Missing OG and twitter on clubs listing",
+          "recommendation": "Add full metadata matching /sporturi pattern"
+        },
+        {
+          "title": "Inconsistent canonical format",
+          "severity": "Medium",
+          "description": "Mix of absolute and relative canonicals",
+          "recommendation": "Standardize to absolute URLs via metadataBase"
+        }
+      ]
+    },
+    {
+      "name": "Schema / Structured Data",
+      "score": 58,
+      "weight": 0.1,
+      "what_works": [
+        "LocalBusiness server-side",
+        "ItemList on listings",
+        "BreadcrumbList",
+        "FAQ schema aligned with content"
+      ],
+      "findings": [
+        {
+          "title": "Organization schema client-side",
+          "severity": "High",
+          "description": "JSON-LD injected via useEffect, not in initial HTML",
+          "recommendation": "Server-render like LocalBusinessSchema"
+        },
+        {
+          "title": "Duplicate doctor schemas",
+          "severity": "High",
+          "description": "MedicalBusiness + Person on same URL",
+          "recommendation": "Consolidate to single Physician graph"
+        }
+      ]
+    },
+    {
+      "name": "Performance (CWV)",
+      "score": 65,
+      "weight": 0.1,
+      "what_works": ["use cache on detail pages", "Font preload", "Next.js Image optimization"],
+      "findings": [
+        {
+          "title": "Heavy JS bundle",
+          "severity": "Medium",
+          "description": "15+ script chunks, deep provider tree",
+          "recommendation": "Defer non-critical scripts, reduce providers on public pages"
+        }
+      ]
+    },
+    {
+      "name": "AI Search Readiness",
+      "score": 28,
+      "weight": 0.1,
+      "what_works": ["FAQ self-contained blocks", "Sport detail rich content"],
+      "findings": [
+        {
+          "title": "AI crawlers blocked",
+          "severity": "Critical",
+          "description": "GPTBot, anthropic-ai, CCBot all disallowed",
+          "recommendation": "Allow search bots, keep training bots blocked"
+        },
+        {
+          "title": "Zero AI citations",
+          "severity": "Critical",
+          "description": "0/15 test queries cite Yuvoo",
+          "recommendation": "Fix crawlers + publish original research + brand building"
+        },
+        {
+          "title": "No llms.txt",
+          "severity": "Low",
+          "description": "404 on /llms.txt",
+          "recommendation": "Create optional llms.txt after crawler fix"
+        }
+      ]
+    },
+    {
+      "name": "Images",
+      "score": 70,
+      "weight": 0.05,
+      "what_works": ["OG image configured", "Next/Image lazy loading"],
+      "findings": [
+        {
+          "title": "Placeholder sport images on clubs",
+          "severity": "Medium",
+          "description": "Generic /assets/img/sports/*.jpg used when no club logo",
+          "recommendation": "Encourage club logo uploads; use Cloudinary transforms"
+        }
+      ]
+    }
+  ],
+  "ai_visibility": {
+    "queries_tested": 15,
+    "yuvoo_cited": 0,
+    "queries": [
+      {
+        "query": "ce sport i se potriveste copilului",
+        "yuvoo_cited": false,
+        "top_sources": ["sfaturiparinti.ro", "carinasuteu.ro", "kids365.ro"]
+      },
+      {
+        "query": "cluburi sport copii bucuresti",
+        "yuvoo_cited": false,
+        "top_sources": ["pelicanii.ro", "baschet-copii.ro", "totalsportbucuresti.ro"]
+      },
+      {
+        "query": "cluburi fotbal copii bucuresti",
+        "yuvoo_cited": false,
+        "top_sources": ["raiders.ro", "astrakidsbucuresti.ro"]
+      },
+      {
+        "query": "sport copii 6 ani",
+        "yuvoo_cited": false,
+        "top_sources": ["psiholog-copii.ro", "med.ro", "copilul.ro"]
+      },
+      { "query": "Yuvoo", "yuvoo_cited": false, "top_sources": ["confusion with YuHuu Land"] },
+      { "query": "Yuvoo chestionar sport", "yuvoo_cited": false, "top_sources": ["didactic.ro"] },
+      {
+        "query": "specialist pediatru sport bucuresti",
+        "yuvoo_cited": false,
+        "top_sources": ["sarciomed.ro", "cardioped.ro"]
+      },
+      { "query": "site:yuvoo.ro", "yuvoo_cited": false, "top_sources": ["zero results"] }
+    ]
+  },
+  "action_plan": {
+    "phases": [
+      {
+        "name": "Phase 1: Critical Fixes",
+        "timeframe": "Week 1",
+        "items": [
+          "Fix www canonical",
+          "Server-render Organization schema",
+          "Review /_next/ disallow",
+          "Fix verified claim",
+          "Clean sitemap"
+        ]
+      },
+      {
+        "name": "Phase 2: High-Impact",
+        "timeframe": "Weeks 2-3",
+        "items": [
+          "Allow AI crawlers",
+          "YMYL disclaimers",
+          "Consolidate doctor schema",
+          "Enrich location pages",
+          "AEO definition blocks"
+        ]
+      },
+      {
+        "name": "Phase 3: Content & Authority",
+        "timeframe": "Month 2",
+        "items": [
+          "Guide landing pages",
+          "llms.txt",
+          "Original research publication",
+          "Brand entity building",
+          "GBP listing"
+        ]
+      },
+      {
+        "name": "Phase 4: Monitoring",
+        "timeframe": "Ongoing",
+        "items": [
+          "GSC monitoring",
+          "CWV tracking",
+          "AI visibility checks",
+          "Sitemap diff",
+          "PostHog organic funnels"
+        ]
+      }
+    ]
+  },
+  "artifacts": {
+    "findings_dir": "findings/",
+    "report": "FULL-AUDIT-REPORT.md",
+    "geo": "GEO-ANALYSIS.md",
+    "aeo": "AEO-ANALYSIS.md",
+    "action_plan": "ACTION-PLAN.md"
+  }
+}

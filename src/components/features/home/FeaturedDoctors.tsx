@@ -4,7 +4,6 @@ import Link from "next/link";
 import { routes } from "@/lib/routes";
 import SectionTitle from "@/components/shared/SectionTitle";
 import VerificationBadge from "@/components/features/clubs/VerificationBadge";
-import ViewAllLink from "@/components/shared/ViewAllLink";
 
 /**
  * FeaturedDoctors Component
@@ -160,9 +159,9 @@ const FeaturedDoctors = () => {
             );
           })}
         </div>
-        <div className="row justify-content-end bd-featured-doctors-view-all-row">
+        {/* <div className="row justify-content-end bd-featured-doctors-view-all-row">
           <ViewAllLink href={routes.doctors.list} text="Vezi toți doctorii" />
-        </div>
+        </div> */}
       </div>
     </section>
   );

@@ -11,6 +11,7 @@ import Link from "next/link";
 import type { SportExpandedContent } from "@/data/sport-expanded-content";
 import SectionTitle from "@/components/shared/SectionTitle";
 import FaqAccordionItem from "@/components/shared/FaqAccordionItem";
+import YMYLDisclaimer from "@/components/shared/YMYLDisclaimer";
 
 interface SportContentExpandedProps {
   content: SportExpandedContent;
@@ -19,6 +20,11 @@ interface SportContentExpandedProps {
 const SportContentExpanded: React.FC<SportContentExpandedProps> = ({ content }) => {
   return (
     <section className="bd-sport-expanded-content-area container">
+      <div className="row g-4 mb-4">
+        <div className="col-12">
+          <YMYLDisclaimer variant="sport" />
+        </div>
+      </div>
       {/* Introduction Section */}
       <div className="row g-4">
         <div className="col-12">

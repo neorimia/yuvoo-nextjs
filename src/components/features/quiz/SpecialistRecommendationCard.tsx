@@ -188,13 +188,13 @@ export default function SpecialistRecommendationCard({
                 </>
               )}
             </button>
-            <Link
+            {/* <Link
               href={routes.doctors.list + `?specialty=${recommendation.specialty}`}
               className="btn btn-outline-primary"
             >
               <i className="bi bi-list-ul me-2"></i>
               Vezi toți doctorii
-            </Link>
+            </Link> */}
           </div>
         )}
 

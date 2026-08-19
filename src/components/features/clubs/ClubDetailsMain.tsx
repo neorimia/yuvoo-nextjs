@@ -15,6 +15,7 @@ import PremiumBadge from "./PremiumBadge";
 import { isPlaceholderUrl } from "@/lib/utils/image-helpers";
 import { routes } from "@/lib/routes";
 import LeadSubmissionButton from "./LeadSubmissionButton";
+import { generateLocationSlug } from "@/lib/utils/location";
 
 interface ClubDetailsMainProps {
   club: Club;
@@ -113,8 +114,16 @@ const ClubDetailsMain: React.FC<ClubDetailsMainProps> = ({ club, isPremium = fal
                     <i className="fa-regular fa-location me-2"></i>Locație
                   </span>
                   <h5>
-                    {club.location.city}
-                    {club.location.district && `, ${club.location.district}`}
+                    <Link
+                      href={routes.clubs.location(
+                        generateLocationSlug(club.location.city, club.location.district)
+                      )}
+                      className="text-decoration-none"
+                      title={`Cluburi sport copii în ${club.location.city}${club.location.district ? `, ${club.location.district}` : ""}`}
+                    >
+                      {club.location.city}
+                      {club.location.district && `, ${club.location.district}`}
+                    </Link>
                   </h5>
                   {club.location.address && (
                     <p className="small text-muted mt-1">
@@ -122,6 +131,16 @@ const ClubDetailsMain: React.FC<ClubDetailsMainProps> = ({ club, isPremium = fal
                       {club.location.address}
                     </p>
                   )}
+                  <p className="small text-muted mt-2 mb-0">
+                    Consultă un{" "}
+                    <Link
+                      href={`${routes.doctors.list}?specialty=orthopedist`}
+                      className="text-yuvoo-primary text-decoration-underline"
+                    >
+                      specialist pediatru
+                    </Link>{" "}
+                    înainte de înscriere, mai ales dacă copilul are condiții medicale.
+                  </p>
                 </div>
 
                 {/* Pricing Information */}
