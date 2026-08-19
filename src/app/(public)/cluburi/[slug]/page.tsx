@@ -23,6 +23,7 @@ import { generateClubExpandedContent } from "@/lib/content/club-expanded-content
 import { generateClubMetadata } from "@/lib/seo/club-metadata";
 import PostHogViewTracking from "@/components/analytics/PostHogViewTracking";
 import { PostHogEvents } from "@/lib/analytics/events";
+import { getClubReviewAggregate } from "@/modules/reviews/reviews.repository";
 import { PRE_LAUNCH_RESTRICTIONS_ENABLED } from "@/lib/config/pre-launch";
 import PreLaunchPage from "@/components/features/early-access/PreLaunchPage";
 import ClubClaimProfile from "@/components/features/clubs/ClubClaimProfile";
@@ -132,6 +133,8 @@ export default async function ClubDetailPage({ params }: ClubDetailPageProps) {
   // Check if club is premium (for contact info visibility)
   const isPremium = await premiumClubService.checkIsPremium(club!.id);
 
+  const reviewAggregate = isProductionBuild ? null : await getClubReviewAggregate(club!.id);
+
   return (
     <>
       <PostHogViewTracking
@@ -140,7 +143,7 @@ export default async function ClubDetailPage({ params }: ClubDetailPageProps) {
         entityType="club"
         entitySlug={slug}
       />
-      <LocalBusinessSchema club={club!} />
+      <LocalBusinessSchema club={club!} reviewAggregate={reviewAggregate} />
       <BreadcrumbOne
         title={club!.name}
         subTitle="Cluburi"

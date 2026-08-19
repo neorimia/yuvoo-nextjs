@@ -8,7 +8,9 @@ import BreadcrumbOne from "@/components/Breadcrumb/BreadcrumbOne";
 import ClubsMain from "@/components/features/clubs/ClubsMain";
 import ClubSearchFilters from "@/components/features/clubs/ClubSearchFilters";
 import ItemListSchema from "@/components/SEO/ItemListSchema";
+import LocationContentExpanded from "@/components/features/clubs/LocationContentExpanded";
 import { searchClubs, getUniqueLocations } from "@/modules/clubs/clubs.service";
+import { generateLocationExpandedContent } from "@/lib/content/location-expanded-content";
 import { routes } from "@/lib/routes";
 import SectionTitle from "@/components/shared/SectionTitle";
 import type { Club, ClubSearchFilters as ClubSearchFiltersType } from "@/modules/clubs/clubs.types";
@@ -18,6 +20,7 @@ import {
   getLocationDisplayName,
 } from "@/lib/utils/location";
 import { getCityIdByName, getSectorIdByName } from "@/lib/db/location-helpers";
+import { getSiteUrl } from "@/lib/seo/site-url";
 import { cacheTag } from "next/cache";
 import { PRE_LAUNCH_RESTRICTIONS_ENABLED } from "@/lib/config/pre-launch";
 import PreLaunchPage from "@/components/features/early-access/PreLaunchPage";
@@ -78,15 +81,15 @@ export async function generateMetadata({ params }: LocationPageProps): Promise<M
   const { city, district } = parseLocationSlug(location);
   const locationDisplayName = getLocationDisplayName(city, district);
 
-  const baseUrl = process.env.NEXT_PUBLIC_APP_URL || "https://yuvoo.ro";
+  const baseUrl = getSiteUrl();
 
   const title = district
     ? `Cluburi Sportive ${district}, ${city} - Yuvoo`
     : `Cluburi Sportive ${city} - Yuvoo`;
 
   const description = district
-    ? `Descoperă cluburi sportive pentru copii în ${district}, ${city}. Găsește activități sportive potrivite, programe adaptate pe vârstă și probe gratuite. Toate cluburile sunt verificate de echipa Yuvoo.`
-    : `Descoperă cluburi sportive pentru copii în ${city}. Găsește activități sportive potrivite, programe adaptate pe vârstă și probe gratuite. Toate cluburile sunt verificate de echipa Yuvoo.`;
+    ? `Găsește cluburi sportive pentru copii în ${district}, ${city}. Filtrează după sport și vârstă. Cluburile cu badge verificat au trecut procesul nostru de validare.`
+    : `Găsește cluburi sportive pentru copii în ${city}. Filtrează după sport și vârstă. Cluburile cu badge verificat au trecut procesul nostru de validare.`;
 
   return {
     title,
@@ -171,6 +174,37 @@ export default async function LocationClubsPage({ params }: LocationPageProps) {
 
   const locationDisplayName = getLocationDisplayName(city, district);
 
+  const allLocations = isProductionBuild ? [] : await getUniqueLocations();
+  const siblingLocations = allLocations
+    .filter((loc) => {
+      const slug = generateLocationSlug(loc.city, loc.district);
+      return slug !== location && loc.city.toLowerCase() === city.toLowerCase();
+    })
+    .map((loc) => ({
+      slug: generateLocationSlug(loc.city, loc.district),
+      displayName: getLocationDisplayName(loc.city, loc.district),
+    }))
+    .slice(0, 8);
+
+  // Include parent city hub when viewing a district
+  if (district && !isProductionBuild) {
+    const citySlug = generateLocationSlug(city);
+    if (citySlug !== location) {
+      siblingLocations.unshift({
+        slug: citySlug,
+        displayName: getLocationDisplayName(city),
+      });
+    }
+  }
+
+  const expandedContent = generateLocationExpandedContent({
+    city,
+    district,
+    locationDisplayName,
+    clubs,
+    siblingLocations,
+  });
+
   return (
     <>
       <ItemListSchema
@@ -221,6 +255,10 @@ export default async function LocationClubsPage({ params }: LocationPageProps) {
           </div>
         </div>
       </section>
+      <LocationContentExpanded
+        content={expandedContent}
+        locationDisplayName={locationDisplayName}
+      />
       <ClubSearchFilters initialFilters={filters} />
       <ClubsMain clubs={clubs} />
     </>

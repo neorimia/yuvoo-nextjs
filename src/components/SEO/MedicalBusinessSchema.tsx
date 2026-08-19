@@ -1,25 +1,33 @@
 /**
- * MedicalBusiness Schema Component
+ * MedicalBusiness / Physician Schema Component
  *
- * Generates JSON-LD structured data for MedicalBusiness schema (Schema.org).
- * Specifically uses Physician type for individual doctors.
- * Used to help search engines understand medical professional information for rich snippets.
+ * Single consolidated JSON-LD graph for doctor detail pages.
  *
- * @see https://schema.org/MedicalBusiness
  * @see https://schema.org/Physician
  */
 
 import type { Doctor } from "@/modules/doctors/doctors.types";
 import { routes } from "@/lib/routes";
+import { getSiteUrl } from "@/lib/seo/site-url";
 
 interface MedicalBusinessSchemaProps {
   doctor: Doctor;
 }
 
-export default function MedicalBusinessSchema({ doctor }: MedicalBusinessSchemaProps) {
-  const baseUrl = process.env.NEXT_PUBLIC_APP_URL || "https://yuvoo.ro";
+function getSpecialtyDisplayName(specialty: string): string {
+  const specialtyMap: Record<string, string> = {
+    orthopedist: "Ortopedie pediatrică",
+    nutritionist: "Nutriție pediatrică",
+    psychologist: "Psihologie pediatrică",
+    general: "Medic pediatru",
+  };
+  return specialtyMap[specialty] || specialty;
+}
 
-  // Build address object
+export default function MedicalBusinessSchema({ doctor }: MedicalBusinessSchemaProps) {
+  const baseUrl = getSiteUrl();
+  const specialtyDisplay = getSpecialtyDisplayName(doctor.specialty);
+
   const address: {
     "@type": "PostalAddress";
     streetAddress?: string;
@@ -40,23 +48,41 @@ export default function MedicalBusinessSchema({ doctor }: MedicalBusinessSchemaP
     address.addressRegion = doctor.location.district;
   }
 
-  // Build base schema with all possible fields
   const doctorSchema: Record<string, unknown> = {
     "@context": "https://schema.org",
-    "@type": "Physician", // More specific than MedicalBusiness for individual doctors
+    "@type": "Physician",
     name: doctor.name,
     description: doctor.description,
-    medicalSpecialty: doctor.specialty,
+    jobTitle: specialtyDisplay,
+    medicalSpecialty: specialtyDisplay,
     address,
     url: `${baseUrl}${routes.doctors.detail(doctor.slug)}`,
+    knowsAbout: [
+      specialtyDisplay,
+      "Pediatrie",
+      "Sănătate copii",
+      "Sport pentru copii",
+      ...(doctor.specialty === "orthopedist"
+        ? ["Ortopedie pediatrică", "Dezvoltare ososară", "Leziuni sportive"]
+        : []),
+      ...(doctor.specialty === "nutritionist"
+        ? ["Nutriție pediatrică", "Alimentație sănătoasă", "Nutriție sportivă"]
+        : []),
+      ...(doctor.specialty === "psychologist"
+        ? ["Psihologie pediatrică", "Dezvoltare emoțională", "Motivație sportivă"]
+        : []),
+    ],
   };
 
-  // Add credentials if available
-  if (doctor.credentials && doctor.credentials.length > 0) {
-    doctorSchema.credential = doctor.credentials;
+  if (doctor.credentials?.length) {
+    doctorSchema.credential = doctor.credentials.map((cred) => ({
+      "@type": "EducationalOccupationalCredential",
+      credentialCategory: "Professional",
+      name: cred,
+    }));
+    doctorSchema.hasCredential = doctor.credentials;
   }
 
-  // Add contact information if available
   if (doctor.contact.phone) {
     doctorSchema.telephone = doctor.contact.phone;
   }
@@ -65,12 +91,10 @@ export default function MedicalBusinessSchema({ doctor }: MedicalBusinessSchemaP
     doctorSchema.email = doctor.contact.email;
   }
 
-  // Add image if available
   if (doctor.image) {
     doctorSchema.image = doctor.image;
   }
 
-  // Add geo coordinates if available
   if (doctor.location.coordinates) {
     doctorSchema.geo = {
       "@type": "GeoCoordinates",
@@ -79,12 +103,55 @@ export default function MedicalBusinessSchema({ doctor }: MedicalBusinessSchemaP
     };
   }
 
-  // Add availability information if available
+  if (doctor.contact.website) {
+    doctorSchema.sameAs = [doctor.contact.website];
+  }
+
   if (doctor.acceptingNewPatients !== undefined) {
     doctorSchema.availableService = doctor.acceptingNewPatients
       ? "Accepting new patients"
       : "Not accepting new patients";
   }
+
+  const services: string[] = [];
+  if (doctor.acceptingNewPatients) {
+    services.push("Consultații pentru pacienți noi");
+  }
+  if (doctor.onlineConsultations) {
+    services.push("Consultații online");
+  }
+  services.push(`Consultații ${specialtyDisplay.toLowerCase()}`);
+  services.push("Consultare pentru activități sportive pentru copii");
+
+  if (services.length > 0) {
+    doctorSchema.hasOfferCatalog = {
+      "@type": "OfferCatalog",
+      name: "Servicii medicale",
+      itemListElement: services.map((service, index) => ({
+        "@type": "Offer",
+        position: index + 1,
+        itemOffered: {
+          "@type": "Service",
+          name: service,
+          serviceType: "Consultare medicală",
+        },
+      })),
+    };
+  }
+
+  doctorSchema.areaServed = doctor.location.district
+    ? {
+        "@type": "State",
+        name: doctor.location.district,
+        containedIn: {
+          "@type": "City",
+          name: doctor.location.city,
+        },
+      }
+    : {
+        "@type": "City",
+        name: doctor.location.city,
+      };
 
   return (
     <script

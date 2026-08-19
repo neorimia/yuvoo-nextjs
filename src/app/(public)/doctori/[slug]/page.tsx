@@ -5,7 +5,6 @@ import { notFound } from "next/navigation";
 import type { Metadata } from "next";
 import BreadcrumbOne from "@/components/Breadcrumb/BreadcrumbOne";
 import MedicalBusinessSchema from "@/components/SEO/MedicalBusinessSchema";
-import PersonSchema from "@/components/SEO/PersonSchema";
 import DoctorDetailsMain from "@/components/features/doctors/DoctorDetailsMain";
 import DoctorAvailability from "@/components/features/doctors/DoctorAvailability";
 import DoctorAppointmentFormSection from "@/components/features/doctors/DoctorAppointmentFormSection";
@@ -110,7 +109,6 @@ export default async function DoctorDetailPage({ params }: DoctorDetailPageProps
         entitySlug={slug}
       />
       <MedicalBusinessSchema doctor={doctor!} />
-      <PersonSchema doctor={doctor!} />
       <BreadcrumbOne
         title={doctor!.name}
         subTitle="Doctori"

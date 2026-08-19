@@ -8,6 +8,7 @@ import HowItWorks from "@/components/features/home/HowItWorks";
 import FeaturedSports from "@/components/features/home/FeaturedSports";
 import HomeFaq from "@/components/features/home/HomeFaq";
 import HomeTrustSignals from "@/components/features/home/HomeTrustSignals";
+import YuvooDefinitionBlock from "@/components/shared/YuvooDefinitionBlock";
 import { cacheLife, cacheTag } from "next/cache";
 
 export const metadata: Metadata = {
@@ -84,6 +85,7 @@ const Home = async (): Promise<React.ReactNode> => {
         copii, chestionar AI.
       </h1>
       <HeroYuvoo />
+      <YuvooDefinitionBlock />
       <HowItWorks />
       <HomePromotionArea promo_space="pt-120 pb-60" />
       <HomeTrustSignals />

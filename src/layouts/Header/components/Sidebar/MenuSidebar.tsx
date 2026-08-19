@@ -82,16 +82,6 @@ const MenuSidebar: React.FC<MenuSidebarProps> = ({ sideMenuOpen, setSideMenuOpen
                 </li> */}
                 <li className="d-flex align-items-center gap-2">
                   <div className="offcanvas__contact-icon">
-                    <a href="tel:+40746385038">
-                      <i className="far fa-phone"></i>
-                    </a>
-                  </div>
-                  <div className="offcanvas__contact-text">
-                    <a href="tel:+40746385038">+40 746 385 038</a>
-                  </div>
-                </li>
-                <li className="d-flex align-items-center gap-2">
-                  <div className="offcanvas__contact-icon">
                     <a href="mailto:contact@yuvoo.ro">
                       <i className="fal fa-envelope"></i>
                     </a>

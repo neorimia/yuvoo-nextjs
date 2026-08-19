@@ -64,6 +64,9 @@ This document provides comprehensive SEO guidelines for the Yuvoo platform, incl
 /chestionar/container        → Quiz container
 /chestionar/previzualizare   → Quiz preview
 /chestionar/rezultate        → Quiz results
+/ghiduri                     → Parent guides hub (long-tail SEO)
+/ghiduri/[slug]              → Guide detail (e.g. sport-copii-6-ani)
+/cluburi/locatie/[location]  → Location hub (city/district club listings)
 /despre-noi                  → About page
 /parteneri                   → Partners page
 /intrebari-frecvente         → FAQ page
@@ -358,26 +361,39 @@ export async function generateMetadata({
 
 ### Organization Schema
 
+Rendered server-side in root layout (`OrganizationSchema.tsx`). Uses stable `@id` for JSON-LD graph linking:
+
 ```json
 {
   "@context": "https://schema.org",
   "@type": "Organization",
+  "@id": "https://yuvoo.ro/#organization",
   "name": "Yuvoo",
   "url": "https://yuvoo.ro",
-  "logo": "https://yuvoo.ro/assets/img/logo/logo.svg",
-  "description": "Platformă digitală pentru descoperirea sportului potrivit copilului tău",
-  "address": {
-    "@type": "PostalAddress",
-    "addressLocality": "București",
-    "addressCountry": "RO"
-  },
-  "contactPoint": {
-    "@type": "ContactPoint",
-    "email": "contact@yuvoo.ro",
-    "contactType": "customer service"
+  "logo": "https://yuvoo.ro/assets/img/logo/logo.svg"
+}
+```
+
+Always use `getSiteUrl()` from `src/lib/seo/site-url.ts` for canonical domain (apex `https://yuvoo.ro`).
+
+### WebSite + SearchAction Schema
+
+Rendered in root layout (`WebSiteSchema.tsx`). Links to Organization via `@id` and declares site search:
+
+```json
+{
+  "@context": "https://schema.org",
+  "@type": "WebSite",
+  "@id": "https://yuvoo.ro/#website",
+  "publisher": { "@id": "https://yuvoo.ro/#organization" },
+  "potentialAction": {
+    "@type": "SearchAction",
+    "target": "https://yuvoo.ro/cautare?q={search_term_string}"
   }
 }
 ```
+
+**Note:** `/cautare` remains `noindex`; SearchAction reflects UX. Sitelinks Search Box eligibility is not guaranteed.
 
 ### LocalBusiness Schema (for Clubs)
 
@@ -396,11 +412,30 @@ export async function generateMetadata({
   "telephone": "[Phone]",
   "url": "https://yuvoo.ro/cluburi/[slug]",
   "image": "[Club Image]",
-  "priceRange": "[Price Range]"
+  "priceRange": "[Price Range]",
+  "aggregateRating": {
+    "@type": "AggregateRating",
+    "ratingValue": 4.5,
+    "reviewCount": 12,
+    "bestRating": 5,
+    "worstRating": 1
+  }
 }
 ```
 
-### FAQ Schema (for FAQ Page)
+**AggregateRating rules:**
+
+- Include only when `reviewCount >= 1` from **moderated** reviews in DB (`reviews.moderated = true`)
+- Implemented via `getClubReviewAggregate()` in `src/modules/reviews/reviews.repository.ts`
+- Reviews must be visible on the page for Google rich snippet eligibility
+- Do not use `club.rating` integer field as a substitute for real review aggregates
+
+### Article Schema (Sport & Guide Pages)
+
+- **Sports:** `ArticleSchema.tsx` — full `articleBody` (intro + benefits + age + equipment), dates `2025-06-01`, author/publisher `@id` → Organization
+- **Guides:** `GuideArticleSchema.tsx` — long-tail parent guides at `/ghiduri/[slug]`
+
+### FAQ Schema (FAQ Page, Sports, Guides)
 
 ```json
 {
@@ -418,6 +453,80 @@ export async function generateMetadata({
   ]
 }
 ```
+
+**FAQ rich results (Google):** As of 2023+, Google shows FAQ rich results primarily for authoritative health/government sites. Yuvoo still implements `FAQPage` schema on guides, sports, and FAQ pages for clarity and non-Google engines — do not expect FAQ snippets in Google SERP for all pages.
+
+---
+
+## Parent Guide Pages (`/ghiduri`)
+
+Long-tail SEO / AEO landing pages for informational queries (e.g. „sport copii 6 ani", „ce sport la 8 ani").
+
+| Route                                  | Purpose                      |
+| -------------------------------------- | ---------------------------- |
+| `/ghiduri`                             | Hub listing all guides       |
+| `/ghiduri/sport-copii-6-ani`           | Age-specific guide (6 years) |
+| `/ghiduri/ce-sport-la-8-ani`           | Age-specific guide (8 years) |
+| `/ghiduri/sport-copil-timid`           | Temperament-based guide      |
+| `/ghiduri/ce-sport-potrivit-copilului` | General selection guide      |
+
+**Data source:** `src/data/guide-pages-data.ts`  
+**Routes:** `routes.guides.list`, `routes.guides.detail(slug)`  
+**Components:** `GuideDetailsMain`, `GuideArticleSchema`, `FAQPageSchema`, `YMYLDisclaimer`
+
+**Content minimum per guide:**
+
+- H1 with target keyword
+- 200–300 word extractable introduction (AEO)
+- Sport recommendations with internal links to `/sporturi/[slug]` and `/cluburi`
+- Optional age comparison table
+- 4–5 FAQ items (plain text for schema)
+- CTA to `/chestionar` and `/cluburi`
+- YMYL disclaimer where health-adjacent
+
+**When adding a new guide:** update `GUIDE_PAGES`, `public/llms.txt` Guides section, and sitemap (automatic via `GUIDE_PAGES`).
+
+---
+
+## llms.txt (AI discoverability)
+
+**Path:** `public/llms.txt` → served at `https://yuvoo.ro/llms.txt`
+
+Purpose: help ChatGPT, Perplexity, and similar crawlers discover key pages. **Not required by Google** (Google uses normal crawling + good content structure).
+
+**Sections:** Primary, Guides, Tools, Legal  
+**Maintenance:** Update when adding major public pages or new guides.
+
+---
+
+## Location Hub Pages (`/cluburi/locatie/[location]`)
+
+City/district club listing pages with expanded SEO content (`LocationContentExpanded`, `location-expanded-content.ts`):
+
+- Stats (club count, verified count, sports)
+- „How to choose" copy
+- Popular sports with links
+- Age guide paragraph
+- Links to parent guides (`/ghiduri/*`)
+- CTA to chestionar and doctors
+
+Included in sitemap with `lastModified` derived from max club `updatedAt` per location.
+
+---
+
+## Faza 3 Post-Deploy Checklist
+
+| Check                        | Expected                                            |
+| ---------------------------- | --------------------------------------------------- |
+| `GET /llms.txt`              | 200, valid markdown structure                       |
+| Homepage view-source         | Organization `@id` + WebSite JSON-LD                |
+| `/ghiduri` + 4 guide slugs   | Indexable, in sitemap.xml                           |
+| Rich Results Test (homepage) | WebSite + Organization valid                        |
+| Rich Results Test (guide)    | Article + FAQPage valid                             |
+| Club with moderated reviews  | AggregateRating in LocalBusiness (if reviews exist) |
+| GSC                          | Submit sitemap, inspect new guide URLs              |
+
+**Off-site (manual):** Wikipedia/Wikidata brand entity (3.6), Google Business Profile + NAP audit (3.8).
 
 ---
 

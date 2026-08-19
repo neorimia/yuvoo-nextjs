@@ -9,6 +9,7 @@
 import React from "react";
 import Link from "next/link";
 import { routes } from "@/lib/routes";
+import { FaqYmylDisclaimer } from "@/components/shared/YMYLDisclaimer";
 
 export interface FAQItem {
   question: string;
@@ -105,6 +106,7 @@ export const faqCategories: FAQCategory[] = [
               Explorează toate sporturile
             </Link>{" "}
             pentru a înțelege mai bine opțiunile.
+            <FaqYmylDisclaimer />
           </>
         ),
         category: "Chestionarul AI",
@@ -140,6 +142,7 @@ export const faqCategories: FAQCategory[] = [
               cluburi
             </Link>{" "}
             care oferă aceste sporturi.
+            <FaqYmylDisclaimer />
           </>
         ),
         category: "Chestionarul AI",
@@ -245,14 +248,23 @@ export const faqCategories: FAQCategory[] = [
             online și offline. Poți rezerva direct prin platformă sau să contactezi direct cabinetul
             medical. Informațiile despre disponibilitate, prețuri și tipuri de consultații sunt
             disponibile pe profilul fiecărui specialist.
+            <FaqYmylDisclaimer />
           </>
         ),
         category: "Specialiști Pediatri",
       },
       {
         question: "Ce tipuri de specialiști găsesc pe Yuvoo?",
-        answer:
-          "Pe Yuvoo găsești specialiști pediatri verificați din următoarele domenii: ortopedie pediatrică (pentru probleme musculo-scheletale legate de sport), nutriție pediatrică (pentru alimentație optimă pentru copii activi), psihologie pediatrică (pentru aspecte mentale și comportamentale) și medicină pediatrică generală (pentru evaluări generale de sănătate legate de sport).",
+        answer: (
+          <>
+            Pe Yuvoo găsești specialiști pediatri verificați din următoarele domenii: ortopedie
+            pediatrică (pentru probleme musculo-scheletale legate de sport), nutriție pediatrică
+            (pentru alimentație optimă pentru copii activi), psihologie pediatrică (pentru aspecte
+            mentale și comportamentale) și medicină pediatrică generală (pentru evaluări generale de
+            sănătate legate de sport).
+            <FaqYmylDisclaimer />
+          </>
+        ),
         category: "Specialiști Pediatri",
       },
       {
@@ -266,20 +278,35 @@ export const faqCategories: FAQCategory[] = [
             poți vedea disponibilitatea și rezerva direct o consultație. Cererea ajunge la
             specialist, care te va contacta pentru confirmare. Mulți specialiști oferă și
             consultații online — verifică pe profil dacă sunt disponibile.
+            <FaqYmylDisclaimer />
           </>
         ),
         category: "Specialiști Pediatri",
       },
       {
         question: "Pot consulta un specialist online?",
-        answer:
-          "Da, mulți specialiști pediatri de pe platformă oferă consultații online pentru comoditatea ta și a copilului tău. Consultațiile online sunt ideale pentru consultații inițiale, urmărire, sau pentru părinții care nu pot ajunge fizic la cabinet. Verifică pe profilul fiecărui specialist dacă oferă consultații online.",
+        answer: (
+          <>
+            Da, mulți specialiști pediatri de pe platformă oferă consultații online pentru
+            comoditatea ta și a copilului tău. Consultațiile online sunt ideale pentru consultații
+            inițiale, urmărire, sau pentru părinții care nu pot ajunge fizic la cabinet. Verifică pe
+            profilul fiecărui specialist dacă oferă consultații online.
+            <FaqYmylDisclaimer />
+          </>
+        ),
         category: "Specialiști Pediatri",
       },
       {
         question: "De ce ar trebui să consult un specialist înainte de a alege un sport?",
-        answer:
-          "Consultarea unui specialist pediatric înainte de a alege un sport poate identifica eventuale limitări fizice, probleme de sănătate, sau nevoi speciale care ar putea influența alegerea sportului. De asemenea, specialiștii pot oferi recomandări personalizate pentru sporturi potrivite și ghidare pentru prevenirea leziunilor.",
+        answer: (
+          <>
+            Consultarea unui specialist pediatric înainte de a alege un sport poate identifica
+            eventuale limitări fizice, probleme de sănătate, sau nevoi speciale care ar putea
+            influența alegerea sportului. De asemenea, specialiștii pot oferi recomandări
+            personalizate pentru sporturi potrivite și ghidare pentru prevenirea leziunilor.
+            <FaqYmylDisclaimer />
+          </>
+        ),
         category: "Specialiști Pediatri",
       },
     ],

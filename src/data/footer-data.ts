@@ -187,12 +187,12 @@ const footerData: IFooterData = {
       //   url: "#",
       //   title: "România",
       // },
-      {
-        id: 2,
-        icon: "fa-light fa-phone",
-        url: "tel:+40746385038",
-        title: "+40 746 385 038",
-      },
+      // {
+      //   id: 2,
+      //   icon: "fa-light fa-phone",
+      //   url: "tel:+40746385038",
+      //   title: "+40 746 385 038",
+      // },
       {
         id: 3,
         icon: "fa-light fa-envelope",

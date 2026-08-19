@@ -2,6 +2,7 @@ import { Gabarito } from "next/font/google";
 import GlobalVideoModal from "@/components/Popup/GlobalVideoModal";
 import CookieConsentBanner from "@/components/CookieConsent/CookieConsentBanner";
 import OrganizationSchema from "@/components/SEO/OrganizationSchema";
+import WebSiteSchema from "@/components/SEO/WebSiteSchema";
 import { VideoProvider } from "@/provider/VideoProvider";
 import AppProvider from "@/provider/AppProvider";
 import type { Metadata } from "next";
@@ -15,7 +16,10 @@ import { Suspense } from "react";
 import { ErrorBoundary } from "@/components/shared/ErrorBoundary";
 import { WebVitalsReporter } from "@/components/monitoring/WebVitalsReporter";
 import { StackAuthProvider } from "@/providers/StackAuthProvider";
+import { getSiteUrl } from "@/lib/seo/site-url";
 import "./globals.scss"; // Bootstrap + SCSS
+
+const siteUrl = getSiteUrl();
 
 const gabarito = Gabarito({
   variable: "--font-gabarito",
@@ -46,7 +50,7 @@ export const metadata: Metadata = {
     address: false,
     telephone: false,
   },
-  metadataBase: new URL(process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000"),
+  metadataBase: new URL(siteUrl),
   alternates: {
     canonical: "/",
   },
@@ -65,7 +69,7 @@ export const metadata: Metadata = {
     title: "Yuvoo - Descoperă sportul potrivit copilului tău",
     description:
       "Platformă AI pentru descoperirea activităților sportive potrivite pentru copiii tăi. Cluburi sportive și specialiști pediatri.",
-    url: process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000",
+    url: siteUrl,
     siteName: "Yuvoo",
     locale: "ro_RO",
     type: "website",
@@ -134,6 +138,7 @@ export default function RootLayout({
               <StackAuthProvider>
                 <WebVitalsReporter />
                 <OrganizationSchema />
+                <WebSiteSchema />
                 <VideoProvider>
                   <ReduxProvider>
                     <AppProvider>{children}</AppProvider>

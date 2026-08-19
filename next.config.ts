@@ -86,6 +86,18 @@ const nextConfig: NextConfig = {
     return config;
   },
 
+  // Canonical host: apex (yuvoo.ro). www redirects to apex for SEO consistency.
+  async redirects() {
+    return [
+      {
+        source: "/:path*",
+        has: [{ type: "host", value: "www.yuvoo.ro" }],
+        destination: "https://yuvoo.ro/:path*",
+        permanent: true,
+      },
+    ];
+  },
+
   // PostHog rewrites for analytics ingestion
   async rewrites() {
     return [

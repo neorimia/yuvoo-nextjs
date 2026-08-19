@@ -1,8 +1,10 @@
 import React from "react";
+import Link from "next/link";
 import type { Metadata } from "next";
 import { cookies } from "next/headers";
 import BreadcrumbOne from "@/components/Breadcrumb/BreadcrumbOne";
 import QuizIntroContent from "@/components/features/quiz/QuizIntroContent";
+import YuvooDefinitionBlock from "@/components/shared/YuvooDefinitionBlock";
 import { routes } from "@/lib/routes";
 import { getQuizCount } from "@/modules/quiz/quiz.repository";
 
@@ -73,6 +75,21 @@ export default async function QuizIntroPage() {
       />
       <section className="quiz-intro-section py-5">
         <div className="container">
+          <YuvooDefinitionBlock className="pb-2 pt-0" />
+          <div className="row justify-content-center mb-4">
+            <div className="col-lg-10 text-center">
+              <p className="small text-muted mb-2">
+                Preferi să citești înainte de quiz? Explorează{" "}
+                <Link
+                  href={routes.guides.list}
+                  className="text-yuvoo-primary text-decoration-underline"
+                >
+                  ghidurile pentru părinți
+                </Link>{" "}
+                — sport copii 6 ani, ce sport la 8 ani și altele.
+              </p>
+            </div>
+          </div>
           <div className="row justify-content-center">
             <div className="col-12">
               <QuizIntroContent quizCount={quizCount} />
