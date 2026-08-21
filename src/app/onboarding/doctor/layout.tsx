@@ -6,6 +6,7 @@
  */
 
 import { requireRole } from "@/lib/auth/session";
+import { routes } from "@/lib/routes";
 import { redirect } from "next/navigation";
 import type { ReactNode } from "react";
 
@@ -23,7 +24,7 @@ export default async function DoctorOnboardingLayout({ children }: { children: R
     await requireRole("doctor");
   } catch (_error) {
     // User is not a doctor, redirect to login
-    redirect("/auth/login");
+    redirect(routes.login);
   }
 
   return <div className="doctor-onboarding">{children}</div>;

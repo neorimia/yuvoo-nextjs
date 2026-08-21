@@ -11,6 +11,7 @@ import React, { useState, useEffect, useTransition } from "react";
 import { useRouter } from "next/navigation";
 import BookingCard from "@/components/shared/BookingCard";
 import BookingDetailModal from "@/components/shared/BookingDetailModal";
+import ConfirmActionModal from "@/components/shared/ConfirmActionModal";
 import { useEntityFilters, type StatusFilter, type DateFilter } from "@/hooks/useEntityFilters";
 import {
   getDoctorConsultationsAction,
@@ -28,6 +29,42 @@ interface ConsultationWithDetails extends Booking {
   child?: Child;
 }
 
+type ConsultationActionType = "confirm" | "cancel" | "complete";
+
+interface PendingConsultationAction {
+  consultationId: string;
+  type: ConsultationActionType;
+}
+
+const CONSULTATION_ACTION_CONFIG: Record<
+  ConsultationActionType,
+  {
+    title: string;
+    message: string;
+    confirmLabel: string;
+    confirmVariant: "primary" | "danger" | "success";
+  }
+> = {
+  confirm: {
+    title: "Confirmă consultația",
+    message: "Ești sigur că vrei să confirmi această consultație?",
+    confirmLabel: "Confirmă",
+    confirmVariant: "primary",
+  },
+  cancel: {
+    title: "Anulează consultația",
+    message: "Ești sigur că vrei să anulezi această consultație?",
+    confirmLabel: "Anulează consultația",
+    confirmVariant: "danger",
+  },
+  complete: {
+    title: "Finalizează consultația",
+    message: "Ești sigur că vrei să marchezi această consultație ca finalizată?",
+    confirmLabel: "Marchează finalizată",
+    confirmVariant: "success",
+  },
+};
+
 const DoctorConsultationList: React.FC = () => {
   const [consultations, setConsultations] = useState<ConsultationWithDetails[]>([]);
   const [isLoading, setIsLoading] = useState(true);
@@ -35,6 +72,8 @@ const DoctorConsultationList: React.FC = () => {
   const [error, setError] = useState<string | null>(null);
   const [selectedConsultation, setSelectedConsultation] = useState<Booking | null>(null);
   const [selectedParent, setSelectedParent] = useState<AuthUser | null>(null);
+  const [pendingAction, setPendingAction] = useState<PendingConsultationAction | null>(null);
+  const [actionError, setActionError] = useState<string | null>(null);
   const router = useRouter();
   const [_isPending, startTransition] = useTransition();
 
@@ -95,59 +134,13 @@ const DoctorConsultationList: React.FC = () => {
   }, []);
 
   const handleConfirm = (consultationId: string) => {
-    if (!confirm("Ești sigur că vrei să confirmi această consultație?")) {
-      return;
-    }
-
-    startTransition(async () => {
-      try {
-        setProcessingId(consultationId);
-        const result = await confirmConsultationAction(consultationId);
-
-        if (result.success) {
-          // Update consultation status in local state
-          setConsultations((prev) =>
-            prev.map((c) => (c.id === consultationId ? { ...c, status: "confirmed" } : c))
-          );
-          router.refresh();
-        } else {
-          alert(result.error || "Eroare la confirmarea consultației");
-        }
-      } catch (err) {
-        console.error("Error confirming consultation:", err);
-        alert("Eroare la confirmarea consultației. Te rugăm să reîncerci.");
-      } finally {
-        setProcessingId(null);
-      }
-    });
+    setActionError(null);
+    setPendingAction({ consultationId, type: "confirm" });
   };
 
   const handleCancel = (consultationId: string) => {
-    if (!confirm("Ești sigur că vrei să anulezi această consultație?")) {
-      return;
-    }
-
-    startTransition(async () => {
-      try {
-        setProcessingId(consultationId);
-        const result = await cancelConsultationAction(consultationId);
-
-        if (result.success) {
-          // Update consultation status in local state
-          setConsultations((prev) =>
-            prev.map((c) => (c.id === consultationId ? { ...c, status: "cancelled" } : c))
-          );
-          router.refresh();
-        } else {
-          alert(result.error || "Eroare la anularea consultației");
-        }
-      } catch (err) {
-        console.error("Error cancelling consultation:", err);
-        alert("Eroare la anularea consultației. Te rugăm să reîncerci.");
-      } finally {
-        setProcessingId(null);
-      }
-    });
+    setActionError(null);
+    setPendingAction({ consultationId, type: "cancel" });
   };
 
   const handleViewDetails = async (consultation: Booking) => {
@@ -164,32 +157,62 @@ const DoctorConsultationList: React.FC = () => {
   };
 
   const handleComplete = (consultationId: string) => {
-    if (!confirm("Ești sigur că vrei să marchezi această consultație ca finalizată?")) {
+    setActionError(null);
+    setPendingAction({ consultationId, type: "complete" });
+  };
+
+  const executePendingAction = () => {
+    if (!pendingAction) {
       return;
     }
+
+    const { consultationId, type } = pendingAction;
 
     startTransition(async () => {
       try {
         setProcessingId(consultationId);
-        const result = await completeConsultationAction(consultationId);
+        setActionError(null);
+
+        let result: { success: boolean; error?: string };
+        let nextStatus: Booking["status"];
+
+        if (type === "confirm") {
+          result = await confirmConsultationAction(consultationId);
+          nextStatus = "confirmed";
+        } else if (type === "cancel") {
+          result = await cancelConsultationAction(consultationId);
+          nextStatus = "cancelled";
+        } else {
+          result = await completeConsultationAction(consultationId);
+          nextStatus = "completed";
+        }
 
         if (result.success) {
-          // Update consultation status in local state
           setConsultations((prev) =>
-            prev.map((c) => (c.id === consultationId ? { ...c, status: "completed" } : c))
+            prev.map((c) => (c.id === consultationId ? { ...c, status: nextStatus } : c))
           );
+          setPendingAction(null);
           router.refresh();
         } else {
-          alert(result.error || "Eroare la finalizarea consultației");
+          setActionError(
+            result.error ||
+              (type === "confirm"
+                ? "Eroare la confirmarea consultației"
+                : type === "cancel"
+                  ? "Eroare la anularea consultației"
+                  : "Eroare la finalizarea consultației")
+          );
         }
       } catch (err) {
-        console.error("Error completing consultation:", err);
-        alert("Eroare la finalizarea consultației. Te rugăm să reîncerci.");
+        console.error("Error processing consultation action:", err);
+        setActionError("Eroare la procesarea consultației. Te rugăm să reîncerci.");
       } finally {
         setProcessingId(null);
       }
     });
   };
+
+  const pendingActionConfig = pendingAction ? CONSULTATION_ACTION_CONFIG[pendingAction.type] : null;
 
   if (isLoading) {
     return (
@@ -213,6 +236,12 @@ const DoctorConsultationList: React.FC = () => {
 
   return (
     <div className="bd-doctor-consultation-list">
+      {actionError && (
+        <div className="alert alert-danger mb-4" role="alert">
+          <i className="bi bi-exclamation-triangle me-2"></i>
+          {actionError}
+        </div>
+      )}
       {/* Filters */}
       <div className="bd-doctor-consultation-filters card border-0 shadow-sm mb-4">
         <div className="card-body">
@@ -366,6 +395,19 @@ const DoctorConsultationList: React.FC = () => {
         onComplete={handleComplete}
         isProcessing={processingId === selectedConsultation?.id}
       />
+
+      {pendingAction && pendingActionConfig && (
+        <ConfirmActionModal
+          show
+          title={pendingActionConfig.title}
+          message={pendingActionConfig.message}
+          confirmLabel={pendingActionConfig.confirmLabel}
+          confirmVariant={pendingActionConfig.confirmVariant}
+          isLoading={processingId === pendingAction.consultationId}
+          onConfirm={executePendingAction}
+          onCancel={() => setPendingAction(null)}
+        />
+      )}
     </div>
   );
 };

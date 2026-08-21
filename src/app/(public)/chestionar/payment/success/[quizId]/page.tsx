@@ -166,21 +166,11 @@ export default async function PaymentSuccessPage({ params }: PaymentSuccessPageP
                     <PaymentSuccessPolling quizId={quizId} paymentId={payment.id} />
 
                     {/* Instructions */}
-                    <p className="text-muted small mb-4">
+                    <p className="text-muted small mb-0">
                       Vei primi un email cu link-ul permanent către raportul complet în câteva
-                      momente. Poți accesa raportul oricând folosind link-ul din email - este tău
-                      pentru 10 ani.
+                      momente. Raportul se va deschide automat când este gata — poți accesa raportul
+                      oricând folosind link-ul din email.
                     </p>
-
-                    {/* Back to Quiz Link */}
-                    <Link
-                      href={routes.quiz.intro}
-                      className="btn btn-outline-primary"
-                      aria-label="Accesează raportul complet"
-                    >
-                      <i className="bi bi-arrow-right me-2" aria-hidden="true" />
-                      Accesează Raportul Complet
-                    </Link>
                   </div>
                 </ErrorBoundary>
               </div>

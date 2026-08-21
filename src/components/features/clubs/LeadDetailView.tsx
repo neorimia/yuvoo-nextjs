@@ -11,6 +11,7 @@ import type { Club } from "@/modules/clubs/clubs.types";
 import type { LeadWithRelations } from "@/types/leads";
 import { routes } from "@/lib/routes";
 import { LeadStatus } from "@/types/leads";
+import LeadDetailActions from "./LeadDetailActions";
 import { formatDistanceToNow, format } from "date-fns";
 import { ro } from "date-fns/locale";
 
@@ -146,6 +147,12 @@ const LeadDetailView: React.FC<LeadDetailViewProps> = ({ _club, lead }) => {
                 Datele de contact sunt disponibile gratuit. Contactează părintele cât timp cererea
                 este activă.
               </div>
+              <LeadDetailActions
+                leadId={lead.id}
+                status={lead.status}
+                parentEmail={lead.parentEmail}
+                parentPhone={lead.parentPhone}
+              />
             </div>
           </div>
         </div>

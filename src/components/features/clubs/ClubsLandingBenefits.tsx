@@ -231,7 +231,7 @@ export default function ClubsLandingBenefits() {
                 >
                   Nu mai sunt locuri disponibile în programul Founding Club?{" "}
                   <Link
-                    href={routes.club.premium}
+                    href={routes.registerWithRole("club_admin")}
                     style={{
                       color: "var(--bd-theme-1)",
                       fontWeight: 600,

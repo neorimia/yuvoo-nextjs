@@ -300,8 +300,7 @@ export function generateImageUrls(count: number = 3): string[] {
   // Using picsum.photos which provides random images without query parameters
   const urls: string[] = [];
   for (let i = 0; i < count; i++) {
-    // Use different seed for each image to get variety
-    urls.push(`https://picsum.photos/seed/club-${i}/800/600`);
+    urls.push("/assets/img/placeholders/profile.svg");
   }
   return urls;
 }

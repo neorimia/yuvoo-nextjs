@@ -10,7 +10,11 @@
  */
 export function isPlaceholderUrl(url: string | undefined | null): boolean {
   if (!url) return false;
-  return url.includes("via.placeholder.com");
+  return (
+    url.includes("via.placeholder.com") ||
+    url.includes("picsum.photos") ||
+    url.startsWith("/assets/img/placeholders/")
+  );
 }
 
 /**

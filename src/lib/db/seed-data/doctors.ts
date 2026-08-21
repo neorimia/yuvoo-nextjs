@@ -60,9 +60,7 @@ function createDoctor(data: Omit<DoctorSeedData, "slug" | "profileComplete">): D
     profileComplete: true,
     languages,
     schedule,
-    photoUrl:
-      data.photoUrl ||
-      `https://picsum.photos/seed/doctor-${data.firstName}-${data.lastName}/400/400`,
+    photoUrl: data.photoUrl || "/assets/img/placeholders/profile.svg",
     credentials,
   };
 }

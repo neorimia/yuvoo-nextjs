@@ -125,7 +125,7 @@ export default async function UnsubscribePage({
                       Ai întrebări?{" "}
                       <Link
                         href={routes.contact}
-                        style={{ color: "#00BBAE", textDecoration: "underline" }}
+                        className="text-yuvoo-primary text-decoration-underline"
                       >
                         Contactează-ne
                       </Link>
@@ -134,7 +134,7 @@ export default async function UnsubscribePage({
                       Poți consulta{" "}
                       <Link
                         href={routes.privacy}
-                        style={{ color: "#00BBAE", textDecoration: "underline" }}
+                        className="text-yuvoo-primary text-decoration-underline"
                       >
                         politica noastră de confidențialitate
                       </Link>{" "}

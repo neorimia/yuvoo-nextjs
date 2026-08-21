@@ -57,6 +57,7 @@ export default async function FAQPage() {
       <BreadcrumbOne
         title="Întrebări Frecvente"
         subTitle="FAQ"
+        titleAs="p"
         items={[
           { name: "Yuvoo", url: routes.home },
           { name: "Întrebări Frecvente", url: routes.faq }, // Current page

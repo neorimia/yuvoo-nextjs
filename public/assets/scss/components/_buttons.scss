@@ -23,6 +23,10 @@
   @include transition(0.5s);
   text-transform: capitalize;
 
+  &:active:not(:disabled) {
+    transform: scale(0.97);
+  }
+
   &::before {
     content: "";
     background-color: var(--bd-theme-1);

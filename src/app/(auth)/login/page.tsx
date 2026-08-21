@@ -1,7 +1,11 @@
 import React from "react";
 import type { Metadata } from "next";
+import { redirect } from "next/navigation";
 import LoginMain from "@/components/Auth/LoginMain";
 import BreadcrumbOne from "@/components/Breadcrumb/BreadcrumbOne";
+import { getRoleBasedRedirect } from "@/lib/auth/redirects";
+import { getSession } from "@/lib/auth/session";
+import { routes } from "@/lib/routes";
 
 export const metadata: Metadata = {
   title: "Autentificare | Yuvoo",
@@ -17,7 +21,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: "Autentificare | Yuvoo",
     description: "Autentifică-te în contul tău Yuvoo pentru a accesa funcționalitățile complete.",
-    url: `${process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000"}/auth/login`,
+    url: `${process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000"}${routes.login}`,
     siteName: "Yuvoo",
     locale: "ro_RO",
     type: "website",
@@ -28,7 +32,7 @@ export const metadata: Metadata = {
     description: "Autentifică-te în contul tău Yuvoo pentru a accesa funcționalitățile complete.",
   },
   alternates: {
-    canonical: "/auth/login",
+    canonical: routes.login,
   },
 };
 
@@ -46,10 +50,14 @@ interface LoginPageProps {
  * Supports redirect parameter for post-login navigation.
  * Route: /login
  *
- * Note: We don't check session server-side to avoid prerendering issues.
- * Stack Auth handles client-side redirects for authenticated users automatically.
+ * Redirects authenticated users to their role-based dashboard or onboarding.
  */
 export default async function LoginPage({ searchParams }: LoginPageProps) {
+  const session = await getSession();
+  if (session?.dbUser) {
+    redirect(getRoleBasedRedirect(session.dbUser.role, session.dbUser.onboardingCompleted));
+  }
+
   const params = await searchParams;
   // Support both 'redirect' and 'returnUrl' query parameters
   // Next.js automatically decodes query parameters, but we need to ensure it's a valid path

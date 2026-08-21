@@ -72,8 +72,19 @@ const ClubSearchFiltersComponent: React.FC<ClubSearchFiltersProps> = ({ initialF
     const updatedFilters = { ...filters, ...normalizedNewFilters };
     setFilters(updatedFilters);
 
-    // Build URL search params
-    const params = new URLSearchParams();
+    // Build URL search params from current URL, then update filter keys
+    const params = new URLSearchParams(searchParams.toString());
+    params.delete("sport");
+    params.delete("age");
+    params.delete("countyId");
+    params.delete("cityId");
+    params.delete("sectorId");
+    params.delete("level");
+    params.delete("verified");
+    params.delete("featured");
+    params.delete("sortBy");
+    params.delete("page");
+
     if (updatedFilters.sportId) params.set("sport", updatedFilters.sportId);
     if (updatedFilters.age) params.set("age", updatedFilters.age.toString());
     if (updatedFilters.countyId) params.set("countyId", updatedFilters.countyId);
@@ -86,13 +97,9 @@ const ClubSearchFiltersComponent: React.FC<ClubSearchFiltersProps> = ({ initialF
       params.set("sortBy", updatedFilters.sortBy);
     }
 
-    // Preserve quiz context if present
-    if (searchParams.get("quiz")) {
-      params.set("quiz", searchParams.get("quiz")!);
-    }
-
     startTransition(() => {
-      router.push(`${routes.clubs.list}?${params.toString()}`);
+      const queryString = params.toString();
+      router.push(queryString ? `${routes.clubs.list}?${queryString}` : routes.clubs.list);
     });
   };
 

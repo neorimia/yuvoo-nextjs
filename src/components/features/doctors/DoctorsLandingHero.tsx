@@ -26,7 +26,7 @@ export default function DoctorsLandingHero() {
     openDoctorsContactModal("hero", "Devino Expert Pediatric Verificat");
   };
 
-  const handleSecondaryCTAClick = (e: React.MouseEvent<HTMLAnchorElement>) => {
+  const handleSecondaryCTAClick = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
 
     // Track event
@@ -155,8 +155,9 @@ export default function DoctorsLandingHero() {
                     marginTop: "15px",
                   }}
                 >
-                  <a
-                    href="#"
+                  <button
+                    type="button"
+                    className="btn btn-link p-0 border-0"
                     onClick={handleSecondaryCTAClick}
                     style={{
                       fontSize: "16px",
@@ -166,7 +167,7 @@ export default function DoctorsLandingHero() {
                     }}
                   >
                     Sau programează un call de clarificare (15 min)
-                  </a>
+                  </button>
                 </div>
               </div>
             </div>

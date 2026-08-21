@@ -246,7 +246,7 @@ export default function ClubsLandingHero({ verifiedCount, remainingSpots }: Club
                         Upgrade la Premium pentru acces nelimitat la cereri și beneficii exclusive
                         (99,99 RON/lună sau 999,99 RON/an)
                       </p>
-                      <Link href={routes.club.premium} className="bd-btn mx-auto">
+                      <Link href={routes.registerWithRole("club_admin")} className="bd-btn mx-auto">
                         <span className="bd-btn-inner">
                           <span className="bd-btn-normal">Upgrade la Premium</span>
                           <span className="bd-btn-hover">Upgrade la Premium</span>

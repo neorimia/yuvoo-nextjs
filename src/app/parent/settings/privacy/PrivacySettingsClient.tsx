@@ -63,6 +63,14 @@ export function PrivacySettingsClient({
   // ========== Consent Toggle ==========
 
   const handleConsentToggle = async (type: ConsentType, newStatus: boolean) => {
+    const consent = consents.find((c) => c.type === type);
+    if (consent?.isRequired && !newStatus) {
+      alert(
+        "Acest consimțământ este obligatoriu pentru utilizarea platformei și nu poate fi retras."
+      );
+      return;
+    }
+
     setTogglingType(type);
 
     startTransition(async () => {
@@ -465,7 +473,7 @@ function ConsentToggle({ consent, isToggling, isPending, onToggle }: ConsentTogg
             id={`consent-${consent.type}`}
             checked={isGranted}
             onChange={(e) => onToggle(consent.type, e.target.checked)}
-            disabled={isToggling || isPending}
+            disabled={isToggling || isPending || (consent.isRequired && isGranted)}
           />
           <label className="form-check-label visually-hidden" htmlFor={`consent-${consent.type}`}>
             {consent.label}

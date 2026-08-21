@@ -69,6 +69,9 @@ const ContactForm: React.FC = () => {
       <div className="row">
         <div className="col-lg-6">
           <div className="bd-contact-input mb-30">
+            <label htmlFor="firstName" className="form-label">
+              Nume complet
+            </label>
             <input
               {...register("firstName", { required: "Numele complet este obligatoriu" })}
               id="firstName"
@@ -84,6 +87,9 @@ const ContactForm: React.FC = () => {
 
         <div className="col-lg-6">
           <div className="bd-contact-input mb-30">
+            <label htmlFor="email" className="form-label">
+              Adresă de email
+            </label>
             <input
               {...register("email", {
                 required: "Adresa de email este obligatorie",
@@ -103,6 +109,9 @@ const ContactForm: React.FC = () => {
 
         <div className="col-lg-6">
           <div className="bd-contact-input mb-30">
+            <label htmlFor="phoneNumber" className="form-label">
+              Număr de telefon
+            </label>
             <input
               {...register("phone", {
                 required: "Numărul de telefon este obligatoriu",
@@ -122,6 +131,9 @@ const ContactForm: React.FC = () => {
 
         <div className="col-lg-6">
           <div className="bd-contact-input mb-30">
+            <label htmlFor="subject" className="form-label">
+              Subiect
+            </label>
             <input
               {...register("subject", { required: "Subiectul este obligatoriu" })}
               id="subject"
@@ -137,6 +149,9 @@ const ContactForm: React.FC = () => {
 
         <div className="col-12">
           <div className="bd-contact-input mb-30">
+            <label htmlFor="message" className="form-label">
+              Mesaj
+            </label>
             <textarea
               {...register("message", { required: "Mesajul este obligatoriu" })}
               id="message"

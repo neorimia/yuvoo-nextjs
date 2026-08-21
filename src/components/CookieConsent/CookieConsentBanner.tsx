@@ -5,6 +5,7 @@ import Link from "next/link";
 import { routes } from "@/lib/routes";
 import { acceptAllCookies, rejectNonEssentialCookies, hasConsented } from "@/lib/cookies";
 import { initializePostHog } from "@/lib/analytics/posthog";
+import { initializeGoogleAnalytics } from "@/lib/analytics/gtag";
 
 const CookieConsentBanner: React.FC = () => {
   const [showBanner, setShowBanner] = useState(false);
@@ -23,8 +24,9 @@ const CookieConsentBanner: React.FC = () => {
   const handleAcceptAll = () => {
     acceptAllCookies();
     setShowBanner(false);
-    // Initialize PostHog after consent
+    // Initialize analytics after consent
     initializePostHog();
+    initializeGoogleAnalytics();
   };
 
   const handleRejectNonEssential = () => {

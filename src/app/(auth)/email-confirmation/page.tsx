@@ -2,6 +2,7 @@ import React from "react";
 import type { Metadata } from "next";
 import EmailConfirmationMain from "@/components/Auth/EmailConfirmationMain";
 import BreadcrumbOne from "@/components/Breadcrumb/BreadcrumbOne";
+import { routes } from "@/lib/routes";
 
 export const metadata: Metadata = {
   title: "Verificare Email | Yuvoo",
@@ -17,7 +18,7 @@ export const metadata: Metadata = {
     title: "Verificare Email | Yuvoo",
     description:
       "Verifică adresa ta de email pentru a activa contul Yuvoo. Click pe link-ul primit pe email.",
-    url: `${process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000"}/auth/email-confirmation`,
+    url: `${process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000"}${routes.emailConfirmation}`,
     siteName: "Yuvoo",
     locale: "ro_RO",
     type: "website",
@@ -28,7 +29,7 @@ export const metadata: Metadata = {
     description: "Verifică adresa ta de email pentru a activa contul Yuvoo.",
   },
   alternates: {
-    canonical: "/auth/email-confirmation",
+    canonical: routes.emailConfirmation,
   },
 };
 

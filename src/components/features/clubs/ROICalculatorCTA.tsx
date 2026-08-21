@@ -41,7 +41,11 @@ export default function ROICalculatorCTA() {
           pentru a discuta despre programul Founding Club (6 luni gratuite).
         </p>
         <div className="d-flex flex-wrap justify-content-center gap-3">
-          <Link href={routes.club.premium} className="bd-btn" onClick={handlePremiumClick}>
+          <Link
+            href={routes.registerWithRole("club_admin")}
+            className="bd-btn"
+            onClick={handlePremiumClick}
+          >
             <span className="bd-btn-inner">
               <span className="bd-btn-normal">Upgrade la Premium</span>
               <span className="bd-btn-hover">Upgrade la Premium</span>

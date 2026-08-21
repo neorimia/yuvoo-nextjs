@@ -7,7 +7,7 @@
 
 import React from "react";
 import type { Metadata } from "next";
-import { notFound } from "next/navigation";
+import { notFound, redirect } from "next/navigation";
 import { cookies, headers } from "next/headers";
 import { connection } from "next/server";
 import BreadcrumbOne from "@/components/Breadcrumb/BreadcrumbOne";
@@ -15,6 +15,7 @@ import { getQuizResultAction } from "@/app/actions/quiz";
 import { resolveLocationToIds } from "@/lib/db/location-helpers";
 import { routes } from "@/lib/routes";
 import Link from "next/link";
+import { getQuizEmail } from "@/modules/quiz/quiz.repository";
 import { trackEventServer } from "@/lib/analytics/tracking-server";
 import { PostHogEvents, PostHogProperties } from "@/lib/analytics/events";
 
@@ -126,6 +127,11 @@ export default async function TeaserPage({ params }: TeaserPageProps) {
     notFound();
   }
 
+  const quizEmail = await getQuizEmail(quizId);
+  if (!quizEmail) {
+    redirect(routes.quiz.emailGate(quizId));
+  }
+
   // Get top recommendation (highest match score)
   const sortedRecommendations = [...quizResult.recommendations].sort(
     (a, b) => b.matchScore - a.matchScore
@@ -161,6 +167,7 @@ export default async function TeaserPage({ params }: TeaserPageProps) {
       <BreadcrumbOne
         title="Recomandarea ta personalizată"
         subTitle="Teaser"
+        titleAs="p"
         items={[
           { name: "Yuvoo", url: routes.home },
           { name: "Chestionar", url: routes.quiz.intro },
@@ -231,7 +238,7 @@ export default async function TeaserPage({ params }: TeaserPageProps) {
                 {/* CTA: local clubs – Bucharest uses countyId + cityId + sectorId; other cities use countyId + cityId */}
                 <Link
                   href={clubsListHref}
-                  className="btn btn-yuvoo-primary px-5 py-3 mb-4"
+                  className="btn btn-outline-primary px-5 py-3 mb-4"
                   aria-label="Vezi cluburile locale pentru copilul tău"
                 >
                   <i className="bi bi-map me-2" aria-hidden="true"></i> Vezi cluburile din{" "}

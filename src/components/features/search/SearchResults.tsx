@@ -204,7 +204,7 @@ const SearchResults: React.FC = () => {
           {clubs.length >= 10 && (
             <div className="text-center mt-4">
               <Link
-                href={`${routes.clubs.list}?search=${encodeURIComponent(query)}`}
+                href={`${routes.search}?q=${encodeURIComponent(query)}`}
                 className="btn btn-outline-primary"
               >
                 Vezi toate cluburile

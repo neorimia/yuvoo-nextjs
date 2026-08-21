@@ -38,6 +38,7 @@ export default function TermsOfServicePage() {
       <BreadcrumbOne
         title="Termeni și Condiții"
         subTitle="Legal"
+        titleAs="p"
         items={[
           { name: "Yuvoo", url: routes.home },
           { name: "Termeni", url: routes.terms }, // Current page

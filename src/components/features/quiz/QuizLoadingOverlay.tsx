@@ -21,7 +21,7 @@ const LOADING_MESSAGES = [
     icon: "bi-stars",
     title: "Creăm recomandări personalizate",
     description:
-      "Pe baza a 6 factori cheie, generăm o listă de sporturi care se potrivesc perfect copilului tău.",
+      "Pe baza a 7 factori cheie, generăm o listă de sporturi care se potrivesc perfect copilului tău.",
   },
   {
     icon: "bi-graph-up-arrow",
@@ -53,7 +53,7 @@ const TRUST_INDICATORS = [
   {
     icon: "🤖",
     label: "AI Avansat",
-    description: "GPT-4 Turbo",
+    description: "Model AI Yuvoo",
   },
   {
     icon: "⚡",
@@ -112,7 +112,7 @@ export default function QuizLoadingOverlay({ isVisible }: QuizLoadingOverlayProp
 
   return (
     <div
-      className="position-fixed top-0 start-0 w-100 h-100 d-flex align-items-center justify-content-center"
+      className="position-fixed top-0 start-0 w-100 h-100 d-flex align-items-center justify-content-center quiz-loading-overlay"
       style={{
         zIndex: 9999,
         backgroundColor: "rgba(235, 255, 254, 0.98)", // #EBFFFE with opacity
@@ -168,12 +168,9 @@ export default function QuizLoadingOverlay({ isVisible }: QuizLoadingOverlayProp
                   aria-valuemax={100}
                 >
                   <div
-                    className="progress-bar"
+                    className="progress-bar bg-yuvoo-primary quiz-loading-progress-bar"
                     style={{
                       width: `${simulatedProgress}%`,
-                      backgroundColor: "#00BBAE",
-                      transition: "width 0.3s ease-out",
-                      borderRadius: "6px",
                     }}
                   />
                 </div>

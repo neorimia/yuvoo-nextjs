@@ -42,6 +42,7 @@ interface DoctorsPageProps {
     acceptingNewPatients?: string;
     onlineConsultations?: string;
     sortBy?: string;
+    page?: string;
   }>;
 }
 
@@ -67,7 +68,11 @@ export default async function DoctorsPage({ searchParams }: DoctorsPageProps) {
     acceptingNewPatients,
     onlineConsultations,
     sortBy,
+    page: pageParam,
   } = params;
+
+  const page = pageParam ? parseInt(pageParam, 10) : 1;
+  const pageSize = 12;
 
   // Build filters object from search params
   const filters: DoctorSearchFiltersType = {
@@ -79,11 +84,14 @@ export default async function DoctorsPage({ searchParams }: DoctorsPageProps) {
     acceptingNewPatients: acceptingNewPatients === "true" ? true : undefined,
     onlineConsultations: onlineConsultations === "true" ? true : undefined,
     sortBy: (sortBy as "name" | "specialty" | "verified") || "verified",
+    page: Number.isNaN(page) || page < 1 ? 1 : page,
+    pageSize,
   };
 
   // Fetch doctors with filters
   const result = await searchDoctors(filters);
   const doctors: Doctor[] = result.doctors;
+  const totalPages = Math.ceil(result.total / result.pageSize);
 
   return (
     <>
@@ -138,7 +146,15 @@ export default async function DoctorsPage({ searchParams }: DoctorsPageProps) {
         </div>
       </section>
       <DoctorSearchFilters initialFilters={filters} />
-      <DoctorsMain doctors={doctors} />
+      <DoctorsMain
+        doctors={doctors}
+        pagination={{
+          currentPage: result.page,
+          totalPages,
+          total: result.total,
+          pageSize: result.pageSize,
+        }}
+      />
     </>
   );
 }

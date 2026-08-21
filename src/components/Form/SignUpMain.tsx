@@ -2,7 +2,7 @@
 
 import React, { useState, useTransition } from "react";
 import { useForm } from "react-hook-form";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { signUpAction } from "@/app/actions/auth";
 import ErrorMsg from "./ErrorMassage";
 import { EmailSvgIcon, EyeCutSvgIcon, LockSvgIcon } from "../SVG";
@@ -18,18 +18,35 @@ type SignUpFormData = {
   consent: boolean;
 };
 
+type SignUpRole = SignUpFormData["role"];
+
+const VALID_ROLES: SignUpRole[] = ["parent", "club_admin", "doctor"];
+
+function parseRoleFromUrl(roleParam: string | null): SignUpRole | undefined {
+  if (roleParam && VALID_ROLES.includes(roleParam as SignUpRole)) {
+    return roleParam as SignUpRole;
+  }
+  return undefined;
+}
+
 const SignUpForm = () => {
   const [showPass, setShowPass] = useState(false);
   const [showConPass, setShowConPass] = useState(false);
   const [isPending, startTransition] = useTransition();
   const [authError, setAuthError] = useState<string | null>(null);
   const router = useRouter();
+  const searchParams = useSearchParams();
+  const roleFromUrl = parseRoleFromUrl(searchParams.get("role"));
   const {
     register,
     handleSubmit,
     formState: { errors },
     watch,
-  } = useForm<SignUpFormData>();
+  } = useForm<SignUpFormData>({
+    defaultValues: {
+      role: roleFromUrl,
+    },
+  });
 
   const password = watch("password");
 

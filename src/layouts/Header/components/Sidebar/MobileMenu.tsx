@@ -3,7 +3,7 @@
 import React, { useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { menuData } from "@/data";
+import { getNavigationMenuData } from "@/data";
 import { routes } from "@/lib/routes";
 
 interface MobileMenuProps {
@@ -76,10 +76,12 @@ const MobileMenu: React.FC<MobileMenuProps> = ({ onClose }) => {
     }
   };
 
+  const navigationMenu = getNavigationMenuData();
+
   return (
     <nav className="mean-nav">
       <ul>
-        {menuData.map((menu, i) => {
+        {navigationMenu.map((menu, i) => {
           // For parent menu items with dropdowns, check if any submenu is active
           // Parent should only be active if exact match, not if submenu is active
           let parentActive = false;

@@ -41,6 +41,7 @@ export const PostHogEvents = {
   CLUBS_LANDING_PAGE_VIEWED: "clubs_landing_page_viewed",
   CLUBS_CONTACT_MODAL_OPENED: "clubs_contact_modal_opened",
   CLUBS_CONTACT_FORM_SUBMITTED: "clubs_contact_form_submitted",
+  CLUBS_MAILTO_CLICKED: "clubs_mailto_clicked",
   CLUBS_CONTACT_FORM_ERROR: "clubs_contact_form_error",
 
   // Doctor Events

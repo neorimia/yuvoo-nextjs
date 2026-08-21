@@ -54,10 +54,10 @@ const HeroYuvoo = () => {
                   Găsește sportul potrivit pentru copilul tău
                 </h2>
                 <p
-                  className="wow fadeInUp"
+                  className="wow fadeInUp text-yuvoo-body"
                   data-wow-duration="1s"
                   data-wow-delay=".6s"
-                  style={{ fontSize: "18px", marginBottom: "30px", color: "#424242" }}
+                  style={{ fontSize: "18px", marginBottom: "30px" }}
                 >
                   Recomandări personalizate bazate pe personalitatea, interesul și ritmul de
                   dezvoltare al copilului, generate de AI prin analiza pattern-urilor și profilului
@@ -102,6 +102,7 @@ const HeroYuvoo = () => {
                         src={heroImg}
                         style={{ width: "auto", height: "100%" }}
                         alt="Copil zâmbind la un sport"
+                        priority
                       />
                     </div>
                   </div>

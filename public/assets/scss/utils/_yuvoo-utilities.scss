@@ -313,6 +313,10 @@
     background-color: #00998d !important;
     border-color: #00998d !important;
   }
+
+  &:active:not(:disabled) {
+    transform: scale(0.97);
+  }
 }
 
 .btn-yuvoo-secondary {

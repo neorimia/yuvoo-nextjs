@@ -6,6 +6,7 @@
  */
 
 import { requireRole } from "@/lib/auth/session";
+import { routes } from "@/lib/routes";
 import { redirect } from "next/navigation";
 import type { ReactNode } from "react";
 
@@ -23,7 +24,7 @@ export default async function ClubOnboardingLayout({ children }: { children: Rea
     await requireRole("club_admin");
   } catch (_error) {
     // User is not a club admin, redirect to login
-    redirect("/auth/login");
+    redirect(routes.login);
   }
 
   return <div className="club-onboarding">{children}</div>;

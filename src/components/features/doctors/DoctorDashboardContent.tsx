@@ -85,7 +85,6 @@ const DoctorDashboardContent: React.FC<DoctorDashboardContentProps> = ({
       <div className="mb-5">
         <DashboardHeader
           title="Dashboard Doctor"
-          subtitle={`Bun venit, <strong>${doctor.firstName} ${doctor.lastName}</strong>!`}
           entityName={`${doctor.title ? `${doctor.title} ` : ""}${doctor.firstName} ${doctor.lastName}`}
           verificationStatus={doctor.verificationStatus}
           variant="doctor"

@@ -1,41 +1,10 @@
-import React from "react";
-import type { Metadata } from "next";
-import { cookies } from "next/headers";
-import { requireAuth } from "@/lib/auth/session";
-import FavoritesList from "@/components/features/favorites/FavoritesList";
-
-// MIGRATED: Removed export const dynamic = 'force-dynamic' (incompatible with Cache Components)
-// This page uses requireAuth() which accesses cookies, so it remains dynamic by default
-// Explicitly accessing cookies() to ensure route is dynamic during build
-
-export const metadata: Metadata = {
-  title: "Favorite - Yuvoo",
-  description: "Cluburile și doctorii tăi favoriți pe Yuvoo.",
-};
+import { permanentRedirect } from "next/navigation";
+import { routes } from "@/lib/routes";
 
 /**
- * Favorites Page
- *
- * Protected page for managing favorites.
- * Route: /parent/favorites
+ * Legacy favorites route — redirects to canonical saved items page.
+ * Route: /parent/favorites → /parent/saved (301)
  */
-export default async function FavoritesPage() {
-  // Explicitly access cookies to ensure route is dynamic (prevents prerender errors)
-  await cookies();
-  await requireAuth();
-
-  return (
-    <section className="bd-favorites-area pt-120 pb-70">
-      <div className="container">
-        <div className="row">
-          <div className="col-12">
-            <div className="bd-favorites-content">
-              <h1 className="bd-section-title mb-30">Favorite</h1>
-              <FavoritesList />
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
-  );
+export default function FavoritesPage() {
+  permanentRedirect(routes.parent.savedItems);
 }

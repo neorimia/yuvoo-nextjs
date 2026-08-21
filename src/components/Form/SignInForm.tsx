@@ -103,6 +103,9 @@ const SignInForm: React.FC<SignInFormProps> = ({ redirectUrl }) => {
 
       <div className="login__input-wrapper">
         <div className="login__input-item">
+          <label htmlFor="emailAddress" className="form-label visually-hidden">
+            Adresă de email
+          </label>
           <div className="login__input">
             <input
               {...register("email", {
@@ -115,6 +118,7 @@ const SignInForm: React.FC<SignInFormProps> = ({ redirectUrl }) => {
               id="emailAddress"
               type="email"
               placeholder="Adresă de email"
+              autoComplete="email"
               disabled={isPending}
             />
             <span>
@@ -124,6 +128,9 @@ const SignInForm: React.FC<SignInFormProps> = ({ redirectUrl }) => {
           <ErrorMsg error={errors.email?.message} />
         </div>
         <div className="login__input-item">
+          <label htmlFor="password" className="form-label visually-hidden">
+            Parolă
+          </label>
           <div className="login__input-item-inner p-relative">
             <div className="login__input">
               <input
@@ -144,13 +151,16 @@ const SignInForm: React.FC<SignInFormProps> = ({ redirectUrl }) => {
                 <LockSvgIcon />
               </span>
             </div>
-            <span
-              className="login-input-eye"
+            <button
+              type="button"
+              className="login-input-eye border-0 bg-transparent p-0"
               onClick={() => setShowPass(!showPass)}
+              disabled={isPending}
+              aria-label={showPass ? "Ascunde parola" : "Arată parola"}
               style={{ cursor: isPending ? "not-allowed" : "pointer" }}
             >
               {showPass ? <i className="fa-regular fa-eye"></i> : <EyeCutSvgIcon />}
-            </span>
+            </button>
           </div>
           <ErrorMsg error={errors.password?.message} />
         </div>

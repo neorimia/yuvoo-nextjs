@@ -65,8 +65,18 @@ const DoctorSearchFiltersComponent: React.FC<DoctorSearchFiltersProps> = ({ init
     const updatedFilters = { ...filters, ...newFilters };
     setFilters(updatedFilters);
 
-    // Build URL search params
-    const params = new URLSearchParams();
+    // Build URL search params from current URL, then update filter keys
+    const params = new URLSearchParams(searchParams.toString());
+    params.delete("specialty");
+    params.delete("cityId");
+    params.delete("sectorId");
+    params.delete("countyId");
+    params.delete("verified");
+    params.delete("acceptingNewPatients");
+    params.delete("onlineConsultations");
+    params.delete("sortBy");
+    params.delete("page");
+
     if (updatedFilters.specialty) params.set("specialty", updatedFilters.specialty);
     if (updatedFilters.cityId) params.set("cityId", updatedFilters.cityId);
     if (updatedFilters.sectorId) params.set("sectorId", updatedFilters.sectorId);
@@ -78,7 +88,8 @@ const DoctorSearchFiltersComponent: React.FC<DoctorSearchFiltersProps> = ({ init
     }
 
     startTransition(() => {
-      router.push(`${routes.doctors.list}?${params.toString()}`);
+      const queryString = params.toString();
+      router.push(queryString ? `${routes.doctors.list}?${queryString}` : routes.doctors.list);
     });
   };
 
@@ -93,8 +104,18 @@ const DoctorSearchFiltersComponent: React.FC<DoctorSearchFiltersProps> = ({ init
       setOnlineConsultations(value);
     }
 
-    // Build URL search params
-    const params = new URLSearchParams();
+    // Build URL search params from current URL, then update filter keys
+    const params = new URLSearchParams(searchParams.toString());
+    params.delete("specialty");
+    params.delete("cityId");
+    params.delete("sectorId");
+    params.delete("countyId");
+    params.delete("verified");
+    params.delete("acceptingNewPatients");
+    params.delete("onlineConsultations");
+    params.delete("sortBy");
+    params.delete("page");
+
     if (filters.specialty) params.set("specialty", filters.specialty);
     if (filters.cityId) params.set("cityId", filters.cityId);
     if (filters.sectorId) params.set("sectorId", filters.sectorId);
@@ -110,7 +131,8 @@ const DoctorSearchFiltersComponent: React.FC<DoctorSearchFiltersProps> = ({ init
     }
 
     startTransition(() => {
-      router.push(`${routes.doctors.list}?${params.toString()}`);
+      const queryString = params.toString();
+      router.push(queryString ? `${routes.doctors.list}?${queryString}` : routes.doctors.list);
     });
   };
 

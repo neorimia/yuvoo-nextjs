@@ -63,7 +63,7 @@ export default async function ParentDashboardPage() {
   });
 
   return (
-    <section className="bd-parent-dashboard-area pt-120 pb-70">
+    <section className="bd-parent-dashboard-area pb-70">
       <div className="container">
         <div className="row">
           <div className="col-12">

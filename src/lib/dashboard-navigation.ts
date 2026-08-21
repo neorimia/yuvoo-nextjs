@@ -40,6 +40,7 @@ export const dashboardNavigation: NavigationConfig = {
   doctor: [
     { label: "Dashboard", href: routes.doctor.dashboard, icon: "bi-house" },
     { label: "Profil", href: routes.doctor.profile, icon: "bi-person" },
+    { label: "Disponibilitate", href: routes.doctor.availability, icon: "bi-calendar-week" },
     { label: "Rezervări", href: routes.doctor.bookings, icon: "bi-calendar-check" },
     { label: "Setări", href: routes.doctor.settings, icon: "bi-gear" },
   ],

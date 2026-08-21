@@ -45,7 +45,7 @@ export function getClubsPremiumMailtoUrl(body?: string): string {
 export function openClubsPremiumMailto(location: string, ctaText: string): void {
   if (typeof window === "undefined") return;
 
-  trackEvent(PostHogEvents.CLUBS_CONTACT_FORM_SUBMITTED, {
+  trackEvent(PostHogEvents.CLUBS_MAILTO_CLICKED, {
     [PostHogProperties.VARIANT_LOCATION]: location,
     [PostHogProperties.CTA_TEXT]: ctaText,
     formType: "premium_mailto",
