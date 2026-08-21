@@ -16,13 +16,13 @@ const footerData: IFooterData = {
       {
         id: 1,
         icon: "fa-brands fa-facebook-f",
-        url: "https://facebook.com/yuvooro",
+        url: "https://www.facebook.com/yuvooro",
         name: "Facebook",
       },
       {
         id: 2,
         icon: "fa-brands fa-instagram",
-        url: "https://instagram.com/yuvooro",
+        url: "https://www.instagram.com/yuvooro",
         name: "Instagram",
       },
       {
@@ -30,12 +30,6 @@ const footerData: IFooterData = {
         icon: "fa-brands fa-tiktok",
         url: "https://www.tiktok.com/@yuvooro",
         name: "TikTok",
-      },
-      {
-        id: 4,
-        icon: "fa-brands fa-twitter",
-        url: "https://twitter.com/yuvooro",
-        name: "Twitter",
       },
     ],
   },
@@ -82,6 +76,11 @@ const footerData: IFooterData = {
         id: 8,
         menu: "Contact",
         path: "/contact",
+      },
+      {
+        id: 9,
+        menu: "Presă",
+        path: "/presa",
       },
     ],
   },
@@ -181,18 +180,12 @@ const footerData: IFooterData = {
     id: 4,
     title: "Contactează-ne",
     infos: [
-      // {
-      //   id: 1,
-      //   icon: "fa-light fa-location-dot",
-      //   url: "#",
-      //   title: "România",
-      // },
-      // {
-      //   id: 2,
-      //   icon: "fa-light fa-phone",
-      //   url: "tel:+40746385038",
-      //   title: "+40 746 385 038",
-      // },
+      {
+        id: 1,
+        icon: "fa-light fa-location-dot",
+        url: "#",
+        title: "București, România",
+      },
       {
         id: 3,
         icon: "fa-light fa-envelope",

@@ -50,7 +50,9 @@ export const GUIDE_PAGES: GuidePage[] = [
       "ce sport la 6 ani",
       "cluburi sport copii bucuresti",
     ],
-    introduction: `La vârsta de 6 ani, copiii au de obicei coordonare mai bună, atenție prelungită și dorința de a juca în grup. Este un moment excelent pentru a introduce un sport structurat, dar fără presiune de performanță. Organizația Mondială a Sănătății recomandă cel puțin 60 de minute de activitate fizică moderată până la viguroasă pe zi pentru copiii școlari — sportul organizat poate acoperi o parte importantă din acest timp.
+    introduction: `Cel mai potrivit sport pentru un copil de 6 ani depinde de temperament și coordonare, dar înotul, gimnastica, fotbalul, dansul și karate-ul sunt printre cele mai alese opțiuni în România — cu programe recreative, fără presiune de performanță.
+
+La vârsta de 6 ani, copiii au de obicei coordonare mai bună, atenție prelungită și dorința de a juca în grup. Este un moment excelent pentru a introduce un sport structurat, dar fără presiune de performanță. Organizația Mondială a Sănătății recomandă cel puțin 60 de minute de activitate fizică moderată până la viguroasă pe zi pentru copiii școlari — sportul organizat poate acoperi o parte importantă din acest timp.
 
 La 6 ani, antrenamentele ar trebui să pună accent pe joc, dezvoltarea motricității generale și plăcerea de a mișca, nu pe competiție intensă. Mulți antrenori folosesc jocuri scurte, exerciții variate și pauze frecvente pentru a menține interesul. Părinții pot observa ce tip de activitate îi entuziasmează copilul: mișcare în echipă, sport individual, ritm muzical sau contact controlat.
 
@@ -148,7 +150,9 @@ Pe Yuvoo găsești cluburi listate pe sport și vârstă, cu filtre pentru verif
       "sport potrivit copil 8 ani",
       "cluburi sport copii",
     ],
-    introduction: `La 8 ani, mulți copii au deja experiență școlară solidă, abilități sociale mai dezvoltate și capacitatea de a urma instrucțiuni complexe. Este o vârstă în care se pot distinge preferințele clare: sport de echipă versus individual, competiție versus recreație, activități cu contact versus fără contact.
+    introduction: `La 8 ani, tenisul, baschetul, înotul, judo și atletismul sunt printre cele mai potrivite sporturi structurate — copilul poate urma instrucțiuni complexe, fără presiune prematură de performanță.
+
+La 8 ani, mulți copii au deja experiență școlară solidă, abilități sociale mai dezvoltate și capacitatea de a urma instrucțiuni complexe. Este o vârstă în care se pot distinge preferințele clare: sport de echipă versus individual, competiție versus recreație, activități cu contact versus fără contact.
 
 Antrenamentele pot include elemente tehnice mai avansate, dar părinții ar trebui să evite presiunea prematură pentru performanță. Federațiile sportive din România au categorii de vârstă care permit participarea graduală la competiții locale — consultă antrenorul clubului despre calendar și așteptări.
 
@@ -246,7 +250,9 @@ Factorii cheie la 8 ani: interesul copilului (cel mai important), compatibilitat
       "activități copii timizi",
       "sport încredere copii",
     ],
-    introduction: `Copiii timizi sau introvertiți pot beneficia enorm de sport, dar mediul și tipul de activitate contează mai mult decât la copiii extrovertiți. Un antrenor care forțează participarea publică sau un sport cu presiune socială intensă poate amplifica anxietatea; invers, un cadru predictibil, antrenor empatic și progres gradual pot construi încredere pe termen lung.
+    introduction: `Cel mai potrivit sport pentru un copil timid este, de regulă, unul cu progres individual (înot, tenis în grup mic, gimnastică, karate structurat) într-un mediu predictibil, fără presiune socială intensă.
+
+Copiii timizi sau introvertiți pot beneficia enorm de sport, dar mediul și tipul de activitate contează mai mult decât la copiii extrovertiți.
 
 Sporturile care permit dezvoltare individuală în cadrul unui grup mic, sau activități cu ritm propriu, sunt adesea mai potrivite la început. Înotul, gimnastica, tenisul (lecții private sau grupuri mici) și anumite arte marțiale pun accent pe competiția cu sine, nu doar cu alții.
 
@@ -327,7 +333,9 @@ Semne că sportul nu se potrivește: refuz repetat fără explicație, somn pert
       "recomandări sport copii",
       "chestionar sport copii",
     ],
-    introduction: `„Ce sport i se potrivește copilului meu?" este una dintre cele mai frecvente întrebări ale părinților din România. Răspunsul nu depinde doar de vârstă, ci de o combinație de factori: temperament (timid sau extrovertit), nivel de energie, coordonare, interese, constrângeri de timp și buget, plus eventuale recomandări medicale.
+    introduction: `Sportul potrivit copilului tău se alege după temperament, energie, coordonare și interese — nu există un singur răspuns universal, dar fotbalul, înotul, gimnastica, tenisul și dansul acoperă profiluri foarte diferite.
+
+„Ce sport i se potrivește copilului meu?" este una dintre cele mai frecvente întrebări ale părinților din România. Răspunsul nu depinde doar de vârstă, ci de o combinație de factori: temperament (timid sau extrovertit), nivel de energie, coordonare, interese, constrângeri de timp și buget, plus eventuale recomandări medicale.
 
 Nu există un sport „perfect" universal. Un copil energic poate prospera la fotbal sau baschet; unul care preferă rutina poate prefera înot sau gimnastică; un copil creativ poate iubi dansul. Important este ca sportul să fie sustenabil — copilul să aștepte antrenamentul, nu să-l perceapă ca pedeapsă.
 

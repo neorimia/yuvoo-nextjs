@@ -16,7 +16,16 @@ export default function LocationContentExpanded({
   content,
   locationDisplayName,
 }: LocationContentExpandedProps) {
-  const { stats, cityParagraph, howToChoose, popularSports, ageGuide, siblingLocations } = content;
+  const {
+    stats,
+    cityParagraph,
+    districtParagraph,
+    howToChoose,
+    popularSports,
+    ageGuide,
+    localFaq,
+    siblingLocations,
+  } = content;
 
   return (
     <section className="bd-location-expanded-content pb-50">
@@ -45,6 +54,7 @@ export default function LocationContentExpanded({
             </div>
 
             <p className="mb-4">{cityParagraph}</p>
+            {districtParagraph && <p className="mb-4">{districtParagraph}</p>}
 
             <SectionTitle title={`Cum alegi un club în ${locationDisplayName}`} className="mb-30" />
             <p className="mb-4">{howToChoose}</p>
@@ -73,6 +83,23 @@ export default function LocationContentExpanded({
 
             <SectionTitle title="Vârste și programe" className="mb-30" />
             <p className="mb-4">{ageGuide}</p>
+
+            {localFaq.length > 0 && (
+              <>
+                <SectionTitle
+                  title={`Întrebări frecvente despre cluburi în ${locationDisplayName}`}
+                  className="mb-30"
+                />
+                <div className="mb-4">
+                  {localFaq.map((item) => (
+                    <div key={item.question} className="mb-3">
+                      <h3 className="h6 fw-semibold">{item.question}</h3>
+                      <p className="small text-muted mb-0">{item.answer}</p>
+                    </div>
+                  ))}
+                </div>
+              </>
+            )}
 
             <SectionTitle title="Ghiduri utile pentru părinți" className="mb-30" />
             <p className="mb-3 small text-muted">

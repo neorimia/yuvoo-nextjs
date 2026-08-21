@@ -94,6 +94,7 @@ export const routes = {
   // Public Information Pages - SEO-friendly Romanian paths
   about: "/despre-noi",
   partners: "/parteneri",
+  press: "/presa",
   contact: "/contact",
   faq: "/intrebari-frecvente",
   testimonials: "/testimonials", // Keep English for now, can be changed to "/testimoniale" later

@@ -26,7 +26,8 @@ const ClubContentExpanded: React.FC<ClubContentExpandedProps> = ({ content }) =>
             data-wow-duration="1s"
             data-wow-delay=".2s"
           >
-            <p className="bd-club-expanded-content-intro-text">{content.introduction}</p>
+            <p className="bd-club-expanded-content-intro-text">{content.geoSummary}</p>
+            <p className="bd-club-expanded-content-intro-text mt-3">{content.introduction}</p>
           </div>
         </div>
       </div>

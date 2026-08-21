@@ -2141,7 +2141,9 @@ Pe măsură ce copiii cresc, antrenamentele devin mai structurate, introducându
     },
     ageRecommendations: {
       title: "Vârsta recomandată pentru patinaj",
-      content: `Patinajul poate fi început de copiii de 4-5 ani, când au dezvoltat coordonare de bază. La această vârstă, programele se concentrează pe echilibru și mișcări fundamentale. Copiii mai mari pot învăța tehnici avansate.`,
+      content: `Patinajul poate începe de la 4–5 ani, cu programe de familiarizare și echilibru. Între 6–8 ani, copiii învață alunecări controlate, viraje simple și opriri. De la 9–10 ani, unii trec la elemente artistice sau hochei pe gheață, în funcție de club.
+
+Antrenamentele pentru începători durează 45–60 minute și includ încălzire pe marginea pistei sau în sală. Patinoarele din București, Cluj sau Brașov oferă cursuri structurate; pe role, cluburile funcționează tot anul în parcuri acoperite sau săli dedicate.`,
     },
     equipmentGuide: {
       title: "Echipament necesar pentru patinaj",
@@ -2170,7 +2172,22 @@ Pe măsură ce copiii cresc, antrenamentele devin mai structurate, introducându
       {
         question: "La ce vârstă poate începe copilul meu patinajul?",
         answer:
-          "Patinajul poate fi început de copiii de 4-5 ani, când au dezvoltat coordonare de bază. Multe cluburi oferă programe speciale pentru copiii mici.",
+          "Patinajul pe gheață sau role poate începe de la 4–5 ani, când copilul stă echilibrat și urmează instrucțiuni scurte. Cluburile din România grupează începătorii pe vârstă, cu ședințe scurte (30–45 minute) pentru cei mici.",
+      },
+      {
+        question: "Patinaj pe gheață sau pe role — ce aleg?",
+        answer:
+          "Rolele sunt accesibile tot anul în oraș; patinajul pe gheață depinde de patinoare sezoniere sau acoperite. Pentru început, multe familii aleg rolele (echipament mai ieftin, fără program strict de sezon).",
+      },
+      {
+        question: "Ce echipament minim e necesar?",
+        answer:
+          "Patine potrivite mărimii, căști obligatorii, mănuși și protecții pentru genunchi/coturi la început. Hainele trebuie să permită mișcare liberă; evită haine prea groase care limitează echilibrul.",
+      },
+      {
+        question: "Cât costă cursurile de patinaj pentru copii?",
+        answer:
+          "Abonamentele variază (150–400 RON/lună în funcție de oraș și frecvență). Unele cluburi includ chiria patinelor; altele cer patine proprii. Cere probă înainte de contract anual.",
       },
     ],
     internalLinks: {
@@ -2240,7 +2257,22 @@ Pe măsură ce copiii cresc, antrenamentele devin mai structurate, introducându
       {
         question: "La ce vârstă poate începe copilul meu schiul?",
         answer:
-          "Schiul poate fi început de copiii de 5-6 ani, când au dezvoltat coordonare de bază. Multe stațiuni oferă programe speciale pentru copiii mici.",
+          "Schiul poate începe de la 5–6 ani pe pârtii ușoare, cu lecții scurte și echipament adaptat. Stațiunile din România (Predeal, Poiana Brașov, Sinaia) oferă școli de schi pentru copii.",
+      },
+      {
+        question: "E nevoie de echipament propriu?",
+        answer:
+          "La început, majoritatea stațiunilor închiriază schiuri, bocanci și cască. Pe măsură ce copilul progresează, investiția în echipament propriu poate fi mai economică.",
+      },
+      {
+        question: "Este schiul sigur pentru copii?",
+        answer:
+          "Da, cu instructor calificat, cască obligatorie și pârtie potrivită nivelului. Evită suprasolicitarea — sesiuni scurte și pauze frecvente pentru începători.",
+      },
+      {
+        question: "Pot face schi doar iarna?",
+        answer:
+          "Schiul pe zăpadă naturală e sezonier (decembrie–martie, în funcție de stațiune). Unele centre au pârtii artificiale sau programe off-season de condiție fizică.",
       },
     ],
     internalLinks: {

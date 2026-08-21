@@ -98,8 +98,10 @@ const nextConfig: NextConfig = {
     ];
   },
 
-  // PostHog rewrites for analytics ingestion
+  // PostHog rewrites + IndexNow key verification file
   async rewrites() {
+    const indexNowKey = process.env.INDEXNOW_KEY?.trim() || "yuvoo-indexnow-key-2026";
+
     return [
       {
         source: "/ingest/static/:path*",
@@ -108,6 +110,10 @@ const nextConfig: NextConfig = {
       {
         source: "/ingest/:path*",
         destination: "https://eu.i.posthog.com/:path*",
+      },
+      {
+        source: `/${indexNowKey}.txt`,
+        destination: "/api/indexnow/key",
       },
     ];
   },
