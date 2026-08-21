@@ -46,13 +46,13 @@ const HeroYuvoo = () => {
           <div className="row align-items-center">
             <div className="col-lg-7 col-md-6">
               <div className="bd-hero-content">
-                <h2
+                <h1
                   className="bd-hero-title wow fadeInUp"
                   data-wow-duration="1s"
                   data-wow-delay=".5s"
                 >
                   Găsește sportul potrivit pentru copilul tău
-                </h2>
+                </h1>
                 <p
                   className="wow fadeInUp text-yuvoo-body"
                   data-wow-duration="1s"

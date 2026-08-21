@@ -33,6 +33,7 @@ export default function HelpCenterHero() {
             <div className="col-lg-10 col-xl-9 mx-auto">
               <div className="bd-hero-content text-center">
                 <SectionTitle
+                  headingLevel={1}
                   title="Ajutor & Întrebări Frecvente"
                   subtitle="Găsește răspunsuri la toate întrebările despre Yuvoo"
                   className="mb-30"

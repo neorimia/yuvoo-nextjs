@@ -67,6 +67,12 @@ export default async function QuizContainerPage({ searchParams }: QuizContainerP
 
   return (
     <div className="quiz-container-page">
+      <div className="container pt-120 pb-30">
+        <h1 className="bd-section-title text-center mb-4">Completează chestionarul AI</h1>
+        <p className="text-center text-muted mb-0">
+          Răspunde la 7 întrebări despre copilul tău (3–4 minute) pentru recomandări personalizate.
+        </p>
+      </div>
       <QuizContainer childId={childId} childProfiles={childProfiles} />
     </div>
   );

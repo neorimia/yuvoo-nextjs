@@ -68,6 +68,7 @@ export default async function QuizIntroPage() {
       <BreadcrumbOne
         title="Chestionar AI"
         subTitle="Chestionar"
+        titleAs="p"
         items={[
           { name: "Yuvoo", url: routes.home },
           { name: "Chestionar", url: routes.quiz.intro }, // Current page

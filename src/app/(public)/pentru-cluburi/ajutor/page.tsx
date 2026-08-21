@@ -13,7 +13,7 @@ const baseUrl = process.env.NEXT_PUBLIC_APP_URL || "https://yuvoo.ro";
 const canonicalUrl = `${baseUrl}${routes.clubs.helpCenter}`;
 
 export const metadata: Metadata = {
-  title: "Ajutor & Întrebări Frecvente - Yuvoo | Răspunsuri la toate întrebările",
+  title: "Ajutor Cluburi | Yuvoo — FAQ",
   description:
     "Găsește răspunsuri la toate întrebările despre Yuvoo: procesul de verificare, prețuri, lead-uri, platformă și multe altele. Suport complet pentru cluburi sportive.",
   keywords: [
@@ -24,7 +24,7 @@ export const metadata: Metadata = {
     "ajutor platformă Yuvoo",
   ],
   openGraph: {
-    title: "Ajutor & Întrebări Frecvente - Yuvoo",
+    title: "Ajutor Cluburi | Yuvoo — FAQ",
     description:
       "Găsește răspunsuri la toate întrebările despre Yuvoo: procesul de verificare, prețuri, lead-uri, platformă.",
     url: canonicalUrl,
@@ -34,7 +34,7 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    title: "Ajutor & Întrebări Frecvente - Yuvoo",
+    title: "Ajutor Cluburi | Yuvoo — FAQ",
     description: "Răspunsuri la toate întrebările despre Yuvoo pentru cluburi",
   },
   alternates: {

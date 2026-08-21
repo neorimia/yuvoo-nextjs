@@ -92,6 +92,7 @@ export default async function TeaserPage({ params }: TeaserPageProps) {
         <BreadcrumbOne
           title="Recomandarea ta personalizată"
           subTitle="Chestionar"
+          titleAs="p"
           items={[
             { name: "Yuvoo", url: routes.home },
             { name: "Chestionar", url: routes.quiz.intro },

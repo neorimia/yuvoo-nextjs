@@ -2314,11 +2314,21 @@ Pe măsură ce copiii cresc, antrenamentele devin mai structurate, introducându
     },
     ageRecommendations: {
       title: "Vârsta recomandată pentru taekwondo",
-      content: `Taekwondo-ul poate fi început de copiii de 5-6 ani, când au dezvoltat coordonare de bază. Programele se concentrează pe jocuri distractive și valori, fără contact pentru copiii mici.`,
+      content: `Taekwondo-ul poate fi început de copiii de 5-6 ani, când au dezvoltat coordonare de bază și capacitatea de a urmări instrucțiuni scurte. La această vârstă, antrenamentele durează 30–45 de minute și se concentrează pe jocuri, posturi de bază și valori (respect, salut, ascultare), fără contact sau lovituri puternice.
+
+Între 7–9 ani, copiii învață forme (poomsae) simple, tehnici de bază cu piciorul și mâna și participă la evaluări pentru centuri colorate. Antrenorii adaptează intensitatea la grupa de vârstă; sparring-ul controlat apare doar când copilul stăpânește echipamentul de protecție și regulile de siguranță.
+
+De la 10–12 ani, unii copii participă la competiții locale sau naționale, iar antrenamentele includ condiție fizică, flexibilitate și tactici de luptă controlată. Adolescenții (13–14 ani) pot specializa tehnici avansate, dar progresul rămâne individual — taekwondo-ul valorizează disciplina și respectul, nu doar rezultatele în ring.
+
+În România, cluburile din București, Cluj, Timișoara și alte orașe oferă grupe separate pentru începători; cere probă gratuită înainte de abonament anual.`,
     },
     equipmentGuide: {
       title: "Echipament necesar pentru taekwondo",
-      content: `Echipamentul de bază include dobok-ul (costum) și centura. Pentru sparring, sunt necesare protecții complete.`,
+      content: `Echipamentul de bază pentru taekwondo este accesibil: dobok (costum alb), centură și eventual protecții pentru sparring. Dobok-ul trebuie să permită mișcări ample (lovituri cu piciorul la înălțime) și să respecte cerințele federației sau ale clubului.
+
+Pentru început, majoritatea cluburilor acceptă dobok simplu; pe măsură ce copilul progresează, poți investi în modele mai rezistente. Sparring-ul necesită cască, protecție pentru piept, mănuși, tibiere și instep — multe cluburi le împrumută la început. Verifică regulile competiției dacă copilul participă la turnee: unele cer mărci certificate WT.
+
+Întreținerea e simplă: spălare la temperatură moderată, fără uscător agresiv. Copiii mici au nevoie de dobok cu mărime reglabilă sau schimbat la 6–12 luni pe măsură ce cresc.`,
       items: [
         {
           name: "Dobok (costum)",
@@ -2344,6 +2354,26 @@ Pe măsură ce copiii cresc, antrenamentele devin mai structurate, introducându
         question: "La ce vârstă poate începe copilul meu taekwondo-ul?",
         answer:
           "Taekwondo-ul poate fi început de copiii de 5-6 ani, când au dezvoltat coordonare de bază. Programele pentru copiii mici se concentrează pe jocuri distractive și valori, fără contact.",
+      },
+      {
+        question: "Este taekwondo-ul sigur pentru copii?",
+        answer:
+          "Da, când este practicat sub supravegherea unui instructor certificat. Copiii mici învață fără contact; sparring-ul apare treptat, cu echipament complet și reguli stricte.",
+      },
+      {
+        question: "Cât durează progresia prin centuri?",
+        answer:
+          "Intervalul variază (3–6 luni între examene la început). Progresul depinde de prezență, disciplină și stăpânirea tehnicilor — nu de vârstă. Cluburile serioase evaluează individual.",
+      },
+      {
+        question: "Ce diferență este față de karate sau judo?",
+        answer:
+          "Taekwondo-ul pune accent pe lovituri cu piciorul și viteză; karate-ul combină pumni și picioare; judo-ul folosește proiecții și luptă la sol. Alege în funcție de energia și preferințele copilului.",
+      },
+      {
+        question: "Cât costă cursurile de taekwondo?",
+        answer:
+          "Abonamentele în România sunt de obicei 150–350 RON/lună (2–3 ședințe). Taxa de examen pentru centură și echipamentul de sparring pot fi costuri suplimentare — întreabă clubul înainte de înscriere.",
       },
     ],
     internalLinks: {
@@ -2385,11 +2415,21 @@ Pe măsură ce copiii cresc, antrenamentele devin mai structurate, introducându
     },
     ageRecommendations: {
       title: "Vârsta recomandată pentru scrimă",
-      content: `Scrima poate fi începută de copiii de 6-7 ani, când au dezvoltat coordonare de bază. Programele pentru începători se concentrează pe siguranță și tehnici fundamentale.`,
+      content: `Scrima poate fi începută de copiii de 6-7 ani, când au coordonare de bază și capacitatea de a purta mască și echipament fără disconfort. Programele pentru începători folosesc arme ușoare (foilă adaptată) și exerciții fără adversar agresiv — accent pe postură, deplasare și siguranță.
+
+La 8–10 ani, copiii învață regulile celor trei arme (floretă, sabie, spadă) sau se specializează pe una, în funcție de club. Antrenamentele includ jocuri pe piste scurte, coordonare și primele meciuri controlate cu arbitru.
+
+Între 11–14 ani, unii participă la competiții regionale; antrenamentele cresc ca durată (60–90 minute) și includ pregătire fizică, tactică și lucru mental (concentrare, gestionarea presiunii). România are tradiție olimpică în scrimă — cluburile din București, Iași și Cluj oferă grupe pentru copii și juniori.
+
+Indiferent de vârstă, scrima cere răbdare: progresul tehnic se vede după luni de practică constantă, nu după câteva ședințe.`,
     },
     equipmentGuide: {
       title: "Echipament necesar pentru scrimă",
-      content: `Echipamentul pentru scrimă include armura completă (mască, veste, mănuși), arma și echipament suplimentar. Echipamentul este esențial pentru siguranță.`,
+      content: `Echipamentul de scrimă este esențial pentru siguranță: mască completă certificată, vestă electrică (la foilă/sabie), mănuși, plastron, pantaloni și șosete speciale. Pentru început, majoritatea cluburilor împrumută echipament — ideal pentru a testa sportul înainte de investiție.
+
+Arma (floretă, sabie sau spadă) trebuie potrivită pentru mâna și vârsta copilului; instructorul alege lungimea și greutatea. Pe măsură ce copilul progresează, vei achiziționa echipament personal — măsuri corecte la vestă și mască sunt critice.
+
+Costul total pentru un set complet de început poate fi 800–2000 RON, dar cluburile serioase permit etapizarea achizițiilor. Verifică cerințele federației pentru competiții dacă copilul vrea să participe la turnee.`,
       items: [
         {
           name: "Armură completă",
@@ -2416,6 +2456,26 @@ Pe măsură ce copiii cresc, antrenamentele devin mai structurate, introducându
         question: "La ce vârstă poate începe copilul meu scrima?",
         answer:
           "Scrima poate fi începută de copiii de 6-7 ani, când au dezvoltat coordonare de bază. Programele pentru începători folosesc arme adaptate și se concentrează pe siguranță.",
+      },
+      {
+        question: "Ce armă alegem: floretă, sabie sau spadă?",
+        answer:
+          "Floreta este cea mai comună pentru începători (țintă doar trunchi). Sabia și spada au reguli diferite; multe cluburi lasă copilul să testeze toate trei în primele luni.",
+      },
+      {
+        question: "Este scrima periculoasă?",
+        answer:
+          "Cu echipament complet certificat și antrenor calificat, scrima este un sport controlat. Accidentările grave sunt rare; regulile și arbitrajul limitează contactul periculos.",
+      },
+      {
+        question: "Cât costă echipamentul și cursurile?",
+        answer:
+          "Abonamentele sunt de obicei 200–400 RON/lună. Echipamentul complet poate fi scump, dar cluburile împrumută la început. Întreabă despre pachete pentru familii sau reduceri anuale.",
+      },
+      {
+        question: "Scrima ajută la școală sau alte sporturi?",
+        answer:
+          "Da — dezvoltă concentrarea, gândirea strategică și disciplina. Mulți scrimeri au performanțe bune la coordonare și sporturi individuale (tenis, atletism).",
       },
     ],
     internalLinks: {
@@ -2457,11 +2517,21 @@ Pe măsură ce copiii cresc, antrenamentele devin mai structurate, introducându
     },
     ageRecommendations: {
       title: "Vârsta recomandată pentru box",
-      content: `Boxul poate fi început de copiii de 8-9 ani, când au dezvoltat coordonare și forță suficientă. Programele pentru copiii mici se concentrează pe tehnici fundamentale fără contact. Sparring-ul este introdus doar pentru copiii mai mari și întotdeauna controlat.`,
+      content: `Boxul pentru copii poate începe de la 8-9 ani, când au coordonare, forță de bază și maturitate emoțională pentru a respecta reguli stricte. Programele pentru începători evită contactul direct: sac, coșuri, tehnici de bază și condiție fizică.
+
+La 10–12 ani, unii copii introduc sparring ușor, cu cască, mănuși grele și supraveghere intensă — doar dacă clubul are protocol clar pentru juniori. Antrenamentele durează 60 de minute și includ încălzire, tehnică, sac și stretching.
+
+Adolescenții (13–14 ani) pot participa la competiții amator controlate, în funcție de regulile federației și ale clubului. Boxul modern pentru copii pune accent pe fitness, disciplină și siguranță — nu pe KO sau agresivitate.
+
+În România, verifică că instructorul are experiență cu juniori și că sala respectă norme de siguranță (ring separat, echipament de protecție obligatoriu). Cere probă înainte de abonament.`,
     },
     equipmentGuide: {
       title: "Echipament necesar pentru box",
-      content: `Echipamentul pentru box include mănuși, bandaje, cască de protecție și echipament suplimentar. Echipamentul este esențial pentru siguranță.`,
+      content: `Echipamentul minim include mănuși de box (14–16 oz pentru juniori, în funcție de greutate), bandaje pentru mâini, căști de protecție pentru sparring și protecție dentară la meciuri. Pentru antrenament pe sac, mănușile și bandajele sunt suficiente.
+
+Tricoul lejer, șorturi confortabile și încălțăminte cu suport lateral (nu alergare simplă) completează setul. Cluburile serioase interzic sparring-ul fără cască și mănuși certificate.
+
+Investiția inițială este moderată (200–500 RON) dacă clubul oferă sacuri și ring; pe termen lung, mănușile se înlocuiesc la 6–12 luni de utilizare intensă. Verifică dacă abonamentul include chiria echipamentului la început.`,
       items: [
         {
           name: "Mănuși de box",
@@ -2498,6 +2568,16 @@ Pe măsură ce copiii cresc, antrenamentele devin mai structurate, introducându
         question: "Este boxul violent pentru copii?",
         answer:
           "Nu! Boxul pentru copii se concentrează pe dezvoltare fizică, disciplină și respect, nu pe violență. Contactul este controlat strict și permis doar în sparring-uri supervizate pentru copiii mai mari.",
+      },
+      {
+        question: "Box sau alte arte marțiale — ce aleg?",
+        answer:
+          "Boxul dezvoltă coordonarea mâinilor și condiția cardiovasculară; karate/taekwondo adaugă lovituri cu piciorul și valori tradiționale. Copiii activi care preferă structură simplă pot prefera boxul fitness.",
+      },
+      {
+        question: "Cât costă cursurile de box pentru copii?",
+        answer:
+          "Abonamentele variază 150–350 RON/lună în funcție de oraș și frecvență. Unele cluburi percep taxă de înscriere; echipamentul de bază poate fi inclus sau achiziționat separat.",
       },
     ],
     internalLinks: {
@@ -2539,11 +2619,21 @@ Pe măsură ce copiii cresc, antrenamentele devin mai structurate, introducându
     },
     ageRecommendations: {
       title: "Vârsta recomandată pentru gimnastică ritmică",
-      content: `Gimnastica ritmică poate fi începută de copiii de 4-5 ani, când au dezvoltat coordonare de bază. Programele pentru copiii mici se concentrează pe jocuri muzicale și mișcări fundamentale.`,
+      content: `Gimnastica ritmică poate începe de la 4-5 ani, când copilul urmează instrucțiuni scurte și se bucură de muzică și mișcare. Primele luni includ jocuri cu cerc, mănunchi sau panglică ușoară, stretching blând și dezvoltarea simțului ritmului.
+
+La 6–8 ani, antrenamentele devin structurate: elemente de bază cu aparatele, coregrafii scurte și participare la spectacole interne ale clubului. Flexibilitatea se lucrează progresiv, fără forțare — instructorii calificați respectă limitele de vârstă.
+
+Între 9–12 ani, unele gimnaste participă la competiții regionale; antrenamentele pot ajunge la 4–5 sesiuni pe săptămână pentru nivel performant. România are tradiție puternică — cluburile din București, Constanța și alte orașe au programe pentru recreație și performanță.
+
+Adolescența aduce specializare pe aparat sau tranziție către dans, acrobație sau antrenorat. Important: progresul în gimnastică ritmică cere constanță — absențele lungi afectează flexibilitatea și memoria coregrafică.`,
     },
     equipmentGuide: {
       title: "Echipament necesar pentru gimnastică ritmică",
-      content: `Echipamentul de bază include leotardul și aparatele (cerc, mănunchi, coardă, panglică, mingi). Majoritatea aparatelor sunt furnizate de club.`,
+      content: `Leotardul este esențial — trebuie să fie confortabil, să permită stretching complet și să respecte codul vestimentar al clubului (adesea fără decorații care se agață de aparate). Pentru antrenament acasă, colanți și tricou lejer sunt acceptabile doar dacă clubul permite.
+
+Aparatele (cerc, mănunchi, coardă, panglică, minge) sunt de obicei furnizate de sală; pentru antrenament acasă poți cumpăra aparate ușoare adaptate vârstei. Accesoriile pentru păr ( coc strâns, gel) previn accidentele și sunt obligatorii la competiții.
+
+Pantofii de gimnastică ritmică (semela flexibilă) sau exercițiul desculț depind de club. Costul leotardului variază 100–300 RON; la competiții pot fi necesare costume separate — discută cu antrenorul înainte de achiziții.`,
       items: [
         {
           name: "Leotard",
@@ -2570,6 +2660,26 @@ Pe măsură ce copiii cresc, antrenamentele devin mai structurate, introducându
         question: "La ce vârstă poate începe copilul meu gimnastica ritmică?",
         answer:
           "Gimnastica ritmică poate fi începută de copiii de 4-5 ani, când au dezvoltat coordonare de bază. Programele pentru copiii mici se concentrează pe jocuri muzicale și mișcări fundamentale.",
+      },
+      {
+        question: "Trebuie copilul să fie deja flexibil?",
+        answer:
+          "Nu — flexibilitatea se dezvoltă treptat în antrenament, sub supraveghere. Cluburile serioase evită forțarea; progresul depinde de constanță, nu de talent la prima ședință.",
+      },
+      {
+        question: "Cât de des sunt antrenamentele?",
+        answer:
+          "Pentru recreație: 2–3 ori pe săptămână (45–60 min). Pentru performanță: 4–6 sesiuni. Discută cu antrenorul obiectivul familiei (sănătate, competiție, recreație).",
+      },
+      {
+        question: "Gimnastică ritmică sau artistică?",
+        answer:
+          "Ritmica combină muzică, aparate și grație; artistica pune accent pe sărituri, paralele și bare. Copiii care iubesc muzica și expresia preferă adesea ritmica.",
+      },
+      {
+        question: "Cât costă cursurile?",
+        answer:
+          "Abonamentele sunt de obicei 200–450 RON/lună, în funcție de oraș și numărul de ședințe. Costume de competiție și deplasări pot adăuga costuri — clarifică la înscriere.",
       },
     ],
     internalLinks: {
@@ -2611,11 +2721,21 @@ Pe măsură ce copiii cresc, antrenamentele devin mai structurate, introducându
     },
     ageRecommendations: {
       title: "Vârsta recomandată pentru patinaj artistic",
-      content: `Patinajul artistic poate fi început de copiii de 4-5 ani, când au dezvoltat coordonare de bază. Programele pentru începători se concentrează pe patinaj de bază și familiarizare cu gheața.`,
+      content: `Patinajul artistic poate începe de la 4-5 ani, când copilul stă echilibrat și acceptă casca și mănușile. Primele lecții se desfășoară pe gheață cu instructor care ține copilul sau folosește suporturi (pinguini) — accent pe alunecare, cădere controlată și distracție.
+
+La 6–8 ani, copiii învață viraje simple, spirale și elemente de bază pe gheață; unii participă la spectacole de club. Antrenamentele durează 45–60 minute și includ încălzire off-ice (stretching, sărituri pe loc).
+
+De la 9–12 ani apar sărituri simple, rotații și programe scurte la competiții regionale pentru cei care doresc performanță. Patinoarele din București (Băneasa, Titan), Brașov sau Cluj oferă programe structurate pe nivel.
+
+Adolescenții pot specializa patinaj artistic sau hochei pe gheață — discută cu antrenorul dacă copilul preferă artă sau sport de echipă. Progresul pe gheață depinde de frecvență: 2–3 ședințe pe săptămână sunt minime pentru îmbunătățire vizibilă.`,
     },
     equipmentGuide: {
       title: "Echipament necesar pentru patinaj artistic",
-      content: `Echipamentul de bază include patine artistice, costum de antrenament și echipament de protecție pentru începători.`,
+      content: `Patinele artistice trebuie să susțină glezna și să fie ascuțite regulat — diferite de patinele de hochei (tăblie și lamă). Copiii mici pot folosi patine închiriate de la patinoar până când mărimea se stabilizează.
+
+Costumul de antrenament: colanți termici, jachetă ușoară, mănuși — evită haine voluminoase care limitează mișcarea. Casca este obligatorie pentru începători în majoritatea cluburilor; genunchierele și cotierele sunt recomandate primele luni.
+
+Pentru competiții, costumele sunt personalizate și scumpe — nu sunt necesare la început. Buget orientativ: patine proprii 300–800 RON, ascuțire lunară 30–50 RON, abonament patinoar/club separat.`,
       items: [
         {
           name: "Patine artistice",
@@ -2642,6 +2762,26 @@ Pe măsură ce copiii cresc, antrenamentele devin mai structurate, introducându
         question: "La ce vârstă poate începe copilul meu patinajul artistic?",
         answer:
           "Patinajul artistic poate fi început de copiii de 4-5 ani, când au dezvoltat coordonare de bază. Programele pentru începători se concentrează pe patinaj de bază.",
+      },
+      {
+        question: "Cât durează o lecție de patinaj artistic?",
+        answer:
+          "Pentru copiii mici: 30–45 minute pe gheață. Juniorii pot avea 60 minute plus încălzire off-ice. Evită sesiuni prea lungi — oboseala crește riscul de cădere.",
+      },
+      {
+        question: "Patine proprii sau închiriate?",
+        answer:
+          "La început, închirierea e practică (copiii cresc rapid). După 3–6 luni de practică constantă, patine proprii bine potrivite îmbunătățesc confortul și progresul.",
+      },
+      {
+        question: "Patinaj artistic sau patinaj pe role?",
+        answer:
+          "Artisticul necesită patinoar (sezon sau acoperit); rolele sunt accesibile tot anul. Unele cluburi combină ambele pentru dezvoltarea echilibrului.",
+      },
+      {
+        question: "Cât costă cursurile?",
+        answer:
+          "Abonament patinoar + lecții: 200–500 RON/lună în funcție de oraș. Lecțiile private costă mai mult; grupele reduc prețul per ședință.",
       },
     ],
     internalLinks: {
@@ -2683,11 +2823,21 @@ Pe măsură ce copiii cresc, antrenamentele devin mai structurate, introducându
     },
     ageRecommendations: {
       title: "Vârsta recomandată pentru echiție",
-      content: `Echiția poate fi începută de copiii de 6-7 ani, când au suficientă coordonare și responsabilitate de bază. Programele pentru copiii mici se concentrează pe familiarizare și siguranță cu asistență completă.`,
+      content: `Echiția poate începe de la 6-7 ani, când copilul urmează instrucțiuni, nu se sperie ușor de animale și poate purta casca corect. Primele ședințe includ grooming (mângâiere, periere), familiarizare cu calul la lead și montare cu asistență.
+
+La 8–10 ani, copiii călăresc independent la pas și trap ușor, în arena sigură; învață echilibru, frâne și comunicarea cu calul. Lecțiile durează 45–60 minute, inclusiv pregătirea calului.
+
+Între 11–14 ani, unii participă la concursuri de dresaj ușor sau sărituri mici, în funcție de nivel și cal disponibil. Echiția cere responsabilitate — copiii care participă la îngrijirea calului progresează mai rapid la încredere.
+
+În România, cluburile din jurul Bucureștiului, Clujului sau Brașovului oferă programe pentru copii; distanța față de grajd contează — calculează timpul de transport la 2–3 ședințe pe săptămână.`,
     },
     equipmentGuide: {
       title: "Echipament necesar pentru echiție",
-      content: `Echipamentul de bază include căciulă de protecție, bocanci de echitare și eventual echipament suplimentar. Majoritatea cluburilor oferă șaua și alte echipamente de bază.`,
+      content: `Căciula (helmet) certificată pentru echitație este obligatorie — nu cască de bicicletă. Bocancii cu toc mic și talpă netedă previn blocarea în ș stirrup; jambierele sau pantalonii de echitație reduc frecarea.
+
+Mănușile îmbunătățesc aderența la căpăstru; vesta de protecție (body protector) este recomandată pentru sărituri. Majoritatea cluburilor furnizează șaua; unii cer echipament propriu pe măsură ce copilul progresează.
+
+Buget inițial: 400–900 RON pentru cască, bocanci și pantaloni. Lecția individuală costă mai mult decât grupa; întreabă despre pachete și politica de anulare la vreme rea.`,
       items: [
         {
           name: "Căciulă de protecție",
@@ -2718,6 +2868,16 @@ Pe măsură ce copiii cresc, antrenamentele devin mai structurate, introducându
         question: "Este echiția sigură pentru copii?",
         answer:
           "Da, echiția poate fi sigură când este practicată sub supravegherea unui instructor calificat și cu echipamentul adecvat. Cluburile prioritizează siguranța și folosesc cai potriviți pentru copiii mici.",
+      },
+      {
+        question: "Cât de des ar trebui să meargă copilul la lecții?",
+        answer:
+          "Ideal 1–2 ori pe săptămână pentru progres constant. Lecțiile prea rare îngreunează refacerea încrederii pe cal; prea multe, fără condiție, pot obosi copilul.",
+      },
+      {
+        question: "Echiție recreativă sau competiție?",
+        answer:
+          "Majoritatea copiilor rămân pe recreație și dresaj de bază. Competiția necesită cal dedicat, timp și costuri mult mai mari — discută obiectivul cu antrenorul.",
       },
     ],
     internalLinks: {
@@ -2759,11 +2919,21 @@ Pe măsură ce copiii cresc, antrenamentele devin mai structurate, introducându
     },
     ageRecommendations: {
       title: "Vârsta recomandată pentru tir cu arcul",
-      content: `Tirul cu arcul poate fi început de copiii de 8-9 ani, când au suficientă coordonare, forță și capacitate de a urmări reguli stricte de siguranță. Programele pentru începători se concentrează pe siguranță și tehnici fundamentale.`,
+      content: `Tirul cu arcul poate începe de la 8-9 ani, când copilul respectă reguli stricte, are forță suficientă pentru arcul adaptat și poate sta concentrat 45–60 minute. Programele pentru începători folosesc arcuri cu tracțiune redusă și ținte apropiate.
+
+La 10–12 ani, copiii învață tehnica recurve de bază, postura stabilă și rutina de tragere (nocking, draw, anchor, release). Antrenamentele includ exerciții de respirație și control mental — tirul este la fel de mult sport mental cât fizic.
+
+Între 13–14 ani, unii participă la competiții locale (indoor sau outdoor). Federația și cluburile impun distanțe de siguranță, echipament verificat și supraveghere permanentă — tirul pentru copii nu folosește arme letale în sens clasic; arcurile sportive sunt controlate.
+
+În România, cluburile din București, Cluj, Timișoara și orașe universitare au secții pentru juniori. Cere probă într-o sală sigură înainte de înscriere; copiii impulsivi pot avea nevoie de câteva luni de adaptare la disciplină.`,
     },
     equipmentGuide: {
       title: "Echipament necesar pentru tir cu arcul",
-      content: `Echipamentul de bază include arcul, săgețile și echipament de protecție. Majoritatea cluburilor oferă echipament pentru începători.`,
+      content: `Cluburile furnizează de obicei arcul recurve adaptat, săgeți, ținte și armură (brățară, finger tab, căptușeală piept). Pe măsură ce copilul progresează, un arc personalizat la draw length îmbunătățește precizia.
+
+Săgețile trebuie potrivite pentru arc (spine corect); nu folosi săgeți deteriorate. Casca nu e standard, dar ochelarii și hair tie pentru păr lung sunt recomandate. Haine lejere fără obiecte care se agață de coardă.
+
+Investiția pentru competiție poate depăși 2000 RON; pentru recreație la club, abonamentul include de obicei echipamentul de bază. Verifică dacă clubul are asigurare și instructor certificat.`,
       items: [
         {
           name: "Arc",
@@ -2795,6 +2965,21 @@ Pe măsură ce copiii cresc, antrenamentele devin mai structurate, introducându
         question: "Este tirul cu arcul sigur pentru copii?",
         answer:
           "Da, tirul cu arcul este foarte sigur când este practicat sub supravegherea unui instructor calificat și cu reguli stricte de siguranță. Cluburile prioritizează siguranța și folosesc arcuri adaptate pentru copii.",
+      },
+      {
+        question: "Ce tip de arc folosesc copiii?",
+        answer:
+          "De obicei arcul recurve cu tracțiune redusă (10–18 lb la început). Compounz-ul apare mai târziu, dacă clubul permite — depinde de vârstă și regulament.",
+      },
+      {
+        question: "Tir indoor sau outdoor?",
+        answer:
+          "Indoor permite antrenament tot anul; outdoor adaugă vânt și distanță. Copiii încep aproape exclusiv indoor, la 5–10 metri.",
+      },
+      {
+        question: "Cât costă participarea la un club de tir?",
+        answer:
+          "Abonamentele sunt de obicei 100–250 RON/lună pentru juniori, plus taxă de federație la competiții. Echipamentul de club reduce costul inițial.",
       },
     ],
     internalLinks: {
@@ -2836,11 +3021,21 @@ Pe măsură ce copiii cresc, antrenamentele devin mai structurate, introducându
     },
     ageRecommendations: {
       title: "Vârsta recomandată pentru alpinism",
-      content: `Alpinismul poate fi început de copiii de 8-9 ani, când au suficientă coordonare, forță și responsabilitate. Programele pentru începători se concentrează pe drumeție și escaladare pe structuri adaptate, întotdeauna sub supraveghere strictă.`,
+      content: `Alpinismul și escalada pentru copii pot începe de la 8-9 ani, în formă de escaladă pe perete artificial (boulder sau top-rope) sub supraveghere. Drumețiile ușoare în familie pot fi mai devreme, dar escalada tehnică cere maturitate și respect al regulilor.
+
+La 10–12 ani, copiii învață noduri de bază, echipament (ham, cască, coardă), comunicarea cu belayer-ul și coborârea controlată. Sălile de escaladă din București, Cluj, Brașov permit progres pe tot parcursul anului.
+
+Între 13–14 ani, unii participă la trasee outdoor ușoare cu ghid certificat. Carpații oferă opțiuni sezoniere — iarna accent pe pregătire fizică și sală; vara, ieșiri scurte cu familie sau club.
+
+Important: alpinismul pentru copii nu înseamnă vârfuri periculoase — cluburile serioase folosesc trasee gradate, echipament verificat și raport instructor-copil mic. Evaluarea medicală și condiția fizică de bază sunt recomandate înainte de program intens.`,
     },
     equipmentGuide: {
       title: "Echipament necesar pentru alpinism",
-      content: `Echipamentul pentru alpinism include echipament de bază de drumeție, echipament de escaladare și echipament de siguranță. Investiția în echipament de calitate este esențială.`,
+      content: `Pentru sală: încălțăminte de escaladă (chalk bag opțional la început), haine lejere — majoritatea sălilor închiriază chiarul și hamul. Casca este obligatorie outdoor; în sală depinde de reguli.
+
+Pentru outdoor, clubul furnizează coardă, carabinere, ham și cască certificată. Investiția personală crește odată cu frecvența: pantofi proprii (300–600 RON), ham (200–400 RON), cască (150–300 RON).
+
+Rucsac mic, apă, haine stratificate și cremă solară pentru drumeții. Nu cumpăra echipament tehnic avansat fără recomandarea instructorului — siguranța depinde de potrivire și inspecție periodică.`,
       items: [
         {
           name: "Încălțăminte de drumeție/escaladare",
@@ -2872,6 +3067,21 @@ Pe măsură ce copiii cresc, antrenamentele devin mai structurate, introducându
         question: "Este alpinismul sigur pentru copii?",
         answer:
           "Da, alpinismul poate fi sigur când este practicat sub supravegherea unui instructor calificat, cu echipamentul adecvat și pe trasee adaptate pentru copii. Cluburile prioritizează siguranța și adaptează activitățile pentru vârstă și nivel.",
+      },
+      {
+        question: "Alpinism sau escaladă în sală?",
+        answer:
+          "Escalada indoor este punctul de start standard — trasee controlate, instructor aproape. Alpinismul montan vine după ani de experiență și formare; copiii încep aproape întotdeauna în sală.",
+      },
+      {
+        question: "Ce condiție fizică e necesară?",
+        answer:
+          "Copilul ar trebui să poată urca scări și să aibă forță în brațe și picioare la nivel mediu. Escalada dezvoltă musculatura treptat — nu e nevoie de pregătire prealabilă extremă.",
+      },
+      {
+        question: "Cât costă cursurile?",
+        answer:
+          "Abonament sală: 150–350 RON/lună. Ieșiri outdoor cu ghid pot costă 100–300 RON/zi. Echipamentul închiriat la sală reduce bariera de intrare.",
       },
     ],
     internalLinks: {
