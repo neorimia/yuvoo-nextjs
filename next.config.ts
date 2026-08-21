@@ -100,7 +100,7 @@ const nextConfig: NextConfig = {
 
   // PostHog rewrites + IndexNow key verification file
   async rewrites() {
-    const indexNowKey = process.env.INDEXNOW_KEY?.trim() || "yuvoo-indexnow-key-2026";
+    const indexNowKey = process.env.INDEXNOW_KEY?.trim() || "9aa24988f8df4574b1e486b05685c5aa";
 
     return [
       {
