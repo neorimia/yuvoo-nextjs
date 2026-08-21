@@ -7,6 +7,7 @@ import { getAllDoctors } from "@/modules/doctors/doctors.service";
 import { generateLocationSlug } from "@/lib/utils/location";
 import type { Club } from "@/modules/clubs/clubs.types";
 import { GUIDE_PAGES, GUIDE_PAGES_LASTMOD } from "@/data/guide-pages-data";
+import { filterSitemapEligibleClubs } from "@/lib/seo/sitemap-quality";
 
 /**
  * Sitemap Generator for Google Search Console
@@ -131,6 +132,12 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       priority: 0.7,
     },
     {
+      url: `${baseUrl}${routes.press}`,
+      lastModified: INFO_PAGES_LASTMOD,
+      changeFrequency: "monthly",
+      priority: 0.6,
+    },
+    {
       url: `${baseUrl}${routes.contact}`,
       lastModified: INFO_PAGES_LASTMOD,
       changeFrequency: "monthly",
@@ -187,7 +194,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     console.error("[Sitemap] Error generating sport pages:", error);
   }
 
-  const clubPages: MetadataRoute.Sitemap = clubs.map((club) => ({
+  const clubPages: MetadataRoute.Sitemap = filterSitemapEligibleClubs(clubs).map((club) => ({
     url: `${baseUrl}${routes.clubs.detail(club.slug)}`,
     lastModified: club.updatedAt || club.createdAt || now,
     changeFrequency: "weekly" as const,

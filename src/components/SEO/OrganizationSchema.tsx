@@ -34,10 +34,9 @@ export default function OrganizationSchema() {
       availableLanguage: "ro",
     },
     sameAs: [
-      "https://facebook.com/yuvoo",
-      "https://instagram.com/yuvoo",
-      "https://twitter.com/yuvoo",
-      "https://linkedin.com/company/yuvoo",
+      "https://www.facebook.com/yuvooro",
+      "https://www.instagram.com/yuvooro",
+      "https://www.tiktok.com/@yuvooro",
     ],
   };
 

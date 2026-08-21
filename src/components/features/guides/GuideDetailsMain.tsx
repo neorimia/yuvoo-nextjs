@@ -27,6 +27,15 @@ export default function GuideDetailsMain({ guide }: GuideDetailsMainProps) {
           <div className="col-lg-10 mx-auto">
             <h1 className="bd-section-title mb-4">{guide.h1}</h1>
 
+            <p className="small text-muted mb-3">
+              Actualizat:{" "}
+              {new Date(guide.lastModified).toLocaleDateString("ro-RO", {
+                year: "numeric",
+                month: "long",
+                day: "numeric",
+              })}
+            </p>
+
             <YMYLDisclaimer variant={guide.ymylVariant} className="mb-4" />
 
             <p className="lead mb-4">{guide.introduction.split("\n\n")[0]}</p>

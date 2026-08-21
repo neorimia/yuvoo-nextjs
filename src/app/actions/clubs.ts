@@ -24,6 +24,7 @@ import { getSession } from "@/lib/auth/session";
 import { requireRole } from "@/modules/auth/auth.service";
 import { rateLimit, getClientIdentifierFromHeaders, RATE_LIMIT_CONFIGS } from "@/lib/rate-limit";
 import { routes } from "@/lib/routes";
+import { pingIndexNowForClub } from "@/lib/seo/indexnow-ping";
 
 /**
  * Get club by slug (public action)
@@ -224,6 +225,8 @@ export async function updateClubAction(
     revalidateTag(`user-${user.id}`, "max");
     revalidateTag(`club-dashboard-${user.id}`, "max");
 
+    pingIndexNowForClub(club);
+
     return { success: true, club };
   } catch (error) {
     console.error("Error updating club:", error);
@@ -336,6 +339,8 @@ export async function updateClubProfileAction(
     // Revalidate user-specific cache
     revalidateTag(`user-${user.id}`, "max");
     revalidateTag(`club-dashboard-${user.id}`, "max");
+
+    pingIndexNowForClub(updatedClub);
 
     return { success: true, club: updatedClub };
   } catch (error) {

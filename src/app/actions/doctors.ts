@@ -25,6 +25,7 @@ import { getSession } from "@/lib/auth/session";
 import { requireRole } from "@/modules/auth/auth.service";
 import { rateLimit, getClientIdentifierFromHeaders, RATE_LIMIT_CONFIGS } from "@/lib/rate-limit";
 import { routes } from "@/lib/routes";
+import { pingIndexNowForDoctor } from "@/lib/seo/indexnow-ping";
 
 /**
  * Get doctor by slug (public action)
@@ -228,6 +229,8 @@ export async function updateDoctorAction(
       revalidateTag("doctors-list", "max");
       revalidateTag("home-featured-doctors", "max");
     }
+
+    pingIndexNowForDoctor(doctor);
 
     return { success: true, doctor };
   } catch (error) {

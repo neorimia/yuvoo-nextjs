@@ -56,8 +56,9 @@ export default function robots(): MetadataRoute.Robots {
     // Lead/payment pages (user-specific)
     "/cereri/", // Guest payment flows
 
-    // ==========================================================================
-    // TECHNICAL ROUTES
+    // Search utility page (noindex via page metadata; block crawl budget waste)
+    "/cautare",
+
     // ==========================================================================
     "/api/", // API routes
     "/ingest/", // PostHog analytics ingestion
@@ -75,10 +76,12 @@ export default function robots(): MetadataRoute.Robots {
     "/sporturi",
     "/cluburi",
     "/doctori",
+    "/ghiduri",
     "/chestionar",
     "/pentru-cluburi",
     "/pentru-doctori",
     "/despre-noi",
+    "/presa",
     "/contact",
     "/ajutor",
     "/intrebari-frecvente",
@@ -134,11 +137,11 @@ export default function robots(): MetadataRoute.Robots {
       },
 
       // ==========================================================================
-      // BINGBOT
+      // BINGBOT — same allow/disallow as Googlebot (no blanket allow: /)
       // ==========================================================================
       {
         userAgent: "Bingbot",
-        allow: ["/"],
+        allow: publicAllow,
         disallow: commonDisallow,
       },
 
