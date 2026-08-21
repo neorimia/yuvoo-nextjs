@@ -81,7 +81,7 @@ const ChildrenList: React.FC = () => {
           Adaugă profilul copilului tău pentru a începe să folosești platforma Yuvoo și să primești
           recomandări personalizate.
         </p>
-        <Link href={routes.onboarding.parent.addChild} className="btn btn-primary">
+        <Link href={routes.parent.children.add} className="btn btn-primary">
           <i className="bi bi-plus-circle me-2"></i>
           Adaugă copil
         </Link>
@@ -93,7 +93,7 @@ const ChildrenList: React.FC = () => {
     <div className="bd-children-list">
       <div className="d-flex justify-content-between align-items-center mb-4">
         <h2 className="mb-0">Copiii Mei ({children.length})</h2>
-        <Link href={routes.onboarding.parent.addChild} className="btn btn-primary">
+        <Link href={routes.parent.children.add} className="btn btn-primary">
           <i className="bi bi-plus-circle me-2"></i>
           Adaugă copil
         </Link>

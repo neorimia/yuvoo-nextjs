@@ -170,7 +170,7 @@ export default function ClubsLandingPricing() {
                     </div>
                   </div>
                   <Link
-                    href={routes.club.premium}
+                    href={routes.registerWithRole("club_admin")}
                     className="bd-btn mx-auto"
                     onClick={handleCTAClick}
                     style={{ display: "inline-block", width: "100%" }}
@@ -304,7 +304,7 @@ export default function ClubsLandingPricing() {
                     </div>
                   </div>
                   <Link
-                    href={routes.club.premium}
+                    href={routes.registerWithRole("club_admin")}
                     className="bd-btn mx-auto"
                     onClick={handleCTAClick}
                     style={{ display: "inline-block", width: "100%" }}

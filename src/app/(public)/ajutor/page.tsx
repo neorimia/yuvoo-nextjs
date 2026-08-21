@@ -164,6 +164,7 @@ export default function HelpPage() {
       <BreadcrumbOne
         title="Ajutor"
         subTitle="Ajutor"
+        titleAs="p"
         items={[
           { name: "Yuvoo", url: routes.home },
           { name: "Ajutor", url: routes.help },

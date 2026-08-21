@@ -101,6 +101,15 @@ export default async function GuestPaymentPage({ params }: GuestPaymentPageProps
                   </>
                 )}
               </p>
+              <div className="alert alert-info mb-4" role="status">
+                <i className="bi bi-shield-lock me-2" aria-hidden="true" />
+                Datele de contact ale părintelui sunt afișate confidențial, doar clubului căruia i
+                s-a trimis cererea. Consultă{" "}
+                <Link href={routes.privacy} className="alert-link">
+                  Politica de confidențialitate
+                </Link>{" "}
+                pentru detalii despre prelucrarea datelor.
+              </div>
               <hr />
               <h2 className="h5 mb-3">Date de contact părinte</h2>
               <p>

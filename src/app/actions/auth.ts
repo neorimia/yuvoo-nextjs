@@ -10,6 +10,7 @@
 import { headers } from "next/headers";
 import { stackServerApp } from "@/lib/auth/stack";
 import { getCurrentUser, requireAuth, requireRole } from "@/modules/auth/auth.service";
+import { authRepository } from "@/modules/auth/auth.repository";
 import { getSession } from "@/lib/auth/session";
 import type { AuthUser, UserRole } from "@/modules/auth/auth.types";
 import { UserRoleEnum } from "@/modules/auth/auth.types";
@@ -246,7 +247,7 @@ export async function signUpAction(formData: FormData) {
     };
   }
 
-  const { email, password } = validationResult.data;
+  const { email, password, role } = validationResult.data;
 
   // Rate limiting: prevent spam registrations
   try {
@@ -268,18 +269,31 @@ export async function signUpAction(formData: FormData) {
   try {
     // Build verification callback URL for email verification
     // Sign up with Stack Auth
-    // Note: Email verification callback URL is configured in stack.ts
-    // Role will default to "parent" in database sync (can be updated later if needed)
     await stackServerApp.signUpWithCredential({
       email,
       password,
     });
+
+    // Persist selected role in Stack Auth clientMetadata before DB sync
+    try {
+      const stackUser = await stackServerApp.getUser();
+      if (stackUser && "update" in stackUser && typeof stackUser.update === "function") {
+        await stackUser.update({ clientMetadata: { role } });
+      }
+    } catch (metadataError) {
+      console.error("[Auth] Error setting signup role in clientMetadata:", metadataError);
+    }
 
     // After signup, user is automatically synced to database via getSession
     // Check onboarding status to determine redirect
     try {
       const session = await getSession();
       if (session?.dbUser) {
+        // Ensure DB role matches signup selection (fallback if clientMetadata sync missed)
+        if (session.dbUser.role !== role) {
+          await authRepository.update(session.dbUser.id, { role });
+          session.dbUser.role = role;
+        }
         // Track signup event server-side with person properties
         try {
           const signupDate = session.dbUser.createdAt.toISOString();
@@ -320,10 +334,10 @@ export async function signUpAction(formData: FormData) {
       console.error("Error checking onboarding status after signup:", sessionError);
     }
 
-    // Default: redirect to dashboard (proxy will handle onboarding redirect if needed)
+    // Default: redirect to role-appropriate dashboard/onboarding
     return {
       success: true,
-      redirect: routes.parent.dashboard,
+      redirect: getOnboardingUrl(role),
     };
   } catch (error) {
     // Re-throw NEXT_REDIRECT errors to allow Next.js to handle them

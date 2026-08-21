@@ -20,6 +20,14 @@ export { trackEventServer } from "./tracking-server";
 // PostHog initialization
 export { initializePostHog, PostHogProviderWrapper } from "./posthog";
 
+// Google Analytics initialization
+export {
+  initializeGoogleAnalytics,
+  trackGaPageview,
+  GA_MEASUREMENT_ID,
+  COOKIE_CONSENT_EVENT,
+} from "./gtag";
+
 // Server-side PostHog client
 export { getPostHogServer, shutdownPostHogServer } from "./posthog-server";
 

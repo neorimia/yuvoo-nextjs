@@ -1,6 +1,6 @@
 "use client";
 
-import { menuData } from "@/data";
+import { getNavigationMenuData } from "@/data";
 import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
@@ -53,9 +53,11 @@ const HeaderMenus = () => {
     return pathname === link || pathname === `${link}/`;
   };
 
+  const navigationMenu = getNavigationMenuData();
+
   return (
     <ul>
-      {menuData.map((menu, i) => {
+      {navigationMenu.map((menu, i) => {
         // For parent menu items with dropdowns, check if any submenu is active
         // Parent should only be active if exact match, not if submenu is active
         let parentActive = false;

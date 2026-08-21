@@ -1,0 +1,43 @@
+@use "../utils" as *;
+
+/*----------------------------------------*/
+/*  Quiz progress & loading
+/*----------------------------------------*/
+
+.quiz-progress {
+  .progress {
+    height: 12px;
+    border-radius: 10px;
+  }
+
+  .quiz-progress-bar {
+    transition: width 0.3s ease;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .progress-bar-animated {
+      animation: none !important;
+    }
+
+    .progress-bar-striped {
+      background-image: none !important;
+    }
+
+    .quiz-progress-bar {
+      transition: none !important;
+    }
+  }
+}
+
+.quiz-loading-overlay {
+  .quiz-loading-progress-bar {
+    transition: width 0.3s ease-out;
+    border-radius: 6px;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .quiz-loading-progress-bar {
+      transition: none !important;
+    }
+  }
+}

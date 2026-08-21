@@ -25,7 +25,7 @@ export default function QuizIntroContent({ quizCount }: { quizCount: number }) {
         <div className="d-flex align-items-center justify-content-center gap-2 mb-4">
           <i className="bi bi-clock text-yuvoo-primary"></i>
           <span className="text-muted">
-            Doar 3–4 minute, 6 întrebări pentru recomandări personalizate
+            Doar 3–4 minute, 7 întrebări pentru recomandări personalizate
           </span>
         </div>
       </div>

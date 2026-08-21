@@ -73,6 +73,8 @@ export function setCookiePreferences(preferences: CookiePreferences): void {
   // Add Secure flag in production (HTTPS only)
   const secureFlag = process.env.NODE_ENV === "production" ? "; Secure" : "";
   document.cookie = `${COOKIE_PREFERENCES_KEY}=${encodeURIComponent(JSON.stringify(preferences))}; expires=${expires.toUTCString()}; path=/; SameSite=Lax${secureFlag}`;
+
+  window.dispatchEvent(new Event("yuvoo-cookie-consent"));
 }
 
 /**

@@ -11,7 +11,7 @@ import { headers } from "next/headers";
 import { getSession } from "@/lib/auth/session";
 import { createLead } from "@/modules/leads/leads.service";
 import { createLeadSchema } from "@/lib/validations/leads";
-import type { CreateLeadInput } from "@/types/leads";
+import type { CreateLeadInput, LeadStatus } from "@/types/leads";
 import { trackEventServer } from "@/lib/analytics/tracking-server";
 import { PostHogEvents, PostHogProperties } from "@/lib/analytics/events";
 import { rateLimit, getClientIdentifierFromHeaders, RATE_LIMIT_CONFIGS } from "@/lib/rate-limit";
@@ -153,6 +153,48 @@ export async function submitLeadAction(
     return {
       success: false,
       error: error instanceof Error ? error.message : "Eroare la trimiterea cererii",
+    };
+  }
+}
+
+/**
+ * Update lead status (club admin)
+ */
+export async function updateLeadStatusAction(
+  input: unknown
+): Promise<{ success: boolean; error?: string }> {
+  try {
+    const { requireRole } = await import("@/modules/auth/auth.service");
+    const { updateLeadStatusSchema } = await import("@/lib/validations/leads");
+    const { leadsRepository } = await import("@/modules/leads/leads.repository");
+    const { revalidatePath } = await import("next/cache");
+    const { routes } = await import("@/lib/routes");
+
+    const user = await requireRole("club_admin");
+    const { getClubByAdminUserId } = await import("@/modules/clubs/clubs.service");
+    const club = await getClubByAdminUserId(user.id);
+    if (!club) {
+      return { success: false, error: "Clubul nu a fost găsit." };
+    }
+
+    const validated = updateLeadStatusSchema.parse(input);
+
+    const lead = await leadsRepository.findById(validated.leadId);
+    if (!lead || lead.clubId !== club.id) {
+      return { success: false, error: "Cererea nu a fost găsită sau nu ai acces." };
+    }
+
+    await leadsRepository.updateStatus(validated.leadId, validated.status as LeadStatus);
+
+    revalidatePath(routes.club.leads.list);
+    revalidatePath(routes.club.leads.detail(validated.leadId));
+
+    return { success: true };
+  } catch (error) {
+    console.error("[Leads] Error updating lead status:", error);
+    return {
+      success: false,
+      error: error instanceof Error ? error.message : "Eroare la actualizarea statusului",
     };
   }
 }

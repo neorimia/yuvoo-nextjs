@@ -8,14 +8,42 @@
 "use client";
 
 import React from "react";
+import { useRouter, useSearchParams } from "next/navigation";
+import { routes } from "@/lib/routes";
 import type { Doctor } from "@/modules/doctors/doctors.types";
 import DoctorCard from "./DoctorCard";
+import PaginationData from "@/components/Common/Pagination/PaginationData";
 
 interface DoctorsMainProps {
   doctors: Doctor[];
+  pagination?: {
+    currentPage: number;
+    totalPages: number;
+    total: number;
+    pageSize: number;
+  };
 }
 
-const DoctorsMain: React.FC<DoctorsMainProps> = ({ doctors }) => {
+const DoctorsMain: React.FC<DoctorsMainProps> = ({ doctors, pagination }) => {
+  const router = useRouter();
+  const searchParams = useSearchParams();
+
+  const handlePageChange = (page: number) => {
+    if (page < 1 || (pagination && page > pagination.totalPages)) {
+      return;
+    }
+
+    const params = new URLSearchParams(searchParams.toString());
+    if (page === 1) {
+      params.delete("page");
+    } else {
+      params.set("page", page.toString());
+    }
+
+    const queryString = params.toString();
+    router.push(queryString ? `${routes.doctors.list}?${queryString}` : routes.doctors.list);
+  };
+
   // Empty state
   if (!doctors || doctors.length === 0) {
     return (
@@ -33,12 +61,6 @@ const DoctorsMain: React.FC<DoctorsMainProps> = ({ doctors }) => {
                   <br />
                   Încearcă să modifici filtrele sau revino mai târziu.
                 </p>
-                {/* <Link href={routes.doctors.list} className="bd-btn">
-                  <span className="bd-btn-inner">
-                    <span className="bd-btn-normal">Vezi toți doctorii</span>
-                    <span className="bd-btn-hover">Vezi toți doctorii</span>
-                  </span>
-                </Link> */}
               </div>
             </div>
           </div>
@@ -54,7 +76,9 @@ const DoctorsMain: React.FC<DoctorsMainProps> = ({ doctors }) => {
         <div className="row mb-4">
           <div className="col-12">
             <p className="text-muted mb-0">
-              {doctors.length} {doctors.length === 1 ? "doctor găsit" : "doctori găsiți"}
+              {pagination
+                ? `Afișând ${doctors.length} din ${pagination.total} ${pagination.total === 1 ? "doctor" : "doctori"}`
+                : `${doctors.length} ${doctors.length === 1 ? "doctor găsit" : "doctori găsiți"}`}
             </p>
           </div>
         </div>
@@ -66,6 +90,14 @@ const DoctorsMain: React.FC<DoctorsMainProps> = ({ doctors }) => {
             </div>
           ))}
         </div>
+
+        {pagination && pagination.totalPages > 1 && (
+          <PaginationData
+            currentPage={pagination.currentPage}
+            totalPages={pagination.totalPages}
+            onPageChange={handlePageChange}
+          />
+        )}
       </div>
     </section>
   );

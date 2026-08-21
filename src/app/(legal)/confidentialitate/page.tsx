@@ -38,6 +38,7 @@ export default function PrivacyPolicyPage() {
       <BreadcrumbOne
         title="Politică de Confidențialitate"
         subTitle="Legal"
+        titleAs="p"
         items={[
           { name: "Yuvoo", url: routes.home },
           { name: "Confidențialitate", url: routes.privacy }, // Current page
@@ -217,6 +218,11 @@ export default function PrivacyPolicyPage() {
                         rezultatelor quiz, plăți la cluburi (pay-per-lead, abonamente Premium) și
                         alte tranzacții pe platformă. Nu stocăm datele tale de card; Stripe
                         procesează plățile în conformitate cu GDPR.
+                      </li>
+                      <li>
+                        <strong>Google Analytics:</strong> Statistici agregate de utilizare a
+                        platformei (pagini vizitate, surse de trafic). Activ doar cu consimțământul
+                        tău pentru cookie-uri de analiză. Nu folosim datele pentru publicitate.
                       </li>
                     </ul>
                     <p className="mb-20">

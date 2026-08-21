@@ -7,19 +7,22 @@
 
 import React from "react";
 import type { Metadata } from "next";
-import { notFound } from "next/navigation";
+import { notFound, redirect } from "next/navigation";
 import { cookies, headers } from "next/headers";
 import { connection } from "next/server";
 import BreadcrumbOne from "@/components/Breadcrumb/BreadcrumbOne";
 import { getQuizResultAction } from "@/app/actions/quiz";
-import { getPaymentByQuizId } from "@/modules/payments/payments.repository";
+import {
+  getPaymentByQuizId,
+  getReportAccessByPaymentId,
+} from "@/modules/payments/payments.repository";
+import { getQuizCount, getQuizEmail } from "@/modules/quiz/quiz.repository";
 import { routes } from "@/lib/routes";
 import { PaymentErrorBoundary } from "@/components/shared/ErrorBoundary";
 import PaymentFormWrapper from "@/components/features/payments/PaymentFormWrapper";
 import { trackEventServer } from "@/lib/analytics/tracking-server";
 import { PostHogEvents, PostHogProperties } from "@/lib/analytics/events";
 import { PAYMENT_AMOUNT_LEI } from "@/modules/payments/payments.service";
-import { getQuizCount } from "@/modules/quiz/quiz.repository";
 
 interface PaywallPageProps {
   params: Promise<{ quizId: string }>;
@@ -132,9 +135,22 @@ export default async function PaywallPage({ params }: PaywallPageProps) {
     notFound();
   }
 
+  const quizEmail = await getQuizEmail(quizId);
+  if (!quizEmail) {
+    redirect(routes.quiz.emailGate(quizId));
+  }
+
   // Check if payment already completed
   const existingPayment = await getPaymentByQuizId(quizId);
   const isAlreadyPaid = existingPayment?.status === "completed";
+
+  if (isAlreadyPaid && existingPayment) {
+    const reportAccess = await getReportAccessByPaymentId(existingPayment.id);
+    if (reportAccess?.accessToken) {
+      redirect(routes.quiz.report(reportAccess.accessToken));
+    }
+    redirect(routes.quiz.paymentSuccess(quizId));
+  }
 
   // Get quiz count for social proof
   const quizCount = await getQuizCount();
@@ -147,14 +163,7 @@ export default async function PaywallPage({ params }: PaywallPageProps) {
       [PostHogProperties.PAYMENT_AMOUNT]: PAYMENT_AMOUNT_LEI * 100,
     });
   } catch (error) {
-    // Don't block page render if tracking fails
     console.error("[Paywall Page] Error tracking event:", error);
-  }
-
-  // If already paid, redirect to report (if we have access token)
-  if (isAlreadyPaid) {
-    // TODO: In Phase 5, redirect to report page with access token
-    // For now, show a message that payment is already completed
   }
 
   return (

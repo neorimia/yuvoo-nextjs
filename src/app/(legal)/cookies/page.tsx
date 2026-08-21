@@ -38,6 +38,7 @@ export default function CookiePolicyPage() {
       <BreadcrumbOne
         title="Politică Cookies"
         subTitle="Legal"
+        titleAs="p"
         items={[
           { name: "Yuvoo", url: routes.home },
           { name: "Cookies", url: routes.cookies }, // Current page
@@ -120,6 +121,13 @@ export default function CookiePolicyPage() {
                         <strong>Cookie-uri de performanță:</strong> Măsoară viteza de încărcare a
                         paginilor și identifică probleme tehnice
                       </li>
+                      <li>
+                        <strong>Google Analytics 4 (Google LLC):</strong> Serviciu de analiză web
+                        care ne ajută să înțelegem cum este utilizată platforma (pagini vizitate,
+                        surse de trafic, dispozitive). Aceste cookie-uri sunt activate doar dacă
+                        accepți cookie-urile de analiză. Nu folosim Google Analytics pentru
+                        publicitate sau remarketing.
+                      </li>
                     </ul>
                     <p className="mb-20">
                       Aceste cookie-uri sunt folosite doar pentru îmbunătățirea platformei și nu
@@ -142,6 +150,10 @@ export default function CookiePolicyPage() {
                       <li>
                         <strong>Stripe:</strong> Cookie-uri necesare pentru procesarea în siguranță
                         a plăților pe platformă (ex.: deblocare rezultate quiz, plăți cluburi)
+                      </li>
+                      <li>
+                        <strong>Google Analytics:</strong> Cookie-uri de analiză pentru statistici
+                        agregate de utilizare (doar cu consimțământul tău explicit)
                       </li>
                     </ul>
                     <p className="mb-20">

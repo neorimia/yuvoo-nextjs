@@ -16,6 +16,7 @@ import {
   deleteChild,
 } from "@/modules/children/children.service";
 import { createChildSchema, updateChildSchema } from "@/lib/validations/child";
+import { routes } from "@/lib/routes";
 import type { Child } from "@/modules/children/children.types";
 
 /**
@@ -61,7 +62,8 @@ export async function createChildAction(
       parentId: user.id,
     });
 
-    revalidatePath("/children");
+    revalidatePath(routes.parent.children.list);
+    revalidatePath(routes.parent.children.add);
     // Revalidate parent dashboard cache
     revalidateTag(`user-${user.id}`, "max");
     revalidateTag(`parent-dashboard-${user.id}`, "max");
@@ -91,7 +93,8 @@ export async function updateChildAction(
 
     const child = await updateChild(childId, user.id, validatedInput);
 
-    revalidatePath("/children");
+    revalidatePath(routes.parent.children.list);
+    revalidatePath(routes.parent.children.add);
     revalidatePath(`/children/${childId}`);
     // Revalidate parent dashboard cache
     revalidateTag(`user-${user.id}`, "max");
@@ -118,7 +121,8 @@ export async function deleteChildAction(
 
     await deleteChild(childId, user.id);
 
-    revalidatePath("/children");
+    revalidatePath(routes.parent.children.list);
+    revalidatePath(routes.parent.children.add);
     // Revalidate parent dashboard cache
     revalidateTag(`user-${user.id}`, "max");
     revalidateTag(`parent-dashboard-${user.id}`, "max");

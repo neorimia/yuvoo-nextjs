@@ -38,6 +38,7 @@ export default function GDPRForParentsPage() {
       <BreadcrumbOne
         title="GDPR pentru Părinți"
         subTitle="Legal"
+        titleAs="p"
         items={[
           { name: "Yuvoo", url: routes.home },
           { name: "GDPR", url: routes.gdpr }, // Current page

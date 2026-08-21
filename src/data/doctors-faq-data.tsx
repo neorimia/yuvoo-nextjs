@@ -15,7 +15,7 @@ export const doctorsFaqItems: FAQItem[] = [
   {
     question: "Este Yuvoo o platformă comercială?",
     answer:
-      "Yuvoo este o platformă care conectează familiile cu profesioniști, oferind vizibilitate relevantă și cerere calificată. Este o platformă comercială partenerială, cu scopul de a ghidă părinții către alegeri sigure și potrivite pentru copii.",
+      "Yuvoo este o platformă de ghidare pentru părinți, nu un marketplace medical. Conectăm familiile cu specialiști pediatrici verificați, cu control editorial și prezentare profesională — fără promovare agresivă sau vânzare de pacienți.",
   },
   {
     question: "Sunt obligat să accept consultații prin platformă?",

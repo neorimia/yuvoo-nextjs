@@ -1,5 +1,5 @@
 import Link from "next/link";
-import React from "react";
+import React, { Suspense } from "react";
 import SignUpForm from "../Form/SignUpMain";
 import { routes } from "@/lib/routes";
 
@@ -16,7 +16,9 @@ const RegisterMain = () => {
                   <p>Poți crea un cont aici</p>
                 </div>
                 <div className="login__form">
-                  <SignUpForm />
+                  <Suspense fallback={<p className="text-center text-muted">Se încarcă...</p>}>
+                    <SignUpForm />
+                  </Suspense>
                   <div className="login__register-now">
                     <p>
                       Ai deja un cont? <Link href={routes.login}>Autentificare</Link>

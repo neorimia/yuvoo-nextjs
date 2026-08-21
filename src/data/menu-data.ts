@@ -1,5 +1,6 @@
 import { MenuItem } from "@/types/menu-interface";
 import { routes } from "@/lib/routes";
+import { getVerifiedCaseStudies } from "@/data/case-studies-data";
 
 /**
  * Yuvoo Navigation Menu Data
@@ -73,5 +74,27 @@ const menuData: MenuItem[] = [
     link: routes.contact,
   },
 ];
+
+/**
+ * Navigation menu with dynamic items (e.g. hide empty case studies).
+ */
+export function getNavigationMenuData(): MenuItem[] {
+  const hasCaseStudies = getVerifiedCaseStudies().length > 0;
+
+  if (hasCaseStudies) {
+    return menuData;
+  }
+
+  return menuData.map((item) => {
+    if (item.id !== 3 || !item.submenus) {
+      return item;
+    }
+
+    return {
+      ...item,
+      submenus: item.submenus.filter((sub) => sub.link !== routes.clubs.caseStudies),
+    };
+  });
+}
 
 export default menuData;

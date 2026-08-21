@@ -135,7 +135,7 @@ export default function ClubsLandingFinalCTA({
                       RON/lună sau 999,99 RON/an)
                     </p>
                     <div className="mb-30">
-                      <Link href={routes.club.premium} className="bd-btn mx-auto">
+                      <Link href={routes.registerWithRole("club_admin")} className="bd-btn mx-auto">
                         <span className="bd-btn-inner">
                           <span className="bd-btn-normal">Upgrade la Premium</span>
                           <span className="bd-btn-hover">Upgrade la Premium</span>

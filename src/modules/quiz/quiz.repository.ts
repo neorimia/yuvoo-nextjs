@@ -188,6 +188,17 @@ export async function getQuizAnswers(quizId: string): Promise<QuizAnswers | null
 }
 
 /**
+ * Get quiz email (email gate)
+ */
+export async function getQuizEmail(quizId: string): Promise<string | null> {
+  const quiz = await db.query.quizzes.findFirst({
+    where: eq(quizzes.id, quizId),
+    columns: { email: true },
+  });
+  return quiz?.email?.trim() || null;
+}
+
+/**
  * Update quiz email
  *
  * Updates the email field in the quiz record.
@@ -243,5 +254,6 @@ export const quizRepository = {
   getQuizAnswers,
   updateQuizEmail,
   updateQuizLocation,
+  getQuizEmail,
   getQuizCount,
 };

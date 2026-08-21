@@ -5,6 +5,7 @@ import ForgotPasswordMain from "@/components/Auth/ForgotPasswordMain";
 import { redirect } from "next/navigation";
 import { getRoleBasedRedirect } from "@/lib/auth/redirects";
 import { getSession } from "@/lib/auth/session";
+import { routes } from "@/lib/routes";
 
 export const metadata: Metadata = {
   title: "Recuperare Parolă | Yuvoo",
@@ -20,7 +21,7 @@ export const metadata: Metadata = {
     title: "Recuperare Parolă | Yuvoo",
     description:
       "Recuperează parola contului tău Yuvoo. Introdu adresa de email și vei primi un link de resetare.",
-    url: `${process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000"}/auth/forgot-password`,
+    url: `${process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000"}${routes.forgotPassword}`,
     siteName: "Yuvoo",
     locale: "ro_RO",
     type: "website",
@@ -31,7 +32,7 @@ export const metadata: Metadata = {
     description: "Recuperează parola contului tău Yuvoo.",
   },
   alternates: {
-    canonical: "/auth/forgot-password",
+    canonical: routes.forgotPassword,
   },
 };
 

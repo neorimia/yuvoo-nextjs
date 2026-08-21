@@ -17,6 +17,7 @@ import {
 } from "@stripe/react-stripe-js";
 import type { StripeExpressCheckoutElementConfirmEvent } from "@stripe/stripe-js";
 import { createPaymentAction } from "@/app/actions/payments";
+import { PAYMENT_AMOUNT_LEI } from "@/modules/payments/payments.service";
 import { routes } from "@/lib/routes";
 import { trackEvent } from "@/lib/analytics/tracking";
 import { PostHogEvents, PostHogProperties } from "@/lib/analytics/events";
@@ -309,7 +310,7 @@ export default function PaymentForm({
             ) : (
               <>
                 <i className="bi bi-lock-fill me-2"></i>
-                Plătește 9,99 lei
+                Plătește {PAYMENT_AMOUNT_LEI} lei
               </>
             )}
           </button>

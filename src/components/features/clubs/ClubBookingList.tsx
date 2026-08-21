@@ -11,6 +11,7 @@ import React, { useState, useEffect, useTransition } from "react";
 import { useRouter } from "next/navigation";
 import ClubBookingCard from "./ClubBookingCard";
 import ClubBookingDetailModal from "./ClubBookingDetailModal";
+import ConfirmActionModal from "@/components/shared/ConfirmActionModal";
 import { useEntityFilters, type StatusFilter, type DateFilter } from "@/hooks/useEntityFilters";
 import {
   getClubBookingsAction,
@@ -28,6 +29,42 @@ interface BookingWithDetails extends Booking {
   child?: Child;
 }
 
+type BookingActionType = "confirm" | "cancel" | "complete";
+
+interface PendingBookingAction {
+  bookingId: string;
+  type: BookingActionType;
+}
+
+const BOOKING_ACTION_CONFIG: Record<
+  BookingActionType,
+  {
+    title: string;
+    message: string;
+    confirmLabel: string;
+    confirmVariant: "primary" | "danger" | "success";
+  }
+> = {
+  confirm: {
+    title: "Confirmă rezervarea",
+    message: "Ești sigur că vrei să confirmi această rezervare?",
+    confirmLabel: "Confirmă",
+    confirmVariant: "primary",
+  },
+  cancel: {
+    title: "Anulează rezervarea",
+    message: "Ești sigur că vrei să anulezi această rezervare?",
+    confirmLabel: "Anulează rezervarea",
+    confirmVariant: "danger",
+  },
+  complete: {
+    title: "Finalizează rezervarea",
+    message: "Ești sigur că vrei să marchezi această rezervare ca finalizată?",
+    confirmLabel: "Marchează finalizată",
+    confirmVariant: "success",
+  },
+};
+
 const ClubBookingList: React.FC = () => {
   const [bookings, setBookings] = useState<BookingWithDetails[]>([]);
   const [isLoading, setIsLoading] = useState(true);
@@ -35,6 +72,8 @@ const ClubBookingList: React.FC = () => {
   const [error, setError] = useState<string | null>(null);
   const [selectedBooking, setSelectedBooking] = useState<Booking | null>(null);
   const [selectedParent, setSelectedParent] = useState<AuthUser | null>(null);
+  const [pendingAction, setPendingAction] = useState<PendingBookingAction | null>(null);
+  const [actionError, setActionError] = useState<string | null>(null);
   const router = useRouter();
   const [_isPending, startTransition] = useTransition();
 
@@ -95,59 +134,13 @@ const ClubBookingList: React.FC = () => {
   }, []);
 
   const handleConfirm = (bookingId: string) => {
-    if (!confirm("Ești sigur că vrei să confirmi această rezervare?")) {
-      return;
-    }
-
-    startTransition(async () => {
-      try {
-        setProcessingId(bookingId);
-        const result = await confirmBookingAction(bookingId);
-
-        if (result.success) {
-          // Update booking status in local state
-          setBookings((prev) =>
-            prev.map((b) => (b.id === bookingId ? { ...b, status: "confirmed" } : b))
-          );
-          router.refresh();
-        } else {
-          alert(result.error || "Eroare la confirmarea rezervării");
-        }
-      } catch (err) {
-        console.error("Error confirming booking:", err);
-        alert("Eroare la confirmarea rezervării. Te rugăm să reîncerci.");
-      } finally {
-        setProcessingId(null);
-      }
-    });
+    setActionError(null);
+    setPendingAction({ bookingId, type: "confirm" });
   };
 
   const handleCancel = (bookingId: string) => {
-    if (!confirm("Ești sigur că vrei să anulezi această rezervare?")) {
-      return;
-    }
-
-    startTransition(async () => {
-      try {
-        setProcessingId(bookingId);
-        const result = await cancelBookingByClubAction(bookingId);
-
-        if (result.success) {
-          // Update booking status in local state
-          setBookings((prev) =>
-            prev.map((b) => (b.id === bookingId ? { ...b, status: "cancelled" } : b))
-          );
-          router.refresh();
-        } else {
-          alert(result.error || "Eroare la anularea rezervării");
-        }
-      } catch (err) {
-        console.error("Error cancelling booking:", err);
-        alert("Eroare la anularea rezervării. Te rugăm să reîncerci.");
-      } finally {
-        setProcessingId(null);
-      }
-    });
+    setActionError(null);
+    setPendingAction({ bookingId, type: "cancel" });
   };
 
   const handleViewDetails = async (booking: Booking) => {
@@ -164,32 +157,62 @@ const ClubBookingList: React.FC = () => {
   };
 
   const handleComplete = (bookingId: string) => {
-    if (!confirm("Ești sigur că vrei să marchezi această rezervare ca finalizată?")) {
+    setActionError(null);
+    setPendingAction({ bookingId, type: "complete" });
+  };
+
+  const executePendingAction = () => {
+    if (!pendingAction) {
       return;
     }
+
+    const { bookingId, type } = pendingAction;
 
     startTransition(async () => {
       try {
         setProcessingId(bookingId);
-        const result = await updateBookingStatusAction(bookingId, "completed");
+        setActionError(null);
+
+        let result: { success: boolean; error?: string };
+        let nextStatus: Booking["status"];
+
+        if (type === "confirm") {
+          result = await confirmBookingAction(bookingId);
+          nextStatus = "confirmed";
+        } else if (type === "cancel") {
+          result = await cancelBookingByClubAction(bookingId);
+          nextStatus = "cancelled";
+        } else {
+          result = await updateBookingStatusAction(bookingId, "completed");
+          nextStatus = "completed";
+        }
 
         if (result.success) {
-          // Update booking status in local state
           setBookings((prev) =>
-            prev.map((b) => (b.id === bookingId ? { ...b, status: "completed" } : b))
+            prev.map((b) => (b.id === bookingId ? { ...b, status: nextStatus } : b))
           );
+          setPendingAction(null);
           router.refresh();
         } else {
-          alert(result.error || "Eroare la actualizarea rezervării");
+          setActionError(
+            result.error ||
+              (type === "confirm"
+                ? "Eroare la confirmarea rezervării"
+                : type === "cancel"
+                  ? "Eroare la anularea rezervării"
+                  : "Eroare la actualizarea rezervării")
+          );
         }
       } catch (err) {
-        console.error("Error completing booking:", err);
-        alert("Eroare la actualizarea rezervării. Te rugăm să reîncerci.");
+        console.error("Error processing booking action:", err);
+        setActionError("Eroare la procesarea rezervării. Te rugăm să reîncerci.");
       } finally {
         setProcessingId(null);
       }
     });
   };
+
+  const pendingActionConfig = pendingAction ? BOOKING_ACTION_CONFIG[pendingAction.type] : null;
 
   if (isLoading) {
     return (
@@ -213,6 +236,12 @@ const ClubBookingList: React.FC = () => {
 
   return (
     <div className="bd-club-booking-list">
+      {actionError && (
+        <div className="alert alert-danger mb-4" role="alert">
+          <i className="bi bi-exclamation-triangle me-2"></i>
+          {actionError}
+        </div>
+      )}
       {/* Filters */}
       <div className="bd-club-booking-filters card border-0 shadow-sm mb-4">
         <div className="card-body">
@@ -310,6 +339,19 @@ const ClubBookingList: React.FC = () => {
         onComplete={handleComplete}
         isProcessing={processingId === selectedBooking?.id}
       />
+
+      {pendingAction && pendingActionConfig && (
+        <ConfirmActionModal
+          show
+          title={pendingActionConfig.title}
+          message={pendingActionConfig.message}
+          confirmLabel={pendingActionConfig.confirmLabel}
+          confirmVariant={pendingActionConfig.confirmVariant}
+          isLoading={processingId === pendingAction.bookingId}
+          onConfirm={executePendingAction}
+          onCancel={() => setPendingAction(null)}
+        />
+      )}
     </div>
   );
 };

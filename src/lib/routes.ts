@@ -38,9 +38,9 @@ export const routes = {
   // Clubs (Cluburi)
   clubs: {
     list: "/cluburi",
-    premium: "/pentru-cluburi/abonare-premium", // Premium page for clubs to upgrade to Premium
+    premium: "/pentru-cluburi#pricing",
     landing: "/pentru-cluburi", // Landing page for clubs to join as Founding Clubs
-    pricing: "/preturi-cluburi", // Pricing page for clubs TODO: CREATE THIS PAGE
+    pricing: "/pentru-cluburi#pricing",
     caseStudies: "/pentru-cluburi/povesti-de-succes", // Case studies / success stories page
     roiCalculator: "/pentru-cluburi/calculator-roi", // ROI calculator standalone page
     howItWorks: "/pentru-cluburi/cum-functioneaza", // Detailed "How It Works" page
@@ -79,10 +79,10 @@ export const routes = {
   search: "/cautare",
 
   // Authentication - Internal routes (English OK)
-  // Note: Files are in (auth)/ route group, but URLs don't include parentheses
-  // (auth)/login/page.tsx → /auth/login
+  // Note: Auth pages live at /login, /register, etc. (not /auth/*)
   login: "/login",
   register: "/register",
+  registerWithRole: (role: "parent" | "club_admin" | "doctor") => `/register?role=${role}` as const,
   forgotPassword: "/forgot-password",
   resetPassword: "/reset-password",
   verifyEmail: "/verify-email",

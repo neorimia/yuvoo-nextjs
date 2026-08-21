@@ -27,17 +27,30 @@ import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
 import { stackServerApp } from "@/lib/auth/stack";
 import { UserRoleEnum } from "@/modules/auth/auth.types";
+import { routes } from "@/lib/routes";
 
-// Route patterns
+// Legacy /auth/* paths → canonical routes (backwards compatibility)
+const LEGACY_AUTH_REDIRECTS: Record<string, string> = {
+  "/auth/login": routes.login,
+  "/auth/register": routes.register,
+  "/auth/forgot-password": routes.forgotPassword,
+  "/auth/reset-password": routes.resetPassword,
+  "/auth/verify-email": routes.verifyEmail,
+  "/auth/email-confirmation": routes.emailConfirmation,
+  "/auth/verification-pending": routes.verificationPending,
+  "/auth/choose-role": routes.chooseRole,
+};
+
+// Route patterns (canonical auth pages)
 const AUTH_ROUTES = [
-  "/auth/login",
-  "/auth/register",
-  "/auth/forgot-password",
-  "/auth/reset-password",
-  "/auth/verify-email",
-  "/auth/email-confirmation",
-  "/auth/verification-pending",
-  "/auth/choose-role",
+  routes.login,
+  routes.register,
+  routes.forgotPassword,
+  routes.resetPassword,
+  routes.verifyEmail,
+  routes.emailConfirmation,
+  routes.verificationPending,
+  routes.chooseRole,
 ];
 const PROTECTED_ROUTE_PREFIXES = ["/parent", "/club", "/doctor", "/admin", "/onboarding"];
 
@@ -225,6 +238,16 @@ export async function proxy(request: NextRequest) {
 
   const { pathname } = request.nextUrl;
 
+  // Redirect legacy /auth/* URLs to canonical routes
+  const legacyAuthTarget = LEGACY_AUTH_REDIRECTS[pathname];
+  if (legacyAuthTarget) {
+    const redirectUrl = new URL(legacyAuthTarget, request.url);
+    request.nextUrl.searchParams.forEach((value, key) => {
+      redirectUrl.searchParams.set(key, value);
+    });
+    return NextResponse.redirect(redirectUrl, 301);
+  }
+
   // Allow public routes
   if (isPublicRoute(pathname)) {
     return NextResponse.next();
@@ -259,7 +282,7 @@ export async function proxy(request: NextRequest) {
     if (!stackUser) {
       // If trying to access protected route, redirect to login
       if (isProtectedRoute(pathname)) {
-        const loginUrl = new URL("/auth/login", request.url);
+        const loginUrl = new URL(routes.login, request.url);
         loginUrl.searchParams.set("redirect", pathname);
         return NextResponse.redirect(loginUrl);
       }
@@ -336,19 +359,19 @@ export async function proxy(request: NextRequest) {
     // e.g., /club matches /club/* but NOT /cluburi/*
     // e.g., /doctor matches /doctor/* but NOT /doctori/*
     if (pathname.startsWith("/parent/") && dbUser.role !== UserRoleEnum.PARENT) {
-      return NextResponse.redirect(new URL("/auth/login", request.url));
+      return NextResponse.redirect(new URL(routes.login, request.url));
     }
 
     if (pathname.startsWith("/club/") && dbUser.role !== UserRoleEnum.CLUB_ADMIN) {
-      return NextResponse.redirect(new URL("/auth/login", request.url));
+      return NextResponse.redirect(new URL(routes.login, request.url));
     }
 
     if (pathname.startsWith("/doctor/") && dbUser.role !== UserRoleEnum.DOCTOR) {
-      return NextResponse.redirect(new URL("/auth/login", request.url));
+      return NextResponse.redirect(new URL(routes.login, request.url));
     }
 
     if (pathname.startsWith("/admin") && dbUser.role !== UserRoleEnum.ADMIN) {
-      return NextResponse.redirect(new URL("/auth/login", request.url));
+      return NextResponse.redirect(new URL(routes.login, request.url));
     }
 
     // Allow access

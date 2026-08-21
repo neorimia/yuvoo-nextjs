@@ -2,6 +2,7 @@ import Link from "next/link";
 import React from "react";
 import Image from "next/image";
 import BreadcrumbSchema from "@/components/SEO/BreadcrumbSchema";
+import { routes } from "@/lib/routes";
 import bg from "../../../public/assets/img/bg/cover-yuvoo-breadcrumbs.jpg";
 import line_1 from "../../../public/assets/img/shape/white-curved-line.png";
 import line_2 from "../../../public/assets/img/shape/curved-line-2.png";
@@ -40,10 +41,10 @@ const BreadcrumbOne: React.FC<BreadcrumbProps> = ({ title, subTitle, items, titl
         <div className="container">
           <div className="bd-breadcrumb-shape d-none d-sm-block p-relative">
             <div className="bd-breadcrumb-shape-1">
-              <Image src={line_2} style={{ width: "100%", height: "100%" }} alt="img not found" />
+              <Image src={line_2} style={{ width: "100%", height: "100%" }} alt="" />
             </div>
             <div className="bd-breadcrumb-shape-2">
-              <Image src={line_1} style={{ width: "100%", height: "100%" }} alt="img not found" />
+              <Image src={line_1} style={{ width: "100%", height: "100%" }} alt="" />
             </div>
           </div>
           <div className="row justify-content-center">
@@ -57,7 +58,7 @@ const BreadcrumbOne: React.FC<BreadcrumbProps> = ({ title, subTitle, items, titl
                   )}
                   <div className="bd-breadcrumb-list">
                     <span>
-                      <Link href="/">
+                      <Link href={routes.home}>
                         <i className="flaticon-hut"></i>Yuvoo
                       </Link>
                     </span>

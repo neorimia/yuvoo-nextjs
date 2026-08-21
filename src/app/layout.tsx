@@ -1,6 +1,7 @@
 import { Gabarito } from "next/font/google";
 import GlobalVideoModal from "@/components/Popup/GlobalVideoModal";
 import CookieConsentBanner from "@/components/CookieConsent/CookieConsentBanner";
+import GoogleAnalytics from "@/components/analytics/GoogleAnalytics";
 import OrganizationSchema from "@/components/SEO/OrganizationSchema";
 import WebSiteSchema from "@/components/SEO/WebSiteSchema";
 import { VideoProvider } from "@/provider/VideoProvider";
@@ -144,6 +145,7 @@ export default function RootLayout({
                     <AppProvider>{children}</AppProvider>
                     <Toaster position="top-center" richColors />
                     <GlobalVideoModal />
+                    <GoogleAnalytics />
                     <CookieConsentBanner />
                   </ReduxProvider>
                 </VideoProvider>

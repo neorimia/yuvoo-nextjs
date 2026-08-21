@@ -44,11 +44,11 @@ export default function QuizProgress({
       </div>
 
       {/* Progress bar - more visible */}
-      <div className="progress mb-2" style={{ height: "12px", borderRadius: "10px" }}>
+      <div className="progress mb-2">
         <div
-          className="progress-bar bg-yuvoo-primary progress-bar-striped progress-bar-animated"
+          className="progress-bar bg-yuvoo-primary progress-bar-striped progress-bar-animated quiz-progress-bar"
           role="progressbar"
-          style={{ width: `${progressPercentage}%`, transition: "width 0.3s ease" }}
+          style={{ width: `${progressPercentage}%` }}
           aria-valuenow={progressPercentage}
           aria-valuemin={0}
           aria-valuemax={100}

@@ -39,7 +39,7 @@ export async function generateMetadata({
   // Access params to mark as dynamic
   await params;
   return {
-    title: `Plată confirmată - Yuvoo`,
+    title: `Contact confirmat - Yuvoo`,
     description: "Informații de contact părinte.",
   };
 }
@@ -59,7 +59,7 @@ export default async function GuestPaymentSuccessPage({
           <div className="col-lg-8">
             <div className="card">
               <div className="card-body text-center py-5">
-                <h2 className="mb-3">Plată confirmată</h2>
+                <h2 className="mb-3">Contact confirmat</h2>
                 <p className="text-muted">Build placeholder</p>
               </div>
             </div>
@@ -130,9 +130,9 @@ export default async function GuestPaymentSuccessPage({
                 style={{ fontSize: "3rem" }}
                 aria-hidden
               />
-              <h2 className="mt-3 mb-3">Plată confirmată</h2>
+              <h2 className="mt-3 mb-3">Contact confirmat</h2>
               <p className="text-muted mb-4">
-                Mulțumim pentru plată. Vei primi informațiile de contact pe email.
+                Mulțumim! Vei primi informațiile de contact pe email.
               </p>
               <Link href={routes.leads.guestPayment(leadId)} className="btn btn-primary">
                 Înapoi la cerere
@@ -158,11 +158,10 @@ export default async function GuestPaymentSuccessPage({
                     className="bi bi-check-circle-fill text-success"
                     style={{ fontSize: "4rem" }}
                   ></i>
-                  <h1 className="mt-3 mb-2">Plată confirmată!</h1>
+                  <h1 className="mt-3 mb-2">Contact confirmat!</h1>
                   <p className="text-muted">
-                    Mulțumim pentru plata de <strong>3€</strong> pentru cererea de{" "}
-                    <strong>{lead.sportType || "sport"}</strong> pentru clubul{" "}
-                    <strong>{club.name}</strong>.
+                    Cererea pentru <strong>{lead.sportType || "sport"}</strong> la clubul{" "}
+                    <strong>{club.name}</strong> a fost procesată cu succes.
                   </p>
                   <p className="text-muted">
                     Vei primi informațiile de contact pe email. Mai jos găsești detaliile
