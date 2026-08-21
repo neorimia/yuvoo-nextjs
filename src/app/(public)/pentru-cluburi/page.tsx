@@ -29,7 +29,7 @@ const baseUrl = process.env.NEXT_PUBLIC_APP_URL || "https://yuvoo.ro";
 const canonicalUrl = `${baseUrl}${routes.clubs.landing}`;
 
 export const metadata: Metadata = {
-  title: "Pentru Cluburi - Yuvoo | Devino Founding Club sau Upgrade la Premium",
+  title: "Pentru Cluburi | Yuvoo — Founding Club & Premium",
   description:
     "Yuvoo conectează cluburi sportive pentru copii cu părinți pre-calificați. Primele 15 cluburi intră gratuit ca Founding Clubs. Sau upgrade la Premium (99,99 RON/lună sau 999,99 RON/an) pentru acces nelimitat la cereri și beneficii exclusive. Părinți pre-calificați, cluburi sportive, zero risc.",
   keywords: [
@@ -42,7 +42,7 @@ export const metadata: Metadata = {
     "cluburi pentru copii",
   ],
   openGraph: {
-    title: "Pentru Cluburi - Yuvoo | Devino Founding Club sau Upgrade la Premium",
+    title: "Pentru Cluburi | Yuvoo — Founding Club & Premium",
     description:
       "Yuvoo conectează cluburi sportive pentru copii cu părinți pre-calificați. Primele 15 cluburi intră gratuit ca Founding Clubs. Sau upgrade la Premium (99,99 RON/lună sau 999,99 RON/an) pentru acces nelimitat.",
     url: canonicalUrl,
@@ -60,7 +60,7 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    title: "Pentru Cluburi - Yuvoo | Devino Founding Club sau Upgrade la Premium",
+    title: "Pentru Cluburi | Yuvoo — Founding Club & Premium",
     description:
       "Yuvoo conectează cluburi sportive pentru copii cu părinți pre-calificați. Primele 15 cluburi intră gratuit ca Founding Clubs. Sau upgrade la Premium (99,99 RON/lună sau 999,99 RON/an) pentru acces nelimitat.",
     images: [`${baseUrl}/assets/img/logo/og-image.jpg`],

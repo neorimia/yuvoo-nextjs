@@ -45,6 +45,7 @@ export default async function GuideDetailPage({ params }: GuideDetailPageProps) 
       <BreadcrumbOne
         title={guide.h1}
         subTitle="Ghiduri"
+        titleAs="p"
         items={[
           { name: "Yuvoo", url: routes.home },
           { name: "Ghiduri", url: routes.guides.list },

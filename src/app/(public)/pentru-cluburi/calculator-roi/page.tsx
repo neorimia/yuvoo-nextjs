@@ -55,6 +55,7 @@ export default async function ROICalculatorPage() {
               <div className="col-lg-10 col-xl-9 mx-auto">
                 <div className="bd-hero-content text-center">
                   <SectionTitle
+                    headingLevel={1}
                     title="Calculează ROI-ul tău cu Yuvoo"
                     subtitle="Descoperă cât poți economisi cu lead-uri pre-calificate vs. Google/Facebook ads"
                     className="mb-30"

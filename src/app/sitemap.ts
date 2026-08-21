@@ -7,7 +7,10 @@ import { getAllDoctors } from "@/modules/doctors/doctors.service";
 import { generateLocationSlug } from "@/lib/utils/location";
 import type { Club } from "@/modules/clubs/clubs.types";
 import { GUIDE_PAGES, GUIDE_PAGES_LASTMOD } from "@/data/guide-pages-data";
-import { filterSitemapEligibleClubs } from "@/lib/seo/sitemap-quality";
+import {
+  filterSitemapEligibleClubs,
+  getSitemapEligibleLocationSlugs,
+} from "@/lib/seo/sitemap-quality";
 
 /**
  * Sitemap Generator for Google Search Console
@@ -216,16 +219,22 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
 
   let locationPages: MetadataRoute.Sitemap = [];
   try {
+    const eligibleLocationSlugs = getSitemapEligibleLocationSlugs(clubs);
     const locations = await getUniqueLocations();
-    locationPages = locations.map((loc) => {
-      const slug = generateLocationSlug(loc.city, loc.district);
-      return {
-        url: `${baseUrl}${routes.clubs.location(slug)}`,
-        lastModified: locationLastModified.get(slug) || INFO_PAGES_LASTMOD,
-        changeFrequency: "weekly" as const,
-        priority: 0.75,
-      };
-    });
+    locationPages = locations
+      .filter((loc) => {
+        const slug = generateLocationSlug(loc.city, loc.district);
+        return eligibleLocationSlugs.has(slug);
+      })
+      .map((loc) => {
+        const slug = generateLocationSlug(loc.city, loc.district);
+        return {
+          url: `${baseUrl}${routes.clubs.location(slug)}`,
+          lastModified: locationLastModified.get(slug) || INFO_PAGES_LASTMOD,
+          changeFrequency: "weekly" as const,
+          priority: 0.75,
+        };
+      });
   } catch (error) {
     console.error("[Sitemap] Error generating location pages:", error);
   }

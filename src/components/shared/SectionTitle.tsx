@@ -15,6 +15,8 @@ interface SectionTitleProps {
   titleClassName?: string;
   subtitleClassName?: string;
   animationDelay?: string;
+  /** Semantic heading level for the title (default h2). Use 1 for page heroes without BreadcrumbOne. */
+  headingLevel?: 1 | 2 | 3;
 }
 
 const SectionTitle: React.FC<SectionTitleProps> = ({
@@ -24,7 +26,10 @@ const SectionTitle: React.FC<SectionTitleProps> = ({
   titleClassName = "",
   subtitleClassName = "",
   animationDelay = ".3s",
+  headingLevel = 2,
 }) => {
+  const TitleTag = headingLevel === 1 ? "h1" : headingLevel === 3 ? "h3" : "h2";
+
   return (
     <div
       className={`bd-section-title-wrapper text-center wow fadeInUp ${className}`}
@@ -32,7 +37,7 @@ const SectionTitle: React.FC<SectionTitleProps> = ({
       data-wow-delay={animationDelay}
     >
       {typeof title === "string" ? (
-        <h2 className={`bd-section-title mb-0 ${titleClassName}`}>{title}</h2>
+        <TitleTag className={`bd-section-title mb-0 ${titleClassName}`}>{title}</TitleTag>
       ) : (
         <div className={`bd-section-title mb-0 ${titleClassName}`}>{title}</div>
       )}

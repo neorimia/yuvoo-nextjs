@@ -19,6 +19,7 @@ export default function HowItWorksHero() {
             <div className="col-lg-10 col-xl-9 mx-auto">
               <div className="bd-hero-content text-center">
                 <SectionTitle
+                  headingLevel={1}
                   title="Cum Funcționează Yuvoo"
                   subtitle="Procesul complet de la verificare la lead-uri pre-calificate"
                   className="mb-30"

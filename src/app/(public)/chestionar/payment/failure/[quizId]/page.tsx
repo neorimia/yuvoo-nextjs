@@ -72,6 +72,7 @@ export default async function PaymentFailurePage({
       <BreadcrumbOne
         title="Plată Eșuată"
         subTitle="Eroare"
+        titleAs="p"
         items={[
           { name: "Yuvoo", url: routes.home },
           { name: "Chestionar", url: routes.quiz.intro },

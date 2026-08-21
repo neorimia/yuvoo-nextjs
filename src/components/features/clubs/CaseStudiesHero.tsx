@@ -31,6 +31,7 @@ export default function CaseStudiesHero() {
             <div className="col-lg-10 col-xl-9 mx-auto">
               <div className="bd-hero-content text-center">
                 <SectionTitle
+                  headingLevel={1}
                   title="Povești reale de la cluburi care au crescut cu Yuvoo"
                   subtitle="Descoperă cum cluburi similare au obținut rezultate concrete: mai multe lead-uri calificate, mai puțin timp pierdut, mai multe înscrieri"
                   className="mb-30"

@@ -28,6 +28,42 @@ export default function GuidesHubPage() {
         <div className="container">
           <div className="row">
             <div className="col-lg-10 mx-auto">
+              <div className="mb-50">
+                <p className="lead text-yuvoo-body mb-4">
+                  Yuvoo publică ghiduri gratuite pentru părinții din România care vor să aleagă
+                  sportul potrivit copilului — fără presiune, fără recomandări generice și fără ore
+                  pierdute căutând informații contradictorii online.
+                </p>
+                <p className="text-yuvoo-body mb-4">
+                  Fiecare ghid răspunde la o întrebare concretă: la ce vârstă poate începe un copil
+                  un anumit sport, cum recunoști un club de calitate, ce costuri și echipament să
+                  anticipezi sau cum combini recomandările medicului cu preferințele copilului.
+                  Conținutul este scris în română, orientat spre părinți din București și alte orașe
+                  mari, și se bazează pe practici comune în cluburile verificate de pe platformă.
+                </p>
+                <p className="text-yuvoo-body mb-4">
+                  Dacă vrei o recomandare personalizată — nu doar informații generale — poți folosi{" "}
+                  <Link href={routes.quiz.intro} className="text-yuvoo-primary fw-semibold">
+                    chestionarul AI Yuvoo
+                  </Link>
+                  . În 3–4 minute răspunzi la întrebări despre personalitatea, energia și ritmul de
+                  dezvoltare al copilului; primești sporturi potrivite și pași clari pentru
+                  explorarea cluburilor din zona ta.
+                </p>
+                <p className="text-yuvoo-body mb-0">
+                  Mai jos găsești toate ghidurile publicate. Alege tema care te interesează acum —
+                  vârstă, sport specific, siguranță sau alegerea între mai multe opțiuni — și
+                  folosește linkurile către{" "}
+                  <Link href={routes.clubs.list} className="text-yuvoo-primary fw-semibold">
+                    cluburi verificate
+                  </Link>{" "}
+                  și{" "}
+                  <Link href={routes.sports.list} className="text-yuvoo-primary fw-semibold">
+                    paginile de sport
+                  </Link>{" "}
+                  pentru a trece de la informație la acțiune.
+                </p>
+              </div>
               <SectionTitle
                 title="Ghiduri pentru alegerea sportului potrivit"
                 subtitle="Resurse gratuite pentru părinți din România — vârstă, personalitate, cluburi verificate și chestionar AI Yuvoo."

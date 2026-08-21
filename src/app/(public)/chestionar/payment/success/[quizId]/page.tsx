@@ -119,6 +119,7 @@ export default async function PaymentSuccessPage({ params }: PaymentSuccessPageP
       <BreadcrumbOne
         title="Plată Reușită"
         subTitle="Succes"
+        titleAs="p"
         items={[
           { name: "Yuvoo", url: routes.home },
           { name: "Chestionar", url: routes.quiz.intro },

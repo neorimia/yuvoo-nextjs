@@ -94,6 +94,7 @@ export default async function PaywallPage({ params }: PaywallPageProps) {
         <BreadcrumbOne
           title="Obține Raportul Complet - Tot ce trebuie să știi"
           subTitle="Plată"
+          titleAs="p"
           items={[
             { name: "Yuvoo", url: routes.home },
             { name: "Chestionar", url: routes.quiz.intro },
@@ -171,6 +172,7 @@ export default async function PaywallPage({ params }: PaywallPageProps) {
       <BreadcrumbOne
         title="Obține Raportul Complet - Tot ce trebuie să știi"
         subTitle="Plată"
+        titleAs="p"
         items={[
           { name: "Yuvoo", url: routes.home },
           { name: "Chestionar", url: routes.quiz.intro },
